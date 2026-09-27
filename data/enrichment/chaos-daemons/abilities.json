@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -41,7 +32,10 @@
       "soul-grinder"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "deep-strike",
@@ -82,56 +76,36 @@
     "source_digest": "b3d6f0b239a385b972687302a0f7c114a8bffcb5ef620463156299979cbc08fb",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "normal-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "advances"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "passthrough": [
+              "friendly-monsters"
+            ]
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "movement-modifier",
-            "target": "self",
-            "modifier": {
-              "passthrough": [
-                "friendly-monsters"
-              ]
-            }
-          },
-          {
-            "type": "movement-modifier",
-            "target": "self",
-            "modifier": {
-              "passthrough": [
-                "friendly-vehicles"
-              ]
-            }
-          },
-          {
-            "type": "movement-modifier",
-            "target": "self",
-            "modifier": {
-              "passthrough": [
-                "terrain-le-4"
-              ]
-            }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "passthrough": [
+              "friendly-vehicles"
+            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "passthrough": [
+              "terrain-le-4"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -141,8 +115,16 @@
       "soul-grinder"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "normal-move"
+      },
+      {
+        "event": "advances"
+      }
+    ]
   },
   {
     "ability_id": "daemonic-allegiance",
@@ -460,28 +442,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -493,7 +466,10 @@
       "aetaosraukeres"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "feel-no-pain-6",
@@ -1166,26 +1142,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "units-destroyed",
             "parameters": {
-              "timing": "after-unit-resolves-attacks"
+              "side": "self",
+              "window": "phase",
+              "count_min": 1
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "units-destroyed",
-                "parameters": {
-                  "side": "self",
-                  "window": "phase",
-                  "count_min": 1
-                }
-              }
-            ]
           }
         ]
       },
@@ -1244,7 +1209,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "after-unit-resolves-attacks"
+    }
   },
   {
     "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two",
@@ -2333,33 +2301,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "own"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-turn"
-            }
-          },
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "area-terrain"
-            }
-          }
-        ]
+        "type": "unit-within-range-of",
+        "parameters": {
+          "target_type": "area-terrain"
+        }
       },
       "effect": {
         "type": "terrain-area-tag",
@@ -2378,7 +2323,27 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-turn",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "swallow-energy-psychic",
@@ -3960,28 +3925,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -3991,7 +3947,10 @@
       "beasts-of-nurgle"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "scouts-6",
@@ -4037,12 +3996,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "BEASTS-OF-NURGLE"
@@ -4086,7 +4039,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase"
+    }
   },
   {
     "ability_id": "hunters-from-the-warp",
@@ -4654,37 +4610,28 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "mortal-wounds",
-              "target": "friendly-within-aura",
-              "modifier": {
-                "count": "D6+2"
-              }
-            },
-            {
-              "type": "mortal-wounds",
-              "target": "enemy-within-aura",
-              "modifier": {
-                "count": "D6+2"
-              }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "count": "D6+2"
             }
-          ]
-        }
+          },
+          {
+            "type": "mortal-wounds",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "count": "D6+2"
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -4696,7 +4643,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "emissary-of-the-blood-god-aura",
@@ -5207,7 +5157,37 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "selected-to-fall-back",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "target_type": "friendly-keyword",
+              "keywords": [
+                "LEGIONES DAEMONICA",
+                "MOUNTED"
+              ],
+              "range": "engagement",
+              "subject": "triggering-unit"
+            }
+          }
+        ]
+      },
       "optional": true
     }
   },
@@ -5527,7 +5507,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -5586,12 +5566,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
             "type": "units-destroyed",
             "parameters": {
               "side": "enemy",
@@ -5621,7 +5595,10 @@
       "range": "unit",
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase"
+    }
   },
   {
     "ability_id": "warp-rifts",
@@ -5738,7 +5715,7 @@
                 "type": "ability-grant",
                 "target": "unit",
                 "modifier": {
-                  "grant_type": "advance-and-charge"
+                  "grant_type": "charge-after-advance"
                 }
               }
             ]

@@ -402,3 +402,11 @@ LSP rename for a local React helper reported no language server, so callsites re
 ## 2026-09-25T17:34:57Z — claude-opus-5-5
 
 omp config list rejects --config, so an isolation overlay can only be verified by a live model call's token count; the Round 5C OMP driver was probed that way.
+
+## 2026-09-27T14:08:46Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the prebuilt, gitignored go/wh40kdc-runner binary, which goes stale after Go edits; a local parity run silently tests old Go code unless --go-cmd 'go run -C go ./cmd/wh40kdc-runner' is passed.
+
+## 2026-09-27T14:15:51Z — claude-opus-5-5
+
+The effect-translation corpus is not exercised by cargo test -p wh40kdc; only tooling/parity/differ.py checks Rust against it, and its default TS command uses a stale tools/dist/runner.js unless --ts-cmd points at tsx. A green cargo test therefore says nothing about describer parity.

@@ -180,7 +180,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -218,7 +218,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -415,7 +415,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -451,7 +451,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -516,7 +516,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -609,7 +625,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -641,7 +673,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -745,7 +777,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -882,7 +914,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1031,11 +1063,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "fallback-and-act",
           "target": "unit",
-          "modifier": {
-            "grant_type": "shoot-after-fall-back"
-          }
+          "modifier": {}
         },
         {
           "type": "ability-grant",
@@ -1070,7 +1100,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -1105,10 +1151,13 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "grant_type": "shoot-after-advance"
+            "keywords": [
+              "Assault"
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
@@ -1218,7 +1267,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1379,7 +1428,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1415,7 +1464,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1453,7 +1502,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1989,11 +2038,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "fallback-and-act",
           "target": "unit",
-          "modifier": {
-            "grant_type": "shoot-after-fall-back"
-          }
+          "modifier": {}
         },
         {
           "type": "ability-grant",

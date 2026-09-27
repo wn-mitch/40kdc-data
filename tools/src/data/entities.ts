@@ -17,7 +17,9 @@ import type {
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
 import {
+  ATTACK_STEP_EVENTS,
   effectToBuffs,
+  momentGate,
   type EffectTranslation,
   type TranslationPerspective,
 } from "../cruncher/from-dsl.js";
@@ -281,7 +283,7 @@ export class AbilityView {
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
     const translated = effectToBuffs(
-      this.resolveRulesBundles(this.raw.effect),
+      triggerGated(this.raw.behavior, this.raw.trigger, this.resolveRulesBundles(this.raw.effect)),
       source,
       ctx,
       perspective,
@@ -302,6 +304,22 @@ export class AbilityView {
       activatable: translated.activatable.map((a) => ({ ...a, buffs: a.buffs.map(gate) })),
     };
   }
+}
+
+/**
+ * A reactive ability's effect gated on its trigger, the way a `timing-is` condition gates it:
+ * the moment is one the player opts into, so a triggered buff is an activatable lever
+ * (`<ability>@<event>`) rather than always on. Several triggers are alternatives. A trigger on
+ * an attack step is met by every attack, and an activated ability (a stratagem) is already
+ * opt-in, so neither is gated.
+ */
+export function triggerGated(behavior: unknown, trigger: unknown, effect: unknown): unknown {
+  if (behavior !== "reactive") return effect;
+  const triggers = Array.isArray(trigger) ? trigger : [trigger];
+  // An ability firing on an attack step applies to every attack; its trigger condition is
+  // already how the authored data gates such abilities (in the effect), so nothing is added.
+  if (triggers.some((item) => item !== null && typeof item === "object" && ATTACK_STEP_EVENTS.has(String((item as { event?: unknown }).event)))) return effect;
+  return momentGate(trigger, effect);
 }
 
 /** A weapon, linked to the units that carry it. */

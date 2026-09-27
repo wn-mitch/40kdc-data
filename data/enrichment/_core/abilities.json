@@ -179,7 +179,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -207,7 +223,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -265,7 +297,29 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 2
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -294,7 +348,23 @@
     "behavior": "reactive",
     "trigger": {
       "event": "start-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "rule-state",
@@ -309,6 +379,6 @@
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "At the start of the opponent's Shooting phase, one friendly Smoke unit: attacks targeting it \u2014 or targeting units not fully visible because of its models \u2014 have the target benefiting from cover"
+    "community_notes": "At the start of the opponent's Shooting phase, one friendly Smoke unit: attacks targeting it — or targeting units not fully visible because of its models — have the target benefiting from cover"
   }
 ]

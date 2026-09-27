@@ -69,22 +69,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "cult-ambush-redeployment"
-            }
-          },
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "range": 0,
-              "target_type": "cult-ambush-marker"
-            }
-          }
-        ]
+        "type": "unit-within-range-of",
+        "parameters": {
+          "range": 0,
+          "target_type": "cult-ambush-marker"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -117,7 +106,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "arrives-from-strategic-reserves",
+      "subject": "self"
+    }
   },
   {
     "ability_id": "demolition-run",
@@ -267,7 +260,7 @@
       "kelermorph"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -657,28 +650,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -688,7 +672,10 @@
       "goliath-truck"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "firing-deck-6",
@@ -990,28 +977,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1021,7 +999,10 @@
       "achilles-ridgerunners"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "crossfire",
@@ -1084,12 +1065,10 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "smokescreen-stratagem-activated"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "stratagem-targeted",
+            "subject": "self"
           },
           "effect": {
             "type": "cp-refund",
@@ -1441,7 +1420,7 @@
       "sanctus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -2045,58 +2024,49 @@
     "source_digest": "f41f916eb665b3cb25d8b27a1bdc89cd18102c79b261e246cd44e6977adf6342",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "cult-ambush-marker-removed-by-enemy-movement"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "reposition-marker",
-        "options": [
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "unit-within-range-of",
-                  "parameters": {
-                    "range": 9,
-                    "target_type": "fortification"
-                  }
-                },
-                {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "opponent-unit-within-range",
-                      "parameters": {
-                        "range": 9,
-                        "target_type": "all-enemies"
-                      }
-                    }
-                  ]
+      "type": "choice",
+      "choice_label": "reposition-marker",
+      "options": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "range": 9,
+                  "target_type": "fortification"
                 }
-              ]
-            },
-            "effect": {
-              "type": "movement-modifier",
-              "target": "self",
-              "modifier": {
-                "move_type": "redeploy"
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "opponent-unit-within-range",
+                    "parameters": {
+                      "range": 9,
+                      "target_type": "all-enemies"
+                    }
+                  }
+                ]
               }
-            }
+            ]
           },
-          {
-            "type": "model-destruction",
+          "effect": {
+            "type": "movement-modifier",
             "target": "self",
-            "modifier": {}
+            "modifier": {
+              "move_type": "redeploy"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "model-destruction",
+          "target": "self",
+          "modifier": {}
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -2107,7 +2077,19 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "enemy-unit-ended-move",
+      "subject": "enemy-unit",
+      "condition": {
+        "type": "unit-within-range-of",
+        "parameters": {
+          "range": 9,
+          "target_type": "cult-ambush-marker",
+          "subject": "triggering-unit"
+        }
+      }
+    }
   },
   {
     "ability_id": "tectonic-fragdrill",
@@ -2338,12 +2320,6 @@
             "parameters": {
               "keyword": "KILLER"
             }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-attack"
-            }
           }
         ]
       },
@@ -2361,7 +2337,15 @@
       "range": "self",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "selected-to-shoot"
+      },
+      {
+        "event": "selected-to-fight"
+      }
+    ]
   },
   {
     "ability_id": "loyal-to-the-end-heroes-of-the-uprising",
@@ -2509,34 +2493,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {}
-              }
-            ]
+            "type": "engagement-state",
+            "parameters": {}
           }
         ]
       },
@@ -2552,7 +2513,27 @@
       "range": "self",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "lurk-and-strike-purestrain-broodswarm",
@@ -2571,35 +2552,24 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-fall-back"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "fallback-and-act",
-        "target": "self",
-        "modifier": {}
-      }
+      "type": "fallback-and-act",
+      "target": "self",
+      "modifier": {}
     },
     "scope": {
       "range": "self",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-fall-back",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "crawling-horror-purestrain-broodswarm",
@@ -3158,39 +3128,39 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "command"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-phase"
-                }
-              },
-              {
-                "type": "controls-objective",
-                "parameters": {}
-              },
-              {
-                "type": "within-range-of-objective",
-                "parameters": {
-                  "target_type": "friendly-atalan-jackals"
-                }
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-phase",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
               }
-            ]
+            }
           },
           "effect": {
-            "type": "objective-control-modifier",
-            "target": "self",
-            "modifier": {
-              "sticky": true
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "controls-objective",
+                  "parameters": {}
+                },
+                {
+                  "type": "within-range-of-objective",
+                  "parameters": {
+                    "target_type": "friendly-atalan-jackals"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "objective-control-modifier",
+              "target": "self",
+              "modifier": {
+                "sticky": true
+              }
             }
           }
         }
@@ -3355,43 +3325,37 @@
     "faction_id": "genestealer-cults",
     "detachment_id": "host-of-ascension",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "reinforcements-arrival"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keyword": "Sustained Hits",
-              "value": 1
-            }
-          },
-          {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keywords": [
-                "Ignores Cover"
-              ]
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keyword": "Sustained Hits",
+            "value": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Ignores Cover"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "When a GENESTEALER CULTS unit is set up as Reinforcements, its weapons gain [SUSTAINED HITS 1] and [IGNORES COVER] until the end of your next Fight phase (modeled as a grant triggered on arrival)."
+    "community_notes": "When a GENESTEALER CULTS unit is set up as Reinforcements, its weapons gain [SUSTAINED HITS 1] and [IGNORES COVER] until the end of your next Fight phase (modeled as a grant triggered on arrival).",
+    "trigger": {
+      "event": "reinforcements"
+    }
   },
   {
     "ability_id": "claw-of-ascension-survey-augur",
@@ -3538,41 +3502,40 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-attack"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "adaptable-fighters-attack-keyword",
-        "options": [
-          {
-            "type": "keyword-grant",
-            "target": "self",
-            "modifier": {
-              "keyword": "Sustained Hits",
-              "value": 1
-            }
-          },
-          {
-            "type": "keyword-grant",
-            "target": "self",
-            "modifier": {
-              "keywords": [
-                "Lethal Hits"
-              ]
-            }
+      "type": "choice",
+      "choice_label": "adaptable-fighters-attack-keyword",
+      "options": [
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keyword": "Sustained Hits",
+            "value": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keywords": [
+              "Lethal Hits"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "range": "self",
       "duration": "phase"
-    }
+    },
+    "trigger": [
+      {
+        "event": "selected-to-shoot"
+      },
+      {
+        "event": "selected-to-fight"
+      }
+    ]
   },
   {
     "ability_id": "claw-of-ascension-brood-claim",
@@ -3591,25 +3554,8 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "controls-objective",
-            "parameters": {}
-          }
-        ]
+        "type": "controls-objective",
+        "parameters": {}
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -3622,6 +3568,15 @@
     "scope": {
       "range": "unit",
       "duration": "battle"
+    },
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
     }
   },
   {

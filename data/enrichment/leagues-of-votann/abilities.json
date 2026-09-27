@@ -508,28 +508,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -539,7 +530,10 @@
       "kapricus-carrier"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "firing-deck-5",
@@ -706,28 +700,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -737,7 +722,10 @@
       "hekaton-land-fortress"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "multicog-targeting",
@@ -886,7 +874,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -894,49 +882,34 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "after-enemy-unit-fires"
-          }
+          "operator": "and",
+          "operands": [
+            {
+              "type": "has-lost-wounds"
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "is-battle-shocked"
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "engagement-state"
+                }
+              ]
+            }
+          ]
         },
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "has-lost-wounds"
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "is-battle-shocked"
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "engagement-state"
-                  }
-                ]
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "first-time-this-phase"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "vengeance-move"
-            }
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "vengeance-move"
           }
         }
       }
@@ -950,7 +923,13 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "first-time-this-phase"
+    },
+    "trigger": {
+      "event": "after-enemy-unit-fires"
+    }
   },
   {
     "ability_id": "brokhyr-guild-support",
@@ -1346,7 +1325,7 @@
       "hernkyn-yaegirs"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -1912,55 +1891,44 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "armoured-trailblazers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "attack_type": "ranged"
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones",
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones",
-              "attack_type": "ranged"
-            }
+        },
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "attack_type": "ranged"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "outflanking-armour-armoured-trailblazers",
@@ -2031,7 +1999,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -2170,42 +2138,31 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "farseekers",
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "self",
-        "modifier": {
-          "keywords": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "ranged"
-        }
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "scornful-analysis-farseekers",
@@ -2222,63 +2179,52 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "farseekers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "grant_type": "scornful-analysis-designated"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
             "parameters": {
-              "phase": "shooting"
+              "keyword": "scornful-analysis-designated"
             }
           },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "enemy-within-aura",
+          "effect": {
+            "type": "keyword-grant",
+            "target": "all-friendly",
             "modifier": {
-              "grant_type": "scornful-analysis-designated"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "target-has-keyword",
-              "parameters": {
-                "keyword": "scornful-analysis-designated"
-              }
-            },
-            "effect": {
-              "type": "keyword-grant",
-              "target": "all-friendly",
-              "modifier": {
-                "keywords": [
-                  "Ignores Cover"
-                ],
-                "weapon_type": "ranged"
-              }
+              "keywords": [
+                "Ignores Cover"
+              ],
+              "weapon_type": "ranged"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "aura-12",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "economy-of-motion-farseekers",
@@ -2310,7 +2256,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -2493,7 +2439,42 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "ingress-move"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "ingress-into-enemy-deployment-zone"
+          }
+        },
+        {
+          "type": "attack-restriction",
+          "target": "self",
+          "modifier": {
+            "action": "charge"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "set-up-from-reserves",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "EINHYR HEARTHGUARD"
+      ],
       "condition": {
         "operator": "and",
         "operands": [
@@ -2504,9 +2485,9 @@
             }
           },
           {
-            "type": "timing-is",
+            "type": "player-turn-is",
             "parameters": {
-              "timing": "making-ingress-move"
+              "turn": "your-turn"
             }
           },
           {
@@ -2516,39 +2497,8 @@
             }
           }
         ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "ingress-move"
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "ingress-into-enemy-deployment-zone"
-            }
-          },
-          {
-            "type": "attack-restriction",
-            "target": "self",
-            "modifier": {
-              "action": "charge"
-            }
-          }
-        ]
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    }
   },
   {
     "ability_id": "ironskein-hearthguard-covenant",
@@ -2678,102 +2628,91 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "attack-restriction",
+          "target": "self",
+          "modifier": {
+            "restriction": "single-target-only",
+            "excluded_target_keywords": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "attack-restriction",
-            "target": "self",
-            "modifier": {
-              "restriction": "single-target-only",
-              "excluded_target_keywords": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "was-hit-by-attack",
+            "parameters": {
+              "subject": "target",
+              "count_min": 1
             }
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "was-hit-by-attack",
-              "parameters": {
-                "subject": "target",
-                "count_min": 1
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "conditional",
-                  "condition": {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "assailed"
-                    }
-                  },
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "movement-modifier",
-                        "target": "defender",
-                        "modifier": {
-                          "move_type": "normal",
-                          "distance": -2
-                        }
-                      },
-                      {
-                        "type": "charge-roll-modifier",
-                        "target": "defender",
-                        "modifier": {
-                          "operation": "subtract",
-                          "value": 2
-                        }
-                      }
-                    ]
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "assailed"
                   }
                 },
-                {
-                  "type": "keyword-grant",
-                  "target": "defender",
-                  "modifier": {
-                    "keywords": [
-                      "assailed"
-                    ]
-                  }
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "movement-modifier",
+                      "target": "defender",
+                      "modifier": {
+                        "move_type": "normal",
+                        "distance": -2
+                      }
+                    },
+                    {
+                      "type": "charge-roll-modifier",
+                      "target": "defender",
+                      "modifier": {
+                        "operation": "subtract",
+                        "value": 2
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
+              },
+              {
+                "type": "keyword-grant",
+                "target": "defender",
+                "modifier": {
+                  "keywords": [
+                    "assailed"
+                  ]
+                }
+              }
+            ]
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "any-visible",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "martial-leverage",

@@ -122,6 +122,14 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		}
 	case "named-effect":
 		translateNamedEffect(n, source, opts, out)
+	case "ability-part":
+		// A part firing on its own moment is gated like a timing-is step; one with only a cost,
+		// a choice or a usage limit is an activation, as a named effect is.
+		if n["trigger"] == nil && (n["optional"] == true || n["cost"] != nil || n["usage"] != nil) {
+			translateNamedEffect(n, source, opts, out)
+		} else {
+			dslWalk(momentGate(n["trigger"], n["effect"]), source, opts, out)
+		}
 	case "choice":
 		enumerateChoice(n, source, opts, out)
 	case "dice-gated":
@@ -193,6 +201,75 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	default:
 		out.unsupported = append(out.unsupported, unsup("effect type \""+jsStr(n["type"])+"\" is not modelled by the buff layer", n))
 	}
+}
+
+// attackStepEvents are steps of every attack: something firing on one applies to
+// each attack it modifies.
+var attackStepEvents = map[string]bool{
+	"before-hit-roll": true, "after-hit-roll": true, "before-wound-roll": true, "after-wound-roll": true,
+	"attack-scores-wound": true, "after-scoring-hit": true, "before-save-roll": true, "after-save-roll": true,
+	"before-damage-roll": true, "after-damage-roll": true, "on-damage-allocated": true,
+}
+
+// moveFacts maps the moves the engine context records to their condition: a
+// unit that made one has charged or advanced this turn.
+var moveFacts = map[string]string{"charge-move": "charged-this-turn", "advance-move": "advanced-this-turn"}
+
+// momentGate gates an effect on a trigger (one, or several alternatives) the way
+// a timing-is condition gates it, so the moment is a player-controlled gate and a
+// buff behind it an opt-in lever (<ability>@<event>). A trigger on an attack step
+// is met by every attack: only its own condition gates the effect. If any
+// alternative leaves no gate, the effect is returned ungated.
+func momentGate(trigger any, effect any) any {
+	if effect == nil {
+		return effect
+	}
+	candidates, ok := trigger.([]any)
+	if !ok {
+		candidates = []any{trigger}
+	}
+	var gates []any
+	for _, candidate := range candidates {
+		t, ok := asMap(candidate)
+		if !ok || t == nil {
+			continue
+		}
+		event, ok := t["event"].(string)
+		if !ok {
+			continue
+		}
+		own, hasOwn := asMap(t["condition"])
+		hasOwn = hasOwn && own != nil
+		if attackStepEvents[event] {
+			if !hasOwn {
+				// Met by every attack without a condition: nothing to gate.
+				return effect
+			}
+			gates = append(gates, own)
+			continue
+		}
+		var moment map[string]any
+		// A unit's own Charge or Advance move is a fact the context carries, not a choice.
+		subject := t["subject"]
+		if fact, isMove := moveFacts[event]; isMove && (subject == nil || subject == "self" || subject == "unit") {
+			moment = map[string]any{"type": fact}
+		} else {
+			moment = map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": event}}
+		}
+		if hasOwn {
+			gates = append(gates, map[string]any{"operator": "and", "operands": []any{moment, own}})
+		} else {
+			gates = append(gates, moment)
+		}
+	}
+	if len(gates) == 0 {
+		return effect
+	}
+	var condition any = gates[0]
+	if len(gates) > 1 {
+		condition = map[string]any{"operator": "or", "operands": gates}
+	}
+	return map[string]any{"type": "conditional", "condition": condition, "effect": effect}
 }
 
 // translateNamedEffect treats an un-gated named rule as transparent. Named
@@ -455,6 +532,11 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 	case "named-effect":
 		if n["optional"] != true && n["cost"] == nil && n["trigger"] == nil && n["usage"] == nil {
 			collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+		}
+		return
+	case "ability-part":
+		if n["trigger"] != nil || (n["optional"] != true && n["cost"] == nil && n["usage"] == nil) {
+			collectGatedBuffs(momentGate(n["trigger"], n["effect"]), source, opts, applicability, outBuffs)
 		}
 		return
 	case "choice", "dice-pool-allocation", "dice-gated":
@@ -1455,7 +1537,7 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 		applies["attacker_unit_keywords"] != nil ||
 		applies["beneficiary"] != nil ||
 		applies["reference"] != nil)
-	triggerUnresolved := n["type"] == "named-effect" && hasUnresolvedTriggerBinding(n["trigger"])
+	triggerUnresolved := (n["type"] == "named-effect" || n["type"] == "ability-part") && hasUnresolvedTriggerBinding(n["trigger"])
 	return selectorUnresolved ||
 		designationUnresolved ||
 		triggerUnresolved ||

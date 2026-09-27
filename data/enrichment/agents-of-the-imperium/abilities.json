@@ -284,35 +284,16 @@
     "source_digest": "fd4c2d7bef28cc8bf5fe05f0d8cbdbe21b79e6261f6612335b9b7b80fc3bd60b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "resurrection",
-          "target": "self",
-          "modifier": {
-            "wounds_remaining": 1
-          }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resurrection",
+        "target": "self",
+        "modifier": {
+          "wounds_remaining": 1,
+          "timing": "end-of-phase"
         }
       }
     },
@@ -325,7 +306,15 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    },
+    "trigger": {
+      "event": "first-model-destroyed",
+      "subject": "self"
+    }
   },
   {
     "ability_id": "deadly-demise-d3",
@@ -338,28 +327,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -369,7 +349,10 @@
       "inquisitorial-chimera"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "firing-deck-2",
@@ -2284,28 +2267,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -2315,7 +2289,10 @@
       "corvus-blackstar"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "hover",
@@ -2930,7 +2907,7 @@
       "ur-025"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -4751,8 +4728,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "trigger": {
-      "event": "on-unit-selected",
-      "subject": "bearer",
+      "event": "selected-to-fight",
+      "subject": "self",
       "optional": true
     },
     "usage": {

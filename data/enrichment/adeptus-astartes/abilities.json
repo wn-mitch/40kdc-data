@@ -108,28 +108,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -146,7 +137,10 @@
       "sicaran-battle-tank"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "aquilon-optics",
@@ -470,7 +464,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -648,28 +642,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -688,7 +673,10 @@
       "spartan"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "assault-ramp",
@@ -1250,12 +1238,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle"
-            }
-          },
-          {
             "type": "phase-is",
             "parameters": {
               "phase": "fight"
@@ -1307,7 +1289,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
   },
   {
     "ability_id": "stabilised-disembarkation",
@@ -1333,7 +1319,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -1572,7 +1558,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -2084,19 +2070,10 @@
     "source_digest": "994286cf6c10cd708ea0cd0c4076b0503acc762d23cb1a064efc21c0db4f2b62",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "fall-back-selected"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "grant_type": "fallback-denial-on-leadership-failure"
-        }
+      "type": "ability-grant",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "grant_type": "fallback-denial-on-leadership-failure"
       }
     },
     "scope": {
@@ -2107,8 +2084,16 @@
       "chief-librarian-mephiston"
     ],
     "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-fall-back",
+      "subject": "enemy-unit",
+      "proximity": {
+        "of": "self",
+        "range": 6
+      }
+    }
   },
   {
     "ability_id": "guardian-of-the-lost",
@@ -3592,33 +3577,16 @@
     "source_digest": "fd4c2d7bef28cc8bf5fe05f0d8cbdbe21b79e6261f6612335b9b7b80fc3bd60b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "first-model-destroyed"
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "end-of-phase"
-          }
-        },
-        "effect": {
-          "type": "dice-gated",
-          "dice": "D6",
-          "threshold": 2,
-          "comparison": "gte",
-          "on_success": {
-            "type": "resurrection",
-            "target": "self",
-            "modifier": {
-              "count": 1
-            }
-          }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resurrection",
+        "target": "self",
+        "modifier": {
+          "count": 1,
+          "timing": "end-of-phase"
         }
       }
     },
@@ -3631,7 +3599,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "first-model-destroyed",
+      "subject": "self"
+    }
   },
   {
     "ability_id": "indomitor-doctrines",
@@ -3948,19 +3920,10 @@
     "source_digest": "1220ca539357e0e3d53def6210deffbcae7d0ca4a2279f3d249ec9f8abbef74f",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
       }
     },
     "scope": {
@@ -3972,7 +3935,16 @@
       "terminator-assault-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "storm-shield",
@@ -4398,45 +4370,25 @@
     "source_digest": "c566cee1c96bb3c599b6eb8625729ccbe7a6b9b31978d1669ff6cd31bd2c590b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "deep-strike-setup"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "deep-strike",
+          "target": "unit",
+          "modifier": {
+            "min_distance": 6
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "deep-strike",
-            "target": "unit",
-            "modifier": {
-              "min_distance": 6
-            }
-          },
-          {
-            "type": "rule-state",
-            "target": "unit",
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "core-rule",
-              "rule": "charge"
-            }
+        },
+        {
+          "type": "rule-state",
+          "target": "unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "charge"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -4446,8 +4398,17 @@
       "inceptor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "deep-strike-setup",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "keep-the-banner-high",
@@ -4727,44 +4688,12 @@
     "source_digest": "8be5c0015a720cef03115074905ba89832bd8b2406e36deb87b41dc26620c9ea",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "normal-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "advance-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "fall-back-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "charge-move"
-            }
-          }
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "passthrough": [
+          "all-terrain"
         ]
-      },
-      "effect": {
-        "type": "movement-modifier",
-        "target": "unit",
-        "modifier": {
-          "passthrough": [
-            "all-terrain"
-          ]
-        }
       }
     },
     "scope": {
@@ -4775,8 +4704,22 @@
       "suboden-khan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "normal-move"
+      },
+      {
+        "event": "advance-move"
+      },
+      {
+        "event": "fall-back-move"
+      },
+      {
+        "event": "charge-move"
+      }
+    ]
   },
   {
     "ability_id": "master-of-shadows",
@@ -4851,12 +4794,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "declare-battle-formations"
-            }
-          },
-          {
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "AETHON SHAAN"
@@ -4912,7 +4849,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "declare-battle-formations"
+    }
   },
   {
     "ability_id": "total-obliteration",
@@ -5150,28 +5090,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -5184,7 +5115,10 @@
       "drop-pod"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "wisdom-of-the-ancients-aura",
@@ -5871,7 +5805,7 @@
   },
   {
     "ability_id": "designer-s-note",
-    "name": "Designer\u2019s Note",
+    "name": "Designer’s Note",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5882,24 +5816,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "unit-within-range-of",
             "parameters": {
-              "timing": "on-model-destroyed"
+              "target_type": "models-on-red-sections"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-within-range-of",
-                "parameters": {
-                  "target_type": "models-on-red-sections"
-                }
-              }
-            ]
           }
         ]
       },
@@ -5919,8 +5842,11 @@
       "drop-pod"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "on-model-destroyed"
+    }
   },
   {
     "ability_id": "angel-s-wrath",
@@ -6598,20 +6524,11 @@
     "source_digest": "fbe4d1bc02fae073609c5475d6defe007d72611c713654a8e8f24f14d4aeabf5",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "enemy-unit-destroyed-in-melee"
-        }
-      },
-      "effect": {
-        "type": "objective-control-modifier",
-        "target": "self",
-        "modifier": {
-          "operation": "set",
-          "value": 9
-        }
+      "type": "objective-control-modifier",
+      "target": "self",
+      "modifier": {
+        "operation": "set",
+        "value": 9
       }
     },
     "scope": {
@@ -6623,7 +6540,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "enemy-unit-destroyed-in-melee"
+    }
   },
   {
     "ability_id": "brutalis-charge",
@@ -7455,7 +7375,7 @@
       "cato-sicarius"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -7903,7 +7823,7 @@
       "lieutenant-with-combi-weapon"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -8079,12 +7999,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "declare-battle-formations"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "declare-battle-formations"
           },
           "effect": {
             "type": "ability-grant",
@@ -8095,12 +8012,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "post-deployment"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "post-deployment"
           },
           "effect": {
             "type": "ability-grant",
@@ -8509,28 +8423,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+2",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+2",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -8540,7 +8445,10 @@
       "astraeus"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "aerial-assault",
@@ -8996,12 +8904,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "declare-battle-formations"
-            }
-          },
-          {
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "ADEPTUS-ASTARTES"
@@ -9052,8 +8954,11 @@
       "uriel-ventris"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "declare-battle-formations"
+    }
   },
   {
     "ability_id": "strategic-dispersal",
@@ -9702,28 +9607,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "2D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "2D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -9733,7 +9629,10 @@
       "sokar-pattern-stormbird"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "inviolable-transport",
@@ -10783,7 +10682,7 @@
       "fenrisian-wolves"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -10878,19 +10777,10 @@
     "source_digest": "a1faa571a950c332602bd8142d1110fb075e203d8ed344e2b46bc719907c2c15",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "declare-battle-formations"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "split-by-headtakers-hunting-wolves"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "split-by-headtakers-hunting-wolves"
       }
     },
     "scope": {
@@ -10902,7 +10792,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "declare-battle-formations"
+    }
   },
   {
     "ability_id": "headhunters",
@@ -11131,7 +11024,7 @@
   },
   {
     "ability_id": "slayer-s-oath",
-    "name": "Slayer\u2019s Oath",
+    "name": "Slayer’s Oath",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -11148,57 +11041,30 @@
         {
           "name": "Character",
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "first-this-battle"
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "unit",
-              "modifier": {
-                "grant_type": "detachment-saga-completed"
-              }
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "detachment-saga-completed"
             }
           }
         },
         {
           "name": "Monster",
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "first-this-battle"
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "unit",
-              "modifier": {
-                "grant_type": "detachment-saga-completed"
-              }
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "detachment-saga-completed"
             }
           }
         },
         {
           "name": "Vehicle",
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "first-this-battle"
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "unit",
-              "modifier": {
-                "grant_type": "detachment-saga-completed"
-              }
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "detachment-saga-completed"
             }
           }
         }
@@ -11213,7 +11079,10 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] fires the first time this model's unit destroys a unit with the chosen Slayer's Oath keyword; if the Detachment rule has a Saga, the unit receives that rule's benefits as if the Saga were completed"
+    "community_notes": "[APPROX] fires the first time this model's unit destroys a unit with the chosen Slayer's Oath keyword; if the Detachment rule has a Saga, the unit receives that rule's benefits as if the Saga were completed",
+    "usage": {
+      "frequency": "first-this-battle"
+    }
   },
   {
     "ability_id": "oathbound",
@@ -11420,19 +11289,8 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "shooting-phase"
-            }
-          },
-          {
-            "type": "has-lost-wounds",
-            "parameters": {}
-          }
-        ]
+        "type": "has-lost-wounds",
+        "parameters": {}
       },
       "effect": {
         "type": "movement-modifier",
@@ -11453,7 +11311,12 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "enemy-unit-completed-shooting-targeting-bearer",
+      "subject": "enemy-unit",
+      "optional": true
+    }
   },
   {
     "ability_id": "violent-fury",
@@ -12283,30 +12146,10 @@
     "source_digest": "25b91bcd40ecb90380d825fbbbd9b164cff8cec58fd3990e6b4a6e300ffeaf68",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "primarch-of-the-first-legion-selection"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "primarch-of-the-first-legion-selection"
       }
     },
     "scope": {
@@ -12317,8 +12160,17 @@
       "lion-eljonson"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "the-emperors-shield",
@@ -12524,10 +12376,10 @@
         {
           "name": "Tactical Doctrine",
           "effect": {
-            "type": "ability-grant",
+            "type": "fallback-and-act",
             "target": "unit",
             "modifier": {
-              "grant_type": "shoot-and-charge-after-fall-back"
+              "can_charge": true
             }
           }
         },
@@ -12574,11 +12426,23 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "charge-after-advance-fallback"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "charge-after-advance"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "charge-after-fall-back"
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -12602,134 +12466,128 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "librarius-conclave",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "ADEPTUS ASTARTES"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "PSYKER"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "unit-has-keyword",
+        "type": "choice",
+        "choice_label": "Psychic Discipline",
+        "options": [
+          {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 2
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "unit",
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones"
+                }
+              }
+            ]
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "opponent-unit-within-range",
               "parameters": {
-                "keyword": "ADEPTUS ASTARTES"
+                "range_inches": 12
               }
             },
-            {
-              "type": "unit-has-keyword",
-              "parameters": {
-                "keyword": "PSYKER"
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "choice",
-          "choice_label": "Psychic Discipline",
-          "options": [
-            {
+            "effect": {
               "type": "stat-modifier",
               "target": "unit",
               "modifier": {
-                "stat": "M",
+                "stat": "AP",
                 "operation": "add",
-                "value": 2
+                "value": 1,
+                "attack_type": "ranged"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is-type",
+              "parameters": {
+                "attack_type": "ranged"
               }
             },
-            {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "re-roll",
-                  "target": "unit",
-                  "modifier": {
-                    "roll": "hit",
-                    "subset": "ones"
-                  }
-                },
-                {
-                  "type": "re-roll",
-                  "target": "unit",
-                  "modifier": {
-                    "roll": "wound",
-                    "subset": "ones"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "opponent-unit-within-range",
-                "parameters": {
-                  "range_inches": 12
-                }
-              },
-              "effect": {
-                "type": "stat-modifier",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "attacker",
+              "modifier": {
+                "stat": "S",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "modifier-immunity",
                 "target": "unit",
                 "modifier": {
-                  "stat": "AP",
-                  "operation": "add",
-                  "value": 1,
-                  "attack_type": "ranged"
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "attack-is-type",
-                "parameters": {
-                  "attack_type": "ranged"
+                  "scope": "characteristics"
                 }
               },
-              "effect": {
-                "type": "stat-modifier",
-                "target": "attacker",
+              {
+                "type": "roll-modifier",
+                "target": "unit",
                 "modifier": {
-                  "stat": "S",
-                  "operation": "subtract",
-                  "value": 1
+                  "roll": "all",
+                  "operation": "ignore-modifiers"
                 }
               }
-            },
-            {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "modifier-immunity",
-                  "target": "unit",
-                  "modifier": {
-                    "scope": "characteristics"
-                  }
-                },
-                {
-                  "type": "roll-modifier",
-                  "target": "unit",
-                  "modifier": {
-                    "roll": "all",
-                    "operation": "ignore-modifiers"
-                  }
-                }
-              ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       }
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "shadow-masters",
@@ -13056,11 +12914,33 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "shoot-and-charge-after-advance-fall-back"
-            }
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "keyword-grant",
+                "target": "unit",
+                "modifier": {
+                  "keywords": [
+                    "Assault"
+                  ],
+                  "weapon_type": "ranged"
+                }
+              },
+              {
+                "type": "ability-grant",
+                "target": "unit",
+                "modifier": {
+                  "grant_type": "charge-after-advance"
+                }
+              },
+              {
+                "type": "fallback-and-act",
+                "target": "unit",
+                "modifier": {
+                  "can_charge": true
+                }
+              }
+            ]
           },
           {
             "type": "ability-grant",
@@ -13076,7 +12956,7 @@
       "range": "unit",
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] ADEPTUS ASTARTES BATTLELINE units become eligible to shoot/declare a charge and to start Actions in a turn they Advanced or Fell Back (captured as opaque eligibility grants). The auspex-scanned mark placed on an enemy unit hit by a BATTLELINE unit \u2014 and the resulting re-roll of Hit rolls of 1 against auspex-scanned units \u2014 are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] ADEPTUS ASTARTES BATTLELINE units become eligible to shoot/declare a charge and to start Actions in a turn they Advanced or Fell Back (captured as opaque eligibility grants). The auspex-scanned mark placed on an enemy unit hit by a BATTLELINE unit — and the resulting re-roll of Hit rolls of 1 against auspex-scanned units — are not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "adaptive-defence",
@@ -13321,18 +13201,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          },
-          {
             "operator": "not",
             "operands": [
               {
@@ -13375,8 +13243,17 @@
       "eradicator-squad-with-heavy-bolters"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "purgation-run",
@@ -13457,12 +13334,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-ended-move"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-ended-move"
           },
           "effect": {
             "type": "dice-gated",
@@ -13686,8 +13560,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "enemy-unit"
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     },
     "effect": {
       "type": "fight-on-death",
@@ -13862,12 +13742,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-unit-resolves-attacks"
           },
           "effect": {
             "type": "battle-shock-test",
@@ -14598,7 +14475,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -14914,18 +14791,43 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "shoot-after-advance-or-fall-back"
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
+              }
+            },
+            {
+              "type": "fallback-and-act",
+              "target": "unit",
+              "modifier": {}
+            }
+          ]
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "charge-after-advance-or-fall-back"
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": "unit",
+              "modifier": {
+                "grant_type": "charge-after-advance"
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": "unit",
+              "modifier": {
+                "grant_type": "charge-after-fall-back"
+              }
+            }
+          ]
         }
       ]
     },
@@ -15095,8 +14997,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "enemy-unit"
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -15447,12 +15355,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-unit-resolves-attacks"
           },
           "effect": {
             "type": "battle-shock-test",
@@ -15514,11 +15419,9 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
+      "type": "fallback-and-act",
       "target": "unit",
-      "modifier": {
-        "grant_type": "shoot-after-fall-back"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",
@@ -15748,7 +15651,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -16023,7 +15926,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -16356,7 +16259,7 @@
   },
   {
     "ability_id": "the-imperiums-sword-1st-company-task-force",
-    "name": "The Imperium\u2019s Sword",
+    "name": "The Imperium’s Sword",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -16384,12 +16287,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase"
           },
           "effect": {
             "type": "stat-modifier",
@@ -16400,6 +16300,12 @@
               "value": 1,
               "attack_type": "melee"
             }
+          },
+          "optional": true,
+          "duration": "phase",
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1
           }
         }
       ]
@@ -16499,12 +16405,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase"
           },
           "effect": {
             "type": "objective-control-modifier",
@@ -16513,6 +16416,12 @@
               "operation": "add",
               "value": 1
             }
+          },
+          "optional": true,
+          "duration": "phase",
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1
           }
         }
       ]
@@ -16556,12 +16465,10 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "on-unit-selected"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-targets-bearer",
+            "subject": "enemy-unit"
           },
           "effect": {
             "type": "feel-no-pain",
@@ -16569,6 +16476,12 @@
             "modifier": {
               "threshold": 5
             }
+          },
+          "optional": true,
+          "duration": "phase",
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1
           }
         }
       ]
@@ -16778,25 +16691,14 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "armoured-speartip",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "within-range-of-objective",
-            "parameters": {
-              "controlled": "friendly"
-            }
-          }
-        ]
+        "type": "within-range-of-objective",
+        "parameters": {
+          "controlled": "friendly"
+        }
       },
       "effect": {
         "type": "objective-tag",
@@ -16816,7 +16718,27 @@
         "Adeptus Astartes"
       ]
     },
-    "community_notes": "At the end of your Command phase, an objective you control in range of the bearer's unit (or its Heavy Transport) stays under your control until the opponent's Level of Control exceeds yours at the end of a phase"
+    "community_notes": "At the end of your Command phase, an objective you control in range of the bearer's unit (or its Heavy Transport) stays under your control until the opponent's Level of Control exceeds yours at the end of a phase",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "tip-of-the-spear-armoured-speartip",
@@ -16833,22 +16755,13 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "armoured-speartip",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "post-deployment"
-        }
-      },
-      "effect": {
-        "type": "movement-modifier",
-        "target": "self",
-        "modifier": {
-          "move_type": "scout",
-          "distance": 6
-        }
+      "type": "movement-modifier",
+      "target": "self",
+      "modifier": {
+        "move_type": "scout",
+        "distance": 6
       }
     },
     "scope": {
@@ -16860,7 +16773,10 @@
         "Adeptus Astartes"
       ]
     },
-    "community_notes": "If the bearer starts the battle embarked within a Transport, that Transport gains Scouts 6\""
+    "community_notes": "If the bearer starts the battle embarked within a Transport, that Transport gains Scouts 6\"",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "shock-deployment-armoured-speartip",
@@ -17656,11 +17572,9 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "ability-grant",
+              "type": "fallback-and-act",
               "target": "unit",
-              "modifier": {
-                "grant_type": "shoot-after-fall-back"
-              }
+              "modifier": {}
             },
             {
               "type": "ability-grant",
@@ -17747,11 +17661,14 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-command-phase"
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
             }
           },
           "effect": {
@@ -18087,11 +18004,9 @@
         "type": "is-attached"
       },
       "effect": {
-        "type": "ability-grant",
+        "type": "fallback-and-act",
         "target": "unit",
-        "modifier": {
-          "grant_type": "shoot-after-fall-back"
-        }
+        "modifier": {}
       }
     },
     "scope": {
@@ -18617,22 +18532,13 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "orbital-assault-force",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "reinforcements"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "charge",
-          "result_scope": "any-result"
-        }
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "charge",
+        "result_scope": "any-result"
       }
     },
     "scope": {
@@ -18644,7 +18550,10 @@
         "Adeptus Astartes"
       ]
     },
-    "community_notes": "Re-roll Charge rolls in a turn in which the bearer's unit was set up on the battlefield"
+    "community_notes": "Re-roll Charge rolls in a turn in which the bearer's unit was set up on the battlefield",
+    "trigger": {
+      "event": "reinforcements"
+    }
   },
   {
     "ability_id": "veteran-of-the-vanguard-orbital-assault-force",
@@ -18893,18 +18802,19 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "ability-grant",
+            "type": "keyword-grant",
             "target": "friendly-within-aura",
             "modifier": {
-              "grant_type": "shoot-after-advance"
+              "keywords": [
+                "Assault"
+              ],
+              "weapon_type": "ranged"
             }
           },
           {
-            "type": "ability-grant",
+            "type": "fallback-and-act",
             "target": "friendly-within-aura",
-            "modifier": {
-              "grant_type": "shoot-after-fall-back"
-            }
+            "modifier": {}
           }
         ]
       }
@@ -19061,7 +18971,36 @@
     "behavior": "reactive",
     "trigger": {
       "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "unengaged"
+            }
+          },
+          {
+            "type": "opponent-unit-within-range",
+            "parameters": {
+              "range": 6
+            }
+          }
+        ]
+      },
+      "optional": true
     },
     "effect": {
       "type": "ability-grant",

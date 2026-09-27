@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -42,7 +33,10 @@
     ],
     "ability_type": "core",
     "behavior": "reactive",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "leader",
@@ -130,18 +124,6 @@
                 "parameters": {}
               }
             ]
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-army-per-battle-round"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "psychic-level-1-activation"
-            }
           }
         ]
       },
@@ -184,9 +166,13 @@
       "weirdboy"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
   },
   {
     "ability_id": "deadly-demise-1",
@@ -199,28 +185,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -232,7 +209,10 @@
     ],
     "ability_type": "core",
     "behavior": "reactive",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "drill-through",
@@ -663,7 +643,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "riled-up"
+              "keyword": "RILED UP"
             }
           },
           "effect": {
@@ -704,7 +684,51 @@
     "source_digest": "45ee181a6c6e52237828744d169b53c072d9627189cd4b1ff9b3b20ec1fbd338",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "advance-roll-set-to-six"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "advance-through-all-models"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-advance-move",
+            "subject": "self"
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "hazard-roll-per-model"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "big-mek"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-advance",
       "condition": {
         "operator": "and",
         "operands": [
@@ -717,64 +741,12 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-make-advance-move"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "advance-roll-set-to-six"
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "advance-through-all-models"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "after-ending-that-advance-move"
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "unit",
-              "modifier": {
-                "grant_type": "hazard-roll-per-model"
-              }
+              "turn": "your-turn"
             }
           }
         ]
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "big-mek"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    }
   },
   {
     "ability_id": "feel-no-pain-5",
@@ -1047,28 +1019,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1079,7 +1042,10 @@
     ],
     "ability_type": "core",
     "behavior": "reactive",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "firing-deck-11",
@@ -1323,24 +1289,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "HIDDEN"
@@ -1375,9 +1323,29 @@
       "boss-snikrot"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "clankin-forward",
@@ -1579,12 +1547,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "battle-start"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle"
           },
           "effect": {
             "type": "resource-gain",
@@ -1596,74 +1561,62 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "movement"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-normal-move"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "once-per-turn-per-unit"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "twice-per-battle-per-unit"
-                }
-              },
-              {
-                "type": "opponent-unit-within-range",
-                "parameters": {
-                  "range": 12,
-                  "visible": true
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "resource-spend",
-                "target": "unit",
-                "modifier": {
-                  "resource": "bomb-squig-token",
-                  "amount": 1
-                }
-              },
-              {
-                "type": "dice-gated",
-                "dice": "D6",
-                "threshold": 3,
-                "comparison": "gte",
-                "on_success": {
-                  "type": "mortal-wounds",
-                  "target": "defender",
-                  "modifier": {
-                    "count": "D3"
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-normal-move",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
                   }
                 }
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "opponent-unit-within-range",
+              "parameters": {
+                "range": 12,
+                "visible": true
               }
-            ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "resource-spend",
+                  "target": "unit",
+                  "modifier": {
+                    "resource": "bomb-squig-token",
+                    "amount": 1
+                  }
+                },
+                {
+                  "type": "dice-gated",
+                  "dice": "D6",
+                  "threshold": 3,
+                  "comparison": "gte",
+                  "on_success": {
+                    "type": "mortal-wounds",
+                    "target": "defender",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                }
+              ]
+            }
           }
         }
       ]
@@ -1679,7 +1632,11 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "attached-unit",
@@ -1726,28 +1683,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "2D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "2D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1758,7 +1706,10 @@
     ],
     "ability_type": "core",
     "behavior": "reactive",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "waaagh-effigy-aura",
@@ -1936,7 +1887,7 @@
       "tankbustas"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
       "event": "selected-to-shoot",
@@ -1953,7 +1904,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -2329,9 +2280,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
+        "type": "unit-within-range-of",
         "parameters": {
-          "timing": "targets-closest-eligible-with-snazzgun"
+          "target_type": "closest-eligible"
         }
       },
       "effect": {
@@ -2353,7 +2304,7 @@
       "flash-gitz"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "orks"
   },
@@ -2368,22 +2319,13 @@
     "source_digest": "949421c089b8b49d18505828e5b39dfd3cf69d24bc928cf23ea7ae5c5e902455",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "once-per-battle"
-        }
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
-        "modifier": {
-          "keywords": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "ranged"
-        }
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
@@ -2395,7 +2337,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
   },
   {
     "ability_id": "boom-bomb",
@@ -2481,7 +2427,7 @@
       "blitza-bommer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
       "event": "end-of-phase",
@@ -2498,7 +2444,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -2725,27 +2671,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "when-selected-to-shoot"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "SPEED FREEKS"
-            }
-          }
-        ]
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "SPEED FREEKS"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2764,10 +2693,19 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "kult-of-speed",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "fix-dat-armour-up",
@@ -2793,7 +2731,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -3108,56 +3046,36 @@
     "source_digest": "345141a400a639ac717d073a168c3c9b14568ecbead48a476754bcadcfa45341",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-movement-phase"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
+      "type": "select-units",
+      "selector": {
+        "max_count": 1,
+        "owner": "friendly",
+        "keywords": [
+          "ORKS",
+          "VEHICLE"
         ]
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "max_count": 1,
-          "owner": "friendly",
-          "keywords": [
-            "ORKS",
-            "VEHICLE"
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "resurrection",
-              "target": "unit",
-              "modifier": {
-                "count": "d3",
-                "type": "wounds"
-              }
-            },
-            {
-              "type": "roll-modifier",
-              "target": "unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "add",
-                "value": 1
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resurrection",
+            "target": "unit",
+            "modifier": {
+              "count": "d3",
+              "type": "wounds"
             }
-          ]
-        }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3169,13 +3087,33 @@
       "mek"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "usage": {
       "frequency": "once-per-turn",
       "per": "model"
     },
     "community_notes": "[APPROX] the hit bonus lasts until the start of your next Movement phase; each model can only be selected once per turn",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "shokk-tunnel",
@@ -3190,41 +3128,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-advance"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "opponent-unit-within-range",
+            "parameters": {
+              "range": 9
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "opponent-unit-within-range",
-              "parameters": {
-                "range": 9
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "deep-strike",
+            "target": "self",
+            "modifier": {}
+          },
+          {
+            "type": "ability-grant",
+            "target": "self",
+            "modifier": {
+              "grant_type": "counts-as-advanced-this-turn"
             }
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "deep-strike",
-              "target": "self",
-              "modifier": {}
-            },
-            {
-              "type": "ability-grant",
-              "target": "self",
-              "modifier": {
-                "grant_type": "counts-as-advanced-this-turn"
-              }
-            }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -3236,7 +3165,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-advance"
+    }
   },
   {
     "ability_id": "one-last-kill",
@@ -3251,30 +3183,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "when-model-is-destroyed"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "unit-selected-to-fight-this-phase"
-                }
-              }
-            ]
+            "type": "has-fought-this-phase",
+            "parameters": {}
           }
         ]
       },
@@ -3294,22 +3207,28 @@
               }
             },
             {
-              "type": "conditional",
-              "condition": {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "has-fought-this-phase",
-                    "parameters": {}
-                  },
-                  {
-                    "type": "timing-is",
+              "type": "ability-part",
+              "trigger": [
+                {
+                  "event": "after-unit-resolves-attacks",
+                  "subject": "self",
+                  "condition": {
+                    "type": "phase-is",
                     "parameters": {
-                      "timing": "end-of-phase"
+                      "phase": "fight"
                     }
                   }
-                ]
-              },
+                },
+                {
+                  "event": "end-of-phase",
+                  "condition": {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  }
+                }
+              ],
               "effect": {
                 "type": "ability-grant",
                 "target": "self",
@@ -3330,9 +3249,18 @@
       "mozrog-skragbad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "on-model-destroyed",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "da-bigger-dey-iz",
@@ -3525,25 +3453,8 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end"
-            }
-          },
-          {
-            "type": "controls-objective",
-            "parameters": {}
-          }
-        ]
+        "type": "controls-objective",
+        "parameters": {}
       },
       "effect": {
         "type": "dice-gated",
@@ -3567,9 +3478,18 @@
       "gretchin"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "deranged-snotling-assault",
@@ -3865,7 +3785,7 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "riled-up"
+              "keyword": "RILED UP"
             }
           }
         ]
@@ -4057,24 +3977,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
             "type": "opponent-unit-within-range",
             "parameters": {
               "range": 36
@@ -4156,9 +4058,29 @@
       "burna-bommer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "on-da-hunt",
@@ -4233,21 +4155,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "starts-in-strategic-reserves"
-            }
-          },
-          {
-            "type": "battle-round",
-            "parameters": {
-              "max": 3
-            }
-          }
-        ]
+        "type": "battle-round",
+        "parameters": {
+          "max": 3
+        }
       },
       "effect": {
         "type": "strategic-reserves-arrival",
@@ -4264,7 +4175,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "starts-in-strategic-reserves"
+    }
   },
   {
     "ability_id": "big-bomms",
@@ -4527,28 +4441,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+2",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+2",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -4558,7 +4463,10 @@
       "kill-krusha"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "da-biggest-booms",
@@ -4841,19 +4749,10 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "arrives-from-strategic-reserves"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "outflank-set-up-in-opponent-deployment-zone"
-        }
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "outflank-set-up-in-opponent-deployment-zone"
       }
     },
     "scope": {
@@ -4866,7 +4765,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "arrives-from-strategic-reserves"
+    }
   },
   {
     "ability_id": "waaagh",
@@ -4925,8 +4827,14 @@
       ]
     },
     "trigger": {
-      "event": "start-of-command-phase",
-      "optional": true
+      "event": "start-of-phase",
+      "optional": true,
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
     },
     "scope": {
       "range": "unit",
@@ -5090,38 +4998,38 @@
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "timing-is",
-                  "parameters": {
-                    "timing": "fall-back-move-selection"
-                  }
-                },
-                {
-                  "type": "engagement-state",
-                  "parameters": {
-                    "only_with_keyword": "FORTIFICATION"
-                  }
-                },
-                {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "is-battle-shocked",
-                      "parameters": {}
-                    }
-                  ]
-                }
-              ]
+            "type": "ability-part",
+            "trigger": {
+              "event": "selected-to-fall-back"
             },
             "effect": {
-              "type": "ability-grant",
-              "target": "enemy-within-aura",
-              "modifier": {
-                "grant_type": "fallback-hazard-auto-pass"
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "engagement-state",
+                    "parameters": {
+                      "only_with_keyword": "FORTIFICATION"
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "is-battle-shocked",
+                        "parameters": {}
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": "enemy-within-aura",
+                "modifier": {
+                  "grant_type": "fallback-hazard-auto-pass"
+                }
               }
             }
           }
@@ -5162,12 +5070,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "unit-disembarked-from-transport"
-            }
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "disposition": "friendly"
@@ -5207,7 +5109,11 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "unit-disembarked",
+      "subject": "friendly-unit"
+    }
   },
   {
     "ability_id": "mount-up-ladz-blitz-brigade",
@@ -5224,24 +5130,12 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -5288,7 +5182,16 @@
       "range": "unit",
       "duration": "one-use"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "armoured-duellists-blitz-brigade",
@@ -5414,24 +5317,12 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -5460,12 +5351,6 @@
                 }
               }
             ]
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "before-target-unit-is-selected-to-move-this-phase"
-            }
           }
         ]
       },
@@ -5481,7 +5366,27 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "selected-to-move",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "run-em-down-blitz-brigade",
@@ -5498,24 +5403,12 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -5544,12 +5437,6 @@
                 }
               }
             ]
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "before-target-unit-is-selected-to-move-this-phase"
-            }
           }
         ]
       },
@@ -5560,7 +5447,7 @@
             "type": "ability-grant",
             "target": "self",
             "modifier": {
-              "grant_type": "advance-and-charge"
+              "grant_type": "charge-after-advance"
             }
           },
           {
@@ -5614,7 +5501,27 @@
       "range": "aura-6",
       "duration": "turn"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "selected-to-move",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "yooz-in-trouble-now-blitz-brigade",
@@ -5637,24 +5544,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-enemy-unit-shot"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -5716,7 +5605,27 @@
       "range": "unit",
       "duration": "one-use"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "after-enemy-unit-fires",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "runnin-boots-blitz-brigade",
@@ -5758,16 +5667,8 @@
             }
           },
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "charge-roll"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "unit-disembarked-this-turn"
-            }
+            "type": "disembarked-from-transport",
+            "parameters": {}
           }
         ]
       },
@@ -5802,7 +5703,7 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5821,24 +5722,18 @@
             }
           },
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-deployment"
-            }
-          },
-          {
             "operator": "or",
             "operands": [
               {
-                "type": "timing-is",
+                "type": "on-battlefield",
                 "parameters": {
-                  "timing": "bearer-unit-on-battlefield"
+                  "subject": "unit"
                 }
               },
               {
-                "type": "timing-is",
+                "type": "engagement-state",
                 "parameters": {
-                  "timing": "embarked-transport-on-battlefield"
+                  "state": "embarked-in-transport-on-battlefield"
                 }
               }
             ]
@@ -5903,7 +5798,10 @@
       "range": "any-on-battlefield",
       "duration": "one-use"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "supercharged-squig-oil-blitz-brigade",
@@ -5924,21 +5822,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "MEK"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-mekaniak-use"
-            }
-          }
-        ]
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "MEK"
+        }
       },
       "effect": {
         "type": "conditional",
@@ -5962,7 +5849,22 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "ability-target-selected",
+      "subject": "friendly-unit",
+      "source_ability": {
+        "ability_id": "mekaniak",
+        "owner": "friendly",
+        "keywords": [
+          "MEK"
+        ]
+      },
+      "condition": {
+        "type": "event-source-is-bearer-unit",
+        "parameters": {}
+      }
+    }
   },
   {
     "ability_id": "tuff-git-blitz-brigade",
@@ -6001,18 +5903,6 @@
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "CHARACTER"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "unit-disembarked-this-phase"
             }
           },
           {
@@ -6441,37 +6331,11 @@
     "source_digest": "b71367d31b367e489c12795c7a2707a9e2ef4a1c2e5eb76586d717d3cb1dc5e1",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "movement-modifier",
-        "target": "self",
-        "modifier": {
-          "move_type": "normal",
-          "distance": 6
-        }
+      "type": "movement-modifier",
+      "target": "self",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6
       }
     },
     "scope": {
@@ -6484,7 +6348,27 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "ammo-runts",
@@ -6500,12 +6384,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "ability-setup"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle"
           },
           "effect": {
             "type": "resource-gain",
@@ -6517,29 +6398,26 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected-to-shoot",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
                 }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "when-selected-to-shoot"
-                }
-              }
-            ]
+              ]
+            }
           },
           "effect": {
             "type": "sequence",
@@ -6677,46 +6555,11 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
+            "operator": "not",
             "operands": [
               {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "movement"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "own"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "when-embarked-unit-selected-to-disembark"
-                }
-              },
-              {
-                "type": "unit-within-range-of",
-                "parameters": {
-                  "target_type": "embarked-within-self"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "when-psychic-roll-is-made"
-                }
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "is-battle-shocked",
-                    "parameters": {}
-                  }
-                ]
+                "type": "is-battle-shocked",
+                "parameters": {}
               }
             ]
           },
@@ -6739,30 +6582,19 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "operator": "and",
+                  "operator": "or",
                   "operands": [
                     {
-                      "type": "timing-is",
+                      "type": "target-has-keyword",
                       "parameters": {
-                        "timing": "after-this-psychic-roll-until-end-of-turn"
+                        "keyword": "MONSTER"
                       }
                     },
                     {
-                      "operator": "or",
-                      "operands": [
-                        {
-                          "type": "target-has-keyword",
-                          "parameters": {
-                            "keyword": "MONSTER"
-                          }
-                        },
-                        {
-                          "type": "target-has-keyword",
-                          "parameters": {
-                            "keyword": "VEHICLE"
-                          }
-                        }
-                      ]
+                      "type": "target-has-keyword",
+                      "parameters": {
+                        "keyword": "VEHICLE"
+                      }
                     }
                   ]
                 },
@@ -6783,15 +6615,42 @@
     },
     "scope": {
       "range": "unit",
-      "duration": "battle"
+      "duration": "turn"
     },
     "unit_ids": [
       "kill-rig"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-disembark",
+      "subject": "friendly-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          },
+          {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "target_type": "embarked-within-self"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "big-spender",
@@ -6936,12 +6795,9 @@
       "type": "rules-bundle",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "ability-token-setup"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle"
           },
           "effect": {
             "type": "resource-gain",
@@ -6953,68 +6809,62 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "movement"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "after-normal-move"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "once-per-battle-per-unit"
-                }
-              },
-              {
-                "type": "unit-within-range-of",
-                "parameters": {
-                  "target_type": "visible-enemy",
-                  "range": 12
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "dice-gated",
-                "dice": "D6",
-                "threshold": 3,
-                "comparison": "gte",
-                "on_success": {
-                  "type": "mortal-wounds",
-                  "target": "defender",
-                  "modifier": {
-                    "count": "D3"
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-normal-move",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
                   }
                 }
-              },
-              {
-                "type": "resource-spend",
-                "target": "unit",
-                "modifier": {
-                  "resource": "bomb-squig-token",
-                  "amount": 1
-                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-within-range-of",
+              "parameters": {
+                "target_type": "visible-enemy",
+                "range": 12
               }
-            ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "dice-gated",
+                  "dice": "D6",
+                  "threshold": 3,
+                  "comparison": "gte",
+                  "on_success": {
+                    "type": "mortal-wounds",
+                    "target": "defender",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "type": "resource-spend",
+                  "target": "unit",
+                  "modifier": {
+                    "resource": "bomb-squig-token",
+                    "amount": 1
+                  }
+                }
+              ]
+            }
           }
         }
       ]
@@ -7029,7 +6879,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "bomb-squig-squighog-boyz",
@@ -7308,7 +7163,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -7328,101 +7183,64 @@
     "source_digest": "0a993eb0bf876b77447aa2901747dd3c309cd8eaf463e3b87b7b8d8cf11a700b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "start-of-move"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-move"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "ORKS",
-            "VEHICLE"
-          ],
-          "range_inches": 3,
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "AIRCRAFT"
-                    }
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "TITANIC"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "target_kind": "model"
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "ORKS",
+          "VEHICLE"
+        ],
+        "range_inches": 3,
+        "eligibility": {
+          "operator": "and",
+          "operands": [
             {
-              "type": "heal-wounds",
-              "target": "unit",
-              "modifier": {
-                "amount": "D3"
-              }
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "AIRCRAFT"
+                  }
+                }
+              ]
             },
             {
-              "type": "roll-modifier",
-              "target": "unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "add",
-                "value": 1
-              }
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "TITANIC"
+                  }
+                }
+              ]
             }
           ]
-        }
+        },
+        "target_kind": "model"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "heal-wounds",
+            "target": "unit",
+            "modifier": {
+              "amount": "D3"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -7433,9 +7251,51 @@
       "mek"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": [
+      {
+        "event": "normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "end-of-normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "cork-dat-red-bit",
@@ -7451,11 +7311,17 @@
       "type": "rules-bundle",
       "steps": [
         {
-          "type": "resource-gain",
-          "target": "unit",
-          "modifier": {
-            "resource": "grot-orderly-token",
-            "amount": 1
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle"
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "unit",
+            "modifier": {
+              "resource": "grot-orderly-token",
+              "amount": 1
+            }
           }
         },
         {
@@ -7464,15 +7330,15 @@
             "operator": "and",
             "operands": [
               {
-                "type": "timing-is",
+                "type": "phase-is",
                 "parameters": {
-                  "timing": "crude-surgery-used"
+                  "phase": "command"
                 }
               },
               {
-                "type": "timing-is",
+                "type": "player-turn-is",
                 "parameters": {
-                  "timing": "once-per-battle-per-unit"
+                  "turn": "your-turn"
                 }
               }
             ]
@@ -7510,7 +7376,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
   },
   {
     "ability_id": "crude-surgery",
@@ -7674,7 +7545,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
@@ -7789,7 +7660,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -7908,74 +7779,31 @@
     "source_digest": "eaada37e92afc8f24bbac59428291b69a8ccede7ffeed3417a5adb7f446412b3",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle-round-per-army"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "start-of-move"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-move"
-                }
-              }
-            ]
-          }
-        ]
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "SPEED FREEKS"
+        ],
+        "range_inches": 6
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "SPEED FREEKS"
-          ],
-          "range_inches": 6
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "remove-battle-shock",
-              "target": "unit"
-            },
-            {
-              "type": "ability-grant",
-              "target": "unit",
-              "modifier": {
-                "ability_id": "riled-up",
-                "rules_bundle": true
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "remove-battle-shock",
+            "target": "unit"
+          },
+          {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "ability_id": "riled-up",
+              "rules_bundle": true
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -7986,9 +7814,55 @@
       "deffkilla-wartrike"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": [
+      {
+        "event": "normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "end-of-normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "get-out-da-way",
@@ -8001,19 +7875,10 @@
     "source_digest": "b73a50066f7f9a53e91ae13b8f33ab652bfea755b8f298018a27d59d1c5d8505",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "charge-move"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "model-passthrough-excluding-monsters-and-vehicles"
-        }
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "model-passthrough-excluding-monsters-and-vehicles"
       }
     },
     "scope": {
@@ -8024,9 +7889,12 @@
       "nobz"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "charge-move"
+    }
   },
   {
     "ability_id": "go-fer-da-waz-spot",
@@ -8102,7 +7970,26 @@
     "source_digest": "5d05c281ab94f4ba80691f52a41c8fccb6d72f92fb8bbc75a00dace452ea13f7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "permit-embarked-units-assault-disembark"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "one-use"
+    },
+    "unit_ids": [
+      "gorkanaut",
+      "morkanaut"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-normal-move",
       "condition": {
         "operator": "and",
         "operands": [
@@ -8115,37 +8002,12 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-ends-normal-move"
+              "turn": "your-turn"
             }
           }
         ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "permit-embarked-units-assault-disembark"
-        }
       }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "gorkanaut",
-      "morkanaut"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    }
   },
   {
     "ability_id": "hardy-bioniks",
@@ -8238,7 +8100,27 @@
     "source_digest": "91840ded31525ce73437995db387cfc9ec7c970a89403b70b96bdbb81478e7c6",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "riled-up",
+        "rules_bundle": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "unit_ids": [
+      "stompa"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-disembark",
+      "subject": "friendly-unit",
       "condition": {
         "operator": "and",
         "operands": [
@@ -8251,37 +8133,18 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
-            "type": "timing-is",
+            "type": "unit-within-range-of",
             "parameters": {
-              "timing": "disembark-move"
+              "target_type": "embarked-within-self"
             }
           }
         ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "riled-up",
-          "rules_bundle": true
-        }
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "stompa"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    }
   },
   {
     "ability_id": "intimidating-motivation",
@@ -8298,41 +8161,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle-round-per-army"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "bearer-move-start"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "bearer-move-end"
-                }
-              }
-            ]
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -8379,9 +8207,55 @@
       "warboss-in-mega-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": [
+      {
+        "event": "normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "end-of-normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "keep-huntin",
@@ -8398,41 +8272,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle-round-per-army"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "bearer-move-start"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "bearer-move-end"
-                }
-              }
-            ]
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -8478,9 +8317,55 @@
       "beastboss-on-squigosaur"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": [
+      {
+        "event": "normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "end-of-normal-move",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "krushin-impetus",
@@ -8520,7 +8405,7 @@
       "warboss-in-mega-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
       "event": "end-of-charge-move",
@@ -8575,33 +8460,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
-          },
-          {
-            "type": "uniform-ranged-loadout",
-            "parameters": {
-              "model_keyword": "MEK GUNZ"
-            }
-          }
-        ]
+        "type": "uniform-ranged-loadout",
+        "parameters": {
+          "model_keyword": "MEK GUNZ"
+        }
       },
       "effect": {
         "type": "select-units",
@@ -8715,9 +8577,29 @@
       "mek-gunz"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "mobbed",
@@ -8734,12 +8616,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-charge-move"
-            }
-          },
           {
             "type": "engagement-state",
             "parameters": {
@@ -8793,9 +8669,12 @@
       "beast-snagga-boyz"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-charge-move"
+    }
   },
   {
     "ability_id": "mobile-arsenal",
@@ -8958,33 +8837,15 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "battle-round",
             "parameters": {
-              "phase": "movement"
+              "min": 1
             }
           },
           {
-            "type": "timing-is",
+            "type": "engagement-state",
             "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "first-battle-round-onwards"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "while-in-strategic-reserves"
+              "state": "in-strategic-reserves"
             }
           }
         ]
@@ -9005,9 +8866,29 @@
       "boss-snikrot"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "paired-krumpas",
@@ -9067,33 +8948,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-end-of-move"
-            }
-          },
-          {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "within_inches": 8
-            }
-          }
-        ]
+        "type": "opponent-unit-within-range",
+        "parameters": {
+          "within_inches": 8
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -9111,9 +8969,29 @@
       "trukk"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "enemy-unit-ended-move",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "pulse-jet",
@@ -9128,33 +9006,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-move"
-            }
-          },
-          {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
-          }
-        ]
+        "type": "engagement-state",
+        "parameters": {
+          "state": "unengaged"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -9172,9 +9027,29 @@
       "wazdakka-gutsmek"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-move",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "push-dat-bit-back-in",
@@ -9190,12 +9065,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "ability-setup"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle"
           },
           "effect": {
             "type": "resource-gain",
@@ -9220,7 +9092,7 @@
               {
                 "type": "player-turn-is",
                 "parameters": {
-                  "turn": "your"
+                  "turn": "your-turn"
                 }
               }
             ]
@@ -9329,28 +9201,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-this-unit-has-shot"
-            }
-          },
-          {
-            "type": "was-hit-by-attack",
-            "parameters": {
-              "subject": "target",
-              "attack_type": "ranged"
-            }
-          }
-        ]
+        "type": "was-hit-by-attack",
+        "parameters": {
+          "subject": "target",
+          "attack_type": "ranged"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -9382,9 +9237,18 @@
       "tankbustas"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "rokkit-charge",
@@ -9554,7 +9418,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
@@ -9739,7 +9603,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -9800,45 +9664,36 @@
     "source_digest": "67df8c45029d1d3262bb050cc03045201f6621f8b116c92d6107712a1d4c991c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "declare-battle-formations-step"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "split-unit-five-five"
-            }
-          },
-          {
-            "type": "choice",
-            "choice_label": "post-split-ability-assignment",
-            "options": [
-              {
-                "type": "ability-grant",
-                "target": "self",
-                "modifier": {
-                  "grant_type": "bomb-squig-first-sub-unit-found-em-second-sub-unit"
-                }
-              },
-              {
-                "type": "ability-grant",
-                "target": "self",
-                "modifier": {
-                  "grant_type": "found-em-first-sub-unit-bomb-squig-second-sub-unit"
-                }
-              }
-            ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "split-unit-five-five"
           }
-        ]
-      }
+        },
+        {
+          "type": "choice",
+          "choice_label": "post-split-ability-assignment",
+          "options": [
+            {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "bomb-squig-first-sub-unit-found-em-second-sub-unit"
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "found-em-first-sub-unit-bomb-squig-second-sub-unit"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -9848,9 +9703,12 @@
       "kommandos"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "declare-battle-formations"
+    }
   },
   {
     "ability_id": "thatll-learn-ya",
@@ -9887,7 +9745,7 @@
       "runtherd"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
       "event": "after-battle-shock",
@@ -9976,19 +9834,10 @@
     "source_digest": "e8f99c72b9a5138ee57ab639407b20ae3db8bce845c3f390808c1ac138f30a48",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "targeted-by-crushing-impact-stratagem"
-        }
-      },
-      "effect": {
-        "type": "cp-gain",
-        "target": "defender",
-        "modifier": {
-          "amount": -1
-        }
+      "type": "cp-gain",
+      "target": "defender",
+      "modifier": {
+        "amount": -1
       }
     },
     "scope": {
@@ -9999,9 +9848,12 @@
       "hunta-rig"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "stratagem-targeted"
+    }
   },
   {
     "ability_id": "turbo-engine",
@@ -10014,11 +9866,23 @@
     "source_digest": "e974aedc9c3b8b8af4dbb1e35cbddfba8655149d22c8ec6f05bf4b36cf041148",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "charge-after-advance-or-fallback"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "charge-after-advance"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "charge-after-fall-back"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -10247,52 +10111,72 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "disposition-matches",
-                "parameters": {
-                  "disposition": "friendly"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SPEED FREEKS"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "after-advance-or-fall-back-selection-until-end-of-turn"
-                }
-              }
-            ]
-          },
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "selected-to-advance",
+              "subject": "friendly-unit"
+            },
+            {
+              "event": "selected-to-fall-back",
+              "subject": "friendly-unit"
+            }
+          ],
           "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "unit",
-                "modifier": {
-                  "keywords": [
-                    "Assault"
-                  ],
-                  "weapon_type": "ranged"
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "disposition-matches",
+                  "parameters": {
+                    "disposition": "friendly"
+                  }
+                },
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "SPEED FREEKS"
+                  }
                 }
-              },
-              {
-                "type": "ability-grant",
-                "target": "unit",
-                "modifier": {
-                  "grant_type": "charge-eligibility-after-advance-or-fall-back"
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "unit",
+                  "modifier": {
+                    "keywords": [
+                      "Assault"
+                    ],
+                    "weapon_type": "ranged"
+                  }
+                },
+                {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "ability-grant",
+                      "target": "unit",
+                      "modifier": {
+                        "grant_type": "charge-after-advance"
+                      }
+                    },
+                    {
+                      "type": "ability-grant",
+                      "target": "unit",
+                      "modifier": {
+                        "grant_type": "charge-after-fall-back"
+                      }
+                    }
+                  ]
                 }
-              }
-            ]
-          }
+              ]
+            }
+          },
+          "duration": "turn"
         }
       ]
     },
@@ -10350,7 +10234,7 @@
                 {
                   "type": "unit-has-keyword",
                   "parameters": {
-                    "keyword": "Riled Up"
+                    "keyword": "RILED UP"
                   }
                 }
               ]
@@ -10368,7 +10252,7 @@
             "condition": {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "Riled Up"
+                "keyword": "RILED UP"
               }
             },
             "effect": {
@@ -10567,49 +10451,49 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "stratagem-target-selection"
-                }
-              },
-              {
-                "type": "is-battle-shocked",
-                "parameters": {}
-              },
-              {
-                "type": "is-attached",
-                "parameters": {}
-              },
-              {
-                "type": "disposition-matches",
-                "parameters": {
-                  "disposition": "friendly"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "ORKS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "INFANTRY"
-                }
-              }
-            ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "stratagem-targeted"
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "battle-shocked-targeting-permission"
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "is-battle-shocked",
+                  "parameters": {}
+                },
+                {
+                  "type": "is-attached",
+                  "parameters": {}
+                },
+                {
+                  "type": "disposition-matches",
+                  "parameters": {
+                    "disposition": "friendly"
+                  }
+                },
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "ORKS"
+                  }
+                },
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "INFANTRY"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "unit",
+              "modifier": {
+                "grant_type": "battle-shocked-targeting-permission"
+              }
             }
           }
         },
@@ -10618,12 +10502,6 @@
           "condition": {
             "operator": "and",
             "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "becomes-battle-shocked"
-                }
-              },
               {
                 "type": "is-attached",
                 "parameters": {}
@@ -10676,10 +10554,14 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "war-horde",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "becomes-battle-shocked",
+      "subject": "friendly-unit"
+    }
   },
   {
     "ability_id": "brutal-but-kunnin-brute-bosses",
@@ -10725,27 +10607,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "ORKS"
-            }
-          }
-        ]
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "ORKS"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -10761,10 +10626,19 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "war-horde",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "clownin-dakka-shoota-boyz",
@@ -10781,24 +10655,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -10846,10 +10702,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "shoota-boyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "competitive-streak-kult-of-speed",
@@ -10910,13 +10786,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle-per-army"
+              "turn": "your-turn"
             }
           }
         ]
@@ -10939,7 +10809,12 @@
     "behavior": "passive",
     "detachment_id": "war-horde",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    }
   },
   {
     "ability_id": "da-gobshot-thunderbuss-brute-bosses",
@@ -11166,7 +11041,7 @@
             "condition": {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "riled-up"
+                "keyword": "RILED UP"
               }
             },
             "effect": {
@@ -11215,7 +11090,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
@@ -11351,24 +11226,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "disposition": "friendly"
@@ -11389,22 +11246,14 @@
         ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "attack-with-weapon-selected-for-use-by-firing-deck"
-          }
-        },
-        "effect": {
-          "type": "roll-modifier",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1,
-            "attack_type": "ranged"
-          }
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1,
+          "attack_type": "ranged",
+          "weapon_source": "firing-deck"
         }
       }
     },
@@ -11414,10 +11263,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "wreckas",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "dubious-restraint-taktikal-brigade",
@@ -11434,35 +11303,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "start-of-phase"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-phase"
-                }
-              }
-            ]
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -11512,10 +11352,52 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "taktikal-brigade",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": [
+      {
+        "event": "start-of-phase",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "end-of-phase",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "ability_id": "eadbanger-wurrband",
@@ -11666,7 +11548,7 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -11916,20 +11798,6 @@
             "parameters": {
               "keyword": "AIRCRAFT"
             }
-          },
-          {
-            "type": "units-destroyed",
-            "parameters": {
-              "side": "friendly",
-              "window": "current-event",
-              "count_min": 1
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "before-deadly-demise-roll"
-            }
           }
         ]
       },
@@ -12076,10 +11944,14 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "flyboyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "on-unit-destroyed",
+      "subject": "friendly-unit"
+    }
   },
   {
     "ability_id": "follow-me-ladz-war-horde",
@@ -12240,12 +12112,10 @@
         }
       },
       "effect": {
-        "type": "fallback-and-act",
+        "type": "ability-grant",
         "target": "self",
         "modifier": {
-          "actions": [
-            "charge"
-          ]
+          "grant_type": "charge-after-fall-back"
         }
       }
     },
@@ -12335,7 +12205,7 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "da-big-hunt",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -12353,7 +12223,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -12376,24 +12246,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-friendly-unit-shot"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -12465,10 +12317,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "wreckas",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "grot-shields-runt-swarm",
@@ -12485,24 +12357,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "when-enemy-unit-targets-friendly-unit"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -12574,9 +12428,9 @@
               }
             },
             {
-              "type": "timing-is",
+              "type": "on-battlefield",
               "parameters": {
-                "timing": "while-selected-unit-remains-on-battlefield"
+                "subject": "unit"
               }
             }
           ]
@@ -12608,10 +12462,31 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "runt-swarm",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "gun-crazy-show-offs-wreckas",
@@ -12628,24 +12503,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-triggering-enemy-unit-resolves-ranged-attacks-that-hit-selected-unit"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -12712,10 +12569,31 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "wreckas",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "after-enemy-unit-fires",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "headwoppas-killchoppa-war-horde",
@@ -12777,33 +12655,13 @@
     "source_digest": "b5886f4ace2136c452403c83285be51aa28233797e5b883ccb3a7ea8679bc51e",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "fight-activation"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
-        "modifier": {
-          "keywords": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "melee"
-        }
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
@@ -12812,10 +12670,19 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "war-horde",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-fight",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "hulking-brutes-bully-boyz",
@@ -12906,7 +12773,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
@@ -12932,7 +12799,7 @@
     },
     "faction_id": "orks",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "flyboyz",
     "community_notes": "community-authored from 11e source"
   },
@@ -12952,15 +12819,11 @@
         "operator": "and",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "units-destroyed",
             "parameters": {
-              "timing": "after-triggering-enemy-unit-completes-attacks"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-target-was-just-destroyed"
+              "side": "friendly",
+              "window": "current-event",
+              "count_min": 1
             }
           },
           {
@@ -13018,10 +12881,14 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "runt-swarm",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "enemy-unit"
+    }
   },
   {
     "ability_id": "instinctive-hunters-da-big-hunt",
@@ -13038,24 +12905,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -13102,10 +12951,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "da-big-hunt",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "it-came-from-da-drops-da-big-hunt",
@@ -13152,12 +13021,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-both-armies-finish-deployment"
-            }
-          },
           {
             "type": "target-has-keyword",
             "parameters": {
@@ -13209,10 +13072,13 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "wreckas",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "kill-kommando-taktikal-brigade",
@@ -13369,18 +13235,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "disposition": "friendly"
@@ -13433,10 +13287,19 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "flyboyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "mekwaaagh-mastermind-madcap-meks",
@@ -13483,29 +13346,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "selected-to-advance"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "selected-to-fall-back"
-                }
-              }
-            ]
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "subject": "unit",
@@ -13551,10 +13391,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "taktikal-brigade",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": [
+      {
+        "event": "selected-to-advance",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "movement"
+          }
+        }
+      },
+      {
+        "event": "selected-to-fall-back",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "movement"
+          }
+        }
+      }
+    ]
   },
   {
     "ability_id": "minefield-detail-runt-swarm",
@@ -13745,18 +13605,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-battle-shock-step"
-            }
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "subject": "unit",
@@ -13821,10 +13669,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "green-tide",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "start-of-battle-shock-step",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "morgogs-finkin-cap-brute-bosses",
@@ -13872,7 +13740,7 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "brute-bosses",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -13890,7 +13758,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -13930,18 +13798,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-fight"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -14003,10 +13859,19 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "war-horde",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-fight",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "never-enough-dakka-shoota-boyz",
@@ -14183,7 +14048,7 @@
             }
           },
           {
-            "type": "named-effect",
+            "type": "ability-part",
             "name": "Roar of Mork",
             "kind": "psychic",
             "level": 1,
@@ -14201,7 +14066,7 @@
                   {
                     "type": "player-turn-is",
                     "parameters": {
-                      "turn": "your"
+                      "turn": "your-turn"
                     }
                   },
                   {
@@ -14283,35 +14148,27 @@
             "optional": true
           },
           {
-            "type": "named-effect",
+            "type": "ability-part",
             "name": "Visions of Violence",
             "kind": "psychic",
             "level": 1,
+            "trigger": {
+              "event": "start-of-phase",
+              "condition": {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              }
+            },
             "effect": {
               "type": "conditional",
               "condition": {
-                "operator": "and",
+                "operator": "not",
                 "operands": [
                   {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "fight"
-                    }
-                  },
-                  {
-                    "type": "timing-is",
-                    "parameters": {
-                      "timing": "start-of-phase"
-                    }
-                  },
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "type": "is-battle-shocked",
-                        "parameters": {}
-                      }
-                    ]
+                    "type": "is-battle-shocked",
+                    "parameters": {}
                   }
                 ]
               },
@@ -14407,24 +14264,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-ends-move"
-            }
-          },
-          {
             "type": "opponent-unit-within-range",
             "parameters": {
               "range_inches": 8
@@ -14491,10 +14330,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "runt-swarm",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "enemy-unit-ended-move",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "skyborne-loons-flyboyz",
@@ -14555,9 +14414,9 @@
                 ]
               },
               {
-                "type": "timing-is",
+                "type": "unit-has-keyword",
                 "parameters": {
-                  "timing": "while-riled-up"
+                  "keyword": "RILED UP"
                 }
               }
             ]
@@ -14703,24 +14562,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-as-ranged-attack-target"
-            }
-          },
-          {
             "type": "disposition-matches",
             "parameters": {
               "disposition": "friendly"
@@ -14754,10 +14595,31 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "kult-of-speed",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "supa-glowy-fing-shoota-boyz",
@@ -14815,12 +14677,9 @@
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "after-selected-unit-resolves-all-shooting-attacks"
-              }
+            "type": "ability-part",
+            "trigger": {
+              "event": "after-unit-resolves-attacks"
             },
             "effect": {
               "type": "ability-grant",
@@ -14901,18 +14760,6 @@
             "parameters": {
               "keyword": "WARBOSS"
             }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle-per-army"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase-in-which-self-was-destroyed"
-            }
           }
         ]
       },
@@ -14948,10 +14795,27 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "brute-bosses",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "army"
+    },
+    "trigger": {
+      "event": "end-of-phase",
+      "subject": "self",
+      "condition": {
+        "type": "units-destroyed",
+        "parameters": {
+          "side": "self",
+          "window": "phase",
+          "count_min": 1
+        }
+      }
+    }
   },
   {
     "ability_id": "suspiciously-well-organised-taktikal-brigade",
@@ -14985,46 +14849,41 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "selected-to-make-fall-back-move"
-                }
-              },
-              {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "BOYZ"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "KOMMANDOS"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "STORMBOYZ"
-                    }
-                  }
-                ]
-              }
-            ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected-to-fall-back"
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "all-friendly",
-            "modifier": {
-              "grant_type": "eligible-to-declare-charge-after-fall-back"
+            "type": "conditional",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "BOYZ"
+                  }
+                },
+                {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "KOMMANDOS"
+                  }
+                },
+                {
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "STORMBOYZ"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "all-friendly",
+              "modifier": {
+                "grant_type": "charge-after-fall-back"
+              }
             }
           }
         }
@@ -15168,12 +15027,9 @@
                 }
               },
               {
-                "type": "conditional",
-                "condition": {
-                  "type": "timing-is",
-                  "parameters": {
-                    "timing": "after-unit-resolves-attacks"
-                  }
+                "type": "ability-part",
+                "trigger": {
+                  "event": "after-unit-resolves-attacks"
                 },
                 "effect": {
                   "type": "model-destruction",
@@ -15227,7 +15083,7 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -15245,7 +15101,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -15363,7 +15219,7 @@
                 {
                   "type": "unit-has-keyword",
                   "parameters": {
-                    "keyword": "Riled Up"
+                    "keyword": "RILED UP"
                   }
                 }
               ]
@@ -15381,7 +15237,7 @@
             "condition": {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "Riled Up"
+                "keyword": "RILED UP"
               }
             },
             "effect": {
@@ -15436,7 +15292,7 @@
                   {
                     "type": "player-turn-is",
                     "parameters": {
-                      "turn": "your"
+                      "turn": "your-turn"
                     }
                   }
                 ]
@@ -15448,12 +15304,6 @@
                 }
               }
             ]
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-attack"
-            }
           },
           {
             "type": "disposition-matches",
@@ -15618,12 +15468,9 @@
                 }
               },
               {
-                "type": "conditional",
-                "condition": {
-                  "type": "timing-is",
-                  "parameters": {
-                    "timing": "after-unit-has-attacked"
-                  }
+                "type": "ability-part",
+                "trigger": {
+                  "event": "after-unit-resolves-attacks"
                 },
                 "effect": {
                   "type": "ability-grant",
@@ -15644,10 +15491,18 @@
     },
     "unit_ids": [],
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": [
+      {
+        "event": "selected-to-shoot"
+      },
+      {
+        "event": "selected-to-fight"
+      }
+    ]
   },
   {
     "ability_id": "unbridled-carnage-green-tide",
@@ -15821,7 +15676,7 @@
     },
     "unit_ids": [],
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -15839,7 +15694,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           },
           {
@@ -16075,7 +15930,7 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "da-big-hunt",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -16106,90 +15961,64 @@
     "source_digest": "7e1b25ef0ec112ddb9e8274fa2055d7d7dc6b986ad373be6dcec6350c8bbb4ee",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "BOYZ"
+                  }
+                },
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "KOMMANDOS"
+                  }
+                },
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "STORMBOYZ"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "engagement-state",
+              "parameters": {
+                "state": "engaged",
+                "timing": "start-of-phase"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "engagement-state",
+                  "parameters": {
+                    "state": "engaged",
+                    "timing": "current"
+                  }
+                }
+              ]
             }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          }
-        ]
+          ]
+        }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "BOYZ"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "KOMMANDOS"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "STORMBOYZ"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "engaged",
-                  "timing": "start-of-phase"
-                }
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "engagement-state",
-                    "parameters": {
-                      "state": "engaged",
-                      "timing": "current"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "effect": {
-          "type": "movement-modifier",
-          "target": "unit",
-          "modifier": {
-            "move_type": "normal",
-            "distance": 6
-          }
+        "type": "movement-modifier",
+        "target": "unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": 6
         }
       }
     },
@@ -16199,10 +16028,30 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "taktikal-brigade",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "whirligig-evasion-flyboyz",
@@ -16228,7 +16077,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -16304,7 +16153,7 @@
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "flyboyz",
     "community_notes": "community-authored from 11e source",
     "trigger": {
@@ -16332,12 +16181,6 @@
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "NOBZ"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-selected-for-fall-back"
             }
           },
           {
@@ -16383,10 +16226,13 @@
     },
     "unit_ids": [],
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "bully-boyz",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "fall-back-move"
+    }
   },
   {
     "ability_id": "wreckin-and-lootin-wreckas",
@@ -16403,24 +16249,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "unit-selected-to-shoot"
-            }
-          },
           {
             "type": "disposition-matches",
             "parameters": {
@@ -16485,10 +16313,30 @@
     },
     "unit_ids": [],
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "detachment_id": "wreckas",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "riled-up",
@@ -16996,7 +16844,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {

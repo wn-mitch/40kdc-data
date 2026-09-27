@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -41,7 +32,10 @@
       "ghost-ark"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "repair-barge",
@@ -84,28 +78,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+2",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+2",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -115,7 +100,10 @@
       "seraptek-heavy-construct"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "terrifying-monstrosity",
@@ -128,19 +116,10 @@
     "source_digest": "b7b9215712f306bfac5281a264b13a03809c40d716cc2cf8ea5f83148a4a2162",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
       }
     },
     "scope": {
@@ -151,7 +130,16 @@
       "seraptek-heavy-construct"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "titanic-walker",
@@ -389,31 +377,22 @@
     "source_digest": "c4916c0016954bb6112fb853ed3588c8150b3ed52105bb1ff239c3da65601a9e",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
+      "type": "select-units",
+      "selector": {
+        "count": 1,
+        "keywords": [
+          "CANOPTEK"
+        ],
+        "owner": "friendly",
+        "within_inches": 3
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "count": 1,
-          "keywords": [
-            "CANOPTEK"
-          ],
-          "owner": "friendly",
-          "within_inches": 3
-        },
-        "effect": {
-          "type": "stat-modifier",
-          "target": "unit",
-          "modifier": {
-            "stat": "WS",
-            "operation": "improve",
-            "value": 1
-          }
+        "type": "stat-modifier",
+        "target": "unit",
+        "modifier": {
+          "stat": "WS",
+          "operation": "improve",
+          "value": 1
         }
       }
     },
@@ -425,8 +404,17 @@
       "canoptek-macrocytes"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] Full rule in raw-text store."
+    "behavior": "reactive",
+    "community_notes": "[APPROX] Full rule in raw-text store.",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "leader",
@@ -529,27 +517,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "reinforcements"
-            }
-          },
-          {
-            "type": "battle-round",
-            "parameters": {
-              "max": 3
-            }
-          }
-        ]
+        "type": "battle-round",
+        "parameters": {
+          "max": 3
+        }
       },
       "effect": {
         "type": "strategic-reserves-arrival",
@@ -565,7 +536,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "reinforcements",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "invasion-beams",
@@ -758,7 +738,7 @@
       "royal-warden"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "applies_to": {
       "required_keywords": [
         "Necrons"
@@ -1008,28 +988,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1039,11 +1010,14 @@
       "tesseract-vault"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "powers-of-the-c-tan",
-    "name": "Powers of the C\u2019tan",
+    "name": "Powers of the C’tan",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1052,30 +1026,10 @@
     "source_digest": "609880a4a0c0cdeea4fafc27a2367cdd48492bb1b69a99fc3373ba7af2806af8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "select-up-to-two-ctan-powers-restrict-others"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "select-up-to-two-ctan-powers-restrict-others"
       }
     },
     "scope": {
@@ -1086,8 +1040,17 @@
       "tesseract-vault"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "scouts-9",
@@ -1547,19 +1510,10 @@
     "source_digest": "aa00289c870ca0ff6b264a76da7276c61bbd0f475803f9af89c4884ad7b9eff1",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "unit-set-up"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "individual-model-deployment-within-12-coherency"
-        }
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "individual-model-deployment-within-12-coherency"
       }
     },
     "scope": {
@@ -1570,8 +1524,11 @@
       "convergence-of-dominion"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "unit-set-up"
+    }
   },
   {
     "ability_id": "united-in-destruction",
@@ -1776,28 +1733,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1811,7 +1759,10 @@
       "transcendent-ctan"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "gravitic-pulse",
@@ -1978,28 +1929,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -2009,7 +1951,10 @@
       "catacomb-command-barge"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "carrier-wave-aura",
@@ -2178,40 +2123,20 @@
     "source_digest": "59fa626260a2dada110fc0c05f97640aa2bf18d74b9f0f77c145342a33fb9424",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "reinforcements"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "deep-strike",
+          "target": "unit"
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "cannot-charge-this-turn"
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "deep-strike",
-            "target": "unit"
-          },
-          {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "cannot-charge-this-turn"
-            }
-          }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "aura-6",
@@ -2221,8 +2146,17 @@
       "monolith"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "reinforcements",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "translocation-shroud",
@@ -2419,30 +2353,10 @@
     "source_digest": "683ed24d2c43cf7e26b6609d8da3b0d471805be622a0ec6800f226c1149ee03a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "surrogate-hosts"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "surrogate-hosts"
       }
     },
     "scope": {
@@ -2453,8 +2367,17 @@
       "trazyn-the-infinite"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "destroyer-cult",
@@ -2820,29 +2743,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "units-destroyed",
-            "parameters": {
-              "side": "enemy",
-              "window": "this-phase",
-              "count_min": 1
-            }
-          }
-        ]
+        "type": "units-destroyed",
+        "parameters": {
+          "side": "enemy",
+          "window": "this-phase",
+          "count_min": 1
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -2861,7 +2767,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "fights-first",
@@ -3109,22 +3024,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-opponent-turn"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {}
-              }
-            ]
+            "type": "engagement-state",
+            "parameters": {}
           }
         ]
       },
@@ -3143,7 +3047,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-opponent-turn"
+    }
   },
   {
     "ability_id": "harbinger-of-destruction",
@@ -3543,28 +3450,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+3 (Szarekh model only)",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+3 (Szarekh model only)",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -3574,7 +3472,10 @@
       "the-silent-king"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "triarch-abilities",
@@ -3752,21 +3653,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "on-model-destroyed"
-            }
-          },
-          {
-            "type": "model-is-leader",
-            "parameters": {
-              "leader_type": "szarekh"
-            }
-          }
-        ]
+        "type": "model-is-leader",
+        "parameters": {
+          "leader_type": "szarekh"
+        }
       },
       "effect": {
         "type": "model-destruction",
@@ -3785,7 +3675,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "on-model-destroyed"
+    }
   },
   {
     "ability_id": "supreme-commander",
@@ -3997,28 +3890,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "3D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "3D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -4028,7 +3912,10 @@
       "tomb-citadel-walls"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "phased-cover",
@@ -4536,20 +4423,11 @@
     "source_digest": "d9a00e8cfae71821b00b94cf12c14a64bc58838df2e315693881bb44e8388109",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "end-of-command-phase"
-        }
-      },
-      "effect": {
-        "type": "recovery-pool",
-        "target": "all-friendly",
-        "modifier": {
-          "dice": "D3",
-          "per_target_unit": true
-        }
+      "type": "recovery-pool",
+      "target": "all-friendly",
+      "modifier": {
+        "dice": "D3",
+        "per_target_unit": true
       }
     },
     "scope": {
@@ -4564,7 +4442,16 @@
       "transcendent-ctan"
     ],
     "ability_type": "faction",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "drain-life",
@@ -4577,41 +4464,21 @@
     "source_digest": "2518a3b4d50740fcdecf865046ada315ab0d34192e855d2f9b45e3a96d60cbc2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          }
-        ]
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "enemy",
+        "within_inches": 6
       },
       "effect": {
-        "type": "for-each-unit",
-        "selector": {
-          "owner": "enemy",
-          "within_inches": 6
-        },
-        "effect": {
-          "type": "dice-gated",
-          "dice": "D6",
-          "threshold": 4,
-          "comparison": "gte",
-          "on_success": {
-            "type": "mortal-wounds",
-            "target": "unit",
-            "modifier": {
-              "count": "D3"
-            }
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "unit",
+          "modifier": {
+            "count": "D3"
           }
         }
       }
@@ -4625,7 +4492,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "enslaved-star-god",
@@ -4669,49 +4545,40 @@
     "source_digest": "d25098be14a7aa444b5245e71ef5deab69dabadb63e7c0ec22c3ed7b17d3a724",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-shooting-phase"
-        }
+      "type": "select-units",
+      "selector": {
+        "count": 1,
+        "keywords": [
+          "VEHICLE"
+        ],
+        "owner": "enemy",
+        "within_inches": 12
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "count": 1,
-          "keywords": [
-            "VEHICLE"
-          ],
-          "owner": "enemy",
-          "within_inches": 12
-        },
-        "effect": {
-          "type": "dice-gated",
-          "dice": "D6",
-          "threshold": 2,
-          "comparison": "gte",
-          "on_success": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "mortal-wounds",
-                "target": "unit",
-                "modifier": {
-                  "count": "D3",
-                  "bind_count_as": "matter-absorption-d3"
-                }
-              },
-              {
-                "type": "resurrection",
-                "target": "self",
-                "modifier": {
-                  "type": "wounds",
-                  "count_from": "matter-absorption-d3"
-                }
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 2,
+        "comparison": "gte",
+        "on_success": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "mortal-wounds",
+              "target": "unit",
+              "modifier": {
+                "count": "D3",
+                "bind_count_as": "matter-absorption-d3"
               }
-            ]
-          }
+            },
+            {
+              "type": "resurrection",
+              "target": "self",
+              "modifier": {
+                "type": "wounds",
+                "count_from": "matter-absorption-d3"
+              }
+            }
+          ]
         }
       }
     },
@@ -4723,8 +4590,17 @@
       "ctan-shard-of-the-void-dragon"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "grand-illusion",
@@ -4739,21 +4615,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-deployment"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "NECRONS"
-            }
-          }
-        ]
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "NECRONS"
+        }
       },
       "effect": {
         "type": "choice",
@@ -4782,8 +4647,11 @@
       "ctan-shard-of-the-deceiver"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "transdimensional-displacement",
@@ -5034,39 +4902,28 @@
     "faction_id": "necrons",
     "detachment_id": "hand-of-the-dynasty",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "objective-control-modifier",
-        "target": "unit",
-        "modifier": {
-          "sticky": true
-        }
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "sticky": true
       }
     },
     "scope": {
       "range": "unit",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "nanosaturation-hand-of-the-dynasty",
@@ -5092,7 +4949,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -5210,11 +5067,9 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
+        "type": "fallback-and-act",
         "target": "unit",
-        "modifier": {
-          "grant_type": "shoot-after-fallback"
-        }
+        "modifier": {}
       }
     },
     "scope": {
@@ -5247,7 +5102,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -5311,7 +5166,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -5476,39 +5331,28 @@
     "faction_id": "necrons",
     "detachment_id": "the-phaerons-armoury",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "grant_type": "increased-detection-range"
-        }
+      "type": "ability-grant",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "grant_type": "increased-detection-range"
       }
     },
     "scope": {
       "range": "aura-12",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "cosmic-storm-the-phaerons-armoury",
@@ -5632,7 +5476,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -5684,12 +5528,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected-to-shoot"
           },
           "effect": {
             "type": "choice",

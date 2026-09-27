@@ -12,7 +12,7 @@ import (
 // python .../translate/effect.py.
 
 var containerTypes = map[string]bool{
-	"rules-bundle": true, "sequence": true, "named-effect": true, "choice": true, "dice-gated": true, "dice-table": true, "dice-pool-allocation": true, "select-units": true,
+	"rules-bundle": true, "sequence": true, "named-effect": true, "ability-part": true, "choice": true, "dice-gated": true, "dice-table": true, "dice-pool-allocation": true, "select-units": true,
 	"for-each-unit": true, "designate-target": true, "persistent-designation": true, "stance-select": true, "risk-reward": true,
 	"issue-orders": true, "resource-action-menu": true, "select-objective": true, "for-each-objective": true, "paired-designation": true,
 }
@@ -1312,7 +1312,7 @@ func conditionLeadIn(c map[string]any) string {
 		return describeTiming(p["timing"])
 	case "player-turn-is":
 		switch p["turn"] {
-		case "your-turn", "your", "own":
+		case "your-turn", "your", "own", "self":
 			return "in your turn"
 		case "opponent-turn", "opponent":
 			return "in the opponent's turn"
@@ -3245,6 +3245,8 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			return prefix + joined
 		}
 		return joined
+	case "ability-part":
+		return partInline(e, ctx)
 	case "named-effect":
 		level := ""
 		if e["kind"] == "psychic" && e["level"] != nil {
@@ -3696,6 +3698,16 @@ func describeEffect(e map[string]any, depth int, ctx map[string]any) string {
 			return indent + arrow + capitalize(strings.TrimSpace(prefix)) + "\n" + joined
 		}
 		return joined
+	case "ability-part":
+		// A part is always a bullet of its ability, even at the top level.
+		inner, _ := getMap(e, "effect")
+		if inner == nil {
+			inner = map[string]any{}
+		}
+		if containerTypes[getStr(inner, "type")] {
+			return indent + "-> " + capitalize(partHead(e)) + ":\n" + describeEffect(inner, depth+1, ctx)
+		}
+		return indent + "-> " + capitalize(partInline(e, ctx)) + "."
 	case "named-effect":
 		if e["cost"] != nil || e["duration"] != nil || e["trigger"] != nil || e["usage"] != nil {
 			return indent + arrow + capitalize(describeEffectInline(e, ctx)) + "."
@@ -4005,9 +4017,9 @@ var triggerAttackModels = map[string]string{
 	"enemy-model":     "an enemy model",
 }
 
-// phaseBoundaryOwners maps the authored spellings of whose turn a phase
-// boundary falls in to its possessive.
-var phaseBoundaryOwners = map[string]string{
+// turnOwners maps the authored spellings of whose turn a trigger window
+// (a phase boundary, a phaseWindow) falls in to its possessive.
+var turnOwners = map[string]string{
 	"your":          "your",
 	"your-turn":     "your",
 	"own":           "your",
@@ -4018,7 +4030,7 @@ var phaseBoundaryOwners = map[string]string{
 
 // phaseBoundary renders "at the start of your Command phase": a phase boundary
 // narrowed only by phase and whose turn. ok is false when the trigger carries
-// anything else, or a turn spelling outside phaseBoundaryOwners.
+// anything else, or a turn spelling outside turnOwners.
 func phaseBoundary(t map[string]any) (string, bool) {
 	if t["event"] != "start-of-phase" && t["event"] != "end-of-phase" {
 		return "", false
@@ -4077,7 +4089,7 @@ func phaseBoundary(t map[string]any) (string, bool) {
 	if hasTurn {
 		// Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
 		turnStr, isStr := turn.(string)
-		mapped, found := phaseBoundaryOwners[turnStr]
+		mapped, found := turnOwners[turnStr]
 		if !isStr || !found {
 			return "", false
 		}
@@ -4090,14 +4102,168 @@ func phaseBoundary(t map[string]any) (string, bool) {
 	return "at the " + edge + " of " + owner + " " + capWord(phase) + " phase", true
 }
 
-func describeReactiveTrigger(t map[string]any) string {
-	if boundary, ok := phaseBoundary(t); ok && boundary != "" {
-		if truthy(t["optional"]) {
-			return boundary + ", you may use this ability"
+// partHead renders what leads an ability part: its moment, its usage limit,
+// its name when the rules give one, the choice to use it and its cost ("at the
+// end of your Movement phase, once per battle, you can").
+func partHead(e map[string]any) string {
+	var moments []string
+	for _, trigger := range normalizeTriggers(e["trigger"]) {
+		if m := describeReactiveTrigger(trigger); m != "" {
+			moments = append(moments, m)
 		}
-		return boundary
 	}
-	s := eventClause(t["event"])
+	level := ""
+	if e["kind"] == "psychic" && e["level"] != nil {
+		level = " (Psychic level " + ejstr(e["level"]) + ")"
+	}
+	named := ""
+	if truthy(e["name"]) {
+		use := "use "
+		if truthy(e["optional"]) {
+			use = "you can use "
+		}
+		named = use + ejstr(e["name"]) + level
+	} else if truthy(e["optional"]) {
+		named = "you can"
+	}
+	usage := ""
+	if u, ok := getMap(e, "usage"); ok && u != nil {
+		usage = usageClause(u)
+	}
+	cost := ""
+	if payment, ok := getMap(e, "cost"); ok && payment != nil {
+		cost = "by paying this cost (" + describeEffectInline(payment, map[string]any{}) + ")"
+	}
+	_, trail := durationClauses(e["duration"])
+	var parts []string
+	for _, part := range []string{strings.Join(moments, " or "), usage, named, cost, trail} {
+		if part != "" {
+			parts = append(parts, part)
+		}
+	}
+	return strings.Join(parts, ", ")
+}
+
+// partInline renders an ability part on one line: its head, then its effect.
+func partInline(e map[string]any, ctx map[string]any) string {
+	head := partHead(e)
+	inner, _ := getMap(e, "effect")
+	if inner == nil {
+		inner = map[string]any{}
+	}
+	body := describeEffectInline(inner, ctx)
+	if head != "" {
+		return head + ": " + body
+	}
+	return body
+}
+
+// phaseWindow splits a trigger condition into its phase and whose turn, as a
+// phrase on the moment ("during your Shooting phase", "in your opponent's
+// turn"), and whatever else the condition says (nil when nothing is left). Only
+// a plain phase-is and player-turn-is (not negated, at most one each, joined by
+// "and") make a window; otherwise window is "" and rest is the whole condition.
+func phaseWindow(condition map[string]any) (window string, rest map[string]any, phase string, owner string) {
+	var operands []any
+	if condition["operator"] == "and" {
+		operands = getList(condition, "operands")
+	} else if !truthy(condition["operator"]) {
+		operands = []any{condition}
+	}
+	plain := func(c map[string]any, typ string) bool {
+		return c != nil && !truthy(c["operator"]) && !truthy(c["negated"]) && c["type"] == typ
+	}
+	var phases, turns []map[string]any
+	var others []any
+	for _, raw := range operands {
+		c, _ := asMap(raw)
+		switch {
+		case plain(c, "phase-is"):
+			phases = append(phases, c)
+		case plain(c, "player-turn-is"):
+			turns = append(turns, c)
+		default:
+			others = append(others, raw)
+		}
+	}
+	hasOwner := false
+	if len(turns) > 0 {
+		params, _ := getMap(turns[0], "parameters")
+		owner, hasOwner = turnOwners[ejstr(params["turn"])]
+	}
+	phaseIsStr := false
+	if len(phases) > 0 {
+		params, _ := getMap(phases[0], "parameters")
+		phase, phaseIsStr = params["phase"].(string)
+	}
+	if len(phases) > 1 || len(turns) > 1 || (len(turns) == 1 && !hasOwner) || (len(phases) == 1 && !phaseIsStr) || len(phases)+len(turns) == 0 {
+		return "", condition, "", ""
+	}
+	if len(phases) > 0 {
+		windowOwner := owner
+		if !hasOwner {
+			windowOwner = "the"
+		}
+		window = "during " + windowOwner + " " + capWord(phase) + " phase"
+	} else {
+		window = "in " + owner + " turn"
+	}
+	switch len(others) {
+	case 0:
+		rest = nil
+	case 1:
+		rest, _ = asMap(others[0])
+	default:
+		rest = map[string]any{"operator": "and", "operands": others}
+	}
+	return window, rest, phase, owner
+}
+
+func describeReactiveTrigger(t map[string]any) string {
+	// The short form only when the boundary is all the trigger says; any other clause goes below.
+	subject := t["subject"]
+	plain := !truthy(t["proximity"]) && len(getList(t, "move_types")) == 0 && len(getList(t, "subject_keywords")) == 0 &&
+		len(getList(t, "subject_excluded_keywords")) == 0 && !truthy(t["caused_by"]) &&
+		!truthy(t["binds_die_variable"]) && !truthy(t["binds_selected_die_variable"]) &&
+		(subject == nil || subject == "self" || subject == "unit")
+	if plain {
+		if boundary, ok := phaseBoundary(t); ok && boundary != "" {
+			if truthy(t["optional"]) {
+				return boundary + ", you may use this ability"
+			}
+			return boundary
+		}
+	}
+	edge := ""
+	switch t["event"] {
+	case "start-of-phase":
+		edge = "start"
+	case "end-of-phase":
+		edge = "end"
+	}
+	disembarkShock := isEndOfPhaseDisembarkBattleShock(t)
+	hasSplit := t["condition"] != nil && !disembarkShock
+	var window, phase, owner string
+	var rest map[string]any
+	if hasSplit {
+		cond, _ := asMap(t["condition"])
+		window, rest, phase, owner = phaseWindow(cond)
+	}
+	// A boundary leads with its own phase ("at the end of your Command phase"); one that names no
+	// phase is the boundary of every phase. Decided first, so the clauses below add to it.
+	var s string
+	switch {
+	case edge == "":
+		s = eventClause(t["event"])
+	case phase != "":
+		lead := owner
+		if lead == "" {
+			lead = "the"
+		}
+		s = "at the " + edge + " of " + lead + " " + capWord(phase) + " phase"
+	default:
+		s = "at the " + edge + " of each phase"
+	}
 	if t["subject"] == "friendly-unit" {
 		s = strings.Replace(s, "the unit", "a friendly unit", 1)
 	}
@@ -4196,11 +4362,17 @@ func describeReactiveTrigger(t map[string]any) string {
 		}
 		s += " within " + ejstr(prox["range"]) + "\" of " + of
 	}
-	if isEndOfPhaseDisembarkBattleShock(t) {
+	if disembarkShock {
 		s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
-	} else if t["condition"] != nil {
-		cond, _ := asMap(t["condition"])
-		s += ", if " + describeCondition(cond)
+	} else if hasSplit {
+		if edge != "" && phase == "" && owner != "" {
+			s += " in " + owner + " turn"
+		} else if edge == "" && window != "" {
+			s += " " + window
+		}
+		if rest != nil {
+			s += ", if " + describeCondition(rest)
+		}
 	}
 	if t["binds_die_variable"] != nil {
 		s += " (binding the generated die as " + dekebab(strings.ReplaceAll(ejstr(t["binds_die_variable"]), "_", "-")) + ")"
@@ -4355,16 +4527,16 @@ func renderTopLevel(e map[string]any, scope map[string]any, usage map[string]any
 		// A designate-target carrying its own `duration` renders that duration
 		// itself — repeating the scope duration in the head would double it.
 		ownDuration := (getStr(e, "type") == "designate-target" || getStr(e, "type") == "persistent-designation") && e["duration"] != nil
-		block := describeEffect(e, 0, ctx)
 		duration := trail
 		if ownDuration {
 			duration = ""
 		}
 		head := joinNonEmpty([]string{trig, lead, duration}, ", ")
+		// Under a header, the block's steps are indented as they are under a condition's lead-in.
 		if head != "" {
-			return capitalize(head) + ":\n" + block
+			return capitalize(head) + ":\n" + describeEffect(e, 1, ctx)
 		}
-		return block
+		return describeEffect(e, 0, ctx)
 	}
 	return assembleSentence([]string{trig, lead, trail, describeEffectInline(e, ctx)})
 }

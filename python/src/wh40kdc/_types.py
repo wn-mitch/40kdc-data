@@ -60,6 +60,8 @@ GameEvent: TypeAlias = Literal[
     "start-of-opponent-turn",
     "end-of-opponent-turn",
     "start-of-battle-round",
+    "end-of-battle-round",
+    "start-of-battle",
     "start-of-command-phase",
     "declare-battle-formations",
     "post-deployment",
@@ -71,6 +73,9 @@ GameEvent: TypeAlias = Literal[
     "deep-strike-setup",
     "reinforcements",
     "normal-move",
+    "end-of-normal-move",
+    "end-of-advance-move",
+    "surge-move",
     "advance-move",
     "advances",
     "fall-back-move",
@@ -101,6 +106,10 @@ GameEvent: TypeAlias = Literal[
     "selected-to-shoot",
     "selected-to-fight",
     "selected-to-advance",
+    "selected-to-move",
+    "selected-to-fall-back",
+    "selected-to-disembark",
+    "unit-disembarked",
     "after-unit-resolves-attacks",
     "after-scoring-hit",
     "after-enemy-unit-fires",
@@ -108,12 +117,16 @@ GameEvent: TypeAlias = Literal[
     "on-model-destroyed",
     "first-model-destroyed",
     "before-bearer-removed",
+    "enemy-unit-destroyed",
     "enemy-unit-destroyed-in-melee",
     "on-damage-allocated",
     "battle-shock-test",
+    "becomes-battle-shocked",
+    "start-of-battle-shock-step",
     "leadership-test",
     "desperate-escape-test",
     "stratagem-targeted",
+    "stratagem-used",
     "ability-target-selected",
     "end-of-opponent-charge-phase",
     "enemy-unit-completed-shooting-targeting-bearer",
@@ -123,6 +136,34 @@ GameEvent: TypeAlias = Literal[
     "act-of-faith-completed",
     "act-of-faith-performed",
     "miracle-die-generated",
+    "dark-pact-made",
+    "agile-manoeuvre-performed",
+    "unit-empowered",
+    "ritual-manifested",
+    "oath-fulfilled",
+    "shadow-in-the-warp-used",
+    "order-issued",
+    "order-received",
+    "reanimation-protocols-activated",
+    "ritual-attempted",
+    "warp-channelled",
+    "after-psychic-test",
+    "blessings-of-khorne-rolled",
+    "observer-selected",
+    "malefic-surge-made",
+    "contract-invoked",
+    "dark-pact-test-passed",
+    "contract-completed",
+    "favoured-champions-changed",
+    "cult-ambush-marker-removed",
+    "set-up-from-cult-ambush",
+    "quarry-destroyed",
+    "combat-doctrine-selected",
+    "waaagh-called",
+    "opponent-cp-gained",
+    "flux-token-spent",
+    "yield-points-spent",
+    "gate-of-infinity-used",
     "enemy-unit-selected-charge-targets-before-charge-move",
 ]
 
@@ -1780,6 +1821,7 @@ EffectNode: TypeAlias = Union[
     "SequenceEffect",
     "RulesBundleEffect",
     "NamedEffect",
+    "AbilityPart",
     "DiceGatedEffect",
     "DiceTableEffect",
     "ConditionalEffect",
@@ -1826,6 +1868,19 @@ class RulesBundleEffect(TypedDict):
 class NamedEffect(TypedDict):
     type: Literal["named-effect"]
     name: str
+    kind: NotRequired[Literal["psychic"]]
+    level: NotRequired[int]
+    effect: EffectNode
+    optional: NotRequired[bool]
+    cost: NotRequired[EffectNode]
+    duration: NotRequired[ScopeDuration]
+    trigger: NotRequired[AbilityTrigger]
+    usage: NotRequired[AbilityUsage]
+
+
+class AbilityPart(TypedDict):
+    type: Literal["ability-part"]
+    name: NotRequired[str]
     kind: NotRequired[Literal["psychic"]]
     level: NotRequired[int]
     effect: EffectNode

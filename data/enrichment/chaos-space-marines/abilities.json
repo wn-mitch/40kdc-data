@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -41,7 +32,10 @@
       "heretic-astartes-daemon-prince"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "dark-blessing-aura",
@@ -882,20 +876,11 @@
     "source_digest": "5bf6cfb08368aca2fb8315a2116edb1dcc2598702dc768e5ffb027502b1380eb",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "dark-pacts-leadership-test"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "unit",
-        "modifier": {
-          "test": "dark-pacts",
-          "operation": "re-roll"
-        }
+      "type": "leadership-modifier",
+      "target": "unit",
+      "modifier": {
+        "test": "dark-pacts",
+        "operation": "re-roll"
       }
     },
     "scope": {
@@ -907,7 +892,12 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "dark-pact-made",
+      "subject": "self",
+      "optional": true
+    }
   },
   {
     "ability_id": "daemonkin-psychic",
@@ -1219,28 +1209,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1251,7 +1232,10 @@
       "defiler"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "assault-ramp",
@@ -1569,28 +1553,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1600,7 +1575,10 @@
       "chaos-spawn"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "scouts-6",
@@ -1691,7 +1669,7 @@
       "chaos-spawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -1989,7 +1967,7 @@
       "chaos-predator-annihilator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "Re-roll the Wound roll and the Damage roll against the closest eligible Monster or Vehicle within 18\". Shared Chaos Predator Annihilator ability, kept identical to the World Eaters copy."
   },
   {
@@ -2181,31 +2159,11 @@
     "source_digest": "ba5b8367ff92ddd66ca41af19f3f635352b5e83cbdd4471767f51490bdda35b1",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "battle-shock-test"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "leadership-test"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "subtract",
-          "value": 1
-        }
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "subtract",
+        "value": 1
       }
     },
     "scope": {
@@ -2217,8 +2175,24 @@
       "gellerpox-infected"
     ],
     "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "battle-shock-test",
+        "subject": "enemy-unit",
+        "proximity": {
+          "range": 6
+        }
+      },
+      {
+        "event": "leadership-test",
+        "subject": "enemy-unit",
+        "proximity": {
+          "range": 6
+        }
+      }
+    ]
   },
   {
     "ability_id": "terrifying-assault",
@@ -3356,30 +3330,10 @@
     "source_digest": "65c50c1e3c8a5ac6e053d66515b909c7e2b2effcde9d0028c22297dc09af15f7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "HERETIC ASTARTES"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "dark-pact"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "friendly-within-aura",
-        "modifier": {
-          "grant_type": "pact-both-abilities"
-        }
+      "type": "ability-grant",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "grant_type": "pact-both-abilities"
       }
     },
     "scope": {
@@ -3390,8 +3344,19 @@
       "helbrute"
     ],
     "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "dark-pact-made",
+      "subject": "friendly-unit",
+      "proximity": {
+        "of": "self",
+        "range": 6
+      },
+      "subject_keywords": [
+        "HERETIC ASTARTES"
+      ]
+    }
   },
   {
     "ability_id": "devoted-to-destruction",
@@ -3677,18 +3642,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
             "type": "units-destroyed",
             "parameters": {
               "side": "enemy",
@@ -3726,7 +3679,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "bestial-raiders",
@@ -3742,12 +3704,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "game-start-in-reserves"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "starts-in-strategic-reserves"
           },
           "effect": {
             "type": "ability-grant",
@@ -3760,9 +3719,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "timing-is",
+            "type": "on-battlefield",
+            "negated": true,
             "parameters": {
-              "timing": "in-reserves"
+              "subject": "self"
             }
           },
           "effect": {
@@ -4190,7 +4150,7 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -4352,30 +4312,19 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "or",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "engagement-state",
             "parameters": {
-              "timing": "post-deployment"
+              "state": "on-battlefield"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "on-battlefield"
-                }
-              },
-              {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "embarked"
-                }
-              }
-            ]
+            "type": "engagement-state",
+            "parameters": {
+              "state": "embarked"
+            }
           }
         ]
       },
@@ -4395,8 +4344,11 @@
       "masters-of-the-maelstrom"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "plunder",
@@ -4686,7 +4638,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -4840,27 +4792,18 @@
     "source_digest": "1dcb21b71d68c31deb63aeb6f71a7264e6bda6b914eb0497984bbd5331d60d4b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "first-model-destroyed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "resurrection",
-          "target": "self",
-          "modifier": {
-            "count": 1,
-            "wounds_remaining": "full",
-            "placement": "closest-to-destruction",
-            "timing": "end-of-phase"
-          }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resurrection",
+        "target": "self",
+        "modifier": {
+          "count": 1,
+          "wounds_remaining": "full",
+          "placement": "closest-to-destruction",
+          "timing": "end-of-phase"
         }
       }
     },
@@ -4872,8 +4815,11 @@
       "fabius-bile"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] applies to this unit's Fabius Bile model; if he was attached when destroyed, he is set back up attached to that unit"
+    "behavior": "reactive",
+    "community_notes": "[APPROX] applies to this unit's Fabius Bile model; if he was attached when destroyed, he is set back up attached to that unit",
+    "trigger": {
+      "event": "first-model-destroyed"
+    }
   },
   {
     "ability_id": "lone-operative",
@@ -4994,28 +4940,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+2",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+2",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -5025,7 +4962,10 @@
       "khorne-lord-of-skulls"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "plough-through-the-enemy",
@@ -5072,21 +5012,12 @@
     "source_digest": "52b2504b0593c9457ea9f17916a5ca2928760b63cca0b59e14cc5de1cd8f8964",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "pool-add-die",
-        "target": "self",
-        "modifier": {
-          "pool_id": "blessings-of-khorne-pool",
-          "count": 1,
-          "value": "rolled"
-        }
+      "type": "pool-add-die",
+      "target": "self",
+      "modifier": {
+        "pool_id": "blessings-of-khorne-pool",
+        "count": 1,
+        "value": "rolled"
       }
     },
     "scope": {
@@ -5097,8 +5028,11 @@
       "khorne-lord-of-skulls"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll. Shared datasheet ability (Khorne Lord of Skulls); the world-eaters copy is the authored original — the linked API resolves each faction's own copy, so the two may evolve independently."
+    "behavior": "reactive",
+    "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll. Shared datasheet ability (Khorne Lord of Skulls); the world-eaters copy is the authored original — the linked API resolves each faction's own copy, so the two may evolve independently.",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "super-heavy-war-engine",
@@ -6243,7 +6177,7 @@
       "type": "ability-grant",
       "target": "self",
       "modifier": {
-        "grant_type": "charge-after-fallback"
+        "grant_type": "charge-after-fall-back"
       }
     },
     "scope": {
@@ -7395,22 +7329,13 @@
     "faction_id": "chaos-space-marines",
     "detachment_id": "warpstrike-champions",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "unit-set-up"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "charge",
-          "subset": "all-failures"
-        }
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "charge",
+        "subset": "all-failures"
       }
     },
     "scope": {
@@ -7421,6 +7346,9 @@
       "required_keywords": [
         "Heretic Astartes"
       ]
+    },
+    "trigger": {
+      "event": "unit-set-up"
     }
   },
   {
@@ -7508,12 +7436,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "set-up-from-reserves"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up-from-reserves"
           },
           "effect": {
             "type": "stat-modifier",
@@ -9198,21 +9123,12 @@
     "ability_type": "unit",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "dark-pact"
-        }
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
-        "modifier": {
-          "keywords": [
-            "Devastating Wounds"
-          ]
-        }
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Devastating Wounds"
+        ]
       }
     },
     "scope": {
@@ -9223,6 +9139,11 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
+    },
+    "trigger": {
+      "event": "dark-pact-made",
+      "subject": "self",
+      "optional": true
     }
   },
   {
@@ -9294,47 +9215,38 @@
     "faction_id": "chaos-space-marines",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-attack"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "mortal-wounds",
-            "target": "self",
-            "modifier": {
-              "count": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1,
-              "weapon_keyword": "Psychic"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1,
-              "weapon_keyword": "Psychic"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "mortal-wounds",
+          "target": "self",
+          "modifier": {
+            "count": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1,
+            "weapon_keyword": "Psychic"
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "operation": "add",
+            "value": 1,
+            "weapon_keyword": "Psychic"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -9343,7 +9255,15 @@
     "usage": {
       "frequency": "once-per-phase",
       "per": "unit"
-    }
+    },
+    "trigger": [
+      {
+        "event": "selected-to-shoot"
+      },
+      {
+        "event": "selected-to-fight"
+      }
+    ]
   },
   {
     "ability_id": "combat-squad-zarkans-daemonkin",
@@ -9363,7 +9283,7 @@
     "ability_type": "unit",
     "behavior": "activated",
     "effect": {
-      "type": "named-effect",
+      "type": "ability-part",
       "name": "Combat Squad",
       "optional": true,
       "trigger": {

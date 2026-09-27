@@ -242,6 +242,15 @@ function walk(
     case "named-effect":
       translateNamedEffect(currentNode, source, opts, out);
       return;
+    case "ability-part":
+      // A part firing on its own moment is gated like a timing-is step; one with only a cost,
+      // a choice or a usage limit is an activation, as a named effect is.
+      if (currentNode.trigger == null && (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null)) {
+        translateNamedEffect(currentNode, source, opts, out);
+      } else {
+        walk(momentGate(currentNode.trigger, currentNode.effect), source, opts, out);
+      }
+      return;
     case "choice":
       enumerateChoice(currentNode, source, opts, out);
       return;
@@ -983,6 +992,39 @@ function translateNamedEffect(
 // `applicableWhen` so the resolver gates them per-target.
 // ---------------------------------------------------------------------------
 
+/** Steps of every attack: something firing on one applies to each attack it modifies. */
+export const ATTACK_STEP_EVENTS: ReadonlySet<string> = new Set([
+  "before-hit-roll", "after-hit-roll", "before-wound-roll", "after-wound-roll", "attack-scores-wound", "after-scoring-hit",
+  "before-save-roll", "after-save-roll", "before-damage-roll", "after-damage-roll", "on-damage-allocated",
+]);
+
+/** Moves the engine context records: a unit that made one has charged or advanced this turn. */
+const MOVE_FACTS: Record<string, string> = { "charge-move": "charged-this-turn", "advance-move": "advanced-this-turn" };
+
+/**
+ * An effect gated on a trigger (one, or several alternatives) the way a `timing-is` condition
+ * gates it, so the moment is a player-controlled gate and a buff behind it an opt-in lever
+ * (`<ability>@<event>`). A trigger on an attack step is met by every attack: only its own
+ * condition gates the effect.
+ */
+export function momentGate(trigger: unknown, effect: unknown): unknown {
+  if (effect == null) return effect;
+  const triggers = (Array.isArray(trigger) ? trigger : [trigger])
+    .filter((item): item is Record<string, unknown> => isObject(item) && typeof item.event === "string");
+  if (triggers.length === 0) return effect;
+  const gates = triggers.map((item) => {
+    const own = isObject(item.condition) ? item.condition : null;
+    if (ATTACK_STEP_EVENTS.has(item.event as string)) return own;
+    // A unit's own Charge or Advance move is a fact the context carries, not a choice.
+    const ownMove = item.subject == null || item.subject === "self" || item.subject === "unit" ? MOVE_FACTS[item.event as string] : undefined;
+    const moment = ownMove ? { type: ownMove } : { type: "timing-is", parameters: { timing: item.event } };
+    return own ? { operator: "and", operands: [moment, own] } : moment;
+  });
+  // Any alternative met by every attack without a condition leaves nothing to gate.
+  if (gates.some((gate) => gate === null)) return effect;
+  return { type: "conditional", condition: gates.length === 1 ? gates[0] : { operator: "or", operands: gates }, effect };
+}
+
 /** Emit one lever per buff-bearing choice, retaining its shared selection cap. */
 function enumerateChoice(
   node: Record<string, unknown>,
@@ -1179,6 +1221,11 @@ function collectGatedBuffs(
     case "named-effect":
       if (node.optional !== true && node.cost == null && node.trigger == null && node.usage == null) {
         collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
+      }
+      return;
+    case "ability-part":
+      if (node.trigger != null || (node.optional !== true && node.cost == null && node.usage == null)) {
+        collectGatedBuffs(momentGate(node.trigger, node.effect), source, opts, applicability, outBuffs);
       }
       return;
     case "choice":
@@ -1585,7 +1632,7 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
       select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
       applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
       applies?.beneficiary != null || applies?.reference != null)) ||
-    (node.type === "named-effect" && hasUnresolvedTriggerBinding(node.trigger)) ||
+    ((node.type === "named-effect" || node.type === "ability-part") && hasUnresolvedTriggerBinding(node.trigger)) ||
     (node.type === "named-region-state" && consumer?.attack_condition != null)
   );
 }

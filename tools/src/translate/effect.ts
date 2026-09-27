@@ -272,6 +272,7 @@ const CONTAINER_TYPES = new Set([
   "sequence",
   "rules-bundle",
   "named-effect",
+  "ability-part",
   "choice",
   "dice-gated",
   "dice-table",
@@ -946,16 +947,51 @@ function phaseBoundary(t: AbilityTrigger): string | null {
   const turn = operands.find((c) => c.type === "player-turn-is")?.parameters?.turn;
   if (typeof phase !== "string" || operands.length !== (turn === undefined ? 1 : 2)) return null;
   // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
-  const owners: Record<string, string> = { your: "your", "your-turn": "your", own: "your", self: "your", opponent: "your opponent's", "opponent-turn": "your opponent's" };
-  if (turn !== undefined && !(String(turn) in owners)) return null;
-  const owner = turn === undefined ? "the" : owners[String(turn)]!;
+  if (turn !== undefined && !(String(turn) in TURN_OWNERS)) return null;
+  const owner = turn === undefined ? "the" : TURN_OWNERS[String(turn)]!;
   return `at the ${t.event === "start-of-phase" ? "start" : "end"} of ${owner} ${capWord(phase)} phase`;
 }
 
+/**
+ * A trigger condition's phase and whose turn, as a phrase on the moment ("during your Shooting
+ * phase", "in your opponent's turn"), and whatever else the condition says. Only a plain phase-is
+ * and player-turn-is (not negated, at most one each, joined by "and") make a window.
+ */
+function phaseWindow(condition: Condition): { window: string; rest: Condition | null; phase?: string; owner?: string } {
+  const operands = condition.operator === "and" ? condition.operands ?? [] : condition.operator ? [] : [condition];
+  const plain = (c: Condition, type: string) => !c.operator && !c.negated && c.type === type;
+  const phases = operands.filter((c) => plain(c, "phase-is"));
+  const turns = operands.filter((c) => plain(c, "player-turn-is"));
+  const owner = TURN_OWNERS[jstr(turns[0]?.parameters?.turn)];
+  const phase = phases[0]?.parameters?.phase;
+  if (phases.length > 1 || turns.length > 1 || (turns.length === 1 && !owner) || (phases.length === 1 && typeof phase !== "string") || phases.length + turns.length === 0) {
+    return { window: "", rest: condition };
+  }
+  const window = phases.length ? `during ${owner ?? "the"} ${capWord(phase as string)} phase` : `in ${owner} turn`;
+  const others = operands.filter((c) => !phases.includes(c) && !turns.includes(c));
+  return {
+    window, rest: others.length === 0 ? null : others.length === 1 ? others[0]! : { operator: "and", operands: others },
+    ...(phases.length ? { phase: phase as string } : {}), ...(owner ? { owner } : {}),
+  };
+}
+
+/** Whose turn, as a trigger window names it. */
+const TURN_OWNERS: Record<string, string> = { your: "your", "your-turn": "your", own: "your", self: "your", opponent: "your opponent's", "opponent-turn": "your opponent's" };
+
 export function describeTrigger(t: AbilityTrigger): string {
-  const boundary = phaseBoundary(t);
+  // The short form only when the boundary is all the trigger says; any other clause goes below.
+  const plain = !t.proximity && !t.move_types?.length && !t.subject_keywords?.length && !t.subject_excluded_keywords?.length
+    && !t.caused_by && !t.binds_die_variable && !t.binds_selected_die_variable && (t.subject == null || t.subject === "self" || t.subject === "unit");
+  const boundary = plain ? phaseBoundary(t) : null;
   if (boundary) return t.optional ? `${boundary}, you may use this ability` : boundary;
-  let s = eventClause(t.event);
+  const edge = t.event === "start-of-phase" ? "start" : t.event === "end-of-phase" ? "end" : null;
+  const disembarkShock = t.event === "end-of-phase" && endOfPhaseDisembarkBattleShockCondition(t.condition);
+  const split = t.condition && !disembarkShock ? phaseWindow(t.condition) : null;
+  // A boundary leads with its own phase ("at the end of your Command phase"); one that names no
+  // phase is the boundary of every phase. Decided first, so the clauses below add to it.
+  let s = !edge ? eventClause(t.event)
+    : split?.phase ? `at the ${edge} of ${split.owner ?? "the"} ${capWord(split.phase)} phase`
+      : `at the ${edge} of each phase`;
   if (t.subject === "friendly-unit") s = s.replace(/\b(?:the|a) unit\b/g, "a friendly unit");
   if (t.subject === "enemy-unit") s = s.replace(/\b(?:the|a) unit\b/g, "an enemy unit");
   if (t.event === "on-model-destroyed") {
@@ -1001,9 +1037,13 @@ export function describeTrigger(t: AbilityTrigger): string {
           : "this unit";
     s += ` within ${jstr(t.proximity.range)}" of ${of}`;
   }
-  if (t.event === "end-of-phase" && endOfPhaseDisembarkBattleShockCondition(t.condition))
-    s += ", if the unit disembarked from a Transport this turn and is Battle-shocked";
-  else if (t.condition) s += `, if ${describeCondition(t.condition)}`;
+  if (disembarkShock) s += ", if the unit disembarked from a Transport this turn and is Battle-shocked";
+  else if (split) {
+    // Another moment takes the phase as its window ("… during your Shooting phase").
+    if (edge && !split.phase && split.owner) s += ` in ${split.owner} turn`;
+    else if (!edge && split.window) s += ` ${split.window}`;
+    if (split.rest) s += `, if ${describeCondition(split.rest)}`;
+  }
   if (t.binds_die_variable) s += ` (binding the generated die as ${dekebab(t.binds_die_variable.replace(/_/g, "-"))})`;
   if (t.binds_selected_die_variable) s += ` (binding one chosen die used in that Act of Faith as ${dekebab(t.binds_selected_die_variable.replace(/_/g, "-"))})`;
   if (t.optional) s += ", you may use this ability";
@@ -1251,7 +1291,7 @@ function conditionLeadIn(c: Condition): string {
     case "player-turn-is": {
       const t = jstr(p.turn);
       const phrase =
-        t === "your-turn" || t === "your" || t === "own"
+        t === "your-turn" || t === "your" || t === "own" || t === "self"
           ? "your"
           : t === "opponent-turn" || t === "opponent"
             ? "the opponent's"
@@ -2295,6 +2335,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       const rider = rollWithRider(e.steps ?? [], ctx);
       return rider ?? (e.steps ?? []).map((s) => describeEffectInline(s, ctx)).join("; ");
     }
+    case "ability-part":
+      return partInline(e, ctx);
     case "named-effect": {
       const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
       if (e.cost || e.duration || e.trigger || e.usage) {
@@ -2695,6 +2737,25 @@ function describeAttackRestriction(m: Record<string, unknown>, subj: string): st
 }
 
 /**
+ * What leads a part: its moment, its usage limit, its name when the rules give one, the choice to
+ * use it and its cost ("at the end of your Movement phase, once per battle, you can").
+ */
+function partHead(e: Effect): string {
+  const moment = normalizeTriggers(e.trigger).map(describeTrigger).filter(Boolean).join(" or ");
+  const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
+  const named = e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
+  const cost = e.cost ? `by paying this cost (${describeEffectInline(e.cost)})` : "";
+  return [moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
+}
+
+/** A part on one line: its head, then its effect. */
+function partInline(e: Effect, ctx: Ctx): string {
+  const head = partHead(e);
+  const body = describeEffectInline(e.effect ?? {}, ctx);
+  return head ? `${head}: ${body}` : body;
+}
+
+/**
  * Block translation of a *container* effect tree (multi-line, two-space
  * indentation). Leaves and conditionals are handled inline by the caller.
  */
@@ -2715,6 +2776,12 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const rider = rollWithRider(e.steps ?? [], ctx);
       if (rider) return `${indent}${arrow}${capitalize(rider)}.`;
       return (e.steps ?? []).map((s) => describeEffect(s, depth, ctx)).join("\n");
+    }
+    case "ability-part": {
+      // A part is always a bullet of its ability, even at the top level.
+      const inner = e.effect ?? {};
+      if (CONTAINER_TYPES.has(inner.type ?? "")) return `${indent}-> ${capitalize(partHead(e))}:\n` + describeEffect(inner, depth + 1, ctx);
+      return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
     }
     case "named-effect": {
       if (e.cost || e.duration || e.trigger || e.usage) return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
@@ -3004,9 +3071,9 @@ function renderTopLevel(
     // duration itself — repeating the scope duration in the head would double it.
     const ownDuration =
       (e.type === "designate-target" || e.type === "persistent-designation") && e.duration != null;
-    const block = describeEffect(e, 0, ctx);
     const head = [trig, lead, ownDuration ? "" : trail].filter((p) => p.length > 0).join(", ");
-    return head ? capitalize(head) + ":\n" + block : block;
+    // Under a header, the block's steps are indented as they are under a condition's lead-in.
+    return head ? capitalize(head) + ":\n" + describeEffect(e, 1, ctx) : describeEffect(e, 0, ctx);
   }
 
   return assembleSentence([trig, lead, trail, describeEffectInline(e, ctx)]);

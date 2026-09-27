@@ -22,7 +22,7 @@
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, until the end of the phase:
+                <characteristic name="Description">Before this model is removed from play, until the end of the phase:
   -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
@@ -33,7 +33,7 @@
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the phase, you may use this ability, if within 12" of a friendly unit, until the end of the battle round, you can use one Stratagem on this model for 0CP.</characteristic>
+                <characteristic name="Description">When this model's unit is targeted with a Stratagem (the triggering unit must have World Eaters), you may use this ability, if within 12" of a friendly unit, until the end of the battle round, you can use one Stratagem on this model for 0CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">
@@ -119,13 +119,13 @@
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
-While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model for ranged attacks.
-If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
+  -&gt; While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model for ranged attacks.
+  -&gt; If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the phase, you may use this ability, the unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -315,13 +315,13 @@ If the target is the closest eligible target, you can re-roll a failed Charge ro
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
-While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model for ranged attacks.
-If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
+  -&gt; While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model for ranged attacks.
+  -&gt; If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the phase, you may use this ability, the unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

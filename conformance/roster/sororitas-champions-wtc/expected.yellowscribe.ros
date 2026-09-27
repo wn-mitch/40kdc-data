@@ -32,7 +32,7 @@
             </profile>
             <profile name="Stirring Rhetoric" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model leads a unit, until the end of the phase, at act of faith, the unit gains the Miracle Dice Value Set 6 ability.</characteristic>
+                <characteristic name="Description">When an Act of Faith is performed, while this model leads a unit, until the end of the phase, the unit gains the Miracle Dice Value Set 6 ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

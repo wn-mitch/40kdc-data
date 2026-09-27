@@ -190,6 +190,17 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             _walk(step, source, opts, out)
     elif node_type == "named-effect":
         _translate_named_effect(node, source, opts, out)
+    elif node_type == "ability-part":
+        # A part firing on its own moment is gated like a timing-is step; one with only a cost,
+        # a choice or a usage limit is an activation, as a named effect is.
+        if node.get("trigger") is None and (
+            node.get("optional") is True
+            or node.get("cost") is not None
+            or node.get("usage") is not None
+        ):
+            _translate_named_effect(node, source, opts, out)
+        else:
+            _walk(moment_gate(node.get("trigger"), node.get("effect")), source, opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
         _enumerate_choice(node, source, opts, out)
@@ -1020,6 +1031,67 @@ def _translate_named_effect(
 # ---------------------------------------------------------------------------
 
 
+# Steps of every attack: something firing on one applies to each attack it modifies.
+ATTACK_STEP_EVENTS: frozenset[str] = frozenset(
+    {
+        "before-hit-roll",
+        "after-hit-roll",
+        "before-wound-roll",
+        "after-wound-roll",
+        "attack-scores-wound",
+        "after-scoring-hit",
+        "before-save-roll",
+        "after-save-roll",
+        "before-damage-roll",
+        "after-damage-roll",
+        "on-damage-allocated",
+    }
+)
+
+# Moves the engine context records: a unit that made one has charged or advanced this turn.
+_MOVE_FACTS: dict[str, str] = {
+    "charge-move": "charged-this-turn",
+    "advance-move": "advanced-this-turn",
+}
+
+
+def moment_gate(trigger: Any, effect: Any) -> Any:
+    """An effect gated on a trigger (one, or several alternatives) the way a ``timing-is``
+    condition gates it, so the moment is a player-controlled gate and a buff behind it an
+    opt-in lever (``<ability>@<event>``). A trigger on an attack step is met by every attack:
+    only its own condition gates the effect."""
+    if effect is None:
+        return effect
+    triggers = [
+        item
+        for item in (trigger if isinstance(trigger, list) else [trigger])
+        if _is_object(item) and isinstance(item.get("event"), str)
+    ]
+    if not triggers:
+        return effect
+    gates: list[dict[str, Any] | None] = []
+    for item in triggers:
+        own = item.get("condition") if _is_object(item.get("condition")) else None
+        event = item["event"]
+        if event in ATTACK_STEP_EVENTS:
+            gates.append(own)
+            continue
+        # A unit's own Charge or Advance move is a fact the context carries, not a choice.
+        subject = item.get("subject")
+        own_move = _MOVE_FACTS.get(event) if subject in (None, "self", "unit") else None
+        moment: dict[str, Any] = (
+            {"type": own_move}
+            if own_move
+            else {"type": "timing-is", "parameters": {"timing": event}}
+        )
+        gates.append({"operator": "and", "operands": [moment, own]} if own is not None else moment)
+    # Any alternative met by every attack without a condition leaves nothing to gate.
+    if any(gate is None for gate in gates):
+        return effect
+    condition = gates[0] if len(gates) == 1 else {"operator": "or", "operands": gates}
+    return {"type": "conditional", "condition": condition, "effect": effect}
+
+
 def _enumerate_choice(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
@@ -1236,6 +1308,20 @@ def _collect_gated_buffs(
             and node.get("usage") is None
         ):
             _collect_gated_buffs(node.get("effect"), source, opts, applicability, out_buffs)
+        return
+    if node_type == "ability-part":
+        if node.get("trigger") is not None or (
+            node.get("optional") is not True
+            and node.get("cost") is None
+            and node.get("usage") is None
+        ):
+            _collect_gated_buffs(
+                moment_gate(node.get("trigger"), node.get("effect")),
+                source,
+                opts,
+                applicability,
+                out_buffs,
+            )
         return
     if node_type in ("choice", "dice-pool-allocation", "dice-gated"):
         # A decision (or stochastic roll) nested inside an activation. The

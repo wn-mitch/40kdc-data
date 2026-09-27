@@ -22,7 +22,7 @@
             </profile>
             <profile name="Icon of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an enemy unit is destroyed, you gain 1 Bloodshed Point.
+                <characteristic name="Description">-&gt; Each time an enemy unit is destroyed: you gain 1 Bloodshed Point.
 Add one rolled D6 to your Blessings of Khorne Pool for each Bloodshed Point you have, after which all your Bloodshed Points are lost.</characteristic>
               </characteristics>
             </profile>
@@ -92,12 +92,12 @@ Add one rolled D6 to your Blessings of Khorne Pool for each Bloodshed Point you 
             </profile>
             <profile name="Scouts 8&quot;" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the phase, once per battle, before the first battle round, the unit can make a Scout move of up to 8".</characteristic>
+                <characteristic name="Description">Once per battle, before the first battle round, the unit can make a Scout move of up to 8".</characteristic>
               </characteristics>
             </profile>
             <profile name="To Slake its Rage" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Advance and Charge ability.</characteristic>
+                <characteristic name="Description">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -146,13 +146,13 @@ Add one rolled D6 to your Blessings of Khorne Pool for each Bloodshed Point you 
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, until the end of the phase:
+                <characteristic name="Description">Before this model is removed from play, until the end of the phase:
   -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Firing Deck 2" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit is selected, the unit: firing deck.</characteristic>
+                <characteristic name="Description">When the unit is selected to shoot during your Shooting phase, you may use this ability, the unit: firing deck.</characteristic>
               </characteristics>
             </profile>
             <profile name="Meet Any Challenge" typeName="Abilities">

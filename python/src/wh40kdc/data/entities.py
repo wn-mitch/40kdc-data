@@ -27,6 +27,31 @@ def _resolve_all(ids: list[str] | None, get: Any) -> list[Any]:
     return out
 
 
+def trigger_gated(behavior: Any, trigger: Any, effect: Any) -> Any:
+    """A reactive ability's effect gated on its trigger, the way a ``timing-is`` condition gates it.
+
+    The moment is one the player opts into, so a triggered buff is an activatable lever
+    (``<ability>@<event>``) rather than always on. Several triggers are alternatives. A trigger
+    on an attack step is met by every attack, and an activated ability (a stratagem) is already
+    opt-in, so neither is gated.
+    """
+    from wh40kdc.cruncher.from_dsl import ATTACK_STEP_EVENTS, moment_gate
+
+    if behavior != "reactive":
+        return effect
+    triggers = trigger if isinstance(trigger, list) else [trigger]
+    # An ability firing on an attack step applies to every attack; its trigger condition is
+    # already how the authored data gates such abilities (in the effect), so nothing is added.
+    if any(
+        isinstance(item, dict)
+        and isinstance(item.get("event"), str)
+        and item["event"] in ATTACK_STEP_EVENTS
+        for item in triggers
+    ):
+        return effect
+    return moment_gate(trigger, effect)
+
+
 class UnitView:
     """A unit, linked to its faction, weapons, and abilities."""
 
@@ -269,7 +294,11 @@ class AbilityView:
 
         ctx = context if context is not None else {"phase": "shooting"}
         translated = effect_to_buffs(
-            self._resolve_rules_bundles(self.raw.get("effect")),
+            trigger_gated(
+                self.raw.get("behavior"),
+                self.raw.get("trigger"),
+                self._resolve_rules_bundles(self.raw.get("effect")),
+            ),
             source,
             ctx,
             perspective,

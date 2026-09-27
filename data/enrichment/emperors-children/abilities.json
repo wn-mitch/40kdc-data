@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -41,7 +32,10 @@
       "chaos-land-raider"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "assault-ramp",
@@ -330,21 +324,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "INFANTRY"
-            }
-          }
-        ]
+        "type": "target-has-keyword",
+        "parameters": {
+          "keyword": "INFANTRY"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -379,7 +362,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "after-unit-resolves-attacks"
+    }
   },
   {
     "ability_id": "empyric-guidance-psychic",
@@ -725,28 +711,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -756,7 +733,10 @@
       "chaos-spawn"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "scouts-6",
@@ -847,7 +827,7 @@
       "chaos-spawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -951,28 +931,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -982,7 +953,10 @@
       "daemon-prince-of-slaanesh"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "lord-of-excess",
@@ -1427,7 +1401,7 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -1535,7 +1509,24 @@
     "source_digest": "1432360a67f83b68878067cca831d55ada222f513635b64e9d8ab7d2add03f86",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "daemon-primarch-of-slaanesh-selection"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle-round"
+    },
+    "unit_ids": [
+      "fulgrim"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
       "condition": {
         "operator": "and",
         "operands": [
@@ -1548,35 +1539,12 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-turn"
+              "turn": "opponent-turn"
             }
           }
         ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "daemon-primarch-of-slaanesh-selection"
-        }
       }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "battle-round"
-    },
-    "unit_ids": [
-      "fulgrim"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    }
   },
   {
     "ability_id": "serpentine",
@@ -2129,41 +2097,36 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "end-of-phase"
-                }
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "units-destroyed",
-                    "parameters": {
-                      "side": "enemy",
-                      "window": "phase",
-                      "count_min": 1
-                    }
-                  }
-                ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-phase",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
               }
-            ]
+            }
           },
           "effect": {
-            "type": "model-destruction",
-            "target": "unit",
-            "modifier": {}
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "units-destroyed",
+                  "parameters": {
+                    "side": "enemy",
+                    "window": "phase",
+                    "count_min": 1
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "model-destruction",
+              "target": "unit",
+              "modifier": {}
+            }
           }
         }
       ]
@@ -2266,22 +2229,13 @@
     "faction_id": "emperors-children",
     "detachment_id": "elegant-brutes",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "unit-set-up"
-        }
-      },
-      "effect": {
-        "type": "charge-roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "operation": "add",
-          "value": 1
-        }
+      "type": "charge-roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "operation": "add",
+        "value": 1
       }
     },
     "scope": {
@@ -2293,6 +2247,9 @@
         "Emperor's Children",
         "Terminator"
       ]
+    },
+    "trigger": {
+      "event": "unit-set-up"
     }
   },
   {
@@ -3312,40 +3269,32 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "start-of-battle-round"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "WARLORD"
-                }
-              }
-            ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-battle-round"
           },
           "effect": {
-            "type": "resource-gain",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pact-pledge",
-              "amount": "variable"
+            "type": "conditional",
+            "condition": {
+              "type": "unit-has-keyword",
+              "parameters": {
+                "keyword": "WARLORD"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "self",
+              "modifier": {
+                "pool_id": "pact-pledge",
+                "amount": "variable"
+              }
             }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-battle-round"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "end-of-battle-round"
           },
           "effect": {
             "type": "sequence",

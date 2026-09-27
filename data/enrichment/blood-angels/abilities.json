@@ -46,7 +46,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -82,7 +82,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -121,18 +121,43 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "shoot-after-advance-or-fall-back"
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
+              }
+            },
+            {
+              "type": "fallback-and-act",
+              "target": "unit",
+              "modifier": {}
+            }
+          ]
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "charge-after-advance-or-fall-back"
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": "unit",
+              "modifier": {
+                "grant_type": "charge-after-advance"
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": "unit",
+              "modifier": {
+                "grant_type": "charge-after-fall-back"
+              }
+            }
+          ]
         }
       ]
     },
@@ -244,7 +269,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -499,7 +524,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -535,7 +560,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -571,8 +596,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "enemy-unit"
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     },
     "effect": {
       "type": "fight-on-death",
@@ -602,8 +633,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "enemy-unit"
+      "event": "enemy-unit-targets-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -737,7 +774,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -940,10 +977,13 @@
       "choice_label": "Red Wrath",
       "options": [
         {
-          "type": "ability-grant",
+          "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "grant_type": "shoot-after-advance"
+            "keywords": [
+              "Assault"
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
@@ -961,10 +1001,13 @@
               "target": "unit"
             },
             {
-              "type": "ability-grant",
+              "type": "keyword-grant",
               "target": "unit",
               "modifier": {
-                "grant_type": "shoot-after-advance"
+                "keywords": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
               }
             },
             {
@@ -982,7 +1025,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Advances: choose to shoot or charge this turn \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Advances: choose to shoot or charge this turn — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "wrathful-rampage-the-lost-brethren",
@@ -1029,10 +1072,13 @@
             ]
           },
           "effect": {
-            "type": "ability-grant",
+            "type": "keyword-grant",
             "target": "unit",
             "modifier": {
-              "grant_type": "shoot-after-advance"
+              "keywords": [
+                "Assault"
+              ],
+              "weapon_type": "ranged"
             }
           }
         }
@@ -1065,10 +1111,13 @@
       "choice_label": "Aggressive Onslaught",
       "options": [
         {
-          "type": "ability-grant",
+          "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "grant_type": "shoot-after-advance"
+            "keywords": [
+              "Assault"
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
@@ -1086,10 +1135,13 @@
               "target": "unit"
             },
             {
-              "type": "ability-grant",
+              "type": "keyword-grant",
               "target": "unit",
               "modifier": {
-                "grant_type": "shoot-after-advance"
+                "keywords": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
               }
             },
             {
@@ -1107,7 +1159,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Advances: choose to shoot or charge \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Advances: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "angelic-grace-liberator-assault-group",
@@ -1188,7 +1240,7 @@
   },
   {
     "ability_id": "aura-of-the-angels-grace-legacy-of-grace",
-    "name": "Aura Of The Angel\u2019S Grace",
+    "name": "Aura Of The Angel’S Grace",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1203,7 +1255,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1236,7 +1288,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1271,7 +1323,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "enemy-unit-targets-bearer",
       "subject": "enemy-unit"
     },
     "effect": {
@@ -1624,11 +1676,9 @@
       "choice_label": "Relentless Assault",
       "options": [
         {
-          "type": "ability-grant",
+          "type": "fallback-and-act",
           "target": "unit",
-          "modifier": {
-            "grant_type": "shoot-after-fall-back"
-          }
+          "modifier": {}
         },
         {
           "type": "ability-grant",
@@ -1645,11 +1695,9 @@
               "target": "unit"
             },
             {
-              "type": "ability-grant",
+              "type": "fallback-and-act",
               "target": "unit",
-              "modifier": {
-                "grant_type": "shoot-after-fall-back"
-              }
+              "modifier": {}
             },
             {
               "type": "ability-grant",
@@ -1666,7 +1714,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Falls Back: choose to shoot or charge \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Falls Back: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "savage-echoes-liberator-assault-group",

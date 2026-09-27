@@ -124,28 +124,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -155,7 +146,10 @@
       "cronos"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "feel-no-pain-5",
@@ -248,25 +242,16 @@
     "source_digest": "7d4f92d18309f326ded15abda64598158965087bfc57c69285948cdc17d17193",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "friendly-unit-empowered-within-9"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 5,
-        "comparison": "gte",
-        "on_success": {
-          "type": "resource-gain",
-          "target": "self",
-          "modifier": {
-            "pool_id": "pain-token-pool",
-            "amount": 1
-          }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 5,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resource-gain",
+        "target": "self",
+        "modifier": {
+          "pool_id": "pain-token-pool",
+          "amount": 1
         }
       }
     },
@@ -278,8 +263,15 @@
       "cronos"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] add 1 to the roll if no model in this unit has a spirit vortex; Pain tokens spent for reasons other than Empowering do not trigger this ability"
+    "behavior": "reactive",
+    "community_notes": "[APPROX] add 1 to the roll if no model in this unit has a spirit vortex; Pain tokens spent for reasons other than Empowering do not trigger this ability",
+    "trigger": {
+      "event": "unit-empowered",
+      "subject": "friendly-unit",
+      "proximity": {
+        "range": 9
+      }
+    }
   },
   {
     "ability_id": "leader",
@@ -522,7 +514,7 @@
       "hellions"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -897,28 +889,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -929,7 +912,10 @@
       "reaper"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "firing-deck-11",
@@ -1664,7 +1650,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "your"
+              "turn": "your-turn"
             }
           }
         ]
@@ -2633,36 +2619,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "engagement-state",
             "parameters": {
-              "timing": "end-of-phase"
+              "state": "engaged"
             }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
           }
         ]
       },
@@ -2697,7 +2660,27 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "shade-weavers",
@@ -2801,11 +2784,25 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-command-phase"
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
             }
           },
           "effect": {
@@ -2818,12 +2815,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-destroyed"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-destroyed"
           },
           "effect": {
             "type": "resource-gain",
@@ -2835,11 +2829,20 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-fails-battle-shock"
+          "type": "ability-part",
+          "trigger": {
+            "event": "after-battle-shock",
+            "subject": "enemy-unit",
+            "binds_event_variable": "tested-enemy",
+            "condition": {
+              "type": "roll-succeeded",
+              "negated": true,
+              "parameters": {
+                "roll": "battle-shock",
+                "source": {
+                  "event_var": "tested-enemy"
+                }
+              }
             }
           },
           "effect": {
@@ -3039,7 +3042,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -3275,7 +3278,7 @@
   },
   {
     "ability_id": "shadows-reach-kabalite-agonysts",
-    "name": "Shadows\u2019 Reach",
+    "name": "Shadows’ Reach",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3290,37 +3293,26 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-shooting"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "shooting-does-not-prevent-hidden"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "shooting-does-not-prevent-hidden"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "killers-from-the-dark-spires-kabalite-agonysts",
@@ -3339,40 +3331,29 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "self",
-        "modifier": {
-          "keywords": [
-            "Ignores Cover"
-          ],
-          "weapon_type": "ranged"
-        }
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keywords": [
+          "Ignores Cover"
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-shoot",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "towering-arrogance-kabalite-agonysts",
@@ -4034,110 +4015,104 @@
     "faction_id": "drukhari",
     "detachment_id": "realspace-raiders",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "ARCHON"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "KABALITE WARRIORS"
-                  }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "ARCHON"
                 }
-              ]
-            },
-            "effect": {
-              "type": "resource-gain",
-              "target": "all-friendly",
-              "modifier": {
-                "pool_id": "pain-token-pool",
-                "amount": 2
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "KABALITE WARRIORS"
+                }
               }
-            }
+            ]
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "SUCCUBUS"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "WYCHES"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "resource-gain",
-              "target": "all-friendly",
-              "modifier": {
-                "pool_id": "pain-token-pool",
-                "amount": 2
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "HAEMONCULUS"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "WRACKS"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "resource-gain",
-              "target": "all-friendly",
-              "modifier": {
-                "pool_id": "pain-token-pool",
-                "amount": 2
-              }
+          "effect": {
+            "type": "resource-gain",
+            "target": "all-friendly",
+            "modifier": {
+              "pool_id": "pain-token-pool",
+              "amount": 2
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "SUCCUBUS"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "WYCHES"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "all-friendly",
+            "modifier": {
+              "pool_id": "pain-token-pool",
+              "amount": 2
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "HAEMONCULUS"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "WRACKS"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "all-friendly",
+            "modifier": {
+              "pool_id": "pain-token-pool",
+              "amount": 2
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "battle"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-battle"
+    }
   },
   {
     "ability_id": "stitchflesh-abominations",
@@ -4196,59 +4171,44 @@
     ],
     "faction_id": "drukhari",
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "normal-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "advance-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "fall-back-move"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "self",
+          "modifier": {
+            "pool_id": "pain-token-pool",
+            "amount": 1
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "resource-spend",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pain-token-pool",
-              "amount": 1
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 2
-            }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 2
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "self",
       "duration": "phase"
-    }
+    },
+    "trigger": [
+      {
+        "event": "normal-move"
+      },
+      {
+        "event": "advance-move"
+      },
+      {
+        "event": "fall-back-move"
+      }
+    ]
   },
   {
     "ability_id": "torture-device-coven-of-agonies",
@@ -4319,39 +4279,39 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "command"
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-battle-shock",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
                 }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "opponent"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "before-battle-shock"
-                }
-              },
-              {
-                "type": "unit-below-starting-strength"
-              }
-            ]
+              ]
+            }
           },
           "effect": {
-            "type": "leadership-modifier",
-            "target": "enemy-within-aura",
-            "modifier": {
-              "test": "battle-shock",
-              "operation": "force-test"
+            "type": "conditional",
+            "condition": {
+              "type": "unit-below-starting-strength"
+            },
+            "effect": {
+              "type": "leadership-modifier",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "test": "battle-shock",
+                "operation": "force-test"
+              }
             }
           }
         }
@@ -4377,52 +4337,41 @@
     ],
     "faction_id": "drukhari",
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-fight"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "self",
+          "modifier": {
+            "pool_id": "pain-token-pool",
+            "amount": 1
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "resource-spend",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pain-token-pool",
-              "amount": 1
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "D",
-              "operation": "set",
-              "value": 3
-            }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "D",
+            "operation": "set",
+            "value": 3
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "self",
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "selected-to-fight",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     }
   }
 ]

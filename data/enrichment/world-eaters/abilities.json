@@ -14,101 +14,158 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "faction",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-phase"
-        }
+      "type": "dice-pool-allocation",
+      "pool": {
+        "count": 8,
+        "die": "D6"
       },
-      "effect": {
-        "type": "dice-pool-allocation",
-        "pool": {
-          "count": 8,
-          "die": "D6"
+      "max_activations": 2,
+      "options": [
+        {
+          "name": "Unbridled Bloodlust",
+          "requirement": {
+            "type": "pair",
+            "min_value": 1
+          },
+          "effect": {
+            "type": "charge-roll-modifier",
+            "target": "all-friendly",
+            "modifier": {
+              "operation": "add",
+              "value": 1
+            }
+          }
         },
-        "max_activations": 2,
-        "options": [
-          {
-            "name": "Unbridled Bloodlust",
-            "requirement": {
-              "type": "pair",
-              "min_value": 1
-            },
-            "effect": {
-              "type": "charge-roll-modifier",
-              "target": "all-friendly",
-              "modifier": {
-                "operation": "add",
-                "value": 1
-              }
-            }
+        {
+          "name": "Rage-Fuelled Invigoration",
+          "requirement": {
+            "type": "pair",
+            "min_value": 2
           },
-          {
-            "name": "Rage-Fuelled Invigoration",
-            "requirement": {
-              "type": "pair",
-              "min_value": 2
-            },
-            "effect": {
-              "type": "movement-modifier",
-              "target": "all-friendly",
-              "modifier": {
-                "move_type": "consolidation",
-                "distance": 6,
-                "replaces_default": true
-              }
+          "effect": {
+            "type": "movement-modifier",
+            "target": "all-friendly",
+            "modifier": {
+              "move_type": "consolidation",
+              "distance": 6,
+              "replaces_default": true
             }
+          }
+        },
+        {
+          "name": "Total Carnage",
+          "requirement": {
+            "type": "pair",
+            "min_value": 3
           },
-          {
-            "name": "Total Carnage",
-            "requirement": {
-              "type": "pair",
-              "min_value": 3
-            },
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "destroyed-by-attack-type",
-                    "parameters": {
-                      "attack_type": "melee"
-                    }
-                  },
-                  {
-                    "type": "has-fought-this-phase",
-                    "negated": true
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "destroyed-by-attack-type",
+                  "parameters": {
+                    "attack_type": "melee"
                   }
-                ]
+                },
+                {
+                  "type": "has-fought-this-phase",
+                  "negated": true
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "on_success": {
+                "type": "fight-on-death",
+                "target": "self",
+                "modifier": {}
               },
-              "effect": {
-                "type": "dice-gated",
-                "dice": "D6",
-                "threshold": 4,
-                "on_success": {
-                  "type": "fight-on-death",
-                  "target": "self",
-                  "modifier": {}
-                },
-                "on_fail": null
-              }
+              "on_fail": null
             }
+          }
+        },
+        {
+          "name": "Martial Excellence",
+          "requirement": {
+            "any_of": [
+              {
+                "type": "pair",
+                "min_value": 4
+              },
+              {
+                "type": "triple",
+                "min_value": 1
+              }
+            ]
           },
-          {
-            "name": "Martial Excellence",
-            "requirement": {
-              "any_of": [
+          "effect": {
+            "type": "keyword-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "keyword": "Sustained Hits 1",
+              "weapon_type": "melee"
+            }
+          }
+        },
+        {
+          "name": "Warp Blades",
+          "requirement": {
+            "any_of": [
+              {
+                "type": "pair",
+                "min_value": 5
+              },
+              {
+                "type": "triple",
+                "min_value": 2
+              }
+            ]
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "keyword": "Lethal Hits",
+              "weapon_type": "melee"
+            }
+          }
+        },
+        {
+          "name": "Decapitating Strikes",
+          "requirement": {
+            "any_of": [
+              {
+                "type": "pair",
+                "min_value": 6
+              },
+              {
+                "type": "triple",
+                "min_value": 3
+              }
+            ]
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
                 {
-                  "type": "pair",
-                  "min_value": 4
+                  "type": "target-has-keyword",
+                  "parameters": {
+                    "keyword": "Infantry"
+                  }
                 },
                 {
-                  "type": "triple",
-                  "min_value": 1
+                  "type": "attack-is-type",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
                 }
               ]
             },
@@ -116,85 +173,20 @@
               "type": "keyword-grant",
               "target": "all-friendly",
               "modifier": {
-                "keyword": "Sustained Hits 1",
-                "weapon_type": "melee"
-              }
-            }
-          },
-          {
-            "name": "Warp Blades",
-            "requirement": {
-              "any_of": [
-                {
-                  "type": "pair",
-                  "min_value": 5
-                },
-                {
-                  "type": "triple",
-                  "min_value": 2
-                }
-              ]
-            },
-            "effect": {
-              "type": "keyword-grant",
-              "target": "all-friendly",
-              "modifier": {
-                "keyword": "Lethal Hits",
-                "weapon_type": "melee"
-              }
-            }
-          },
-          {
-            "name": "Decapitating Strikes",
-            "requirement": {
-              "any_of": [
-                {
-                  "type": "pair",
-                  "min_value": 6
-                },
-                {
-                  "type": "triple",
-                  "min_value": 3
-                }
-              ]
-            },
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "Infantry"
-                    }
-                  },
-                  {
-                    "type": "attack-is-type",
-                    "parameters": {
-                      "attack_type": "melee"
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "keyword-grant",
-                "target": "all-friendly",
-                "modifier": {
-                  "keyword": "Devastating Wounds"
-                }
+                "keyword": "Devastating Wounds"
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "battle-round"
     },
     "trigger": {
-      "event": "start-of-phase"
+      "event": "start-of-battle-round",
+      "optional": true
     }
   },
   {
@@ -214,7 +206,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -279,59 +271,33 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
+        "type": "model-is-leader"
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "model-is-leader"
+          "type": "opponent-unit-within-range",
+          "parameters": {
+            "range": "engagement"
+          },
+          "negated": true
         },
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "range": "engagement"
-            },
-            "negated": true
-          },
-          "effect": {
-            "type": "dice-gated",
-            "dice": "2D6",
-            "threshold": "leadership",
-            "comparison": "gte",
-            "on_success": null,
-            "on_fail": {
-              "type": "model-destruction",
-              "target": "unit",
-              "modifier": {
-                "count": 1,
-                "exclude_leader": true
-              }
+          "type": "dice-gated",
+          "dice": "2D6",
+          "threshold": "leadership",
+          "comparison": "gte",
+          "on_success": null,
+          "on_fail": {
+            "type": "model-destruction",
+            "target": "unit",
+            "modifier": {
+              "count": 1,
+              "exclude_leader": true
             }
           }
         }
@@ -343,7 +309,24 @@
     },
     "trigger": {
       "event": "end-of-phase",
-      "subject": "self"
+      "subject": "self",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -365,30 +348,21 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-unit-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resurrection",
+        "target": "self",
+        "modifier": {
+          "wounds_remaining": 3,
+          "placement": "closest-to-destruction",
+          "engagement_restriction": true,
+          "timing": "end-of-phase"
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "resurrection",
-          "target": "self",
-          "modifier": {
-            "wounds_remaining": 3,
-            "placement": "closest-to-destruction",
-            "engagement_restriction": true,
-            "timing": "end-of-phase"
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "self",
@@ -416,35 +390,26 @@
     "ability_type": "core",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-model-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "amount": 1,
+          "range_inches": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "amount": 1,
-            "range_inches": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-model-destroyed",
+      "event": "before-bearer-removed",
       "subject": "self"
     }
   },
@@ -465,35 +430,26 @@
     "ability_type": "core",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-model-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "amount": "D3",
+          "range_inches": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "amount": "D3",
-            "range_inches": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-model-destroyed",
+      "event": "before-bearer-removed",
       "subject": "self"
     }
   },
@@ -514,35 +470,26 @@
     "ability_type": "core",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-model-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "amount": "D6",
+          "range_inches": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "amount": "D6",
-            "range_inches": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-model-destroyed",
+      "event": "before-bearer-removed",
       "subject": "self"
     }
   },
@@ -563,35 +510,26 @@
     "ability_type": "core",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-model-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "amount": "D6+2",
+          "range_inches": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "amount": "D6+2",
-            "range_inches": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-model-destroyed",
+      "event": "before-bearer-removed",
       "subject": "self"
     }
   },
@@ -619,11 +557,6 @@
     "scope": {
       "range": "unit",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase",
-      "subject": "bearer",
-      "optional": true
     }
   },
   {
@@ -641,7 +574,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "core",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "feel-no-pain",
       "target": "self",
@@ -673,7 +606,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "core",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "feel-no-pain",
       "target": "self",
@@ -716,9 +649,6 @@
     "scope": {
       "range": "self",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -748,9 +678,6 @@
     "scope": {
       "range": "unit",
       "duration": "one-use"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -780,9 +707,6 @@
     "scope": {
       "range": "unit",
       "duration": "one-use"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -811,9 +735,6 @@
     "scope": {
       "range": "unit",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -842,11 +763,6 @@
     "scope": {
       "range": "self",
       "duration": "turn"
-    },
-    "trigger": {
-      "event": "start-of-phase",
-      "subject": "self",
-      "optional": true
     }
   },
   {
@@ -864,7 +780,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "core",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "attack-restriction",
       "target": "unit",
@@ -878,8 +794,26 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "on-unit-selected",
-      "subject": "bearer"
+      "event": "selected-to-shoot",
+      "subject": "self",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -905,12 +839,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-destroyed"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-destroyed"
           },
           "effect": {
             "type": "resource-gain",
@@ -961,7 +892,7 @@
       "type": "ability-grant",
       "target": "unit",
       "modifier": {
-        "grant_type": "advance-and-charge"
+        "grant_type": "charge-after-advance"
       }
     },
     "scope": {
@@ -997,10 +928,6 @@
     "scope": {
       "range": "unit",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase",
-      "subject": "friendly-unit"
     }
   },
   {
@@ -1020,7 +947,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1065,9 +992,27 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
+      "condition": {
+        "type": "within-range-of-objective",
+        "parameters": {}
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "unit",
+        "modifier": {
+          "sticky": true
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "end-of-phase",
       "condition": {
         "operator": "and",
         "operands": [
@@ -1082,30 +1027,9 @@
             "parameters": {
               "turn": "your-turn"
             }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "within-range-of-objective",
-            "parameters": {}
           }
         ]
-      },
-      "effect": {
-        "type": "objective-control-modifier",
-        "target": "unit",
-        "modifier": {
-          "sticky": true
-        }
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
     }
   },
   {
@@ -1183,7 +1107,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1240,7 +1164,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1362,7 +1286,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1448,7 +1372,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1500,9 +1424,6 @@
     "scope": {
       "range": "self",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -1522,30 +1443,24 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "pool-add-die",
-        "target": "self",
-        "modifier": {
-          "pool_id": "blessings-of-khorne-pool",
-          "count": 1,
-          "value": "rolled"
-        }
+      "type": "pool-add-die",
+      "target": "self",
+      "modifier": {
+        "pool_id": "blessings-of-khorne-pool",
+        "count": 1,
+        "value": "rolled"
       }
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "permanent"
     },
-    "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll."
+    "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll.",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "blood-hungry-annihilator",
@@ -1564,7 +1479,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -1756,7 +1671,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -1835,28 +1750,28 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
       }
     },
     "scope": {
       "range": "engagement-range",
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] the test subtracts 1 if the enemy unit is Below Half-strength"
+    "community_notes": "[APPROX] the test subtracts 1 if the enemy unit is Below Half-strength",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "swooping-predator",
@@ -2030,11 +1945,41 @@
       "duration": "phase"
     },
     "community_notes": "Once per turn, per unit. In the Fight phase, after an enemy unit that targeted this unit resolves its attacks, this unit is eligible to fight again and must be selected to fight next.",
-    "trigger": {
-      "event": "end-of-phase",
-      "subject": "enemy-unit",
-      "optional": true
-    }
+    "trigger": [
+      {
+        "event": "enemy-unit-completed-shooting-targeting-bearer",
+        "subject": "enemy-unit",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "shooting"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "after-unit-resolves-attacks",
+        "subject": "enemy-unit",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "fight"
+          }
+        },
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "super-heavy-war-engine",
@@ -2107,12 +2052,9 @@
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "moved-through-tall-terrain"
-              }
+            "type": "ability-part",
+            "trigger": {
+              "event": "moved-through-tall-terrain"
             },
             "effect": {
               "type": "dice-gated",
@@ -2155,7 +2097,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2227,7 +2169,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2333,10 +2275,6 @@
     "scope": {
       "range": "unit",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase",
-      "subject": "self"
     }
   },
   {
@@ -2356,7 +2294,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2567,27 +2505,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "range": 12
-            }
-          }
-        ]
+        "type": "opponent-unit-within-range",
+        "parameters": {
+          "range": 12
+        }
       },
       "effect": {
         "type": "choice",
@@ -2617,6 +2538,24 @@
     },
     "trigger": {
       "event": "end-of-phase",
+      "subject": "self",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
       "optional": true
     }
   },
@@ -2639,40 +2578,34 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "charge-move"
-        }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "dice": "D6",
-          "amount_table": [
-            {
-              "roll": "2-3",
-              "amount": 1
-            },
-            {
-              "roll": "4-5",
-              "amount": "D3"
-            },
-            {
-              "roll": "6",
-              "amount": "D3+3"
-            }
-          ]
-        }
+      "type": "mortal-wounds",
+      "target": "defender",
+      "modifier": {
+        "dice": "D6",
+        "amount_table": [
+          {
+            "roll": "2-3",
+            "amount": 1
+          },
+          {
+            "roll": "4-5",
+            "amount": "D3"
+          },
+          {
+            "roll": "6",
+            "amount": "D3+3"
+          }
+        ]
       }
     },
     "scope": {
       "range": "unit",
       "duration": "permanent"
     },
-    "community_notes": "select one enemy unit within Engagement Range of this model when its unit ends a Charge move"
+    "community_notes": "select one enemy unit within Engagement Range of this model when its unit ends a Charge move",
+    "trigger": {
+      "event": "charge-move"
+    }
   },
   {
     "ability_id": "fire-riders",
@@ -2723,9 +2656,6 @@
     "scope": {
       "range": "unit",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -2745,26 +2675,20 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-fight"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3"
-        }
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "selected-to-fight"
     }
   },
   {
@@ -2784,7 +2708,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -2809,13 +2733,16 @@
       "duration": "battle-round"
     },
     "trigger": {
-      "event": "start-of-phase",
+      "event": "stratagem-targeted",
       "subject": "friendly-unit",
-      "optional": true,
+      "subject_keywords": [
+        "World Eaters"
+      ],
       "proximity": {
         "of": "self",
         "range": 12
-      }
+      },
+      "optional": true
     }
   },
   {
@@ -2848,10 +2775,11 @@
             }
           },
           {
-            "type": "timing-is",
+            "type": "on-battlefield",
             "parameters": {
-              "timing": "on-unit-destroyed"
-            }
+              "subject": "self"
+            },
+            "negated": true
           }
         ]
       },
@@ -2911,21 +2839,12 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-phase"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "wrathful-presence-selection"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "wrathful-presence-selection"
       }
     },
     "scope": {
@@ -2933,7 +2852,8 @@
       "duration": "battle-round"
     },
     "trigger": {
-      "event": "start-of-phase"
+      "event": "start-of-battle-round",
+      "subject": "self"
     }
   },
   {
@@ -2989,9 +2909,6 @@
     "scope": {
       "range": "unit",
       "duration": "phase"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -3011,38 +2928,29 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-phase"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 3,
-              "attack_type": "melee"
-            }
-          },
-          {
-            "type": "keyword-grant",
-            "target": "self",
-            "modifier": {
-              "keyword": "Devastating Wounds",
-              "weapon_type": "melee"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 3,
+            "attack_type": "melee"
           }
-        ]
-      }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keyword": "Devastating Wounds",
+            "weapon_type": "melee"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -3050,6 +2958,13 @@
     },
     "trigger": {
       "event": "start-of-phase",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
       "optional": true
     }
   },
@@ -3070,7 +2985,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3104,7 +3019,8 @@
       "duration": "battle"
     },
     "trigger": {
-      "event": "start-of-phase"
+      "event": "declare-battle-formations",
+      "subject": "self"
     }
   },
   {
@@ -3122,7 +3038,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3184,18 +3100,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "Possessed"
@@ -3227,8 +3131,25 @@
       ]
     },
     "trigger": {
-      "event": "start-of-phase",
-      "subject": "self",
+      "event": "enemy-unit-completed-shooting-targeting-bearer",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
       "optional": true
     }
   },
@@ -3247,38 +3168,29 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-fight"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "options": [
-          {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keyword": "Cleave 1",
-              "weapon_type": "melee"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "unit",
-            "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 1,
-              "attack_type": "melee"
-            }
+      "type": "choice",
+      "options": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keyword": "Cleave 1",
+            "weapon_type": "melee"
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "attack_type": "melee"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -3286,8 +3198,21 @@
     },
     "community_notes": "[APPROX] Only the unit's CHARACTER models' melee attacks gain the chosen benefit; modeled unit-wide.",
     "trigger": {
-      "event": "start-of-phase",
-      "subject": "self",
+      "event": "selected-to-fight",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "World Eaters",
+        "Character"
+      ],
+      "subject_excluded_keywords": [
+        "Epic Hero"
+      ],
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -3320,12 +3245,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-destroyed"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-destroyed"
           },
           "effect": {
             "type": "dice-gated",
@@ -3344,11 +3266,14 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-command-phase"
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
             }
           },
           "effect": {
@@ -3461,7 +3386,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3489,6 +3414,12 @@
     },
     "trigger": {
       "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
       "optional": true
     },
     "community_notes": "[APPROX] Applies to BLOOD LEGIONS and WORLD EATERS models only; modeled as all friendly units (keyword-OR gate not expressible). Blood Tithe spend (2 BTP): the start-of-Command-phase activation timing and until-end-of-battle duration come from the parent Blood Tithe rule ('At the start of the Command phase, you can spend... to activate one of the following abilities until the end of the battle'), not from this option's own text."
@@ -3508,7 +3439,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3536,6 +3467,12 @@
     },
     "trigger": {
       "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -3560,7 +3497,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3587,6 +3524,12 @@
     },
     "trigger": {
       "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -3611,7 +3554,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3640,6 +3583,12 @@
     },
     "trigger": {
       "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -3664,34 +3613,23 @@
     "faction_id": "world-eaters",
     "detachment_id": "cult-of-blood",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "or",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "unit-has-keyword",
             "parameters": {
-              "timing": "start-of-command-phase"
+              "keyword": "TITANIC"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TITANIC"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              }
-            ]
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "MONSTER"
+            }
           }
         ]
       },
@@ -3849,7 +3787,16 @@
       "range": "aura-6",
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] The aura reaches 9\" from TITANIC bearers (modeled at the 6\" base), and each Idol may only be selected once per battle (per-option limit not modeled)."
+    "community_notes": "[APPROX] The aura reaches 9\" from TITANIC bearers (modeled at the 6\" base), and each Idol may only be selected once per battle (per-option limit not modeled).",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "rush-to-the-fray",
@@ -3866,44 +3813,39 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-phase"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "charge",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keyword": "Lance",
-              "weapon_type": "melee"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "charge",
+            "operation": "add",
+            "value": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keyword": "Lance",
+            "weapon_type": "melee"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "turn"
     },
     "trigger": {
-      "event": "start-of-phase"
+      "event": "unit-disembarked",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "World Eaters"
+      ]
     }
   },
   {
@@ -4235,31 +4177,22 @@
     "faction_id": "world-eaters",
     "detachment_id": "cult-of-blood",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "post-deployment"
-        }
+      "type": "select-units",
+      "selector": {
+        "max_count": 3,
+        "keywords": [
+          "Jakhals or Goremongers"
+        ],
+        "owner": "friendly"
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "max_count": 3,
-          "keywords": [
-            "Jakhals or Goremongers"
-          ],
-          "owner": "friendly"
-        },
-        "effect": {
-          "type": "movement-modifier",
-          "target": "unit",
-          "modifier": {
-            "move_type": "redeploy",
-            "to_reserves": true
-          }
+        "type": "movement-modifier",
+        "target": "unit",
+        "modifier": {
+          "move_type": "redeploy",
+          "to_reserves": true
         }
       }
     },
@@ -4272,6 +4205,9 @@
       "required_keywords": [
         "World Eaters"
       ]
+    },
+    "trigger": {
+      "event": "post-deployment"
     }
   },
   {
@@ -4293,10 +4229,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-phase"
-        }
+        "type": "disembarked-from-transport"
       },
       "effect": {
         "type": "rule-state",
@@ -4311,9 +4244,6 @@
     "scope": {
       "range": "unit",
       "duration": "turn"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -4331,7 +4261,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "ability-grant",
       "target": "unit",
@@ -4344,7 +4274,8 @@
       "duration": "one-use"
     },
     "trigger": {
-      "event": "start-of-phase"
+      "event": "declare-battle-formations",
+      "subject": "bearer"
     }
   },
   {
@@ -4441,19 +4372,10 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
-      },
-      "effect": {
-        "type": "fight-first",
-        "target": "unit"
-      }
+      "type": "fight-first",
+      "target": "unit"
     },
     "scope": {
       "range": "unit",
@@ -4467,6 +4389,15 @@
       "required_keywords": [
         "World Eaters"
       ]
+    },
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
     }
   },
   {
@@ -4506,9 +4437,6 @@
     "scope": {
       "range": "aura-6",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -4540,12 +4468,10 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "on-unit-destroyed"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "on-unit-destroyed",
+            "subject": "bearer"
           },
           "effect": {
             "type": "resource-gain",
@@ -4561,9 +4487,6 @@
     "scope": {
       "range": "self",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
@@ -4678,12 +4601,9 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "enemy-unit-destroyed-in-melee"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "enemy-unit-destroyed-in-melee"
           },
           "effect": {
             "type": "resource-gain",
@@ -4757,29 +4677,20 @@
     "faction_id": "world-eaters",
     "detachment_id": "possessed-slaughterband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "on-unit-destroyed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "self",
+        "modifier": {
+          "amount": 1
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "cp-gain",
-          "target": "self",
-          "modifier": {
-            "amount": 1
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "unit",
@@ -4894,10 +4805,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -4911,11 +4833,7 @@
       "range": "self",
       "duration": "until-next-command-phase"
     },
-    "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn.",
-    "trigger": {
-      "event": "start-of-phase",
-      "optional": true
-    }
+    "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn."
   },
   {
     "ability_id": "gateways-to-glory-vessels-of-wrath",
@@ -5004,10 +4922,6 @@
       "range": "unit",
       "duration": "phase"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "optional": true
-    },
     "applies_to": {
       "required_keywords": [
         "World Eaters"
@@ -5068,22 +4982,11 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "on-unit-destroyed"
-            }
-          },
-          {
-            "type": "controls-objective"
-          }
-        ]
+        "type": "controls-objective"
       },
       "effect": {
         "type": "objective-tag",
@@ -5097,7 +5000,10 @@
       "range": "unit",
       "duration": "battle"
     },
-    "community_notes": "the objective marker remains yours until your opponent's Level of Control over it exceeds yours at the end of a phase; usable even though the unit was just destroyed"
+    "community_notes": "the objective marker remains yours until your opponent's Level of Control over it exceeds yours at the end of a phase; usable even though the unit was just destroyed",
+    "trigger": {
+      "event": "on-unit-destroyed"
+    }
   },
   {
     "ability_id": "skulls-for-the-skull-throne-berzerker-warband",
@@ -5170,7 +5076,7 @@
       "type": "ability-grant",
       "target": "unit",
       "modifier": {
-        "grant_type": "advance-and-charge"
+        "grant_type": "charge-after-advance"
       }
     },
     "scope": {
@@ -5178,7 +5084,28 @@
       "duration": "turn"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "selected-to-advance",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "Khorne Berzerkers"
+      ],
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
       "optional": true
     }
   },
@@ -5273,10 +5200,6 @@
       "range": "unit",
       "duration": "phase"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "optional": true
-    },
     "community_notes": "[APPROX] Targets one JAKHALS or GOREMONGERS unit that has not been selected to fight this phase and is within Engagement Range (the keyword-OR target and the not-yet-fought precondition are not modeled)."
   },
   {
@@ -5294,34 +5217,23 @@
     "faction_id": "world-eaters",
     "detachment_id": "cult-of-blood",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "or",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "unit-has-keyword",
             "parameters": {
-              "timing": "on-unit-destroyed"
+              "keyword": "MONSTER"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TITANIC"
-                }
-              }
-            ]
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "TITANIC"
+            }
           }
         ]
       },
@@ -5370,7 +5282,10 @@
       "range": "any-on-battlefield",
       "duration": "battle"
     },
-    "community_notes": "[APPROX] The marked unit must be the enemy unit that just destroyed your MONSTER/TITANIC (modeled as selecting one enemy unit)."
+    "community_notes": "[APPROX] The marked unit must be the enemy unit that just destroyed your MONSTER/TITANIC (modeled as selecting one enemy unit).",
+    "trigger": {
+      "event": "on-unit-destroyed"
+    }
   },
   {
     "ability_id": "brazen-idol-cult-of-blood",
@@ -5455,10 +5370,6 @@
     "scope": {
       "range": "unit",
       "duration": "until-next-command-phase"
-    },
-    "trigger": {
-      "event": "on-unit-selected",
-      "optional": true
     },
     "usage": {
       "frequency": "n-per-battle",
@@ -5545,45 +5456,50 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "attack_type": "melee",
-            "subset": "ones"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "range": 6,
-              "target_type": "friendly-monster"
-            }
-          },
-          "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "re-roll",
             "target": "unit",
             "modifier": {
-              "roll": "wound",
+              "roll": "hit",
               "attack_type": "melee",
               "subset": "ones"
             }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-within-range-of",
+              "parameters": {
+                "range": 6,
+                "target_type": "friendly-monster"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "unit",
+              "modifier": {
+                "roll": "wound",
+                "attack_type": "melee",
+                "subset": "ones"
+              }
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
-    },
-    "trigger": {
-      "event": "on-unit-selected",
-      "optional": true
     }
   },
   {
@@ -5616,7 +5532,11 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "on-unit-destroyed",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "Jakhals"
+      ],
       "optional": true
     }
   },
@@ -5639,29 +5559,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "friendly-keyword",
-              "keyword": "TRANSPORT",
-              "range": 6
-            }
-          }
-        ]
+        "type": "unit-within-range-of",
+        "parameters": {
+          "target_type": "friendly-keyword",
+          "keyword": "TRANSPORT",
+          "range": 6
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -5676,7 +5579,13 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -5795,11 +5704,6 @@
       "range": "unit",
       "duration": "turn"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "subject": "friendly-unit",
-      "optional": true
-    },
     "community_notes": "[APPROX] The Rhino must not have been selected to move this phase (precondition not modeled). The disembarking unit sets up wholly within 6\" of the Rhino and may be placed within Engagement Range.",
     "applies_to": {
       "required_keywords": [
@@ -5825,20 +5729,35 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "disembark-after-advance-charge"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "disembark-after-advance-charge"
+        }
       }
     },
     "scope": {
       "range": "unit",
       "duration": "turn"
-    },
-    "trigger": {
-      "event": "on-unit-selected",
-      "subject": "friendly-unit",
-      "optional": true
     }
   },
   {
@@ -5986,65 +5905,45 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-fight-phase"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
+      "type": "select-units",
+      "selector": {
+        "max_count": 1,
+        "owner": "friendly",
+        "keywords": [
+          "WORLD EATERS"
         ]
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "max_count": 1,
-          "owner": "friendly",
-          "keywords": [
-            "WORLD EATERS"
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "keyword-grant",
+            "target": "unit",
+            "modifier": {
+              "keyword": "Lance",
+              "weapon_type": "melee"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-has-keyword",
+              "parameters": {
+                "keyword": "Daemonic Rage active"
+              }
+            },
+            "effect": {
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
-                "keyword": "Lance",
+                "keyword": "Twin-linked",
                 "weapon_type": "melee"
               }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "Daemonic Rage active"
-                }
-              },
-              "effect": {
-                "type": "keyword-grant",
-                "target": "unit",
-                "modifier": {
-                  "keyword": "Twin-linked",
-                  "weapon_type": "melee"
-                }
-              }
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -6056,6 +5955,26 @@
       "required_keywords": [
         "Blood Legions"
       ]
+    },
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {
@@ -6106,11 +6025,41 @@
       "range": "unit",
       "duration": "phase"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "subject": "friendly-unit",
-      "optional": true
-    },
+    "trigger": [
+      {
+        "event": "enemy-unit-targets-bearer",
+        "subject": "enemy-unit",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "shooting"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "enemy-unit-targets-bearer",
+        "subject": "enemy-unit",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "fight"
+          }
+        },
+        "optional": true
+      }
+    ],
     "community_notes": "5+ invulnerable save until end of phase, improving to 4+ while the Boon of Blood ability (Blood Tithe, Khorne Daemonkin) is active. The source targets a Blood Legions unit within 6\" of the attacked World Eaters unit but buffs that World Eaters unit; the DSL target vocabulary can't express that relay, so target is the unit the ability resolves on."
   },
   {
@@ -6132,36 +6081,31 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "or",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "has-destroyed",
             "parameters": {
-              "phase": "fight"
+              "subject": "unit",
+              "victim_kind": "model",
+              "victim_owner": "enemy",
+              "victim_keywords": [
+                "Character"
+              ],
+              "window": "just-finished-attack-sequence"
             }
           },
           {
-            "type": "timing-is",
+            "type": "has-destroyed",
             "parameters": {
-              "timing": "enemy-unit-destroyed-in-melee"
+              "subject": "unit",
+              "victim_kind": "model",
+              "victim_owner": "enemy",
+              "victim_keywords": [
+                "Monster"
+              ],
+              "window": "just-finished-attack-sequence"
             }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "CHARACTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              }
-            ]
           }
         ]
       },
@@ -6192,7 +6136,14 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "after-unit-resolves-attacks",
+      "subject": "friendly-unit",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
       "optional": true
     },
     "community_notes": "[APPROX] The follow-on 'spend one or more BTP to activate one of the Blood Tithe abilities' is modeled as an unquantified resource-spend without naming the activated ability."
@@ -6325,10 +6276,6 @@
       "range": "aura-6",
       "duration": "phase"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "optional": true
-    },
     "applies_to": {
       "required_keywords": [
         "Blood Legions"
@@ -6351,18 +6298,30 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "redeploy",
+        "to_reserves": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Blood Legions"
+      ]
+    },
+    "community_notes": "the unit must be on the battlefield and not within Engagement Range of enemy units",
+    "trigger": {
+      "event": "end-of-phase",
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
           {
             "type": "phase-is",
             "parameters": {
@@ -6376,26 +6335,8 @@
             }
           }
         ]
-      },
-      "effect": {
-        "type": "movement-modifier",
-        "target": "unit",
-        "modifier": {
-          "move_type": "redeploy",
-          "to_reserves": true
-        }
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "applies_to": {
-      "required_keywords": [
-        "Blood Legions"
-      ]
-    },
-    "community_notes": "the unit must be on the battlefield and not within Engagement Range of enemy units"
+    }
   },
   {
     "ability_id": "daemonic-strength-possessed-slaughterband",
@@ -6566,21 +6507,36 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "deep-strike",
-      "target": "unit",
-      "modifier": {
-        "min_distance": 6,
-        "replaces_default": true
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "deep-strike",
+        "target": "unit",
+        "modifier": {
+          "min_distance": 6,
+          "replaces_default": true
+        }
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
-    },
-    "trigger": {
-      "event": "on-unit-selected",
-      "subject": "friendly-unit",
-      "optional": true
     }
   },
   {
@@ -6712,11 +6668,6 @@
       "range": "engagement-range",
       "duration": "phase"
     },
-    "trigger": {
-      "event": "on-unit-selected",
-      "subject": "friendly-unit",
-      "optional": true
-    },
     "applies_to": {
       "required_keywords": [
         "World Eaters",
@@ -6741,45 +6692,50 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "selected-to-fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 1,
-              "attack_type": "melee"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 2,
-              "attack_type": "melee"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "attack_type": "melee"
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 2,
+            "attack_type": "melee"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
     },
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "selected-to-fight",
+      "subject": "friendly-unit",
+      "subject_keywords": [
+        "World Eaters",
+        "Character"
+      ],
+      "subject_excluded_keywords": [
+        "Epic Hero"
+      ],
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
       "optional": true
     },
     "applies_to": {
@@ -6808,7 +6764,7 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "stratagem",
-    "behavior": "reactive",
+    "behavior": "activated",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6845,7 +6801,25 @@
     },
     "community_notes": "An enemy unit engaged with your WORLD EATERS CHARACTER that falls back must use desperate escape; if it is battle-shocked, -1 to those hazard rolls.",
     "trigger": {
-      "event": "on-unit-selected",
+      "event": "selected-to-fall-back",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
       "optional": true
     }
   },
@@ -6876,23 +6850,15 @@
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "start-of-phase"
-                }
+          "type": "ability-part",
+          "trigger": {
+            "event": "start-of-phase",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
               }
-            ]
+            }
           },
           "effect": {
             "type": "select-units",
@@ -7176,32 +7142,12 @@
     "faction_id": "world-eaters",
     "detachment_id": "butchers-of-khorne",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "all-friendly",
-        "modifier": {
-          "grant_type": "activate-blessing-of-khorne"
-        }
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "activate-blessing-of-khorne"
       }
     },
     "scope": {
@@ -7213,7 +7159,16 @@
         "Terminator Squad"
       ]
     },
-    "community_notes": "At the start of the Fight phase, if a friendly TERMINATOR SQUAD is engaged, make a Blessings of Khorne roll and activate one Blessing of Khorne for friendly TERMINATOR SQUAD units (in addition to any already active)."
+    "community_notes": "At the start of the Fight phase, if a friendly TERMINATOR SQUAD is engaged, make a Blessings of Khorne roll and activate one Blessing of Khorne for friendly TERMINATOR SQUAD units (in addition to any already active).",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "sanctified-in-slaughter-butchers-of-khorne",
@@ -7510,7 +7465,7 @@
     "faction_id": null,
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {

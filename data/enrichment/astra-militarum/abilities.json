@@ -10,28 +10,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -46,7 +37,10 @@
       "hippogriff-afv"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "scouts-9",
@@ -632,19 +626,10 @@
     "source_digest": "ac7fdeb4bb0fd76d170f960812c9c296335e1fbf8cad0bc5851a5c93b62e2c0c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "post-deployment"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override"
       }
     },
     "scope": {
@@ -655,8 +640,11 @@
       "lord-solar-leontus"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "post-deployment"
+    }
   },
   {
     "ability_id": "supreme-commander",
@@ -747,19 +735,10 @@
     "source_digest": "da08c3dbeed9101c7958f88b3ebe415ff7f5b2a1ee7447e27c545443987cbf77",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "deep-strike-setup"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "shoot-after-action"
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "shoot-after-action"
       }
     },
     "scope": {
@@ -770,8 +749,11 @@
       "tempestus-aquilons"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] only the Tempestor Aquilon shoots, and only with its sentry weapon (sentry flamer / sentry grenade launcher / sentry hotshot volley gun), as if it were your Shooting phase"
+    "behavior": "reactive",
+    "community_notes": "[APPROX] only the Tempestor Aquilon shoots, and only with its sentry weapon (sentry flamer / sentry grenade launcher / sentry hotshot volley gun), as if it were your Shooting phase",
+    "trigger": {
+      "event": "deep-strike-setup"
+    }
   },
   {
     "ability_id": "final-duty",
@@ -995,28 +977,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1031,7 +1004,10 @@
       "commissar-graves"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "armoured-spearhead",
@@ -1072,28 +1048,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6+2",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6+2",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1106,7 +1073,10 @@
       "arkurian-stormhammer"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "concussive-wave",
@@ -1310,28 +1280,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1341,7 +1302,10 @@
       "rogal-dorn-commander"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "vox-net",
@@ -2079,21 +2043,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "first-this-battle"
-            }
-          }
-        ]
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
       },
       "effect": {
         "type": "choice",
@@ -2125,7 +2078,10 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "first-this-battle"
+    }
   },
   {
     "ability_id": "screening-line",
@@ -2152,7 +2108,7 @@
       "death-riders"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -3372,21 +3328,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "first-this-battle"
-            }
-          },
-          {
-            "type": "destroyed-by-attack-type",
-            "parameters": {
-              "attack_type": "any"
-            }
-          }
-        ]
+        "type": "destroyed-by-attack-type",
+        "parameters": {
+          "attack_type": "any"
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -3411,7 +3356,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "first-this-battle"
+    }
   },
   {
     "ability_id": "leading-the-charge",
@@ -4299,43 +4247,34 @@
     "source_digest": "56dc3facedac2aa76775c49386e441c27488565e2dfba95d1eff041d2cd2cd17",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "deep-strike-setup"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "options": [
-          {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "ability-grant",
-                "target": "self",
-                "modifier": {
-                  "grant_type": "meteoric-descent-placement-beyond-three-inches"
-                }
-              },
-              {
-                "type": "attack-restriction",
-                "target": "self",
-                "modifier": {
-                  "restriction_type": "cannot-declare-charge"
-                }
+      "type": "choice",
+      "options": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "meteoric-descent-placement-beyond-three-inches"
               }
-            ]
-          },
-          {
-            "type": "deep-strike",
-            "target": "self",
-            "modifier": {}
-          }
-        ],
-        "choice_label": "Perform meteoric descent"
-      }
+            },
+            {
+              "type": "attack-restriction",
+              "target": "self",
+              "modifier": {
+                "restriction_type": "cannot-declare-charge"
+              }
+            }
+          ]
+        },
+        {
+          "type": "deep-strike",
+          "target": "self",
+          "modifier": {}
+        }
+      ],
+      "choice_label": "Perform meteoric descent"
     },
     "scope": {
       "range": "self",
@@ -4345,8 +4284,11 @@
       "elysian-drop-sentinel"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "deep-strike-setup"
+    }
   },
   {
     "ability_id": "aerial-deployment",
@@ -4367,12 +4309,6 @@
             "type": "unit-has-keyword",
             "parameters": {
               "keyword": "HOVER"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "starts-in-strategic-reserves"
             }
           },
           {
@@ -4399,7 +4335,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "[APPROX] If this model starts the game in Hover mode and in Strategic Reserves, it can arrive in the Reinforcements step of the first, second or third battle round regardless of mission rules. Aligned to the orks/aerial-deployment encoding. Full rule in raw-text store."
+    "community_notes": "[APPROX] If this model starts the game in Hover mode and in Strategic Reserves, it can arrive in the Reinforcements step of the first, second or third battle round regardless of mission rules. Aligned to the orks/aerial-deployment encoding. Full rule in raw-text store.",
+    "trigger": {
+      "event": "starts-in-strategic-reserves"
+    }
   },
   {
     "ability_id": "turbo-boost",
@@ -4561,19 +4500,10 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "arrives-from-strategic-reserves"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "outflank-set-up-in-opponent-deployment-zone"
-        }
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "outflank-set-up-in-opponent-deployment-zone"
       }
     },
     "scope": {
@@ -4584,8 +4514,11 @@
       "salamander-scout-vehicle"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "arrives-from-strategic-reserves"
+    }
   },
   {
     "ability_id": "recovery-vehicle",
@@ -5109,15 +5042,10 @@
             }
           },
           {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "grenade-stratagem-used-on-unit-this-phase"
-                }
-              }
-            ]
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
         ]
       },
@@ -5138,7 +5066,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21; the free use is barred if this unit was already the Grenade target this phase (paid or free)",
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "voice-of-command",
@@ -5346,28 +5278,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-turn"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {}
-              }
-            ]
+            "type": "engagement-state",
+            "parameters": {}
           }
         ]
       },
@@ -5386,7 +5301,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-turn",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      }
+    }
   },
   {
     "ability_id": "absolutist-principles",
@@ -6701,28 +6625,19 @@
     "faction_id": "astra-militarum",
     "detachment_id": "bridgehead-strike",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "unit-set-up"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "all-friendly",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1,
-          "scope": "weapon",
-          "attack_type": "ranged",
-          "applies_to_keywords": [
-            "Militarum Tempestus"
-          ]
-        }
+      "type": "roll-modifier",
+      "target": "all-friendly",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1,
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "applies_to_keywords": [
+          "Militarum Tempestus"
+        ]
       }
     },
     "scope": {
@@ -6733,6 +6648,9 @@
       "required_keywords": [
         "Astra Militarum"
       ]
+    },
+    "trigger": {
+      "event": "unit-set-up"
     }
   },
   {

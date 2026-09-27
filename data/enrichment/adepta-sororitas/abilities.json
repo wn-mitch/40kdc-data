@@ -45,28 +45,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -77,7 +68,10 @@
       "intranzia-fraye"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "feel-no-pain-5",
@@ -499,18 +493,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
             "type": "controls-objective",
             "parameters": {}
           },
@@ -544,7 +526,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "attached-unit",
@@ -590,49 +581,29 @@
     "source_digest": "362acf3a25fcba869b910223c2ddfa7371fd481987b715562a5ab41504a5c443",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-fight"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 6,
+            "weapon_name": "arco-flails"
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 6,
-              "weapon_name": "arco-flails"
-            }
-          },
-          {
-            "type": "keyword-grant",
-            "target": "self",
-            "modifier": {
-              "keywords": [
-                "Hazardous"
-              ],
-              "weapon_name": "arco-flails"
-            }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keywords": [
+              "Hazardous"
+            ],
+            "weapon_name": "arco-flails"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -642,8 +613,17 @@
       "arco-flagellants"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected-to-fight",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "rituale-nullificatus",
@@ -851,20 +831,11 @@
     "source_digest": "d80acbee2500c4d6606bfbf8921363c2bff4480dbee2cf1b695db998a5a27a41",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "relics-of-matriarchs",
-          "max_count": 2
-        }
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "relics-of-matriarchs",
+        "max_count": 2
       }
     },
     "scope": {
@@ -875,8 +846,11 @@
       "triumph-of-saint-katherine"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "solemn-procession",
@@ -889,20 +863,11 @@
     "source_digest": "df8d2d762cc8136e411f1d28601f4933bc1baf3ea2af13b7fdaef4e8a1c6fbfb",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "pool-add-die",
-        "target": "self",
-        "modifier": {
-          "pool_id": "miracle-dice-pool",
-          "value": 6
-        }
+      "type": "pool-add-die",
+      "target": "self",
+      "modifier": {
+        "pool_id": "miracle-dice-pool",
+        "value": 6
       }
     },
     "scope": {
@@ -914,7 +879,10 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "The Triumph contributes a guaranteed value-6 Miracle die to the pool each battle round; modeled with the pooled-resource `pool-add-die` effect. Previously punted as an opaque ability-grant grant_type."
+    "community_notes": "The Triumph contributes a guaranteed value-6 Miracle die to the pool each battle round; modeled with the pooled-resource `pool-add-die` effect. Previously punted as an opaque ability-grant grant_type.",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "angelic-ascent",
@@ -1046,19 +1014,10 @@
         "type": "model-is-leader"
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "act-of-faith"
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "miracle-dice-value-set-6"
-          }
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "miracle-dice-value-set-6"
         }
       }
     },
@@ -1071,7 +1030,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "act-of-faith-performed",
+      "subject": "self"
+    }
   },
   {
     "ability_id": "executioner-of-heretics-aura",
@@ -1146,28 +1109,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1177,7 +1131,10 @@
       "immolator"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "purge-and-cleanse",
@@ -2265,7 +2222,7 @@
       "dominion-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -2320,12 +2277,6 @@
       "condition": {
         "operator": "and",
         "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-command-phase"
-            }
-          },
           {
             "type": "unit-has-keyword",
             "parameters": {
@@ -2401,8 +2352,17 @@
       "saint-celestine"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "lifewards",
@@ -2444,21 +2404,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "destroyed-by-attack-type",
-            "parameters": {
-              "attack_type": "any"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "once-per-battle"
-            }
-          }
-        ]
+        "type": "destroyed-by-attack-type",
+        "parameters": {
+          "attack_type": "any"
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -2483,7 +2432,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
   },
   {
     "ability_id": "defenders-of-the-faith",
@@ -2790,28 +2743,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -2821,7 +2765,10 @@
       "battle-sanctum"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "holy-cover",
@@ -3048,7 +2995,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -3599,28 +3546,22 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "penitent-host",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "all-friendly",
-        "modifier": {
-          "grant_type": "vow-of-atonement-selection"
-        }
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "vow-of-atonement-selection"
       }
     },
     "scope": {
       "range": "any-on-battlefield",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "the-blood-of-martyrs",
@@ -3830,34 +3771,25 @@
     "source_digest": "7666e45e7bfb23fc68c5b4ac7ca1f5cd74b7cb42a1f9f81aaba95a6802e4c70d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-fight-phase"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "enemy-within-aura",
-            "modifier": {
-              "grant_type": "forced-battle-shock-test"
-            }
-          },
-          {
-            "type": "leadership-modifier",
-            "target": "enemy-within-aura",
-            "modifier": {
-              "test": "battle-shock",
-              "operation": "subtract",
-              "value": 1
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "grant_type": "forced-battle-shock-test"
           }
-        ]
-      }
+        },
+        {
+          "type": "leadership-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "test": "battle-shock",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "range": "aura-6",
@@ -3868,7 +3800,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "judged-for-execution",
@@ -3883,21 +3824,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-movement-phase"
-            }
-          },
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "enemy"
-            }
-          }
-        ]
+        "type": "unit-within-range-of",
+        "parameters": {
+          "target_type": "enemy"
+        }
       },
       "effect": {
         "type": "conditional",
@@ -3926,8 +3856,17 @@
       "intranzia-fraye"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "boundless-zeal-penitent-host",

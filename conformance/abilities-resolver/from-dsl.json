@@ -1,8 +1,8 @@
 {
-  "name": "DSL\u2192Buff translations for canonical abilities (attacker-perspective, fight phase)",
+  "name": "DSL→Buff translations for canonical abilities (attacker-perspective, fight phase)",
   "cases": [
     {
-      "_comment": "Combat Doctrines is the Codex army rule. Only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group; Assault and Tactical are opaque eligibility grants and carry no buff.",
+      "_comment": "Combat Doctrines is the Codex army rule. Only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group; Assault (charge after Advancing) and Tactical (shoot and charge after Falling Back) grant move-then-act eligibility, which carries no buff.",
       "abilityId": "combat-doctrines",
       "source": {
         "kind": "ability",
@@ -75,7 +75,9 @@
       },
       "expected": {
         "applied": [],
-        "unsupportedReasons": [],
+        "unsupportedReasons": [
+          "dice-gated effect: stochastic; not expressible as a buff"
+        ],
         "activatable": []
       }
     },
@@ -171,7 +173,7 @@
       }
     },
     {
-      "_comment": "\u2026and stays on that model when pooled in from an attached member \u2014 the gate is perspective-independent, so an attached character's personal grant never rides the squad's weapons.",
+      "_comment": "…and stays on that model when pooled in from an attached member — the gate is perspective-independent, so an attached character's personal grant never rides the squad's weapons.",
       "abilityId": "psychic-gifts",
       "source": {
         "kind": "ability",
@@ -211,6 +213,103 @@
           }
         ],
         "unsupportedReasons": []
+      }
+    },
+    {
+      "abilityId": "the-imperiums-sword-1st-company-task-force",
+      "source": {
+        "kind": "ability",
+        "abilityId": "the-imperiums-sword-1st-company-task-force",
+        "abilityKind": "enhancement"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "attacks-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "the-imperiums-sword-1st-company-task-force@start-of-phase",
+            "label": "+1 attacks",
+            "group": null,
+            "buffs": [
+              {
+                "type": "attacks-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "abilityId": "battle-focus",
+      "source": {
+        "kind": "ability",
+        "abilityId": "battle-focus",
+        "abilityKind": "faction"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"resource-gain\" is not modelled by the buff layer",
+          "effect type \"resource-clear\" is not modelled by the buff layer"
+        ],
+        "activatable": [
+          {
+            "id": "battle-focus#star-engines",
+            "label": "Star Engines",
+            "group": null,
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "assault"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "abilityId": "ammo-runts",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ammo-runts",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"resource-gain\" is not modelled by the buff layer",
+          "effect type \"resource-spend\" is not modelled by the buff layer"
+        ],
+        "activatable": [
+          {
+            "id": "ammo-runts@selected-to-shoot",
+            "label": "+1 to hit",
+            "group": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
       }
     }
   ]

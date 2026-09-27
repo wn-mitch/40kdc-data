@@ -74,6 +74,33 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 	}
 }
 
+// triggerGated gates a reactive ability's effect on its trigger, the way a
+// timing-is condition gates it: the moment is one the player opts into, so a
+// triggered buff is an activatable lever (<ability>@<event>) rather than always on.
+// Several triggers are alternatives. A trigger on an attack step is met by every
+// attack, and an activated ability (a stratagem) is already opt-in, so neither is
+// gated.
+func triggerGated(behavior any, trigger any, effect any) any {
+	if behavior != "reactive" {
+		return effect
+	}
+	candidates, ok := trigger.([]any)
+	if !ok {
+		candidates = []any{trigger}
+	}
+	// An ability firing on an attack step applies to every attack; its trigger
+	// condition is already how the authored data gates such abilities (in the
+	// effect), so nothing is added.
+	for _, candidate := range candidates {
+		if t, ok := asMap(candidate); ok && t != nil {
+			if event, _ := t["event"].(string); attackStepEvents[event] {
+				return effect
+			}
+		}
+	}
+	return momentGate(trigger, effect)
+}
+
 // describeBuffs is the full DSL->Buff translation (applied/unsupported/
 // activatable), with a range-scoped ability's scope.range_inches stamped onto
 // every emitted buff as applicableWhen.maxRangeInches.
@@ -82,7 +109,7 @@ func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, p
 		ctx = map[string]any{"phase": "shooting"}
 	}
 	resolvedEffect, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
-	translated := effectToBuffs(resolvedEffect, source, ctx, perspective)
+	translated := effectToBuffs(triggerGated(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect), source, ctx, perspective)
 	scope, _ := getMap(a.Raw, "scope")
 	rngVal := scope["range_inches"]
 	if !isNumber(rngVal) {

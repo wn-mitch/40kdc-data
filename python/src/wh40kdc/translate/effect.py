@@ -37,6 +37,7 @@ _CONTAINER_TYPES = {
     "sequence",
     "rules-bundle",
     "named-effect",
+    "ability-part",
     "choice",
     "dice-gated",
     "dice-table",
@@ -280,7 +281,7 @@ def _marker_clauses(m: dict[str, Any]) -> list[str]:
         clauses.append("using the marker consumes it")
     if m.get("removed_by_enemy_within_inches") is not None:
         clauses.append(
-            f'remove the marker if an enemy unit comes within '
+            f"remove the marker if an enemy unit comes within "
             f'{_jstr(m.get("removed_by_enemy_within_inches"))}" of it'
         )
     return clauses
@@ -1011,8 +1012,9 @@ _TRIGGER_ATTACK_MODELS = {
 
 _MISSING: Any = object()
 
-# Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
-_PHASE_BOUNDARY_OWNERS = {
+# Whose turn, as a trigger window names it. Authored data spells whose turn several ways; an
+# unknown spelling keeps the generic wording.
+_TURN_OWNERS = {
     "your": "your",
     "your-turn": "your",
     "own": "your",
@@ -1054,21 +1056,97 @@ def _phase_boundary(t: dict[str, Any]) -> str | None:
         return None
     if turn is _MISSING:
         owner = "the"
-    elif isinstance(turn, str) and turn in _PHASE_BOUNDARY_OWNERS:
-        owner = _PHASE_BOUNDARY_OWNERS[turn]
+    elif isinstance(turn, str) and turn in _TURN_OWNERS:
+        owner = _TURN_OWNERS[turn]
     else:
         return None
     edge = "start" if event == "start-of-phase" else "end"
     return f"at the {edge} of {owner} {_cap_word(phase)} phase"
 
 
+def _phase_window(condition: dict[str, Any]) -> tuple[str, Any, str | None, str | None]:
+    """A trigger condition's phase and whose turn, as a phrase on the moment ("during your
+    Shooting phase", "in your opponent's turn"), and whatever else the condition says. Only a
+    plain phase-is and player-turn-is (not negated, at most one each, joined by "and") make a
+    window. Returns ``(window, rest, phase, owner)``; ``rest`` is ``None`` when nothing else
+    remains, and ``phase``/``owner`` are ``None`` when the window names no phase/turn."""
+    if condition.get("operator") == "and":
+        operands = [c for c in condition.get("operands") or [] if isinstance(c, dict)]
+    elif condition.get("operator"):
+        operands = []
+    else:
+        operands = [condition]
+
+    def plain(c: dict[str, Any], ctype: str) -> bool:
+        return not c.get("operator") and not c.get("negated") and c.get("type") == ctype
+
+    phases = [c for c in operands if plain(c, "phase-is")]
+    turns = [c for c in operands if plain(c, "player-turn-is")]
+
+    def params(c: dict[str, Any]) -> dict[str, Any]:
+        p = c.get("parameters")
+        return p if isinstance(p, dict) else {}
+
+    owner = _TURN_OWNERS.get(_jstr(params(turns[0]).get("turn"))) if turns else None
+    phase = params(phases[0]).get("phase") if phases else None
+    if (
+        len(phases) > 1
+        or len(turns) > 1
+        or (len(turns) == 1 and not owner)
+        or (len(phases) == 1 and not isinstance(phase, str))
+        or len(phases) + len(turns) == 0
+    ):
+        return "", condition, None, None
+    # A phase, when there is one, is a string (checked above).
+    window = (
+        f"during {owner or 'the'} {_cap_word(phase)} phase"
+        if isinstance(phase, str)
+        else f"in {owner} turn"
+    )
+    others = [
+        c for c in operands if not any(c is x for x in phases) and not any(c is x for x in turns)
+    ]
+    window_phase = phase if phases else None
+    window_owner = owner or None
+    if not others:
+        return window, None, window_phase, window_owner
+    if len(others) == 1:
+        return window, others[0], window_phase, window_owner
+    return window, {"operator": "and", "operands": others}, window_phase, window_owner
+
+
 def _describe_trigger(t: dict[str, Any]) -> str:
     """Reactive trigger -> front-of-sentence lead clause
     ("an enemy unit ends a move within 9\" of this model")."""
-    boundary = _phase_boundary(t)
+    # The short form only when the boundary is all the trigger says; any other clause goes below.
+    plain = (
+        t.get("proximity") is None
+        and not t.get("move_types")
+        and not t.get("subject_keywords")
+        and not t.get("subject_excluded_keywords")
+        and t.get("caused_by") is None
+        and not t.get("binds_die_variable")
+        and not t.get("binds_selected_die_variable")
+        and t.get("subject") in (None, "self", "unit")
+    )
+    boundary = _phase_boundary(t) if plain else None
     if boundary:
         return f"{boundary}, you may use this ability" if t.get("optional") else boundary
-    s = event_clause(t.get("event"))
+    event = t.get("event")
+    edge = "start" if event == "start-of-phase" else "end" if event == "end-of-phase" else None
+    disembark_shock = _is_end_of_phase_disembark_battle_shock(t)
+    condition = t.get("condition")
+    split = (
+        _phase_window(condition) if isinstance(condition, dict) and not disembark_shock else None
+    )
+    # A boundary leads with its own phase ("at the end of your Command phase"); one that names no
+    # phase is the boundary of every phase. Decided first, so the clauses below add to it.
+    if not edge:
+        s = event_clause(event)
+    elif split is not None and split[2]:
+        s = f"at the {edge} of {split[3] or 'the'} {_cap_word(split[2])} phase"
+    else:
+        s = f"at the {edge} of each phase"
     subject = t.get("subject")
     if subject == "friendly-unit":
         s = re.sub(r"\b(?:the|a) unit\b", "a friendly unit", s)
@@ -1157,10 +1235,17 @@ def _describe_trigger(t: dict[str, Any]) -> str:
         else:
             of = "this unit"
         s += f' within {_jstr(prox["range"])}" of {of}'
-    if _is_end_of_phase_disembark_battle_shock(t):
+    if disembark_shock:
         s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
-    elif t.get("condition"):
-        s += f", if {describe_condition(t['condition'])}"
+    elif split is not None:
+        window, rest, phase, owner = split
+        # Another moment takes the phase as its window ("... during your Shooting phase").
+        if edge and not phase and owner:
+            s += f" in {owner} turn"
+        elif not edge and window:
+            s += f" {window}"
+        if rest is not None:
+            s += f", if {describe_condition(rest)}"
     if t.get("binds_die_variable"):
         binding = _jstr(t["binds_die_variable"]).replace("_", "-")
         s += f" (binding the generated die as {dekebab(binding)})"
@@ -1418,7 +1503,7 @@ def _condition_lead_in(c: Condition) -> str:
         return describe_timing(p.get("timing"))
     if ctype == "player-turn-is":
         turn = p.get("turn")
-        if turn in ("your-turn", "your", "own"):
+        if turn in ("your-turn", "your", "own", "self"):
             return "in your turn"
         if turn in ("opponent-turn", "opponent"):
             return "in the opponent's turn"
@@ -2312,8 +2397,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         )
     if etype == "eligibility-override":
         restrictions = " or ".join(
-            _ignored_restriction_phrase(_jstr(r))
-            for r in (m.get("ignored_restrictions") or [])
+            _ignored_restriction_phrase(_jstr(r)) for r in (m.get("ignored_restrictions") or [])
         )
         waiver_subject = "this model" if e.get("target") in ("self", "bearer") else "this unit"
         return (
@@ -3000,6 +3084,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         if rider is not None:
             return rider
         return "; ".join(describe_effect_inline(s, ctx) for s in steps)
+    if etype == "ability-part":
+        return _part_inline(e, ctx)
     if etype == "named-effect":
         level = (
             f" (Psychic level {_jstr(e.get('level'))})"
@@ -3177,6 +3263,37 @@ def _choice_prompt(e: Effect) -> str:
     )
 
 
+def _part_head(e: Effect) -> str:
+    """What leads a part: its moment, its usage limit, its name when the rules give one, the
+    choice to use it and its cost ("at the end of your Movement phase, once per battle, you
+    can")."""
+    moment = " or ".join(
+        part
+        for part in (_describe_trigger(t) for t in _normalize_triggers(e.get("trigger")))
+        if part
+    )
+    level = (
+        f" (Psychic level {_jstr(e.get('level'))})"
+        if e.get("kind") == "psychic" and e.get("level") is not None
+        else ""
+    )
+    if e.get("name"):
+        named = f"{'you can use ' if e.get('optional') else 'use '}{_jstr(e.get('name'))}{level}"
+    else:
+        named = "you can" if e.get("optional") else ""
+    cost = f"by paying this cost ({describe_effect_inline(e['cost'])})" if e.get("cost") else ""
+    usage = _usage_clause(e["usage"]) if e.get("usage") else ""
+    _, trail = _duration_clauses(e.get("duration"))
+    return ", ".join(part for part in (moment, usage, named, cost, trail) if part)
+
+
+def _part_inline(e: Effect, ctx: Ctx) -> str:
+    """A part on one line: its head, then its effect."""
+    head = _part_head(e)
+    body = describe_effect_inline(e.get("effect") or {}, ctx)
+    return f"{head}: {body}" if head else body
+
+
 def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     """Block translation of a *container* effect tree (multi-line, indented)."""
     ctx = ctx or {}
@@ -3206,6 +3323,14 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         if rider is not None:
             return f"{indent}{arrow}{_capitalize(rider)}."
         return "\n".join(describe_effect(s, depth, ctx) for s in steps)
+    if etype == "ability-part":
+        # A part is always a bullet of its ability, even at the top level.
+        inner = e.get("effect") or {}
+        if inner.get("type") in _CONTAINER_TYPES:
+            return f"{indent}-> {_capitalize(_part_head(e))}:\n" + describe_effect(
+                inner, depth + 1, ctx
+            )
+        return f"{indent}-> {_capitalize(_part_inline(e, ctx))}."
     if etype == "named-effect":
         if any(e.get(field) for field in ("cost", "duration", "trigger", "usage")):
             return f"{indent}{arrow}{_capitalize(describe_effect_inline(e, ctx))}."
@@ -3554,9 +3679,11 @@ def _render_top_level(
             e.get("type") in {"designate-target", "persistent-designation"}
             and e.get("duration") is not None
         )
-        block = describe_effect(e, 0, ctx)
         head = ", ".join(part for part in (trig, lead, "" if own_duration else trail) if part)
-        return _capitalize(head) + ":\n" + block if head else block
+        # Under a header, the block's steps are indented as they are under a condition's lead-in.
+        if head:
+            return _capitalize(head) + ":\n" + describe_effect(e, 1, ctx)
+        return describe_effect(e, 0, ctx)
 
     return _assemble_sentence([trig, lead, trail, describe_effect_inline(e, ctx)])
 

@@ -84,6 +84,11 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "end-of-opponent-turn" => "at the end of the opponent's turn",
         "start-of-battle-round" => "at the start of the battle round",
         "start-of-battle" => "at the start of the battle",
+        "end-of-battle-round" => "at the end of the battle round",
+        "end-of-normal-move" => "when the unit ends a Normal move",
+        "enemy-unit-destroyed" => "each time an enemy unit is destroyed",
+        "selected-to-move" => "when the unit is selected to move",
+        "selected-to-fall-back" => "when the unit is selected to Fall Back",
         "army-selection" => "when you select this model to include in your army",
         "start-of-command-phase" => "at the start of the Command phase",
         "declare-battle-formations" => "when declaring Battle Formations",
@@ -155,6 +160,43 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "enemy-unit-selected-charge-targets-before-charge-move" => {
             "after an enemy unit selects targets for its charge but before it makes a Charge move"
         }
+        "end-of-advance-move" => "when the unit ends an Advance move",
+        "selected-to-disembark" => "when the unit is selected to disembark",
+        "unit-disembarked" => "when the unit disembarks from a Transport",
+        "becomes-battle-shocked" => "when the unit becomes Battle-shocked",
+        "start-of-battle-shock-step" => "at the start of the Battle-shock step",
+        "stratagem-used" => "each time you use a Stratagem",
+        "dark-pact-made" => "each time the unit makes a Dark Pact",
+        "agile-manoeuvre-performed" => "each time the unit performs an Agile Manoeuvre",
+        "unit-empowered" => "each time the unit is Empowered",
+        "ritual-manifested" => "each time the unit manifests a Ritual",
+        "oath-fulfilled" => "when you fulfil an Oath",
+        "shadow-in-the-warp-used" => "when you use Shadow in the Warp",
+        "order-issued" => "each time the unit issues an Order",
+        "order-received" => "each time an Order is issued to the unit",
+        "reanimation-protocols-activated" => "each time the unit's Reanimation Protocols activate",
+        "ritual-attempted" => "each time the unit attempts a Ritual",
+        "warp-channelled" => "each time the unit Channels the Warp",
+        "after-psychic-test" => "after a Psychic test is taken",
+        "blessings-of-khorne-rolled" => "each time you make a Blessings of Khorne roll",
+        "observer-selected" => "each time the unit is selected as an Observer unit",
+        "malefic-surge-made" => "each time the unit makes a Malefic Surge",
+        "contract-invoked" => "each time the unit invokes its contract",
+        "dark-pact-test-passed" => {
+            "each time the unit makes a Dark Pact and passes its Leadership test"
+        }
+        "contract-completed" => "each time you complete a Contract",
+        "favoured-champions-changed" => "each time a unit becomes your Favoured Champions",
+        "cult-ambush-marker-removed" => "each time one of your Cult Ambush markers is removed",
+        "set-up-from-cult-ambush" => "when the unit is set up using Cult Ambush",
+        "quarry-destroyed" => "each time your quarry is destroyed",
+        "combat-doctrine-selected" => "when you select a Combat Doctrine",
+        "waaagh-called" => "when you call a Waaagh!",
+        "opponent-cp-gained" => "each time your opponent gains a CP",
+        "flux-token-spent" => "each time a Flux token is spent",
+        "yield-points-spent" => "each time you spend Yield points",
+        "gate-of-infinity-used" => "when you use Gate of Infinity",
+        "surge-move" => "when the unit makes a Surge move",
         _ => return None,
     };
     Some(mapped)
@@ -218,12 +260,10 @@ fn timing_only_phrase(t: &str) -> Option<&'static str> {
         "start-of-movement-phase" => "at the start of the Movement phase",
         "shooting-or-fight-phase" => "in the Shooting or Fight phase",
         "this-model-starts-or-ends-a-move" => "each time this model starts or ends a move",
-        "end-of-normal-move" => "when the unit ends a Normal move",
         "friendly-unit-empowered-within-9" => {
             "each time you spend 1 Pain token to Empower a friendly unit within 9\" of this unit"
         }
         "enemy-unit-fails-battle-shock" => "each time an enemy unit fails a Battle-shock test",
-        "enemy-unit-destroyed" => "each time an enemy unit is destroyed",
         _ => return None,
     })
 }
@@ -510,7 +550,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
         }
         T::PlayerTurnIs => {
             let turn = match ps(p, "turn") {
-                Some("your-turn") | Some("your") | Some("own") => "your",
+                Some("your-turn") | Some("your") | Some("own") | Some("self") => "your",
                 Some("opponent-turn") | Some("opponent") => "the opponent's",
                 _ => "either player's",
             };

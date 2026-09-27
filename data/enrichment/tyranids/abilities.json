@@ -38,43 +38,23 @@
     "source_digest": "11b16c98c9ac34860ee473b8c42da593c59d9cea95d2b7f2f8f8f0013b01f476",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "deep-strike-setup"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "deep-strike-6inch-exclusion"
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "deep-strike-6inch-exclusion"
-            }
-          },
-          {
-            "type": "attack-restriction",
-            "target": "self",
-            "modifier": {
-              "attack_type": "charge"
-            }
+        },
+        {
+          "type": "attack-restriction",
+          "target": "self",
+          "modifier": {
+            "attack_type": "charge"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "range": "self",
@@ -84,8 +64,17 @@
       "trygon"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "deep-strike-setup",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      }
+    }
   },
   {
     "ability_id": "terror-from-the-deep",
@@ -150,28 +139,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D3",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -181,7 +161,10 @@
       "winged-hive-tyrant"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "will-of-the-hive-mind",
@@ -257,28 +240,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "2D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "2D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -288,7 +262,10 @@
       "harridan"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "hover",
@@ -374,28 +351,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "D6",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -405,7 +373,10 @@
       "norn-emissary"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "singular-purpose",
@@ -1102,28 +1073,19 @@
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "count": "1",
+          "range": 6
         }
       },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
+      "on_fail": null
     },
     "scope": {
       "range": "aura-6",
@@ -1133,7 +1095,10 @@
       "biovores"
     ],
     "ability_type": "core",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "before-bearer-removed"
+    }
   },
   {
     "ability_id": "seed-spore-mines",
@@ -1947,18 +1912,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-attacks-resolved"
-            }
-          },
-          {
             "type": "target-has-keyword",
             "parameters": {
               "keyword": "INFANTRY"
@@ -1993,7 +1946,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "it-itches",
@@ -2324,21 +2286,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "NEUROTYRANT"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "shadow-in-the-warp-unleash"
-            }
-          }
-        ]
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "NEUROTYRANT"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -2359,7 +2310,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "shadow-in-the-warp-used",
+      "condition": {
+        "type": "on-battlefield",
+        "parameters": {
+          "subject": "self"
+        }
+      }
+    }
   },
   {
     "ability_id": "neuroloids",
@@ -2372,28 +2332,19 @@
     "source_digest": "3f86b944e4b5d0b44256c99222c7c581ed6e9e16758b8178b9ca2b0925570c4c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-command-phase"
-        }
+      "type": "select-units",
+      "selector": {
+        "max_count": 2,
+        "owner": "friendly",
+        "keywords": [
+          "TYRANIDS"
+        ]
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "max_count": 2,
-          "owner": "friendly",
-          "keywords": [
-            "TYRANIDS"
-          ]
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "always-within-synapse-range"
-          }
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "always-within-synapse-range"
         }
       }
     },
@@ -2406,7 +2357,16 @@
       "neurotyrant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    }
   },
   {
     "ability_id": "skulking-horrors",
@@ -2433,7 +2393,7 @@
       "termagants"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
@@ -2467,7 +2427,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -2566,18 +2526,6 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
-          },
-          {
             "type": "target-has-keyword",
             "parameters": {
               "keyword": "INFANTRY"
@@ -2633,7 +2581,16 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "neurocytes",
@@ -2925,7 +2882,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -3452,39 +3409,28 @@
     "faction_id": "tyranids",
     "detachment_id": "ambush-predators",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "grant_type": "detection-range-extended-6"
-        }
+      "type": "ability-grant",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "grant_type": "detection-range-extended-6"
       }
     },
     "scope": {
       "range": "aura-12",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
     "ability_id": "scanner-gheist-ambush-predators",
@@ -3505,33 +3451,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-phase"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent"
-            }
-          },
-          {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
-          }
-        ]
+        "type": "engagement-state",
+        "parameters": {
+          "state": "unengaged"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -3545,7 +3468,27 @@
       "range": "unit",
       "duration": "one-use"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "encircling-horrors-ambush-predators",
@@ -3600,7 +3543,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -3903,65 +3846,59 @@
     "faction_id": "tyranids",
     "detachment_id": "synaptic-nexus",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "Synaptic Imperative",
-        "options": [
-          {
-            "type": "invulnerable-save",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "threshold": 5
-            }
-          },
-          {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "movement-modifier",
-                "target": "friendly-within-aura",
-                "modifier": {
-                  "move_type": "advance",
-                  "distance": 1
-                }
-              },
-              {
-                "type": "charge-roll-modifier",
-                "target": "friendly-within-aura",
-                "modifier": {
-                  "operation": "add",
-                  "value": 1
-                }
-              }
-            ]
-          },
-          {
-            "type": "roll-modifier",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1,
-              "attack_type": "melee"
-            }
+      "type": "choice",
+      "choice_label": "Synaptic Imperative",
+      "options": [
+        {
+          "type": "invulnerable-save",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "threshold": 5
           }
-        ]
-      }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "movement-modifier",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "move_type": "advance",
+                "distance": 1
+              }
+            },
+            {
+              "type": "charge-roll-modifier",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "roll-modifier",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1,
+            "attack_type": "melee"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "aura-6",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "start-of-battle-round"
+    }
   },
   {
     "ability_id": "surprise-assault",
@@ -4277,12 +4214,9 @@
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "timing-is",
-              "parameters": {
-                "timing": "moved-through-tall-terrain"
-              }
+            "type": "ability-part",
+            "trigger": {
+              "event": "moved-through-tall-terrain"
             },
             "effect": {
               "type": "dice-gated",
@@ -4344,7 +4278,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
@@ -4750,24 +4684,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "timing-is",
+            "type": "opponent-unit-within-range",
             "parameters": {
-              "timing": "end-of-fight-phase"
+              "range": "engagement"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "opponent-unit-within-range",
-                "parameters": {
-                  "range": "engagement"
-                }
-              }
-            ]
           }
         ]
       },
@@ -4787,8 +4710,17 @@
       "the-red-terror"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "end-of-phase",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "serpentine-fiend",

@@ -845,9 +845,9 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "triggers_for_event on-unit-selected",
+    name: "triggers_for_event enemy-unit-targets-bearer",
     query: "triggers_for_event",
-    args: { event: "on-unit-selected" },
+    args: { event: "enemy-unit-targets-bearer" },
     comparison: "ordered",
   },
 ];

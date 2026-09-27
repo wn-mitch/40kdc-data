@@ -14,24 +14,24 @@ use super::{
 };
 use crate::{
     generated::{
-        Ability, AbilityAppliesTo, AbilityTrigger, AbilityUsage, AbilityUsageFrequency, AuraEffect,
-        AuraEffectModifierRange, AuraEffectTarget, BeneficiaryBoundEffectNode,
-        CompoundConditionOperator, Condition, ConditionNode, DesignateTargetEffectAppliesTo,
-        DesignateTargetEffectSelect, DiceGatedEffect, DiceGatedEffectComparison,
-        DiceGatedEffectThreshold, DicePoolAllocationEffect, DiceRequirementSpec, DiceTableEffect,
-        EffectNode, FormationAttachmentGrantEffect, KeywordFilter, LeaderModelAbilityGrantEffect,
-        MiracleDieOperationEffect, MovementModifierEffect, NamedEffectKind, ObjectiveSelector,
-        PairedDesignationEffect, PersistentDesignationEffect,
-        PersistentDesignationEffectConsumerRelation, PersistentDesignationEffectOperation,
-        PersistentDesignationEffectSelectScope, ResourceActionMenuEffectActionsItemDuration,
-        ResourceActionMenuEffectActionsItemWhen, ResourceActionMenuEffectCapacity,
-        ResourceActionMenuEffectCapacityRefresh, ResourceActionMenuEffectSharedUsage,
-        ResourceActionMenuTrigger, ResourceActionMenuTriggerMoveTypesItem,
-        ResourceActionMenuTriggerProximityOf, ResourceActionMenuTriggerSubject, Scaling, ScalingOf,
-        ScalingRound, Scope, ScopeRange, SelectUnitsEffectSelector, SimpleConditionType,
-        SingleEffect, SingleEffectTarget, SingleEffectType, StanceSelectEffectMode,
-        StanceSelectionCapacityEffectModifierAllocation, Trigger, TriggerCausedBySource,
-        TriggerMoveTypesItem, TriggerProximityOf,
+        Ability, AbilityAppliesTo, AbilityPart, AbilityPartKind, AbilityTrigger, AbilityUsage,
+        AbilityUsageFrequency, AuraEffect, AuraEffectModifierRange, AuraEffectTarget,
+        BeneficiaryBoundEffectNode, CompoundConditionOperator, Condition, ConditionNode,
+        DesignateTargetEffectAppliesTo, DesignateTargetEffectSelect, DiceGatedEffect,
+        DiceGatedEffectComparison, DiceGatedEffectThreshold, DicePoolAllocationEffect,
+        DiceRequirementSpec, DiceTableEffect, EffectNode, FormationAttachmentGrantEffect,
+        KeywordFilter, LeaderModelAbilityGrantEffect, MiracleDieOperationEffect,
+        MovementModifierEffect, NamedEffectKind, ObjectiveSelector, PairedDesignationEffect,
+        PersistentDesignationEffect, PersistentDesignationEffectConsumerRelation,
+        PersistentDesignationEffectOperation, PersistentDesignationEffectSelectScope,
+        ResourceActionMenuEffectActionsItemDuration, ResourceActionMenuEffectActionsItemWhen,
+        ResourceActionMenuEffectCapacity, ResourceActionMenuEffectCapacityRefresh,
+        ResourceActionMenuEffectSharedUsage, ResourceActionMenuTrigger,
+        ResourceActionMenuTriggerMoveTypesItem, ResourceActionMenuTriggerProximityOf,
+        ResourceActionMenuTriggerSubject, Scaling, ScalingOf, ScalingRound, Scope, ScopeRange,
+        SelectUnitsEffectSelector, SimpleConditionType, SingleEffect, SingleEffectTarget,
+        SingleEffectType, StanceSelectEffectMode, StanceSelectionCapacityEffectModifierAllocation,
+        Trigger, TriggerCausedBySource, TriggerMoveTypesItem, TriggerProximityOf,
     },
     LeaderModelAbilityGrantEffectBeneficiary, ResourceActionMenuEffect,
     ResourceActionMenuEffectActionsItem,
@@ -1436,7 +1436,9 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                 }
                 T::TimingIs => describe_timing(nstr(p, "timing").unwrap_or("?")),
                 T::PlayerTurnIs => match nstr(p, "turn") {
-                    Some("your-turn") | Some("your") | Some("own") => "in your turn".to_string(),
+                    Some("your-turn") | Some("your") | Some("own") | Some("self") => {
+                        "in your turn".to_string()
+                    }
                     Some("opponent-turn") | Some("opponent") => {
                         "in the opponent's turn".to_string()
                     }
@@ -4036,13 +4038,13 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
 }
 fn describe_menu_trigger(t: &ResourceActionMenuTrigger) -> String {
     let event = t.event.to_string();
-    let mut s = event_clause(&event);
+    let (mut s, split) = trigger_lead(&event, t.condition.as_ref());
     let subject = t.subject.map(|subject| subject.to_string());
     if t.subject == Some(ResourceActionMenuTriggerSubject::FriendlyUnit) {
-        s = s.replacen("the unit", "a friendly unit", 1);
+        s = replace_unit_noun(&s, "a friendly unit");
     }
     if t.subject == Some(ResourceActionMenuTriggerSubject::EnemyUnit) {
-        s = s.replacen("the unit", "an enemy unit", 1);
+        s = replace_unit_noun(&s, "an enemy unit");
     }
     if event == "on-model-destroyed" {
         s = match subject.as_deref() {
@@ -4098,9 +4100,7 @@ fn describe_menu_trigger(t: &ResourceActionMenuTrigger) -> String {
         };
         s.push_str(&format!(" within {}\" of {of}", fmt_num(prox.range)));
     }
-    if let Some(cond) = &t.condition {
-        s.push_str(&format!(", if {}", describe_node(&cond.0)));
-    }
+    append_trigger_condition(&mut s, split);
     if t.optional {
         s.push_str(", you may use this ability");
     }
@@ -4412,6 +4412,70 @@ fn named_effect_inline(n: &crate::generated::NamedEffect, ctx: &Ctx) -> String {
     )
 }
 
+/// A named `ability-part`, which the untagged `EffectNode` deserializes as a
+/// `NamedEffect` (the variant listed first whose fields it satisfies).
+fn named_as_part(n: &crate::generated::NamedEffect) -> Option<AbilityPart> {
+    if n.type_.as_str() != Some("ability-part") {
+        return None;
+    }
+    serde_json::from_value(serde_json::to_value(n).ok()?).ok()
+}
+
+/// What leads a part: its moment, its usage limit, its name when the rules give one, the choice to
+/// use it and its cost ("at the end of your Movement phase, once per battle, you can"). Mirrors
+/// `partHead`.
+fn part_head(p: &AbilityPart) -> String {
+    let moment = normalize_triggers(p.trigger.as_ref())
+        .iter()
+        .map(|trigger| describe_ability_trigger(trigger))
+        .filter(|phrase| !phrase.is_empty())
+        .collect::<Vec<_>>()
+        .join(" or ");
+    let level = if matches!(p.kind, Some(AbilityPartKind::Psychic)) {
+        p.level
+            .map(|level| format!(" (Psychic level {level})"))
+            .unwrap_or_default()
+    } else {
+        String::new()
+    };
+    let named = match &p.name {
+        Some(name) => format!(
+            "{}{}{level}",
+            if p.optional { "you can use " } else { "use " },
+            name.as_str()
+        ),
+        None if p.optional => "you can".to_string(),
+        None => String::new(),
+    };
+    let cost = p
+        .cost
+        .as_ref()
+        .map(|cost| format!("by paying this cost ({})", inline(cost, &Ctx::default())))
+        .unwrap_or_default();
+    let usage = p.usage.as_ref().map(usage_clause).unwrap_or_default();
+    let duration = p
+        .duration
+        .as_ref()
+        .map(|duration| duration_clauses(&duration.to_string()).1)
+        .unwrap_or_default();
+    [moment, usage, named, cost, duration]
+        .into_iter()
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+/// A part on one line: its head, then its effect. Mirrors `partInline`.
+fn part_inline(p: &AbilityPart, ctx: &Ctx) -> String {
+    let head = part_head(p);
+    let body = inline(&p.effect, ctx);
+    if head.is_empty() {
+        body
+    } else {
+        format!("{head}: {body}")
+    }
+}
+
 fn inline(e: &EffectNode, ctx: &Ctx) -> String {
     match e {
         EffectNode::NoEffectEffect(_) => "nothing happens".into(),
@@ -4459,7 +4523,11 @@ fn inline(e: &EffectNode, ctx: &Ctx) -> String {
                 .collect::<Vec<_>>()
                 .join("; "),
         },
-        EffectNode::NamedEffect(n) => named_effect_inline(n, ctx),
+        EffectNode::NamedEffect(n) => match named_as_part(n) {
+            Some(p) => part_inline(&p, ctx),
+            None => named_effect_inline(n, ctx),
+        },
+        EffectNode::AbilityPart(p) => part_inline(p, ctx),
         EffectNode::ChoiceEffect(c) => format!(
             "{}: {}",
             choice_prompt(c),
@@ -5100,6 +5168,7 @@ fn is_container(e: &EffectNode) -> bool {
             | EffectNode::RulesBundleEffect(_)
             | EffectNode::ChoiceEffect(_)
             | EffectNode::NamedEffect(_)
+            | EffectNode::AbilityPart(_)
             | EffectNode::DiceGatedEffect(_)
             | EffectNode::DiceTableEffect(_)
             | EffectNode::DicePoolAllocationEffect(_)
@@ -5204,6 +5273,22 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
                 .collect::<Vec<_>>()
                 .join("\n"),
         },
+        EffectNode::NamedEffect(n) if named_as_part(n).is_some() => {
+            let part = named_as_part(n).expect("guarded by is_some");
+            block(&EffectNode::AbilityPart(part), depth, ctx)
+        }
+        EffectNode::AbilityPart(p) => {
+            // A part is always a bullet of its ability, even at the top level.
+            if is_container(&p.effect) {
+                format!(
+                    "{indent}-> {}:\n{}",
+                    capitalize(&part_head(p)),
+                    block(&p.effect, depth + 1, ctx)
+                )
+            } else {
+                format!("{indent}-> {}.", capitalize(&part_inline(p, ctx)))
+            }
+        }
         EffectNode::NamedEffect(n) => {
             if named_metadata(n).is_some() {
                 return format!(
@@ -5569,11 +5654,11 @@ fn replace_first_word(haystack: &str, word: &str, replacement: &str) -> String {
     }
     haystack.to_string()
 }
-fn is_end_of_phase_disembark_battle_shock(t: &Trigger) -> bool {
-    if t.event.to_string() != "end-of-phase" {
+fn is_end_of_phase_disembark_battle_shock(event: &str, condition: Option<&Condition>) -> bool {
+    if event != "end-of-phase" {
         return false;
     }
-    let Some(condition) = &t.condition else {
+    let Some(condition) = condition else {
         return false;
     };
     let ConditionNode::CompoundCondition(compound) = &condition.0 else {
@@ -5642,11 +5727,7 @@ fn phase_boundary(t: &Trigger) -> Option<String> {
     // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
     let owner = match turn {
         None => "the",
-        Some(v) => match v.as_str()? {
-            "your" | "your-turn" | "own" | "self" => "your",
-            "opponent" | "opponent-turn" => "your opponent's",
-            _ => return None,
-        },
+        Some(v) => turn_owner(v.as_str()?)?,
     };
     Some(format!(
         "at the {edge} of {owner} {} phase",
@@ -5654,8 +5735,207 @@ fn phase_boundary(t: &Trigger) -> Option<String> {
     ))
 }
 
+/// Every whole-word "the unit" / "a unit" in `s` → `with`. Mirrors the TS
+/// `s.replace(/\b(?:the|a) unit\b/g, with)` on a trigger's subject.
+fn replace_unit_noun(s: &str, with: &str) -> String {
+    let word = |c: Option<char>| c.is_some_and(|c| c.is_ascii_alphanumeric() || c == '_');
+    let mut out = String::with_capacity(s.len());
+    let mut i = 0;
+    while i < s.len() {
+        let rest = &s[i..];
+        let matched = ["the unit", "a unit"].into_iter().find(|noun| {
+            rest.starts_with(noun)
+                && !word(s[..i].chars().next_back())
+                && !word(rest[noun.len()..].chars().next())
+        });
+        match matched {
+            Some(noun) => {
+                out.push_str(with);
+                i += noun.len();
+            }
+            None => {
+                let c = rest.chars().next().expect("i < len");
+                out.push(c);
+                i += c.len_utf8();
+            }
+        }
+    }
+    out
+}
+
+/// Whose turn, as a trigger window names it. Mirrors `TURN_OWNERS`.
+fn turn_owner(turn: &str) -> Option<&'static str> {
+    match turn {
+        "your" | "your-turn" | "own" | "self" => Some("your"),
+        "opponent" | "opponent-turn" => Some("your opponent's"),
+        _ => None,
+    }
+}
+
+/// A trigger condition's phase and whose turn, as a phrase on the moment ("during your Shooting
+/// phase", "in your opponent's turn"), and whatever else the condition says. Only a plain phase-is
+/// and player-turn-is (not negated, at most one each, joined by "and") make a window. Mirrors
+/// `phaseWindow`.
+fn phase_window(condition: &ConditionNode) -> PhaseWindow {
+    let operands: Vec<&ConditionNode> = match condition {
+        ConditionNode::CompoundCondition(compound)
+            if compound.operator == CompoundConditionOperator::And =>
+        {
+            compound.operands.iter().collect()
+        }
+        ConditionNode::CompoundCondition(_) => Vec::new(),
+        node => vec![node],
+    };
+    let plain = |node: &ConditionNode, ty: SimpleConditionType| matches!(node, ConditionNode::SimpleCondition(c) if !c.negated && c.type_ == ty);
+    let param = |node: &ConditionNode, key: &str| match node {
+        ConditionNode::SimpleCondition(c) => c.parameters.get(key).cloned(),
+        _ => None,
+    };
+    let phases: Vec<usize> = (0..operands.len())
+        .filter(|&i| plain(operands[i], SimpleConditionType::PhaseIs))
+        .collect();
+    let turns: Vec<usize> = (0..operands.len())
+        .filter(|&i| plain(operands[i], SimpleConditionType::PlayerTurnIs))
+        .collect();
+    let owner = turns.first().and_then(|&i| {
+        let turn = param(operands[i], "turn").unwrap_or(Value::Null);
+        turn_owner(&jval(&turn))
+    });
+    let phase = phases
+        .first()
+        .and_then(|&i| param(operands[i], "phase"))
+        .and_then(|v| v.as_str().map(str::to_string));
+    if phases.len() > 1
+        || turns.len() > 1
+        || (turns.len() == 1 && owner.is_none())
+        || (phases.len() == 1 && phase.is_none())
+        || phases.len() + turns.len() == 0
+    {
+        return PhaseWindow {
+            window: String::new(),
+            rest: Some(condition.clone()),
+            phase: None,
+            owner: None,
+        };
+    }
+    let window = match &phase {
+        Some(phase) => format!(
+            "during {} {} phase",
+            owner.unwrap_or("the"),
+            cap_word(phase)
+        ),
+        None => format!("in {} turn", owner.unwrap_or("the")),
+    };
+    let others: Vec<ConditionNode> = (0..operands.len())
+        .filter(|i| !phases.contains(i) && !turns.contains(i))
+        .map(|i| operands[i].clone())
+        .collect();
+    let rest = match others.len() {
+        0 => None,
+        1 => others.into_iter().next(),
+        _ => Some(ConditionNode::CompoundCondition(
+            crate::generated::CompoundCondition {
+                operands: others,
+                operator: CompoundConditionOperator::And,
+            },
+        )),
+    };
+    PhaseWindow {
+        window,
+        rest,
+        phase,
+        owner,
+    }
+}
+
+/// What [`phase_window`] reads off a trigger condition: the window phrase, the
+/// condition left over, and the phase and whose turn when the window names them.
+struct PhaseWindow {
+    window: String,
+    rest: Option<ConditionNode>,
+    phase: Option<String>,
+    owner: Option<&'static str>,
+}
+
+/// A trigger's moment, decided before any subject, keyword, move or proximity clause is added to
+/// it: the event phrase, or for a phase boundary its own phase ("at the end of your Command
+/// phase") or, naming none, every phase. Also returns what [`append_trigger_condition`] needs.
+/// Shared by ability and menu-action triggers, which the TS renders through one `describeTrigger`.
+fn trigger_lead(event: &str, condition: Option<&Condition>) -> (String, TriggerSplit) {
+    let edge = match event {
+        "start-of-phase" => Some("start"),
+        "end-of-phase" => Some("end"),
+        _ => None,
+    };
+    let disembark_shock = is_end_of_phase_disembark_battle_shock(event, condition);
+    let window = match condition {
+        Some(condition) if !disembark_shock => Some(phase_window(&condition.0)),
+        _ => None,
+    };
+    let lead = match (edge, window.as_ref().and_then(|w| w.phase.as_ref())) {
+        (None, _) => event_clause(event),
+        (Some(edge), Some(phase)) => format!(
+            "at the {edge} of {} {} phase",
+            window.as_ref().and_then(|w| w.owner).unwrap_or("the"),
+            cap_word(phase)
+        ),
+        (Some(edge), None) => format!("at the {edge} of each phase"),
+    };
+    (
+        lead,
+        TriggerSplit {
+            edge,
+            disembark_shock,
+            window,
+        },
+    )
+}
+
+/// How a trigger's condition splits, as [`trigger_lead`] decided it.
+struct TriggerSplit {
+    edge: Option<&'static str>,
+    disembark_shock: bool,
+    window: Option<PhaseWindow>,
+}
+
+/// A trigger's condition on its moment `s`: the disembark/Battle-shock case, a turn on a boundary,
+/// a phase or turn window on any other moment, and whatever else it says as ", if ...".
+fn append_trigger_condition(s: &mut String, split: TriggerSplit) {
+    if split.disembark_shock {
+        s.push_str(", if the unit disembarked from a Transport this turn and is Battle-shocked");
+    } else if let Some(PhaseWindow {
+        window,
+        rest,
+        phase,
+        owner,
+    }) = split.window
+    {
+        // Another moment takes the phase as its window ("… during your Shooting phase").
+        match (split.edge, &phase, owner) {
+            (Some(_), None, Some(owner)) => s.push_str(&format!(" in {owner} turn")),
+            (None, _, _) if !window.is_empty() => s.push_str(&format!(" {window}")),
+            _ => {}
+        }
+        if let Some(rest) = rest {
+            s.push_str(&format!(", if {}", describe_node(&rest)));
+        }
+    }
+}
+
 fn describe_ability_trigger(t: &Trigger) -> String {
-    if let Some(boundary) = phase_boundary(t) {
+    let subject = t.subject.as_ref().map(ToString::to_string);
+    // The short form only when the boundary is all the trigger says; any other clause goes below.
+    let plain = t.proximity.is_none()
+        && t.move_types.is_empty()
+        && t.subject_keywords.as_ref().is_none_or(|k| k.is_empty())
+        && t.subject_excluded_keywords
+            .as_ref()
+            .is_none_or(|k| k.is_empty())
+        && t.caused_by.is_none()
+        && t.binds_die_variable.is_none()
+        && t.binds_selected_die_variable.is_none()
+        && matches!(subject.as_deref(), None | Some("self" | "unit"));
+    if let Some(boundary) = plain.then(|| phase_boundary(t)).flatten() {
         return if t.optional {
             format!("{boundary}, you may use this ability")
         } else {
@@ -5663,13 +5943,12 @@ fn describe_ability_trigger(t: &Trigger) -> String {
         };
     }
     let event = t.event.to_string();
-    let mut s = event_clause(&event);
-    let subject = t.subject.as_ref().map(ToString::to_string);
+    let (mut s, split) = trigger_lead(&event, t.condition.as_ref());
     if subject.as_deref() == Some("friendly-unit") {
-        s = s.replacen("the unit", "a friendly unit", 1);
+        s = replace_unit_noun(&s, "a friendly unit");
     }
     if subject.as_deref() == Some("enemy-unit") {
-        s = s.replacen("the unit", "an enemy unit", 1);
+        s = replace_unit_noun(&s, "an enemy unit");
     }
     if event == "on-model-destroyed" {
         s = match subject.as_deref() {
@@ -5805,11 +6084,7 @@ fn describe_ability_trigger(t: &Trigger) -> String {
         };
         s.push_str(&format!(" within {}\" of {of}", fmt_num(proximity.range)));
     }
-    if is_end_of_phase_disembark_battle_shock(t) {
-        s.push_str(", if the unit disembarked from a Transport this turn and is Battle-shocked");
-    } else if let Some(condition) = &t.condition {
-        s.push_str(&format!(", if {}", describe_node(&condition.0)));
-    }
+    append_trigger_condition(&mut s, split);
     if let Some(variable) = &t.binds_die_variable {
         s.push_str(&format!(
             " (binding the generated die as {})",
@@ -5994,17 +6269,17 @@ fn render_top_level(
                 EffectNode::PersistentDesignationEffect(_) => true,
                 _ => false,
             };
-            let block = block(e, 0, &ctx);
             let duration = if own_duration { String::new() } else { trail };
             let header = [trig, lead, duration]
                 .into_iter()
                 .filter(|part| !part.is_empty())
                 .collect::<Vec<_>>()
                 .join(", ");
+            // Under a header, the block's steps are indented as they are under a condition's lead-in.
             if header.is_empty() {
-                block
+                block(e, 0, &ctx)
             } else {
-                format!("{}:\n{}", capitalize(&header), block)
+                format!("{}:\n{}", capitalize(&header), block(e, 1, &ctx))
             }
         }
         _ => assemble_sentence(&[trig, lead, trail, inline(e, &ctx)]),

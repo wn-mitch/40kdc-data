@@ -27,6 +27,9 @@
           "$ref": "#/$defs/named-effect"
         },
         {
+          "$ref": "#/$defs/ability-part"
+        },
+        {
           "$ref": "#/$defs/dice-gated-effect"
         },
         {
@@ -2640,7 +2643,7 @@
     "named-effect": {
       "type": "object",
       "additionalProperties": false,
-      "description": "A named sub-ability embedded in a larger rules bundle.",
+      "description": "Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.",
       "properties": {
         "type": {
           "const": "named-effect"
@@ -2686,6 +2689,59 @@
       "required": [
         "type",
         "name",
+        "effect"
+      ]
+    },
+    "ability-part": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).",
+      "properties": {
+        "type": {
+          "const": "ability-part"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The part's own name, only when the rules give it one."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "psychic"
+          ]
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the controlling player may decline this part."
+        },
+        "cost": {
+          "$ref": "#/$defs/effect-node",
+          "description": "A prerequisite cost: the part's effect applies only after this complete cost is paid. An optional part may be declined without paying it."
+        },
+        "duration": {
+          "$ref": "scope.schema.json#/$defs/scope-duration",
+          "description": "Expiration of this sub-effect, independently of sibling rules in an enclosing bundle."
+        },
+        "trigger": {
+          "$ref": "ability.schema.json#/$defs/ability-trigger",
+          "description": "The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration."
+        },
+        "usage": {
+          "$ref": "ability.schema.json#/$defs/ability-usage",
+          "description": "How often this part may be used, when the limit is the part's and not the whole ability's."
+        }
+      },
+      "required": [
+        "type",
         "effect"
       ]
     },

@@ -17,7 +17,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the phase, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit has the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Loping Speed" typeName="Abilities">

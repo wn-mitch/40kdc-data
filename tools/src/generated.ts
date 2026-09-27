@@ -95,6 +95,8 @@ export type GameEvent =
   | "start-of-opponent-turn"
   | "end-of-opponent-turn"
   | "start-of-battle-round"
+  | "end-of-battle-round"
+  | "start-of-battle"
   | "start-of-command-phase"
   | "declare-battle-formations"
   | "post-deployment"
@@ -106,6 +108,9 @@ export type GameEvent =
   | "deep-strike-setup"
   | "reinforcements"
   | "normal-move"
+  | "end-of-normal-move"
+  | "end-of-advance-move"
+  | "surge-move"
   | "advance-move"
   | "advances"
   | "fall-back-move"
@@ -136,6 +141,10 @@ export type GameEvent =
   | "selected-to-shoot"
   | "selected-to-fight"
   | "selected-to-advance"
+  | "selected-to-move"
+  | "selected-to-fall-back"
+  | "selected-to-disembark"
+  | "unit-disembarked"
   | "after-unit-resolves-attacks"
   | "after-scoring-hit"
   | "after-enemy-unit-fires"
@@ -143,12 +152,16 @@ export type GameEvent =
   | "on-model-destroyed"
   | "first-model-destroyed"
   | "before-bearer-removed"
+  | "enemy-unit-destroyed"
   | "enemy-unit-destroyed-in-melee"
   | "on-damage-allocated"
   | "battle-shock-test"
+  | "becomes-battle-shocked"
+  | "start-of-battle-shock-step"
   | "leadership-test"
   | "desperate-escape-test"
   | "stratagem-targeted"
+  | "stratagem-used"
   | "ability-target-selected"
   | "end-of-opponent-charge-phase"
   | "enemy-unit-completed-shooting-targeting-bearer"
@@ -158,6 +171,34 @@ export type GameEvent =
   | "act-of-faith-completed"
   | "act-of-faith-performed"
   | "miracle-die-generated"
+  | "dark-pact-made"
+  | "agile-manoeuvre-performed"
+  | "unit-empowered"
+  | "ritual-manifested"
+  | "oath-fulfilled"
+  | "shadow-in-the-warp-used"
+  | "order-issued"
+  | "order-received"
+  | "reanimation-protocols-activated"
+  | "ritual-attempted"
+  | "warp-channelled"
+  | "after-psychic-test"
+  | "blessings-of-khorne-rolled"
+  | "observer-selected"
+  | "malefic-surge-made"
+  | "contract-invoked"
+  | "dark-pact-test-passed"
+  | "contract-completed"
+  | "favoured-champions-changed"
+  | "cult-ambush-marker-removed"
+  | "set-up-from-cult-ambush"
+  | "quarry-destroyed"
+  | "combat-doctrine-selected"
+  | "waaagh-called"
+  | "opponent-cp-gained"
+  | "flux-token-spent"
+  | "yield-points-spent"
+  | "gate-of-infinity-used"
   | "enemy-unit-selected-charge-targets-before-charge-move";
 /**
  * 11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
@@ -307,6 +348,7 @@ export type AbilityEffect =
   | SequenceEffect
   | RulesBundleEffect
   | NamedEffect
+  | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
   | ConditionalEffect
@@ -441,6 +483,7 @@ export type EffectNode =
   | SequenceEffect
   | RulesBundleEffect
   | NamedEffect
+  | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
   | ConditionalEffect
@@ -539,6 +582,7 @@ export type AbilityEffect1 =
   | SequenceEffect
   | RulesBundleEffect
   | NamedEffect
+  | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
   | ConditionalEffect
@@ -670,6 +714,7 @@ export type AbilityEffect2 =
   | SequenceEffect
   | RulesBundleEffect
   | NamedEffect
+  | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
   | ConditionalEffect
@@ -1668,7 +1713,7 @@ export interface RulesBundleEffect {
   steps: [EffectNode, ...EffectNode[]];
 }
 /**
- * A named sub-ability embedded in a larger rules bundle.
+ * Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "named-effect".
@@ -1694,6 +1739,7 @@ export interface NamedEffect {
     | SequenceEffect
     | RulesBundleEffect
     | NamedEffect
+    | AbilityPart
     | DiceGatedEffect
     | DiceTableEffect
     | ConditionalEffect
@@ -1733,6 +1779,80 @@ export interface NamedEffect {
     | "resolution";
   /**
    * Reactive event for this sub-ability. When nested inside an activated effect, the subscription exists only for the enclosing effect duration.
+   */
+  trigger?: Trigger | [Trigger, ...Trigger[]];
+  usage?: AbilityUsage1;
+}
+/**
+ * One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ability-part".
+ */
+export interface AbilityPart {
+  type: "ability-part";
+  /**
+   * The part's own name, only when the rules give it one.
+   */
+  name?: string;
+  kind?: "psychic";
+  level?: number;
+  effect: EffectNode;
+  /**
+   * Whether the controlling player may decline this part.
+   */
+  optional?: boolean;
+  /**
+   * A prerequisite cost: the part's effect applies only after this complete cost is paid. An optional part may be declined without paying it.
+   */
+  cost?:
+    | SingleEffect
+    | StanceSelectEffect
+    | StanceSelectionCapacityEffect
+    | ChoiceEffect
+    | SequenceEffect
+    | RulesBundleEffect
+    | NamedEffect
+    | AbilityPart
+    | DiceGatedEffect
+    | DiceTableEffect
+    | ConditionalEffect
+    | DicePoolAllocationEffect
+    | SelectUnitsEffect
+    | ForEachUnitEffect
+    | MovementModifierEffect
+    | AuraEffect
+    | DesignateTargetEffect
+    | RiskRewardEffect
+    | IssueOrdersEffect
+    | ResourceActionMenuEffect
+    | LeaderModelAbilityGrantEffect
+    | PersistentDesignationEffect
+    | NoEffectEffect
+    | SelectObjectiveEffect
+    | ForEachObjectiveEffect
+    | PairedDesignationEffect
+    | MiracleDieOperationEffect
+    | FormationAttachmentGrantEffect
+    | AttachmentEligibilityInheritEffect;
+  /**
+   * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
+   */
+  duration?:
+    | "phase"
+    | "turn"
+    | "battle-round"
+    | "battle"
+    | "until-next-command-phase"
+    | "until-next-movement-phase"
+    | "until-next-battle-round"
+    | "until-start-next-turn"
+    | "one-use"
+    | "permanent"
+    | "attack-sequence"
+    | "resolution";
+  /**
+   * The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration.
    */
   trigger?: Trigger | [Trigger, ...Trigger[]];
   usage?: AbilityUsage;
@@ -2012,6 +2132,7 @@ export interface MovementModifierEffect {
     | SequenceEffect
     | RulesBundleEffect
     | NamedEffect
+    | AbilityPart
     | DiceGatedEffect
     | DiceTableEffect
     | ConditionalEffect
@@ -2359,6 +2480,7 @@ export interface PersistentDesignationEffect {
       | SequenceEffect
       | RulesBundleEffect
       | NamedEffect
+      | AbilityPart
       | DiceGatedEffect
       | DiceTableEffect
       | ConditionalEffect
@@ -2621,11 +2743,27 @@ export interface Trigger {
 }
 /**
  * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
+ */
+export interface AbilityUsage {
+  frequency:
+    | "once-per-turn"
+    | "once-per-phase"
+    | "once-per-battle-round"
+    | "once-per-command-phase"
+    | "once-per-opponent-turn"
+    | "n-per-battle"
+    | "first-this-battle"
+    | "first-time-this-phase";
+  count?: number;
+  per?: "army" | "unit" | "model";
+}
+/**
+ * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "ability-usage".
  */
-export interface AbilityUsage {
+export interface AbilityUsage1 {
   frequency:
     | "once-per-turn"
     | "once-per-phase"
@@ -3673,7 +3811,7 @@ export interface AbilityDSLEntry {
   effect: AbilityEffect1;
   trigger?: AbilityTrigger;
   scope: AbilityScope;
-  usage?: AbilityUsage;
+  usage?: AbilityUsage1;
   /**
    * Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.
    */

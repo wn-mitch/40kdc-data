@@ -600,6 +600,239 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
         value.parse()
     }
 }
+///One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).",
+///  "type": "object",
+///  "required": [
+///    "effect",
+///    "type"
+///  ],
+///  "properties": {
+///    "cost": {
+///      "description": "A prerequisite cost: the part's effect applies only after this complete cost is paid. An optional part may be declined without paying it.",
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "duration": {
+///      "description": "Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.",
+///      "$ref": "#/$defs/scope-duration"
+///    },
+///    "effect": {
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "kind": {
+///      "type": "string",
+///      "enum": [
+///        "psychic"
+///      ]
+///    },
+///    "level": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "name": {
+///      "description": "The part's own name, only when the rules give it one.",
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "optional": {
+///      "description": "Whether the controlling player may decline this part.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "trigger": {
+///      "description": "The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration.",
+///      "$ref": "#/$defs/ability-trigger"
+///    },
+///    "type": {
+///      "const": "ability-part"
+///    },
+///    "usage": {
+///      "description": "How often this part may be used, when the limit is the part's and not the whole ability's.",
+///      "$ref": "#/$defs/ability-usage"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AbilityPart {
+    ///A prerequisite cost: the part's effect applies only after this complete cost is paid. An optional part may be declined without paying it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub cost: ::std::option::Option<::std::boxed::Box<EffectNode>>,
+    ///Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<ScopeDuration>,
+    pub effect: ::std::boxed::Box<EffectNode>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<AbilityPartKind>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub level: ::std::option::Option<::std::num::NonZeroU64>,
+    ///The part's own name, only when the rules give it one.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AbilityPartName>,
+    ///Whether the controlling player may decline this part.
+    #[serde(default)]
+    pub optional: bool,
+    ///The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub trigger: ::std::option::Option<AbilityTrigger>,
+    #[serde(rename = "type")]
+    pub type_: ::serde_json::Value,
+    ///How often this part may be used, when the limit is the part's and not the whole ability's.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<AbilityUsage>,
+}
+///`AbilityPartKind`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "psychic"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AbilityPartKind {
+    #[serde(rename = "psychic")]
+    Psychic,
+}
+impl ::std::fmt::Display for AbilityPartKind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Psychic => f.write_str("psychic"),
+        }
+    }
+}
+impl ::std::str::FromStr for AbilityPartKind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "psychic" => Ok(Self::Psychic),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityPartKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityPartKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityPartKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The part's own name, only when the rules give it one.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The part's own name, only when the rules give it one.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityPartName(::std::string::String);
+impl ::std::ops::Deref for AbilityPartName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityPartName> for ::std::string::String {
+    fn from(value: AbilityPartName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityPartName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityPartName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityPartName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityPartName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityPartName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///SHA-256 of the NORMALISED printed rule this annotation was authored against — one-way, so the rule text itself stays outside this repository. Normalisation (defined once in tools/src/source-digest.ts) casefolds, folds Unicode, keeps the rule-significant operators + - = < > / % and replaces other punctuation with spaces, so reprint noise and quote style leave the digest unchanged while a changed value or an added condition changes it. Optional: absent means the source was never fingerprinted, which `npm run audit:source-digest` reports as untracked rather than current. Records source-content identity, not release history — consumers must not select, order or supersede abilities by it.
 ///
 /// <details><summary>JSON schema</summary>
@@ -7007,6 +7240,9 @@ impl ::std::convert::From<EffectNode> for Effect {
 ///      "$ref": "#/$defs/named-effect"
 ///    },
 ///    {
+///      "$ref": "#/$defs/ability-part"
+///    },
+///    {
 ///      "$ref": "#/$defs/dice-gated-effect"
 ///    },
 ///    {
@@ -7083,6 +7319,7 @@ pub enum EffectNode {
     SequenceEffect(SequenceEffect),
     RulesBundleEffect(RulesBundleEffect),
     NamedEffect(NamedEffect),
+    AbilityPart(AbilityPart),
     DiceGatedEffect(DiceGatedEffect),
     DiceTableEffect(DiceTableEffect),
     ConditionalEffect(ConditionalEffect),
@@ -7138,6 +7375,11 @@ impl ::std::convert::From<RulesBundleEffect> for EffectNode {
 impl ::std::convert::From<NamedEffect> for EffectNode {
     fn from(value: NamedEffect) -> Self {
         Self::NamedEffect(value)
+    }
+}
+impl ::std::convert::From<AbilityPart> for EffectNode {
+    fn from(value: AbilityPart) -> Self {
+        Self::AbilityPart(value)
     }
 }
 impl ::std::convert::From<DiceGatedEffect> for EffectNode {
@@ -10027,6 +10269,8 @@ for FormationAttachmentGrantEffectSource {
 ///    "start-of-opponent-turn",
 ///    "end-of-opponent-turn",
 ///    "start-of-battle-round",
+///    "end-of-battle-round",
+///    "start-of-battle",
 ///    "start-of-command-phase",
 ///    "declare-battle-formations",
 ///    "post-deployment",
@@ -10038,6 +10282,9 @@ for FormationAttachmentGrantEffectSource {
 ///    "deep-strike-setup",
 ///    "reinforcements",
 ///    "normal-move",
+///    "end-of-normal-move",
+///    "end-of-advance-move",
+///    "surge-move",
 ///    "advance-move",
 ///    "advances",
 ///    "fall-back-move",
@@ -10068,6 +10315,10 @@ for FormationAttachmentGrantEffectSource {
 ///    "selected-to-shoot",
 ///    "selected-to-fight",
 ///    "selected-to-advance",
+///    "selected-to-move",
+///    "selected-to-fall-back",
+///    "selected-to-disembark",
+///    "unit-disembarked",
 ///    "after-unit-resolves-attacks",
 ///    "after-scoring-hit",
 ///    "after-enemy-unit-fires",
@@ -10075,12 +10326,16 @@ for FormationAttachmentGrantEffectSource {
 ///    "on-model-destroyed",
 ///    "first-model-destroyed",
 ///    "before-bearer-removed",
+///    "enemy-unit-destroyed",
 ///    "enemy-unit-destroyed-in-melee",
 ///    "on-damage-allocated",
 ///    "battle-shock-test",
+///    "becomes-battle-shocked",
+///    "start-of-battle-shock-step",
 ///    "leadership-test",
 ///    "desperate-escape-test",
 ///    "stratagem-targeted",
+///    "stratagem-used",
 ///    "ability-target-selected",
 ///    "end-of-opponent-charge-phase",
 ///    "enemy-unit-completed-shooting-targeting-bearer",
@@ -10090,6 +10345,34 @@ for FormationAttachmentGrantEffectSource {
 ///    "act-of-faith-completed",
 ///    "act-of-faith-performed",
 ///    "miracle-die-generated",
+///    "dark-pact-made",
+///    "agile-manoeuvre-performed",
+///    "unit-empowered",
+///    "ritual-manifested",
+///    "oath-fulfilled",
+///    "shadow-in-the-warp-used",
+///    "order-issued",
+///    "order-received",
+///    "reanimation-protocols-activated",
+///    "ritual-attempted",
+///    "warp-channelled",
+///    "after-psychic-test",
+///    "blessings-of-khorne-rolled",
+///    "observer-selected",
+///    "malefic-surge-made",
+///    "contract-invoked",
+///    "dark-pact-test-passed",
+///    "contract-completed",
+///    "favoured-champions-changed",
+///    "cult-ambush-marker-removed",
+///    "set-up-from-cult-ambush",
+///    "quarry-destroyed",
+///    "combat-doctrine-selected",
+///    "waaagh-called",
+///    "opponent-cp-gained",
+///    "flux-token-spent",
+///    "yield-points-spent",
+///    "gate-of-infinity-used",
 ///    "enemy-unit-selected-charge-targets-before-charge-move"
 ///  ]
 ///}
@@ -10124,6 +10407,10 @@ pub enum GameEvent {
     EndOfOpponentTurn,
     #[serde(rename = "start-of-battle-round")]
     StartOfBattleRound,
+    #[serde(rename = "end-of-battle-round")]
+    EndOfBattleRound,
+    #[serde(rename = "start-of-battle")]
+    StartOfBattle,
     #[serde(rename = "start-of-command-phase")]
     StartOfCommandPhase,
     #[serde(rename = "declare-battle-formations")]
@@ -10146,6 +10433,12 @@ pub enum GameEvent {
     Reinforcements,
     #[serde(rename = "normal-move")]
     NormalMove,
+    #[serde(rename = "end-of-normal-move")]
+    EndOfNormalMove,
+    #[serde(rename = "end-of-advance-move")]
+    EndOfAdvanceMove,
+    #[serde(rename = "surge-move")]
+    SurgeMove,
     #[serde(rename = "advance-move")]
     AdvanceMove,
     #[serde(rename = "advances")]
@@ -10206,6 +10499,14 @@ pub enum GameEvent {
     SelectedToFight,
     #[serde(rename = "selected-to-advance")]
     SelectedToAdvance,
+    #[serde(rename = "selected-to-move")]
+    SelectedToMove,
+    #[serde(rename = "selected-to-fall-back")]
+    SelectedToFallBack,
+    #[serde(rename = "selected-to-disembark")]
+    SelectedToDisembark,
+    #[serde(rename = "unit-disembarked")]
+    UnitDisembarked,
     #[serde(rename = "after-unit-resolves-attacks")]
     AfterUnitResolvesAttacks,
     #[serde(rename = "after-scoring-hit")]
@@ -10220,18 +10521,26 @@ pub enum GameEvent {
     FirstModelDestroyed,
     #[serde(rename = "before-bearer-removed")]
     BeforeBearerRemoved,
+    #[serde(rename = "enemy-unit-destroyed")]
+    EnemyUnitDestroyed,
     #[serde(rename = "enemy-unit-destroyed-in-melee")]
     EnemyUnitDestroyedInMelee,
     #[serde(rename = "on-damage-allocated")]
     OnDamageAllocated,
     #[serde(rename = "battle-shock-test")]
     BattleShockTest,
+    #[serde(rename = "becomes-battle-shocked")]
+    BecomesBattleShocked,
+    #[serde(rename = "start-of-battle-shock-step")]
+    StartOfBattleShockStep,
     #[serde(rename = "leadership-test")]
     LeadershipTest,
     #[serde(rename = "desperate-escape-test")]
     DesperateEscapeTest,
     #[serde(rename = "stratagem-targeted")]
     StratagemTargeted,
+    #[serde(rename = "stratagem-used")]
+    StratagemUsed,
     #[serde(rename = "ability-target-selected")]
     AbilityTargetSelected,
     #[serde(rename = "end-of-opponent-charge-phase")]
@@ -10250,6 +10559,62 @@ pub enum GameEvent {
     ActOfFaithPerformed,
     #[serde(rename = "miracle-die-generated")]
     MiracleDieGenerated,
+    #[serde(rename = "dark-pact-made")]
+    DarkPactMade,
+    #[serde(rename = "agile-manoeuvre-performed")]
+    AgileManoeuvrePerformed,
+    #[serde(rename = "unit-empowered")]
+    UnitEmpowered,
+    #[serde(rename = "ritual-manifested")]
+    RitualManifested,
+    #[serde(rename = "oath-fulfilled")]
+    OathFulfilled,
+    #[serde(rename = "shadow-in-the-warp-used")]
+    ShadowInTheWarpUsed,
+    #[serde(rename = "order-issued")]
+    OrderIssued,
+    #[serde(rename = "order-received")]
+    OrderReceived,
+    #[serde(rename = "reanimation-protocols-activated")]
+    ReanimationProtocolsActivated,
+    #[serde(rename = "ritual-attempted")]
+    RitualAttempted,
+    #[serde(rename = "warp-channelled")]
+    WarpChannelled,
+    #[serde(rename = "after-psychic-test")]
+    AfterPsychicTest,
+    #[serde(rename = "blessings-of-khorne-rolled")]
+    BlessingsOfKhorneRolled,
+    #[serde(rename = "observer-selected")]
+    ObserverSelected,
+    #[serde(rename = "malefic-surge-made")]
+    MaleficSurgeMade,
+    #[serde(rename = "contract-invoked")]
+    ContractInvoked,
+    #[serde(rename = "dark-pact-test-passed")]
+    DarkPactTestPassed,
+    #[serde(rename = "contract-completed")]
+    ContractCompleted,
+    #[serde(rename = "favoured-champions-changed")]
+    FavouredChampionsChanged,
+    #[serde(rename = "cult-ambush-marker-removed")]
+    CultAmbushMarkerRemoved,
+    #[serde(rename = "set-up-from-cult-ambush")]
+    SetUpFromCultAmbush,
+    #[serde(rename = "quarry-destroyed")]
+    QuarryDestroyed,
+    #[serde(rename = "combat-doctrine-selected")]
+    CombatDoctrineSelected,
+    #[serde(rename = "waaagh-called")]
+    WaaaghCalled,
+    #[serde(rename = "opponent-cp-gained")]
+    OpponentCpGained,
+    #[serde(rename = "flux-token-spent")]
+    FluxTokenSpent,
+    #[serde(rename = "yield-points-spent")]
+    YieldPointsSpent,
+    #[serde(rename = "gate-of-infinity-used")]
+    GateOfInfinityUsed,
     #[serde(rename = "enemy-unit-selected-charge-targets-before-charge-move")]
     EnemyUnitSelectedChargeTargetsBeforeChargeMove,
 }
@@ -10264,6 +10629,8 @@ impl ::std::fmt::Display for GameEvent {
             Self::StartOfOpponentTurn => f.write_str("start-of-opponent-turn"),
             Self::EndOfOpponentTurn => f.write_str("end-of-opponent-turn"),
             Self::StartOfBattleRound => f.write_str("start-of-battle-round"),
+            Self::EndOfBattleRound => f.write_str("end-of-battle-round"),
+            Self::StartOfBattle => f.write_str("start-of-battle"),
             Self::StartOfCommandPhase => f.write_str("start-of-command-phase"),
             Self::DeclareBattleFormations => f.write_str("declare-battle-formations"),
             Self::PostDeployment => f.write_str("post-deployment"),
@@ -10279,6 +10646,9 @@ impl ::std::fmt::Display for GameEvent {
             Self::DeepStrikeSetup => f.write_str("deep-strike-setup"),
             Self::Reinforcements => f.write_str("reinforcements"),
             Self::NormalMove => f.write_str("normal-move"),
+            Self::EndOfNormalMove => f.write_str("end-of-normal-move"),
+            Self::EndOfAdvanceMove => f.write_str("end-of-advance-move"),
+            Self::SurgeMove => f.write_str("surge-move"),
             Self::AdvanceMove => f.write_str("advance-move"),
             Self::Advances => f.write_str("advances"),
             Self::FallBackMove => f.write_str("fall-back-move"),
@@ -10309,6 +10679,10 @@ impl ::std::fmt::Display for GameEvent {
             Self::SelectedToShoot => f.write_str("selected-to-shoot"),
             Self::SelectedToFight => f.write_str("selected-to-fight"),
             Self::SelectedToAdvance => f.write_str("selected-to-advance"),
+            Self::SelectedToMove => f.write_str("selected-to-move"),
+            Self::SelectedToFallBack => f.write_str("selected-to-fall-back"),
+            Self::SelectedToDisembark => f.write_str("selected-to-disembark"),
+            Self::UnitDisembarked => f.write_str("unit-disembarked"),
             Self::AfterUnitResolvesAttacks => f.write_str("after-unit-resolves-attacks"),
             Self::AfterScoringHit => f.write_str("after-scoring-hit"),
             Self::AfterEnemyUnitFires => f.write_str("after-enemy-unit-fires"),
@@ -10316,14 +10690,18 @@ impl ::std::fmt::Display for GameEvent {
             Self::OnModelDestroyed => f.write_str("on-model-destroyed"),
             Self::FirstModelDestroyed => f.write_str("first-model-destroyed"),
             Self::BeforeBearerRemoved => f.write_str("before-bearer-removed"),
+            Self::EnemyUnitDestroyed => f.write_str("enemy-unit-destroyed"),
             Self::EnemyUnitDestroyedInMelee => {
                 f.write_str("enemy-unit-destroyed-in-melee")
             }
             Self::OnDamageAllocated => f.write_str("on-damage-allocated"),
             Self::BattleShockTest => f.write_str("battle-shock-test"),
+            Self::BecomesBattleShocked => f.write_str("becomes-battle-shocked"),
+            Self::StartOfBattleShockStep => f.write_str("start-of-battle-shock-step"),
             Self::LeadershipTest => f.write_str("leadership-test"),
             Self::DesperateEscapeTest => f.write_str("desperate-escape-test"),
             Self::StratagemTargeted => f.write_str("stratagem-targeted"),
+            Self::StratagemUsed => f.write_str("stratagem-used"),
             Self::AbilityTargetSelected => f.write_str("ability-target-selected"),
             Self::EndOfOpponentChargePhase => f.write_str("end-of-opponent-charge-phase"),
             Self::EnemyUnitCompletedShootingTargetingBearer => {
@@ -10339,6 +10717,36 @@ impl ::std::fmt::Display for GameEvent {
             Self::ActOfFaithCompleted => f.write_str("act-of-faith-completed"),
             Self::ActOfFaithPerformed => f.write_str("act-of-faith-performed"),
             Self::MiracleDieGenerated => f.write_str("miracle-die-generated"),
+            Self::DarkPactMade => f.write_str("dark-pact-made"),
+            Self::AgileManoeuvrePerformed => f.write_str("agile-manoeuvre-performed"),
+            Self::UnitEmpowered => f.write_str("unit-empowered"),
+            Self::RitualManifested => f.write_str("ritual-manifested"),
+            Self::OathFulfilled => f.write_str("oath-fulfilled"),
+            Self::ShadowInTheWarpUsed => f.write_str("shadow-in-the-warp-used"),
+            Self::OrderIssued => f.write_str("order-issued"),
+            Self::OrderReceived => f.write_str("order-received"),
+            Self::ReanimationProtocolsActivated => {
+                f.write_str("reanimation-protocols-activated")
+            }
+            Self::RitualAttempted => f.write_str("ritual-attempted"),
+            Self::WarpChannelled => f.write_str("warp-channelled"),
+            Self::AfterPsychicTest => f.write_str("after-psychic-test"),
+            Self::BlessingsOfKhorneRolled => f.write_str("blessings-of-khorne-rolled"),
+            Self::ObserverSelected => f.write_str("observer-selected"),
+            Self::MaleficSurgeMade => f.write_str("malefic-surge-made"),
+            Self::ContractInvoked => f.write_str("contract-invoked"),
+            Self::DarkPactTestPassed => f.write_str("dark-pact-test-passed"),
+            Self::ContractCompleted => f.write_str("contract-completed"),
+            Self::FavouredChampionsChanged => f.write_str("favoured-champions-changed"),
+            Self::CultAmbushMarkerRemoved => f.write_str("cult-ambush-marker-removed"),
+            Self::SetUpFromCultAmbush => f.write_str("set-up-from-cult-ambush"),
+            Self::QuarryDestroyed => f.write_str("quarry-destroyed"),
+            Self::CombatDoctrineSelected => f.write_str("combat-doctrine-selected"),
+            Self::WaaaghCalled => f.write_str("waaagh-called"),
+            Self::OpponentCpGained => f.write_str("opponent-cp-gained"),
+            Self::FluxTokenSpent => f.write_str("flux-token-spent"),
+            Self::YieldPointsSpent => f.write_str("yield-points-spent"),
+            Self::GateOfInfinityUsed => f.write_str("gate-of-infinity-used"),
             Self::EnemyUnitSelectedChargeTargetsBeforeChargeMove => {
                 f.write_str("enemy-unit-selected-charge-targets-before-charge-move")
             }
@@ -10359,6 +10767,8 @@ impl ::std::str::FromStr for GameEvent {
             "start-of-opponent-turn" => Ok(Self::StartOfOpponentTurn),
             "end-of-opponent-turn" => Ok(Self::EndOfOpponentTurn),
             "start-of-battle-round" => Ok(Self::StartOfBattleRound),
+            "end-of-battle-round" => Ok(Self::EndOfBattleRound),
+            "start-of-battle" => Ok(Self::StartOfBattle),
             "start-of-command-phase" => Ok(Self::StartOfCommandPhase),
             "declare-battle-formations" => Ok(Self::DeclareBattleFormations),
             "post-deployment" => Ok(Self::PostDeployment),
@@ -10370,6 +10780,9 @@ impl ::std::str::FromStr for GameEvent {
             "deep-strike-setup" => Ok(Self::DeepStrikeSetup),
             "reinforcements" => Ok(Self::Reinforcements),
             "normal-move" => Ok(Self::NormalMove),
+            "end-of-normal-move" => Ok(Self::EndOfNormalMove),
+            "end-of-advance-move" => Ok(Self::EndOfAdvanceMove),
+            "surge-move" => Ok(Self::SurgeMove),
             "advance-move" => Ok(Self::AdvanceMove),
             "advances" => Ok(Self::Advances),
             "fall-back-move" => Ok(Self::FallBackMove),
@@ -10400,6 +10813,10 @@ impl ::std::str::FromStr for GameEvent {
             "selected-to-shoot" => Ok(Self::SelectedToShoot),
             "selected-to-fight" => Ok(Self::SelectedToFight),
             "selected-to-advance" => Ok(Self::SelectedToAdvance),
+            "selected-to-move" => Ok(Self::SelectedToMove),
+            "selected-to-fall-back" => Ok(Self::SelectedToFallBack),
+            "selected-to-disembark" => Ok(Self::SelectedToDisembark),
+            "unit-disembarked" => Ok(Self::UnitDisembarked),
             "after-unit-resolves-attacks" => Ok(Self::AfterUnitResolvesAttacks),
             "after-scoring-hit" => Ok(Self::AfterScoringHit),
             "after-enemy-unit-fires" => Ok(Self::AfterEnemyUnitFires),
@@ -10407,12 +10824,16 @@ impl ::std::str::FromStr for GameEvent {
             "on-model-destroyed" => Ok(Self::OnModelDestroyed),
             "first-model-destroyed" => Ok(Self::FirstModelDestroyed),
             "before-bearer-removed" => Ok(Self::BeforeBearerRemoved),
+            "enemy-unit-destroyed" => Ok(Self::EnemyUnitDestroyed),
             "enemy-unit-destroyed-in-melee" => Ok(Self::EnemyUnitDestroyedInMelee),
             "on-damage-allocated" => Ok(Self::OnDamageAllocated),
             "battle-shock-test" => Ok(Self::BattleShockTest),
+            "becomes-battle-shocked" => Ok(Self::BecomesBattleShocked),
+            "start-of-battle-shock-step" => Ok(Self::StartOfBattleShockStep),
             "leadership-test" => Ok(Self::LeadershipTest),
             "desperate-escape-test" => Ok(Self::DesperateEscapeTest),
             "stratagem-targeted" => Ok(Self::StratagemTargeted),
+            "stratagem-used" => Ok(Self::StratagemUsed),
             "ability-target-selected" => Ok(Self::AbilityTargetSelected),
             "end-of-opponent-charge-phase" => Ok(Self::EndOfOpponentChargePhase),
             "enemy-unit-completed-shooting-targeting-bearer" => {
@@ -10428,6 +10849,34 @@ impl ::std::str::FromStr for GameEvent {
             "act-of-faith-completed" => Ok(Self::ActOfFaithCompleted),
             "act-of-faith-performed" => Ok(Self::ActOfFaithPerformed),
             "miracle-die-generated" => Ok(Self::MiracleDieGenerated),
+            "dark-pact-made" => Ok(Self::DarkPactMade),
+            "agile-manoeuvre-performed" => Ok(Self::AgileManoeuvrePerformed),
+            "unit-empowered" => Ok(Self::UnitEmpowered),
+            "ritual-manifested" => Ok(Self::RitualManifested),
+            "oath-fulfilled" => Ok(Self::OathFulfilled),
+            "shadow-in-the-warp-used" => Ok(Self::ShadowInTheWarpUsed),
+            "order-issued" => Ok(Self::OrderIssued),
+            "order-received" => Ok(Self::OrderReceived),
+            "reanimation-protocols-activated" => Ok(Self::ReanimationProtocolsActivated),
+            "ritual-attempted" => Ok(Self::RitualAttempted),
+            "warp-channelled" => Ok(Self::WarpChannelled),
+            "after-psychic-test" => Ok(Self::AfterPsychicTest),
+            "blessings-of-khorne-rolled" => Ok(Self::BlessingsOfKhorneRolled),
+            "observer-selected" => Ok(Self::ObserverSelected),
+            "malefic-surge-made" => Ok(Self::MaleficSurgeMade),
+            "contract-invoked" => Ok(Self::ContractInvoked),
+            "dark-pact-test-passed" => Ok(Self::DarkPactTestPassed),
+            "contract-completed" => Ok(Self::ContractCompleted),
+            "favoured-champions-changed" => Ok(Self::FavouredChampionsChanged),
+            "cult-ambush-marker-removed" => Ok(Self::CultAmbushMarkerRemoved),
+            "set-up-from-cult-ambush" => Ok(Self::SetUpFromCultAmbush),
+            "quarry-destroyed" => Ok(Self::QuarryDestroyed),
+            "combat-doctrine-selected" => Ok(Self::CombatDoctrineSelected),
+            "waaagh-called" => Ok(Self::WaaaghCalled),
+            "opponent-cp-gained" => Ok(Self::OpponentCpGained),
+            "flux-token-spent" => Ok(Self::FluxTokenSpent),
+            "yield-points-spent" => Ok(Self::YieldPointsSpent),
+            "gate-of-infinity-used" => Ok(Self::GateOfInfinityUsed),
             "enemy-unit-selected-charge-targets-before-charge-move" => {
                 Ok(Self::EnemyUnitSelectedChargeTargetsBeforeChargeMove)
             }
@@ -14409,13 +14858,13 @@ impl ::std::convert::TryFrom<::std::string::String> for MovementModifierEffectTa
         value.parse()
     }
 }
-///A named sub-ability embedded in a larger rules bundle.
+///Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A named sub-ability embedded in a larger rules bundle.",
+///  "description": "Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.",
 ///  "type": "object",
 ///  "required": [
 ///    "effect",
