@@ -35,6 +35,41 @@ fn workspace_root() -> PathBuf {
         .to_path_buf()
 }
 
+/// Make each `effect-node` variant's `type` constant a checked value. typify turns
+/// `oneOf` into an untagged enum and a bare `{"const": X}` into an unchecked
+/// `serde_json::Value`, so the first variant whose other fields fit would win (an
+/// `ability-part` with a `name` read as a `named-effect`). A one-value string enum
+/// means the same and generates a type that only accepts X, so every variant is
+/// told apart by its `type`. Only codegen's input changes; the schema does not.
+fn tag_effect_variants(schema: &mut serde_json::Value) {
+    let refs: Vec<String> = schema
+        .pointer("/$defs/effect-node/oneOf")
+        .and_then(|members| members.as_array())
+        .map(|members| {
+            members
+                .iter()
+                .filter_map(|member| member.get("$ref")?.as_str())
+                .filter_map(|reference| reference.strip_prefix("#/$defs/"))
+                .map(str::to_string)
+                .collect()
+        })
+        .unwrap_or_default();
+    for name in refs {
+        let Some(type_schema) = schema.pointer_mut(&format!("/$defs/{name}/properties/type"))
+        else {
+            continue;
+        };
+        let Some(constant) = type_schema
+            .get("const")
+            .and_then(|c| c.as_str())
+            .map(str::to_string)
+        else {
+            continue;
+        };
+        *type_schema = serde_json::json!({ "type": "string", "enum": [constant] });
+    }
+}
+
 fn codegen() -> Result<()> {
     let root = workspace_root();
     let schema_path = root.join("crates/wh40kdc/schemas/bundled.schema.json");
@@ -42,7 +77,10 @@ fn codegen() -> Result<()> {
 
     let content = std::fs::read_to_string(&schema_path)
         .with_context(|| format!("reading {}", schema_path.display()))?;
-    let schema: RootSchema = serde_json::from_str(&content)
+    let mut raw: serde_json::Value = serde_json::from_str(&content)
+        .with_context(|| format!("parsing {} as JSON", schema_path.display()))?;
+    tag_effect_variants(&mut raw);
+    let schema: RootSchema = serde_json::from_value(raw)
         .with_context(|| format!("parsing {} as a JSON Schema", schema_path.display()))?;
 
     let mut settings = TypeSpaceSettings::default();

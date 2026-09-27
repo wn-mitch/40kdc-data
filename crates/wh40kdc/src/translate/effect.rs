@@ -4412,15 +4412,6 @@ fn named_effect_inline(n: &crate::generated::NamedEffect, ctx: &Ctx) -> String {
     )
 }
 
-/// A named `ability-part`, which the untagged `EffectNode` deserializes as a
-/// `NamedEffect` (the variant listed first whose fields it satisfies).
-fn named_as_part(n: &crate::generated::NamedEffect) -> Option<AbilityPart> {
-    if n.type_.as_str() != Some("ability-part") {
-        return None;
-    }
-    serde_json::from_value(serde_json::to_value(n).ok()?).ok()
-}
-
 /// What leads a part: its moment, its usage limit, its name when the rules give one, the choice to
 /// use it and its cost ("at the end of your Movement phase, once per battle, you can"). Mirrors
 /// `partHead`.
@@ -4523,10 +4514,7 @@ fn inline(e: &EffectNode, ctx: &Ctx) -> String {
                 .collect::<Vec<_>>()
                 .join("; "),
         },
-        EffectNode::NamedEffect(n) => match named_as_part(n) {
-            Some(p) => part_inline(&p, ctx),
-            None => named_effect_inline(n, ctx),
-        },
+        EffectNode::NamedEffect(n) => named_effect_inline(n, ctx),
         EffectNode::AbilityPart(p) => part_inline(p, ctx),
         EffectNode::ChoiceEffect(c) => format!(
             "{}: {}",
@@ -5273,10 +5261,6 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
                 .collect::<Vec<_>>()
                 .join("\n"),
         },
-        EffectNode::NamedEffect(n) if named_as_part(n).is_some() => {
-            let part = named_as_part(n).expect("guarded by is_some");
-            block(&EffectNode::AbilityPart(part), depth, ctx)
-        }
         EffectNode::AbilityPart(p) => {
             // A part is always a bullet of its ability, even at the top level.
             if is_container(&p.effect) {

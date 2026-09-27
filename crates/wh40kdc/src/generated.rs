@@ -649,7 +649,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///      "$ref": "#/$defs/ability-trigger"
 ///    },
 ///    "type": {
-///      "const": "ability-part"
+///      "type": "string",
+///      "enum": [
+///        "ability-part"
+///      ]
 ///    },
 ///    "usage": {
 ///      "description": "How often this part may be used, when the limit is the part's and not the whole ability's.",
@@ -684,7 +687,7 @@ pub struct AbilityPart {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trigger: ::std::option::Option<AbilityTrigger>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: AbilityPartType,
     ///How often this part may be used, when the limit is the part's and not the whole ability's.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<AbilityUsage>,
@@ -831,6 +834,77 @@ impl<'de> ::serde::Deserialize<'de> for AbilityPartName {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`AbilityPartType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "ability-part"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AbilityPartType {
+    #[serde(rename = "ability-part")]
+    AbilityPart,
+}
+impl ::std::fmt::Display for AbilityPartType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::AbilityPart => f.write_str("ability-part"),
+        }
+    }
+}
+impl ::std::str::FromStr for AbilityPartType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ability-part" => Ok(Self::AbilityPart),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityPartType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityPartType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityPartType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///SHA-256 of the NORMALISED printed rule this annotation was authored against — one-way, so the rule text itself stays outside this repository. Normalisation (defined once in tools/src/source-digest.ts) casefolds, folds Unicode, keeps the rule-significant operators + - = < > / % and replaces other punctuation with spaces, so reprint noise and quote style leave the digest unchanged while a changed value or an added condition changes it. Optional: absent means the source was never fingerprinted, which `npm run audit:source-digest` reports as untracked rather than current. Records source-content identity, not release history — consumers must not select, order or supersede abilities by it.
@@ -2049,7 +2123,10 @@ impl ::std::default::Default for ArmyCompositionPredicateUnitFilter {
 ///      "const": "self"
 ///    },
 ///    "type": {
-///      "const": "attachment-eligibility-inherit"
+///      "type": "string",
+///      "enum": [
+///        "attachment-eligibility-inherit"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -2062,7 +2139,7 @@ pub struct AttachmentEligibilityInheritEffect {
     pub modifier: AttachmentEligibilityInheritEffectModifier,
     pub target: ::serde_json::Value,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: AttachmentEligibilityInheritEffectType,
 }
 ///`AttachmentEligibilityInheritEffectModifier`
 ///
@@ -2102,6 +2179,81 @@ pub struct AttachmentEligibilityInheritEffectModifier {
     pub leader_id: EntityId,
     pub required_leader_ability: ::serde_json::Value,
     pub to_bodyguard_id: EntityId,
+}
+///`AttachmentEligibilityInheritEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "attachment-eligibility-inherit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AttachmentEligibilityInheritEffectType {
+    #[serde(rename = "attachment-eligibility-inherit")]
+    AttachmentEligibilityInherit,
+}
+impl ::std::fmt::Display for AttachmentEligibilityInheritEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::AttachmentEligibilityInherit => {
+                f.write_str("attachment-eligibility-inherit")
+            }
+        }
+    }
+}
+impl ::std::str::FromStr for AttachmentEligibilityInheritEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "attachment-eligibility-inherit" => Ok(Self::AttachmentEligibilityInherit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AttachmentEligibilityInheritEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AttachmentEligibilityInheritEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AttachmentEligibilityInheritEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`AuraEffect`
 ///
@@ -2184,7 +2336,10 @@ pub struct AttachmentEligibilityInheritEffectModifier {
 ///      ]
 ///    },
 ///    "type": {
-///      "const": "aura"
+///      "type": "string",
+///      "enum": [
+///        "aura"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -2198,7 +2353,7 @@ pub struct AuraEffect {
     pub modifier: AuraEffectModifier,
     pub target: AuraEffectTarget,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: AuraEffectType,
 }
 ///`AuraEffectModifier`
 ///
@@ -2607,6 +2762,77 @@ impl ::std::convert::TryFrom<&::std::string::String> for AuraEffectTarget {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for AuraEffectTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`AuraEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "aura"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AuraEffectType {
+    #[serde(rename = "aura")]
+    Aura,
+}
+impl ::std::fmt::Display for AuraEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Aura => f.write_str("aura"),
+        }
+    }
+}
+impl ::std::str::FromStr for AuraEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "aura" => Ok(Self::Aura),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AuraEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AuraEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AuraEffectType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -3071,7 +3297,10 @@ impl<'de> ::serde::Deserialize<'de> for BeneficiaryBoundEffectNodeType {
 ///      "minItems": 2
 ///    },
 ///    "type": {
-///      "const": "choice"
+///      "type": "string",
+///      "enum": [
+///        "choice"
+///      ]
 ///    }
 ///  }
 ///}
@@ -3091,7 +3320,7 @@ pub struct ChoiceEffect {
     pub min_choices: ::std::option::Option<u64>,
     pub options: ::std::vec::Vec<EffectNode>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: ChoiceEffectType,
 }
 ///`ChoiceEffectChoicePrompt`
 ///
@@ -3163,6 +3392,77 @@ impl<'de> ::serde::Deserialize<'de> for ChoiceEffectChoicePrompt {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`ChoiceEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "choice"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ChoiceEffectType {
+    #[serde(rename = "choice")]
+    Choice,
+}
+impl ::std::fmt::Display for ChoiceEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Choice => f.write_str("choice"),
+        }
+    }
+}
+impl ::std::str::FromStr for ChoiceEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "choice" => Ok(Self::Choice),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ChoiceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ChoiceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ChoiceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.
@@ -3522,7 +3822,10 @@ impl ::std::convert::From<CompoundCondition> for ConditionNode {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
 ///    "type": {
-///      "const": "conditional"
+///      "type": "string",
+///      "enum": [
+///        "conditional"
+///      ]
 ///    }
 ///  }
 ///}
@@ -3533,7 +3836,78 @@ pub struct ConditionalEffect {
     pub condition: Condition,
     pub effect: ::std::boxed::Box<EffectNode>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: ConditionalEffectType,
+}
+///`ConditionalEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "conditional"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ConditionalEffectType {
+    #[serde(rename = "conditional")]
+    Conditional,
+}
+impl ::std::fmt::Display for ConditionalEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Conditional => f.write_str("conditional"),
+        }
+    }
+}
+impl ::std::str::FromStr for ConditionalEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "conditional" => Ok(Self::Conditional),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ConditionalEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ConditionalEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ConditionalEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///GitHub handle or '40kdc-community'
 ///
@@ -4370,7 +4744,10 @@ impl<'de> ::serde::Deserialize<'de> for DeploymentPatternZonesItemName {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "designate-target"
+///      "type": "string",
+///      "enum": [
+///        "designate-target"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -4387,7 +4764,7 @@ pub struct DesignateTargetEffect {
     pub duration: ::std::option::Option<DesignateTargetEffectDuration>,
     pub select: DesignateTargetEffectSelect,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: DesignateTargetEffectType,
 }
 ///`DesignateTargetEffectApplies`
 ///
@@ -5606,6 +5983,77 @@ for DesignateTargetEffectSelectSelectionLimitPeriod {
         value.parse()
     }
 }
+///`DesignateTargetEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "designate-target"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignateTargetEffectType {
+    #[serde(rename = "designate-target")]
+    DesignateTarget,
+}
+impl ::std::fmt::Display for DesignateTargetEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DesignateTarget => f.write_str("designate-target"),
+        }
+    }
+}
+impl ::std::str::FromStr for DesignateTargetEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "designate-target" => Ok(Self::DesignateTarget),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DesignateTargetEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.
 ///
 /// <details><summary>JSON schema</summary>
@@ -6020,7 +6468,10 @@ impl ::std::default::Default for DetachmentRestrictions {
 ///      ]
 ///    },
 ///    "type": {
-///      "const": "dice-gated"
+///      "type": "string",
+///      "enum": [
+///        "dice-gated"
+///      ]
 ///    }
 ///  }
 ///}
@@ -6047,7 +6498,7 @@ pub struct DiceGatedEffect {
     ///Fixed threshold or model characteristic to compare against
     pub threshold: DiceGatedEffectThreshold,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: DiceGatedEffectType,
 }
 ///`DiceGatedEffectComparison`
 ///
@@ -6630,6 +7081,77 @@ impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectThreshold
         value.parse()
     }
 }
+///`DiceGatedEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "dice-gated"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DiceGatedEffectType {
+    #[serde(rename = "dice-gated")]
+    DiceGated,
+}
+impl ::std::fmt::Display for DiceGatedEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DiceGated => f.write_str("dice-gated"),
+        }
+    }
+}
+impl ::std::str::FromStr for DiceGatedEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "dice-gated" => Ok(Self::DiceGated),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DiceGatedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DiceGatedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`DicePoolAllocationEffect`
 ///
 /// <details><summary>JSON schema</summary>
@@ -6688,7 +7210,10 @@ impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectThreshold
 ///      }
 ///    },
 ///    "type": {
-///      "const": "dice-pool-allocation"
+///      "type": "string",
+///      "enum": [
+///        "dice-pool-allocation"
+///      ]
 ///    }
 ///  }
 ///}
@@ -6700,7 +7225,7 @@ pub struct DicePoolAllocationEffect {
     pub options: ::std::vec::Vec<DicePoolAllocationEffectOptionsItem>,
     pub pool: DicePoolAllocationEffectPool,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: DicePoolAllocationEffectType,
 }
 ///`DicePoolAllocationEffectOptionsItem`
 ///
@@ -6761,6 +7286,77 @@ pub struct DicePoolAllocationEffectOptionsItem {
 pub struct DicePoolAllocationEffectPool {
     pub count: ::std::num::NonZeroU64,
     pub die: ::std::string::String,
+}
+///`DicePoolAllocationEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "dice-pool-allocation"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DicePoolAllocationEffectType {
+    #[serde(rename = "dice-pool-allocation")]
+    DicePoolAllocation,
+}
+impl ::std::fmt::Display for DicePoolAllocationEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DicePoolAllocation => f.write_str("dice-pool-allocation"),
+        }
+    }
+}
+impl ::std::str::FromStr for DicePoolAllocationEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "dice-pool-allocation" => Ok(Self::DicePoolAllocation),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DicePoolAllocationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DicePoolAllocationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DicePoolAllocationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`DiceRequirement`
 ///
@@ -6978,7 +7574,10 @@ impl ::std::convert::TryFrom<::std::string::String> for DiceRequirementType {
 ///      "minItems": 2
 ///    },
 ///    "type": {
-///      "const": "dice-table"
+///      "type": "string",
+///      "enum": [
+///        "dice-table"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -6993,7 +7592,7 @@ pub struct DiceTableEffect {
     pub dice: DiceTableEffectDice,
     pub outcomes: ::std::vec::Vec<DiceTableEffectOutcomesItem>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: DiceTableEffectType,
 }
 ///One closed die whose faces are covered exactly once by outcomes.
 ///
@@ -7105,6 +7704,77 @@ impl ::std::convert::TryFrom<::std::string::String> for DiceTableEffectDice {
 pub struct DiceTableEffectOutcomesItem {
     pub effect: EffectNode,
     pub results: Vec<::std::num::NonZeroU64>,
+}
+///`DiceTableEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "dice-table"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DiceTableEffectType {
+    #[serde(rename = "dice-table")]
+    DiceTable,
+}
+impl ::std::fmt::Display for DiceTableEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DiceTable => f.write_str("dice-table"),
+        }
+    }
+}
+impl ::std::str::FromStr for DiceTableEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "dice-table" => Ok(Self::DiceTable),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DiceTableEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DiceTableEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DiceTableEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///Game edition, e.g. '10th' or '11'
 ///
@@ -8591,7 +9261,10 @@ pub enum Footprint {
 ///      "$ref": "#/$defs/objective-selector"
 ///    },
 ///    "type": {
-///      "const": "for-each-objective"
+///      "type": "string",
+///      "enum": [
+///        "for-each-objective"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -8604,7 +9277,78 @@ pub struct ForEachObjectiveEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
     pub selector: ObjectiveSelector,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: ForEachObjectiveEffectType,
+}
+///`ForEachObjectiveEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "for-each-objective"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ForEachObjectiveEffectType {
+    #[serde(rename = "for-each-objective")]
+    ForEachObjective,
+}
+impl ::std::fmt::Display for ForEachObjectiveEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::ForEachObjective => f.write_str("for-each-objective"),
+        }
+    }
+}
+impl ::std::str::FromStr for ForEachObjectiveEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "for-each-objective" => Ok(Self::ForEachObjective),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ForEachObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ForEachObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ForEachObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`ForEachUnitEffect`
 ///
@@ -8724,7 +9468,10 @@ pub struct ForEachObjectiveEffect {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "for-each-unit"
+///      "type": "string",
+///      "enum": [
+///        "for-each-unit"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -8738,7 +9485,7 @@ pub struct ForEachUnitEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
     pub selector: ForEachUnitEffectSelector,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: ForEachUnitEffectType,
 }
 ///`ForEachUnitEffectSelector`
 ///
@@ -9670,6 +10417,77 @@ impl ::std::default::Default for ForEachUnitEffectSelectorTargetKind {
         ForEachUnitEffectSelectorTargetKind::Unit
     }
 }
+///`ForEachUnitEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "for-each-unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ForEachUnitEffectType {
+    #[serde(rename = "for-each-unit")]
+    ForEachUnit,
+}
+impl ::std::fmt::Display for ForEachUnitEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::ForEachUnit => f.write_str("for-each-unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for ForEachUnitEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "for-each-unit" => Ok(Self::ForEachUnit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ForEachUnitEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ForEachUnitEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///A 11e strategic-intent tag granted by detachments. Players compare dispositions at game start to determine the shared mission; asymmetric primary objectives result.
 ///
 /// <details><summary>JSON schema</summary>
@@ -10022,7 +10840,10 @@ impl<'de> ::serde::Deserialize<'de> for ForceDispositionText {
 ///      ]
 ///    },
 ///    "type": {
-///      "const": "formation-attachment-grant"
+///      "type": "string",
+///      "enum": [
+///        "formation-attachment-grant"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -10038,7 +10859,7 @@ pub struct FormationAttachmentGrantEffect {
     pub grant: FormationAttachmentGrantEffectGrant,
     pub source: FormationAttachmentGrantEffectSource,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: FormationAttachmentGrantEffectType,
 }
 ///`FormationAttachmentGrantEffectAttachment`
 ///
@@ -10245,6 +11066,79 @@ for FormationAttachmentGrantEffectSource {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for FormationAttachmentGrantEffectSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`FormationAttachmentGrantEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "formation-attachment-grant"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum FormationAttachmentGrantEffectType {
+    #[serde(rename = "formation-attachment-grant")]
+    FormationAttachmentGrant,
+}
+impl ::std::fmt::Display for FormationAttachmentGrantEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::FormationAttachmentGrant => f.write_str("formation-attachment-grant"),
+        }
+    }
+}
+impl ::std::str::FromStr for FormationAttachmentGrantEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "formation-attachment-grant" => Ok(Self::FormationAttachmentGrant),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FormationAttachmentGrantEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for FormationAttachmentGrantEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FormationAttachmentGrantEffectType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -11709,7 +12603,10 @@ impl ::std::convert::TryFrom<::std::string::String> for InteractionFlagInteracti
 ///      "exclusiveMinimum": 0.0
 ///    },
 ///    "type": {
-///      "const": "issue-orders"
+///      "type": "string",
+///      "enum": [
+///        "issue-orders"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -11728,7 +12625,7 @@ pub struct IssueOrdersEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<f64>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: IssueOrdersEffectType,
 }
 ///`IssueOrdersEffectEligible`
 ///
@@ -11936,6 +12833,77 @@ impl<'de> ::serde::Deserialize<'de> for IssueOrdersEffectOptionsItemName {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`IssueOrdersEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "issue-orders"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum IssueOrdersEffectType {
+    #[serde(rename = "issue-orders")]
+    IssueOrders,
+}
+impl ::std::fmt::Display for IssueOrdersEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::IssueOrders => f.write_str("issue-orders"),
+        }
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "issue-orders" => Ok(Self::IssueOrders),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for IssueOrdersEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`Keyword`
@@ -12449,7 +13417,10 @@ impl<'de> ::serde::Deserialize<'de> for LeaderAttachmentEligibleBodyguardKeyword
 ///      "const": "bearer-unit"
 ///    },
 ///    "type": {
-///      "const": "leader-model-ability-grant"
+///      "type": "string",
+///      "enum": [
+///        "leader-model-ability-grant"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -12470,7 +13441,7 @@ pub struct LeaderModelAbilityGrantEffect {
     pub recipient_binding: ::serde_json::Value,
     pub source: ::serde_json::Value,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: LeaderModelAbilityGrantEffectType,
 }
 ///`LeaderModelAbilityGrantEffectAttachedUnitFilterItem`
 ///
@@ -12854,6 +13825,79 @@ for LeaderModelAbilityGrantEffectLeaderFilterKeywordsItem {
             })
     }
 }
+///`LeaderModelAbilityGrantEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "leader-model-ability-grant"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum LeaderModelAbilityGrantEffectType {
+    #[serde(rename = "leader-model-ability-grant")]
+    LeaderModelAbilityGrant,
+}
+impl ::std::fmt::Display for LeaderModelAbilityGrantEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::LeaderModelAbilityGrant => f.write_str("leader-model-ability-grant"),
+        }
+    }
+}
+impl ::std::str::FromStr for LeaderModelAbilityGrantEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "leader-model-ability-grant" => Ok(Self::LeaderModelAbilityGrant),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for LeaderModelAbilityGrantEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for LeaderModelAbilityGrantEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for LeaderModelAbilityGrantEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`MiracleDieOperationEffect`
 ///
 /// <details><summary>JSON schema</summary>
@@ -12959,7 +14003,10 @@ for LeaderModelAbilityGrantEffectLeaderFilterKeywordsItem {
 ///      "const": "self"
 ///    },
 ///    "type": {
-///      "const": "miracle-die-operation"
+///      "type": "string",
+///      "enum": [
+///        "miracle-die-operation"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -12972,7 +14019,7 @@ pub struct MiracleDieOperationEffect {
     pub modifier: MiracleDieOperationEffectModifier,
     pub target: ::serde_json::Value,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: MiracleDieOperationEffectType,
 }
 ///`MiracleDieOperationEffectModifier`
 ///
@@ -13490,6 +14537,77 @@ for MiracleDieOperationEffectModifierStage {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for MiracleDieOperationEffectModifierStage {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`MiracleDieOperationEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "miracle-die-operation"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MiracleDieOperationEffectType {
+    #[serde(rename = "miracle-die-operation")]
+    MiracleDieOperation,
+}
+impl ::std::fmt::Display for MiracleDieOperationEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MiracleDieOperation => f.write_str("miracle-die-operation"),
+        }
+    }
+}
+impl ::std::str::FromStr for MiracleDieOperationEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "miracle-die-operation" => Ok(Self::MiracleDieOperation),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MiracleDieOperationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MiracleDieOperationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MiracleDieOperationEffectType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -14039,7 +15157,10 @@ impl<'de> ::serde::Deserialize<'de> for MissionSource {
 ///      ]
 ///    },
 ///    "type": {
-///      "const": "movement-modifier"
+///      "type": "string",
+///      "enum": [
+///        "movement-modifier"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -14056,7 +15177,7 @@ pub struct MovementModifierEffect {
     pub modifier: MovementModifierEffectModifier,
     pub target: MovementModifierEffectTarget,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: MovementModifierEffectType,
 }
 ///`MovementModifierEffectModifier`
 ///
@@ -14858,6 +15979,77 @@ impl ::std::convert::TryFrom<::std::string::String> for MovementModifierEffectTa
         value.parse()
     }
 }
+///`MovementModifierEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "movement-modifier"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MovementModifierEffectType {
+    #[serde(rename = "movement-modifier")]
+    MovementModifier,
+}
+impl ::std::fmt::Display for MovementModifierEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MovementModifier => f.write_str("movement-modifier"),
+        }
+    }
+}
+impl ::std::str::FromStr for MovementModifierEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "movement-modifier" => Ok(Self::MovementModifier),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MovementModifierEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MovementModifierEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MovementModifierEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.
 ///
 /// <details><summary>JSON schema</summary>
@@ -14907,7 +16099,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MovementModifierEffectTa
 ///      "$ref": "#/$defs/ability-trigger"
 ///    },
 ///    "type": {
-///      "const": "named-effect"
+///      "type": "string",
+///      "enum": [
+///        "named-effect"
+///      ]
 ///    },
 ///    "usage": {
 ///      "$ref": "#/$defs/ability-usage"
@@ -14939,7 +16134,7 @@ pub struct NamedEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trigger: ::std::option::Option<AbilityTrigger>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: NamedEffectType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<AbilityUsage>,
 }
@@ -15084,6 +16279,77 @@ impl<'de> ::serde::Deserialize<'de> for NamedEffectName {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`NamedEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "named-effect"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum NamedEffectType {
+    #[serde(rename = "named-effect")]
+    NamedEffect,
+}
+impl ::std::fmt::Display for NamedEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NamedEffect => f.write_str("named-effect"),
+        }
+    }
+}
+impl ::std::str::FromStr for NamedEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "named-effect" => Ok(Self::NamedEffect),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for NamedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for NamedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for NamedEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.
@@ -17810,7 +19076,10 @@ pub struct NamedRegionState {
 ///  ],
 ///  "properties": {
 ///    "type": {
-///      "const": "no-effect"
+///      "type": "string",
+///      "enum": [
+///        "no-effect"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -17821,7 +19090,78 @@ pub struct NamedRegionState {
 #[serde(deny_unknown_fields)]
 pub struct NoEffectEffect {
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: NoEffectEffectType,
+}
+///`NoEffectEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "no-effect"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum NoEffectEffectType {
+    #[serde(rename = "no-effect")]
+    NoEffect,
+}
+impl ::std::fmt::Display for NoEffectEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NoEffect => f.write_str("no-effect"),
+        }
+    }
+}
+impl ::std::str::FromStr for NoEffectEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "no-effect" => Ok(Self::NoEffect),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for NoEffectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for NoEffectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for NoEffectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`ObjectiveSelector`
 ///
@@ -18595,7 +19935,10 @@ for ObjectiveSelectorSelectionLimitPeriod {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "paired-designation"
+///      "type": "string",
+///      "enum": [
+///        "paired-designation"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -18613,7 +19956,7 @@ pub struct PairedDesignationEffect {
     pub observer_eligibility: Condition,
     pub spotted: PairedDesignationEffectSpotted,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: PairedDesignationEffectType,
 }
 ///`PairedDesignationEffectGuided`
 ///
@@ -19990,6 +21333,77 @@ for PairedDesignationEffectSpottedSelectorVariant0SelectionLimitPeriod {
 )]
 #[serde(deny_unknown_fields)]
 pub enum PairedDesignationEffectSpottedSelectorVariant1 {}
+///`PairedDesignationEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "paired-designation"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PairedDesignationEffectType {
+    #[serde(rename = "paired-designation")]
+    PairedDesignation,
+}
+impl ::std::fmt::Display for PairedDesignationEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::PairedDesignation => f.write_str("paired-designation"),
+        }
+    }
+}
+impl ::std::str::FromStr for PairedDesignationEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "paired-designation" => Ok(Self::PairedDesignation),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PairedDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PairedDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PairedDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`PairedUnitSelector`
 ///
 /// <details><summary>JSON schema</summary>
@@ -21337,7 +22751,10 @@ for PersistentBattlefieldMarkerStateSetupKeywordsItem {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "persistent-designation"
+///      "type": "string",
+///      "enum": [
+///        "persistent-designation"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -21358,7 +22775,7 @@ pub struct PersistentDesignationEffect {
     pub operation: PersistentDesignationEffectOperation,
     pub select: PersistentDesignationEffectSelect,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: PersistentDesignationEffectType,
 }
 ///Resolve the declared bearer-model or unit beneficiary against the exact retained reference.
 ///
@@ -22269,6 +23686,78 @@ impl<'de> ::serde::Deserialize<'de> for PersistentDesignationEffectSelectTiming 
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`PersistentDesignationEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "persistent-designation"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PersistentDesignationEffectType {
+    #[serde(rename = "persistent-designation")]
+    PersistentDesignation,
+}
+impl ::std::fmt::Display for PersistentDesignationEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::PersistentDesignation => f.write_str("persistent-designation"),
+        }
+    }
+}
+impl ::std::str::FromStr for PersistentDesignationEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "persistent-designation" => Ok(Self::PersistentDesignation),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PersistentDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PersistentDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PersistentDesignationEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
@@ -23721,7 +25210,10 @@ impl ::std::convert::TryFrom<::std::string::String> for PlayerTurn {
 ///      "$comment": "Caps shared across every action, distinct from a single action's own `usage` override."
 ///    },
 ///    "type": {
-///      "const": "resource-action-menu"
+///      "type": "string",
+///      "enum": [
+///        "resource-action-menu"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -23740,7 +25232,7 @@ pub struct ResourceActionMenuEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub shared_usage: ::std::option::Option<ResourceActionMenuEffectSharedUsage>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: ResourceActionMenuEffectType,
 }
 ///`ResourceActionMenuEffectActionsItem`
 ///
@@ -24908,6 +26400,77 @@ impl ::std::default::Default for ResourceActionMenuEffectSharedUsage {
         }
     }
 }
+///`ResourceActionMenuEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "resource-action-menu"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ResourceActionMenuEffectType {
+    #[serde(rename = "resource-action-menu")]
+    ResourceActionMenu,
+}
+impl ::std::fmt::Display for ResourceActionMenuEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::ResourceActionMenu => f.write_str("resource-action-menu"),
+        }
+    }
+}
+impl ::std::str::FromStr for ResourceActionMenuEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "resource-action-menu" => Ok(Self::ResourceActionMenu),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceActionMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ResourceActionMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ResourceActionMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`ResourceActionMenuTrigger`
 ///
 /// <details><summary>JSON schema</summary>
@@ -25772,7 +27335,10 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "risk-reward"
+///      "type": "string",
+///      "enum": [
+///        "risk-reward"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -25786,7 +27352,7 @@ pub struct RiskRewardEffect {
     pub reward: ::std::boxed::Box<EffectNode>,
     pub risk: RiskRewardEffectRisk,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: RiskRewardEffectType,
 }
 ///`RiskRewardEffectRisk`
 ///
@@ -25888,6 +27454,77 @@ impl<'de> ::serde::Deserialize<'de> for RiskRewardEffectRiskTest {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`RiskRewardEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "risk-reward"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RiskRewardEffectType {
+    #[serde(rename = "risk-reward")]
+    RiskReward,
+}
+impl ::std::fmt::Display for RiskRewardEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::RiskReward => f.write_str("risk-reward"),
+        }
+    }
+}
+impl ::std::str::FromStr for RiskRewardEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "risk-reward" => Ok(Self::RiskReward),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RiskRewardEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RiskRewardEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RiskRewardEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`RollReference`
@@ -26115,7 +27752,10 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///      "minItems": 1
 ///    },
 ///    "type": {
-///      "const": "rules-bundle"
+///      "type": "string",
+///      "enum": [
+///        "rules-bundle"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -26127,7 +27767,78 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 pub struct RulesBundleEffect {
     pub steps: ::std::vec::Vec<EffectNode>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: RulesBundleEffectType,
+}
+///`RulesBundleEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "rules-bundle"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RulesBundleEffectType {
+    #[serde(rename = "rules-bundle")]
+    RulesBundle,
+}
+impl ::std::fmt::Display for RulesBundleEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::RulesBundle => f.write_str("rules-bundle"),
+        }
+    }
+}
+impl ::std::str::FromStr for RulesBundleEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "rules-bundle" => Ok(Self::RulesBundle),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RulesBundleEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RulesBundleEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RulesBundleEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///Scales the effect's numeric `modifier.value`: it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6\"' → modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within_inches: 6 }.
 ///
@@ -28569,7 +30280,10 @@ impl ::std::convert::TryFrom<::std::string::String> for SecondaryCardWhenDrawnOp
 ///      "$ref": "#/$defs/objective-selector"
 ///    },
 ///    "type": {
-///      "const": "select-objective"
+///      "type": "string",
+///      "enum": [
+///        "select-objective"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -28582,7 +30296,78 @@ pub struct SelectObjectiveEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
     pub selector: ObjectiveSelector,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: SelectObjectiveEffectType,
+}
+///`SelectObjectiveEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "select-objective"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SelectObjectiveEffectType {
+    #[serde(rename = "select-objective")]
+    SelectObjective,
+}
+impl ::std::fmt::Display for SelectObjectiveEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::SelectObjective => f.write_str("select-objective"),
+        }
+    }
+}
+impl ::std::str::FromStr for SelectObjectiveEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "select-objective" => Ok(Self::SelectObjective),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SelectObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SelectObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SelectObjectiveEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`SelectUnitsEffect`
 ///
@@ -28755,7 +30540,10 @@ pub struct SelectObjectiveEffect {
 ///      "additionalProperties": false
 ///    },
 ///    "type": {
-///      "const": "select-units"
+///      "type": "string",
+///      "enum": [
+///        "select-units"
+///      ]
 ///    }
 ///  },
 ///  "$comment": "Targeting wrapper: choose up to `selector.max_count` units, or a bounded exact/inclusive count when `selector.min_count` is present, matching `selector.keywords` of the named `owner`; apply the nested `effect` to each selected unit. Optional range, visibility, and engagement gates are bearer-relative candidate predicates evaluated before the nested effect."
@@ -28767,7 +30555,7 @@ pub struct SelectUnitsEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
     pub selector: SelectUnitsEffectSelector,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: SelectUnitsEffectType,
 }
 ///Legacy selectors omit min_count and retain up-to semantics. Bounded authoring requires min_count, max_count, and owner, with min_count <= max_count.
 ///
@@ -30402,6 +32190,77 @@ impl ::std::default::Default for SelectUnitsEffectSelectorVariant1TargetKind {
         SelectUnitsEffectSelectorVariant1TargetKind::Unit
     }
 }
+///`SelectUnitsEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "select-units"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SelectUnitsEffectType {
+    #[serde(rename = "select-units")]
+    SelectUnits,
+}
+impl ::std::fmt::Display for SelectUnitsEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::SelectUnits => f.write_str("select-units"),
+        }
+    }
+}
+impl ::std::str::FromStr for SelectUnitsEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "select-units" => Ok(Self::SelectUnits),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SelectUnitsEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SelectUnitsEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SelectUnitsEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`SelectionReference`
 ///
 /// <details><summary>JSON schema</summary>
@@ -30519,7 +32378,10 @@ impl<'de> ::serde::Deserialize<'de> for SelectionReferenceSelectionVar {
 ///      "minItems": 1
 ///    },
 ///    "type": {
-///      "const": "sequence"
+///      "type": "string",
+///      "enum": [
+///        "sequence"
+///      ]
 ///    }
 ///  }
 ///}
@@ -30529,7 +32391,78 @@ impl<'de> ::serde::Deserialize<'de> for SelectionReferenceSelectionVar {
 pub struct SequenceEffect {
     pub steps: ::std::vec::Vec<EffectNode>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: SequenceEffectType,
+}
+///`SequenceEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "sequence"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SequenceEffectType {
+    #[serde(rename = "sequence")]
+    Sequence,
+}
+impl ::std::fmt::Display for SequenceEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Sequence => f.write_str("sequence"),
+        }
+    }
+}
+impl ::std::str::FromStr for SequenceEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "sequence" => Ok(Self::Sequence),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SequenceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SequenceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///Which player a zone or territory belongs to.
 ///
@@ -32214,7 +34147,10 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///      "type": "string"
 ///    },
 ///    "type": {
-///      "const": "stance-select"
+///      "type": "string",
+///      "enum": [
+///        "stance-select"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -32232,7 +34168,7 @@ pub struct StanceSelectEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub select: ::std::option::Option<::std::string::String>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: StanceSelectEffectType,
 }
 ///`StanceSelectEffectMode`
 ///
@@ -32490,6 +34426,77 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectScope 
         value.parse()
     }
 }
+///`StanceSelectEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "stance-select"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StanceSelectEffectType {
+    #[serde(rename = "stance-select")]
+    StanceSelect,
+}
+impl ::std::fmt::Display for StanceSelectEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::StanceSelect => f.write_str("stance-select"),
+        }
+    }
+}
+impl ::std::str::FromStr for StanceSelectEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "stance-select" => Ok(Self::StanceSelect),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StanceSelectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for StanceSelectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`StanceSelectionCapacityEffect`
 ///
 /// <details><summary>JSON schema</summary>
@@ -32538,7 +34545,10 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectScope 
 ///      ]
 ///    },
 ///    "type": {
-///      "const": "stance-selection-capacity"
+///      "type": "string",
+///      "enum": [
+///        "stance-selection-capacity"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false,
@@ -32553,7 +34563,7 @@ pub struct StanceSelectionCapacityEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub scope: ::std::option::Option<StanceSelectionCapacityEffectScope>,
     #[serde(rename = "type")]
-    pub type_: ::serde_json::Value,
+    pub type_: StanceSelectionCapacityEffectType,
 }
 ///`StanceSelectionCapacityEffectModifier`
 ///
@@ -32748,6 +34758,79 @@ for StanceSelectionCapacityEffectScope {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for StanceSelectionCapacityEffectScope {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`StanceSelectionCapacityEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "stance-selection-capacity"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StanceSelectionCapacityEffectType {
+    #[serde(rename = "stance-selection-capacity")]
+    StanceSelectionCapacity,
+}
+impl ::std::fmt::Display for StanceSelectionCapacityEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::StanceSelectionCapacity => f.write_str("stance-selection-capacity"),
+        }
+    }
+}
+impl ::std::str::FromStr for StanceSelectionCapacityEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "stance-selection-capacity" => Ok(Self::StanceSelectionCapacity),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StanceSelectionCapacityEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StanceSelectionCapacityEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StanceSelectionCapacityEffectType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,

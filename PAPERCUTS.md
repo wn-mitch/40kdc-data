@@ -410,3 +410,7 @@ tooling/parity/differ.py defaults to the prebuilt, gitignored go/wh40kdc-runner 
 ## 2026-09-27T14:15:51Z — claude-opus-5-5
 
 The effect-translation corpus is not exercised by cargo test -p wh40kdc; only tooling/parity/differ.py checks Rust against it, and its default TS command uses a stale tools/dist/runner.js unless --ts-cmd points at tsx. A green cargo test therefore says nothing about describer parity.
+
+## 2026-09-27T17:48:01Z — claude-opus-5-5
+
+tooling/parity/differ.py also prefers a prebuilt target/release/wh40kdc-runner, which goes stale after Rust edits; a local TS-vs-Rust run reported a false divergence until the binary was rebuilt (cargo build --release --bin wh40kdc-runner).
