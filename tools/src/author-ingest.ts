@@ -388,7 +388,7 @@ export function projectRawTextRecords(
     const id = ingestRecordId(source);
     const replacement = incomingById.get(id);
     if (replacement) {
-      projected.set(id, replacement);
+      if (!keepsDumpText(projected.get(id), replacement)) projected.set(id, replacement);
       continue;
     }
     const prior = projected.get(id);
@@ -447,8 +447,17 @@ function ensureStoreRepo(): void {
  */
 export function mergeRawTextRecords(existing: RawTextRecord[], incoming: RawTextRecord[]): RawTextRecord[] {
   const merged = new Map<string, RawTextRecord>(existing.map((e) => [e.ability_id, e]));
-  for (const r of incoming) merged.set(r.ability_id, r); // updates in place; new ids append
+  for (const r of incoming) if (!keepsDumpText(merged.get(r.ability_id), r)) merged.set(r.ability_id, r); // updates in place; new ids append
   return Array.from(merged.values());
+}
+
+/**
+ * The GW MFM dump is the live game's own text, so a store entry taken from it (`source.kind`
+ * "mfm", written by mfm-refresh-store) is only replaced by newer dump text, never by a PDF,
+ * JSON manifest or other source.
+ */
+export function keepsDumpText(existing: { source?: { kind?: string } } | undefined, incoming: { source?: { kind?: string } }): boolean {
+  return existing?.source?.kind === "mfm" && incoming.source?.kind !== "mfm";
 }
 
 export function buildRawTextIndex(storeRoot: string = RAW_TEXT_STORE): Record<string, Record<string, Json>> {

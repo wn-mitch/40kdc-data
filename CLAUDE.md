@@ -298,8 +298,10 @@ across implementations by the `conformance/share/` corpus.
   `ability_id ?? id` (the app's lookup). **Stratagems** carry structured
   `when`/`target`/`effect`/`restrictions` (cost lives in core `cp_cost`, not the
   store); unit abilities + enhancements carry a single `raw_text` string. Fill
-  precedence: an 11e PDF entry (`source.kind: pdf`) supersedes a game-datacards 10e
-  entry; both are fill-only and never clobber existing 11e prose.
+  precedence: the GW MFM dump always wins. `npm run mfm:store` (`mfm-refresh-store.ts`)
+  gives every ability the dump has text for that text (`source.kind: mfm`), replacing any
+  other source; no other writer replaces an `mfm` entry. Below that, an 11e PDF entry
+  (`source.kind: pdf`) supersedes a game-datacards 10e entry, and both are fill-only.
 - **Two backfill sources.** `npm run author:backfill-store` pulls 10e text from
   game-datacards (fill-only). `npm run author:backfill-store`'s sibling
   `extract-pack-store` pulls **11e** text from the faction-pack PDFs in

@@ -492,3 +492,17 @@ describe("buildRawTextIndex", () => {
     }
   });
 });
+
+describe("raw-text store precedence", () => {
+  // Fabricated records only.
+  const record = (kind: string, raw_text: string) => ({
+    ability_id: "fixture-rule", name: "Fixture Rule", faction_id: "fixture", detachment_id: null, unit_ids: [],
+    ability_type: "unit", game_version: { edition: "11th", dataslate: "fixture" }, source: { kind, ref: "fixture", phases: null }, raw_text,
+  });
+
+  it("never lets another source replace text taken from the MFM dump", () => {
+    expect(mergeRawTextRecords([record("mfm", "dump text")], [record("pdf", "pack text")])[0]!.raw_text).toBe("dump text");
+    expect(mergeRawTextRecords([record("mfm", "dump text")], [record("mfm", "newer dump text")])[0]!.raw_text).toBe("newer dump text");
+    expect(mergeRawTextRecords([record("game-datacards", "old text")], [record("pdf", "pack text")])[0]!.raw_text).toBe("pack text");
+  });
+});

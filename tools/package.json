@@ -89,6 +89,7 @@
     "author:reconcile": "tsx src/author-reconcile.ts",
     "author:seed-core": "tsx src/author-seed-core.ts",
     "author:backfill-store": "tsx src/author-backfill-store.ts",
+    "mfm:store": "tsx src/mfm-refresh-store.ts",
     "author:review": "tsx src/author-batch.ts review",
     "author:report": "tsx src/audit-phrasing.ts --review",
     "mfm:golden": "tsx src/ingest-mfm.ts golden",

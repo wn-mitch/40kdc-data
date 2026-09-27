@@ -22,8 +22,8 @@
  */
 import * as fs from "fs";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "./converters/id-generator.js";
-import { loadDump, type DetachmentRow, type StratagemRow } from "./mfm/loader.js";
+import { loadDump } from "./mfm/loader.js";
+import { stratagemProseById, type StratagemProse } from "./mfm/dump-prose.js";
 import { REPO_ROOT, readJsonArray, CORE_DIR } from "./mfm/repo-files.js";
 import { repoDirs } from "./mfm/faction-map.js";
 
@@ -57,54 +57,9 @@ interface RepoStrat {
   ability_id?: string | null;
   game_version?: { edition: string; dataslate: string };
 }
-interface DumpText {
-  name: string;
-  when?: string;
-  target?: string;
-  effect?: string;
-  restrictions?: string;
-  ref: string;
-}
-
-
-/** Strip BattleScribe inline tags to plain text; null/empty → undefined. */
-function plain(s: string | null | undefined): string | undefined {
-  if (!s) return undefined;
-  const t = s
-    .replace(/<b>(.*?)<\/b>/gis, "**$1**")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-  return t || undefined;
-}
-
 /** repo stratagem id → dump prose. */
-function buildDumpText(): Map<string, DumpText> {
-  const dump = loadDump();
-  const detName = dump.byId("detachment");
-  const m = new Map<string, DumpText>();
-  for (const s of dump.table("stratagem")) {
-    const name = dump.enName(s);
-    if (!name) continue;
-    let id: string;
-    try {
-      id = s.detachmentId
-        ? detachmentScopedId(name, dump.enName(detName.get(s.detachmentId)) ?? "")
-        : nameToId(name);
-    } catch {
-      continue;
-    }
-    const en = s.localisations?.en;
-    m.set(id, {
-      name,
-      when: plain(en?.whenRules),
-      target: plain(en?.targetRules),
-      effect: plain(en?.effectRules),
-      restrictions: plain(en?.restrictionRules),
-      ref: `dump.json#${s.id}`,
-    });
-  }
-  return m;
+function buildDumpText(): Map<string, StratagemProse> {
+  return stratagemProseById(loadDump());
 }
 
 interface DirResult {
