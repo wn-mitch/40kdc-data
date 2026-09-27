@@ -793,7 +793,6 @@
     "detachment_id": "ordo-hereticus-purgation-force",
     "cp_cost": 1,
     "phases": [
-      "command",
       "movement",
       "shooting",
       "charge",

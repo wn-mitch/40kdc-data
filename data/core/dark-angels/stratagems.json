@@ -648,7 +648,7 @@
     "detachment_id": "company-of-hunters",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
@@ -2270,7 +2270,7 @@
     "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "charge"
+      "fight"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
@@ -2648,8 +2648,7 @@
     "detachment_id": "company-of-hunters",
     "cp_cost": 1,
     "phases": [
-      "fight",
-      "shooting"
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",

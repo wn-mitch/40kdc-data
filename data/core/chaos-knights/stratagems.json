@@ -604,7 +604,8 @@
     "detachment_id": "traitoris-lance",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "shooting",
+      "fight"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",

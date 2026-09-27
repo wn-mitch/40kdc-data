@@ -194,8 +194,7 @@
     "detachment_id": null,
     "cp_cost": 1,
     "phases": [
-      "movement",
-      "charge"
+      "movement"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-turn",

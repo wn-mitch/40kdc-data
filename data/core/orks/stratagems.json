@@ -336,7 +336,11 @@
     "detachment_id": "war-horde",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
@@ -527,7 +531,11 @@
     "detachment_id": "flyboyz",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
@@ -718,7 +726,11 @@
     "detachment_id": "runt-swarm",
     "cp_cost": 2,
     "phases": [
-      "command"
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",

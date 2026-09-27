@@ -102,13 +102,26 @@ function stripTags(s: string): string {
   return s.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 }
 
-const PHASE_WORDS: [Phase, RegExp][] = [
-  ["command", /\bcommand phase\b/i],
-  ["movement", /\bmovement phase\b/i],
-  ["shooting", /\bshooting phase\b/i],
-  ["charge", /\bcharge phase\b/i],
-  ["fight", /\bfight phase\b/i],
-];
+const PHASE_NAMES: Phase[] = ["command", "movement", "shooting", "charge", "fight"];
+const PHASE_WORD = `(?:${PHASE_NAMES.join("|")})`;
+/** A run of phase names sharing one "phase(s)": "movement or your charge phase",
+ * "shooting phase or the fight phase" (two runs), "command phase". */
+const PHASE_RUN = new RegExp(
+  `(?:(excluding) (?:the )?)?(${PHASE_WORD}(?:\\s*(?:,|or|and)\\s*(?:your (?:opponent(?:'|’)s )?|the )?${PHASE_WORD})*)\\s+phases?\\b`,
+  "g",
+);
+
+/** The phases a when line names, in the canonical order. "Any phase" is every phase;
+ * "excluding the X phase" takes X out. */
+export function phasesOf(text: string): Phase[] {
+  const named = new Set<Phase>();
+  const excluded = new Set<Phase>();
+  for (const m of text.matchAll(PHASE_RUN)) {
+    for (const p of m[2]!.match(new RegExp(PHASE_WORD, "g")) ?? []) (m[1] ? excluded : named).add(p as Phase);
+  }
+  if (/\b(any|each|every) phase\b/.test(text)) PHASE_NAMES.forEach((p) => named.add(p));
+  return PHASE_NAMES.filter((p) => named.has(p) && !excluded.has(p));
+}
 
 /** Derive { phases, player_turn } from a stratagem's whenRules prose. Either field
  * is null when the prose doesn't determine it (→ keep the authored value). */
@@ -119,8 +132,7 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   if (!whenRulesRaw) return { phases: null, player_turn: null };
   const t = stripTags(whenRulesRaw).toLowerCase();
 
-  const phases: Phase[] = [];
-  for (const [p, re] of PHASE_WORDS) if (re.test(t)) phases.push(p);
+  const phases = phasesOf(t);
 
   // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours;
   // both present, or "any/either" → either; nothing decisive → null.

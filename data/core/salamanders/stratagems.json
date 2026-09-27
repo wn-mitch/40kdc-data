@@ -503,7 +503,7 @@
     "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "charge"
+      "fight"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",

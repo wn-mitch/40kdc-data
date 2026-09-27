@@ -92,6 +92,18 @@ describe("deriveTrigger (phases review)", () => {
       expect.arrayContaining(["movement", "charge"]),
     );
   });
+  it("reads phase names that share one 'phase' as a list, and ignores a move named after a phase", () => {
+    expect(deriveTrigger("Your Movement or your Charge phase, when a unit is selected to make a charge move.").phases)
+      .toEqual(["movement", "charge"]);
+    expect(deriveTrigger("Start of your Movement or Charge phase.").phases).toEqual(["movement", "charge"]);
+    expect(deriveTrigger("Your opponent’s Shooting phase or the Fight phase, just after a unit has selected its targets.").phases)
+      .toEqual(["shooting", "fight"]);
+  });
+  it("reads 'any phase' as every phase and takes out an excluded one", () => {
+    expect(deriveTrigger("Start of any phase (excluding the Command phase).").phases)
+      .toEqual(["movement", "shooting", "charge", "fight"]);
+    expect(deriveTrigger("End of your Command phase.").phases).toEqual(["command"]);
+  });
 });
 
 describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the real dump", () => {
