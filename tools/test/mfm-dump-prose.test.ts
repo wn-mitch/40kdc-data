@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildProseIndex, decodeEntities, plainBlock, plainLine, resolveProse } from "../src/mfm/dump-prose.js";
+import { apostropheSlugs, buildProseIndex, decodeEntities, plainBlock, plainLine, resolveProse } from "../src/mfm/dump-prose.js";
 import { MfmDump } from "../src/mfm/loader.js";
 
 // Fabricated names and wording only.
@@ -47,5 +47,10 @@ describe("MFM dump prose", () => {
     expect(resolveProse({ ability_id: "star-lantern-warden-host", name: "Star Lantern", ability_type: "enhancement" }, index))
       .toEqual({ text: "The bearer has **STEALTH**.", ref: "dump.json#enh-1" });
     expect(resolveProse({ ability_id: "oath", name: "Oath", ability_type: "enhancement" }, index)).toBeNull();
+  });
+
+  it("gives a rule name with an apostrophe both of the ids the repo spells it with", () => {
+    expect(apostropheSlugs("Warden’s Gift (Aura)")).toEqual(["wardens-gift-aura", "warden-s-gift-aura"]);
+    expect(apostropheSlugs("Warden Gift")).toEqual(["warden-gift"]);
   });
 });

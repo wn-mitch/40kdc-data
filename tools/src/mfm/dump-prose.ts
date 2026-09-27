@@ -161,13 +161,15 @@ export function collectRules(dump: MfmDump): DumpRule[] {
     const dir = repoDirForFactionName(fkName(r.detachmentId ? dump.factionKeywordOfDetachment(r.detachmentId) : null));
     const text = assembleRuleText(byDetRule.get(r.id) ?? []);
     if (!dir || !text) continue;
-    const slugs = [nameToId(name)];
+    const slugs = apostropheSlugs(name);
     const detName = dump.enName(det);
     if (detName) {
-      try {
-        slugs.push(detachmentScopedId(name, detName));
-      } catch {
-        /* unslugable detachment name — the bare slug still applies */
+      for (const spelling of apostropheSpellings(name)) {
+        try {
+          slugs.push(detachmentScopedId(spelling, detName));
+        } catch {
+          /* unslugable detachment name — the bare slug still applies */
+        }
       }
     }
     candidates.push({ name, slugs, factionDir: dir, text, ref: `dump.json#${r.id}`, fromPreferredPub: preferredPub(dump, det?.publicationId) });
@@ -182,7 +184,7 @@ export function collectRules(dump: MfmDump): DumpRule[] {
     const dir = repoDirForFactionName(fkName(fkId));
     const text = assembleRuleText(byArmyRule.get(r.id) ?? []);
     if (!dir || !text) continue;
-    candidates.push({ name, slugs: [nameToId(name)], factionDir: dir, text, ref: `dump.json#${r.id}`, fromPreferredPub: preferredPub(dump, r.publicationId) });
+    candidates.push({ name, slugs: apostropheSlugs(name), factionDir: dir, text, ref: `dump.json#${r.id}`, fromPreferredPub: preferredPub(dump, r.publicationId) });
   }
 
   // Preferred publication wins, then the longest text.
@@ -233,6 +235,27 @@ function subSections(rule: DumpRule): DumpRule[] {
 }
 
 /** Every id spelling a name can carry: with and without a trailing "(…)", and apostrophes as separators. */
+/** A name as written, and with each apostrophe read as a word break ("Nurgle’s" → "Nurgle s"). */
+function apostropheSpellings(name: string): string[] {
+  const spaced = name.replace(/[’']/g, " ");
+  return spaced === name ? [name] : [name, spaced];
+}
+
+/** The ids a rule name can have: the repo slugs "Nurgle’s Gift" both `nurgles-gift` and `nurgle-s-gift`.
+ * The first entry is always `nameToId(name)`, which callers key on. */
+export function apostropheSlugs(name: string): string[] {
+  const out: string[] = [];
+  for (const spelling of apostropheSpellings(name)) {
+    try {
+      const slug = nameToId(spelling);
+      if (!out.includes(slug)) out.push(slug);
+    } catch {
+      /* unslugable spelling */
+    }
+  }
+  return out;
+}
+
 export function slugVariants(name: string | null | undefined): string[] {
   if (typeof name !== "string" || !name.trim()) return [];
   const out = new Set<string>();

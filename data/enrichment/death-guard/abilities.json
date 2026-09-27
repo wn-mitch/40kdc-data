@@ -3884,32 +3884,6 @@
     }
   },
   {
-    "ability_id": "nurgles-gift-aura",
-    "name": "Nurgle's Gift (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "57f3020a87868b47afc5d89cbe420215de47fae0603f82f85c119911bf2c9dbe",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "nurgle-s-gift-aura"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "faction",
-    "behavior": "aura",
-    "faction_id": "death-guard"
-  },
-  {
     "ability_id": "damaged-1-6-wounds-remaining",
     "name": "Damaged: 1-6 Wounds Remaining",
     "authored_by": "40kdc-community",
