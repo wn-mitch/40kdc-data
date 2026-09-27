@@ -131,7 +131,9 @@ export function condition(leaf: CompileLeaf): Node {
     case "unit-state":
       return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => state === "engaged"
         ? { type: "engagement-state", parameters: { state: "engaged", ...(target ? { subject: "target" } : {}) } }
-        : { type: STATE_CONDITIONS[state], ...(target ? { parameters: { subject: "target" } } : {}) })));
+        : state === "on-battlefield"
+          ? { type: "on-battlefield", parameters: { subject: target ? "target" : leaf.parameters.subject === "this-model" ? "self" : "unit" } }
+          : { type: STATE_CONDITIONS[state], ...(target ? { parameters: { subject: "target" } } : {}) })));
     case "unit-keyword": {
       const keywords = leaf.parameters.keywords as string[];
       const type = target ? "target-has-keyword" : "unit-has-keyword";

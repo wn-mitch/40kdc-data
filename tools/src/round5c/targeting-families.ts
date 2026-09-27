@@ -14,7 +14,11 @@ export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
 export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
 const UNIT_STATES_V1 = ["below-starting-strength", "below-half-strength", "battle-shocked"] as const;
 /** Version 2 adds being within Engagement Range of an enemy unit (negated: unengaged). */
-export const UNIT_STATES = [...UNIT_STATES_V1, "engaged"] as const;
+const UNIT_STATES_V2 = [...UNIT_STATES_V1, "engaged"] as const;
+/** Version 3 adds being on the battlefield, the one state a single model can have. */
+export const UNIT_STATES = [...UNIT_STATES_V2, "on-battlefield"] as const;
+/** unit-state version 3 subjects: "this model" is only for being on the battlefield. */
+export const STATE_SUBJECTS = ["this-model", ...PREDICATE_SUBJECTS] as const;
 export const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked"] as const;
 export const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objective-range"] as const;
 const DISTANCE_KINDS = ["within", "beyond"] as const;
@@ -74,7 +78,22 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: {
       type: "object",
       required: ["states", "subject", "negated"],
-      properties: { states: { type: "array", items: { enum: UNIT_STATES }, minItems: 1, uniqueItems: true }, ...subjectAndNegation },
+      properties: { states: { type: "array", items: { enum: UNIT_STATES_V2 }, minItems: 1, uniqueItems: true }, ...subjectAndNegation },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "unit-state",
+    version: 3,
+    role: "CONDITION",
+    label: "Unit is (or is not) in a state",
+    description: "This model, this unit or the attack's target is below its Starting Strength, Below Half-strength, Battle-shocked, within Engagement Range of an enemy unit (negated: unengaged), or on the battlefield. Several states mean any of them; this model can only be on the battlefield.",
+    starter: { states: [], subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["states", "subject", "negated"],
+      properties: { states: { type: "array", items: { enum: UNIT_STATES }, minItems: 1, uniqueItems: true }, subject: { enum: STATE_SUBJECTS }, negated: { type: "boolean" } },
       additionalProperties: false,
     },
   },
@@ -216,9 +235,14 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
         unit: enumValue(input.unit, ATTACK_UNITS, "attack.unit"),
         attack_type: enumValue(input.attack_type, ATTACK_TYPES, "attack.attack_type"),
       };
-    case "unit-state":
+    case "unit-state": {
       exactKeys(input, ["states", "subject", "negated"], family);
-      return { states: enumSet(input.states, version >= 2 ? UNIT_STATES : UNIT_STATES_V1, "unit-state.states"), ...predicate(family) };
+      const states = enumSet(input.states, version >= 3 ? UNIT_STATES : version === 2 ? UNIT_STATES_V2 : UNIT_STATES_V1, "unit-state.states");
+      if (version < 3) return { states, ...predicate(family) };
+      const subject = enumValue(input.subject, STATE_SUBJECTS, "unit-state.subject");
+      if (subject === "this-model" && states.some((state) => state !== "on-battlefield")) throw new TypeError("unit-state: only being on the battlefield can be said of this model; use this unit for the other states.");
+      return { states, subject, negated: booleanValue(input.negated, "unit-state.negated") };
+    }
     case "unit-keyword":
       exactKeys(input, ["keywords", "subject", "negated"], family);
       return { keywords: keywordList(input.keywords), ...predicate(family) };

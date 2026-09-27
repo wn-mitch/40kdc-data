@@ -21,6 +21,7 @@ import { publishableEntries } from "../src/round5c/publish-queue.js";
 import { previewLeaf } from "../src/round5c/leaf-preview.js";
 import { REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { localEmbedder } from "../src/round5c/embeddings.js";
+import { leafExamples } from "../src/round5c/leaf-examples.js";
 import { askModelAboutClusters, deepseekModelCall } from "../src/round5c/leaf-proposals-llm.js";
 import { abandonStaleProposalRuns, dismissLeafProposal, latestProposalRun, listLeafProposals, runLeafProposals, type ProposalKind } from "../src/round5c/leaf-proposals.js";
 
@@ -106,6 +107,9 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "GET" && path === "/leaves") {
             return json(response, 200, leafBoard(db, { factionId: url.searchParams.get("faction") ?? undefined }));
+          }
+          if (request.method === "GET" && path === "/leaves/examples") {
+            return json(response, 200, leafExamples(db, { text: url.searchParams.get("text") ?? undefined, faction: url.searchParams.get("faction") ?? undefined, limit: url.searchParams.has("limit") ? Number(url.searchParams.get("limit")) : undefined }));
           }
           if (request.method === "POST" && path === "/leaves/preview") {
             return json(response, 200, previewLeaf(await body()));

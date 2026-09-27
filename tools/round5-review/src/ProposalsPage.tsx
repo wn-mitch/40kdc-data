@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
 import { LeafForm, leafLabel, type Family } from "./LeafForm";
+import { Examples } from "./Examples";
 import { SplitEditor } from "./SplitEditor";
 import type { DecisionQueue, QueueItem } from "./decision-queue";
 import { api } from "./workbench-api";
 
-type Piece = { text: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; confidence: number; neighbours: Array<{ surface: string; sample_text: string; sim: number }> };
+type Piece = { text: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; confidence: number; basis?: "wording"; neighbours: Array<{ surface: string; sample_text: string; sim: number }> };
 type Unnamed = { text: string; family_id: null };
 type Kind = "direct" | "decomposition" | "partial" | "llm" | "new-family" | "unlabelled";
 type Proposal = { id: number; surface: string; sample_text: string; kind: Kind; pieces: Array<Piece | Unnamed | NewFamily>; confidence: number; occurrences: number; closes: number; dropped: string[] };
@@ -41,7 +42,7 @@ const percent = (value: number) => `${Math.round(value * 100)}%`;
  * (or split into leaves) its nearest decided spellings suggest. Accepting sends one decision per
  * named piece through the shared queue; every decision still applies corpus-wide like any other.
  */
-export function ProposalsPage({ families, faction, revision, queue, queueItems, reviewer, setStatus }: {
+export function ProposalsPage({ families, faction, revision, queue, queueItems, reviewer, setStatus, openAbility }: {
   families: readonly Family[];
   faction: string;
   revision: number;
@@ -49,6 +50,7 @@ export function ProposalsPage({ families, faction, revision, queue, queueItems, 
   queueItems: readonly QueueItem[];
   reviewer: string;
   setStatus: (text: string) => void;
+  openAbility: (id: number) => void;
 }) {
   const [listing, setListing] = useState<Listing | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -182,6 +184,7 @@ export function ProposalsPage({ families, faction, revision, queue, queueItems, 
         <ol className="wb-wording-list">{(expanded.has(cluster.cluster) ? proposals : proposals.slice(0, CLUSTER_PREVIEW)).map((proposal) => <li key={proposal.id} className="wb-wording">
           <div>
             <blockquote>{proposal.sample_text}</blockquote>
+            <Examples text={proposal.sample_text} faction={faction} openAbility={openAbility} />
             <small>{proposal.closes ? `finishes ${proposal.closes} · ` : ""}appears {proposal.occurrences}× · {KINDS.find((kind) => kind.id === proposal.kind)?.label ?? proposal.kind}{proposal.pieces.some(named) ? ` · ${percent(proposal.confidence)} sure` : ""}</small>
           </div>
           <ul className="wb-proposal-pieces">{proposal.pieces.map((piece, index) => {
@@ -191,7 +194,7 @@ export function ProposalsPage({ families, faction, revision, queue, queueItems, 
               {text && <><span className="wb-surface-text">“{text}”</span>{" "}</>}
               {named(piece)
                 ? <><strong>{leafLabel(families, piece.family_id, piece.parameters)}</strong>
-                  <small>{piece.confidence === 1 ? "already decided" : piece.neighbours[0] ? `like “${piece.neighbours[0].sample_text}” (${piece.neighbours[0].sim.toFixed(2)})` : "the model’s reading"}</small></>
+                  <small>{piece.confidence === 1 ? "already decided" : piece.basis === "wording" ? "stated by the wording (core keyword list)" : piece.neighbours[0] ? `like “${piece.neighbours[0].sample_text}” (${piece.neighbours[0].sim.toFixed(2)})` : "the model’s reading"}</small></>
                 : unnamed(piece) ? <small className="wb-needs-leaf">needs a leaf</small>
                   : <small className="wb-needs-leaf">new family? {piece.new_family.role.toLowerCase()} “{piece.new_family.label}”: {piece.new_family.distinction}</small>}
               {queued && <small className={`wb-state ${queued.status === "failed" ? "wb-state-blocked" : "wb-state-queued"}`}>{queued.status === "failed" ? `not recorded: ${queued.error}` : queued.status === "running" ? "recording…" : "queued"}</small>}

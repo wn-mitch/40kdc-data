@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { LeafForm, leafLabel, type Family } from "./LeafForm";
+import { Examples } from "./Examples";
 import { SplitEditor } from "./SplitEditor";
 import type { DecisionQueue, QueueItem } from "./decision-queue";
 import { api } from "./workbench-api";
@@ -96,7 +97,8 @@ export function LeavesPage({ families, faction, revision, queue, queueItems, rev
   const wordingRow = (item: Wording, key: string, role: string | null) => waiting(`wording:${item.surface}`) || settled.has(`wording:${item.surface}`) ? null : <li key={key} className="wb-wording">
     <div><blockquote>{item.sample_text}</blockquote>
       <small>{item.unlocks ? `finishes ${item.unlocks} source${item.unlocks === 1 ? "" : "s"} · ` : ""}appears {item.occurrences}×</small>
-      {queueNote(`wording:${item.surface}`)}</div>
+      {queueNote(`wording:${item.surface}`)}
+      <Examples text={item.sample_text} faction={faction} openAbility={openAbility} /></div>
     {editing === key
       ? <LeafForm families={families} exactText={item.sample_text} role={role} busy={false} submitLabel="Decide everywhere"
         onSubmit={(familyId, parameters) => decide(`wording:${item.surface}`, item.sample_text, familyId, parameters)} onCancel={() => setEditing(null)} />

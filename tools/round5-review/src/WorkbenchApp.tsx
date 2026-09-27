@@ -909,7 +909,7 @@ export default function WorkbenchApp() {
       {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision}
         queue={queue} queueItems={queueItems} reviewer={REVIEWER} openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
       {view === "proposals" && panel("AI leaf proposals", <ProposalsPage families={families as unknown as Family[]} faction={faction} revision={revision}
-        queue={queue} queueItems={queueItems} reviewer={REVIEWER} setStatus={setStatus} />, "Leaves proposed from the nearest decided spellings, grouped by alike wording.")}
+        queue={queue} queueItems={queueItems} reviewer={REVIEWER} setStatus={setStatus} openAbility={openAbility} />, "Leaves proposed from the nearest decided spellings, grouped by alike wording.")}
       {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={busy}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Approve how leaves combine once for every source with that shape.")}

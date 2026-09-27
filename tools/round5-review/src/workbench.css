@@ -472,3 +472,6 @@
 .wb-kind-filter { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-block: var(--space-2); }
 .wb-kind-filter button { width: auto; }
 .wb-needs-leaf { color: var(--warn); font-size: var(--text-xs, 0.75rem); text-transform: uppercase; letter-spacing: 0.04em; }
+.wb-examples ul { list-style: none; margin: 0.25rem 0; padding: 0; display: grid; gap: 0.5rem; }
+.wb-examples p { margin: 0.125rem 0 0; font-size: var(--text-sm); line-height: 1.5; }
+.wb-examples mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inherit; padding: 0 0.1em; }

@@ -3,6 +3,9 @@ import type { DatabaseSync } from "node:sqlite";
 import { hashJson } from "../round4/hash.js";
 import { familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { prefillFromSource, type PrefillFamily } from "./leaf-prefill.js";
+import { keywordIndex } from "./core-keywords.js";
+import { round5cDataRoot } from "./entries.js";
+import { predicateProposal } from "./leaf-predicate-rules.js";
 import { withTransaction } from "./db.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { mutualKnnClusters, topK, vote } from "./leaf-knn.js";
@@ -38,6 +41,8 @@ export type ProposalPiece = {
   parameters: Record<string, unknown>;
   /** Vote share times the nearest example's similarity; 1 for a spelling already decided. */
   confidence: number;
+  /** Where the leaf came from when no decided example lent it: the wording and core's keyword list. */
+  basis?: "wording";
   neighbours: Array<{ surface: string; sample_text: string; sim: number }>;
 };
 /**
@@ -79,13 +84,17 @@ function pools(db: DatabaseSync): { labelled: Labelled[]; wordings: Wording[] } 
 type Classified = { piece: ProposalPiece } | { dropped: string } | null;
 
 /** The labelled vote for one text, or null when no example is close and agreed enough. */
-function classify(text: string, vector: Float32Array, labelled: readonly Labelled[], vectors: readonly Float32Array[], settings: ProposalSettings): Classified {
+function classify(text: string, vector: Float32Array, labelled: readonly Labelled[], vectors: readonly Float32Array[], settings: ProposalSettings, keywords: ReadonlyMap<string, string>): Classified {
   const exact = labelled.find((item) => item.surface === leafSurface(text));
   const neighbours = topK(vector, vectors, settings.k);
   const evidence = neighbours.slice(0, 3).map((item) => ({ surface: labelled[item.index]!.surface, sample_text: labelled[item.index]!.text, sim: Math.round(item.sim * 1000) / 1000 }));
   if (exact) return { piece: { text, family_id: exact.family_id, family_version: exact.family_version, role: exact.role, parameters: exact.parameters, confidence: 1, neighbours: evidence } };
   const result = vote(neighbours, labelled, (item) => item.family_id);
-  if (!result || result.best.sim < settings.direct_sim || result.share < settings.direct_share) return null;
+  if (!result || result.best.sim < settings.direct_sim || result.share < settings.direct_share) {
+    // No example is near: a predicate the words state in full is still a proposal.
+    const predicate = predicateProposal(text, keywords);
+    return predicate ? { piece: { text, ...predicate, confidence: 0.8, neighbours: evidence, basis: "wording" } } : null;
+  }
   const example = result.best.item;
   try {
     // The example lends its parameters; whatever this wording states outright (a bracketed
@@ -121,6 +130,7 @@ export async function runLeafProposals(db: DatabaseSync, embedder: Embedder, set
 
 async function proposeInto(db: DatabaseSync, runId: number, embedder: Embedder, settings: ProposalSettings): Promise<ProposalRunCounts> {
   const { labelled, wordings } = pools(db);
+  const keywords = keywordIndex(round5cDataRoot());
   const splits = wordings.map((wording) => {
     const words = wording.sample_text.split(/\s+/u).filter(Boolean);
     const pieces = splitPieces(words, suggestedCuts(words));
@@ -154,13 +164,13 @@ async function proposeInto(db: DatabaseSync, runId: number, embedder: Embedder, 
       let pieces: Array<ProposalPiece | UnnamedPiece> = [];
       // Wording that splits is proposed piece by piece: one leaf for all of it would lose the
       // pieces its nearest example lacks ("… makes an attack" + "that targets a MONSTER").
-      const parts = splits[index]!.map((text) => take(classify(text, pieceVectors.get(text)!, labelled, labelledVectors, settings)) ?? { text, family_id: null });
+      const parts = splits[index]!.map((text) => take(classify(text, pieceVectors.get(text)!, labelled, labelledVectors, settings, keywords)) ?? { text, family_id: null });
       const named = parts.filter((part): part is ProposalPiece => part.family_id !== null);
       if (named.length) {
         kind = named.length === parts.length ? "decomposition" : "partial";
         pieces = parts;
       } else {
-        const whole = take(classify(wording.sample_text, wordingVectors[index]!, labelled, labelledVectors, settings));
+        const whole = take(classify(wording.sample_text, wordingVectors[index]!, labelled, labelledVectors, settings, keywords));
         if (whole) {
           kind = "direct";
           pieces = [whole];

@@ -5,7 +5,8 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
-import { normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
+import { compileLeaves } from "../src/round5c/compile.js";
+import { currentFamilyVersion, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
 import { getAbility } from "../src/round5c/review.js";
@@ -83,7 +84,7 @@ describe("Round 5C targeting families", () => {
         { family_id: "unit-state", parameters: { states: ["below-starting-strength"], subject: "target", negated: false } },
       ]);
       expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 1 });
-      expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 2 });
+      expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 3 });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, repointed_surfaces: 0 });
     } finally {
       db.close();
@@ -151,6 +152,23 @@ describe("Round 5C targeting families", () => {
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["OC", "A"], operation: "add", value: 1, weapon_type: "melee" }, 2)).toThrow(/only weapon characteristics/u);
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }, 2)).toThrow(/attack's own leaf/u);
     expect(normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["S", "A"], operation: "add", value: 1, weapon_type: "melee" }, 2).characteristics).toEqual(["A", "S"]);
+  });
+
+  it("says a model, its unit or the target is on the battlefield, and nothing else of a model", () => {
+    const onField = (subject: string, negated = false) => {
+      const result = compileLeaves([
+        { role: "CONDITION", family_id: "unit-state", family_version: 3, parameters: normalizeFingerprintParameters("unit-state", { states: ["on-battlefield"], subject, negated }, 3), start_byte: 0 },
+        { role: "EFFECT", family_id: "fights-first", family_version: currentFamilyVersion("fights-first"), parameters: { subject: "this-unit" }, start_byte: 10 },
+      ]);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return (result.mechanics.effect as { condition: unknown }).condition;
+    };
+    expect(onField("this-model")).toEqual({ type: "on-battlefield", parameters: { subject: "self" } });
+    expect(onField("this-unit", true)).toEqual({ type: "on-battlefield", parameters: { subject: "unit" }, negated: true });
+    expect(onField("target")).toEqual({ type: "on-battlefield", parameters: { subject: "target" } });
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["on-battlefield", "engaged"], subject: "this-model", negated: false }, 3)).toThrow(/only being on the battlefield/u);
+    // Version 2 never had this model or the battlefield.
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["on-battlefield"], subject: "this-unit", negated: false }, 2)).toThrow(/unit-state.states/u);
   });
 
   it("warns when a decided spelling says more than its meaning", () => {
