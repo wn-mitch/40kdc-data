@@ -1,0 +1,1643 @@
+{
+  "data/core/mission-cards.json#punishment#awards/0/when": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "object": {
+        "owner": "enemy",
+        "designated": "condemned"
+      },
+      "window": "turn"
+    }
+  },
+  "data/core/mission-cards.json#surveil-the-foe#awards/0/when": {
+    "type": "designated",
+    "parameters": {
+      "subject": {
+        "owner": "enemy"
+      },
+      "tag": "surveilled",
+      "count_min": 1
+    }
+  },
+  "data/core/mission-cards.json#search-and-scour#awards/3/when": {
+    "operator": "not",
+    "operands": [
+      {
+        "type": "in-region",
+        "parameters": {
+          "subject": {
+            "owner": "enemy"
+          },
+          "region": {
+            "territory": "your-territory"
+          },
+          "wholly": true
+        }
+      }
+    ]
+  },
+  "data/core/mission-cards.json#defend-stronghold#awards/1/when": {
+    "operator": "not",
+    "operands": [
+      {
+        "type": "in-region",
+        "parameters": {
+          "subject": {
+            "owner": "enemy"
+          },
+          "region": {
+            "territory": "your-deployment-zone"
+          }
+        }
+      }
+    ]
+  },
+  "data/enrichment/_example/abilities.example.json#ironclad-last-stand#effect/condition/operands/1": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "window": "event",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    }
+  },
+  "data/enrichment/_example/abilities.example.json#void-harvest-aura#effect/condition/operands/1": {
+    "type": "happened",
+    "parameters": {
+      "event": "phase-started",
+      "window": "event"
+    }
+  },
+  "data/enrichment/adepta-sororitas/abilities.json#denuncia-oratory#effect/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy",
+        "designated": "QUARRY"
+      }
+    }
+  },
+  "data/enrichment/adepta-sororitas/abilities.json#recount-the-deeds-of-the-saints#effect/steps/0/condition/operands/2": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "by": "this-unit"
+      }
+    }
+  },
+  "data/enrichment/adepta-sororitas/abilities.json#judged-for-execution#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "subject": "this-model",
+      "of": {
+        "owner": "enemy",
+        "visible": true
+      },
+      "range": {
+        "inches": 18
+      }
+    }
+  },
+  "data/enrichment/adepta-sororitas/resource-pools.json#miracle-dice-pool#generation/0/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "turn-started",
+      "window": "event"
+    }
+  },
+  "data/enrichment/adepta-sororitas/resource-pools.json#miracle-dice-pool#generation/1/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTA SORORITAS"
+        ]
+      }
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#vengeance-of-the-omnissiah#effect/condition/operands/0": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "VEHICLE"
+        ],
+        "level": "model"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 12
+        }
+      },
+      "window": "battle"
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#vengeance-of-the-omnissiah#effect/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "VEHICLE"
+        ],
+        "level": "model"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 12
+        }
+      },
+      "window": "battle"
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#extremis-level-threat#effect/effect/condition/operands/0": {
+    "type": "has-ability",
+    "parameters": {
+      "ability": "oath-of-moment"
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#skystrike#effect/steps/1/condition/operands/2": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "your-turn"
+        }
+      },
+      {
+        "type": "battle-round",
+        "parameters": {
+          "min": 1,
+          "max": 1
+        }
+      }
+    ]
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#calculated-feint-vanguard-spearhead#effect/steps/1/condition/operands/1": {
+    "type": "has-keyword",
+    "parameters": {
+      "all_of": [
+        "SCOUT SQUAD"
+      ]
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#ceramite-sledgehammer-armoured-speartip#effect/steps/1/condition": {
+    "type": "has-keyword",
+    "parameters": {
+      "all_of": [
+        "HEAVY TRANSPORT"
+      ]
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#neurostatic-interference-aura#effect/effect/condition/operands/0": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS",
+          "BATTLELINE"
+        ]
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#neurostatic-interference-aura#effect/effect/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS",
+          "BATTLELINE"
+        ]
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#ride-the-thermals#effect/effect/options/1/condition/operands/0": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS",
+          "BATTLELINE"
+        ]
+      },
+      "range": {
+        "inches": 6
+      },
+      "wholly": true,
+      "models": "every"
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#ride-the-thermals#effect/effect/options/1/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS",
+          "BATTLELINE"
+        ]
+      },
+      "range": {
+        "inches": 6
+      },
+      "wholly": true,
+      "models": "every"
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#acquisition-at-any-cost#effect/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "subject": "defender",
+      "of": {
+        "objective": {
+          "designated": "acquisition"
+        }
+      },
+      "range": "objective-control"
+    }
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#acquisition-at-any-cost#effect/condition": {
+    "operator": "or",
+    "operands": [
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "objective": {
+              "designated": "acquisition"
+            }
+          },
+          "range": "objective-control"
+        }
+      },
+      {
+        "type": "within",
+        "parameters": {
+          "subject": "defender",
+          "of": {
+            "objective": {
+              "designated": "acquisition"
+            }
+          },
+          "range": "objective-control"
+        }
+      }
+    ]
+  },
+  "data/enrichment/adeptus-mechanicus/abilities.json#searing-conflagration-purge-corps-pteraxii-sterylizors#effect/steps/1/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS",
+          "BATTLELINE"
+        ]
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/aeldari/abilities.json#empyric-ambush#effect/effect/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "flickerjump"
+      },
+      "window": "turn"
+    }
+  },
+  "data/enrichment/aeldari/abilities.json#prince-of-corsairs#effect/condition/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "unit-state",
+        "parameters": {
+          "state": "embarked"
+        }
+      },
+      {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "in-reserves"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/aeldari/abilities.json#point-blank-devastation#effect/condition/operands/1/operands/0": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_name": "Heavy wraithcannon"
+        }
+      },
+      {
+        "type": "within",
+        "parameters": {
+          "subject": "defender",
+          "of": "attacker",
+          "range": "half-weapon"
+        }
+      }
+    ]
+  },
+  "data/enrichment/aeldari/abilities.json#point-blank-devastation#effect/condition/operands/1": {
+    "operator": "or",
+    "operands": [
+      {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapon_name": "Heavy wraithcannon"
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": "attacker",
+              "range": "half-weapon"
+            }
+          }
+        ]
+      },
+      {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapon_name": "Suncannon"
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": "attacker",
+              "range": "half-weapon"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/aeldari/abilities.json#martial-grace#effect/steps/1/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "used",
+      "filter": {
+        "kind": "manoeuvre",
+        "id": "swift-as-the-wind"
+      },
+      "window": "phase"
+    }
+  },
+  "data/enrichment/aeldari/abilities.json#martial-grace#effect/steps/2/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "used",
+      "window": "event",
+      "filter": {
+        "kind": "manoeuvre"
+      }
+    }
+  },
+  "data/enrichment/astra-militarum/abilities.json#vox-caster-draydens-lance#effect/steps/0/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "OFFICER"
+        ],
+        "level": "model"
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/astra-militarum/abilities.json#vox-caster-draydens-lance#effect/steps/1/condition": {
+    "operator": "not",
+    "operands": [
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "OFFICER"
+            ],
+            "level": "model"
+          },
+          "range": {
+            "inches": 6
+          }
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-daemons/abilities.json#split#effect/condition/operands/0": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": "this-unit"
+    }
+  },
+  "data/enrichment/chaos-daemons/abilities.json#grotesque-regeneration#effect/condition/operands/2/operands/0": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "window": "phase"
+    }
+  },
+  "data/enrichment/chaos-daemons/abilities.json#first-prince-of-chaos#effect/steps/4/condition": {
+    "type": "has-keyword",
+    "parameters": {
+      "all_of": [
+        "UNDIVIDED"
+      ]
+    }
+  },
+  "data/enrichment/chaos-knights/abilities.json#grav-pinned#effect/condition/operands/1": {
+    "type": "attack-is",
+    "parameters": {
+      "weapon_name": "Graviton crusher"
+    }
+  },
+  "data/enrichment/imperial-knights/abilities.json#grav-pinned#effect/condition/operands/1": {
+    "type": "attack-is",
+    "parameters": {
+      "weapon_name": "Graviton crusher"
+    }
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/0/condition/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "LETHAL HITS"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/1/condition/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "LETHAL HITS"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/2/condition/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "SUSTAINED HITS 1"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/3/condition/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "SUSTAINED HITS 1"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/4/condition/operands/1/operands/0": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "LETHAL HITS"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#marks-of-chaos#effect/steps/4/condition/operands/1/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      {
+        "type": "attack-is",
+        "parameters": {
+          "weapon_keyword": "SUSTAINED HITS 1"
+        }
+      }
+    ]
+  },
+  "data/enrichment/chaos-space-marines/abilities.json#headlong-destruction#effect/condition": {
+    "type": "closest",
+    "parameters": {
+      "subject": "defender",
+      "among": "eligible-targets"
+    }
+  },
+  "data/enrichment/death-guard/abilities.json#curse-of-the-walking-pox#effect/condition/operands/2/operands/1/operands/1": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "ability",
+        "id": "eater-plague-psychic",
+        "by": {
+          "all_of": [
+            "TYPHUS"
+          ]
+        }
+      }
+    }
+  },
+  "data/enrichment/death-guard/abilities.json#pestilent-fallout-psychic#effect/condition/operands/0": {
+    "type": "happened",
+    "parameters": {
+      "event": "after-roll",
+      "object": "defender",
+      "filter": {
+        "roll": "hit",
+        "result": "success",
+        "weapon_name": "Plague Wind"
+      },
+      "window": "event"
+    }
+  },
+  "data/enrichment/death-guard/abilities.json#reverberant-rancidity#effect/steps/1/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "PLAGUE LEGIONS"
+        ]
+      },
+      "range": {
+        "inches": 7
+      }
+    }
+  },
+  "data/enrichment/drukhari/abilities.json#callous-competition#effect/steps/0/condition": {
+    "type": "designated",
+    "parameters": {
+      "tag": "winning-the-wager"
+    }
+  },
+  "data/enrichment/drukhari/abilities.json#callous-competition#effect/steps/1/condition": {
+    "type": "designated",
+    "parameters": {
+      "tag": "losing-the-wager"
+    }
+  },
+  "data/enrichment/drukhari/resource-pools.json#pain-token-pool#generation/0/condition": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "happened",
+        "parameters": {
+          "event": "phase-started",
+          "window": "event"
+        }
+      },
+      {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
+      {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "your-turn"
+        }
+      }
+    ]
+  },
+  "data/enrichment/drukhari/resource-pools.json#pain-token-pool#generation/1/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy"
+      }
+    }
+  },
+  "data/enrichment/drukhari/resource-pools.json#pain-token-pool#generation/2/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "after-roll",
+      "window": "event",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "roll": "battle-shock",
+        "result": "failure"
+      }
+    }
+  },
+  "data/enrichment/emperors-children/abilities.json#lord-of-the-host#effect/condition": {
+    "type": "attachment",
+    "parameters": {
+      "subject": "this-model",
+      "role": "leading",
+      "with": {
+        "all_of": [
+          "EMPEROR’S CHILDREN",
+          "BATTLELINE"
+        ]
+      }
+    }
+  },
+  "data/enrichment/emperors-children/abilities.json#daemonic-empowerment#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "LEGIONS OF EXCESS"
+        ]
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/genestealer-cults/abilities.json#crawling-horror-purestrain-broodswarm#effect/condition": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      }
+    ]
+  },
+  "data/enrichment/genestealer-cults/abilities.json#rapid-takeover#effect/steps/1/effect/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ATALAN JACKALS"
+        ]
+      },
+      "of": {
+        "objective": {
+          "controlled_by": "friendly"
+        }
+      },
+      "range": "objective-control"
+    }
+  },
+  "data/enrichment/grey-knights/abilities.json#hallowed-ground#effect/modifier/consumer/qualified_condition/operands/1": {
+    "type": "in-region",
+    "parameters": {
+      "region": {
+        "rule_region": {
+          "region_id": "hallowed-ground",
+          "owner_faction": "grey-knights"
+        }
+      },
+      "wholly": true,
+      "models": "every"
+    }
+  },
+  "data/enrichment/imperial-knights/abilities.json#dauntless-defenders#effect/condition": {
+    "type": "in-region",
+    "parameters": {
+      "region": {
+        "rule_region": {
+          "region_id": "defensive-line",
+          "owner_faction": "imperial-knights"
+        }
+      }
+    }
+  },
+  "data/enrichment/necrons/abilities.json#optimised-for-slaughter#effect/condition": {
+    "operator": "or",
+    "operands": [
+      {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapon_name": "Enmitic exterminator"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapon_name": "Gauss destructor"
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/necrons/abilities.json#power-matrix#effect/modifier/consumer/qualified_condition": {
+    "type": "in-region",
+    "parameters": {
+      "region": {
+        "rule_region": {
+          "region_id": "power-matrix",
+          "owner_faction": "necrons"
+        }
+      },
+      "wholly": true,
+      "models": "every"
+    }
+  },
+  "data/enrichment/thousand-sons/abilities.json#flow-of-magic#effect/modifier/consumer/qualified_condition": {
+    "type": "in-region",
+    "parameters": {
+      "subject": "this-model",
+      "region": {
+        "rule_region": {
+          "region_id": "flow-of-magic",
+          "owner_faction": "thousand-sons"
+        }
+      },
+      "wholly": true
+    }
+  },
+  "data/enrichment/orks/abilities.json#fortification#effect/condition": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "unit-state",
+        "parameters": {
+          "subject": {
+            "owner": "enemy"
+          },
+          "state": "engaged",
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "FORTIFICATION"
+            ]
+          }
+        }
+      },
+      {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": {
+                "owner": "enemy"
+              },
+              "state": "engaged",
+              "with": {
+                "owner": "friendly",
+                "none_of": [
+                  "FORTIFICATION"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#fortification#effect/effect/steps/2/effect/condition/operands/0": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "unit-state",
+        "parameters": {
+          "subject": "event-subject",
+          "state": "engaged",
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "FORTIFICATION"
+            ]
+          }
+        }
+      },
+      {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": {
+                "owner": "friendly",
+                "none_of": [
+                  "FORTIFICATION"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#mount-up-ladz-blitz-brigade#effect/condition/operands/4": {
+    "type": "within",
+    "parameters": {
+      "of": "selected-unit",
+      "range": {
+        "inches": 6
+      },
+      "wholly": true
+    }
+  },
+  "data/enrichment/orks/abilities.json#blitzkaptin-blitz-brigade#effect/condition/operands/2/operands/1": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "unit-state",
+        "parameters": {
+          "state": "embarked"
+        }
+      },
+      {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "in-reserves"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#supercharged-squig-oil-blitz-brigade#trigger": {
+    "event": "used",
+    "subject": "this-model",
+    "filter": {
+      "kind": "ability",
+      "id": "mekaniak"
+    }
+  },
+  "data/enrichment/orks/abilities.json#beast-snagga-following#effect/condition": {
+    "operator": "or",
+    "operands": [
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "BEAST SNAGGA"
+            ],
+            "none_of": [
+              "MONSTER"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "BEAST SNAGGA"
+            ],
+            "none_of": [
+              "CHARACTER"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#boss-of-da-hunt#effect/condition": {
+    "operator": "or",
+    "operands": [
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "BEAST SNAGGA"
+            ],
+            "none_of": [
+              "MONSTER"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "BEAST SNAGGA"
+            ],
+            "none_of": [
+              "CHARACTER"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#beastscent-psychic#trigger/condition/operands/2": {
+    "type": "unit-state",
+    "parameters": {
+      "subject": "event-subject",
+      "state": "embarked",
+      "with": "this-unit"
+    }
+  },
+  "data/enrichment/orks/abilities.json#idol-of-belligerence#trigger/condition/operands/2": {
+    "type": "unit-state",
+    "parameters": {
+      "subject": "event-subject",
+      "state": "embarked",
+      "with": "this-unit"
+    }
+  },
+  "data/enrichment/orks/abilities.json#bombdakka-support#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "SPEED FREEKS"
+        ],
+        "none_of": [
+          "WARTRAKK"
+        ]
+      },
+      "range": {
+        "inches": 3
+      },
+      "models": "every"
+    }
+  },
+  "data/enrichment/orks/abilities.json#drive-by-skorchin#effect/condition/operands/3": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "enemy",
+        "visible": true
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/orks/abilities.json#mobbed#effect/condition/operands/0": {
+    "type": "unit-state",
+    "parameters": {
+      "subject": "defender",
+      "state": "engaged",
+      "with": "this-unit"
+    }
+  },
+  "data/enrichment/orks/abilities.json#support-bubble#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "subject": "this-model",
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "ORKS",
+          "INFANTRY"
+        ],
+        "none_of": [
+          "BIG MEK WITH SHOKK ATTACK GUN"
+        ]
+      },
+      "range": {
+        "inches": 3
+      }
+    }
+  },
+  "data/enrichment/orks/abilities.json#delicious-eating-squigs-kult-of-speed#effect/effect/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "subject": "selected-unit",
+      "of": "stratagem-target",
+      "range": {
+        "inches": 3
+      }
+    }
+  },
+  "data/enrichment/orks/abilities.json#grot-shields-runt-swarm#effect/condition/operands/7": {
+    "type": "within",
+    "parameters": {
+      "of": "defender",
+      "range": {
+        "inches": 3
+      }
+    }
+  },
+  "data/enrichment/orks/abilities.json#mob-mentality-green-tide#effect/effect/condition/operands/2": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "within",
+        "parameters": {
+          "subject": "selected-unit",
+          "of": "stratagem-target",
+          "range": {
+            "inches": 12
+          }
+        }
+      },
+      {
+        "type": "visible",
+        "parameters": {
+          "subject": "selected-unit",
+          "to": "stratagem-target"
+        }
+      }
+    ]
+  },
+  "data/enrichment/orks/abilities.json#surly-as-a-squiggoth-brute-bosses#trigger/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "window": "phase"
+    }
+  },
+  "data/enrichment/orks/abilities.json#where-dya-fink-youre-going-da-big-hunt#trigger/condition": {
+    "type": "unit-state",
+    "parameters": {
+      "subject": "event-subject",
+      "state": "engaged",
+      "with": {
+        "owner": "friendly",
+        "all_of": [
+          "BEAST SNAGGA"
+        ]
+      }
+    }
+  },
+  "data/enrichment/orks/abilities.json#where-dya-fink-youre-going-da-big-hunt#trigger": {
+    "event": "selected",
+    "subject": {
+      "owner": "enemy"
+    },
+    "filter": {
+      "to": "move",
+      "move_types": [
+        "fall-back"
+      ]
+    },
+    "condition": {
+      "operator": "and",
+      "operands": [
+        {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "movement"
+          }
+        },
+        {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "opponent-turn"
+          }
+        },
+        {
+          "type": "unit-state",
+          "parameters": {
+            "subject": "event-subject",
+            "state": "engaged",
+            "with": {
+              "owner": "friendly",
+              "all_of": [
+                "BEAST SNAGGA"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "data/enrichment/orks/abilities.json#wimp-kickaz-bully-boyz#effect/condition/operands/1": {
+    "type": "unit-state",
+    "parameters": {
+      "subject": "event-subject",
+      "state": "engaged",
+      "with": "this-unit"
+    }
+  },
+  "data/enrichment/orks/abilities.json#wimp-kickaz-bully-boyz#trigger": {
+    "event": "selected",
+    "subject": {
+      "owner": "enemy"
+    },
+    "filter": {
+      "to": "move",
+      "move_types": [
+        "fall-back"
+      ]
+    }
+  },
+  "data/enrichment/tau-empire/abilities.json#exemplars-of-mont-ka#effect/condition/operands/1": {
+    "type": "closest",
+    "parameters": {
+      "subject": "defender",
+      "among": "eligible-targets"
+    }
+  },
+  "data/enrichment/tau-empire/abilities.json#jammer-array#effect/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "set-up",
+      "window": "event",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "from": "reserves"
+      }
+    }
+  },
+  "data/enrichment/thousand-sons/abilities.json#binding-tendrils-psychic#effect/condition/operands/2": {
+    "type": "happened",
+    "parameters": {
+      "event": "after-roll",
+      "object": "defender",
+      "filter": {
+        "roll": "hit",
+        "result": "success",
+        "weapon_name": "Arcane Fire"
+      },
+      "window": "event"
+    }
+  },
+  "data/enrichment/thousand-sons/abilities.json#infernal-pacts#effect/steps/1/condition/operands/1": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "SCINTILLATING LEGIONS",
+          "PSYKER"
+        ],
+        "visible": true
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/tyranids/abilities.json#disruption-bombardment#effect/condition/operands/1": {
+    "type": "happened",
+    "parameters": {
+      "event": "after-roll",
+      "object": "defender",
+      "filter": {
+        "roll": "hit",
+        "result": "success"
+      },
+      "window": "event"
+    }
+  },
+  "data/enrichment/tyranids/abilities.json#neurocytes#effect/condition/operands/0": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "TYRANIDS"
+        ],
+        "none_of": [
+          "NEUROGAUNTS"
+        ]
+      },
+      "range": {
+        "aura_of": "synapse"
+      }
+    }
+  },
+  "data/enrichment/tyranids/abilities.json#neurocytes#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "TYRANIDS"
+        ],
+        "none_of": [
+          "NEUROGAUNTS"
+        ]
+      },
+      "range": {
+        "aura_of": "synapse"
+      }
+    }
+  },
+  "data/enrichment/tyranids/abilities.json#encircling-horrors-ambush-predators#effect/condition/operands/3": {
+    "type": "happened",
+    "parameters": {
+      "event": "move-ended",
+      "window": "event",
+      "subject": {
+        "owner": "enemy"
+      },
+      "proximity": {
+        "range": {
+          "inches": 8
+        }
+      }
+    }
+  },
+  "data/enrichment/tyranids/abilities.json#catalytic-biofortification-talons-of-the-norn-queen#effect/condition/operands/1": {
+    "type": "happened",
+    "parameters": {
+      "event": "damage-allocated",
+      "window": "event",
+      "object": "this-unit",
+      "filter": {
+        "attack_type": "mortal"
+      }
+    }
+  },
+  "data/enrichment/world-eaters/abilities.json#battle-lust-berzerker-warband#effect/steps/1/condition": {
+    "type": "rule-active",
+    "parameters": {
+      "rule": "unbridled-bloodlust"
+    }
+  },
+  "data/enrichment/world-eaters/abilities.json#icon-of-war-khorne-daemonkin#effect/condition": {
+    "type": "within",
+    "parameters": {
+      "of": {
+        "owner": "friendly",
+        "all_of": [
+          "BLOOD LEGIONS"
+        ]
+      },
+      "range": {
+        "inches": 6
+      }
+    }
+  },
+  "data/enrichment/world-eaters/abilities.json#daemonic-fury-khorne-daemonkin#effect/effect/steps/1/condition": {
+    "type": "rule-active",
+    "parameters": {
+      "rule": "daemonic-rage"
+    }
+  },
+  "data/enrichment/world-eaters/resource-pools.json#blessings-of-khorne-pool#generation/0/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "round-started",
+      "window": "event"
+    }
+  },
+  "data/enrichment/world-eaters/resource-pools.json#bloodshed-point#generation/0/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy"
+      }
+    }
+  },
+  "data/enrichment/world-eaters/resource-pools.json#blood-tithe-pool#generation/0/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "window": "event",
+      "object": {
+        "owner": "enemy"
+      }
+    }
+  },
+  "tools/test/fixtures/valid/abilities-good.json#cond-territory-control#effect/condition": {
+    "type": "in-region",
+    "parameters": {
+      "region": {
+        "territory": "attacker-territory"
+      }
+    }
+  },
+  "tools/test/fixtures/valid/abilities-good.json#cond-disposition-matches#effect/condition": {
+    "type": "rule-active",
+    "parameters": {
+      "rule": "take-and-hold"
+    }
+  },
+  "tools/test/fixtures/valid/abilities-good.json#cond-unit-has-tag#effect/condition": {
+    "type": "happened",
+    "parameters": {
+      "event": "destroyed",
+      "object": {
+        "owner": "enemy",
+        "designated": "doomed"
+      },
+      "window": "turn"
+    }
+  },
+  "tools/test/fixtures/valid/abilities-good.json#cond-terrain-has-tag#effect/condition": {
+    "operator": "and",
+    "operands": [
+      {
+        "type": "in-region",
+        "parameters": {
+          "subject": {
+            "owner": "friendly"
+          },
+          "region": {
+            "terrain_area": {
+              "designated": "mined"
+            }
+          }
+        }
+      },
+      {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": {
+                "owner": "enemy"
+              },
+              "region": {
+                "terrain_area": {
+                  "designated": "mined"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#designer-s-note#effect": {
+    "type": "ability-grant",
+    "target": "unit",
+    "modifier": {
+      "grant_type": "passenger-relocation-on-destruction"
+    }
+  },
+  "data/enrichment/genestealer-cults/abilities.json#cloaked-assassin#effect": {
+    "type": "rule-state",
+    "target": "self",
+    "modifier": {
+      "direction": "suppressed",
+      "rule_kind": "core-rule",
+      "rule": "fire-overwatch"
+    }
+  },
+  "data/enrichment/adeptus-astartes/abilities.json#oathbound#effect/condition/operands/2": {
+    "type": "has-keyword",
+    "parameters": {
+      "subject": "defender",
+      "chosen_by": "slayer-s-oath"
+    }
+  },
+  "data/enrichment/aeldari/abilities.json#fated-hero#effect/condition": {
+    "type": "has-keyword",
+    "parameters": {
+      "subject": "defender",
+      "chosen_by": "fated-hero"
+    }
+  },
+  "data/enrichment/emperors-children/abilities.json#pledges-to-the-dark-prince#effect/steps/1/effect/steps/0/condition": {
+    "type": "happened-compare",
+    "parameters": {
+      "left": {
+        "event": "destroyed",
+        "object": {
+          "owner": "enemy"
+        },
+        "window": "round"
+      },
+      "comparison": "greater-or-equal",
+      "right": {
+        "pool": "pact-pledge"
+      }
+    }
+  },
+  "data/enrichment/emperors-children/abilities.json#pledges-to-the-dark-prince#effect/steps/1/effect/steps/1/condition/operands/0": {
+    "type": "happened-compare",
+    "parameters": {
+      "left": {
+        "event": "destroyed",
+        "object": {
+          "owner": "enemy"
+        },
+        "window": "round"
+      },
+      "comparison": "greater-or-equal",
+      "right": {
+        "pool": "pact-pledge"
+      }
+    }
+  },
+  "data/enrichment/necrons/abilities.json#triarchal-menhirs#effect/condition": {
+    "type": "model-profile",
+    "parameters": {
+      "subject": "event-object",
+      "profile": "szarekh"
+    }
+  },
+  "data/enrichment/orks/abilities.json#ramshackle-cover#effect/condition": {
+    "type": "visible",
+    "parameters": {
+      "subject": "defender",
+      "to": "attacker",
+      "fully": true,
+      "blocked_by": "this-unit"
+    }
+  },
+  "data/enrichment/orks/abilities.json#unpredictable-genius-madcap-meks#effect/outcomes/1/effect/selector/eligibility/operands/0": {
+    "operator": "not",
+    "operands": [
+      {
+        "type": "same-unit",
+        "parameters": {
+          "as": "defender"
+        }
+      }
+    ]
+  }
+}

@@ -207,6 +207,26 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 				}
 			}
 		}
+		if mp, ok := schema["minProperties"]; ok && len(inst) < asInt(mp) {
+			*out = append(*out, violation{path, "minProperties"})
+		}
+		if mp, ok := schema["maxProperties"]; ok && len(inst) > asInt(mp) {
+			*out = append(*out, violation{path, "maxProperties"})
+		}
+		if dr, ok := schema["dependentRequired"].(map[string]any); ok {
+			for trigger, reqAny := range dr {
+				if _, present := inst[trigger]; !present {
+					continue
+				}
+				req, _ := reqAny.([]any)
+				for _, rAny := range req {
+					r, _ := rAny.(string)
+					if _, present := inst[r]; !present {
+						*out = append(*out, violation{path, "dependentRequired"})
+					}
+				}
+			}
+		}
 		props, _ := schema["properties"].(map[string]any)
 		for k, val := range inst {
 			if sub, ok := props[k]; ok {
@@ -242,6 +262,24 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 		}
 		if ma, ok := schema["maxItems"]; ok && len(inst) > asInt(ma) {
 			*out = append(*out, violation{path, "maxItems"})
+		}
+		if contains, ok := schema["contains"]; ok {
+			matches := 0
+			for _, e := range inst {
+				if v.valid(contains, e, base) {
+					matches++
+				}
+			}
+			minContains := 1
+			if mc, ok := schema["minContains"]; ok {
+				minContains = asInt(mc)
+			}
+			if matches < minContains {
+				*out = append(*out, violation{path, "contains"})
+			}
+			if mc, ok := schema["maxContains"]; ok && matches > asInt(mc) {
+				*out = append(*out, violation{path, "maxContains"})
+			}
 		}
 		if u, ok := schema["uniqueItems"].(bool); ok && u {
 			if hasDuplicate(inst) {
@@ -294,6 +332,19 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 			for _, sub := range oneOf {
 				v.check(sub, instance, path, base, out)
 			}
+		}
+	}
+	if not, ok := schema["not"]; ok && v.valid(not, instance, base) {
+		*out = append(*out, violation{path, "not"})
+	}
+	// if/then/else: the branch's own errors are reported (as jsonschema and AJV do).
+	if cond, ok := schema["if"]; ok {
+		if v.valid(cond, instance, base) {
+			if then, ok := schema["then"]; ok {
+				v.check(then, instance, path, base, out)
+			}
+		} else if els, ok := schema["else"]; ok {
+			v.check(els, instance, path, base, out)
 		}
 	}
 	if anyOf, ok := schema["anyOf"].([]any); ok {

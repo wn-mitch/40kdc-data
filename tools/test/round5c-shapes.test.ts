@@ -126,7 +126,7 @@ describe("Round 5C shapes", () => {
     await publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
     const published = JSON.parse(readFileSync(abilitiesFile, "utf8")) as Array<Record<string, unknown>>;
     expect(published.find((entry) => entry.ability_id === "copy")).toMatchObject({
-      effect: { type: "conditional", condition: { type: "is-attached" }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "all-failures" } } },
+      effect: { type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "all-failures" } } },
       scope: { range: "unit", duration: "permanent" },
       behavior: "passive",
     });

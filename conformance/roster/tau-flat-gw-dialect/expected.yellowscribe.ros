@@ -17,7 +17,7 @@
             </profile>
             <profile name="Jammer Array" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Reserves phase, for the rest of the battle, enemy units within 12": prevent reserve setup (within 12").</characteristic>
+                <characteristic name="Description">If set up happened, for the rest of the battle, enemy units within 12": prevent reserve setup (within 12").</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">

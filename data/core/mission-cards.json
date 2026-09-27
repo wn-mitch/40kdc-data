@@ -6,7 +6,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "max": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 2
       },
       {
@@ -16,7 +16,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "your-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "friendly" } } },
         "vp_per": 2,
         "per": "controlled-non-home-objective",
         "cumulative": true
@@ -57,7 +57,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 3
       },
       {
@@ -81,22 +81,22 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 3 } },
+        "when": { "type": "controls", "parameters": { "count_min": 3 } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 2 } },
+        "when": { "type": "controls", "parameters": { "count_min": 2 } },
         "vp": 5
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 5
       }
     ],
@@ -127,7 +127,7 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "new-objective-controlled", "parameters": { "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "objective-gained", "window": "turn" } },
         "vp": 3
       }
     ],
@@ -141,7 +141,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" } },
         "vp": 3
       },
       {
@@ -151,12 +151,12 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "new-objective-controlled", "parameters": { "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "objective-gained", "window": "turn" } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 5
       }
     ],
@@ -173,29 +173,29 @@
         "timing": "start-of-turn",
         "player_turn": "your-turn",
         "use_limit": 3,
-        "completes": { "type": "action-completed", "parameters": { "action_id": "condemn", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "condemn", "result": "success" }, "window": "turn", "object": { "owner": "enemy" } } },
         "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "condemned", "source": "this-action", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "either" },
-        "when": { "type": "unit-has-tag", "parameters": { "tag": "condemned", "side": "enemy", "count_min": 1, "window": "left-battlefield-this-turn" } },
+        "when": { "type": "happened", "parameters": { "event": "destroyed", "object": { "owner": "enemy", "designated": "condemned" }, "window": "turn" } },
         "vp": 5
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 5
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 8
       }
     ],
@@ -209,22 +209,22 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "units-destroyed-comparison", "parameters": { "subject": { "side": "enemy", "window": "this-turn" }, "comparator": "greater-than", "reference": { "side": "friendly", "window": "previous-turn" } } },
+        "when": { "type": "happened-compare", "parameters": { "left": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" }, "comparison": "greater-than", "right": { "event": "destroyed", "object": { "owner": "friendly" }, "window": "previous-turn" } } },
         "vp": 5
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 5
       }
     ],
@@ -238,22 +238,22 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 6
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "units-destroyed-comparison", "parameters": { "subject": { "side": "enemy", "window": "this-turn" }, "comparator": "greater-than", "reference": { "side": "friendly", "window": "previous-turn" } } },
+        "when": { "type": "happened-compare", "parameters": { "left": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" }, "comparison": "greater-than", "right": { "event": "destroyed", "object": { "owner": "friendly" }, "window": "previous-turn" } } },
         "vp": 4
       }
     ],
@@ -269,36 +269,36 @@
         "action_id": "consecrate",
         "timing": "end-of-turn",
         "player_turn": "your-turn",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "consecrate", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "consecrate", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
         "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "consecrated", "source": "this-action", "clears_on": "never" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "consecrated", "count_min": 1, "count_max": 2 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "consecrated", "count_min": 1, "count_max": 2 } },
         "vp": 3,
         "exclusive_group": "consecrated-tier"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "consecrated", "count_min": 3 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "consecrated", "count_min": 3 } },
         "vp": 6,
         "exclusive_group": "consecrated-tier"
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "consecrated", "objective": "opponent-home", "count_min": 1 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": { "home_of": "enemy" } }, "tag": "consecrated", "count_min": 1 } },
         "vp": 5
       }
     ],
@@ -314,7 +314,7 @@
         "action_id": "booby-trap",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "booby-trap", "target_kind": "terrain", "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "booby-trap", "result": "success" }, "window": "turn", "object": { "terrain_area": {} } } },
         "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "trapped", "source": "this-action", "clears_on": "never" } }
       }
     ],
@@ -337,7 +337,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       }
     ],
@@ -351,7 +351,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 10
       },
       {
@@ -385,14 +385,14 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "operator": "and", "operands": [
-          { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
-          { "type": "controls-objective", "parameters": { "objective_role": "expansion", "count_min": 1 } }
+          { "type": "controls", "parameters": { "objective": { "role": "central" } } },
+          { "type": "controls", "parameters": { "objective": { "role": "expansion" } } }
         ] },
         "vp": 3
       }
@@ -416,8 +416,8 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
-        "completes": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } },
+        "units": { "type": "within", "parameters": { "of": { "objective": { "role": "central" } }, "range": "objective-control" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "sensor-sweep", "result": "success" }, "window": "turn", "object": { "objective": { "role": "central" } } } },
         "restrictions": { "type": "operation-markers", "parameters": { "count_min": 1, "count_max": 1 } }
       }
     ],
@@ -434,7 +434,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
@@ -455,7 +455,7 @@
         "action_id": "decoy",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "decoy", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "decoy", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
         "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "decoyed", "source": "this-action", "clears_on": "never" } }
       }
     ],
@@ -473,12 +473,12 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "decoyed", "count_min": 4 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "decoyed", "count_min": 4 } },
         "vp": 10
       }
     ],
@@ -495,13 +495,13 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "completes": { "type": "action-completed", "parameters": { "action_id": "secure-asset", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "secure-asset", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "action-completed", "parameters": { "action_id": "secure-asset", "count_min": 1, "window": "this-turn" } },
+        "when": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "secure-asset", "result": "success" }, "window": "turn" } },
         "vp": 4
       },
       {
@@ -511,12 +511,12 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 3 } },
+        "when": { "type": "controls", "parameters": { "count_min": 3 } },
         "vp": 4
       }
     ],
@@ -533,15 +533,15 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
-        "completes": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } },
+        "units": { "type": "within", "parameters": { "of": { "objective": { "role": "central" } }, "range": "objective-control" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "sensor-sweep", "result": "success" }, "window": "turn", "object": { "objective": { "role": "central" } } } },
         "restrictions": { "type": "operation-markers", "parameters": { "count_min": 1, "count_max": 1 } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "count_min": 1, "window": "this-turn" } },
+        "when": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "sensor-sweep", "result": "success" }, "window": "turn" } },
         "vp": 4
       },
       {
@@ -556,7 +556,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
@@ -578,37 +578,37 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
-        "completes": { "type": "action-completed", "parameters": { "action_id": "maintain-control", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } }
+        "units": { "type": "within", "parameters": { "of": { "objective": { "role": "central" } }, "range": "objective-control" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "maintain-control", "result": "success" }, "window": "turn", "object": { "objective": { "role": "central" } } } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 2
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp_per": 1,
         "per": "operation-marker-within-range-of-a-controlled-central-objective",
         "cumulative": true
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 4,
         "cumulative": true
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 10
       }
     ],
@@ -624,7 +624,7 @@
         "action_id": "sabotage",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "sabotage", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "sabotage", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } }
       }
     ],
     "awards": [
@@ -641,7 +641,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       }
     ],
@@ -658,28 +658,28 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "completes": { "type": "action-completed", "parameters": { "action_id": "vanguard-operation", "target_kind": "terrain", "target_filter": { "in_enemy_territory": true }, "count_min": 1, "window": "this-turn" } }
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "vanguard-operation", "result": "success" }, "window": "turn", "object": { "terrain_area": { "territory": "enemy-territory" } } } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "action-completed", "parameters": { "action_id": "vanguard-operation", "count_min": 1, "window": "this-turn" } },
+        "when": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "vanguard-operation", "result": "success" }, "window": "turn" } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
+        "when": { "type": "happened", "parameters": { "event": "destroyed", "object": { "owner": "enemy" }, "window": "turn" } },
         "vp": 2
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
         "vp": 10
       }
     ],
@@ -710,7 +710,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 3
       }
     ],
@@ -726,28 +726,28 @@
         "action_id": "surveil",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "surveil", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "surveil", "result": "success" }, "window": "turn", "object": { "owner": "enemy" } } },
         "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "surveilled", "source": "this-action", "clears_on": "turn-rollover" } }
       },
       {
         "action_id": "clear-markers",
-        "completes": { "type": "action-completed", "parameters": { "action_id": "clear-markers", "target_kind": "objective", "count_min": 1, "window": "this-turn" } }
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "clear-markers", "result": "success" }, "window": "turn", "object": { "objective": {} } } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "unit-has-tag", "parameters": { "tag": "surveilled", "side": "enemy", "count_min": 1, "window": "this-turn" } },
+        "when": { "type": "designated", "parameters": { "subject": { "owner": "enemy" }, "tag": "surveilled", "count_min": 1 } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": { "type": "controls", "parameters": { "compare": "more-than-opponent" } },
         "vp": 4
       },
       {
@@ -770,37 +770,37 @@
         "player_turn": "your-turn",
         "battle_round": { "min": 2 },
         "use_limit": 1,
-        "completes": { "type": "action-completed", "parameters": { "action_id": "triangulate", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "triangulate", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
         "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "triangulated", "source": "this-action", "clears_on": "never" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "triangulated", "count_min": 1, "count_max": 1 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "triangulated", "count_min": 1, "count_max": 1 } },
         "vp": 3,
         "exclusive_group": "triangulated-tier"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "triangulated", "count_min": 2, "count_max": 2 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "triangulated", "count_min": 2, "count_max": 2 } },
         "vp": 6,
         "exclusive_group": "triangulated-tier"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "triangulated", "count_min": 3 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "triangulated", "count_min": 3 } },
         "vp": 10,
         "exclusive_group": "triangulated-tier"
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 4 } },
+        "when": { "type": "controls", "parameters": { "count_min": 4 } },
         "vp": 10
       }
     ],
@@ -814,7 +814,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 3
       },
       {
@@ -829,7 +829,9 @@
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "territory-control", "parameters": { "territory_ref": "your-territory", "enemy_units_max": 0 } },
+        "when": { "operator": "not", "operands": [
+          { "type": "in-region", "parameters": { "subject": { "owner": "enemy" }, "region": { "territory": "your-territory" }, "wholly": true } }
+        ] },
         "vp": 5
       }
     ],
@@ -846,18 +848,18 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "battle_round": { "min": 2 },
-        "completes": { "type": "action-completed", "parameters": { "action_id": "extract-intelligence", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "extract-intelligence", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 1, "max": 1 } },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 6
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
@@ -888,8 +890,8 @@
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "when": { "operator": "or", "operands": [
-          { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
-          { "type": "controls-objective", "parameters": { "objective_role": "expansion", "count_min": 1 } }
+          { "type": "controls", "parameters": { "objective": { "home_of": "enemy" } } },
+          { "type": "controls", "parameters": { "objective": { "role": "expansion" } } }
         ] },
         "vp": 5
       }
@@ -1011,7 +1013,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "action-completed", "parameters": { "action_id": "plunder", "count_min": 1, "window": "this-turn" } },
+        "when": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "plunder", "result": "success" }, "window": "turn" } },
         "vp": 5
       }
     ],
@@ -1062,7 +1064,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 2, "scope": "no-mans-land", "exclude": "home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "role": "non-home", "territory": "no-mans-land" }, "count_min": 2 } },
         "vp": 5
       }
     ],
@@ -1132,21 +1134,21 @@
         "action_id": "cleanse",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "units": { "type": "within-range-of-objective" },
-        "completes": { "type": "action-completed", "parameters": { "action_id": "cleanse", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "units": { "type": "within", "parameters": { "of": { "objective": {} }, "range": "objective-control" } },
+        "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "cleanse", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
         "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "cleansed", "source": "this-action", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 1, "count_max": 1 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "cleansed", "count_min": 1, "count_max": 1 } },
         "vp": 2,
         "exclusive_group": "cleanse-count"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 2 } },
+        "when": { "type": "designated", "parameters": { "subject": { "objective": {} }, "tag": "cleansed", "count_min": 2 } },
         "vp": 5,
         "exclusive_group": "cleanse-count"
       }
@@ -1178,12 +1180,14 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "your-home" } },
+        "when": { "type": "controls", "parameters": { "objective": { "home_of": "friendly" } } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "territory-control", "parameters": { "territory_ref": "your-deployment-zone", "enemy_units_max": 0 } },
+        "when": { "operator": "not", "operands": [
+          { "type": "in-region", "parameters": { "subject": { "owner": "enemy" }, "region": { "territory": "your-deployment-zone" } } }
+        ] },
         "vp": 2,
         "cumulative": true
       }
@@ -1198,7 +1202,7 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "tempting-target" } },
+        "when": { "type": "controls", "parameters": { "objective": { "name": "tempting-target" } } },
         "vp": 5
       }
     ],

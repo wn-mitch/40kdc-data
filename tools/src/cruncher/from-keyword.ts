@@ -175,11 +175,8 @@ function conditionalBuffs(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return [];
-  const negated = condition.negated === true;
   const verdict = evaluateCondition(condition, ctx);
-  if (verdict === "unknown") return [];
-  const active = negated ? !verdict : verdict;
-  if (!active) return [];
+  if (verdict !== true) return [];
   return walk(effect, source, ctx);
 }
 
@@ -193,14 +190,23 @@ function evaluateCondition(
   condition: Record<string, unknown>,
   ctx: EngineContext,
 ): boolean | "unknown" {
+  if (condition.operator === "not" && Array.isArray(condition.operands) && isObject(condition.operands[0])) {
+    const v = evaluateCondition(condition.operands[0], ctx);
+    return v === "unknown" ? v : !v;
+  }
+  const parameters = isObject(condition.parameters) ? condition.parameters : {};
   switch (condition.type) {
-    case "remained-stationary":
-      return ctx.attackerStationary === true;
-    case "target-has-keyword": {
-      const parameters = isObject(condition.parameters) ? condition.parameters : {};
-      const kw = parameters.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.targetKeywords ?? []).includes(kw.toLowerCase());
+    case "happened": {
+      const filter = isObject(parameters.filter) ? parameters.filter : {};
+      const types = Array.isArray(filter.move_types) ? filter.move_types : [];
+      if (parameters.event === "move-ended" && types.length === 1 && types[0] === "remain-stationary" && parameters.subject == null)
+        return ctx.attackerStationary === true;
+      return "unknown";
+    }
+    case "has-keyword": {
+      const all = Array.isArray(parameters.all_of) ? parameters.all_of : [];
+      if (parameters.subject !== "defender" || parameters.any_of != null || all.length !== 1 || typeof all[0] !== "string") return "unknown";
+      return (ctx.targetKeywords ?? []).includes(all[0].toLowerCase());
     }
     default:
       return "unknown";

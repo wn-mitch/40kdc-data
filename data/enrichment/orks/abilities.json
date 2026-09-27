@@ -35,7 +35,11 @@
     "behavior": "reactive",
     "faction_id": "orks",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -120,8 +124,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked",
-                "parameters": {}
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           }
@@ -210,7 +216,11 @@
     "behavior": "reactive",
     "faction_id": "orks",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -235,9 +245,14 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 9
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 9
+              }
             }
           }
         ]
@@ -311,7 +326,16 @@
             }
           },
           {
-            "type": "advanced-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -351,7 +375,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -416,10 +444,17 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -521,9 +556,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "RILED UP"
+              "tag": "RILED UP"
             }
           },
           "effect": {
@@ -583,8 +618,12 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "end-of-advance-move",
-            "subject": "self"
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "advance"
+              ]
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -608,7 +647,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-advance",
+      "event": "selected",
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "advance"
+        ]
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -726,7 +771,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -821,9 +875,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "FLY"
+                  "subject": "recipient",
+                  "all_of": [
+                    "FLY"
+                  ]
                 }
               }
             ]
@@ -927,7 +984,11 @@
     "behavior": "reactive",
     "faction_id": "orks",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1135,7 +1196,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -1172,16 +1237,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "HIDDEN"
+              "tag": "HIDDEN"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "engagement-state",
+                "type": "unit-state",
                 "parameters": {
                   "state": "engaged"
                 }
@@ -1210,7 +1275,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -1313,9 +1378,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -1432,7 +1499,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle"
+            "event": "battle-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -1446,7 +1513,12 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "end-of-normal-move",
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal"
+              ]
+            },
             "condition": {
               "operator": "and",
               "operands": [
@@ -1468,10 +1540,15 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "opponent-unit-within-range",
+              "type": "within",
               "parameters": {
-                "range": 12,
-                "visible": true
+                "of": {
+                  "owner": "enemy",
+                  "visible": true
+                },
+                "range": {
+                  "inches": 12
+                }
               }
             },
             "effect": {
@@ -1534,7 +1611,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -1591,7 +1672,11 @@
     "behavior": "reactive",
     "faction_id": "orks",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1773,8 +1858,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected-to-shoot",
-      "subject": "self",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -2097,9 +2184,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-below-starting-strength",
+                "type": "strength",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "below": "starting"
                 }
               }
             ]
@@ -2108,21 +2196,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -2188,9 +2269,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "closest",
         "parameters": {
-          "target_type": "closest-eligible"
+          "subject": "defender",
+          "among": "eligible-targets"
         }
       },
       "effect": {
@@ -2273,9 +2355,12 @@
           "operator": "not",
           "operands": [
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "LONE OPERATIVE"
+                "subject": "recipient",
+                "all_of": [
+                  "LONE OPERATIVE"
+                ]
               }
             }
           ]
@@ -2338,8 +2423,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -2438,7 +2522,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2476,7 +2564,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "melee"
         }
@@ -2515,9 +2603,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "SPEED FREEKS"
+          "all_of": [
+            "SPEED FREEKS"
+          ]
         }
       },
       "effect": {
@@ -2542,7 +2632,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2673,21 +2766,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -2731,7 +2817,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2874,7 +2964,7 @@
     "community_notes": "[APPROX] the hit bonus lasts until the start of your next Movement phase; each model can only be selected once per turn",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -2910,8 +3000,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -2934,8 +3030,7 @@
               "type": "ability-part",
               "trigger": [
                 {
-                  "event": "after-unit-resolves-attacks",
-                  "subject": "self",
+                  "event": "attacks-resolved",
                   "condition": {
                     "type": "phase-is",
                     "parameters": {
@@ -2944,7 +3039,7 @@
                   }
                 },
                 {
-                  "event": "end-of-phase",
+                  "event": "phase-ended",
                   "condition": {
                     "type": "phase-is",
                     "parameters": {
@@ -2977,7 +3072,8 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "on-model-destroyed",
+      "event": "model-destroyed",
+      "object": "model-in-this-unit",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2999,21 +3095,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -3177,8 +3266,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "controls-objective",
-        "parameters": {}
+        "type": "controls"
       },
       "effect": {
         "type": "dice-gated",
@@ -3206,7 +3294,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3354,7 +3442,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3390,9 +3482,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "BEAST SNAGGA"
+          "all_of": [
+            "BEAST SNAGGA"
+          ]
         }
       },
       "effect": {
@@ -3469,9 +3563,9 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "RILED UP"
+              "tag": "RILED UP"
             }
           }
         ]
@@ -3609,18 +3703,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 36
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 36
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "LONE OPERATIVE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "LONE OPERATIVE"
+                  ]
                 }
               }
             ]
@@ -3629,9 +3731,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -3640,9 +3745,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -3694,7 +3802,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -3790,9 +3898,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FLY"
+              "subject": "recipient",
+              "all_of": [
+                "FLY"
+              ]
             }
           }
         ]
@@ -3833,7 +3944,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -3881,7 +3996,10 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "orks",
     "trigger": {
-      "event": "arrives-from-strategic-reserves"
+      "event": "set-up",
+      "filter": {
+        "from": "strategic-reserves"
+      }
     }
   },
   {
@@ -3900,8 +4018,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "advanced-this-turn",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ]
+              },
+              "window": "turn"
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -3941,14 +4067,14 @@
       ]
     },
     "trigger": {
-      "event": "start-of-phase",
-      "optional": true,
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
           "phase": "command"
         }
-      }
+      },
+      "optional": true
     },
     "scope": {
       "range": "unit",
@@ -3981,9 +4107,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
+        "type": "visible",
         "parameters": {
-          "timing": "attack-target-declared-with-self-obscuration"
+          "subject": "defender",
+          "to": "attacker",
+          "fully": true,
+          "blocked_by": "this-unit"
         }
       },
       "effect": {
@@ -4019,9 +4148,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "subject": "defender",
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -4059,10 +4191,44 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
-        "parameters": {
-          "only_with_keyword": "FORTIFICATION"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": {
+                "owner": "enemy"
+              },
+              "state": "engaged",
+              "with": {
+                "owner": "friendly",
+                "all_of": [
+                  "FORTIFICATION"
+                ]
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": {
+                    "owner": "enemy"
+                  },
+                  "state": "engaged",
+                  "with": {
+                    "owner": "friendly",
+                    "none_of": [
+                      "FORTIFICATION"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -4080,7 +4246,7 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "attack-is-type",
+                  "type": "attack-is",
                   "parameters": {
                     "attack_type": "ranged"
                   }
@@ -4089,9 +4255,9 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "attack-is-type",
+                      "type": "attack-is",
                       "parameters": {
-                        "attack_type": "close-quarters"
+                        "shooting_type": "close-quarters"
                       }
                     }
                   ]
@@ -4112,7 +4278,13 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "selected-to-fall-back"
+              "event": "selected",
+              "filter": {
+                "to": "move",
+                "move_types": [
+                  "fall-back"
+                ]
+              }
             },
             "effect": {
               "type": "conditional",
@@ -4120,17 +4292,49 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "engagement-state",
-                    "parameters": {
-                      "only_with_keyword": "FORTIFICATION"
-                    }
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "unit-state",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "state": "engaged",
+                          "with": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "FORTIFICATION"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "unit-state",
+                            "parameters": {
+                              "subject": "event-subject",
+                              "state": "engaged",
+                              "with": {
+                                "owner": "friendly",
+                                "none_of": [
+                                  "FORTIFICATION"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "is-battle-shocked",
-                        "parameters": {}
+                        "type": "unit-state",
+                        "parameters": {
+                          "state": "battle-shocked"
+                        }
                       }
                     ]
                   }
@@ -4182,15 +4386,17 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           }
         ]
@@ -4223,8 +4429,10 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "unit-disembarked",
-      "subject": "friendly-unit"
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly"
+      }
     }
   },
   {
@@ -4249,34 +4457,45 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "not-within-enemy-engagement-range"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly-transport-unit-it-can-embark-within",
-              "within_inches": 6,
+              "of": "selected-unit",
+              "range": {
+                "inches": 6
+              },
               "wholly": true
             }
           }
@@ -4296,7 +4515,7 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4324,21 +4543,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "sequence",
@@ -4391,11 +4603,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -4436,33 +4654,20 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BATTLEWAGON"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KILL RIG"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "HUNTA RIG"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BATTLEWAGON",
+                "KILL RIG",
+                "HUNTA RIG"
+              ]
+            }
           }
         ]
       },
@@ -4480,7 +4685,10 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected-to-move",
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -4522,33 +4730,20 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BATTLEWAGON"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KILL RIG"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "HUNTA RIG"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BATTLEWAGON",
+                "KILL RIG",
+                "HUNTA RIG"
+              ]
+            }
           }
         ]
       },
@@ -4568,33 +4763,29 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "disposition-matches",
+                  "type": "owned-by",
                   "parameters": {
-                    "disposition": "friendly"
+                    "owner": "friendly"
                   }
                 },
                 {
-                  "type": "target-has-keyword",
+                  "type": "has-keyword",
                   "parameters": {
-                    "keyword": "ORKS"
+                    "subject": "defender",
+                    "all_of": [
+                      "ORKS"
+                    ]
                   }
                 },
                 {
-                  "operator": "or",
-                  "operands": [
-                    {
-                      "type": "target-has-keyword",
-                      "parameters": {
-                        "keyword": "VEHICLE"
-                      }
-                    },
-                    {
-                      "type": "target-has-keyword",
-                      "parameters": {
-                        "keyword": "MONSTER"
-                      }
-                    }
-                  ]
+                  "type": "has-keyword",
+                  "parameters": {
+                    "subject": "defender",
+                    "any_of": [
+                      "VEHICLE",
+                      "MONSTER"
+                    ]
+                  }
                 }
               ]
             },
@@ -4615,7 +4806,10 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected-to-move",
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -4657,38 +4851,31 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BATTLEWAGON"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "HUNTA RIG"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KILL RIG"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BATTLEWAGON",
+                "HUNTA RIG",
+                "KILL RIG"
+              ]
+            }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "self"
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "phase"
             }
           }
         ]
@@ -4719,7 +4906,13 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-enemy-unit-fires",
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -4761,26 +4954,35 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           },
           {
-            "type": "disembarked-from-transport",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
           }
         ]
       },
@@ -4822,31 +5024,51 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           },
           {
             "operator": "or",
             "operands": [
               {
-                "type": "on-battlefield",
+                "type": "unit-state",
                 "parameters": {
-                  "subject": "unit"
+                  "state": "on-battlefield"
                 }
               },
               {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "embarked-in-transport-on-battlefield"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "embarked"
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "unit-state",
+                        "parameters": {
+                          "state": "in-reserves"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -4858,15 +5080,21 @@
           "operator": "and",
           "operands": [
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "ORKS"
+                "subject": "defender",
+                "all_of": [
+                  "ORKS"
+                ]
               }
             },
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "VEHICLE"
+                "subject": "defender",
+                "all_of": [
+                  "VEHICLE"
+                ]
               }
             }
           ]
@@ -4912,7 +5140,7 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "post-deployment"
+      "event": "deployment-ended"
     }
   },
   {
@@ -4934,17 +5162,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "MEK"
+          "all_of": [
+            "MEK"
+          ]
         }
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "target-has-keyword",
+          "type": "has-keyword",
           "parameters": {
-            "keyword": "VEHICLE"
+            "subject": "defender",
+            "all_of": [
+              "VEHICLE"
+            ]
           }
         },
         "effect": {
@@ -4963,18 +5196,11 @@
     },
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "ability-target-selected",
-      "subject": "friendly-unit",
-      "source_ability": {
-        "ability_id": "mekaniak",
-        "owner": "friendly",
-        "keywords": [
-          "MEK"
-        ]
-      },
-      "condition": {
-        "type": "event-source-is-bearer-unit",
-        "parameters": {}
+      "event": "used",
+      "subject": "this-model",
+      "filter": {
+        "kind": "ability",
+        "id": "mekaniak"
       }
     }
   },
@@ -5000,26 +5226,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           },
           {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           }
         ]
       },
@@ -5033,18 +5267,22 @@
       }
     },
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
           {
-            "type": "disembarked-from-transport",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
           },
           {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           }
         ]
       }
@@ -5077,24 +5315,30 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "MEK"
+              "all_of": [
+                "MEK"
+              ]
             }
           },
           {
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ORKS"
+                  "all_of": [
+                    "ORKS"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "WALKER"
+                  "all_of": [
+                    "WALKER"
+                  ]
                 }
               }
             ]
@@ -5103,15 +5347,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "GROTS"
+                  "all_of": [
+                    "GROTS"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -5201,21 +5449,14 @@
         "operator": "not",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -5321,13 +5562,18 @@
         "target_kind": "unit",
         "count": 1,
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "source": {
-              "event_var": "indiscriminate-attacks"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "by": {
+                "event_var": "indiscriminate-attacks"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -5462,7 +5708,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -5498,7 +5744,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle"
+            "event": "battle-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -5512,7 +5758,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "selected-to-shoot",
+            "event": "selected",
+            "filter": {
+              "to": "shoot"
+            },
             "condition": {
               "operator": "and",
               "operands": [
@@ -5614,13 +5863,43 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
-        "parameters": {
-          "target_type": "friendly",
-          "keyword": "BEAST SNAGGA",
-          "exclude_keyword": "MONSTER CHARACTER",
-          "range": 3
-        }
+        "operator": "or",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "none_of": [
+                  "MONSTER"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "none_of": [
+                  "CHARACTER"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "keyword-grant",
@@ -5670,8 +5949,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked",
-                "parameters": {}
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           },
@@ -5694,21 +5975,14 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "operator": "or",
-                  "operands": [
-                    {
-                      "type": "target-has-keyword",
-                      "parameters": {
-                        "keyword": "MONSTER"
-                      }
-                    },
-                    {
-                      "type": "target-has-keyword",
-                      "parameters": {
-                        "keyword": "VEHICLE"
-                      }
-                    }
-                  ]
+                  "type": "has-keyword",
+                  "parameters": {
+                    "subject": "defender",
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  }
                 },
                 "effect": {
                   "type": "roll-modifier",
@@ -5737,8 +6011,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-disembark",
-      "subject": "friendly-unit",
+      "event": "selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "to": "disembark"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -5755,9 +6034,11 @@
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "unit-state",
             "parameters": {
-              "target_type": "embarked-within-self"
+              "subject": "event-subject",
+              "state": "embarked",
+              "with": "this-unit"
             }
           }
         ]
@@ -5789,12 +6070,22 @@
             "operator": "or",
             "operands": [
               {
-                "type": "within-range-of-objective"
+                "type": "within",
+                "parameters": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
               },
               {
-                "type": "within-range-of-objective",
+                "type": "within",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               }
             ]
@@ -5849,21 +6140,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -5909,7 +6193,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle"
+            "event": "battle-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -5923,7 +6207,12 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "end-of-normal-move",
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal"
+              ]
+            },
             "condition": {
               "operator": "and",
               "operands": [
@@ -5945,10 +6234,15 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "unit-within-range-of",
+              "type": "within",
               "parameters": {
-                "target_type": "visible-enemy",
-                "range": 12
+                "of": {
+                  "owner": "enemy",
+                  "visible": true
+                },
+                "range": {
+                  "inches": 12
+                }
               }
             },
             "effect": {
@@ -6055,13 +6349,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "target_type": "friendly",
-          "range": 3,
-          "keyword": "SPEED FREEKS",
-          "exclude_keyword": "WARTRAKK",
-          "per_model": true
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "SPEED FREEKS"
+            ],
+            "none_of": [
+              "WARTRAKK"
+            ]
+          },
+          "range": {
+            "inches": 3
+          },
+          "models": "every"
         }
       },
       "effect": {
@@ -6138,13 +6440,43 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
-        "parameters": {
-          "target_type": "friendly",
-          "keyword": "BEAST SNAGGA",
-          "exclude_keyword": "MONSTER CHARACTER",
-          "range": 3
-        }
+        "operator": "or",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "none_of": [
+                  "MONSTER"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "none_of": [
+                  "CHARACTER"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "keyword-grant",
@@ -6181,7 +6513,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -6223,13 +6564,18 @@
         "count": 1,
         "timing": "after-unit-resolves-attacks",
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "source": {
-              "event_var": "bust-attacks"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "by": {
+                "event_var": "bust-attacks"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -6261,8 +6607,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "operator": "and",
         "operands": [
@@ -6311,9 +6656,12 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "target-has-keyword",
+                  "type": "has-keyword",
                   "parameters": {
-                    "keyword": "AIRCRAFT"
+                    "subject": "recipient",
+                    "all_of": [
+                      "AIRCRAFT"
+                    ]
                   }
                 }
               ]
@@ -6322,9 +6670,12 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "target-has-keyword",
+                  "type": "has-keyword",
                   "parameters": {
-                    "keyword": "TITANIC"
+                    "subject": "recipient",
+                    "all_of": [
+                      "TITANIC"
+                    ]
                   }
                 }
               ]
@@ -6368,7 +6719,12 @@
     "faction_id": "orks",
     "trigger": [
       {
-        "event": "normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -6388,7 +6744,12 @@
         }
       },
       {
-        "event": "end-of-normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -6425,7 +6786,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle"
+            "event": "battle-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -6661,24 +7022,33 @@
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "enemy"
+              "owner": "enemy"
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "visible-enemy"
+              "of": {
+                "owner": "enemy",
+                "visible": true
+              },
+              "range": {
+                "inches": 6
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -6687,9 +7057,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -6935,7 +7308,12 @@
     },
     "trigger": [
       {
-        "event": "normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -6955,7 +7333,12 @@
         }
       },
       {
-        "event": "end-of-normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -7005,7 +7388,12 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "charge-move"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     }
   },
   {
@@ -7030,21 +7418,14 @@
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -7101,7 +7482,12 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-normal-move",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -7134,11 +7520,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -7176,7 +7568,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -7231,8 +7632,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-disembark",
-      "subject": "friendly-unit",
+      "event": "selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "to": "disembark"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -7249,9 +7655,11 @@
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "unit-state",
             "parameters": {
-              "target_type": "embarked-within-self"
+              "subject": "event-subject",
+              "state": "embarked",
+              "with": "this-unit"
             }
           }
         ]
@@ -7274,16 +7682,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "target",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "subject": "recipient",
+              "all_of": [
+                "ORKS"
+              ]
             }
           }
         ]
@@ -7328,7 +7739,12 @@
     },
     "trigger": [
       {
-        "event": "normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -7348,7 +7764,12 @@
         }
       },
       {
-        "event": "end-of-normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -7385,16 +7806,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "target",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BEAST SNAGGA"
+              "subject": "recipient",
+              "all_of": [
+                "BEAST SNAGGA"
+              ]
             }
           }
         ]
@@ -7438,7 +7862,12 @@
     },
     "trigger": [
       {
-        "event": "normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -7458,7 +7887,12 @@
         }
       },
       {
-        "event": "end-of-normal-move",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        },
         "condition": {
           "operator": "and",
           "operands": [
@@ -7520,8 +7954,12 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "self",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
       "optional": true
     },
     "faction_id": "orks"
@@ -7572,9 +8010,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "uniform-ranged-loadout",
+        "type": "loadout",
         "parameters": {
-          "model_keyword": "MEK GUNZ"
+          "model_keyword": "MEK GUNZ",
+          "uniform": "ranged"
         }
       },
       "effect": {
@@ -7583,11 +8022,16 @@
           "owner": "enemy",
           "count": 1,
           "eligibility": {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "target",
-              "attack_type": "ranged",
-              "count_min": 1
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
             }
           }
         },
@@ -7597,12 +8041,17 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "was-hit-by-attack",
+                "type": "happened",
                 "parameters": {
-                  "subject": "target",
-                  "attack_type": "ranged",
-                  "weapon_name": "Bubblechukka",
-                  "count_min": 1
+                  "event": "after-roll",
+                  "object": "selected-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "attack_type": "ranged",
+                    "weapon_name": "Bubblechukka"
+                  },
+                  "window": "phase"
                 }
               },
               "effect": {
@@ -7618,12 +8067,17 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "was-hit-by-attack",
+                "type": "happened",
                 "parameters": {
-                  "subject": "target",
-                  "attack_type": "ranged",
-                  "weapon_name": "Kustom Mega-kannon",
-                  "count_min": 1
+                  "event": "after-roll",
+                  "object": "selected-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "attack_type": "ranged",
+                    "weapon_name": "Kustom Mega-kannon"
+                  },
+                  "window": "phase"
                 }
               },
               "effect": {
@@ -7639,12 +8093,17 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "was-hit-by-attack",
+                "type": "happened",
                 "parameters": {
-                  "subject": "target",
-                  "attack_type": "ranged",
-                  "weapon_name": "Smasha Gun",
-                  "count_min": 1
+                  "event": "after-roll",
+                  "object": "selected-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "attack_type": "ranged",
+                    "weapon_name": "Smasha Gun"
+                  },
+                  "window": "phase"
                 }
               },
               "effect": {
@@ -7660,12 +8119,17 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "was-hit-by-attack",
+                "type": "happened",
                 "parameters": {
-                  "subject": "target",
-                  "attack_type": "ranged",
-                  "weapon_name": "Traktor Kannon",
-                  "count_min": 1
+                  "event": "after-roll",
+                  "object": "selected-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success",
+                    "attack_type": "ranged",
+                    "weapon_name": "Traktor Kannon"
+                  },
+                  "window": "phase"
                 }
               },
               "effect": {
@@ -7693,7 +8157,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "operator": "and",
         "operands": [
@@ -7729,27 +8193,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
-              "state": "engaged-with-unit"
+              "subject": "defender",
+              "state": "engaged",
+              "with": "this-unit"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -7785,7 +8244,12 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-charge-move"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     }
   },
   {
@@ -7841,7 +8305,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "ranged"
         }
@@ -7906,9 +8370,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "HIDDEN"
+          "subject": "defender",
+          "tag": "HIDDEN"
         }
       },
       "effect": {
@@ -7955,7 +8420,7 @@
             }
           },
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "in-strategic-reserves"
             }
@@ -7982,7 +8447,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -8060,9 +8525,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "opponent-unit-within-range",
+        "type": "within",
         "parameters": {
-          "within_inches": 8
+          "of": {
+            "owner": "enemy"
+          },
+          "range": {
+            "inches": 8
+          }
         }
       },
       "effect": {
@@ -8085,7 +8555,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "enemy-unit-ended-move",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -8118,10 +8591,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
-        "parameters": {
-          "state": "unengaged"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -8143,7 +8621,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-move",
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -8179,7 +8660,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle"
+            "event": "battle-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -8275,9 +8756,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within-range-of-objective",
+        "type": "within",
         "parameters": {
-          "objective": "home"
+          "of": {
+            "objective": {
+              "role": "home"
+            }
+          },
+          "range": "objective-control"
         }
       },
       "effect": {
@@ -8313,10 +8799,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "was-hit-by-attack",
+        "type": "happened",
         "parameters": {
-          "subject": "target",
-          "attack_type": "ranged"
+          "event": "after-roll",
+          "object": "defender",
+          "filter": {
+            "roll": "hit",
+            "result": "success",
+            "attack_type": "ranged"
+          },
+          "window": "phase"
         }
       },
       "effect": {
@@ -8353,7 +8845,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -8384,7 +8876,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -8452,12 +8953,18 @@
         "operator": "and",
         "operands": [
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "MOUNTED"
+              "all_of": [
+                "MOUNTED"
+              ]
             }
           }
         ]
@@ -8534,10 +9041,15 @@
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },
@@ -8606,11 +9118,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "target-unit-max-T",
+          "left": {
+            "of": "defender",
+            "stat": "T",
+            "reduce": "max"
+          },
           "comparison": "less-than",
-          "target_stat": 7
+          "right": {
+            "value": 7
+          }
         }
       },
       "effect": {
@@ -8656,15 +9174,20 @@
           "VEHICLE"
         ],
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged",
-            "weapon_name": "Squig Launchas",
-            "source": {
-              "event_var": "squig-attacks"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged",
+              "weapon_name": "Squig Launchas",
+              "by": {
+                "event_var": "squig-attacks"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -8701,8 +9224,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "operator": "and",
         "operands": [
@@ -8737,10 +9259,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "target_type": "friendly-orks-infantry-excluding-big-mek-with-shokk-attack-gun",
-          "range": 3
+          "subject": "this-model",
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "ORKS",
+              "INFANTRY"
+            ],
+            "none_of": [
+              "BIG MEK WITH SHOKK ATTACK GUN"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
         }
       },
       "effect": {
@@ -8819,7 +9353,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "declare-battle-formations"
+      "event": "battle-formations-declared"
     }
   },
   {
@@ -8860,20 +9394,24 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-battle-shock",
-      "subject": "self",
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock"
+      },
       "condition": {
         "operator": "and",
         "operands": [
           {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           },
           {
-            "type": "unit-model-count",
+            "type": "model-count",
             "parameters": {
               "keyword": "GRETCHIN",
-              "count_min": 4
+              "min": 4
             }
           }
         ]
@@ -8908,7 +9446,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -8964,7 +9511,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "stratagem-targeted"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      }
     }
   },
   {
@@ -9033,7 +9586,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           }
@@ -9106,7 +9662,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           }
@@ -9207,9 +9766,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WARBIKERS"
+              "all_of": [
+                "WARBIKERS"
+              ]
             }
           },
           "effect": {
@@ -9226,12 +9787,28 @@
           "type": "ability-part",
           "trigger": [
             {
-              "event": "selected-to-advance",
-              "subject": "friendly-unit"
+              "event": "selected",
+              "subject": {
+                "owner": "friendly"
+              },
+              "filter": {
+                "to": "move",
+                "move_types": [
+                  "advance"
+                ]
+              }
             },
             {
-              "event": "selected-to-fall-back",
-              "subject": "friendly-unit"
+              "event": "selected",
+              "subject": {
+                "owner": "friendly"
+              },
+              "filter": {
+                "to": "move",
+                "move_types": [
+                  "fall-back"
+                ]
+              }
             }
           ],
           "effect": {
@@ -9240,15 +9817,17 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "disposition-matches",
+                  "type": "owned-by",
                   "parameters": {
-                    "disposition": "friendly"
+                    "owner": "friendly"
                   }
                 },
                 {
-                  "type": "unit-has-keyword",
+                  "type": "has-keyword",
                   "parameters": {
-                    "keyword": "SPEED FREEKS"
+                    "all_of": [
+                      "SPEED FREEKS"
+                    ]
                   }
                 }
               ]
@@ -9328,8 +9907,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-fought-this-phase",
-                "parameters": {}
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
               }
             ]
           }
@@ -9344,9 +9929,9 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-has-keyword",
+                  "type": "designated",
                   "parameters": {
-                    "keyword": "RILED UP"
+                    "tag": "RILED UP"
                   }
                 }
               ]
@@ -9362,9 +9947,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "RILED UP"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -9443,9 +10028,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "RILED UP"
+              "tag": "RILED UP"
             }
           },
           "effect": {
@@ -9486,30 +10071,38 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WARBOSS"
+              "all_of": [
+                "WARBOSS"
+              ]
             }
           },
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "embarked"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TRANSPORT"
+              "subject": "defender",
+              "all_of": [
+                "TRANSPORT"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "WALKER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "WALKER"
+                  ]
                 }
               }
             ]
@@ -9565,7 +10158,13 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "stratagem-targeted"
+            "event": "targets-selected",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "kind": "stratagem"
+            }
           },
           "effect": {
             "type": "conditional",
@@ -9573,29 +10172,38 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "is-battle-shocked",
-                  "parameters": {}
-                },
-                {
-                  "type": "is-attached",
-                  "parameters": {}
-                },
-                {
-                  "type": "disposition-matches",
+                  "type": "unit-state",
                   "parameters": {
-                    "disposition": "friendly"
+                    "state": "battle-shocked"
                   }
                 },
                 {
-                  "type": "unit-has-keyword",
+                  "type": "attachment",
                   "parameters": {
-                    "keyword": "ORKS"
+                    "subject": "this-model",
+                    "role": "leading"
                   }
                 },
                 {
-                  "type": "unit-has-keyword",
+                  "type": "owned-by",
                   "parameters": {
-                    "keyword": "INFANTRY"
+                    "owner": "friendly"
+                  }
+                },
+                {
+                  "type": "has-keyword",
+                  "parameters": {
+                    "all_of": [
+                      "ORKS"
+                    ]
+                  }
+                },
+                {
+                  "type": "has-keyword",
+                  "parameters": {
+                    "all_of": [
+                      "INFANTRY"
+                    ]
                   }
                 }
               ]
@@ -9615,25 +10223,32 @@
             "operator": "and",
             "operands": [
               {
-                "type": "is-attached",
-                "parameters": {}
-              },
-              {
-                "type": "disposition-matches",
+                "type": "attachment",
                 "parameters": {
-                  "disposition": "friendly"
+                  "subject": "this-model",
+                  "role": "leading"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "owned-by",
                 "parameters": {
-                  "keyword": "ORKS"
+                  "owner": "friendly"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "INFANTRY"
+                  "all_of": [
+                    "ORKS"
+                  ]
+                }
+              },
+              {
+                "type": "has-keyword",
+                "parameters": {
+                  "all_of": [
+                    "INFANTRY"
+                  ]
                 }
               }
             ]
@@ -9671,8 +10286,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "becomes-battle-shocked",
-      "subject": "friendly-unit"
+      "event": "state-changed",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "state": "battle-shocked"
+      }
     }
   },
   {
@@ -9719,9 +10339,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -9743,7 +10365,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -9768,21 +10393,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -9790,10 +10419,12 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "unit-within-range-of",
+          "type": "within",
           "parameters": {
-            "target_type": "current-ranged-attack-target",
-            "range": 9
+            "of": "defender",
+            "range": {
+              "inches": 9
+            }
           }
         },
         "effect": {
@@ -9819,7 +10450,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -9884,9 +10518,11 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
@@ -9941,9 +10577,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "WARBOSS"
+          "all_of": [
+            "WARBOSS"
+          ]
         }
       },
       "effect": {
@@ -9972,21 +10610,14 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "MONSTER"
-                  }
-                },
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "VEHICLE"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "defender",
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
             },
             "effect": {
               "type": "attack-restriction",
@@ -10026,27 +10657,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BEAST SNAGGA"
+              "all_of": [
+                "BEAST SNAGGA"
+              ]
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -10122,15 +10748,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -10151,9 +10781,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "RILED UP"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -10206,15 +10836,17 @@
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "RUKKATRUKK SQUIGBUGGIES"
+              "all_of": [
+                "RUKKATRUKK SQUIGBUGGIES"
+              ]
             }
           }
         ]
@@ -10225,28 +10857,37 @@
           "operator": "and",
           "operands": [
             {
-              "type": "disposition-matches",
+              "type": "owned-by",
               "parameters": {
-                "disposition": "friendly"
+                "owner": "friendly"
               }
             },
             {
-              "type": "unit-within-range-of",
+              "type": "within",
               "parameters": {
-                "target_type": "source-unit",
-                "range": 3
+                "subject": "selected-unit",
+                "of": "stratagem-target",
+                "range": {
+                  "inches": 3
+                }
               }
             },
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "ORKS"
+                "subject": "defender",
+                "all_of": [
+                  "ORKS"
+                ]
               }
             },
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "INFANTRY"
+                "subject": "defender",
+                "all_of": [
+                  "INFANTRY"
+                ]
               }
             }
           ]
@@ -10284,21 +10925,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "MEGANOBZ"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "NOBZ"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "any_of": [
+            "MEGANOBZ",
+            "NOBZ"
+          ]
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -10338,21 +10971,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TRANSPORT"
+              "all_of": [
+                "TRANSPORT"
+              ]
             }
           }
         ]
@@ -10380,7 +11017,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -10416,37 +11056,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "controls-objective",
-            "parameters": {}
+            "type": "controls"
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BOYZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KOMMANDOS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "STORMBOYZ"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BOYZ",
+                "KOMMANDOS",
+                "STORMBOYZ"
+              ]
+            }
           }
         ]
       },
@@ -10470,7 +11096,7 @@
     "faction_id": "orks",
     "trigger": [
       {
-        "event": "start-of-phase",
+        "event": "phase-started",
         "condition": {
           "operator": "and",
           "operands": [
@@ -10490,7 +11116,7 @@
         }
       },
       {
-        "event": "end-of-phase",
+        "event": "phase-ended",
         "condition": {
           "operator": "and",
           "operands": [
@@ -10527,15 +11153,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "all_of": [
+                "PSYKER"
+              ]
             }
           }
         ]
@@ -10637,10 +11267,16 @@
         "target_kind": "unit",
         "count": 1,
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged"
+            },
+            "window": "phase"
           }
         }
       },
@@ -10664,8 +11300,8 @@
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "bearer"
+      "event": "attacks-resolved",
+      "subject": "this-model"
     },
     "applies_to": {
       "required_keywords": [
@@ -10726,9 +11362,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "GRETCHIN"
+          "all_of": [
+            "GRETCHIN"
+          ]
         }
       },
       "effect": {
@@ -10766,15 +11404,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -10841,7 +11483,16 @@
             "operator": "and",
             "operands": [
               {
-                "type": "made-ingress-move-this-turn"
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "ingress"
+                    ]
+                  },
+                  "window": "turn"
+                }
               },
               {
                 "operator": "or",
@@ -10850,23 +11501,32 @@
                     "operator": "and",
                     "operands": [
                       {
-                        "type": "target-has-keyword",
+                        "type": "has-keyword",
                         "parameters": {
-                          "keyword": "ORKS"
+                          "subject": "defender",
+                          "all_of": [
+                            "ORKS"
+                          ]
                         }
                       },
                       {
-                        "type": "target-has-keyword",
+                        "type": "has-keyword",
                         "parameters": {
-                          "keyword": "AIRCRAFT"
+                          "subject": "defender",
+                          "all_of": [
+                            "AIRCRAFT"
+                          ]
                         }
                       }
                     ]
                   },
                   {
-                    "type": "target-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "DEFFKOPTAS"
+                      "subject": "defender",
+                      "all_of": [
+                        "DEFFKOPTAS"
+                      ]
                     }
                   }
                 ]
@@ -10911,15 +11571,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "AIRCRAFT"
+              "all_of": [
+                "AIRCRAFT"
+              ]
             }
           }
         ]
@@ -11072,8 +11736,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "on-unit-destroyed",
-      "subject": "friendly-unit"
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly"
+      }
     }
   },
   {
@@ -11089,9 +11755,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -11137,21 +11805,13 @@
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "MOUNTED"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "MOUNTED",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -11189,9 +11849,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -11229,9 +11891,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "BEAST SNAGGA"
+          "all_of": [
+            "BEAST SNAGGA"
+          ]
         }
       },
       "effect": {
@@ -11275,17 +11939,25 @@
           "operator": "and",
           "operands": [
             {
-              "type": "engagement-state",
-              "parameters": {
-                "state": "unengaged"
-              }
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "engaged"
+                  }
+                }
+              ]
             },
             {
-              "type": "wounds-lost-from-attack",
+              "type": "happened",
               "parameters": {
-                "subject": "self",
-                "attack_type": "ranged",
-                "source": "triggering-attacks"
+                "event": "damage-allocated",
+                "object": "this-unit",
+                "filter": {
+                  "attack_type": "ranged"
+                },
+                "window": "event"
               }
             }
           ]
@@ -11305,9 +11977,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "disposition-matches",
+              "type": "designated",
               "parameters": {
-                "disposition": "riled-up"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -11332,8 +12004,13 @@
     "detachment_id": "da-big-hunt",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "after-enemy-unit-fires",
-      "subject": "enemy-unit",
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -11370,39 +12047,31 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
-          },
-          {
-            "operator": "or",
+            "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "unit-state",
                 "parameters": {
-                  "keyword": "BREAKA BOYZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "FLASH GITZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TANKBUSTAS"
+                  "state": "engaged"
                 }
               }
             ]
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BREAKA BOYZ",
+                "FLASH GITZ",
+                "TANKBUSTAS"
+              ]
+            }
           }
         ]
       },
@@ -11445,7 +12114,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "operator": "and",
         "operands": [
@@ -11481,59 +12150,73 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "attacker",
-              "disposition": "enemy"
+              "subject": "recipient",
+              "owner": "enemy"
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "unit",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "GRETCHIN"
+              "all_of": [
+                "GRETCHIN"
+              ]
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "target",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "subject": "recipient",
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "recipient",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "GRETCHIN"
+                  "subject": "recipient",
+                  "all_of": [
+                    "GRETCHIN"
+                  ]
                 }
               }
             ]
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "defended-unit-within-3-inches"
+              "of": "defender",
+              "range": {
+                "inches": 3
+              }
             }
           }
         ]
@@ -11544,16 +12227,22 @@
           "operator": "and",
           "operands": [
             {
-              "type": "was-hit-by-attack",
+              "type": "happened",
               "parameters": {
-                "subject": "target",
-                "attack_type": "ranged"
+                "event": "after-roll",
+                "object": "defender",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "attack_type": "ranged"
+                },
+                "window": "phase"
               }
             },
             {
-              "type": "on-battlefield",
+              "type": "unit-state",
               "parameters": {
-                "subject": "unit"
+                "state": "on-battlefield"
               }
             }
           ]
@@ -11590,8 +12279,14 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit",
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -11627,42 +12322,40 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "target",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "attacker",
-              "disposition": "enemy"
+              "subject": "recipient",
+              "owner": "enemy"
             }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "self",
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "FLASH GITZ"
-                }
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
               },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TANKBUSTAS"
-                }
-              }
-            ]
+              "window": "phase"
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "FLASH GITZ",
+                "TANKBUSTAS"
+              ]
+            }
           }
         ]
       },
@@ -11697,8 +12390,13 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "after-enemy-unit-fires",
-      "subject": "enemy-unit",
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -11734,14 +12432,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "charged-this-turn",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -11798,7 +12506,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-fight",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -11823,11 +12534,17 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           },
           "effect": {
@@ -11882,8 +12599,7 @@
       }
     },
     "trigger": {
-      "event": "start-of-phase",
-      "optional": true,
+      "event": "phase-started",
       "condition": {
         "operator": "and",
         "operands": [
@@ -11907,7 +12623,8 @@
             }
           }
         ]
-      }
+      },
+      "optional": true
     },
     "scope": {
       "range": "unit",
@@ -11942,31 +12659,36 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "friendly",
-              "window": "current-event",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "friendly"
+              },
+              "window": "event"
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "target",
-              "disposition": "friendly"
+              "subject": "recipient",
+              "owner": "friendly"
             }
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "attacker",
-              "disposition": "enemy"
+              "subject": "recipient",
+              "owner": "enemy"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "GRETCHIN"
+              "subject": "recipient",
+              "all_of": [
+                "GRETCHIN"
+              ]
             }
           }
         ]
@@ -12009,8 +12731,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "enemy-unit"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -12029,22 +12753,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BEAST SNAGGA"
+              "all_of": [
+                "BEAST SNAGGA"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "engagement-state",
+                "type": "unit-state",
                 "parameters": {
                   "state": "engaged"
                 }
@@ -12052,10 +12778,12 @@
             ]
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "battlefield-edge",
-              "within_inches": 6
+              "of": "battlefield-edge",
+              "range": {
+                "inches": 6
+              }
             }
           }
         ]
@@ -12079,7 +12807,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -12145,27 +12873,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "BIG MEK"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "WARBOSS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "BIG MEK",
+                "WARBOSS"
+              ]
+            }
           }
         ]
       },
@@ -12200,7 +12924,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "post-deployment"
+      "event": "deployment-ended"
     }
   },
   {
@@ -12216,7 +12940,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -12253,9 +12981,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "ORKS"
+          "all_of": [
+            "ORKS"
+          ]
         }
       },
       "effect": {
@@ -12300,21 +13030,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -12358,38 +13081,35 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "AIRCRAFT"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "DEFFKOPTAS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "AIRCRAFT",
+                "DEFFKOPTAS"
+              ]
+            }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FLY"
+              "subject": "defender",
+              "all_of": [
+                "FLY"
+              ]
             }
           }
         ]
@@ -12415,7 +13135,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -12469,34 +13192,20 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "subject": "unit",
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BOYZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KOMMANDOS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "STORMBOYZ"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BOYZ",
+                "KOMMANDOS",
+                "STORMBOYZ"
+              ]
+            }
           }
         ]
       },
@@ -12520,7 +13229,13 @@
     "faction_id": "orks",
     "trigger": [
       {
-        "event": "selected-to-advance",
+        "event": "selected",
+        "filter": {
+          "to": "move",
+          "move_types": [
+            "advance"
+          ]
+        },
         "condition": {
           "type": "phase-is",
           "parameters": {
@@ -12529,7 +13244,13 @@
         }
       },
       {
-        "event": "selected-to-fall-back",
+        "event": "selected",
+        "filter": {
+          "to": "move",
+          "move_types": [
+            "fall-back"
+          ]
+        },
         "condition": {
           "type": "phase-is",
           "parameters": {
@@ -12555,18 +13276,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "GRETCHIN"
+              "all_of": [
+                "GRETCHIN"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "EMBARKED"
+                  "all_of": [
+                    "EMBARKED"
+                  ]
                 }
               }
             ]
@@ -12611,16 +13336,17 @@
             "operator": "and",
             "operands": [
               {
-                "type": "disposition-matches",
+                "type": "owned-by",
                 "parameters": {
-                  "subject": "unit",
-                  "disposition": "friendly"
+                  "owner": "friendly"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "BOYZ"
+                  "all_of": [
+                    "BOYZ"
+                  ]
                 }
               }
             ]
@@ -12642,47 +13368,51 @@
             "operator": "and",
             "operands": [
               {
-                "type": "disposition-matches",
+                "type": "owned-by",
                 "parameters": {
-                  "subject": "unit",
-                  "disposition": "friendly"
+                  "owner": "friendly"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ORKS"
+                  "all_of": [
+                    "ORKS"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "INFANTRY"
+                  "all_of": [
+                    "INFANTRY"
+                  ]
                 }
               },
               {
-                "type": "charged-this-turn",
-                "parameters": {}
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
+                }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "operator": "or",
-                    "operands": [
-                      {
-                        "type": "target-has-keyword",
-                        "parameters": {
-                          "keyword": "MONSTER"
-                        }
-                      },
-                      {
-                        "type": "target-has-keyword",
-                        "parameters": {
-                          "keyword": "VEHICLE"
-                        }
-                      }
-                    ]
+                    "type": "has-keyword",
+                    "parameters": {
+                      "subject": "defender",
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
                   }
                 ]
               }
@@ -12728,23 +13458,36 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "operator": "and",
+            "operands": [
+              {
+                "type": "owned-by",
+                "parameters": {
+                  "owner": "friendly"
+                }
+              },
+              {
+                "type": "model-count",
+                "parameters": {
+                  "min": 13
+                }
+              }
+            ]
+          },
+          {
+            "type": "has-keyword",
             "parameters": {
-              "subject": "unit",
-              "disposition": "friendly",
-              "model_count_min": 13
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -12755,24 +13498,42 @@
           "operator": "and",
           "operands": [
             {
-              "type": "disposition-matches",
+              "type": "owned-by",
               "parameters": {
-                "subject": "target",
-                "disposition": "friendly"
+                "subject": "recipient",
+                "owner": "friendly"
               }
             },
             {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "ORKS"
+                "subject": "recipient",
+                "all_of": [
+                  "ORKS"
+                ]
               }
             },
             {
-              "type": "unit-within-range-of",
-              "parameters": {
-                "target_type": "initiating-unit",
-                "visibility": "visible"
-              }
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "within",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "of": "stratagem-target",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                },
+                {
+                  "type": "visible",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "to": "stratagem-target"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -12797,7 +13558,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "start-of-battle-shock-step",
+      "event": "step-started",
+      "filter": {
+        "step": "battle-shock"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -12841,9 +13605,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "disposition-matches",
+            "type": "designated",
             "parameters": {
-              "disposition": "riled-up"
+              "tag": "RILED UP"
             }
           },
           "effect": {
@@ -12867,8 +13631,7 @@
     "detachment_id": "brute-bosses",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -12885,10 +13648,15 @@
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },
@@ -12922,37 +13690,51 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "WALKER"
+                  "all_of": [
+                    "WALKER"
+                  ]
                 }
               }
             ]
           },
           {
-            "type": "charged-this-turn",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -12987,7 +13769,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-fight",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -13052,7 +13837,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase"
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -13062,9 +13854,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "RILED UP"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -13087,9 +13879,9 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-has-keyword",
+                  "type": "designated",
                   "parameters": {
-                    "keyword": "RILED UP"
+                    "tag": "RILED UP"
                   }
                 }
               ]
@@ -13196,8 +13988,10 @@
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "is-battle-shocked",
-                        "parameters": {}
+                        "type": "unit-state",
+                        "parameters": {
+                          "state": "battle-shocked"
+                        }
                       }
                     ]
                   }
@@ -13230,9 +14024,12 @@
                             "operator": "not",
                             "operands": [
                               {
-                                "type": "target-has-keyword",
+                                "type": "has-keyword",
                                 "parameters": {
-                                  "keyword": "MONSTER"
+                                  "subject": "recipient",
+                                  "all_of": [
+                                    "MONSTER"
+                                  ]
                                 }
                               }
                             ]
@@ -13241,9 +14038,12 @@
                             "operator": "not",
                             "operands": [
                               {
-                                "type": "target-has-keyword",
+                                "type": "has-keyword",
                                 "parameters": {
-                                  "keyword": "VEHICLE"
+                                  "subject": "recipient",
+                                  "all_of": [
+                                    "VEHICLE"
+                                  ]
                                 }
                               }
                             ]
@@ -13276,7 +14076,7 @@
             "kind": "psychic",
             "level": 1,
             "trigger": {
-              "event": "start-of-phase",
+              "event": "phase-started",
               "condition": {
                 "type": "phase-is",
                 "parameters": {
@@ -13290,8 +14090,10 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "is-battle-shocked",
-                    "parameters": {}
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "battle-shocked"
+                    }
                   }
                 ]
               },
@@ -13346,9 +14148,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "WARBOSS"
+          "subject": "defender",
+          "all_of": [
+            "WARBOSS"
+          ]
         }
       },
       "effect": {
@@ -13387,22 +14192,34 @@
         "operator": "and",
         "operands": [
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range_inches": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "GRETCHIN"
+              "all_of": [
+                "GRETCHIN"
+              ]
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },
@@ -13412,8 +14229,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "is-attached",
-              "parameters": {}
+              "type": "attachment",
+              "parameters": {
+                "subject": "this-model",
+                "role": "leading"
+              }
             },
             "effect": {
               "type": "movement-modifier",
@@ -13430,8 +14250,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "is-attached",
-                  "parameters": {}
+                  "type": "attachment",
+                  "parameters": {
+                    "subject": "this-model",
+                    "role": "leading"
+                  }
                 }
               ]
             },
@@ -13458,7 +14281,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "enemy-unit-ended-move",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -13508,38 +14334,32 @@
             "operator": "and",
             "operands": [
               {
-                "type": "disposition-matches",
+                "type": "owned-by",
                 "parameters": {
-                  "disposition": "friendly"
+                  "owner": "friendly"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ORKS"
+                  "all_of": [
+                    "ORKS"
+                  ]
                 }
               },
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "AIRCRAFT"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "DEFFKOPTAS"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "any_of": [
+                    "AIRCRAFT",
+                    "DEFFKOPTAS"
+                  ]
+                }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "designated",
                 "parameters": {
-                  "keyword": "RILED UP"
+                  "tag": "RILED UP"
                 }
               }
             ]
@@ -13584,18 +14404,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "SPEED FREEKS"
+              "all_of": [
+                "SPEED FREEKS"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "AIRCRAFT"
+                  "all_of": [
+                    "AIRCRAFT"
+                  ]
                 }
               }
             ]
@@ -13685,19 +14509,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "SPEED FREEKS"
+              "all_of": [
+                "SPEED FREEKS"
+              ]
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
@@ -13723,8 +14549,14 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit",
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -13760,24 +14592,33 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "subject": "defender",
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -13802,7 +14643,7 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "after-unit-resolves-attacks"
+              "event": "attacks-resolved"
             },
             "effect": {
               "type": "ability-grant",
@@ -13873,15 +14714,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WARBOSS"
+              "all_of": [
+                "WARBOSS"
+              ]
             }
           }
         ]
@@ -13928,14 +14773,13 @@
       "per": "army"
     },
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "event": "phase-ended",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "self",
-          "window": "phase",
-          "count_min": 1
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase"
         }
       }
     }
@@ -13956,9 +14800,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "STORMBOYZ"
+              "subject": "defender",
+              "all_of": [
+                "STORMBOYZ"
+              ]
             }
           },
           "effect": {
@@ -13974,32 +14821,26 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "selected-to-fall-back"
+            "event": "selected",
+            "filter": {
+              "to": "move",
+              "move_types": [
+                "fall-back"
+              ]
+            }
           },
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "BOYZ"
-                  }
-                },
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "KOMMANDOS"
-                  }
-                },
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "STORMBOYZ"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "defender",
+                "any_of": [
+                  "BOYZ",
+                  "KOMMANDOS",
+                  "STORMBOYZ"
+                ]
+              }
             },
             "effect": {
               "type": "ability-grant",
@@ -14036,27 +14877,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "BIG MEK"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "BIG BOSS"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "MEKBOSS"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "any_of": [
+            "BIG MEK",
+            "BIG BOSS",
+            "MEKBOSS"
+          ]
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -14093,9 +14921,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]
@@ -14152,7 +14982,7 @@
               {
                 "type": "ability-part",
                 "trigger": {
-                  "event": "after-unit-resolves-attacks"
+                  "event": "attacks-resolved"
                 },
                 "effect": {
                   "type": "model-destruction",
@@ -14210,8 +15040,10 @@
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected-to-shoot",
-      "subject": "self",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -14257,9 +15089,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -14268,9 +15103,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -14324,8 +15162,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-fought-this-phase",
-                "parameters": {}
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
               }
             ]
           }
@@ -14340,9 +15184,9 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-has-keyword",
+                  "type": "designated",
                   "parameters": {
-                    "keyword": "RILED UP"
+                    "tag": "RILED UP"
                   }
                 }
               ]
@@ -14358,9 +15202,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "RILED UP"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -14429,30 +15273,36 @@
             ]
           },
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WALKER"
+              "all_of": [
+                "WALKER"
+              ]
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "TITANIC"
+                  "all_of": [
+                    "TITANIC"
+                  ]
                 }
               }
             ]
@@ -14593,7 +15443,7 @@
               {
                 "type": "ability-part",
                 "trigger": {
-                  "event": "after-unit-resolves-attacks"
+                  "event": "attacks-resolved"
                 },
                 "effect": {
                   "type": "ability-grant",
@@ -14620,10 +15470,16 @@
     "faction_id": "orks",
     "trigger": [
       {
-        "event": "selected-to-shoot"
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        }
       },
       {
-        "event": "selected-to-fight"
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        }
       }
     ]
   },
@@ -14649,7 +15505,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -14717,12 +15582,15 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "disposition-matches",
-                    "parameters": {
-                      "subject": "candidate",
-                      "other": "defender",
-                      "comparison": "same-unit"
-                    }
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "same-unit",
+                        "parameters": {
+                          "as": "defender"
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -14803,8 +15671,10 @@
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected-to-shoot",
-      "subject": "self",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -14821,38 +15691,21 @@
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "BIG MEK"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "MEK GUNZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "MORKANAUT"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "WAZBOM BLASTAJET"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BIG MEK",
+                "MEK GUNZ",
+                "MORKANAUT",
+                "WAZBOM BLASTAJET"
+              ]
+            }
           },
           {
-            "type": "all-attacks-target-same-unit",
+            "type": "attack-is",
             "parameters": {
-              "attack_type": "ranged"
+              "attack_type": "ranged",
+              "all_target_same_unit": true
             }
           }
         ]
@@ -14944,15 +15797,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ORKS"
+              "all_of": [
+                "ORKS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "all_of": [
+                "PSYKER"
+              ]
             }
           }
         ]
@@ -15019,21 +15876,14 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           },
           "effect": {
             "type": "hazard-rolls",
@@ -15057,13 +15907,45 @@
     "detachment_id": "da-big-hunt",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "fall-back-move",
-      "subject": "enemy-unit",
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "fall-back"
+        ]
+      },
       "condition": {
-        "type": "engagement-state",
-        "parameters": {
-          "state": "engaged-with-friendly-beast-snagga"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "unit-state",
+            "parameters": {
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "applies_to": {
@@ -15092,43 +15974,29 @@
           "operator": "and",
           "operands": [
             {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "BOYZ"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "KOMMANDOS"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "STORMBOYZ"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "any_of": [
+                  "BOYZ",
+                  "KOMMANDOS",
+                  "STORMBOYZ"
+                ]
+              }
             },
             {
-              "type": "engagement-state",
+              "type": "unit-state",
               "parameters": {
                 "state": "engaged",
-                "timing": "start-of-phase"
+                "at": "phase-start"
               }
             },
             {
               "operator": "not",
               "operands": [
                 {
-                  "type": "engagement-state",
+                  "type": "unit-state",
                   "parameters": {
-                    "state": "engaged",
-                    "timing": "current"
+                    "state": "engaged"
                   }
                 }
               ]
@@ -15156,7 +16024,7 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -15217,17 +16085,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "triggering-enemy-unit",
-                  "range": 8
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "engagement-state",
+                    "type": "unit-state",
                     "parameters": {
                       "state": "engaged"
                     }
@@ -15252,9 +16122,9 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "disposition-matches",
+                "type": "designated",
                 "parameters": {
-                  "disposition": "riled-up"
+                  "tag": "RILED UP"
                 }
               },
               "effect": {
@@ -15280,8 +16150,10 @@
     "detachment_id": "flyboyz",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit"
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
     },
     "faction_id": "orks"
   },
@@ -15301,15 +16173,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NOBZ"
+              "all_of": [
+                "NOBZ"
+              ]
             }
           },
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
-              "state": "triggering-enemy-engaged-with-self"
+              "subject": "event-subject",
+              "state": "engaged",
+              "with": "this-unit"
             }
           }
         ]
@@ -15327,9 +16203,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "RILED UP"
+                "tag": "RILED UP"
               }
             },
             "effect": {
@@ -15354,7 +16230,16 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "fall-back-move"
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "fall-back"
+        ]
+      }
     }
   },
   {
@@ -15373,47 +16258,42 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "friendly"
+              "owner": "friendly"
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "BREAKA BOYZ",
+                "FLASH GITZ",
+                "TANKBUSTAS"
+              ]
             }
           },
           {
             "operator": "or",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "within",
                 "parameters": {
-                  "keyword": "BREAKA BOYZ"
+                  "subject": "attacker",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "within",
                 "parameters": {
-                  "keyword": "FLASH GITZ"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TANKBUSTAS"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "within-range-of-objective",
-                "parameters": {
-                  "subject": "attacker"
-                }
-              },
-              {
-                "type": "within-range-of-objective",
-                "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               }
             ]
@@ -15441,7 +16321,10 @@
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -15495,8 +16378,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "advanced-this-turn",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ]
+              },
+              "window": "turn"
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -15544,21 +16435,37 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "range": 3,
-                  "keyword": "ORKS",
-                  "exclude_keyword": "BIG MEK"
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ORKS"
+                    ],
+                    "none_of": [
+                      "BIG MEK"
+                    ]
+                  },
+                  "range": {
+                    "inches": 3
+                  }
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "range": 3,
-                  "keyword": "WALKER",
-                  "exclude_keyword": "BIG MEK"
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WALKER"
+                    ],
+                    "none_of": [
+                      "BIG MEK"
+                    ]
+                  },
+                  "range": {
+                    "inches": 3
+                  }
                 }
               }
             ]
@@ -15725,7 +16632,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
+        "type": "unit-state",
         "parameters": {
           "state": "engaged"
         }
@@ -15796,8 +16703,8 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-unit-destroyed",
-      "subject": "self",
+      "event": "destroyed",
+      "object": "this-unit",
       "optional": true
     },
     "usage": {
@@ -15854,8 +16761,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "self",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -15893,8 +16802,7 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -15905,10 +16813,7 @@
             }
           },
           {
-            "type": "controls-objective",
-            "parameters": {
-              "count_min": 1
-            }
+            "type": "controls"
           }
         ]
       }
@@ -15941,9 +16846,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "disposition-matches",
+            "type": "designated",
             "parameters": {
-              "disposition": "riled-up"
+              "tag": "RILED UP"
             }
           },
           "effect": {
@@ -15967,8 +16872,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -15985,17 +16892,24 @@
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "triggering-enemy-unit",
-              "range": 8
+              "of": "event-subject",
+              "range": {
+                "inches": 8
+              }
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },

@@ -414,3 +414,19 @@ The effect-translation corpus is not exercised by cargo test -p wh40kdc; only to
 ## 2026-09-27T17:48:01Z — claude-opus-5-5
 
 tooling/parity/differ.py also prefers a prebuilt target/release/wh40kdc-runner, which goes stale after Rust edits; a local TS-vs-Rust run reported a false divergence until the binary was rebuilt (cargo build --release --bin wh40kdc-runner).
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+differ.py prefers the ignored prebuilt go/wh40kdc-runner over go run, so after Go source changes it silently tests a stale binary; rebuild it (go build -o go/wh40kdc-runner ./cmd/wh40kdc-runner) or pass --go-cmd.
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+go/codegen/sync.sh copies the Rust crate's bundle.generated.json; when the Rust port regenerates it later, go/bundle.json goes stale (mission cards rendered legacy shapes) and scoring/linked-api diffs look like Go bugs. Re-run sync after any Rust bundle-data.
+
+## 2026-09-27T21:28:12Z — claude-opus-5.5
+
+npx tsx fails from the repo root (tsx not on PATH); the parity README's runner command needs tools/node_modules/.bin/tsx or a fresh tools/dist build.
+
+## 2026-09-27T21:56:32Z — claude-opus-5-5
+
+tooling/parity/differ.py defaults to the stale gitignored tools/dist/runner.js when present, producing 240 false TS/Py diffs after TS source changes; pass --ts-cmd 'tools/node_modules/.bin/tsx tools/src/runner.ts' (bare npx tsx isn't on PATH) or rebuild tools first.

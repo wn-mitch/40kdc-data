@@ -31,8 +31,20 @@ describe("parseClaudeEnvelope", () => {
 describe("conditionNode", () => {
   it("maps known kinds to condition objects and 'none' to null", () => {
     expect(conditionNode("none", null)).toBeNull();
-    expect(conditionNode("vs-keyword", "MONSTER")).toEqual({ type: "target-has-keyword", parameters: { keyword: "MONSTER" } });
-    expect(conditionNode("charged", null)).toEqual({ type: "charged-this-turn" });
+    expect(conditionNode("vs-keyword", "MONSTER")).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["MONSTER"] } });
+    expect(conditionNode("charged", null)).toEqual({
+      type: "happened",
+      parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" },
+    });
+    expect(conditionNode("stationary", null)).toEqual({
+      type: "happened",
+      parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" },
+    });
+    expect(conditionNode("below-half", null)).toEqual({ type: "strength", parameters: { below: "half" } });
+    expect(conditionNode("below-starting", null)).toEqual({ type: "strength", parameters: { below: "starting" } });
+    for (const kind of ["attached", "leading"]) {
+      expect(conditionNode(kind, null)).toEqual({ type: "attachment", parameters: { subject: "this-model", role: "leading" } });
+    }
     expect(conditionNode("phase", "shooting")).toEqual({ type: "phase-is", parameters: { phase: "shooting" } });
   });
 });
@@ -53,7 +65,7 @@ describe("assembleEffect", () => {
       attack_type: "any", condition_kind: "vs-keyword", condition_param: "VEHICLE", scope_range: "unit", scope_duration: "phase",
     });
     expect(effect.type).toBe("conditional");
-    expect(effect.condition).toEqual({ type: "target-has-keyword", parameters: { keyword: "VEHICLE" } });
+    expect(effect.condition).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } });
     expect(effect.effect.type).toBe("re-roll");
   });
 
@@ -104,7 +116,7 @@ describe("buildEntry", () => {
 describe("buildRepairedEntry", () => {
   const nested = {
     type: "conditional",
-    condition: { operator: "not", operands: [{ type: "is-battle-shocked" }] },
+    condition: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] },
     effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
   };
 
@@ -126,7 +138,7 @@ describe("buildRepairedEntry", () => {
   it("grafts and removes ability-level repair fields explicitly", () => {
     const original = {
       ...ORIGINAL,
-      trigger: { event: "enemy-unit-ended-move", subject: "enemy-unit" },
+      trigger: { event: "move-ended", subject: { owner: "enemy" } },
       usage: { frequency: "once-per-turn", per: "unit" },
     };
     const entry = buildRepairedEntry(
@@ -135,12 +147,12 @@ describe("buildRepairedEntry", () => {
       { range: "self", duration: "phase" },
       "reactive",
       {
-        trigger: { event: "unit-selected-to-shoot", subject: "self" },
+        trigger: { event: "selected", filter: { to: "shoot" } },
         usage: null,
         applies_to: { required_keywords: ["WARBOSS"] },
       },
     );
-    expect(entry.trigger).toEqual({ event: "unit-selected-to-shoot", subject: "self" });
+    expect(entry.trigger).toEqual({ event: "selected", filter: { to: "shoot" } });
     expect(entry.usage).toBeUndefined();
     expect(entry.applies_to).toEqual({ required_keywords: ["WARBOSS"] });
   });
@@ -153,7 +165,7 @@ describe("buildRepairedEntry → AJV gate", () => {
   it("accepts a faithful nested tree (compound condition + leaf)", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "conditional",
-      condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "unit-has-keyword", parameters: { keyword: "INFANTRY" } }] },
+      condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } }] },
       effect: { type: "ability-grant", target: "self", modifier: { ability_id: "temple-relics" } },
     }, { range: "self", duration: "turn" }, "passive");
     expect(validate(entry)).toBe(true);
@@ -193,7 +205,7 @@ describe("lintCanonical", () => {
   it("accepts canonical leaves nested under wrappers", () => {
     const eff = {
       type: "conditional",
-      condition: { type: "unit-has-keyword", parameters: { keyword: "WAR DOG" } },
+      condition: { type: "has-keyword", parameters: { all_of: ["WAR DOG"] } },
       effect: { type: "sequence", steps: [
         { type: "stat-modifier", target: "unit", modifier: { stat: "T", operation: "add", value: 1 } },
         { type: "keyword-grant", target: "unit", modifier: { keywords: ["Lethal Hits"], weapon_type: "melee" } },
@@ -227,7 +239,7 @@ describe("lintCanonical", () => {
     const result = lintCanonical({
       type: "resource-action-menu",
       actions: [{
-        eligibility: { requires: [{ type: "unit-has-keyword", keyword: "FABRICATED" }] },
+        eligibility: { requires: [{ type: "has-keyword", all_of: ["FABRICATED"] }] },
         effect: { type: "no-effect" },
       }],
     });
@@ -271,11 +283,14 @@ describe("lintCanonical", () => {
   });
 
   it("rejects condition params placed top-level instead of under `parameters` (cruncher can't read them)", () => {
-    const bad = lintCanonical({ type: "conditional", condition: { type: "unit-has-keyword", keyword: "TECH-PRIEST" }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const bad = lintCanonical({ type: "conditional", condition: { type: "has-keyword", all_of: ["TECH-PRIEST"] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);
     expect(bad.issues.join()).toContain("parameters");
-    const good = lintCanonical({ type: "conditional", condition: { type: "unit-has-keyword", parameters: { keyword: "TECH-PRIEST" } }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const good = lintCanonical({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(good.canonical).toBe(true);
+    // Negation is the `not` operator, never a flag beside `parameters`.
+    const flagged = lintCanonical({ type: "conditional", condition: { type: "has-keyword", negated: true, parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    expect(flagged.issues.join()).toContain("operator");
   });
 
   it("rejects non-canonical phase condition values", () => {
@@ -305,19 +320,24 @@ describe("lintCanonical", () => {
   });
 
   it("rejects a keyword condition that is not one uppercase unit keyword", () => {
-    const effect = (keyword: string) => ({
+    const effect = (list: "all_of" | "any_of", keywords: string[]) => ({
       type: "conditional",
-      condition: { type: "target-has-keyword", parameters: { keyword } },
+      condition: { type: "has-keyword", parameters: { subject: "defender", [list]: keywords } },
       effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
     });
-    expect(lintCanonical(effect("VEHICLE")).canonical).toBe(true);
-    expect(lintCanonical(effect("SPOTTED")).canonical).toBe(true);
-    // The old extraction's capital A, datasheet spelling, and two keywords joined into one.
-    for (const bad of ["A", "Vehicle", "ORKS WALKER"]) expect(lintCanonical(effect(bad)).issues.join()).toContain("is not a unit keyword");
+    expect(lintCanonical(effect("all_of", ["VEHICLE"])).canonical).toBe(true);
+    expect(lintCanonical(effect("any_of", ["MONSTER", "VEHICLE"])).canonical).toBe(true);
+    // The old extraction's capital A, datasheet spelling, and two keywords joined into one —
+    // in either list, and even beside a good keyword.
+    for (const list of ["all_of", "any_of"] as const) {
+      for (const bad of ["A", "Vehicle", "ORKS WALKER"]) {
+        expect(lintCanonical(effect(list, ["MONSTER", bad])).issues.join()).toContain(`"${bad}" is not a unit keyword`);
+      }
+    }
   });
 
   it("recurses compound-condition operands for stray top-level params", () => {
-    const bad = lintCanonical({ type: "conditional", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "units-destroyed", side: "friendly", count_min: 1 }] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } } });
+    const bad = lintCanonical({ type: "conditional", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "happened", event: "destroyed", object: { owner: "friendly" }, window: "turn" }] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);
   });
 });

@@ -228,14 +228,7 @@ fn conditional_buffs(
     let Some(condition) = obj.get("condition").and_then(Value::as_object) else {
         return Vec::new();
     };
-    let negated = condition.get("negated").and_then(Value::as_bool) == Some(true);
-    let verdict = evaluate_condition(condition, ctx);
-    let active = match verdict {
-        Verdict::Unknown => return Vec::new(),
-        Verdict::True => !negated,
-        Verdict::False => negated,
-    };
-    if !active {
+    if !matches!(evaluate_condition(condition, ctx), Verdict::True) {
         return Vec::new();
     }
     obj.get("effect")
@@ -249,24 +242,62 @@ enum Verdict {
     Unknown,
 }
 
-/// M1 condition evaluator. Matches the TS `from-keyword.ts` subset:
-/// `remained-stationary` and `target-has-keyword`; everything else is
+/// M1 condition evaluator. Matches the TS `from-keyword.ts` subset: `not` over
+/// one operand, the unit's own `remain-stationary` move this turn (`happened`),
+/// and a single-keyword `has-keyword` on the defender; everything else is
 /// "unknown" (the buff is then dropped, matching TS).
 fn evaluate_condition(condition: &serde_json::Map<String, Value>, ctx: &EngineContext) -> Verdict {
-    match condition.get("type").and_then(Value::as_str) {
-        Some("remained-stationary") => {
-            if ctx.attacker_stationary == Some(true) {
-                Verdict::True
-            } else {
-                Verdict::False
-            }
+    if condition.get("operator").and_then(Value::as_str) == Some("not") {
+        if let Some(inner) = condition
+            .get("operands")
+            .and_then(Value::as_array)
+            .and_then(|ops| ops.first())
+            .and_then(Value::as_object)
+        {
+            return match evaluate_condition(inner, ctx) {
+                Verdict::True => Verdict::False,
+                Verdict::False => Verdict::True,
+                Verdict::Unknown => Verdict::Unknown,
+            };
         }
-        Some("target-has-keyword") => {
-            let parameters = condition.get("parameters").and_then(Value::as_object);
-            let Some(kw) = parameters
-                .and_then(|p| p.get("keyword"))
-                .and_then(Value::as_str)
-            else {
+    }
+    let empty = serde_json::Map::new();
+    let parameters = condition
+        .get("parameters")
+        .and_then(Value::as_object)
+        .unwrap_or(&empty);
+    let absent = |k: &str| parameters.get(k).map_or(true, Value::is_null);
+    match condition.get("type").and_then(Value::as_str) {
+        Some("happened") => {
+            let types = parameters
+                .get("filter")
+                .and_then(Value::as_object)
+                .and_then(|f| f.get("move_types"))
+                .and_then(Value::as_array);
+            let stationary =
+                types.is_some_and(|t| t.len() == 1 && t[0].as_str() == Some("remain-stationary"));
+            if parameters.get("event").and_then(Value::as_str) == Some("move-ended")
+                && stationary
+                && absent("subject")
+            {
+                return if ctx.attacker_stationary == Some(true) {
+                    Verdict::True
+                } else {
+                    Verdict::False
+                };
+            }
+            Verdict::Unknown
+        }
+        Some("has-keyword") => {
+            let all = parameters.get("all_of").and_then(Value::as_array);
+            let keyword = match all {
+                Some(all) if all.len() == 1 => all[0].as_str(),
+                _ => None,
+            };
+            let Some(kw) = keyword.filter(|_| {
+                parameters.get("subject").and_then(Value::as_str) == Some("defender")
+                    && absent("any_of")
+            }) else {
                 return Verdict::Unknown;
             };
             let kw_lower = kw.to_lowercase();

@@ -1,0 +1,648 @@
+{
+ "conditions": [
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "happened",
+      "parameters": {
+       "event": "move-ended",
+       "filter": {
+        "move_types": [
+         "charge"
+        ]
+       },
+       "window": "turn"
+      }
+     }
+    ]
+   },
+   "describe": "the unit did not charge this turn",
+   "lead_in": "unless the unit charged this turn",
+   "eligibility": "that did not charge this turn"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "happened",
+      "parameters": {
+       "event": "move-ended",
+       "filter": {
+        "move_types": [
+         "normal",
+         "advance"
+        ]
+       },
+       "window": "turn"
+      }
+     }
+    ]
+   },
+   "describe": "the unit did not make a Normal or Advance move this turn",
+   "lead_in": "unless the unit made a Normal or Advance move this turn",
+   "eligibility": "that did not make a Normal or Advance move this turn"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "happened",
+      "parameters": {
+       "event": "selected",
+       "filter": {
+        "to": "fight"
+       },
+       "window": "phase"
+      }
+     }
+    ]
+   },
+   "describe": "the unit has not fought this phase",
+   "lead_in": "unless the unit has fought this phase",
+   "eligibility": "that has not fought this phase"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "happened",
+      "parameters": {
+       "event": "disembarked",
+       "window": "turn"
+      }
+     }
+    ]
+   },
+   "describe": "the unit did not disembark from a Transport this turn",
+   "lead_in": "unless the unit disembarked from a Transport this turn",
+   "eligibility": "that did not disembark from a Transport this turn"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "happened",
+      "parameters": {
+       "event": "destroyed",
+       "object": {
+        "owner": "enemy"
+       },
+       "window": "turn"
+      }
+     }
+    ]
+   },
+   "describe": "no enemy units destroyed this turn",
+   "lead_in": "unless 1+ enemy units destroyed this turn",
+   "eligibility": "if no enemy units destroyed this turn"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "strength",
+      "parameters": {
+       "below": "half"
+      }
+     }
+    ]
+   },
+   "describe": "the unit is not below half strength",
+   "lead_in": "unless the unit is below half strength",
+   "eligibility": "that is not below half strength"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "wounds",
+      "parameters": {
+       "lost": true
+      }
+     }
+    ]
+   },
+   "describe": "the model has not lost wounds",
+   "lead_in": "unless the model has lost wounds",
+   "eligibility": "if the model has not lost wounds"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "has-ability",
+      "parameters": {
+       "ability": "deep-strike"
+      }
+     }
+    ]
+   },
+   "describe": "the unit does not have the Deep Strike ability",
+   "lead_in": "unless the unit has the Deep Strike ability",
+   "eligibility": "without the Deep Strike ability"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "controls",
+      "parameters": {
+       "objective": {
+        "role": "central"
+       }
+      }
+     }
+    ]
+   },
+   "describe": "you do not control 1+ central objectives",
+   "lead_in": "unless you control 1+ central objectives",
+   "eligibility": "if you do not control 1+ central objectives"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "controls",
+      "parameters": {
+       "compare": "more-than-opponent"
+      }
+     }
+    ]
+   },
+   "describe": "you do not hold more objectives than the opponent",
+   "lead_in": "unless you hold more objectives than the opponent",
+   "eligibility": "if you do not hold more objectives than the opponent"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "model-count",
+      "parameters": {
+       "min": 5
+      }
+     }
+    ]
+   },
+   "describe": "the unit does not contain 5+ models",
+   "lead_in": "unless the unit contains 5+ models",
+   "eligibility": "that does not contain 5+ models"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "within",
+      "parameters": {
+       "of": {
+        "owner": "enemy"
+       },
+       "range": {
+        "inches": 9
+       }
+      }
+     }
+    ]
+   },
+   "describe": "no enemy unit is within 9\"",
+   "lead_in": "unless an enemy unit is within 9\"",
+   "eligibility": "if no enemy unit is within 9\""
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "within",
+      "parameters": {
+       "of": "battlefield-edge",
+       "range": {
+        "inches": 6
+       }
+      }
+     }
+    ]
+   },
+   "describe": "the unit is not within 6\" of a battlefield edge",
+   "lead_in": "unless the unit is within 6\" of a battlefield edge",
+   "eligibility": "that is not within 6\" of a battlefield edge"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "in-region",
+      "parameters": {
+       "region": {
+        "terrain_area": {
+         "footprint": "ruins",
+         "designated": "obscured"
+        }
+       }
+      }
+     }
+    ]
+   },
+   "describe": "the unit is not within the ruins terrain area tagged obscured",
+   "lead_in": "unless the unit is within the ruins terrain area tagged obscured",
+   "eligibility": "that is not within the ruins terrain area tagged obscured"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "rule-active",
+      "parameters": {
+       "rule": "waaagh"
+      }
+     }
+    ]
+   },
+   "describe": "the Waaagh is not active",
+   "lead_in": "unless the Waaagh is active",
+   "eligibility": "if the Waaagh is not active"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "unit-state",
+      "parameters": {
+       "state": "engaged"
+      }
+     }
+    ]
+   },
+   "describe": "the unit is unengaged",
+   "lead_in": "while the unit is unengaged",
+   "eligibility": "that is unengaged"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "engagement-fronts",
+      "parameters": {
+       "count_min": 2
+      }
+     }
+    ]
+   },
+   "describe": "you are not engaged on 2+ fronts",
+   "lead_in": "unless you are engaged on 2+ fronts",
+   "eligibility": "if you are not engaged on 2+ fronts"
+  },
+  {
+   "input": {
+    "operator": "and",
+    "operands": [
+     {
+      "type": "has-keyword",
+      "parameters": {
+       "all_of": [
+        "INFANTRY"
+       ]
+      }
+     },
+     {
+      "type": "has-keyword",
+      "parameters": {
+       "all_of": [
+        "ADEPTUS ASTARTES"
+       ]
+      }
+     }
+    ]
+   },
+   "describe": "the unit has \"INFANTRY\" and the unit has \"ADEPTUS ASTARTES\"",
+   "lead_in": "if the unit is an INFANTRY ADEPTUS ASTARTES unit",
+   "eligibility": "with \"INFANTRY\" and with \"ADEPTUS ASTARTES\""
+  },
+  {
+   "input": {
+    "operator": "and",
+    "operands": [
+     {
+      "type": "phase-is",
+      "parameters": {
+       "phase": "shooting"
+      }
+     },
+     {
+      "operator": "not",
+      "operands": [
+       {
+        "type": "has-keyword",
+        "parameters": {
+         "subject": "defender",
+         "all_of": [
+          "MONSTER"
+         ]
+        }
+       }
+      ]
+     },
+     {
+      "operator": "not",
+      "operands": [
+       {
+        "type": "has-keyword",
+        "parameters": {
+         "subject": "defender",
+         "all_of": [
+          "VEHICLE"
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "describe": "during the shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\"",
+   "lead_in": "during the Shooting phase against a unit that is not a MONSTER or VEHICLE",
+   "eligibility": "if during the shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\""
+  },
+  {
+   "input": {
+    "operator": "and",
+    "operands": [
+     {
+      "type": "within",
+      "parameters": {
+       "range": {
+        "inches": 6
+       },
+       "of": "this-model"
+      }
+     },
+     {
+      "operator": "not",
+      "operands": [
+       {
+        "type": "has-keyword",
+        "parameters": {
+         "subject": "recipient",
+         "all_of": [
+          "TITANIC"
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "describe": "the unit is within 6\" of this model and the unit does not have \"TITANIC\"",
+   "lead_in": "while the unit is within 6\" of this model (excluding Titanic units)",
+   "eligibility": "that is within 6\" of this model and without \"TITANIC\""
+  },
+  {
+   "input": {
+    "type": "closest",
+    "parameters": {
+     "among": "eligible-targets",
+     "range": {
+      "inches": 18
+     }
+    }
+   },
+   "describe": "the unit is the closest eligible target within 18\"",
+   "lead_in": "if the unit is the closest eligible target within 18\"",
+   "eligibility": "that is the closest eligible target within 18\""
+  },
+  {
+   "input": {
+    "type": "battle-round",
+    "parameters": {
+     "min": 3
+    }
+   },
+   "describe": "during the third battle round onward",
+   "lead_in": "from the third battle round onward",
+   "eligibility": "if during the third battle round onward"
+  },
+  {
+   "input": {
+    "type": "has-keyword",
+    "parameters": {
+     "any_of": [
+      "PSYKER",
+      "CHARACTER"
+     ]
+    }
+   },
+   "describe": "the unit has \"PSYKER\" or \"CHARACTER\"",
+   "lead_in": "if the unit has the PSYKER or CHARACTER keywords",
+   "eligibility": "with \"PSYKER\" or \"CHARACTER\""
+  },
+  {
+   "input": {
+    "type": "attack-is",
+    "parameters": {
+     "attack_type": "melee",
+     "weapon_keyword": "lance"
+    }
+   },
+   "describe": "for melee attacks made with [LANCE] weapons",
+   "lead_in": "while making melee attacks made with [LANCE] weapons",
+   "eligibility": "if for melee attacks made with [LANCE] weapons"
+  }
+ ],
+ "triggers": [
+  {
+   "input": {
+    "event": "turn-started",
+    "condition": {
+     "type": "player-turn-is",
+     "parameters": {
+      "turn": "your-turn"
+     }
+    }
+   },
+   "text": "at the start of your turn"
+  },
+  {
+   "input": {
+    "event": "turn-ended",
+    "condition": {
+     "type": "player-turn-is",
+     "parameters": {
+      "turn": "opponent-turn"
+     }
+    },
+    "optional": true
+   },
+   "text": "at the end of your opponent's turn, you may use this ability"
+  },
+  {
+   "input": {
+    "event": "phase-started",
+    "condition": {
+     "operator": "and",
+     "operands": [
+      {
+       "type": "phase-is",
+       "parameters": {
+        "phase": "command"
+       }
+      },
+      {
+       "type": "player-turn-is",
+       "parameters": {
+        "turn": "your-turn"
+       }
+      }
+     ]
+    }
+   },
+   "text": "at the start of your Command phase"
+  },
+  {
+   "input": {
+    "event": "phase-ended",
+    "condition": {
+     "operator": "and",
+     "operands": [
+      {
+       "type": "phase-is",
+       "parameters": {
+        "phase": "shooting"
+       }
+      },
+      {
+       "type": "player-turn-is",
+       "parameters": {
+        "turn": "your-turn"
+       }
+      },
+      {
+       "type": "strength",
+       "parameters": {
+        "below": "half"
+       }
+      }
+     ]
+    }
+   },
+   "text": "at the end of your Shooting phase, if the unit is below half strength"
+  },
+  {
+   "input": {
+    "event": "move-ended",
+    "subject": {
+     "owner": "enemy"
+    },
+    "filter": {
+     "move_types": [
+      "normal",
+      "advance",
+      "fall-back"
+     ]
+    },
+    "proximity": {
+     "range": {
+      "inches": 9
+     },
+     "of": "this-model"
+    }
+   },
+   "text": "an enemy unit ends a Normal, Advance or Fall Back move within 9\" of this model"
+  },
+  {
+   "input": {
+    "event": "before-roll",
+    "filter": {
+     "roll": "hit"
+    },
+    "subject": "this-model"
+   },
+   "text": "before a Hit roll is made for an attack made by this model"
+  },
+  {
+   "input": {
+    "event": "after-roll",
+    "filter": {
+     "roll": "wound",
+     "result": "success"
+    },
+    "subject": {
+     "owner": "friendly",
+     "all_of": [
+      "INFANTRY"
+     ]
+    }
+   },
+   "text": "each time an attack made by a model in a friendly unit scores a wound (the triggering unit must have INFANTRY)"
+  },
+  {
+   "input": {
+    "event": "destroyed",
+    "object": {
+     "owner": "enemy"
+    },
+    "filter": {
+     "by": "this-unit",
+     "attack_type": "melee"
+    }
+   },
+   "text": "when an enemy unit is destroyed in melee by this unit"
+  },
+  {
+   "input": {
+    "event": "selected",
+    "filter": {
+     "to": "shoot"
+    },
+    "condition": {
+     "operator": "and",
+     "operands": [
+      {
+       "type": "phase-is",
+       "parameters": {
+        "phase": "shooting"
+       }
+      },
+      {
+       "type": "player-turn-is",
+       "parameters": {
+        "turn": "opponent-turn"
+       }
+      }
+     ]
+    }
+   },
+   "text": "when the unit is selected to shoot during your opponent's Shooting phase"
+  },
+  {
+   "input": {
+    "event": "used",
+    "filter": {
+     "kind": "stratagem"
+    },
+    "subject": {
+     "owner": "enemy"
+    },
+    "proximity": {
+     "range": "engagement"
+    }
+   },
+   "text": "each time you use a Stratagem within Engagement Range of this unit"
+  }
+ ]
+}

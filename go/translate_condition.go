@@ -2,13 +2,15 @@ package wh40kdc
 
 import "strings"
 
-// Humanize an Ability-DSL / scoring condition into plain English. ASCII-only
-// with a fixed clause + parameter order, pinned by conformance/scoring-
-// translation. Go mirror of python .../translate/condition.py.
+// Humanize an Ability-DSL / scoring condition into plain English. Shared by
+// the effect describer (which frames conditions as lead-ins, conditionLeadIn)
+// and the scoring-card translator. ASCII-only with a fixed clause + parameter
+// order, pinned byte-for-byte across the ports by the conformance corpus.
+// Mirror of tools/src/translate/condition.ts.
 
 func dekebab(s string) string { return strings.ReplaceAll(s, "-", " ") }
 
-// cstr is the condition module's `_str`: null -> "?", else JS String(v).
+// cstr is the condition module's `str`: null -> "?", else JS String(v).
 func cstr(v any) string {
 	if v == nil {
 		return "?"
@@ -23,980 +25,454 @@ func cstr(v any) string {
 		return "false"
 	case float64:
 		return numStr(x)
+	case []any:
+		// JS String([a, b]) joins with "," (null elements render empty).
+		parts := make([]string, len(x))
+		for i, e := range x {
+			if e != nil {
+				parts[i] = cstr(e)
+			}
+		}
+		return strings.Join(parts, ",")
+	case map[string]any:
+		return "[object Object]"
 	}
 	return numStr(v)
 }
 
-// legacyUnitSubjects maps legacy `parameters.subject` values that name the other side of an attack.
-var legacyUnitSubjects = map[string]string{"target": "the target unit", "attacker": "the attacking unit"}
-
-func conditionSubject(c map[string]any, implicit string, legacySubjects map[string]string) string {
-	explicitSubjects := map[string]string{
-		"bearer":   "this model",
-		"unit":     "the unit",
-		"led-unit": "the unit this model leads",
-		"attacker": "the attacking unit",
-		"defender": "the target unit",
-		"target":   "the target unit",
-		"friendly": "the friendly unit",
-		"enemy":    "the enemy unit",
+// jsTruthy mirrors JavaScript truthiness: null/false/""/0 are falsy; every
+// object and array (even empty) is truthy.
+func jsTruthy(v any) bool {
+	switch x := v.(type) {
+	case nil:
+		return false
+	case bool:
+		return x
+	case string:
+		return x != ""
+	case float64:
+		return x != 0 && x == x
 	}
-	if explicit, ok := c["of"].(string); ok {
-		if subject, found := explicitSubjects[explicit]; found {
-			return subject
-		}
-		return implicit
-	}
-	parameters, _ := getMap(c, "parameters")
-	if legacy, ok := parameters["subject"].(string); ok {
-		if subject, found := legacySubjects[legacy]; found {
-			return subject
-		}
-	}
-	return implicit
+	return true
 }
 
-func countNoun(n any, noun string) string { return cstr(n) + "+ " + noun + "s" }
-
-// timingAliases maps legacy timing slugs onto canonical game-event ids so
-// describeTiming can share the eventPhrases table.
-var timingAliases = map[string]string{
-	"advance":                               "advances",
-	"after-attacks":                         "after-unit-resolves-attacks",
-	"after-attacking-unit-finishes-attacks": "after-unit-resolves-attacks",
-	"after-shooting":                        "after-unit-resolves-attacks",
-	"after-unit-shot":                       "after-unit-resolves-attacks",
-	"after-unit-has-shot":                   "after-unit-resolves-attacks",
-	"after-this-model-has-shot":             "after-unit-resolves-attacks",
-	"after-shot-hits-scored":                "after-scoring-hit",
-	"deep-strike":                           "deep-strike-setup",
-	"end":                                   "end-of-turn",
-	"start":                                 "start-of-turn",
-	"fall-back":                             "falls-back",
-	"model-destroyed":                       "on-model-destroyed",
-	"on-destroyed":                          "on-unit-destroyed",
-	"before-this-model-removed":             "before-bearer-removed",
-	"reinforcements-step":                   "reinforcements",
-	"setup":                                 "unit-set-up",
-	"set-up-this-turn":                      "unit-set-up",
-	"after-move-through-terrain-over-4-inches": "moved-through-tall-terrain",
-	"after-moving-through-tall-terrain":        "moved-through-tall-terrain",
-	"when-selected-to-shoot":                   "selected-to-shoot",
-	"when-this-unit-selected-to-shoot":         "selected-to-shoot",
-}
-
-// timingOnlyPhrases are timing strings with no canonical game-event equivalent
-// but an established phrase (usage markers + a couple of phase/state gates).
-var timingOnlyPhrases = map[string]string{
-	"once-per-battle":                  "once per battle",
-	"once-per-phase":                   "once per phase",
-	"once-per-battle-round":            "once per battle round",
-	"once-per-opponent-turn":           "once per opponent's turn",
-	"first-this-battle":                "the first time this battle",
-	"first-time-this-phase":            "the first time this phase",
-	"in-reserves":                      "while it is in Reserves",
-	"command-phase":                    "during the Command phase",
-	"shooting-phase":                   "in the Shooting phase",
-	"start-of-shooting-phase":          "at the start of your Shooting phase",
-	"start-of-battle":                  "at the start of the battle",
-	"start-of-fight-phase":             "at the start of the Fight phase",
-	"first-movement-phase":             "in your first Movement phase",
-	"start-of-first-battle-round":      "at the start of the first battle round",
-	"start-of-movement-phase":          "at the start of the Movement phase",
-	"shooting-or-fight-phase":          "in the Shooting or Fight phase",
-	"this-model-starts-or-ends-a-move": "each time this model starts or ends a move",
-	"friendly-unit-empowered-within-9": "each time you spend 1 Pain token to Empower a friendly unit within 9\" of this unit",
-	"enemy-unit-fails-battle-shock":    "each time an enemy unit fails a Battle-shock test",
-}
-
-func describeTiming(timing any) string {
-	t := cstr(timing)
-	if p, ok := timingOnlyPhrases[t]; ok {
+// paramsOf returns a condition's `parameters` (an empty map when absent).
+func paramsOf(c map[string]any) map[string]any {
+	if p, ok := getMap(c, "parameters"); ok && p != nil {
 		return p
 	}
-	canon := t
-	if a, ok := timingAliases[t]; ok {
-		canon = a
-	}
-	if p, ok := eventPhrases[canon]; ok {
-		return p
-	}
-	if strings.HasPrefix(t, "after-") {
-		return "after " + dekebab(t[6:])
-	}
-	if strings.HasPrefix(t, "on-") {
-		return "when " + dekebab(t[3:])
-	}
-	if strings.HasSuffix(t, "-destroyed") {
-		return "each time " + dekebab(t)
-	}
-	return "at " + dekebab(t)
+	return map[string]any{}
 }
 
-// negatedTiming renders a `timing-is` negation, generic over every
-// describeTiming phrase: a "when ..." clause becomes "unless ..."; anything
-// else is bare-prepended with "unless ". Mirrors the TS negatedTiming helper.
-func negatedTiming(timing any) string {
-	phrase := describeTiming(timing)
-	if rest, ok := strings.CutPrefix(phrase, "when "); ok {
-		return "unless " + rest
+// mapOr returns v as an object, or an empty map when v is not one (`v ?? {}`).
+func mapOr(v any) map[string]any {
+	if m, ok := asMap(v); ok && m != nil {
+		return m
 	}
-	return "unless " + phrase
+	return map[string]any{}
 }
 
-var eventPhrases = map[string]string{
-	"start-of-phase":                                 "at the start of the phase",
-	"end-of-phase":                                   "at the end of the phase",
-	"start-of-turn":                                  "at the start of the turn",
-	"end-of-turn":                                    "at the end of the turn",
-	"start-of-player-turn":                           "at the start of your turn",
-	"start-of-opponent-turn":                         "at the start of the opponent's turn",
-	"end-of-opponent-turn":                           "at the end of the opponent's turn",
-	"start-of-battle-round":                          "at the start of the battle round",
-	"start-of-battle":                                "at the start of the battle",
-	"end-of-battle-round":                            "at the end of the battle round",
-	"end-of-normal-move":                             "when the unit ends a Normal move",
-	"enemy-unit-destroyed":                           "each time an enemy unit is destroyed",
-	"selected-to-move":                               "when the unit is selected to move",
-	"selected-to-fall-back":                          "when the unit is selected to Fall Back",
-	"end-of-advance-move":                            "when the unit ends an Advance move",
-	"selected-to-disembark":                          "when the unit is selected to disembark",
-	"unit-disembarked":                               "when the unit disembarks from a Transport",
-	"becomes-battle-shocked":                         "when the unit becomes Battle-shocked",
-	"start-of-battle-shock-step":                     "at the start of the Battle-shock step",
-	"stratagem-used":                                 "each time you use a Stratagem",
-	"dark-pact-made":                                 "each time the unit makes a Dark Pact",
-	"agile-manoeuvre-performed":                      "each time the unit performs an Agile Manoeuvre",
-	"unit-empowered":                                 "each time the unit is Empowered",
-	"ritual-manifested":                              "each time the unit manifests a Ritual",
-	"oath-fulfilled":                                 "when you fulfil an Oath",
-	"shadow-in-the-warp-used":                        "when you use Shadow in the Warp",
-	"order-issued":                                   "each time the unit issues an Order",
-	"order-received":                                 "each time an Order is issued to the unit",
-	"reanimation-protocols-activated":                "each time the unit's Reanimation Protocols activate",
-	"ritual-attempted":                               "each time the unit attempts a Ritual",
-	"warp-channelled":                                "each time the unit Channels the Warp",
-	"after-psychic-test":                             "after a Psychic test is taken",
-	"blessings-of-khorne-rolled":                     "each time you make a Blessings of Khorne roll",
-	"observer-selected":                              "each time the unit is selected as an Observer unit",
-	"malefic-surge-made":                             "each time the unit makes a Malefic Surge",
-	"contract-invoked":                               "each time the unit invokes its contract",
-	"dark-pact-test-passed":                          "each time the unit makes a Dark Pact and passes its Leadership test",
-	"contract-completed":                             "each time you complete a Contract",
-	"favoured-champions-changed":                     "each time a unit becomes your Favoured Champions",
-	"cult-ambush-marker-removed":                     "each time one of your Cult Ambush markers is removed",
-	"set-up-from-cult-ambush":                        "when the unit is set up using Cult Ambush",
-	"quarry-destroyed":                               "each time your quarry is destroyed",
-	"combat-doctrine-selected":                       "when you select a Combat Doctrine",
-	"waaagh-called":                                  "when you call a Waaagh!",
-	"opponent-cp-gained":                             "each time your opponent gains a CP",
-	"flux-token-spent":                               "each time a Flux token is spent",
-	"yield-points-spent":                             "each time you spend Yield points",
-	"gate-of-infinity-used":                          "when you use Gate of Infinity",
-	"surge-move":                                     "when the unit makes a Surge move",
-	"army-selection":                                 "when you select this model to include in your army",
-	"start-of-command-phase":                         "at the start of the Command phase",
-	"declare-battle-formations":                      "when declaring Battle Formations",
-	"post-deployment":                                "after deployment",
-	"unit-set-up":                                    "when the unit is set up",
-	"set-up-from-reserves":                           "when the unit arrives from Reserves",
-	"arrives-from-strategic-reserves":                "when the unit arrives from Strategic Reserves",
-	"starts-in-strategic-reserves":                   "if the unit starts in Strategic Reserves",
-	"game-start-in-reserves":                         "if the unit begins the battle in Reserves",
-	"deep-strike-setup":                              "when the unit is set up by Deep Strike",
-	"reinforcements":                                 "when the unit arrives as Reinforcements",
-	"normal-move":                                    "when the unit makes a Normal move",
-	"advance-move":                                   "when the unit makes an Advance move",
-	"advances":                                       "when the unit Advances",
-	"fall-back-move":                                 "when the unit makes a Fall Back move",
-	"falls-back":                                     "when the unit Falls Back",
-	"charge-move":                                    "when the unit makes a Charge move",
-	"end-of-charge-move":                             "after the unit ends a Charge move",
-	"charge-declaration":                             "when a Charge is declared",
-	"moved-through-terrain":                          "when the unit moves through terrain",
-	"moved-through-tall-terrain":                     "when the unit moves through terrain over 4\" tall",
-	"enemy-unit-ended-move":                          "an enemy unit ends a move",
-	"enemy-unit-fell-back":                           "an enemy unit Falls Back",
-	"before-hit-roll":                                "before a Hit roll is made",
-	"after-hit-roll":                                 "after a Hit roll is made",
-	"before-wound-roll":                              "before a Wound roll is made",
-	"after-wound-roll":                               "after a Wound roll is made",
-	"attack-scores-wound":                            "each time an attack scores a wound",
-	"before-save-roll":                               "before a saving throw is made",
-	"after-save-roll":                                "after a saving throw is made",
-	"before-damage-roll":                             "before a Damage roll is made",
-	"after-damage-roll":                              "after a Damage roll is made",
-	"before-charge-roll":                             "before a Charge roll is made",
-	"after-charge-roll":                              "after a Charge roll is made",
-	"before-advance-roll":                            "before an Advance roll is made",
-	"after-advance-roll":                             "after an Advance roll is made",
-	"before-battle-shock":                            "before a Battle-shock test",
-	"after-battle-shock":                             "after a Battle-shock test",
-	"on-unit-selected":                               "when the unit is selected",
-	"selected-to-shoot":                              "when the unit is selected to shoot",
-	"selected-to-fight":                              "when the unit is selected to fight",
-	"selected-to-advance":                            "when the unit is selected to Advance",
-	"after-unit-resolves-attacks":                    "after the unit resolves its attacks",
-	"after-scoring-hit":                              "after scoring a hit",
-	"after-enemy-unit-fires":                         "after an enemy unit shoots",
-	"on-unit-destroyed":                              "when the unit is destroyed",
-	"on-model-destroyed":                             "when a model in the unit is destroyed",
-	"first-model-destroyed":                          "the first time a model in the unit is destroyed",
-	"before-bearer-removed":                          "before this model is removed from play",
-	"enemy-unit-destroyed-in-melee":                  "when an enemy unit is destroyed in melee",
-	"on-damage-allocated":                            "when damage is allocated",
-	"battle-shock-test":                              "when the unit takes a Battle-shock test",
-	"leadership-test":                                "when the unit takes a Leadership test",
-	"desperate-escape-test":                          "when the unit takes a Desperate Escape test",
-	"end-of-opponent-charge-phase":                   "at the end of the opponent's Charge phase",
-	"enemy-unit-completed-shooting-targeting-bearer": "after an enemy unit has shot and targeted this unit",
-	"enemy-unit-selects-bearer-as-charge-target":     "when an enemy unit selects this unit as a charge target",
-	"enemy-unit-targets-bearer":                      "when an enemy unit targets this unit",
-	"enemy-unit-completed-fall-back-from-bearer":     "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
-	"act-of-faith-completed":                         "after an Act of Faith is completed",
-	"act-of-faith-performed":                         "when an Act of Faith is performed",
-	"miracle-die-generated":                          "when a Miracle die is generated",
-	"enemy-unit-selected-charge-targets-before-charge-move": "after an enemy unit selects targets for its charge but before it makes a Charge move",
+// cstrList maps a JSON array through cstr ("" -> nil when v is not an array).
+func cstrList(v any) []string {
+	l, _ := asList(v)
+	out := make([]string, len(l))
+	for i, e := range l {
+		out[i] = cstr(e)
+	}
+	return out
 }
 
-// eventClause maps a reactive-trigger event to its lead-in phrase; unmapped
-// events fall back to "when <dekebab>".
-func eventClause(event any) string {
-	e := cstr(event)
-	if v, ok := eventPhrases[e]; ok {
-		return v
-	}
-	return "when " + dekebab(e)
-}
-func isEndOfPhaseDisembarkBattleShock(t map[string]any) bool {
-	if t["event"] != "end-of-phase" {
-		return false
-	}
-	condition, ok := asMap(t["condition"])
-	if !ok || condition["operator"] != "and" {
-		return false
-	}
-	operands, ok := asList(condition["operands"])
-	if !ok || len(operands) != 2 {
-		return false
-	}
-	first, firstOK := asMap(operands[0])
-	second, secondOK := asMap(operands[1])
-	return firstOK && secondOK &&
-		first["negated"] != true && second["negated"] != true &&
-		first["type"] == "disembarked-from-transport" &&
-		second["type"] == "is-battle-shocked"
+// startsVowel is JS /^[aeiou]/i.test(s).
+func startsVowel(s string) bool {
+	return s != "" && strings.ContainsRune("aeiouAEIOU", rune(s[0]))
 }
 
-func regionMembershipPhrase(p map[string]any, negated bool) string {
-	raw := p["region_id"]
-	if raw == nil {
-		if state, ok := asMap(p["state_ref"]); ok {
-			raw = state["region_id"]
+func article(s string) string {
+	if startsVowel(s) {
+		return "an"
+	}
+	return "a"
+}
+
+// trimEnd is JS String.prototype.trimEnd for the ASCII whitespace the
+// describers can produce.
+func trimEnd(s string) string { return strings.TrimRight(s, " \t\n\r\f\v") }
+
+// isList reports whether v is a JSON array (JS Array.isArray).
+func isList(v any) bool {
+	_, ok := v.([]any)
+	return ok
+}
+
+var conditionOrdinals = []string{"zeroth", "first", "second", "third", "fourth", "fifth"}
+
+func conditionOrd(n float64) string {
+	if n >= 0 && n == float64(int(n)) && int(n) < len(conditionOrdinals) {
+		return conditionOrdinals[int(n)]
+	}
+	return numStr(n) + "th"
+}
+
+// jsNumberStr renders JS `${Number(v)}`: a numeric value as its number, else NaN.
+func jsNumberStr(v any) (float64, string) {
+	if f, ok := parseNumber(v); ok {
+		return f, numStr(f)
+	}
+	return 0, "NaN"
+}
+
+// -- Shared references --------------------------------------------------------
+
+var rolePhrases = map[string]string{
+	"this-unit":          "the unit",
+	"this-model":         "this model",
+	"model-in-this-unit": "a model in this unit",
+	"attacker":           "the attacking unit",
+	"defender":           "the target unit",
+	"event-subject":      "the triggering unit",
+	"event-object":       "that unit",
+	"stratagem-target":   "the Stratagem's target",
+	"selected-unit":      "the selected unit",
+	"recipient":          "the unit",
+}
+
+// unitFilterPhrase renders a unit filter as a noun phrase: "a friendly ADEPTUS
+// MECHANICUS BATTLELINE unit".
+func unitFilterPhrase(f map[string]any) string {
+	owner := ""
+	switch f["owner"] {
+	case "friendly":
+		owner = "friendly "
+	case "enemy":
+		owner = "enemy "
+	}
+	all := ""
+	if isList(f["all_of"]) {
+		all = strings.Join(cstrList(f["all_of"]), " ") + " "
+	}
+	noun := "unit"
+	if f["level"] == "model" {
+		noun = "model"
+	}
+	s := owner + all + noun
+	s = article(s) + " " + s
+	if isList(f["any_of"]) {
+		s += " with the " + orList(cstrList(f["any_of"])) + " keyword"
+	}
+	if isList(f["none_of"]) {
+		s += " (excluding " + orList(cstrList(f["none_of"])) + " " + noun + "s)"
+	}
+	if f["designated"] != nil {
+		s += " that is " + designationPhrase(cstr(f["designated"]))
+	}
+	if f["state"] != nil {
+		s += " that is " + statePhrase(cstr(f["state"]), false)
+	}
+	if f["visible"] == true {
+		s += " that is visible to it"
+	}
+	return s
+}
+
+// unitRefPhrase renders a unit-ref as a noun phrase; fallback names the default subject.
+func unitRefPhrase(ref any, fallback string) string {
+	switch r := ref.(type) {
+	case nil:
+		return fallback
+	case string:
+		if p, ok := rolePhrases[r]; ok {
+			return p
+		}
+		return dekebab(r)
+	case map[string]any:
+		if _, ok := r["event_var"].(string); ok {
+			return "that unit"
+		}
+		if sv, ok := r["selection_var"].(string); ok {
+			return "the bound " + strings.ReplaceAll(sv, "_", " ")
+		}
+		return unitFilterPhrase(r)
+	case []any:
+		return unitFilterPhrase(map[string]any{})
+	}
+	return fallback
+}
+
+// subjectOf renders the subject of a predicate.
+func subjectOf(p map[string]any, fallback string) string {
+	return unitRefPhrase(p["subject"], fallback)
+}
+
+var auraRanges = map[string]string{"nurgle-s-gift-aura": "Contagion Range"}
+
+var rangeSlugPhrases = map[string]string{
+	"engagement":        "Engagement Range",
+	"aura":              "its aura range",
+	"weapon":            "the attacking weapon's range",
+	"half-weapon":       "half the attacking weapon's range",
+	"detection":         "detection range",
+	"objective-control": "range",
+}
+
+// rangePhrase renders a range-ref as a distance phrase ("6\"", "Engagement Range").
+func rangePhrase(r any) string {
+	switch x := r.(type) {
+	case nil:
+		return "?\""
+	case string:
+		if p, ok := rangeSlugPhrases[x]; ok {
+			return p
+		}
+		return dekebab(x)
+	case map[string]any:
+		if x["inches"] != nil {
+			return cstr(x["inches"]) + "\""
+		}
+		if x["aura_of"] != nil {
+			if p, ok := auraRanges[cstr(x["aura_of"])]; ok {
+				return p
+			}
+			return "the " + titleCase(cstr(x["aura_of"])) + " range"
 		}
 	}
-	words := strings.Fields(dekebab(cstr(raw)))
-	for i, word := range words {
-		if len(word) > 0 {
-			words[i] = strings.ToUpper(word[:1]) + word[1:]
-		}
+	return "?\""
+}
+
+func objectivePhrase(f map[string]any, plural bool, noun string) string {
+	role := ""
+	if f["role"] != "non-home" && f["role"] != nil {
+		role = dekebab(cstr(f["role"])) + " "
 	}
-	region := strings.Join(words, " ")
-	relation := dekebab(cstr(p["relation"]))
-	if p["relation"] == nil {
-		relation = "within"
-	} else if p["relation"] == "wholly-within" {
-		relation = "wholly within"
+	s := role + noun
+	if plural {
+		s += "s"
 	}
-	subject := "the eligible attacking model"
-	if p["unit_scope"] == "whole-unit" {
-		subject = "every model in the eligible attacking unit"
+	switch f["home_of"] {
+	case "enemy":
+		s += " (opponent home)"
+	case "friendly":
+		s += " (your home)"
 	}
-	prefix := ""
+	if f["name"] != nil {
+		s += " (" + dekebab(cstr(f["name"])) + ")"
+	}
+	if f["territory"] != nil {
+		s += " in " + dekebab(cstr(f["territory"]))
+	}
+	if f["role"] == "non-home" {
+		s += " (excluding home)"
+	}
+	switch f["controlled_by"] {
+	case "friendly":
+		s += " you control"
+	case "enemy":
+		s += " your opponent controls"
+	}
+	if f["designated"] != nil {
+		s += " tagged " + dekebab(cstr(f["designated"]))
+	}
+	return s
+}
+
+var statePhrases = map[string]string{
+	"engaged":               "engaged",
+	"battle-shocked":        "Battle-shocked",
+	"embarked":              "embarked",
+	"in-strategic-reserves": "in Strategic Reserves",
+	"in-reserves":           "in Reserves",
+	"on-battlefield":        "on the battlefield",
+	"hidden":                "hidden",
+	"fights-first":          "a Fights First unit",
+	"benefit-of-cover":      "receiving the benefit of cover",
+}
+
+var negatedStates = map[string]string{"engaged": "unengaged"}
+
+func statePhrase(state string, negated bool) string {
+	positive, ok := statePhrases[state]
+	if !ok {
+		positive = dekebab(state)
+	}
 	if negated {
-		prefix = "not "
+		if p, ok := negatedStates[state]; ok {
+			return p
+		}
+		return "not " + positive
 	}
-	return prefix + subject + " is " + relation + " " + region
+	return positive
 }
 
+// designationPhrase keeps GW-printed tags as printed and spells out internal state names.
+func designationPhrase(tag string) string {
+	if tag == strings.ToUpper(tag) {
+		return tag
+	}
+	return "tagged " + dekebab(tag)
+}
+
+var windowPhrases = map[string]string{
+	"phase":         "this phase",
+	"turn":          "this turn",
+	"round":         "this battle round",
+	"battle":        "this battle",
+	"previous-turn": "in the previous turn",
+	"event":         "",
+}
+
+func windowPhrase(w any) string {
+	if p, ok := windowPhrases[cstr(w)]; ok {
+		return p
+	}
+	return dekebab(cstr(w))
+}
+
+func withWindow(s string, w any) string {
+	if wp := windowPhrase(w); wp != "" {
+		return s + " " + wp
+	}
+	return s
+}
+
+var moveNames = map[string]string{
+	"normal": "Normal", "advance": "Advance", "remain-stationary": "Remain Stationary", "fall-back": "Fall Back",
+	"charge": "Charge", "pile-in": "Pile-in", "consolidation": "Consolidation", "ingress": "ingress",
+	"surge": "Surge", "scout": "Scout", "disembark": "Disembark",
+}
+
+// moveKinds renders a move_types list as an "or" list of move names.
+func moveKinds(types any) string {
+	l, _ := asList(types)
+	names := make([]string, len(l))
+	for i, t := range l {
+		if n, ok := moveNames[cstr(t)]; ok {
+			names[i] = n
+		} else {
+			names[i] = dekebab(cstr(t))
+		}
+	}
+	return orList(names)
+}
+
+func conditionOperands(c map[string]any, op string) ([]map[string]any, bool) {
+	if c["operator"] != op {
+		return nil, false
+	}
+	l, ok := asList(c["operands"])
+	if !ok {
+		return nil, false
+	}
+	out := make([]map[string]any, len(l))
+	for i, e := range l {
+		out[i] = mapOr(e)
+	}
+	return out, true
+}
+
+// describeCondition renders a condition as a predicate phrase ("the unit is
+// below starting strength and during your turn").
+func describeCondition(c map[string]any) string {
+	if c == nil {
+		c = map[string]any{}
+	}
+	if ops, ok := conditionOperands(c, "and"); ok {
+		parts := make([]string, len(ops))
+		for i, o := range ops {
+			if o["operator"] == "or" {
+				parts[i] = "(" + describeCondition(o) + ")"
+			} else {
+				parts[i] = describeCondition(o)
+			}
+		}
+		return strings.Join(parts, " and ")
+	}
+	if ops, ok := conditionOperands(c, "or"); ok {
+		parts := make([]string, len(ops))
+		for i, o := range ops {
+			if o["operator"] == "and" {
+				parts[i] = "(" + describeCondition(o) + ")"
+			} else {
+				parts[i] = describeCondition(o)
+			}
+		}
+		return strings.Join(parts, " or ")
+	}
+	if ops, ok := conditionOperands(c, "not"); ok {
+		if len(ops) == 1 && !jsTruthy(ops[0]["operator"]) {
+			return describePredicate(ops[0], true)
+		}
+		parts := make([]string, len(ops))
+		for i, o := range ops {
+			parts[i] = describeCondition(o)
+		}
+		return "not (" + strings.Join(parts, ", ") + ")"
+	}
+	return describePredicate(c, false)
+}
+
+// describeSelectionEligibility renders a condition as a predicate on an
+// already-named candidate unit ("that is not Battle-shocked"), so selection
+// eligibility reads distinct from an ability's own condition.
 func describeSelectionEligibility(c map[string]any) string {
-	if c["type"] == "is-battle-shocked" && !truthy(c["operator"]) {
-		if c["negated"] == true {
+	inner := c
+	negated := false
+	if ops, ok := conditionOperands(c, "not"); ok && len(ops) == 1 {
+		inner, negated = ops[0], true
+	}
+	ip := paramsOf(inner)
+	if inner["type"] == "unit-state" && ip["state"] == "battle-shocked" && ip["subject"] == nil {
+		if negated {
 			return "that is not Battle-shocked"
 		}
 		return "that is Battle-shocked"
 	}
+	if _, ok := conditionOperands(c, "and"); ok {
+		var flat func(n map[string]any) []map[string]any
+		flat = func(n map[string]any) []map[string]any {
+			if ops, ok := conditionOperands(n, "and"); ok {
+				var out []map[string]any
+				for _, o := range ops {
+					out = append(out, flat(o)...)
+				}
+				return out
+			}
+			return []map[string]any{n}
+		}
+		var parts []string
+		all := true
+		for _, n := range flat(c) {
+			part, ok := candidateClause(n)
+			if !ok {
+				all = false
+				break
+			}
+			parts = append(parts, part)
+		}
+		if all {
+			return strings.Join(parts, " and ")
+		}
+	}
+	if part, ok := candidateClause(c); ok {
+		return part
+	}
+	return "if " + describeCondition(c)
+}
+
+var candidatePrefixes = [][2]string{
+	{"the unit does not have ", "without "},
+	{"the unit has not ", "that has not "},
+	{"the unit has ", "with "},
+	{"not the unit is ", "that is not "},
+	{"the unit ", "that "},
+}
+
+// candidateClause renders a condition on the candidate as a relative clause
+// ("that was hit...", "without \"MONSTER\""), else ok=false.
+func candidateClause(c map[string]any) (string, bool) {
 	phrase := describeCondition(c)
-	if suffix, ok := strings.CutPrefix(phrase, "the unit is "); ok {
-		return "that is " + suffix
-	}
-	if suffix, ok := strings.CutPrefix(phrase, "not the unit is "); ok {
-		return "that is not " + suffix
-	}
-	if suffix, ok := strings.CutPrefix(phrase, "the unit has "); ok {
-		return "with " + suffix
-	}
-	return "if " + phrase
-}
-
-func describeCondition(c map[string]any) string {
-	operands, _ := asList(c["operands"])
-	switch c["operator"] {
-	case "and":
-		if len(operands) > 0 {
-			return joinCompoundConds(operands, " and ", "or")
-		}
-	case "or":
-		if len(operands) > 0 {
-			keywords := make([]string, 0, len(operands))
-			for _, operand := range operands {
-				condition, _ := asMap(operand)
-				if condition["negated"] == true || condition["type"] != "unit-has-keyword" {
-					return joinCompoundConds(operands, " or ", "and")
-				}
-				parameters, _ := getMap(condition, "parameters")
-				keywords = append(keywords, cstr(parameters["keyword"]))
-			}
-			return "the unit has the " + orList(keywords) + " keywords"
-		}
-	case "not":
-		if len(operands) > 0 {
-			return "not (" + joinConds(operands, ", ") + ")"
+	for _, pair := range candidatePrefixes {
+		if rest, ok := strings.CutPrefix(phrase, pair[0]); ok {
+			return pair[1] + rest, true
 		}
 	}
-
-	negate := ""
-	if c["negated"] == true {
-		negate = "not "
-	}
-	p, _ := getMap(c, "parameters")
-	if p == nil {
-		p = map[string]any{}
-	}
-	ctype, _ := c["type"].(string)
-
-	switch ctype {
-	case "target-of-triggering-charge":
-		return negate + "the unit was selected as a target of that charge"
-	case "every-model-within-range-of-bearer":
-		return negate + "every model in the unit is within " + cstr(p["range"]) + "\" of this Transport"
-	case "roll-succeeded":
-		return negate + "the triggering " + dekebab(cstr(p["roll"])) + " roll succeeded"
-	case "on-battlefield":
-		who := "this model"
-		if p["model_name"] != nil {
-			who = "the " + cstr(p["model_name"]) + " model"
-		} else if p["subject"] == "unit" {
-			who = "the unit"
-		} else if p["subject"] == "target" {
-			who = "the target unit"
-		}
-		return negate + who + " is on the battlefield"
-	case "target-within-half-weapon-range":
-		return negate + "the target is within half the attacking weapon's range"
-	case "has-destroyed":
-		who := "this model"
-		if p["subject"] == "unit" {
-			who = "the unit"
-		} else if p["subject"] == "target" {
-			who = "the target unit"
-		}
-		keywords := ""
-		if values, ok := asList(p["victim_keywords"]); ok {
-			items := make([]string, len(values))
-			for i, value := range values {
-				items[i] = cstr(value)
-			}
-			keywords = " " + strings.Join(items, " ")
-		}
-		victims := countNoun(countMinOr1(p), cstr(p["victim_owner"])+keywords+" "+cstr(p["victim_kind"]))
-		window := "during " + dekebab(cstr(p["window"]))
-		if p["window"] == "just-finished-attack-sequence" {
-			window = "with its just-resolved attacks"
-		}
-		return negate + who + " has destroyed " + victims + " " + window
-	case "phase-is":
-		if p["phase"] == "command" || p["phase"] == "command-phase" {
-			return negate + "during the Command phase"
-		}
-		return negate + "during the " + cstr(p["phase"]) + " phase"
-	case "timing-is":
-		if c["negated"] == true {
-			return negatedTiming(p["timing"])
-		}
-		return describeTiming(p["timing"])
-	case "player-turn-is":
-		whose := "either player's"
-		switch p["turn"] {
-		case "your-turn", "your", "own", "self":
-			whose = "your"
-		case "opponent-turn", "opponent":
-			whose = "the opponent's"
-		}
-		return negate + "in " + whose + " turn"
-	case "army-faction-is":
-		// The negation folds into the verb ("is not X") rather than taking the
-		// generic "not " prefix, which would read "not your army faction is X".
-		verb := "is"
-		if c["negated"] == true {
-			verb = "is not"
-		}
-		return "your army faction " + verb + " " + titleCase(cstr(p["faction_id"]))
-	case "charged-this-turn":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " charged this turn"
-	case "advanced-this-turn":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " advanced this turn"
-	case "remained-stationary":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " remained stationary"
-	case "unit-below-starting-strength":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is below starting strength"
-	case "unit-below-half-strength":
-		who := conditionSubject(c, "the unit", map[string]string{"target": "the target unit"})
-		return negate + who + " is below half strength"
-	case "unit-has-keyword":
-		return negate + "the unit has \"" + cstr(p["keyword"]) + "\""
-	case "unit-model-count":
-		return negate + "the unit contains " + cstr(p["count_min"]) + "+ " + cstr(p["keyword"]) + " models"
-	case "uniform-ranged-loadout":
-		keyword := ""
-		if p["model_keyword"] != nil {
-			keyword = cstr(p["model_keyword"]) + " "
-		}
-		return negate + "all ranged weapons equipped by each " + keyword + "model in the unit are the same"
-	case "all-attacks-target-same-unit":
-		attackType := ""
-		if p["attack_type"] != nil {
-			attackType = cstr(p["attack_type"]) + " "
-		}
-		return negate + "all of the unit's " + attackType + "attacks target the same enemy unit"
-	case "target-has-keyword":
-		return negate + "the target has \"" + cstr(p["keyword"]) + "\""
-	case "model-is-leader":
-		return negate + "the model is leading a unit"
-	case "unit-is-led-by":
-		return negate + "this unit is being led by an " + cstr(p["keyword"]) + " model"
-	case "is-attached":
-		keyword := ""
-		if p["keyword"] != nil && truthy(p["keyword"]) {
-			keyword = cstr(p["keyword"]) + " "
-		}
-		return negate + "the model is leading a " + keyword + "unit"
-	case "attack-is-type":
-		if p["comparison"] == "strength-greater-than-toughness" {
-			return negate + "when this attack's Strength is greater than the target's Toughness"
-		}
-		if p["comparison"] != nil {
-			return negate + "when " + dekebab(cstr(p["comparison"]))
-		}
-		return negate + "for " + cstr(p["attack_type"]) + " attacks"
-	case "is-battle-shocked":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is battle-shocked"
-	case "unit-selected-to-shoot-this-phase":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " has been selected to shoot this phase"
-	case "unit-selected-to-move-this-phase":
-		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " has been selected to move this phase"
-	case "eligible-to-shoot":
-		return negate + "the unit is eligible to shoot"
-	case "selection-has-keyword":
-		selection, _ := getMap(p, "selection")
-		selected := "the selected unit"
-		if selection != nil {
-			if observer, ok := getMap(selection, "observer_for"); ok && observer != nil {
-				if selectionVar := observer["selection_var"]; selectionVar != nil {
-					selected = "the Observer unit that marked the bound " + strings.ReplaceAll(cstr(selectionVar), "_", " ")
-				}
-			} else if selectionVar := selection["selection_var"]; selectionVar != nil {
-				selected = "the bound " + strings.ReplaceAll(cstr(selectionVar), "_", " ")
-			}
-		}
-		return negate + selected + " has the " + cstr(p["keyword"]) + " keyword"
-	case "has-lost-wounds":
-		return negate + "the model has lost wounds"
-	case "wounds-remaining-at-or-below":
-		threshold := "0"
-		if p["threshold"] != nil {
-			threshold = cstr(p["threshold"])
-		}
-		return negate + "the model has " + threshold + " or fewer wounds remaining"
-	case "was-hit-by-attack":
-		subject := "the unit"
-		if p["subject"] == "target" {
-			subject = "the target"
-		} else if p["subject"] == "selected-friendly-unit" {
-			subject = "the selected friendly unit"
-		}
-		atk := ""
-		if p["attack_type"] != nil && truthy(p["attack_type"]) {
-			atk = cstr(p["attack_type"]) + " "
-		}
-		weapon := ""
-		if p["weapon_name"] != nil && truthy(p["weapon_name"]) {
-			weapon = " by " + cstr(p["weapon_name"])
-		}
-		boundSource := ""
-		if source, ok := p["source"].(map[string]any); ok && source["event_var"] != nil {
-			boundSource = " from the triggering unit"
-		} else if p["source"] != nil {
-			boundSource = " from " + cstr(p["source"])
-		}
-		window := " this phase"
-		if p["window"] == "just-finished-shooting-sequence" {
-			window = " during its just-finished shooting sequence"
-		}
-		var n any = 1
-		if p["count_min"] != nil {
-			n = p["count_min"]
-		}
-		if isNumber(n) {
-			if nf, _ := num(n); nf > 1 {
-				return negate + subject + " was hit by " + cstr(n) + "+ " + atk + "attacks" + weapon + boundSource + window
-			}
-		}
-		article := "an attack"
-		if atk != "" {
-			article = "a " + atk + "attack"
-		}
-		return negate + subject + " was hit by " + article + weapon + boundSource + window
-	case "wounds-lost-from-attack":
-		subject := "the unit"
-		if p["subject"] == "target" {
-			subject = "the target"
-		}
-		attackType := ""
-		if p["attack_type"] != nil && truthy(p["attack_type"]) {
-			attackType = cstr(p["attack_type"]) + " "
-		}
-		source := ""
-		if p["source"] == "triggering-attacks" {
-			source = " from the triggering attacks"
-		}
-		return negate + subject + " lost one or more wounds from " + attackType + "attacks" + source
-	case "opponent-unit-within-range":
-		var within string
-		rng := p["range"]
-		if rng == nil {
-			rng = p["range_inches"]
-		}
-		if rng == nil {
-			rng = p["within_inches"]
-		}
-		switch {
-		case p["weapon_name"] != nil:
-			within = "range of " + dekebab(cstr(p["weapon_name"]))
-		case p["range_multiplier"] != nil:
-			within = "half range of its ranged weapons"
-		case rng == "engagement":
-			within = "engagement range"
-		default:
-			within = cstr(rng) + "\""
-		}
-		return negate + "an enemy unit is within " + within
-	case "unit-within-range-of":
-		if keywords := getStrList(p, "keywords"); len(keywords) > 0 {
-			who := "the unit"
-			if p["subject"] == "self" {
-				who = "this model"
-			} else if p["subject"] == "triggering-unit" {
-				who = "the triggering unit"
-			}
-			distance := cstr(p["range"]) + "\""
-			if p["range"] == "engagement" {
-				distance = "Engagement Range"
-			}
-			owner := "enemy"
-			if p["target_type"] == "friendly-keyword" {
-				owner = "friendly"
-			}
-			return negate + who + " is within " + distance + " of one or more " + owner + " units with all of " + strings.Join(keywords, " and ")
-		}
-		tt := "target"
-		if p["target_type"] != nil {
-			tt = cstr(p["target_type"])
-		}
-		if tt == "closest-eligible" {
-			within := ""
-			if p["range"] != nil {
-				within = " within " + cstr(p["range"]) + "\""
-			}
-			return negate + "the target is the closest eligible target" + within
-		}
-		if tt == "area-terrain" {
-			return negate + "within an area terrain feature"
-		}
-		var who string
-		if tt == "friendly-keyword" && p["keyword"] != nil && truthy(p["keyword"]) {
-			who = "a friendly " + cstr(p["keyword"]) + " unit"
-		} else if tt == "friendly" {
-			who = "a friendly unit"
-		} else {
-			who = dekebab(tt)
-		}
-		dist := "?\""
-		if p["range"] != nil {
-			dist = cstr(p["range"]) + "\""
-		}
-		return negate + "within " + dist + " of " + who
-	case "within-range-of-objective":
-		if p["subject"] == nil && p["controlled_by"] == nil {
-			return negate + "within range of an objective"
-		}
-		who := "the unit"
-		if p["subject"] == "target" {
-			who = "the target unit"
-		} else if p["subject"] == "attacker" {
-			who = "the attacking unit"
-		}
-		control := ""
-		if p["controlled_by"] == "your-army" {
-			control = " you control"
-		} else if p["controlled_by"] == "opponent" {
-			control = " your opponent controls"
-		}
-		return negate + who + " is within range of an objective marker" + control
-	case "event-source-is-bearer-unit":
-		return negate + "the triggering event was performed by this unit"
-	case "event-source-is-attached-unit":
-		return negate + "the triggering Act of Faith was performed by the unit this model leads"
-	case "miracle-die-generation-reason":
-		keywords := ""
-		if values, ok := asList(p["keywords"]); ok {
-			items := make([]string, len(values))
-			for i, value := range values {
-				items[i] = cstr(value)
-			}
-			keywords = strings.Join(items, " ")
-		}
-		return negate + "the Miracle die was gained because a friendly " + keywords + " unit or model was destroyed"
-	case "miracle-die-generation-timing":
-		return negate + "the Miracle die was gained at the start of the battle round"
-	case "destroyed-event-within-range":
-		return negate + "that destroyed unit or model was within " + cstr(p["range"]) + "\" of this model"
-	case "destroyed-by-friendly-unit":
-		keywords := ""
-		if values, ok := asList(p["keywords"]); ok {
-			items := make([]string, len(values))
-			for i, value := range values {
-				items[i] = cstr(value)
-			}
-			keywords = strings.Join(items, " ")
-		}
-		return negate + "the unit was destroyed by a friendly " + keywords + " unit"
-	case "target-is-visible":
-		return negate + "the target is visible to the attacking model"
-	case "has-fought-this-phase":
-		who := ""
-		switch p["subject"] {
-		case "self":
-			who = "this model "
-		case "destroyed-model":
-			who = "the destroyed model "
-		case "unit":
-			who = "the unit "
-		case "target":
-			who = "the target unit "
-		}
-		return negate + who + "has fought this phase"
-	case "destroyed-by-attack-type":
-		if cstr(p["attack_type"]) == "any" {
-			return negate + "destroyed by any attack"
-		}
-		return negate + "destroyed by a " + cstr(p["attack_type"]) + " attack"
-	case "attack-stat-compare":
-		// Mirrors the TS/Rust arms byte-for-byte: missing params render as "" (not "?").
-		sv := func(v any) string {
-			if v == nil {
-				return ""
-			}
-			return cstr(v)
-		}
-		return negate + "the attack's " + sv(p["attacker_stat"]) + " is " + dekebab(sv(p["comparison"])) + " the target's " + sv(p["target_stat"])
-	case "made-ingress-move-this-turn":
-		return negate + "the unit made an ingress move (including a Deep Strike setup) this turn"
-	case "engagement-state":
-		if p["state"] == nil {
-			return negate + "the unit is within Engagement Range"
-		}
-		st := cstr(p["state"])
-		switch st {
-		case "on-battlefield":
-			return negate + "the unit is on the battlefield"
-		case "embarked":
-			return negate + "the unit is embarked"
-		case "engaged", "within-engagement-range", "in-engagement-range":
-			return negate + "the unit is within Engagement Range"
-		}
-		return negate + "the unit is " + dekebab(st)
-	case "unit-was-in-engagement-range-of":
-		snapshotPoint := "the phase"
-		if p["snapshot"] == "turn-start" {
-			snapshotPoint = "the turn"
-		}
-		return negate + "the selected friendly unit started " + snapshotPoint + " within Engagement Range of that enemy unit"
-	case "ability-window-capacity":
-		source, _ := getMap(p, "source_ability")
-		return negate + "the " + dekebab(cstr(source["ability_id"])) + " ability had unused selection capacity at the end of the opponent's previous turn"
-	case "candidate-eligible-in-ability-window":
-		source, _ := getMap(p, "source_ability")
-		return negate + "the candidate was eligible for the " + dekebab(cstr(source["ability_id"])) + " ability at the end of the opponent's previous turn"
-	case "disposition-matches":
-		d := cstr(p["disposition"])
-		if d == "strategic-reserves" {
-			return negate + "the unit is in Strategic Reserves"
-		}
-		return negate + "the unit's disposition is " + dekebab(d)
-	case "fights-first":
-		return negate + "the unit has Fights First"
-
-	// Scoring conditions.
-	case "objective-majority":
-		rel := "opponent"
-		if p["relative_to"] != nil {
-			rel = cstr(p["relative_to"])
-		}
-		return negate + "you hold more objectives than the " + dekebab(rel)
-	case "controls-objective":
-		noun := "objective"
-		if p["objective_role"] != nil && truthy(p["objective_role"]) {
-			noun = dekebab(cstr(p["objective_role"])) + " objective"
-		}
-		s := negate + "you control " + countNoun(countMinOr1(p), noun)
-		if p["objective"] != nil {
-			s += " (" + dekebab(cstr(p["objective"])) + ")"
-		}
-		if p["scope"] != nil {
-			s += " in " + dekebab(cstr(p["scope"]))
-		}
-		if p["exclude"] != nil {
-			s += " (excluding " + dekebab(cstr(p["exclude"])) + ")"
-		}
-		return s
-	case "units-destroyed":
-		s := negate + countNoun(countMinOr1(p), cstr(p["side"])+" unit") + " destroyed"
-		if p["window"] != nil {
-			s += " " + dekebab(cstr(p["window"]))
-		}
-		return s
-	case "units-destroyed-comparison":
-		subj, _ := getMap(p, "subject")
-		ref, _ := getMap(p, "reference")
-		gte := p["comparator"] == "greater-or-equal"
-		cmp := "more"
-		link := "than"
-		if gte {
-			cmp = "at least as many"
-			link = "as"
-		}
-		return negate + "you destroyed " + cmp + " " + cstr(subj["side"]) + " units " +
-			dekebab(cstr(subj["window"])) + " " + link + " " + cstr(ref["side"]) + " units " +
-			dekebab(cstr(ref["window"]))
-	case "new-objective-controlled":
-		return negate + "you newly control " + countNoun(countMinOr1(p), "objective") + " this turn"
-	case "destroyed-while-on-objective":
-		obj := "an objective"
-		if p["objective_role"] != nil && truthy(p["objective_role"]) {
-			obj = "a " + dekebab(cstr(p["objective_role"])) + " objective"
-		}
-		s := negate + countNoun(countMinOr1(p), "enemy unit") + " destroyed"
-		if truthy(p["destroyer_on_objective"]) {
-			s += " by a unit on " + obj
-		}
-		if truthy(p["victim_on_objective"]) {
-			s += " while on " + obj
-		}
-		if truthy(p["victim_started_turn_on_objective"]) {
-			s += " that started the turn on " + obj
-		}
-		return s
-	case "destroyed-in-tagged-terrain":
-		where := "while in"
-		if truthy(p["at_start_of_turn"]) {
-			where = "that started the turn in"
-		}
-		terrain := "a terrain area"
-		if p["tag"] != nil {
-			terrain = dekebab(cstr(p["tag"])) + " terrain"
-		}
-		return negate + countNoun(countMinOr1(p), "enemy unit") + " destroyed " + where + " " + terrain
-	case "operation-markers":
-		side := ""
-		if p["side"] != nil {
-			side = cstr(p["side"]) + " "
-		}
-		var minP, maxP *float64
-		if isNumber(p["count_min"]) {
-			v, _ := num(p["count_min"])
-			minP = &v
-		}
-		if isNumber(p["count_max"]) {
-			v, _ := num(p["count_max"])
-			maxP = &v
-		}
-		var s string
-		switch {
-		case maxP != nil && *maxP == 0:
-			s = "no " + side + "operation markers on the battlefield"
-		case minP != nil && maxP != nil && *minP == *maxP:
-			plural := "s"
-			if *minP == 1 {
-				plural = ""
-			}
-			s = "exactly " + numStr(*minP) + " " + side + "operation marker" + plural + " on the battlefield"
-		default:
-			n := "1"
-			if minP != nil {
-				n = numStr(*minP)
-			}
-			s = n + "+ " + side + "operation markers on the battlefield"
-		}
-		if p["within_range_of"] != nil {
-			s += " within range of " + dekebab(cstr(p["within_range_of"]))
-		}
-		if truthy(p["friendly_unit_in_same_terrain_area"]) {
-			s += " with a friendly unit in the same terrain area"
-		}
-		if truthy(p["no_enemy_in_terrain_area"]) {
-			s += " and no enemy units in that terrain area"
-		}
-		return negate + s
-	case "action-completed":
-		s := negate + countNoun(countMinOr1(p), "action") + " completed"
-		if p["action_id"] != nil {
-			s += " (" + dekebab(cstr(p["action_id"])) + ")"
-		}
-		if p["target_kind"] != nil {
-			s += " on " + dekebab(cstr(p["target_kind"]))
-		}
-		tf, _ := getMap(p, "target_filter")
-		if tf["objective_role"] != nil {
-			s += " (" + dekebab(cstr(tf["objective_role"])) + ")"
-		}
-		if truthy(tf["in_enemy_territory"]) {
-			s += " in enemy territory"
-		}
-		if tf["exclude"] != nil {
-			s += " (excluding " + dekebab(cstr(tf["exclude"])) + ")"
-		}
-		if p["window"] != nil {
-			s += " " + dekebab(cstr(p["window"]))
-		}
-		return s
-	case "objective-has-tag":
-		s := negate + countNoun(countMinOr1(p), "objective") + " tagged " + dekebab(cstr(p["tag"]))
-		if p["count_max"] != nil {
-			s += " (at most " + cstr(p["count_max"]) + ")"
-		}
-		if p["objective"] != nil {
-			s += " (" + dekebab(cstr(p["objective"])) + ")"
-		}
-		if p["scope"] != nil {
-			s += " in " + dekebab(cstr(p["scope"]))
-		}
-		if truthy(p["last_marked"]) {
-			s += " (most recently marked)"
-		}
-		return s
-	case "unit-has-tag":
-		if p["side"] == nil && p["count_min"] == nil {
-			return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is tagged " + dekebab(cstr(p["tag"]))
-		}
-		s := negate + countNoun(countMinOr1(p), cstr(p["side"])+" unit") + " tagged " + dekebab(cstr(p["tag"]))
-		if p["window"] != nil {
-			s += " (" + dekebab(cstr(p["window"])) + ")"
-		}
-		return s
-	case "terrain-has-tag":
-		s := negate + "terrain tagged " + dekebab(cstr(p["tag"]))
-		if p["friendly_units_min"] != nil {
-			s += " with " + cstr(p["friendly_units_min"]) + "+ friendly units"
-		}
-		if p["enemy_units_max"] != nil {
-			s += " and at most " + cstr(p["enemy_units_max"]) + " enemy units"
-		}
-		if truthy(p["last_marked"]) {
-			s += " (most recently marked)"
-		}
-		if truthy(p["in_enemy_dz"]) {
-			s += " in the enemy deployment zone"
-		}
-		return s
-	case "region-membership":
-		return regionMembershipPhrase(p, c["negated"] == true)
-	case "terrain-area-control":
-		n := "1"
-		if p["min_models"] != nil {
-			n = cstr(p["min_models"])
-		}
-		return negate + "you control a terrain area with " + n + "+ models"
-	case "territory-control":
-		ref := "your-territory"
-		if p["territory_ref"] != nil {
-			ref = cstr(p["territory_ref"])
-		}
-		s := negate + "you control " + dekebab(ref)
-		if p["enemy_units_max"] != nil {
-			s += " with at most " + cstr(p["enemy_units_max"]) + " enemy units"
-		}
-		return s
-	case "engagement-fronts":
-		n := "1"
-		if p["count_min"] != nil {
-			n = cstr(p["count_min"])
-		}
-		return negate + "you are engaged on " + n + "+ fronts"
-	case "token-count-at-or-above":
-		return negate + "the unit has " + cstr(p["threshold"]) + "+ " + dekebab(cstr(p["pool_id"]))
-	case "battle-round":
-		min, hasMin := parseNumber(p["min"])
-		max, hasMax := parseNumber(p["max"])
-		var where string
-		switch {
-		case hasMin && hasMax:
-			if min == max {
-				where = "the " + bordinal(min) + " battle round"
-			} else {
-				where = "battle rounds " + numStr(min) + "-" + numStr(max)
-			}
-		case hasMin:
-			where = "the " + bordinal(min) + " battle round onward"
-		case hasMax:
-			where = "the first " + numStr(max) + " battle rounds"
-		default:
-			where = "the battle round"
-		}
-		return negate + "during " + where
-	}
-	t := "unknown"
-	if ctype != "" {
-		t = ctype
-	}
-	return negate + dekebab(t)
-}
-
-func joinConds(operands []any, sep string) string {
-	parts := make([]string, 0, len(operands))
-	for _, o := range operands {
-		om, _ := asMap(o)
-		parts = append(parts, describeCondition(om))
-	}
-	return strings.Join(parts, sep)
-}
-
-func countMinOr1(p map[string]any) any {
-	if p["count_min"] != nil {
-		return p["count_min"]
-	}
-	return float64(1)
-}
-
-func joinCompoundConds(operands []any, separator, opposite string) string {
-	parts := []string{}
-	for _, raw := range operands {
-		condition, _ := asMap(raw)
-		phrase := describeCondition(condition)
-		if condition["operator"] == opposite {
-			phrase = "(" + phrase + ")"
-		}
-		parts = append(parts, phrase)
-	}
-	return strings.Join(parts, separator)
+	return "", false
 }

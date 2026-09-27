@@ -70,6 +70,67 @@ fn tag_effect_variants(schema: &mut serde_json::Value) {
     }
 }
 
+/// Give each `simple-condition` predicate's `parameters` its own named definition.
+/// typify turns the predicate `oneOf` (each member keyed by a `type` const) into a
+/// `type`-tagged enum, but names every member's inline `parameters` object
+/// `SimpleConditionParameters` and keeps only the first, so every predicate but
+/// `phase-is` would fail to deserialize. Moving each `parameters` object to
+/// `$defs/<type>-condition-parameters` (and referencing it) gives every predicate
+/// its own parameter type. Only codegen's input changes; the schema does not.
+fn hoist_condition_parameters(schema: &mut serde_json::Value) {
+    let mut hoisted: Vec<(String, serde_json::Value)> = Vec::new();
+    if let Some(members) = schema
+        .pointer_mut("/$defs/simple-condition/oneOf")
+        .and_then(|members| members.as_array_mut())
+    {
+        for member in members {
+            let Some(constant) = member
+                .pointer("/properties/type/const")
+                .and_then(|c| c.as_str())
+                .map(str::to_string)
+            else {
+                continue;
+            };
+            let Some(parameters) = member.pointer_mut("/properties/parameters") else {
+                continue;
+            };
+            if parameters.get("$ref").is_some() {
+                continue;
+            }
+            // An `anyOf` of bare `required` lists means "at least one of these
+            // keys". typify turns it into one variant per list that admits only
+            // that key, rejecting valid data that sets several (`lost` and
+            // `remaining_max`). Dropping it keeps every key optional; the
+            // validator still enforces the constraint from the real schema.
+            if let Some(obj) = parameters.as_object_mut() {
+                let presence_only =
+                    obj.get("anyOf")
+                        .and_then(|any| any.as_array())
+                        .is_some_and(|any| {
+                            any.iter().all(|m| {
+                                m.as_object()
+                                    .is_some_and(|m| m.keys().all(|k| k == "required"))
+                            })
+                        });
+                if presence_only {
+                    obj.remove("anyOf");
+                }
+            }
+            let name = format!("{constant}-condition-parameters");
+            let body = std::mem::replace(
+                parameters,
+                serde_json::json!({ "$ref": format!("#/$defs/{name}") }),
+            );
+            hoisted.push((name, body));
+        }
+    }
+    if let Some(defs) = schema.get_mut("$defs").and_then(|d| d.as_object_mut()) {
+        for (name, body) in hoisted {
+            defs.insert(name, body);
+        }
+    }
+}
+
 fn codegen() -> Result<()> {
     let root = workspace_root();
     let schema_path = root.join("crates/wh40kdc/schemas/bundled.schema.json");
@@ -80,6 +141,7 @@ fn codegen() -> Result<()> {
     let mut raw: serde_json::Value = serde_json::from_str(&content)
         .with_context(|| format!("parsing {} as JSON", schema_path.display()))?;
     tag_effect_variants(&mut raw);
+    hoist_condition_parameters(&mut raw);
     let schema: RootSchema = serde_json::from_value(raw)
         .with_context(|| format!("parsing {} as a JSON Schema", schema_path.display()))?;
 

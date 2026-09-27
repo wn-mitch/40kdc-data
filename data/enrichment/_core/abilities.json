@@ -60,8 +60,10 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "enemy-unit"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
     },
     "effect": {
       "type": "fight-first",
@@ -85,8 +87,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "self"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -178,7 +184,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -222,7 +228,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -296,7 +302,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -347,7 +353,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "operator": "and",
         "operands": [

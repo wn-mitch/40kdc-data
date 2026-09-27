@@ -67,7 +67,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "deep-strike-setup",
+      "event": "set-up",
+      "filter": {
+        "from": "deep-strike"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -163,7 +166,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -264,7 +271,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -375,7 +386,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -543,7 +558,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -612,9 +631,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-battle-shocked",
+        "type": "unit-state",
         "parameters": {
-          "subject": "target"
+          "subject": "defender",
+          "state": "battle-shocked"
         }
       },
       "effect": {
@@ -775,9 +795,11 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TYRANIDS"
+              "all_of": [
+                "TYRANIDS"
+              ]
             }
           },
           "effect": {
@@ -1084,7 +1106,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1250,7 +1276,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -1592,13 +1621,15 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "TYRANIDS"
+                  "all_of": [
+                    "TYRANIDS"
+                  ]
                 }
               },
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "melee"
                 }
@@ -1651,10 +1682,16 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -1788,7 +1825,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1891,16 +1932,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "destroyed-by-attack-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "melee",
-              "weapon_name": "barbed ovipositor"
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "melee",
+                "weapon_name": "barbed ovipositor"
+              },
+              "window": "event"
             }
           }
         ]
@@ -1927,7 +1976,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -1985,7 +2034,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -2215,7 +2268,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -2265,9 +2322,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "NEUROTYRANT"
+          "all_of": [
+            "NEUROTYRANT"
+          ]
         }
       },
       "effect": {
@@ -2291,11 +2350,19 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "shadow-in-the-warp-used",
+      "event": "used",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "ability",
+        "id": "shadow-in-the-warp"
+      },
       "condition": {
-        "type": "on-battlefield",
+        "type": "unit-state",
         "parameters": {
-          "subject": "self"
+          "subject": "this-model",
+          "state": "on-battlefield"
         }
       }
     }
@@ -2338,7 +2405,7 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2374,8 +2441,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -2410,16 +2479,24 @@
             }
           },
           {
-            "type": "destroyed-by-attack-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "ranged"
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "ranged"
+              },
+              "window": "event"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           },
@@ -2427,9 +2504,9 @@
             "operator": "not",
             "operands": [
               {
-                "type": "engagement-state",
+                "type": "unit-state",
                 "parameters": {
-                  "state": "within-engagement-range"
+                  "state": "engaged"
                 }
               }
             ]
@@ -2505,15 +2582,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "hit"
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
             }
           }
         ]
@@ -2562,7 +2648,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2584,32 +2670,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "friendly"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "TYRANIDS"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "NEUROGAUNT"
-                }
-              }
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "TYRANIDS"
+            ],
+            "none_of": [
+              "NEUROGAUNTS"
             ]
+          },
+          "range": {
+            "aura_of": "synapse"
           }
-        ]
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2654,9 +2729,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FLY"
+              "subject": "defender",
+              "all_of": [
+                "FLY"
+              ]
             }
           }
         ]
@@ -2750,7 +2828,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -2812,7 +2894,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-half-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "half"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2863,7 +2948,11 @@
             }
           },
           {
-            "type": "has-lost-wounds"
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-model",
+              "lost": true
+            }
           }
         ]
       },
@@ -3202,9 +3291,10 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "HIDDEN"
+              "subject": "defender",
+              "tag": "HIDDEN"
             }
           }
         ]
@@ -3270,7 +3360,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3298,10 +3388,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
-        "parameters": {
-          "state": "unengaged"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -3317,7 +3412,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -3359,27 +3454,14 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "NEUROLICTOR"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LICTOR"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "VON RYAN’S LEAPERS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "NEUROLICTOR",
+                "LICTOR",
+                "VON RYAN’S LEAPERS"
+              ]
+            }
           },
           {
             "type": "phase-is",
@@ -3394,8 +3476,19 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "window": "event",
+              "subject": {
+                "owner": "enemy"
+              },
+              "proximity": {
+                "range": {
+                  "inches": 8
+                }
+              }
+            }
           }
         ]
       },
@@ -3434,9 +3527,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "VON RYAN’S LEAPERS"
+          "all_of": [
+            "VON RYAN’S LEAPERS"
+          ]
         }
       },
       "effect": {
@@ -3504,16 +3599,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NORN ASSIMILATOR"
+              "all_of": [
+                "NORN ASSIMILATOR"
+              ]
             }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "self",
-              "attack_type": "mortal"
+              "event": "damage-allocated",
+              "window": "event",
+              "object": "this-unit",
+              "filter": {
+                "attack_type": "mortal"
+              }
             }
           }
         ]
@@ -3744,7 +3845,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-battle-round"
+      "event": "round-started"
     }
   },
   {
@@ -3777,9 +3878,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BURROWER"
+              "all_of": [
+                "BURROWER"
+              ]
             }
           },
           "effect": {
@@ -3842,27 +3945,14 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TYRANID WARRIORS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TYRANID PRIME WITH LASH WHIP"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "WINGED TYRANID PRIME"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "TYRANID WARRIORS",
+                "TYRANID PRIME WITH LASH WHIP",
+                "WINGED TYRANID PRIME"
+              ]
+            }
           },
           "effect": {
             "type": "invulnerable-save",
@@ -3905,13 +3995,18 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               },
               {
-                "type": "unit-below-starting-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "starting"
+                }
               }
             ]
           },
@@ -3931,13 +4026,18 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               },
               {
-                "type": "unit-below-half-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "half"
+                }
               }
             ]
           },
@@ -3957,16 +4057,21 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-below-starting-strength"
+                    "type": "strength",
+                    "parameters": {
+                      "below": "starting"
+                    }
                   }
                 ]
               },
@@ -3974,7 +4079,10 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "is-battle-shocked"
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "battle-shocked"
+                    }
                   }
                 ]
               }
@@ -4063,7 +4171,10 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "moved-through-tall-terrain"
+              "event": "move-ended",
+              "filter": {
+                "through": "tall-terrain"
+              }
             },
             "effect": {
               "type": "dice-gated",
@@ -4129,15 +4240,22 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ENDLESS MULTITUDE"
+              "all_of": [
+                "ENDLESS MULTITUDE"
+              ]
             }
           },
           {
-            "type": "destroyed-by-attack-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "ranged"
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "ranged"
+              },
+              "window": "event"
             }
           }
         ]
@@ -4179,9 +4297,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TYRANIDS"
+              "all_of": [
+                "TYRANIDS"
+              ]
             }
           },
           "effect": {
@@ -4193,9 +4313,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VANGUARD INVADER"
+              "all_of": [
+                "VANGUARD INVADER"
+              ]
             }
           },
           "effect": {
@@ -4282,21 +4404,14 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "INFANTRY"
-                  }
-                },
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "SWARM"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "defender",
+                "any_of": [
+                  "INFANTRY",
+                  "SWARM"
+                ]
+              }
             },
             "effect": {
               "type": "keyword-grant",
@@ -4313,21 +4428,14 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "MONSTER"
-                  }
-                },
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "VEHICLE"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "defender",
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
             },
             "effect": {
               "type": "keyword-grant",
@@ -4345,9 +4453,12 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "CHARACTER"
+                "subject": "defender",
+                "all_of": [
+                  "CHARACTER"
+                ]
               }
             },
             "effect": {
@@ -4429,27 +4540,15 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "INFANTRY"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MOUNTED"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "BEASTS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "INFANTRY",
+                "MOUNTED",
+                "BEASTS"
+              ]
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -4465,33 +4564,26 @@
             "operator": "and",
             "operands": [
               {
-                "type": "destroyed-by-attack-type",
+                "type": "happened",
                 "parameters": {
-                  "attack_type": "melee"
+                  "event": "destroyed",
+                  "object": "event-object",
+                  "filter": {
+                    "attack_type": "melee"
+                  },
+                  "window": "event"
                 }
               },
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "INFANTRY"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MOUNTED"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "BEASTS"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "INFANTRY",
+                    "MOUNTED",
+                    "BEASTS"
+                  ]
+                }
               }
             ]
           },
@@ -4534,8 +4626,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
+              "of": {
+                "owner": "enemy"
+              },
               "range": "engagement"
             }
           }
@@ -4560,7 +4655,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4617,14 +4712,19 @@
         "count": 1,
         "timing": "after-this-unit-shoots",
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged",
-            "source": {
-              "event_var": "disruption-bombardment-shooting"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged",
+              "by": {
+                "event_var": "disruption-bombardment-shooting"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -4675,8 +4775,7 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "optional": true,
       "binds_event_variable": "disruption-bombardment-shooting"
     }
@@ -4700,13 +4799,16 @@
             "operator": "and",
             "operands": [
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "melee"
                 }
               },
               {
-                "type": "unit-below-starting-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "starting"
+                }
               }
             ]
           },
@@ -4726,13 +4828,16 @@
             "operator": "and",
             "operands": [
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "melee"
                 }
               },
               {
-                "type": "unit-below-half-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "half"
+                }
               }
             ]
           },
@@ -4825,17 +4930,26 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "proximity": {
-        "of": "self",
-        "range": 8
+        "of": "this-model",
+        "range": {
+          "inches": 8
+        }
       },
       "condition": {
-        "type": "engagement-state",
-        "parameters": {
-          "state": "unengaged"
-        }
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
+          }
+        ]
       },
       "optional": true
     },

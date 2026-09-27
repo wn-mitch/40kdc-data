@@ -139,6 +139,7 @@ def _js_round(x: float) -> float:
 def _round4(v: Vec2) -> Vec2:
     return {"x": _js_round(v["x"] * 1e4) / 1e4, "y": _js_round(v["y"] * 1e4) / 1e4}
 
+
 def _resolve_walls(
     walls: list[dict[str, Any]] | None,
     footprint: dict[str, Any],
@@ -360,10 +361,7 @@ def resolve_layout(layout: dict[str, Any], templates: list[dict[str, Any]]) -> l
                     )
                 feature_id = feat.get("id")
                 if piece.get("id"):
-                    feature_id = (
-                        f'{piece["id"]}--'
-                        f'{feature_id or f"feature-{feature_index + 1}"}'
-                    )
+                    feature_id = f"{piece['id']}--{feature_id or f'feature-{feature_index + 1}'}"
                 resolved_feature = {
                     "id": feature_id,
                     "name": ft.get("name"),

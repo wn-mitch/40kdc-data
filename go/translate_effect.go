@@ -1116,326 +1116,12 @@ func durationClauses(duration any) (string, string) {
 	return "", ""
 }
 
-var leadingIfRe = regexp.MustCompile(`^if `)
-
-// negatedTargetKeywords renders "against a unit that is not a Monster or Vehicle"
-// from a run of excluded target keywords.
-func negatedTargetKeywords(keywords []string) string {
-	return "against a unit that is not a " + strings.Join(keywords, " or ")
-}
-
 // capWord capitalizes the first character and lowercases the rest (MONSTER -> Monster).
 func capWord(s string) string {
 	if s == "" {
 		return s
 	}
 	return strings.ToUpper(s[:1]) + strings.ToLower(s[1:])
-}
-
-// notWrappedTargetKeyword returns the keyword of a `not`-wrapping-a-single-
-// `target-has-keyword` operand, else "", false. The aura-subject exclusion
-// encoding, distinct from the bare negated form.
-func notWrappedTargetKeyword(op map[string]any) (string, bool) {
-	if op["operator"] != "not" {
-		return "", false
-	}
-	operands, ok := asList(op["operands"])
-	if !ok || len(operands) != 1 {
-		return "", false
-	}
-	inner, _ := asMap(operands[0])
-	if inner["type"] != "target-has-keyword" || inner["negated"] == true {
-		return "", false
-	}
-	mp, _ := getMap(inner, "parameters")
-	return ejstr(mp["keyword"]), true
-}
-
-// excludedTargetKeywords renders "(excluding Monster or Vehicle units)" from a run
-// of `not`-wrapped target-keyword exclusions.
-func excludedTargetKeywords(keywords []string) string {
-	capped := make([]string, len(keywords))
-	for i, k := range keywords {
-		capped[i] = capWord(k)
-	}
-	return "(excluding " + strings.Join(capped, " or ") + " units)"
-}
-
-// joinAndLeadIns joins the operands of an `and` lead-in. Two exclusion encodings
-// collapse: a run of bare-negated target-has-keyword becomes "against a unit that
-// is not a X or Y", and a run of `not`-wrapped target-has-keyword becomes
-// "(excluding X or Y units)". Either attaches to the preceding clause with a
-// space; all other operands join with ", ".
-func joinAndLeadIns(operands []any) string {
-	var parts []string
-	for i := 0; i < len(operands); {
-		om, _ := asMap(operands[i])
-		if om["negated"] == true && om["type"] == "target-has-keyword" {
-			var kws []string
-			for i < len(operands) {
-				m, _ := asMap(operands[i])
-				if m["negated"] == true && m["type"] == "target-has-keyword" {
-					mp, _ := getMap(m, "parameters")
-					kws = append(kws, ejstr(mp["keyword"]))
-					i++
-				} else {
-					break
-				}
-			}
-			parts = append(parts, negatedTargetKeywords(kws))
-			continue
-		}
-		if kw, ok := notWrappedTargetKeyword(om); ok {
-			kws := []string{kw}
-			i++
-			for i < len(operands) {
-				m, _ := asMap(operands[i])
-				if k2, ok2 := notWrappedTargetKeyword(m); ok2 {
-					kws = append(kws, k2)
-					i++
-				} else {
-					break
-				}
-			}
-			parts = append(parts, excludedTargetKeywords(kws))
-			continue
-		}
-		if om["negated"] != true && om["type"] == "unit-has-keyword" {
-			var kws []string
-			for i < len(operands) {
-				m, _ := asMap(operands[i])
-				if m["negated"] != true && m["type"] == "unit-has-keyword" {
-					mp, _ := getMap(m, "parameters")
-					kws = append(kws, ejstr(mp["keyword"]))
-					i++
-				} else {
-					break
-				}
-			}
-			if len(kws) >= 2 {
-				parts = append(parts, "if the unit is a "+strings.Join(kws, " ")+" unit")
-			} else {
-				parts = append(parts, "if the unit has the "+kws[0]+" keyword")
-			}
-			continue
-		}
-		parts = append(parts, conditionLeadIn(om))
-		i++
-	}
-	acc := ""
-	for _, part := range parts {
-		switch {
-		case acc == "":
-			acc = part
-		case strings.HasPrefix(part, "against ") || strings.HasPrefix(part, "(excluding "):
-			acc = acc + " " + part
-		default:
-			acc = acc + ", " + part
-		}
-	}
-	return acc
-}
-
-// joinOrLeadIns preserves generic recursive behavior for mixed or negated
-// operands, but compacts an all-positive unit-keyword OR into the shared
-// keyword-list wording.
-func joinOrLeadIns(operands []any) string {
-	kws := make([]string, 0, len(operands))
-	for _, operand := range operands {
-		om, _ := asMap(operand)
-		if om["negated"] == true || om["type"] != "unit-has-keyword" {
-			kws = nil
-			break
-		}
-		mp, _ := getMap(om, "parameters")
-		kws = append(kws, ejstr(mp["keyword"]))
-	}
-	if kws != nil {
-		return "if the unit has the " + orList(kws) + " keywords"
-	}
-	parts := make([]string, len(operands))
-	for i, operand := range operands {
-		om, _ := asMap(operand)
-		parts[i] = conditionLeadIn(om)
-	}
-	return strings.Join(parts, " or ")
-}
-
-func conditionLeadIn(c map[string]any) string {
-	operands, _ := asList(c["operands"])
-	switch c["operator"] {
-	case "and":
-		if len(operands) > 0 {
-			return joinAndLeadIns(operands)
-		}
-	case "or":
-		if len(operands) > 0 {
-			return joinOrLeadIns(operands)
-		}
-	case "not":
-		if len(operands) > 0 {
-			parts := make([]string, len(operands))
-			for i, o := range operands {
-				om, _ := asMap(o)
-				parts[i] = leadingIfRe.ReplaceAllString(conditionLeadIn(om), "")
-			}
-			return "unless " + strings.Join(parts, " or ")
-		}
-	}
-	p, _ := getMap(c, "parameters")
-	if p == nil {
-		p = map[string]any{}
-	}
-	// Negated keyword gates read as an exclusion clause, not the generic "if not …".
-	if c["negated"] == true && c["type"] == "target-has-keyword" {
-		return negatedTargetKeywords([]string{ejstr(p["keyword"])})
-	}
-	if c["negated"] == true && c["type"] == "unit-has-keyword" {
-		return "unless the unit has the " + ejstr(p["keyword"]) + " keyword"
-	}
-	if c["negated"] == true && c["type"] == "timing-is" {
-		return negatedTiming(p["timing"])
-	}
-	if c["negated"] == true {
-		return "if " + describeCondition(c)
-	}
-	switch c["type"] {
-	case "phase-is":
-		return "during the " + titleCase(ejstr(p["phase"])) + " phase"
-	case "is-attached":
-		kw := ""
-		if p["keyword"] != nil && truthy(p["keyword"]) {
-			kw = ejstr(p["keyword"]) + " "
-		}
-		return "while this model is leading a " + kw + "unit"
-	case "timing-is":
-		return describeTiming(p["timing"])
-	case "player-turn-is":
-		switch p["turn"] {
-		case "your-turn", "your", "own", "self":
-			return "in your turn"
-		case "opponent-turn", "opponent":
-			return "in the opponent's turn"
-		}
-		return "in either player's turn"
-	case "model-is-leader":
-		return "while this model leads a unit"
-	case "charged-this-turn":
-		return "if " + conditionSubject(c, "the unit", legacyUnitSubjects) + " charged this turn"
-	case "advanced-this-turn":
-		return "if " + conditionSubject(c, "the unit", legacyUnitSubjects) + " Advanced this turn"
-	case "disembarked-from-transport":
-		return "if the unit disembarked from a Transport this turn"
-	case "faction-rule-active":
-		return "while the " + titleCase(ejstr(p["rule"])) + " is active"
-	case "battle-round":
-		bMin, hasMin := parseNumber(p["min"])
-		bMax, hasMax := parseNumber(p["max"])
-		switch {
-		case hasMin && hasMax:
-			if bMin == bMax {
-				return "during the " + bordinal(bMin) + " battle round"
-			}
-			return "during battle rounds " + numStr(bMin) + "-" + numStr(bMax)
-		case hasMin:
-			return "from the " + bordinal(bMin) + " battle round onward"
-		case hasMax:
-			return "during the first " + numStr(bMax) + " battle rounds"
-		}
-		return "during the battle round"
-	case "token-count-at-or-above":
-		return "while the unit has " + ejstr(p["threshold"]) + "+ " + poolName(p["pool_id"])
-	case "remained-stationary":
-		return "if the unit Remained Stationary"
-	case "target-has-keyword":
-		return "against " + ejstr(p["keyword"]) + " targets"
-	case "unit-has-keyword":
-		return "if the unit has the " + ejstr(p["keyword"]) + " keyword"
-	case "unit-model-count":
-		return "if the unit contains " + ejstr(p["count_min"]) + "+ " + ejstr(p["keyword"]) + " models"
-	case "uniform-ranged-loadout":
-		keyword := ""
-		if p["model_keyword"] != nil {
-			keyword = ejstr(p["model_keyword"]) + " "
-		}
-		return "if all ranged weapons equipped by each " + keyword + "model in the unit are the same"
-	case "all-attacks-target-same-unit":
-		attackType := ""
-		if p["attack_type"] != nil {
-			attackType = ejstr(p["attack_type"]) + " "
-		}
-		return "when all of the unit's " + attackType + "attacks target the same enemy unit"
-	case "is-battle-shocked":
-		return "while " + conditionSubject(c, "the unit", legacyUnitSubjects) + " is Battle-shocked"
-	case "unit-below-half-strength":
-		return "while " + conditionSubject(
-			c,
-			"the unit",
-			map[string]string{"target": "the target unit"},
-		) + " is below half strength"
-	case "unit-below-starting-strength":
-		return "while " + conditionSubject(c, "the unit", legacyUnitSubjects) + " is below its starting strength"
-	case "has-lost-wounds":
-		return "while the model has lost wounds"
-	case "attack-is-type":
-		if p["comparison"] == "strength-greater-than-toughness" {
-			return "when this attack's Strength is greater than the target's Toughness"
-		}
-		if p["comparison"] != nil {
-			return "when " + dekebab(ejstr(p["comparison"]))
-		}
-		return "while making " + ejstr(p["attack_type"]) + " attacks"
-	case "destroyed-by-attack-type":
-		if ejstr(p["attack_type"]) == "any" {
-			return "when destroyed by any attack"
-		}
-		return "when destroyed by a " + ejstr(p["attack_type"]) + " attack"
-	case "opponent-unit-within-range":
-		var where string
-		rng := p["range"]
-		if rng == nil {
-			rng = p["range_inches"]
-		}
-		if rng == nil {
-			rng = p["within_inches"]
-		}
-		switch {
-		case p["weapon_name"] != nil:
-			where = "range of " + dekebab(ejstr(p["weapon_name"]))
-		case p["range_multiplier"] != nil:
-			where = "half range of its ranged weapons"
-		case rng == "engagement":
-			where = "engagement range"
-		default:
-			where = ejstr(rng) + "\""
-		}
-		return "while an enemy unit is within " + where
-	case "engagement-state":
-		if p["state"] == nil {
-			return "while the unit is within Engagement Range"
-		}
-		st := cstr(p["state"])
-		switch st {
-		case "on-battlefield":
-			return "while the unit is on the battlefield"
-		case "embarked":
-			return "while the unit is embarked"
-		case "engaged", "within-engagement-range", "in-engagement-range":
-			return "while the unit is within Engagement Range"
-		case "not-in-engagement-range", "not-within-engagement-range":
-			return "while the unit is not within Engagement Range"
-		}
-		return "while the unit is " + dekebab(st)
-	case "disposition-matches":
-		d := cstr(p["disposition"])
-		if d == "strategic-reserves" {
-			return "while the unit is in Strategic Reserves"
-		}
-		return "while the unit's disposition is " + dekebab(d)
-	case "fights-first":
-		return "while the unit has the Fights First ability"
-	}
-	return "if " + describeCondition(c)
 }
 
 // describeRuleState renders a `rule-state` effect: a named rule switched on/off
@@ -2144,15 +1830,37 @@ func describeNamedRegionState(m map[string]any, ctx map[string]any) string {
 	return namedRegionPrefix(m) + " " + attackGate + namedRegionBranch(m, wholeUnit, false, false, ctx) + " " + namedRegionBranch(m, wholeUnit, true, false, ctx)
 }
 
+// foughtThisPhase recognizes `not(happened selected-to-fight this phase)` and
+// returns the subject that has not fought yet.
+func foughtThisPhase(c map[string]any) (string, bool) {
+	ops, ok := conditionOperands(c, "not")
+	if !ok || len(ops) != 1 {
+		return "", false
+	}
+	p := paramsOf(ops[0])
+	f := mapOr(p["filter"])
+	if ops[0]["type"] != "happened" || p["event"] != "selected" || f["to"] != "fight" || p["window"] != "phase" {
+		return "", false
+	}
+	if s, ok := p["subject"].(string); ok {
+		return s, true
+	}
+	return "this-unit", true
+}
+
 func describeNamedRegionConditional(m map[string]any, condition map[string]any, ctx map[string]any) string {
 	consumer, _ := asMap(m["consumer"])
 	membership, _ := asMap(consumer["membership"])
 	wholeUnit := membership["unit_scope"] == "whole-unit"
-	positive := map[string]any{"type": "region-membership", "parameters": condition["parameters"]}
-	predicate := describeCondition(positive)
+	ops, isNot := conditionOperands(condition, "not")
+	negated := isNot && len(ops) == 1
+	predicate := describeCondition(condition)
+	if negated {
+		predicate = describeCondition(ops[0])
+	}
 	defaultText := namedRegionBranch(m, wholeUnit, false, true, ctx)
 	qualifiedText := namedRegionBranch(m, wholeUnit, true, true, ctx)
-	if condition["negated"] == true {
+	if negated {
 		return namedRegionPrefix(m) + " Unless " + predicate + ", " + defaultText + ". If " + predicate + ", " + qualifiedText + "."
 	}
 	return namedRegionPrefix(m) + " When " + predicate + ", " + qualifiedText + ". Otherwise, " + defaultText + "."
@@ -2979,10 +2687,9 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			}
 			before := ""
 			if elig, ok := getMap(m, "eligibility"); ok && elig != nil {
-				neg, _ := elig["negated"].(bool)
-				if neg && ejstr(elig["type"]) == "has-fought-this-phase" {
+				if fought, ok := foughtThisPhase(elig); ok {
 					who := "this unit"
-					if params, _ := getMap(elig, "parameters"); ejstr(params["subject"]) == "self" {
+					if fought == "this-model" {
 						who = "this model"
 					}
 					before = " before " + who + " has fought this phase"
@@ -3141,7 +2848,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		if m["can_charge"] == true {
 			acts = "shoot and declare a charge"
 		}
-		return subj + " " + ev(subj, "is") + " eligible to " + acts + " in a turn in which it Fell Back"
+		pronoun := "it"
+		if isPlural(subj) {
+			pronoun = "they"
+		}
+		return subj + " " + ev(subj, "is") + " eligible to " + acts + " in a turn in which " + pronoun + " Fell Back"
 	case "fight-eligibility-extension":
 		r := ejstr(m["range"])
 		return "when determining which models in " + subj + " are eligible to fight, " +
@@ -4002,106 +3713,6 @@ func usageClause(u map[string]any) string {
 	return base
 }
 
-// describeReactiveTrigger renders a reactive ability trigger as a front-of-sentence
-// lead clause ("an enemy unit ends a move within 9\" of this model"). Distinct from
-// the scoring-card describeTrigger (different shape; same package).
-var moveWordRe = regexp.MustCompile(`\bmove\b`)
-var triggerAttackModels = map[string]string{
-	"bearer":          "this model",
-	"self":            "this model",
-	"unit":            "a model in this unit",
-	"model-in-bearer": "a model in this unit",
-	"friendly-unit":   "a model in a friendly unit",
-	"enemy-unit":      "a model in an enemy unit",
-	"friendly-model":  "a friendly model",
-	"enemy-model":     "an enemy model",
-}
-
-// turnOwners maps the authored spellings of whose turn a trigger window
-// (a phase boundary, a phaseWindow) falls in to its possessive.
-var turnOwners = map[string]string{
-	"your":          "your",
-	"your-turn":     "your",
-	"own":           "your",
-	"self":          "your",
-	"opponent":      "your opponent's",
-	"opponent-turn": "your opponent's",
-}
-
-// phaseBoundary renders "at the start of your Command phase": a phase boundary
-// narrowed only by phase and whose turn. ok is false when the trigger carries
-// anything else, or a turn spelling outside turnOwners.
-func phaseBoundary(t map[string]any) (string, bool) {
-	if t["event"] != "start-of-phase" && t["event"] != "end-of-phase" {
-		return "", false
-	}
-	var operands []map[string]any
-	if cond, ok := asMap(t["condition"]); ok && cond != nil {
-		if cond["operator"] == "and" {
-			for _, raw := range getList(cond, "operands") {
-				op, _ := asMap(raw)
-				operands = append(operands, op)
-			}
-		} else {
-			operands = []map[string]any{cond}
-		}
-	}
-	var phaseOp, turnOp map[string]any
-	for _, c := range operands {
-		if c == nil || truthy(c["operator"]) || truthy(c["negated"]) {
-			return "", false
-		}
-		switch c["type"] {
-		case "phase-is":
-			if phaseOp == nil {
-				phaseOp = c
-			}
-		case "player-turn-is":
-			if turnOp == nil {
-				turnOp = c
-			}
-		default:
-			return "", false
-		}
-	}
-	if phaseOp == nil {
-		return "", false
-	}
-	phaseParams, _ := getMap(phaseOp, "parameters")
-	phase, ok := phaseParams["phase"].(string)
-	if !ok {
-		return "", false
-	}
-	var turn any
-	hasTurn := false
-	if turnOp != nil {
-		turnParams, _ := getMap(turnOp, "parameters")
-		turn, hasTurn = turnParams["turn"]
-	}
-	want := 1
-	if hasTurn {
-		want = 2
-	}
-	if len(operands) != want {
-		return "", false
-	}
-	owner := "the"
-	if hasTurn {
-		// Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
-		turnStr, isStr := turn.(string)
-		mapped, found := turnOwners[turnStr]
-		if !isStr || !found {
-			return "", false
-		}
-		owner = mapped
-	}
-	edge := "end"
-	if t["event"] == "start-of-phase" {
-		edge = "start"
-	}
-	return "at the " + edge + " of " + owner + " " + capWord(phase) + " phase", true
-}
-
 // partHead renders what leads an ability part: its moment, its usage limit,
 // its name when the rules give one, the choice to use it and its cost ("at the
 // end of your Movement phase, once per battle, you can").
@@ -4158,234 +3769,6 @@ func partInline(e map[string]any, ctx map[string]any) string {
 	return body
 }
 
-// phaseWindow splits a trigger condition into its phase and whose turn, as a
-// phrase on the moment ("during your Shooting phase", "in your opponent's
-// turn"), and whatever else the condition says (nil when nothing is left). Only
-// a plain phase-is and player-turn-is (not negated, at most one each, joined by
-// "and") make a window; otherwise window is "" and rest is the whole condition.
-func phaseWindow(condition map[string]any) (window string, rest map[string]any, phase string, owner string) {
-	var operands []any
-	if condition["operator"] == "and" {
-		operands = getList(condition, "operands")
-	} else if !truthy(condition["operator"]) {
-		operands = []any{condition}
-	}
-	plain := func(c map[string]any, typ string) bool {
-		return c != nil && !truthy(c["operator"]) && !truthy(c["negated"]) && c["type"] == typ
-	}
-	var phases, turns []map[string]any
-	var others []any
-	for _, raw := range operands {
-		c, _ := asMap(raw)
-		switch {
-		case plain(c, "phase-is"):
-			phases = append(phases, c)
-		case plain(c, "player-turn-is"):
-			turns = append(turns, c)
-		default:
-			others = append(others, raw)
-		}
-	}
-	hasOwner := false
-	if len(turns) > 0 {
-		params, _ := getMap(turns[0], "parameters")
-		owner, hasOwner = turnOwners[ejstr(params["turn"])]
-	}
-	phaseIsStr := false
-	if len(phases) > 0 {
-		params, _ := getMap(phases[0], "parameters")
-		phase, phaseIsStr = params["phase"].(string)
-	}
-	if len(phases) > 1 || len(turns) > 1 || (len(turns) == 1 && !hasOwner) || (len(phases) == 1 && !phaseIsStr) || len(phases)+len(turns) == 0 {
-		return "", condition, "", ""
-	}
-	if len(phases) > 0 {
-		windowOwner := owner
-		if !hasOwner {
-			windowOwner = "the"
-		}
-		window = "during " + windowOwner + " " + capWord(phase) + " phase"
-	} else {
-		window = "in " + owner + " turn"
-	}
-	switch len(others) {
-	case 0:
-		rest = nil
-	case 1:
-		rest, _ = asMap(others[0])
-	default:
-		rest = map[string]any{"operator": "and", "operands": others}
-	}
-	return window, rest, phase, owner
-}
-
-func describeReactiveTrigger(t map[string]any) string {
-	// The short form only when the boundary is all the trigger says; any other clause goes below.
-	subject := t["subject"]
-	plain := !truthy(t["proximity"]) && len(getList(t, "move_types")) == 0 && len(getList(t, "subject_keywords")) == 0 &&
-		len(getList(t, "subject_excluded_keywords")) == 0 && !truthy(t["caused_by"]) &&
-		!truthy(t["binds_die_variable"]) && !truthy(t["binds_selected_die_variable"]) &&
-		(subject == nil || subject == "self" || subject == "unit")
-	if plain {
-		if boundary, ok := phaseBoundary(t); ok && boundary != "" {
-			if truthy(t["optional"]) {
-				return boundary + ", you may use this ability"
-			}
-			return boundary
-		}
-	}
-	edge := ""
-	switch t["event"] {
-	case "start-of-phase":
-		edge = "start"
-	case "end-of-phase":
-		edge = "end"
-	}
-	disembarkShock := isEndOfPhaseDisembarkBattleShock(t)
-	hasSplit := t["condition"] != nil && !disembarkShock
-	var window, phase, owner string
-	var rest map[string]any
-	if hasSplit {
-		cond, _ := asMap(t["condition"])
-		window, rest, phase, owner = phaseWindow(cond)
-	}
-	// A boundary leads with its own phase ("at the end of your Command phase"); one that names no
-	// phase is the boundary of every phase. Decided first, so the clauses below add to it.
-	var s string
-	switch {
-	case edge == "":
-		s = eventClause(t["event"])
-	case phase != "":
-		lead := owner
-		if lead == "" {
-			lead = "the"
-		}
-		s = "at the " + edge + " of " + lead + " " + capWord(phase) + " phase"
-	default:
-		s = "at the " + edge + " of each phase"
-	}
-	if t["subject"] == "friendly-unit" {
-		s = strings.Replace(s, "the unit", "a friendly unit", 1)
-	}
-	if t["subject"] == "enemy-unit" {
-		s = strings.Replace(s, "the unit", "an enemy unit", 1)
-	}
-	if t["event"] == "on-model-destroyed" {
-		switch t["subject"] {
-		case "bearer", "self":
-			s = "when this model is destroyed"
-		case "model-in-bearer":
-			s = "when a model in this unit is destroyed"
-		case "friendly-model":
-			s = "when a friendly model is destroyed"
-		case "enemy-model":
-			s = "when an enemy model is destroyed"
-		}
-	}
-	attackModel := triggerAttackModels[ejstr(t["subject"])]
-	if event := ejstr(t["event"]); (event == "before-hit-roll" || event == "after-hit-roll" || event == "before-wound-roll" || event == "after-wound-roll" || event == "before-damage-roll" || event == "after-damage-roll") && attackModel != "" {
-		s += " for an attack made by " + attackModel
-	}
-	if ejstr(t["event"]) == "attack-scores-wound" && attackModel != "" {
-		s = "each time an attack made by " + attackModel + " scores a wound"
-	}
-	if causedBy, ok := getMap(t, "caused_by"); ok && causedBy != nil {
-		source := "this unit"
-		if causedBy["source"] == "bearer-model" {
-			source = "this model"
-		}
-		attackType := ""
-		if causedBy["attack_type"] != nil {
-			attackType = ejstr(causedBy["attack_type"]) + " "
-		}
-		weapon := ""
-		if causedBy["weapon_keyword"] != nil {
-			weapon = " with " + bracketKeyword(causedBy["weapon_keyword"]) + " weapons"
-		}
-		if attackType != "" || weapon != "" {
-			s += " by " + attackType + "attacks made by " + source + weapon
-		} else {
-			s += " by " + source
-		}
-	}
-	if t["event"] == "stratagem-targeted" {
-		s = "when this model's unit is targeted with a Stratagem"
-	}
-	if source, ok := getMap(t, "source_ability"); t["event"] == "ability-target-selected" && ok && source != nil {
-		selected := "a unit"
-		if t["subject"] == "friendly-unit" {
-			selected = "a friendly unit"
-		} else if t["subject"] == "enemy-unit" {
-			selected = "an enemy unit"
-		}
-		s = "when " + selected + " is selected by the " + titleCase(ejstr(source["ability_id"])) + " ability of a " + ejstr(source["owner"]) + " " + strings.Join(getStrList(source, "keywords"), " ") + " unit"
-	}
-	if ejstr(t["event"]) == "falls-back" && ejstr(t["subject"]) == "enemy-unit" {
-		s = "an enemy unit Falls Back"
-	}
-	actor := "unit"
-	switch t["subject"] {
-	case "bearer", "self", "model-in-bearer", "friendly-model", "enemy-model":
-		actor = "model"
-	}
-	if keywords := getStrList(t, "subject_keywords"); len(keywords) > 0 {
-		s += " (the triggering " + actor + " must have " + andList(keywords) + ")"
-	}
-	if keywords := getStrList(t, "subject_excluded_keywords"); len(keywords) > 0 {
-		s += " (the triggering " + actor + " must not have " + orList(keywords) + ")"
-	}
-	// Narrow a move event to its move kinds: "ends a move" -> "ends a Normal,
-	// Advance or Fall Back move".
-	if mts := getStrList(t, "move_types"); len(mts) > 0 {
-		kinds := make([]string, len(mts))
-		for i, mt := range mts {
-			if mt == "fall-back" {
-				kinds[i] = "Fall Back"
-			} else {
-				kinds[i] = capWord(mt)
-			}
-		}
-		repl := orList(kinds) + " move"
-		if loc := moveWordRe.FindStringIndex(s); loc != nil {
-			s = s[:loc[0]] + repl + s[loc[1]:]
-		}
-	}
-	if prox, _ := getMap(t, "proximity"); prox != nil && prox["range"] != nil {
-		of := "this unit"
-		switch prox["of"] {
-		case "bearer-unit":
-			of = "this model's unit"
-		case "attached-unit":
-			of = "the unit this model leads"
-		case "self", "bearer":
-			of = "this model"
-		}
-		s += " within " + ejstr(prox["range"]) + "\" of " + of
-	}
-	if disembarkShock {
-		s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
-	} else if hasSplit {
-		if edge != "" && phase == "" && owner != "" {
-			s += " in " + owner + " turn"
-		} else if edge == "" && window != "" {
-			s += " " + window
-		}
-		if rest != nil {
-			s += ", if " + describeCondition(rest)
-		}
-	}
-	if t["binds_die_variable"] != nil {
-		s += " (binding the generated die as " + dekebab(strings.ReplaceAll(ejstr(t["binds_die_variable"]), "_", "-")) + ")"
-	}
-	if t["binds_selected_die_variable"] != nil {
-		s += " (binding one chosen die used in that Act of Faith as " + dekebab(strings.ReplaceAll(ejstr(t["binds_selected_die_variable"]), "_", "-")) + ")"
-	}
-	if t["optional"] == true {
-		s += ", you may use this ability"
-	}
-	return s
-}
-
 var auraSlugRe = regexp.MustCompile(`^aura-(\d+)$`)
 
 // auraRadius returns the aura radius in inches: an explicit range_inches, else the
@@ -4406,55 +3789,14 @@ func auraRadius(scope map[string]any) any {
 	return nil
 }
 
-// normalizeTriggers flattens the polymorphic trigger field (one object, an
-// array, or nil) to a flat list of trigger maps (the ability fires on ANY).
-func normalizeTriggers(t any) []map[string]any {
-	if t == nil {
-		return nil
-	}
-	if list, ok := asList(t); ok {
-		out := make([]map[string]any, 0, len(list))
-		for _, e := range list {
-			if m, ok := asMap(e); ok {
-				out = append(out, m)
-			}
-		}
-		return out
-	}
-	if m, ok := asMap(t); ok {
-		return []map[string]any{m}
-	}
-	return nil
-}
-
-// timingOfCondition returns the timing value of a bare `timing-is` condition,
-// and whether the condition is of that type.
-func timingOfCondition(c map[string]any) (string, bool) {
-	if c != nil && c["type"] == "timing-is" {
-		p, _ := getMap(c, "parameters")
-		return ejstr(p["timing"]), true
-	}
-	return "", false
-}
-
-// conditionWithinRange returns the numeric range of a top-level within-range
+// conditionWithinRange returns the inch range of a top-level `within`
 // condition, and whether one is present.
 func conditionWithinRange(c map[string]any) (float64, bool) {
-	if c == nil {
+	if c == nil || c["type"] != "within" {
 		return 0, false
 	}
-	if c["type"] != "unit-within-range-of" && c["type"] != "opponent-unit-within-range" {
-		return 0, false
-	}
-	p, _ := getMap(c, "parameters")
-	rng := p["range"]
-	if rng == nil {
-		rng = p["range_inches"]
-	}
-	if rng == nil {
-		rng = p["within_inches"]
-	}
-	return num(rng)
+	r, _ := asMap(paramsOf(c)["range"])
+	return num(r["inches"])
 }
 
 func renderTopLevel(e map[string]any, scope map[string]any, usage map[string]any, trigger any) string {
@@ -4473,13 +3815,9 @@ func renderTopLevel(e map[string]any, scope map[string]any, usage map[string]any
 	// sentence ("Each time …"). B2: when a trigger's proximity just restates a
 	// within-range condition on the effect, render the range once (drop it here).
 	var triggers []map[string]any
-	triggerEvents := map[string]bool{}
 	for _, t := range normalizeTriggers(trigger) {
 		if t["event"] != nil {
 			triggers = append(triggers, t)
-			if ev, ok := t["event"].(string); ok {
-				triggerEvents[ev] = true
-			}
 		}
 	}
 	var condForRange map[string]any
@@ -4492,7 +3830,7 @@ func renderTopLevel(e map[string]any, scope map[string]any, usage map[string]any
 		tt := t
 		if hasCondRange {
 			if prox, _ := getMap(t, "proximity"); prox != nil {
-				if pr, ok := num(prox["range"]); ok && pr == condRange {
+				if r, _ := asMap(prox["range"]); r != nil && r["inches"] == condRange {
 					tt = cloneMap(t)
 					delete(tt, "proximity")
 				}
@@ -4511,12 +3849,7 @@ func renderTopLevel(e map[string]any, scope map[string]any, usage map[string]any
 			modifier, _ := asMap(inner["modifier"])
 			return describeNamedRegionConditional(modifier, cond, ctx)
 		}
-		// B1: drop the condition lead-in when it merely restates a trigger's timing
-		// (e.g. trigger start-of-phase + condition timing-is start-of-phase).
 		leadIn := conditionLeadIn(cond)
-		if condTiming, isTiming := timingOfCondition(cond); isTiming && triggerEvents[condTiming] {
-			leadIn = ""
-		}
 		if inner != nil && containerTypes[getStr(inner, "type")] {
 			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
 			return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx)

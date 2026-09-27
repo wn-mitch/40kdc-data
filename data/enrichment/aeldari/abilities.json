@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -96,7 +100,13 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "stratagem-targeted"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      }
     }
   },
   {
@@ -141,7 +151,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -330,7 +343,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -509,7 +531,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -554,9 +580,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "A"
+          "subject": "defender",
+          "chosen_by": "fated-hero"
         }
       },
       "effect": {
@@ -590,9 +617,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "community_notes": "auto-generated, partial"
   },
   {
     "ability_id": "deadly-demise-d3",
@@ -629,7 +654,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -686,7 +715,11 @@
         "operator": "and",
         "operands": [
           {
-            "type": "model-is-leader"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           },
           {
             "type": "phase-is",
@@ -974,7 +1007,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -990,8 +1027,10 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "agile-manoeuvre-performed",
-              "subject": "self"
+              "event": "used",
+              "filter": {
+                "kind": "manoeuvre"
+              }
             },
             "effect": {
               "type": "re-roll",
@@ -1056,7 +1095,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "fight-first",
@@ -1086,14 +1129,14 @@
     "version": "2025-q3",
     "behavior": "reactive",
     "trigger": {
-      "event": "start-of-phase",
-      "optional": false,
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
           "phase": "fight"
         }
-      }
+      },
+      "optional": false
     },
     "effect": {
       "type": "leadership-modifier",
@@ -1192,7 +1235,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1303,7 +1350,8 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "on-model-destroyed"
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
     }
   },
   {
@@ -1346,9 +1394,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "TITANIC"
+          "subject": "defender",
+          "all_of": [
+            "TITANIC"
+          ]
         }
       },
       "effect": {
@@ -1466,14 +1517,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "flickerjump-used-this-turn"
+            "event": "used",
+            "filter": {
+              "kind": "ability",
+              "id": "flickerjump"
+            },
+            "window": "turn"
           }
         },
         "effect": {
@@ -1727,7 +1787,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -1780,16 +1844,32 @@
         "operator": "or",
         "operands": [
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "on-battlefield"
             }
           },
           {
-            "type": "is-attached",
-            "parameters": {
-              "attachment_type": "transport"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "embarked"
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "in-reserves"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1815,7 +1895,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "post-deployment"
+      "event": "deployment-ended"
     }
   },
   {
@@ -1840,17 +1920,22 @@
             }
           },
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "on-battlefield"
             }
           },
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "friendly",
-              "window": "this-turn",
-              "keyword": "AELDARI"
+              "event": "destroyed",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "AELDARI"
+                ]
+              },
+              "window": "turn"
             }
           }
         ]
@@ -1965,7 +2050,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2148,7 +2237,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2315,7 +2408,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -2516,9 +2613,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "RIVEN"
+              "subject": "defender",
+              "all_of": [
+                "RIVEN"
+              ]
             }
           }
         ]
@@ -2607,7 +2707,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -2667,7 +2771,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "moved-through-tall-terrain"
+            "event": "move-ended",
+            "filter": {
+              "through": "tall-terrain"
+            }
           },
           "effect": {
             "type": "dice-gated",
@@ -2721,16 +2828,42 @@
             "operator": "or",
             "operands": [
               {
-                "type": "opponent-unit-within-range",
-                "parameters": {
-                  "weapon_name": "heavy wraithcannon"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_name": "Heavy wraithcannon"
+                    }
+                  },
+                  {
+                    "type": "within",
+                    "parameters": {
+                      "subject": "defender",
+                      "of": "attacker",
+                      "range": "half-weapon"
+                    }
+                  }
+                ]
               },
               {
-                "type": "opponent-unit-within-range",
-                "parameters": {
-                  "weapon_name": "suncannon"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_name": "Suncannon"
+                    }
+                  },
+                  {
+                    "type": "within",
+                    "parameters": {
+                      "subject": "defender",
+                      "of": "attacker",
+                      "range": "half-weapon"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -2950,7 +3083,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -3012,7 +3149,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -3056,7 +3197,10 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           }
         ]
       },
@@ -3143,7 +3287,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "fight-first",
@@ -3174,7 +3322,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -3273,7 +3425,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "targeting-permission",
@@ -3338,7 +3494,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -3371,9 +3531,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "CHARACTER"
+          "subject": "defender",
+          "all_of": [
+            "CHARACTER"
+          ]
         }
       },
       "effect": {
@@ -3592,7 +3755,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3700,7 +3872,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3774,11 +3950,16 @@
             }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "target",
-              "weapon_name": "doomweaver",
-              "count_min": 1
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapon_name": "doomweaver"
+              },
+              "window": "phase"
             }
           }
         ]
@@ -3837,7 +4018,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -4008,7 +4193,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -4109,8 +4298,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -4139,9 +4330,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FLY"
+              "subject": "defender",
+              "all_of": [
+                "FLY"
+              ]
             }
           }
         ]
@@ -4322,10 +4516,17 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -4416,7 +4617,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -4450,7 +4655,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "ranged"
         }
@@ -4474,7 +4679,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "unit-set-up"
+      "event": "set-up"
     }
   },
   {
@@ -4845,7 +5050,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle-round"
+            "event": "round-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -4876,16 +5081,37 @@
               "label": "Swift as the Wind",
               "when": [
                 {
-                  "event": "normal-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "normal"
+                    ]
+                  }
                 },
                 {
-                  "event": "advance-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "advance"
+                    ]
+                  }
                 },
                 {
-                  "event": "fall-back-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "fall-back"
+                    ]
+                  }
                 }
               ],
               "cost": {
@@ -4912,24 +5138,52 @@
               "label": "Flitting Shadows",
               "when": [
                 {
-                  "event": "normal-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "normal"
+                    ]
+                  }
                 },
                 {
-                  "event": "advance-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "advance"
+                    ]
+                  }
                 },
                 {
-                  "event": "fall-back-move",
-                  "subject": "friendly-unit"
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "move_types": [
+                      "fall-back"
+                    ]
+                  }
                 },
                 {
-                  "event": "unit-set-up",
-                  "subject": "friendly-unit"
+                  "event": "set-up",
+                  "subject": {
+                    "owner": "friendly"
+                  }
                 },
                 {
-                  "event": "charge-declaration",
-                  "subject": "friendly-unit"
+                  "event": "targets-selected",
+                  "subject": {
+                    "owner": "friendly"
+                  },
+                  "filter": {
+                    "kind": "charge"
+                  }
                 }
               ],
               "cost": {
@@ -4952,8 +5206,16 @@
               "id": "star-engines",
               "label": "Star Engines",
               "when": {
-                "event": "selected-to-advance",
-                "subject": "friendly-unit"
+                "event": "selected",
+                "subject": {
+                  "owner": "friendly"
+                },
+                "filter": {
+                  "to": "move",
+                  "move_types": [
+                    "advance"
+                  ]
+                }
               },
               "eligibility": {
                 "requires_keyword": [
@@ -4981,8 +5243,13 @@
               "id": "sudden-strike",
               "label": "Sudden Strike",
               "when": {
-                "event": "selected-to-fight",
-                "subject": "friendly-unit"
+                "event": "selected",
+                "subject": {
+                  "owner": "friendly"
+                },
+                "filter": {
+                  "to": "fight"
+                }
               },
               "cost": {
                 "pool_id": "battle-focus-pool",
@@ -5018,8 +5285,15 @@
               "id": "opportunity-seized",
               "label": "Opportunity Seized",
               "when": {
-                "event": "falls-back",
-                "subject": "enemy-unit",
+                "event": "move-ended",
+                "subject": {
+                  "owner": "enemy"
+                },
+                "filter": {
+                  "move_types": [
+                    "fall-back"
+                  ]
+                },
                 "binds_event_variable": "triggering-enemy"
               },
               "eligibility": {
@@ -5029,13 +5303,14 @@
                 ],
                 "requires": [
                   {
-                    "type": "unit-was-in-engagement-range-of",
+                    "type": "unit-state",
                     "parameters": {
-                      "subject": "selected-friendly-unit",
-                      "object": {
+                      "subject": "selected-unit",
+                      "state": "engaged",
+                      "with": {
                         "event_var": "triggering-enemy"
                       },
-                      "snapshot": "phase-start"
+                      "at": "phase-start"
                     }
                   }
                 ]
@@ -5059,8 +5334,13 @@
               "id": "fade-back",
               "label": "Fade Back",
               "when": {
-                "event": "after-enemy-unit-fires",
-                "subject": "enemy-unit",
+                "event": "attacks-resolved",
+                "subject": {
+                  "owner": "enemy"
+                },
+                "filter": {
+                  "kind": "shoot"
+                },
                 "binds_event_variable": "triggering-shooter"
               },
               "eligibility": {
@@ -5082,14 +5362,18 @@
                     }
                   },
                   {
-                    "type": "was-hit-by-attack",
+                    "type": "happened",
                     "parameters": {
-                      "subject": "selected-friendly-unit",
-                      "source": {
-                        "event_var": "triggering-shooter"
+                      "event": "after-roll",
+                      "object": "selected-unit",
+                      "filter": {
+                        "roll": "hit",
+                        "result": "success",
+                        "by": {
+                          "event_var": "triggering-shooter"
+                        }
                       },
-                      "window": "just-finished-shooting-sequence",
-                      "count_min": 1
+                      "window": "event"
                     }
                   }
                 ]
@@ -5114,7 +5398,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "end-of-battle-round"
+            "event": "round-ended"
           },
           "effect": {
             "type": "resource-clear",
@@ -5209,14 +5493,19 @@
             "operator": "not",
             "operands": [
               {
-                "type": "engagement-state"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
               }
             ]
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "HARLEQUINS"
+              "all_of": [
+                "HARLEQUINS"
+              ]
             }
           }
         ]
@@ -5267,7 +5556,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-fought-this-phase"
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
               }
             ]
           }
@@ -5315,7 +5611,10 @@
         "operator": "not",
         "operands": [
           {
-            "type": "engagement-state"
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           }
         ]
       },
@@ -5329,11 +5628,15 @@
       }
     },
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "proximity": {
-        "of": "bearer",
-        "range": 8
+        "of": "this-model",
+        "range": {
+          "inches": 8
+        }
       },
       "optional": true
     },
@@ -5368,7 +5671,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -5404,7 +5711,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -5474,10 +5785,16 @@
             }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "target",
-              "attack_type": "ranged"
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
             }
           }
         ]
@@ -5496,9 +5813,14 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "destroyed-by-attack-type",
+              "type": "happened",
               "parameters": {
-                "attack_type": "ranged"
+                "event": "destroyed",
+                "object": "event-object",
+                "filter": {
+                  "attack_type": "ranged"
+                },
+                "window": "event"
               }
             },
             "effect": {
@@ -5580,21 +5902,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "RANGERS"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "SHROUD RUNNERS"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "any_of": [
+            "RANGERS",
+            "SHROUD RUNNERS"
+          ]
+        }
       },
       "effect": {
         "type": "sequence",
@@ -5632,7 +5946,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -5733,7 +6047,10 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-fight",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -5824,7 +6141,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -5920,23 +6237,29 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ASURYANI"
+                  "all_of": [
+                    "ASURYANI"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MOUNTED"
+                  "all_of": [
+                    "MOUNTED"
+                  ]
                 }
               }
             ]
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VYPER"
+              "all_of": [
+                "VYPER"
+              ]
             }
           }
         ]
@@ -5965,7 +6288,13 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "end-of-opponent-turn"
+              "event": "turn-ended",
+              "condition": {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
             },
             "effect": {
               "type": "movement-modifier",
@@ -6010,27 +6339,21 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "HARLEQUINS"
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
                 }
               },
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "MOUNTED"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "any_of": [
+                    "MOUNTED",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           },
@@ -6050,14 +6373,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "HARLEQUINS"
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
                 }
               },
               {
-                "type": "disembarked-from-transport",
-                "parameters": {}
+                "type": "happened",
+                "parameters": {
+                  "event": "disembarked",
+                  "window": "turn"
+                }
               }
             ]
           },
@@ -6186,12 +6514,16 @@
                 }
               },
               {
-                "type": "units-destroyed",
+                "type": "happened",
                 "parameters": {
-                  "side": "friendly",
-                  "window": "this-phase",
-                  "keyword": "YNNARI",
-                  "count_min": 1
+                  "event": "destroyed",
+                  "object": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "YNNARI"
+                    ]
+                  },
+                  "window": "phase"
                 }
               }
             ]
@@ -6208,9 +6540,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "YNNARI"
+              "all_of": [
+                "YNNARI"
+              ]
             }
           },
           "effect": {
@@ -6234,7 +6568,10 @@
                 }
               },
               {
-                "type": "unit-below-starting-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "starting"
+                }
               }
             ]
           },
@@ -6274,45 +6611,36 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "DIRE AVENGER"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "GUARDIAN"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SUPPORT WEAPON"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "WAR WALKER"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "DIRE AVENGER",
+                "GUARDIAN",
+                "SUPPORT WEAPON",
+                "WAR WALKER"
+              ]
+            }
           },
           {
             "operator": "or",
             "operands": [
               {
-                "type": "within-range-of-objective",
-                "parameters": {}
+                "type": "within",
+                "parameters": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
               },
               {
-                "type": "within-range-of-objective",
+                "type": "within",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               }
             ]
@@ -6391,13 +6719,16 @@
             "operator": "and",
             "operands": [
               {
-                "type": "controls-objective",
-                "parameters": {}
+                "type": "controls"
               },
               {
-                "type": "within-range-of-objective",
+                "type": "within",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               }
             ]
@@ -6419,9 +6750,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ANHRATHE"
+              "all_of": [
+                "ANHRATHE"
+              ]
             }
           },
           "effect": {
@@ -6498,27 +6831,14 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "ANHRATHE"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "RANGERS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SHROUD RUNNERS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "ANHRATHE",
+                "RANGERS",
+                "SHROUD RUNNERS"
+              ]
+            }
           },
           "effect": {
             "type": "re-roll",
@@ -6559,7 +6879,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle-round",
+            "event": "round-started",
             "condition": {
               "type": "battle-round",
               "parameters": {
@@ -6581,7 +6901,13 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "stratagem-used"
+            "event": "used",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "kind": "stratagem"
+            }
           },
           "effect": {
             "type": "sequence",
@@ -6636,7 +6962,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "start-of-battle-round"
+            "event": "round-started"
           },
           "effect": {
             "type": "resource-gain",
@@ -6650,9 +6976,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "timing-is",
+            "type": "happened",
             "parameters": {
-              "timing": "unit-performs-swift-as-the-wind-agile-manoeuvre"
+              "event": "used",
+              "filter": {
+                "kind": "manoeuvre",
+                "id": "swift-as-the-wind"
+              },
+              "window": "phase"
             }
           },
           "effect": {
@@ -6668,9 +6999,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "timing-is",
+            "type": "happened",
             "parameters": {
-              "timing": "unit-performs-agile-manoeuvre-involving-d6"
+              "event": "used",
+              "window": "event",
+              "filter": {
+                "kind": "manoeuvre"
+              }
             }
           },
           "effect": {
@@ -6728,21 +7063,13 @@
             ]
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "ASPECT WARRIORS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "AVATAR OF KHAINE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "ASPECT WARRIORS",
+                "AVATAR OF KHAINE"
+              ]
+            }
           }
         ]
       },
@@ -6994,7 +7321,10 @@
       "per": "unit"
     },
     "trigger": {
-      "event": "selected-to-shoot"
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
     }
   },
   {
@@ -7016,12 +7346,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "subject": "unit",
-          "target_type": "friendly-keyword",
-          "keyword": "WRAITH CONSTRUCT",
-          "range": 3
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "WRAITH CONSTRUCT"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
         }
       },
       "effect": {
@@ -7056,15 +7391,18 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "subject": "unit",
-          "target_type": "friendly-keyword",
-          "keywords": [
-            "AELDARI",
-            "PSYKER"
-          ],
-          "range": 12
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "AELDARI",
+              "PSYKER"
+            ]
+          },
+          "range": {
+            "inches": 12
+          }
         }
       },
       "effect": {
@@ -7143,8 +7481,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-within-half-weapon-range",
-        "parameters": {}
+        "type": "within",
+        "parameters": {
+          "subject": "defender",
+          "of": "attacker",
+          "range": "half-weapon"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -7179,8 +7521,15 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-fell-back",
-      "subject": "enemy-unit"
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
     },
     "effect": {
       "type": "desperate-escape",

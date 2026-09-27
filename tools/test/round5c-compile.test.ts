@@ -102,7 +102,7 @@ describe("Round 5C leaf compiler", () => {
     expect(result.mechanics).toEqual({
       effect: {
         type: "conditional",
-        condition: { operator: "and", operands: [{ type: "unit-below-starting-strength" }, { type: "is-attached" }] },
+        condition: { operator: "and", operands: [{ type: "strength", parameters: { below: "starting" } }, { type: "attachment", parameters: { subject: "this-model", role: "leading" } }] },
         effect: { type: "sequence", steps: [
           { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } },
           { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } },
@@ -110,7 +110,7 @@ describe("Round 5C leaf compiler", () => {
       },
       scope: { range: "unit", duration: "turn" },
       behavior: "reactive",
-      trigger: { event: "start-of-phase" },
+      trigger: { event: "phase-started" },
     });
     expect(result.signature).toBe("EVENT(event:phase-start) · CONDITION(below-starting-strength) · CONDITION(leading-unit) · EFFECT(reroll) · EFFECT(roll-modifier) · DURATION(duration)");
     expect(rendered(authored("adeptus-mechanicus", "control-edict"), leaves).length).toBeGreaterThan(0);
@@ -128,27 +128,27 @@ describe("Round 5C leaf compiler", () => {
     const window = (phase: string) => ({ operator: "and", operands: [{ type: "phase-is", parameters: { phase } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] });
     // One ability: no trigger of its own, its leading condition gates both parts, and the two
     // moments with no effect between them are alternatives for the second part.
-    expect(result.mechanics).toMatchObject({ behavior: "reactive", trigger: null, effect: { type: "conditional", condition: { type: "is-attached" }, effect: { type: "sequence", steps: [
-      { type: "ability-part", trigger: { event: "start-of-phase", condition: window("movement") }, effect: { type: "re-roll" } },
-      { type: "ability-part", trigger: [{ event: "end-of-phase", condition: window("movement") }, { event: "end-of-phase", condition: window("shooting") }], effect: { type: "cp-gain" } },
+    expect(result.mechanics).toMatchObject({ behavior: "reactive", trigger: null, effect: { type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, effect: { type: "sequence", steps: [
+      { type: "ability-part", trigger: { event: "phase-started", condition: window("movement") }, effect: { type: "re-roll" } },
+      { type: "ability-part", trigger: [{ event: "phase-ended", condition: window("movement") }, { event: "phase-ended", condition: window("shooting") }], effect: { type: "cp-gain" } },
     ] } } });
   });
 
   it("fires on any of several leading moments", () => {
     const either = compiled([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EVENT", "event", { kind: "selected-to-fight" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
-    expect(either.mechanics).toMatchObject({ behavior: "reactive", trigger: [{ event: "selected-to-shoot", subject: "self" }, { event: "selected-to-fight", subject: "self" }] });
+    expect(either.mechanics).toMatchObject({ behavior: "reactive", trigger: [{ event: "selected", filter: { to: "shoot" } }, { event: "selected", filter: { to: "fight" } }] });
   });
 
   it("narrows a phase-boundary trigger by phase and whose turn", () => {
     const command = compiled([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]);
-    expect(command.mechanics.trigger).toEqual({ event: "start-of-phase", condition: { operator: "and", operands: [
+    expect(command.mechanics.trigger).toEqual({ event: "phase-started", condition: { operator: "and", operands: [
       { type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } },
     ] } });
     expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "fight", turn: "opponent" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger)
-      .toEqual({ event: "end-of-phase", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }] } });
+      .toEqual({ event: "phase-ended", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }] } });
     expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]))
       .toMatch(/Command phase/iu);
-    expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger).toEqual({ event: "end-of-phase" });
+    expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger).toEqual({ event: "phase-ended" });
     expect(shapeSignature([leaf("EVENT", "event", { kind: "phase-start", phase: "fight", turn: "opponent" }, 3)])).toBe("EVENT(event:phase-start)");
   });
 

@@ -7,18 +7,26 @@
     "generation": [
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "start-of-battle-round"
+            "event": "turn-started",
+            "window": "event"
           }
         },
         "amount": 1
       },
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "on-unit-destroyed"
+            "event": "destroyed",
+            "window": "event",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTA SORORITAS"
+              ]
+            }
           }
         },
         "amount": 1

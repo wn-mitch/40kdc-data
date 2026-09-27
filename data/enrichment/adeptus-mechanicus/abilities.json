@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -89,9 +93,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "FLY"
+                  "subject": "recipient",
+                  "all_of": [
+                    "FLY"
+                  ]
                 }
               }
             ]
@@ -206,13 +213,28 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": [
       {
-        "event": "normal-move"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        }
       },
       {
-        "event": "advances"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        }
       },
       {
-        "event": "falls-back"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ]
+        }
       }
     ]
   },
@@ -349,7 +371,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -406,7 +432,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -447,7 +477,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -692,9 +726,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "TECH-PRIEST"
+          "all_of": [
+            "TECH PRIEST"
+          ]
         }
       },
       "effect": {
@@ -729,7 +765,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -789,7 +829,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -824,9 +868,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "INFANTRY"
+          "subject": "defender",
+          "all_of": [
+            "INFANTRY"
+          ]
         }
       },
       "effect": {
@@ -927,9 +974,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "INFANTRY"
+          "subject": "defender",
+          "all_of": [
+            "INFANTRY"
+          ]
         }
       },
       "effect": {
@@ -1054,31 +1104,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "opponent-unit-within-range",
+        "type": "within",
         "parameters": {
-          "range": 6
+          "of": {
+            "owner": "enemy"
+          },
+          "range": {
+            "inches": 6
+          }
         }
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "unit-within-range-of",
-              "parameters": {
-                "target_type": "friendly-keyword",
-                "keyword": "ADEPTUS MECHANICUS"
-              }
+          "type": "within",
+          "parameters": {
+            "of": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS MECHANICUS",
+                "BATTLELINE"
+              ]
             },
-            {
-              "type": "unit-within-range-of",
-              "parameters": {
-                "target_type": "friendly-keyword",
-                "keyword": "BATTLELINE"
-              }
+            "range": {
+              "inches": 6
             }
-          ]
+          }
         },
         "effect": {
           "type": "leadership-modifier",
@@ -1179,9 +1230,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "subject": "recipient",
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]
@@ -1272,23 +1326,29 @@
       "steps": [
         {
           "condition": {
+            "operator": "and",
             "operands": [
               {
-                "type": "is-attached"
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
               },
               {
+                "operator": "not",
                 "operands": [
                   {
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "ELECTRO-PRIESTS"
-                    },
-                    "type": "unit-has-keyword"
+                      "all_of": [
+                        "ELECTRO PRIESTS"
+                      ]
+                    }
                   }
-                ],
-                "operator": "not"
+                ]
               }
-            ],
-            "operator": "and"
+            ]
           },
           "effect": {
             "modifier": {
@@ -1301,18 +1361,24 @@
         },
         {
           "condition": {
+            "operator": "and",
             "operands": [
               {
-                "type": "is-attached"
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
               },
               {
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ELECTRO-PRIESTS"
-                },
-                "type": "unit-has-keyword"
+                  "all_of": [
+                    "ELECTRO PRIESTS"
+                  ]
+                }
               }
-            ],
-            "operator": "and"
+            ]
           },
           "effect": {
             "modifier": {
@@ -1393,9 +1459,9 @@
         "operator": "not",
         "operands": [
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
-              "state": "in-engagement-range"
+              "state": "engaged"
             }
           }
         ]
@@ -1427,23 +1493,21 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "unit-within-range-of",
-                  "parameters": {
-                    "target_type": "friendly-keyword",
-                    "keyword": "ADEPTUS MECHANICUS"
-                  }
+              "type": "within",
+              "parameters": {
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
+                  ]
                 },
-                {
-                  "type": "unit-within-range-of",
-                  "parameters": {
-                    "target_type": "friendly-keyword",
-                    "keyword": "BATTLELINE"
-                  }
-                }
-              ]
+                "range": {
+                  "inches": 6
+                },
+                "wholly": true,
+                "models": "every"
+              }
             },
             "effect": {
               "type": "sequence",
@@ -1480,7 +1544,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -1559,7 +1623,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -1699,8 +1767,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -1770,7 +1840,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -1831,30 +1905,40 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "friendly",
-              "window": "battle",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "friendly"
+              },
+              "window": "battle"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ADEPTUS MECHANICUS"
+              "all_of": [
+                "ADEPTUS MECHANICUS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly",
-              "range": 12
+              "of": {
+                "owner": "friendly"
+              },
+              "range": {
+                "inches": 12
+              }
             }
           }
         ]
@@ -1894,7 +1978,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -2239,28 +2327,42 @@
                   "operator": "or",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "BATTLELINE"
+                        "all_of": [
+                          "BATTLELINE"
+                        ]
                       }
                     },
                     {
                       "operator": "and",
                       "operands": [
                         {
-                          "type": "unit-within-range-of",
+                          "type": "within",
                           "parameters": {
-                            "range": 6,
-                            "target_type": "friendly-keyword",
-                            "keyword": "ADEPTUS MECHANICUS"
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
                           }
                         },
                         {
-                          "type": "unit-within-range-of",
+                          "type": "within",
                           "parameters": {
-                            "range": 6,
-                            "target_type": "friendly-keyword",
-                            "keyword": "BATTLELINE"
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
                           }
                         }
                       ]
@@ -2310,28 +2412,42 @@
                   "operator": "or",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "BATTLELINE"
+                        "all_of": [
+                          "BATTLELINE"
+                        ]
                       }
                     },
                     {
                       "operator": "and",
                       "operands": [
                         {
-                          "type": "unit-within-range-of",
+                          "type": "within",
                           "parameters": {
-                            "range": 6,
-                            "target_type": "friendly-keyword",
-                            "keyword": "ADEPTUS MECHANICUS"
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
                           }
                         },
                         {
-                          "type": "unit-within-range-of",
+                          "type": "within",
                           "parameters": {
-                            "range": 6,
-                            "target_type": "friendly-keyword",
-                            "keyword": "BATTLELINE"
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
                           }
                         }
                       ]
@@ -2671,7 +2787,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -2869,9 +2989,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CORPUSCARII"
+              "subject": "defender",
+              "all_of": [
+                "CORPUSCARII"
+              ]
             }
           },
           "effect": {
@@ -2889,9 +3012,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FULGURITE"
+              "subject": "defender",
+              "all_of": [
+                "FULGURITE"
+              ]
             }
           },
           "effect": {
@@ -3124,7 +3250,7 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-tag",
+            "type": "designated",
             "parameters": {
               "tag": "protector-imperative-active"
             }
@@ -3141,7 +3267,7 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-tag",
+            "type": "designated",
             "parameters": {
               "tag": "conqueror-imperative-active"
             }
@@ -3722,9 +3848,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIO CYBERNETICA"
+              "all_of": [
+                "LEGIO CYBERNETICA"
+              ]
             }
           },
           "effect": {
@@ -3742,16 +3870,21 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "LEGIO CYBERNETICA"
+                  "all_of": [
+                    "LEGIO CYBERNETICA"
+                  ]
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "is-battle-shocked"
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "battle-shocked"
+                    }
                   }
                 ]
               }
@@ -3802,15 +3935,19 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "SKITARII"
+                      "all_of": [
+                        "SKITARII"
+                      ]
                     }
                   },
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "INFANTRY"
+                      "all_of": [
+                        "INFANTRY"
+                      ]
                     }
                   }
                 ]
@@ -3819,23 +3956,29 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "SKITARII"
+                      "all_of": [
+                        "SKITARII"
+                      ]
                     }
                   },
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "MOUNTED"
+                      "all_of": [
+                        "MOUNTED"
+                      ]
                     }
                   }
                 ]
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "IRONSTRIDER BALLISTARII"
+                  "all_of": [
+                    "IRONSTRIDER BALLISTARII"
+                  ]
                 }
               }
             ]
@@ -3856,24 +3999,32 @@
             "operator": "and",
             "operands": [
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "ranged"
                 }
               },
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "SICARIAN"
+                  "subject": "defender",
+                  "all_of": [
+                    "SICARIAN"
+                  ]
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "opponent-unit-within-range",
+                    "type": "within",
                     "parameters": {
-                      "range": 12
+                      "of": {
+                        "owner": "enemy"
+                      },
+                      "range": {
+                        "inches": 12
+                      }
                     }
                   }
                 ]
@@ -3925,7 +4076,7 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "attack-is-type",
+              "type": "attack-is",
               "parameters": {
                 "attack_type": "ranged"
               }
@@ -3947,7 +4098,16 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "charged-this-turn"
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "charge"
+                  ]
+                },
+                "window": "turn"
+              }
             },
             "effect": {
               "type": "sequence",
@@ -4006,12 +4166,27 @@
         "operator": "or",
         "operands": [
           {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {
+                  "designated": "acquisition"
+                }
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "opponent-unit-within-range",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": {
+                "objective": {
+                  "designated": "acquisition"
+                }
+              },
+              "range": "objective-control"
+            }
           }
         ]
       },
@@ -4051,7 +4226,8 @@
       "condition": {
         "type": "battle-round",
         "parameters": {
-          "round": 1
+          "min": 1,
+          "max": 1
         }
       },
       "effect": {
@@ -4095,9 +4271,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -4106,9 +4285,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -4150,21 +4332,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -4268,9 +4443,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "VEHICLE"
+          "subject": "defender",
+          "all_of": [
+            "VEHICLE"
+          ]
         }
       },
       "effect": {
@@ -4298,7 +4476,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4355,9 +4533,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           },
           "effect": {
@@ -4376,20 +4558,28 @@
             "operator": "and",
             "operands": [
               {
-                "type": "within-range-of-objective",
+                "type": "within",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "subject": "unit",
-                  "range": 6,
-                  "keywords": [
-                    "ADEPTUS MECHANICUS",
-                    "BATTLELINE"
-                  ]
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "BATTLELINE"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
                 }
               }
             ]
@@ -4462,9 +4652,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "subject": "recipient",
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]

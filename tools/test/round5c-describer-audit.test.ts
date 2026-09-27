@@ -16,12 +16,10 @@ describe("Round 5C leaf describer audit", () => {
     expect(summary()).toEqual({
       // Only gains compile; losing, spending and setting a resource have no DSL fragment.
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
-      // The compiler writes every attachment as is-attached, which names neither.
+      // The compiler writes every attachment as this model leading a unit, whatever the leaf said.
       "leading-unit": { unrendered: ["subject", "attachment"], colliding: [], problems: 0 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
-      // Engagement Range ignores subject: target in the describer (all four ports).
-      "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
     });
@@ -31,9 +29,11 @@ describe("Round 5C leaf describer audit", () => {
     for (const family of ["unit-keyword", "unit-mark", "unit-position", "unit-activity"]) {
       expect(leafDescriberAudit().find((item) => item.family_id === family)).toMatchObject({ unrendered: [], collisions: [], problems: [] });
     }
-    expect(describeCondition({ type: "unit-below-starting-strength", parameters: { subject: "target" } } as never)).toBe("the target unit is below starting strength");
-    expect(describeCondition({ type: "is-battle-shocked", parameters: { subject: "attacker" } } as never)).toBe("the attacking unit is battle-shocked");
-    expect(describeCondition({ type: "unit-below-starting-strength" } as never)).toBe("the unit is below starting strength");
+    expect(describeCondition({ type: "strength", parameters: { subject: "defender", below: "starting" } } as never)).toBe("the target unit is below starting strength");
+    expect(describeCondition({ type: "unit-state", parameters: { subject: "attacker", state: "battle-shocked" } } as never)).toBe("the attacking unit is Battle-shocked");
+    // Engagement Range names the target too, not only this unit.
+    expect(describeCondition({ type: "unit-state", parameters: { subject: "defender", state: "engaged" } } as never)).toBe("the target unit is engaged");
+    expect(describeCondition({ type: "strength", parameters: { below: "starting" } } as never)).toBe("the unit is below starting strength");
   });
 
   it("names the hidden values of one leaf for the Leaves page", () => {

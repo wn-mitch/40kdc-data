@@ -49,6 +49,27 @@ const ABILITY_SCHEMA_ID = "https://40kdc.dev/schemas/enrichment/ability-dsl/abil
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Json = any;
 const readJSON = (p: string): Json => JSON.parse(readFileSync(p, "utf-8"));
+const SCHEMA_ROOT = resolve(__dirname, "../../schemas");
+
+/** The predicate vocabulary, from the condition schema, so the guide cannot drift from it. */
+const CONDITION_GUIDE = (() => {
+  const schema = readJSON(resolve(SCHEMA_ROOT, "enrichment/ability-dsl/condition.schema.json"));
+  const lines = (schema.$defs["simple-condition"].oneOf as Json[]).map((v) => {
+    const params = v.properties.parameters?.properties ?? {};
+    const required = new Set<string>(v.properties.parameters?.required ?? []);
+    const keys = Object.keys(params).map((k) => (required.has(k) ? k : `${k}?`)).join(", ");
+    return `    - ${v.properties.type.const}{${keys}}: ${String(v.description).replace(/^\[[a-z]+\] /, "")}`;
+  });
+  return `A condition is ONE of:\n` +
+    `  • predicate: {type, parameters:{...}} — ALL params go UNDER "parameters". \`subject\` names the unit tested: this-unit (default), this-model, model-in-this-unit, attacker, defender (the attack's target), event-subject, event-object, stratagem-target, selected-unit, recipient (the unit an aura or effect is applied to), or a filter {owner, all_of, any_of, none_of, designated, state, level, visible} meaning "a unit that…". A range is {inches:N} | engagement | aura | weapon | half-weapon | detection | objective-control | {aura_of:<ability_id>}. Keywords are uppercase as GW prints them; designations (RILED UP, SPOTTED) are \`designated\`, not keywords. Types:\n${lines.join("\n")}\n` +
+    `  • compound: {operator:"and"|"or", operands:[condition, ...]} or {operator:"not", operands:[one condition]} — "not" is the ONLY negation (e.g. "while not Battle-shocked" → {operator:"not", operands:[{type:"unit-state",parameters:{state:"battle-shocked"}}]}; "unengaged" → not unit-state engaged).\n\n`;
+})();
+
+/** The trigger shape and event families, from the schema. */
+const TRIGGER_GUIDE = (() => {
+  const events = readJSON(resolve(SCHEMA_ROOT, "$defs/common.schema.json")).$defs["game-event"].enum as string[];
+  return `Ability-level trigger is an EVENT OBJECT, never a condition: {event, subject?, object?, filter?, proximity?:{of?, range}, condition?, optional?:boolean, cost?:{cp}, window?:string, binds_event_variable?:string}. event MUST be one of [${events.join(",")}]. subject is who acted (default this-unit; a filter such as {owner:"enemy"} for "an enemy unit"); object is what the action was aimed at (the unit targeted, charged, attacked or destroyed). filter narrows the family: {to} for selected (move|shoot|fight|attack|disembark|observe), {kind, id} for targets-selected / attacks-resolved / used (which Stratagem, ability, action…), {move_types, mode, through} for move-ended, {from} for set-up, {roll, result} for before-roll / after-roll, {by, attack_type, weapon_keyword, timing:"before-removal", first} for destroyed / model-destroyed. Phase and whose turn go in trigger.condition (phase-is, player-turn-is). `;
+})();
 const writeJSON = (p: string, v: Json): void => writeFileSync(p, JSON.stringify(v, null, 2) + "\n");
 /** Stable digest of a stub's source rule — the resume key (rule changed ⇒ re-propose). */
 const srcHash = (s: string): string => createHash("sha1").update(s).digest("hex").slice(0, 12);
@@ -213,14 +234,11 @@ export const REPAIR_SYSTEM =
   `  • dice-gated: {type:"dice-gated", dice:"D6"|..., threshold:int, comparison?:"gte"|"lte"|"gt"|"lt"|"eq", on_success:effect, on_fail?:effect}\n` +
   `  • dice-table: {type:"dice-table", dice:"D3"|"D6", outcomes:[{results:[1,...], effect}, ...]} — one closed die whose outcome rows cover every face exactly once; use this instead of nested dice-gated effects when each face has a different result\n` +
   `  • dice-pool-allocation: {type:"dice-pool-allocation", pool:{count,die}, max_activations:int, options:[{name, requirement:{type:"pair"|"triple"|"single"|"run",min_value:1..6}, effect}, ...]} — ONLY for allocating an already-rolled dice pool by pair/triple/single/run requirements; never use it for an ordinary D6 outcome table\n\n` +
-  `A condition is ONE of:\n` +
-  `  • simple: {type, parameters:{...}} — ALL params go UNDER "parameters", never as top-level keys (e.g. {"type":"unit-has-keyword","parameters":{"keyword":"VEHICLE"}}, NOT {"type":"unit-has-keyword","keyword":"VEHICLE"}). type ∈ [phase-is{phase}, player-turn-is{turn:"your-turn"|"opponent-turn"}, unit-below-starting-strength, unit-below-half-strength, unit-has-keyword{keyword}, unit-model-count{keyword,count_min}, uniform-ranged-loadout{model_keyword?}, all-attacks-target-same-unit{attack_type?}, unit-within-range-of{target_type}, model-is-leader, target-has-keyword{keyword}, charged-this-turn, advanced-this-turn, remained-stationary, is-battle-shocked, has-lost-wounds, was-hit-by-attack{subject?:"self"|"target",attack_type?,weapon_name?,count_min?}, opponent-unit-within-range, within-range-of-objective, attack-is-type{attack_type}, has-fought-this-phase, destroyed-by-attack-type{attack_type}, controls-objective, is-attached, terrain-area-control, engagement-state, territory-control, fights-first, disposition-matches, units-destroyed{side,window,count_min}, units-destroyed-comparison, objective-majority, attack-stat-compare{attacker_stat,comparison:"greater-than"|"less-than"|"greater-or-equal"|"less-or-equal"|"equal",target_stat} (e.g. attack S greater than unit T), made-ingress-move-this-turn]\n` +
-  `  • army-faction-is{faction_id} — use the canonical faction ID when a rule says "if your army faction is ..."; this tests the army, not a unit keyword.\n` +
-  `  • compound: {operator:"and"|"or"|"not", operands:[condition, ...]} — use "not" with ONE operand to negate (e.g. "while not Battle-shocked" → {operator:"not", operands:[{type:"is-battle-shocked"}]}). Nest compounds freely.\n\n` +
-  `Encode every moment (when the rule fires) as a trigger, never as a timing-is condition: the moment the whole ability fires is the ability-level trigger (an array of triggers when any of several moments fires it), with its phase and whose turn in trigger.condition as phase-is + player-turn-is{turn:"your-turn"|"opponent-turn"}. A compound ability whose parts fire at different moments stays one ability: its effect is a sequence of {type:"ability-part", trigger, effect, usage?, optional?, name?} steps, one per moment, and it has no ability-level trigger. Encode frequency with usage (on the ability, or on the part it limits); do not invent timing condition strings for frequency.\n` +
+  CONDITION_GUIDE +
+  `Encode every moment (when the rule fires) as a trigger, never as a condition: the moment the whole ability fires is the ability-level trigger (an array of triggers when any of several moments fires it), with its phase and whose turn in trigger.condition as phase-is + player-turn-is{turn:"your-turn"|"opponent-turn"}. A compound ability whose parts fire at different moments stays one ability: its effect is a sequence of {type:"ability-part", trigger, effect, usage?, optional?, name?} steps, one per moment, and it has no ability-level trigger. Encode frequency with usage (on the ability, or on the part it limits); do not invent timing condition strings for frequency.\n` +
   `scope = {range, duration}: range ∈ [self, unit, attached, aura-6, aura-9, aura-12, aura-custom, engagement-range, any-visible, any-on-battlefield, terrain-within-range] — this is the COMPLETE list. range is a distance from the bearer and is NEVER a target value: do NOT put "all-friendly"/"friendly-within-aura"/"all-enemy" here (those are effect targets). For an army-wide detachment/faction buff ("all friendly X units"), use range "unit" and express the audience via the effect target / applies_to keywords. duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, until-next-movement-phase, until-next-battle-round, until-start-next-turn, one-use, permanent, attack-sequence, resolution]. Use until-start-next-turn exactly when the rule says "until the start of your next turn"; that is not equivalent to battle-round or until-next-command-phase.\n` +
-  `Ability-level trigger is an EVENT OBJECT, never a condition: {event, subject, proximity?:{of,range}, move_types?:["normal"|"advance"|"fall-back"|"charge"], condition?:condition, optional?:boolean, cost?:{cp}, window?:string, binds_event_variable?:string}. event MUST be one of [start-of-phase,end-of-phase,start-of-turn,end-of-turn,stratagem-targeted,ability-target-selected,start-of-opponent-turn,end-of-opponent-turn,start-of-battle-round,start-of-command-phase,declare-battle-formations,post-deployment,unit-set-up,set-up-from-reserves,arrives-from-strategic-reserves,starts-in-strategic-reserves,game-start-in-reserves,deep-strike-setup,reinforcements,normal-move,advance-move,advances,fall-back-move,falls-back,charge-move,end-of-charge-move,charge-declaration,moved-through-terrain,moved-through-tall-terrain,enemy-unit-ended-move,enemy-unit-fell-back,before-hit-roll,after-hit-roll,before-wound-roll,after-wound-roll,before-save-roll,after-save-roll,before-damage-roll,after-damage-roll,before-charge-roll,after-charge-roll,before-advance-roll,after-advance-roll,before-battle-shock,after-battle-shock,on-unit-selected,selected-to-shoot,selected-to-fight,selected-to-advance,after-unit-resolves-attacks,after-scoring-hit,after-enemy-unit-fires,on-unit-destroyed,on-model-destroyed,first-model-destroyed,before-bearer-removed,enemy-unit-destroyed-in-melee,on-damage-allocated,battle-shock-test,leadership-test,desperate-escape-test]. subject MUST be self|bearer|friendly-unit|enemy-unit|any-unit|model-in-bearer. If no canonical event exactly fits, omit trigger and keep the timing as a condition; NEVER put {type,parameters} or {operator,operands} in trigger. usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {required_keywords?:[...], excluded_keywords?:[...]} for static bearer/datasheet eligibility such as "WARBOSS model only". Do not duplicate a trigger as a timing condition when trigger expresses it exactly.\n` +
-  `The event vocabulary also includes start-of-player-turn ("your turn"); start-of-battle-round and start-of-opponent-turn are existing distinct events.\n` +
+  TRIGGER_GUIDE +
+  `usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {required_keywords?:[...], excluded_keywords?:[...]} for static bearer/datasheet eligibility such as "WARBOSS model only".\n` +
   `behavior ∈ [passive, activated, reactive, aura].\n\n` +
   `CANONICAL MODIFIER KEYS — use ONLY the keys listed per type; never invent a key (an unknown key is silently ignored by consumers and corrupts the data):\n` +
   `  stat-modifier.modifier: {stat, operation:"add"|"subtract"|"set", value:int}. stat ∈ [A,S,T,Sv,AP,OC,Ld,M,W,D] ONLY (use "M" for Move, never "Move"/"range"; weapon range is NOT a unit stat). operation:"set" IS allowed for "characteristic of N" rules (e.g. OC of 9). Optional narrowing: attack_type:"melee"|"ranged", weapon_type:"melee"|"ranged", weapon_name:"<weapon>" for a single named weapon, or weapon_keyword:"<ability>" to restrict to weapons with a keyword like "Torrent"/"Blast"/"Pistol". Do NOT use weapon_filter/model_filter.\n` +
@@ -274,15 +292,16 @@ export const REPAIR_SCHEMA = {
 // ─── assembly (pure TS, no LLM) ──────────────────────────────────────
 
 export function conditionNode(kind: string, param: string | null | undefined): Json | null {
+  const move = (types: string[]) => ({ type: "happened", parameters: { event: "move-ended", filter: { move_types: types }, window: "turn" } });
   switch (kind) {
     case "phase": return { type: "phase-is", parameters: { phase: param } };
-    case "vs-keyword": return { type: "target-has-keyword", parameters: { keyword: param } };
-    case "charged": return { type: "charged-this-turn" };
-    case "stationary": return { type: "remained-stationary" };
-    case "below-half": return { type: "unit-below-half-strength" };
-    case "below-starting": return { type: "unit-below-starting-strength" };
-    case "attached": return { type: "is-attached" };
-    case "leading": return { type: "model-is-leader" };
+    case "vs-keyword": return { type: "has-keyword", parameters: { subject: "defender", all_of: [param] } };
+    case "charged": return move(["charge"]);
+    case "stationary": return move(["remain-stationary"]);
+    case "below-half": return { type: "strength", parameters: { below: "half" } };
+    case "below-starting": return { type: "strength", parameters: { below: "starting" } };
+    case "attached":
+    case "leading": return { type: "attachment", parameters: { subject: "this-model", role: "leading" } };
     default: return null;
   }
 }
@@ -402,15 +421,16 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
     }
     if (Array.isArray(c.operands)) return c.operands.forEach(visitCondition); // compound {operator, operands}
     if (typeof c.type === "string") {
-      for (const k of Object.keys(c)) if (k !== "type" && k !== "parameters" && k !== "negated") issues.push(`condition ${c.type}: param "${k}" must live under "parameters"`);
+      for (const k of Object.keys(c)) if (k !== "type" && k !== "parameters") issues.push(`condition ${c.type}: "${k}" must live under "parameters"${k === "negated" ? " (negate with {operator:\"not\"})" : ""}`);
       if (c.type === "phase-is" && !CANONICAL_PHASES.has(String(c.parameters?.phase))) {
         issues.push(`condition phase-is: unknown phase "${String(c.parameters?.phase)}"`);
       }
       if (c.type === "player-turn-is" && !CANONICAL_PLAYER_TURNS.has(String(c.parameters?.turn))) {
         issues.push(`condition player-turn-is: unknown turn "${String(c.parameters?.turn)}"`);
       }
-      if ((c.type === "unit-has-keyword" || c.type === "target-has-keyword") && !canonicalKeyword(c.parameters?.keyword)) {
-        issues.push(`condition ${c.type}: "${String(c.parameters?.keyword)}" is not a unit keyword as rules print it (uppercase, one keyword)`);
+      const keywords = c.type === "has-keyword" ? [...(c.parameters?.all_of ?? []), ...(c.parameters?.any_of ?? [])] : [];
+      for (const keyword of keywords) if (!canonicalKeyword(keyword)) {
+        issues.push(`condition ${c.type}: "${String(keyword)}" is not a unit keyword as rules print it (uppercase, one keyword)`);
       }
     }
   };

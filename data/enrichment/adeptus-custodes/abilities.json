@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -128,7 +132,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -144,7 +152,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -295,7 +312,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -385,27 +406,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "CHARACTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "CHARACTER",
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -698,7 +707,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -817,7 +830,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1008,7 +1025,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1183,7 +1204,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "fight-first",
@@ -1217,13 +1242,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1340,7 +1375,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -1401,7 +1440,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1476,7 +1519,10 @@
             }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -1576,7 +1622,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1819,7 +1869,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -1951,9 +2005,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "subject": "defender",
+              "all_of": [
+                "PSYKER"
+              ]
             }
           }
         ]
@@ -2033,7 +2090,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2237,7 +2298,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-half-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "half"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -2326,9 +2390,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-compare",
         "parameters": {
-          "comparison": "strength-greater-than-toughness"
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "greater-than",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -2586,9 +2658,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "subject": "defender",
+              "all_of": [
+                "PSYKER"
+              ]
             }
           },
           "effect": {
@@ -2724,9 +2799,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "advanced-this-turn",
+        "type": "happened",
         "parameters": {
-          "move": "ingress"
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "ingress"
+            ]
+          },
+          "window": "turn"
         }
       },
       "effect": {
@@ -2802,7 +2883,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-lost-wounds"
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "lost": true
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -2953,10 +3038,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly",
-              "range": 6
+              "of": {
+                "owner": "friendly"
+              },
+              "range": {
+                "inches": 6
+              }
             }
           }
         ]
@@ -3023,15 +3112,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ADEPTUS CUSTODES"
+                  "all_of": [
+                    "ADEPTUS CUSTODES"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "CHARACTER"
+                  "all_of": [
+                    "CHARACTER"
+                  ]
                 }
               }
             ]
@@ -3082,17 +3175,9 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-below-starting-strength"
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "unit-has-keyword",
+                    "type": "strength",
                     "parameters": {
-                      "keyword": "AIRCRAFT"
+                      "below": "starting"
                     }
                   }
                 ]
@@ -3101,7 +3186,23 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "is-battle-shocked"
+                    "type": "has-keyword",
+                    "parameters": {
+                      "all_of": [
+                        "AIRCRAFT"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "battle-shocked"
+                    }
                   }
                 ]
               }
@@ -3119,7 +3220,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           "effect": {
             "type": "re-roll",
@@ -3133,7 +3237,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           "effect": {
             "type": "re-roll",
@@ -3293,13 +3400,19 @@
             "operator": "or",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "PSYKER"
+                  "subject": "defender",
+                  "all_of": [
+                    "PSYKER"
+                  ]
                 }
               },
               {
-                "type": "unit-below-starting-strength"
+                "type": "strength",
+                "parameters": {
+                  "below": "starting"
+                }
               }
             ]
           }
@@ -3319,7 +3432,10 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-below-half-strength"
+              "type": "strength",
+              "parameters": {
+                "below": "half"
+              }
             },
             "effect": {
               "type": "leadership-modifier",
@@ -3443,8 +3559,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -3667,21 +3789,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "rules-bundle",
@@ -3896,8 +4011,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -3941,8 +4062,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -4089,9 +4216,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WALKER"
+              "all_of": [
+                "WALKER"
+              ]
             }
           },
           "effect": {
@@ -4294,8 +4423,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength",
-        "parameters": {}
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -4369,7 +4500,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "melee"
         }
@@ -4454,7 +4585,7 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "melee"
             }
@@ -4471,9 +4602,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "subject": "defender",
+              "all_of": [
+                "PSYKER"
+              ]
             }
           },
           "effect": {
@@ -4722,9 +4856,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "strength",
         "parameters": {
-          "keyword": "below-starting-strength"
+          "subject": "defender",
+          "below": "starting"
         }
       },
       "effect": {
@@ -5027,8 +5162,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength",
-        "parameters": {}
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -5257,8 +5394,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn",
-        "parameters": {}
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -5702,8 +5847,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader",
-        "parameters": {}
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -5874,8 +6022,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader",
-        "parameters": {}
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "rules-bundle",
@@ -5892,9 +6043,12 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "target-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "PSYKER"
+                "subject": "defender",
+                "all_of": [
+                  "PSYKER"
+                ]
               }
             },
             "effect": {
@@ -5976,7 +6130,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "melee"
         }
@@ -6127,8 +6281,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn",
-        "parameters": {}
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "battle-shock-test",
@@ -6164,27 +6326,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "CHARACTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "CHARACTER",
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -6216,8 +6366,7 @@
     "source_digest": "cb39b349c24837caa780a64b9f9bf07419370a367c6fb0d6a667cd9479b85dcb",
     "version": "2025-q3",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "optional": true
     },
     "effect": {
@@ -6262,9 +6411,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           },
           "effect": {
@@ -6384,14 +6537,28 @@
     "source_digest": "dcdd34ddd4306ea78e9c123279c0bf9bb1bbd80482fcc61af4bb207d24222e21",
     "version": "2025-q3",
     "trigger": {
-      "event": "end-of-opponent-turn",
-      "subject": "self",
+      "event": "turn-ended",
       "condition": {
-        "type": "engagement-state",
-        "negated": true,
-        "parameters": {
-          "state": "engaged"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
+          }
+        ]
       },
       "optional": true
     },

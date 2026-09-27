@@ -117,6 +117,15 @@ regen commands below are the manual equivalents:
   the Python `gen_typeddicts.py`, and `bash go/codegen/sync.sh` (copies the
   schema tree the Go validator embeds); CI diff-checks all.
 
+**Condition and trigger vocabulary.** Conditions are predicates on named axes (`has-keyword`,
+`unit-state`, `happened`, `within`, …) whose `subject` is a unit-ref; negation is only the `not`
+operator; triggers are event families (`selected`, `move-ended`, `targets-selected`, …) with
+`subject`/`object`/`filter`. The schema (`condition.schema.json`, `common.schema.json`) is the
+catalog. Data authored in the pre-round-6 vocabulary (`unit-has-keyword`, `timing-is`,
+`enemy-unit-targets-bearer`, `negated: true`) fails validation: run `npm run vocab:migrate --
+<paths>` (dry run; `--write` applies, `--review <file>` lists what it can't place) and resolve any
+reviews in `tools/src/round6/vocab-overrides.json`.
+
 Referential integrity beyond JSON Schema (unit `ability_id`s must resolve in the
 same faction's enrichment; `faction_keywords` must match the faction's home
 keyword) is enforced by `tools/src/integrity.ts`, run as part of

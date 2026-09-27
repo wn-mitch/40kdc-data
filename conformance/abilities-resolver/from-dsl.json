@@ -235,7 +235,7 @@
         "unsupportedReasons": [],
         "activatable": [
           {
-            "id": "the-imperiums-sword-1st-company-task-force@start-of-phase",
+            "id": "the-imperiums-sword-1st-company-task-force@phase-started",
             "label": "+1 attacks",
             "group": null,
             "buffs": [
@@ -299,7 +299,7 @@
         ],
         "activatable": [
           {
-            "id": "ammo-runts@selected-to-shoot",
+            "id": "ammo-runts@selected:shoot",
             "label": "+1 to hit",
             "group": null,
             "buffs": [

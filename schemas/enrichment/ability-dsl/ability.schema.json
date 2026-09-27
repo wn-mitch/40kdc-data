@@ -166,71 +166,40 @@
   "additionalProperties": false,
   "$defs": {
     "trigger": {
-      "description": "A single reactive trigger: the game `event` (closed dispatch key), `subject` (whose action triggered it), `proximity` (spatial gate in inches), optional `move_types` (restricts a move event to given move kinds), `condition` (extra gate reusing the condition tree), `optional` ('you can' reactions), `cost` (stratagem-style CP), and `window` (how long the granted reaction stays open).",
+      "description": "A single reactive trigger: an event family (`event`), who acted (`subject`, default this-unit; clock events have none), what the action was aimed at (`object`), which one (`filter`: the move, roll, Stratagem or ability), a spatial gate (`proximity`), an extra gate (`condition`, where phase and turn go), `optional` for 'you can' reactions, a CP `cost`, and the `window` a granted reaction stays open.",
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event"
+      ],
       "properties": {
         "event": {
           "$ref": "../../defs/common.schema.json#/$defs/game-event"
         },
         "subject": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "friendly-unit",
-            "enemy-unit",
-            "any-unit",
-            "model-in-bearer",
-            "friendly-model",
-            "enemy-model"
-          ]
+          "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
         },
-        "caused_by": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "source": { "enum": ["bearer-model", "bearer-unit"] },
-            "attack_type": { "enum": ["melee", "ranged"] },
-            "weapon_keyword": { "type": "string", "minLength": 1 }
-          },
-          "required": ["source"],
-          "description": "Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source."
+        "object": {
+          "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+        },
+        "filter": {
+          "$ref": "../../defs/common.schema.json#/$defs/event-filter"
         },
         "proximity": {
           "type": "object",
-          "properties": {
-            "of": {
-              "type": "string",
-              "enum": [
-                "self",
-                "bearer",
-                "attached-unit",
-                "bearer-unit"
-              ]
-            },
-            "range": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
+          "additionalProperties": false,
           "required": [
             "range"
           ],
-          "additionalProperties": false
-        },
-        "move_types": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "advance",
-              "fall-back",
-              "charge"
-            ]
+          "properties": {
+            "of": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "range": {
+              "$ref": "../../defs/common.schema.json#/$defs/range-ref"
+            }
           },
-          "description": "Restricts a move-related event (e.g. enemy-unit-ended-move) to these move kinds — e.g. [normal, advance, fall-back] for 'a Normal, Advance or Fall Back move'."
+          "description": "The event happened within range of `of` (default this-unit)."
         },
         "condition": {
           "$ref": "condition.schema.json"
@@ -256,6 +225,16 @@
           "type": "string",
           "minLength": 1,
           "$comment": "Names the triggering event's bound object for later reference by a condition in the same reactive action. Internal only; never rendered."
+        },
+        "binds_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
+        },
+        "binds_selected_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
         },
         "source_ability": {
           "type": "object",
@@ -287,50 +266,10 @@
             "keywords"
           ],
           "additionalProperties": false,
-          "description": "Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase."
-        },
-        "subject_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer."
-        },
-        "subject_excluded_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "The event subject must have none of these keywords."
-        },
-        "binds_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
-        },
-        "binds_selected_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
+          "description": "The ability whose selection fired a `targets-selected {kind: ability}` trigger. Required there and allowed nowhere else."
         }
       },
-      "required": [
-        "event"
-      ],
-      "additionalProperties": false,
       "allOf": [
-        {
-          "if": { "required": ["caused_by"] },
-          "then": {
-            "properties": { "event": { "enum": ["on-unit-destroyed", "on-model-destroyed"] } }
-          }
-        },
         {
           "if": {
             "required": [
@@ -340,21 +279,45 @@
           "then": {
             "properties": {
               "event": {
-                "const": "ability-target-selected"
+                "const": "targets-selected"
+              },
+              "filter": {
+                "required": [
+                  "kind"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "ability"
+                  }
+                }
               }
-            }
+            },
+            "required": [
+              "filter"
+            ]
           }
         },
         {
           "if": {
+            "required": [
+              "event",
+              "filter"
+            ],
             "properties": {
               "event": {
-                "const": "ability-target-selected"
+                "const": "targets-selected"
+              },
+              "filter": {
+                "required": [
+                  "kind"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "ability"
+                  }
+                }
               }
-            },
-            "required": [
-              "event"
-            ]
+            }
           },
           "then": {
             "required": [
@@ -372,7 +335,7 @@
           "then": {
             "properties": {
               "event": {
-                "const": "miracle-die-generated"
+                "const": "resource-gained"
               }
             },
             "required": [
@@ -389,7 +352,7 @@
           "then": {
             "properties": {
               "event": {
-                "const": "act-of-faith-performed"
+                "const": "used"
               }
             },
             "required": [

@@ -23,10 +23,10 @@ diff the working tree against it.
 ```json
 {
   "ability_ids": ["…"],
-  "levers_before": { "relentless-rage": ["charged-this-turn → context gate", "…"] },
+  "levers_before": { "relentless-rage": ["happened move-ended charge this turn → context gate", "…"] },
   "levers_after": { "relentless-rage": [] },
   "regressions": [
-    { "ability_id": "relentless-rage", "lever": "charged-this-turn context gate", "change": "dropped — condition re-phrased to timing-is charge-move" }
+    { "ability_id": "relentless-rage", "lever": "charged-this-turn context gate", "change": "dropped — the charge history was re-encoded as a trigger moment" }
   ],
   "additions": [],
   "verdict": "clean|regressed"
@@ -51,8 +51,8 @@ diff the working tree against it.
 ## Design principles
 - The levers are contractual; the cosine score is advisory. A re-author that
   gains 0.1 cosine and drops one lever is a regression, full stop.
-- Canonical ids to watch: `charged-this-turn`, `advanced-this-turn`,
-  `remained-stationary`, `is-battle-shocked`, `unit-below-half-strength`,
+- Lever-bearing predicates to watch: `happened` move-ended charge / advance /
+  remain-stationary this turn, `unit-state battle-shocked`, `strength below half`,
   `wounds-remaining-at-or-below` — check `conditionToApplicability` for the
   current full set rather than trusting this list.
 - A precondition moved to an [APPROX] note (so the lever survives) is the
@@ -71,7 +71,7 @@ diff the working tree against it.
 Mined from 30 ability-coverage session transcripts (2026-07-12). Own-words rules; corrections weighted highest.
 
 - Add every new container effect shape (designate-target, stance-select, risk-reward, issue-orders) to the cruncher's buff-extraction walker (tools/src/cruncher/from-dsl.ts) as a pass-through case with the enumerateNamedOptions helper, or buffs nested inside it silently disappear — this broke oath-of-moment's re-roll extraction; designate-target only walks when applies.to=='attackers-of-target', else it appends an unsupported-fragment.
-- Use `charged-this-turn`, the shape the cruncher's stackable-buff math actually evaluates — a cosine-motivated rephrase to timing-is charge-move validates and scores well but silently kills the stratagem lever; correctness-first at a cosine cost.
+- Use `happened {event: move-ended, filter: {move_types: [charge]}, window: turn}`, the shape the cruncher's stackable-buff math actually evaluates — a cosine-motivated rephrase into a trigger moment validates and scores well but silently kills the stratagem lever; correctness-first at a cosine cost.
 - Never rely on notes/community_notes/dispute_notes/interactions/disputed/behavior for mechanic detail — no describer reads them and they never affect the cosine score or the cruncher; anything meant to influence fidelity or downstream math must live in structured DSL keys (effect/scope/usage/trigger/applies_to).
 - Check whether the cruncher treats an effect type as a buff-relevant leaf or a no-op BEFORE doing describer work — mortal-wounds is a confirmed no-op in from-dsl.ts, so its dice-pool/per-model extension needed no cruncher change; do this check first, not after.
 - Trace a new modifier key through from-dsl.ts to confirm the cruncher actually reads it — the open modifier object (additionalProperties:true) means AJV can't catch an inert key, so schema-validity does not prove a fill is a genuine (not just accepted) capture.

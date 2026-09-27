@@ -17,7 +17,7 @@ import type {
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
 import {
-  ATTACK_STEP_EVENTS,
+  isAttackStep,
   effectToBuffs,
   momentGate,
   type EffectTranslation,
@@ -320,7 +320,7 @@ export function triggerGated(behavior: unknown, trigger: unknown, effect: unknow
   const triggers = Array.isArray(trigger) ? trigger : [trigger];
   // An ability firing on an attack step applies to every attack; its trigger condition is
   // already how the authored data gates such abilities (in the effect), so nothing is added.
-  if (triggers.some((item) => item !== null && typeof item === "object" && ATTACK_STEP_EVENTS.has(String((item as { event?: unknown }).event)))) return effect;
+  if (triggers.some(isAttackStep)) return effect;
   return momentGate(trigger, effect);
 }
 

@@ -22,8 +22,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
-        "parameters": { "state": "within-engagement-range" }
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged"
+        }
       },
       "effect": { "type": "fight-first", "target": "unit" }
     },
@@ -37,8 +39,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "territory-control",
-        "parameters": { "territory_ref": "attacker-territory" }
+        "type": "in-region",
+        "parameters": {
+          "region": {
+            "territory": "attacker-territory"
+          }
+        }
       },
       "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
     },
@@ -51,7 +57,7 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
       "type": "conditional",
-      "condition": { "type": "fights-first", "negated": true },
+      "condition": {"operator":"not","operands":[{"type":"unit-state","parameters":{"state":"fights-first"}}]},
       "effect": { "type": "stat-modifier", "target": "unit", "modifier": { "stat": "A", "operation": "add", "value": 1 } }
     },
     "scope": { "range": "unit", "duration": "phase" }
@@ -64,8 +70,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "disposition-matches",
-        "parameters": { "disposition_id": "take-and-hold" }
+        "type": "rule-active",
+        "parameters": {
+          "rule": "take-and-hold"
+        }
       },
       "effect": { "type": "ability-grant", "target": "all-friendly", "modifier": { "ability": "scout-6" } }
     },
@@ -115,8 +123,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "action-completed",
-        "parameters": { "action_id": "sabotage", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "action",
+            "id": "sabotage",
+            "result": "success"
+          },
+          "window": "turn",
+          "object": {
+            "objective": {
+              "role": "non-home"
+            }
+          }
+        }
       },
       "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
     },
@@ -130,8 +151,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "objective-has-tag",
-        "parameters": { "tag": "consecrated", "count_min": 3 }
+        "type": "designated",
+        "parameters": {
+          "subject": {
+            "objective": {}
+          },
+          "tag": "consecrated",
+          "count_min": 3
+        }
       },
       "effect": { "type": "ability-grant", "target": "all-friendly", "modifier": { "ability": "fight-first" } }
     },
@@ -145,8 +172,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-tag",
-        "parameters": { "tag": "doomed", "side": "enemy", "count_min": 1, "window": "destroyed-this-turn" }
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy",
+            "designated": "doomed"
+          },
+          "window": "turn"
+        }
       },
       "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
     },
@@ -160,8 +194,40 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "terrain-has-tag",
-        "parameters": { "tag": "mined", "friendly_units_min": 1, "enemy_units_max": 0, "last_marked": true }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": {
+                "owner": "friendly"
+              },
+              "region": {
+                "terrain_area": {
+                  "designated": "mined"
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "in-region",
+                "parameters": {
+                  "subject": {
+                    "owner": "enemy"
+                  },
+                  "region": {
+                    "terrain_area": {
+                      "designated": "mined"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
     },
@@ -174,7 +240,7 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
       "type": "conditional",
-      "condition": { "type": "new-objective-controlled", "parameters": { "count_min": 1 } },
+      "condition": {"type":"happened","parameters":{"event":"objective-gained","window":"turn"}},
       "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
     },
     "scope": { "range": "any-on-battlefield", "duration": "turn" }

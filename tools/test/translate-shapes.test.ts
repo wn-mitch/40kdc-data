@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 
 import { describeAbility, describeCondition, type Effect } from "../src/translate/index.js";
-import { describeTiming } from "../src/translate/condition.js";
+import { describeTrigger } from "../src/translate/trigger.js";
 
 /**
  * Describer pins for the three Ability-DSL effect leaves added in 1.0.14
@@ -18,23 +18,26 @@ function render(effect: Effect, scope: Record<string, unknown> = { range: "unit"
   return describeAbility({ effect, scope } as Parameters<typeof describeAbility>[0]);
 }
 
-describe("army faction and turn-start vocabulary", () => {
+describe("rule and turn-start vocabulary", () => {
   it("distinguishes the player's turn from the opponent's turn and the battle round", () => {
-    expect(describeTiming("start-of-player-turn")).toBe("at the start of your turn");
-    expect(describeTiming("start-of-opponent-turn")).toBe("at the start of the opponent's turn");
-    expect(describeTiming("start-of-battle-round")).toBe("at the start of the battle round");
+    const turn = (t: string) => ({ type: "player-turn-is", parameters: { turn: t } });
+    expect(describeTrigger({ event: "turn-started", condition: turn("your-turn") })).toBe("at the start of your turn");
+    expect(describeTrigger({ event: "turn-started", condition: turn("opponent-turn") })).toBe(
+      "at the start of your opponent's turn",
+    );
+    expect(describeTrigger({ event: "round-started" })).toBe("at the start of the battle round");
   });
 
-  it("tests the army faction rather than a unit keyword, including negation", () => {
-    const condition = { type: "army-faction-is", parameters: { faction_id: "adepta-sororitas" } };
-    expect(describeCondition(condition)).toBe("your army faction is Adepta Sororitas");
-    expect(describeCondition({ ...condition, negated: true })).toBe("your army faction is not Adepta Sororitas");
+  it("tests whether a rule is active rather than a unit keyword, including negation", () => {
+    const condition = { type: "rule-active", parameters: { rule: "acts-of-faith" } };
+    expect(describeCondition(condition)).toBe("the Acts of Faith is active");
+    expect(describeCondition({ operator: "not", operands: [condition] })).toBe("the Acts of Faith is not active");
     expect(describeCondition({
-      type: "army-faction-is",
-      parameters: { faction_id: "agents-of-the-imperium" },
-    })).toBe("your army faction is Agents of the Imperium");
+      type: "rule-active",
+      parameters: { rule: "oath-of-moment" },
+    })).toBe("the Oath of Moment is active");
     expect(render({ type: "conditional", condition, effect: { type: "no-effect" } })).toContain(
-      "If your army faction is Adepta Sororitas",
+      "While the Acts of Faith is active",
     );
   });
 });

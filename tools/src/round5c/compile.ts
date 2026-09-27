@@ -349,7 +349,16 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
   const moments = triggers.map((node) => {
     const moment: Node = optional ? { ...node, optional: true } : { ...node };
-    if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) moment.subject_keywords = bound.parameters.keywords;
+    // The keywords narrow whoever acted: a filter subject gains all_of; this unit gets a keyword condition.
+    if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
+      const keywords = bound.parameters.keywords as string[];
+      if (moment.subject !== null && typeof moment.subject === "object") moment.subject = { ...(moment.subject as Node), all_of: keywords };
+      else {
+        const gate: Node = { type: "has-keyword", parameters: { ...(moment.subject ? { subject: moment.subject } : {}), all_of: keywords } };
+        const own = moment.condition as Node | undefined;
+        moment.condition = own ? { operator: "and", operands: [own, gate] } : gate;
+      }
+    }
     return moment;
   });
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;

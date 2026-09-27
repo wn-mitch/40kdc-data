@@ -57,8 +57,8 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.effect).toEqual({
       type: "conditional",
       condition: { operator: "and", operands: [
-        { type: "attack-is-type", parameters: { attack_type: "ranged" } },
-        { type: "unit-below-half-strength", parameters: { subject: "target" }, negated: true },
+        { type: "attack-is", parameters: { attack_type: "ranged" } },
+        { operator: "not", operands: [{ type: "strength", parameters: { subject: "defender", below: "half" } }] },
       ] },
       effect: { type: "roll-modifier", target: "self", modifier: { roll: "hit", operation: "add", value: 1 } },
     });
@@ -75,8 +75,8 @@ describe("Round 5C composition rules", () => {
       ["if the foe is halved", "CONDITION", "unit-state", state(["below-half-strength"])],
     ]);
     expect(result.mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "conditional", condition: { type: "unit-below-starting-strength", parameters: { subject: "target" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
-      { type: "conditional", condition: { type: "unit-below-half-strength", parameters: { subject: "target" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } } },
+      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "starting" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
+      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "half" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } } },
     ] });
     expect(result.signature).toBe("EVENT(attack:makes) · EFFECT(roll-modifier) · CONDITION(unit-state) | EFFECT(roll-modifier) · CONDITION(unit-state)");
 
@@ -101,7 +101,7 @@ describe("Round 5C composition rules", () => {
     ]);
     expect(result.mechanics.effect).toMatchObject({
       type: "conditional",
-      condition: { operator: "and", operands: [{ type: "attack-is-type" }, { type: "target-has-keyword", parameters: { keyword: "CHARACTER" } }] },
+      condition: { operator: "and", operands: [{ type: "attack-is" }, { type: "has-keyword", parameters: { subject: "defender", all_of: ["CHARACTER"] } }] },
       effect: { type: "sequence" },
     });
   });
@@ -146,11 +146,12 @@ describe("Round 5C composition rules", () => {
       ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
+    const charged = { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } };
     expect(result.mechanics.effect).toEqual({
-      type: "conditional", condition: { type: "attack-is-type", parameters: { attack_type: "melee" } },
+      type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "melee" } },
       effect: { type: "sequence", steps: [
-        { type: "conditional", condition: { type: "charged-this-turn", negated: true }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
-        { type: "conditional", condition: { type: "charged-this-turn" }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+        { type: "conditional", condition: { operator: "not", operands: [charged] }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
+        { type: "conditional", condition: charged, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
       ] },
     });
   });
@@ -171,7 +172,7 @@ describe("Round 5C composition rules", () => {
       { results: [2, 3, 4, 5], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3" } } },
       { results: [6], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3+3" } } },
     ] });
-    expect(result.mechanics.trigger).toEqual({ event: "charge-move", subject: "self" });
+    expect(result.mechanics.trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
 
   it("gates one band that reaches the top face with dice-gated", () => {
@@ -194,7 +195,7 @@ describe("Round 5C composition rules", () => {
     ]);
     expect(result.mechanics.effect).toEqual({ type: "fight-on-death", target: "destroyed-model", modifier: {
       resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights",
-      gate: { dice: "D6", threshold: 2, comparison: "gte" }, eligibility: { type: "has-fought-this-phase", negated: true },
+      gate: { dice: "D6", threshold: 2, comparison: "gte" }, eligibility: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } }] },
     } });
   });
 
@@ -233,9 +234,9 @@ describe("Round 5C composition rules", () => {
       ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
-    const weak = { type: "unit-below-starting-strength", parameters: { subject: "target" } };
+    const weak = { type: "strength", parameters: { subject: "defender", below: "starting" } };
     expect(rerolls.mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "conditional", condition: { ...weak, negated: true }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
+      { type: "conditional", condition: { operator: "not", operands: [weak] }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
       { type: "conditional", condition: weak, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
     ] });
 
@@ -246,9 +247,9 @@ describe("Round 5C composition rules", () => {
       ["instead", "COMBINATOR", "instead", {}],
       ["if the foe is halved", "CONDITION", "unit-state", state(["below-half-strength"])],
     ]);
-    const halved = { type: "unit-below-half-strength", parameters: { subject: "target" } };
+    const halved = { type: "strength", parameters: { subject: "defender", below: "half" } };
     expect(numbers.mechanics.effect).toMatchObject({ type: "sequence", steps: [
-      { condition: { ...halved, negated: true }, effect: { modifier: { value: 1 } } },
+      { condition: { operator: "not", operands: [halved] }, effect: { modifier: { value: 1 } } },
       { condition: halved, effect: { modifier: { value: 2 } } },
     ] });
     // A compound condition is negated as a whole, not operand by operand.
@@ -306,16 +307,16 @@ describe("Round 5C composition rules", () => {
 
   it("compiles every predicate family to a node the describer renders", () => {
     const cases: Array<[string, Record<string, unknown>, Record<string, unknown>]> = [
-      ["unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: false }, { operator: "or", operands: [
-        { type: "target-has-keyword", parameters: { keyword: "MONSTER" } }, { type: "target-has-keyword", parameters: { keyword: "VEHICLE" } }] }],
+      ["unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: false }, { type: "has-keyword", parameters: { subject: "defender", any_of: ["MONSTER", "VEHICLE"] } }],
       ["unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: true }, { operator: "and", operands: [
-        { type: "target-has-keyword", parameters: { keyword: "MONSTER" }, negated: true }, { type: "target-has-keyword", parameters: { keyword: "VEHICLE" }, negated: true }] }],
-      ["unit-keyword", { keywords: ["FLY"], subject: "this-unit", negated: false }, { type: "unit-has-keyword", parameters: { keyword: "FLY" } }],
-      ["unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }, { type: "is-battle-shocked" }],
-      ["unit-mark", { mark: "oath-of-moment", subject: "target", negated: false }, { type: "target-has-keyword", parameters: { keyword: "OATH OF MOMENT TARGET" } }],
-      ["unit-position", { kind: "closest-eligible", subject: "target", negated: false }, { type: "unit-within-range-of", parameters: { target_type: "closest-eligible" } }],
-      ["unit-position", { kind: "beyond", inches: 12, subject: "target", negated: false }, { type: "unit-within-range-of", parameters: { target_type: "current-ranged-attack-target", range: 12 }, negated: true }],
-      ["unit-position", { kind: "objective-range", controlled_by: "you", subject: "target", negated: false }, { type: "within-range-of-objective", parameters: { subject: "target", controlled_by: "your-army" } }],
+        { operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "defender", all_of: ["MONSTER"] } }] },
+        { operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } }] }] }],
+      ["unit-keyword", { keywords: ["FLY"], subject: "this-unit", negated: false }, { type: "has-keyword", parameters: { all_of: ["FLY"] } }],
+      ["unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }, { type: "unit-state", parameters: { state: "battle-shocked" } }],
+      ["unit-mark", { mark: "oath-of-moment", subject: "target", negated: false }, { type: "designated", parameters: { subject: "defender", tag: "OATH OF MOMENT TARGET" } }],
+      ["unit-position", { kind: "closest-eligible", subject: "target", negated: false }, { type: "closest", parameters: { subject: "defender", among: "eligible-targets" } }],
+      ["unit-position", { kind: "beyond", inches: 12, subject: "target", negated: false }, { operator: "not", operands: [{ type: "within", parameters: { of: "defender", range: { inches: 12 } } }] }],
+      ["unit-position", { kind: "objective-range", controlled_by: "you", subject: "target", negated: false }, { type: "within", parameters: { subject: "defender", of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } }],
     ];
     for (const [family, parameters, node] of cases) {
       const result = compiled("If so, re-roll the hit.", [

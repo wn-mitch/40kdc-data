@@ -11,7 +11,7 @@
     "keyword_id": "heavy",
     "expected_effect": {
       "type": "conditional",
-      "condition": { "type": "remained-stationary" },
+      "condition": {"type":"happened","parameters":{"event":"move-ended","filter":{"move_types":["remain-stationary"]},"window":"turn"}},
       "effect": {
         "type": "roll-modifier",
         "target": "self",

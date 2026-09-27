@@ -8,30 +8,25 @@
 
 use serde_json::{Map, Value};
 
-use super::{
-    battle_round_ordinal, condition_subject, dekebab, describe_node, describe_timing, event_clause,
-    legacy_unit_subject, negated_timing, num_param,
-};
+use super::{dekebab, describe_node, describe_timing, event_clause};
 use crate::{
     generated::{
         Ability, AbilityAppliesTo, AbilityPart, AbilityPartKind, AbilityTrigger, AbilityUsage,
         AbilityUsageFrequency, AuraEffect, AuraEffectModifierRange, AuraEffectTarget,
-        BeneficiaryBoundEffectNode, CompoundConditionOperator, Condition, ConditionNode,
-        DesignateTargetEffectAppliesTo, DesignateTargetEffectSelect, DiceGatedEffect,
-        DiceGatedEffectComparison, DiceGatedEffectThreshold, DicePoolAllocationEffect,
-        DiceRequirementSpec, DiceTableEffect, EffectNode, FormationAttachmentGrantEffect,
-        KeywordFilter, LeaderModelAbilityGrantEffect, MiracleDieOperationEffect,
-        MovementModifierEffect, NamedEffectKind, ObjectiveSelector, PairedDesignationEffect,
-        PersistentDesignationEffect, PersistentDesignationEffectConsumerRelation,
-        PersistentDesignationEffectOperation, PersistentDesignationEffectSelectScope,
+        BeneficiaryBoundEffectNode, Condition, ConditionNode, DesignateTargetEffectAppliesTo,
+        DesignateTargetEffectSelect, DiceGatedEffect, DiceGatedEffectComparison,
+        DiceGatedEffectThreshold, DicePoolAllocationEffect, DiceRequirementSpec, DiceTableEffect,
+        EffectNode, FormationAttachmentGrantEffect, KeywordFilter, LeaderModelAbilityGrantEffect,
+        MiracleDieOperationEffect, MovementModifierEffect, NamedEffectKind, ObjectiveSelector,
+        PairedDesignationEffect, PersistentDesignationEffect,
+        PersistentDesignationEffectConsumerRelation, PersistentDesignationEffectOperation,
+        PersistentDesignationEffectSelectScope, RangeRef,
         ResourceActionMenuEffectActionsItemDuration, ResourceActionMenuEffectActionsItemWhen,
         ResourceActionMenuEffectCapacity, ResourceActionMenuEffectCapacityRefresh,
-        ResourceActionMenuEffectSharedUsage, ResourceActionMenuTrigger,
-        ResourceActionMenuTriggerMoveTypesItem, ResourceActionMenuTriggerProximityOf,
-        ResourceActionMenuTriggerSubject, Scaling, ScalingOf, ScalingRound, Scope, ScopeRange,
-        SelectUnitsEffectSelector, SimpleConditionType, SingleEffect, SingleEffectTarget,
-        SingleEffectType, StanceSelectEffectMode, StanceSelectionCapacityEffectModifierAllocation,
-        Trigger, TriggerCausedBySource, TriggerMoveTypesItem, TriggerProximityOf,
+        ResourceActionMenuEffectSharedUsage, ResourceActionMenuTrigger, Scaling, ScalingOf,
+        ScalingRound, Scope, ScopeRange, SelectUnitsEffectSelector, SingleEffect,
+        SingleEffectTarget, SingleEffectType, StanceSelectEffectMode,
+        StanceSelectionCapacityEffectModifierAllocation, Trigger,
     },
     LeaderModelAbilityGrantEffectBeneficiary, ResourceActionMenuEffect,
     ResourceActionMenuEffectActionsItem,
@@ -1163,24 +1158,6 @@ fn duration_clauses(duration: &str) -> (String, String) {
     }
 }
 
-/// A condition rendered as a natural lead-in clause (lowercase-initial).
-/// "against a unit that is not a Monster or Vehicle" from a run of excluded target keywords.
-fn negated_target_keywords(keywords: &[String]) -> String {
-    format!("against a unit that is not a {}", keywords.join(" or "))
-}
-
-/// Capitalize the first character and lowercase the rest (`MONSTER` -> `Monster`).
-fn cap_word(s: &str) -> String {
-    let mut chars = s.chars();
-    match chars.next() {
-        Some(first) => first.to_uppercase().collect::<String>() + &chars.as_str().to_lowercase(),
-        None => String::new(),
-    }
-}
-
-/// The keyword of a `not`-wrapping-a-single-`target-has-keyword` operand, else None.
-/// The aura-subject exclusion encoding, distinct from the bare negated form.
-/// Sentence list for a `persistent-battlefield-marker-state`: placement, then lifecycle.
 /// A roll-with-rider `sequence`: `[dice-gated rider, unconditional primary]`. The
 /// rider fires on the roll and the primary always resolves, so the sentence
 /// carries a mandatory "Regardless of the result" clause. Only a gate that
@@ -1246,347 +1223,9 @@ fn marker_clauses(m: &serde_json::Map<String, Value>) -> Vec<String> {
     clauses
 }
 
-fn not_wrapped_target_keyword(n: &ConditionNode) -> Option<String> {
-    if let ConditionNode::CompoundCondition(c) = n {
-        if matches!(c.operator, CompoundConditionOperator::Not) && c.operands.len() == 1 {
-            if let ConditionNode::SimpleCondition(s) = &c.operands[0] {
-                if s.type_ == SimpleConditionType::TargetHasKeyword && !s.negated {
-                    return Some(jv(&s.parameters, "keyword"));
-                }
-            }
-        }
-    }
-    None
-}
-
-/// "(excluding Monster or Vehicle units)" from a run of `not`-wrapped exclusions.
-fn excluded_target_keywords(keywords: &[String]) -> String {
-    format!(
-        "(excluding {} units)",
-        keywords
-            .iter()
-            .map(|k| cap_word(k))
-            .collect::<Vec<_>>()
-            .join(" or ")
-    )
-}
-
-/// Join the operands of an `and` lead-in. Two exclusion encodings collapse: a run
-/// of bare-negated `target-has-keyword` becomes "against a unit that is not a X or
-/// Y", and a run of `not`-wrapped `target-has-keyword` becomes "(excluding X or Y
-/// units)". Either attaches to the preceding clause with a space; all other
-/// operands join with ", ".
-fn join_and_lead_ins(operands: &[ConditionNode]) -> String {
-    let mut parts: Vec<String> = Vec::new();
-    let mut i = 0;
-    while i < operands.len() {
-        if let ConditionNode::SimpleCondition(s) = &operands[i] {
-            if s.negated && s.type_ == SimpleConditionType::TargetHasKeyword {
-                let mut kws: Vec<String> = Vec::new();
-                while i < operands.len() {
-                    match &operands[i] {
-                        ConditionNode::SimpleCondition(s2)
-                            if s2.negated && s2.type_ == SimpleConditionType::TargetHasKeyword =>
-                        {
-                            kws.push(jv(&s2.parameters, "keyword"));
-                            i += 1;
-                        }
-                        _ => break,
-                    }
-                }
-                parts.push(negated_target_keywords(&kws));
-                continue;
-            }
-        }
-        if not_wrapped_target_keyword(&operands[i]).is_some() {
-            let mut kws: Vec<String> = Vec::new();
-            while i < operands.len() {
-                match not_wrapped_target_keyword(&operands[i]) {
-                    Some(kw) => {
-                        kws.push(kw);
-                        i += 1;
-                    }
-                    None => break,
-                }
-            }
-            parts.push(excluded_target_keywords(&kws));
-            continue;
-        }
-        if let ConditionNode::SimpleCondition(s) = &operands[i] {
-            if !s.negated && s.type_ == SimpleConditionType::UnitHasKeyword {
-                let mut kws: Vec<String> = Vec::new();
-                while i < operands.len() {
-                    match &operands[i] {
-                        ConditionNode::SimpleCondition(s2)
-                            if !s2.negated && s2.type_ == SimpleConditionType::UnitHasKeyword =>
-                        {
-                            kws.push(jv(&s2.parameters, "keyword"));
-                            i += 1;
-                        }
-                        _ => break,
-                    }
-                }
-                parts.push(if kws.len() >= 2 {
-                    format!("if the unit is a {} unit", kws.join(" "))
-                } else {
-                    format!("if the unit has the {} keyword", kws[0])
-                });
-                continue;
-            }
-        }
-        parts.push(condition_lead_in(&operands[i]));
-        i += 1;
-    }
-    let mut acc = String::new();
-    for part in parts {
-        if acc.is_empty() {
-            acc = part;
-        } else if part.starts_with("against ") || part.starts_with("(excluding ") {
-            acc = format!("{acc} {part}");
-        } else {
-            acc = format!("{acc}, {part}");
-        }
-    }
-    acc
-}
-
-/// Join `or` operands exactly as the TypeScript lead-in renderer: an
-/// all-keyword disjunction becomes a shared keyword list; mixed disjunctions
-/// retain each operand's natural framing.
-fn join_or_lead_ins(operands: &[ConditionNode]) -> String {
-    let keyword_operands = operands.iter().all(|operand| {
-        matches!(
-            operand,
-            ConditionNode::SimpleCondition(s)
-                if !s.negated && s.type_ == SimpleConditionType::UnitHasKeyword
-        )
-    });
-    if keyword_operands {
-        let keywords = operands
-            .iter()
-            .filter_map(|operand| match operand {
-                ConditionNode::SimpleCondition(s) => Some(jv(&s.parameters, "keyword")),
-                _ => None,
-            })
-            .collect::<Vec<_>>();
-        return format!("if the unit has the {} keywords", or_list(&keywords));
-    }
-    operands
-        .iter()
-        .map(condition_lead_in)
-        .collect::<Vec<_>>()
-        .join(" or ")
-}
-
+/// A condition as a natural lead-in clause (see [`super::condition::condition_lead_in_value`]).
 fn condition_lead_in(n: &ConditionNode) -> String {
-    match n {
-        ConditionNode::CompoundCondition(c) => match c.operator {
-            CompoundConditionOperator::And => join_and_lead_ins(&c.operands),
-            CompoundConditionOperator::Or => join_or_lead_ins(&c.operands),
-            CompoundConditionOperator::Not => {
-                let parts: Vec<String> = c.operands.iter().map(condition_lead_in).collect();
-                format!(
-                    "unless {}",
-                    parts
-                        .iter()
-                        .map(|p| p.strip_prefix("if ").unwrap_or(p))
-                        .collect::<Vec<_>>()
-                        .join(" or ")
-                )
-            }
-        },
-        ConditionNode::SimpleCondition(s) => {
-            if s.negated {
-                // Negated keyword gates read as an exclusion clause, not "if not …".
-                return match s.type_ {
-                    SimpleConditionType::TargetHasKeyword => {
-                        negated_target_keywords(&[jv(&s.parameters, "keyword")])
-                    }
-                    SimpleConditionType::UnitHasKeyword => {
-                        format!(
-                            "unless the unit has the {} keyword",
-                            jv(&s.parameters, "keyword")
-                        )
-                    }
-                    SimpleConditionType::TimingIs => {
-                        negated_timing(nstr(&s.parameters, "timing").unwrap_or("?"))
-                    }
-                    SimpleConditionType::RegionMembership => {
-                        format!(
-                            "unless {}",
-                            super::region_membership_phrase(&s.parameters, false)
-                        )
-                    }
-                    _ => format!("if {}", describe_node(n)),
-                };
-            }
-            let p = &s.parameters;
-            use SimpleConditionType as T;
-            match s.type_ {
-                T::PhaseIs => format!("during the {} phase", title_case(&jv(p, "phase"))),
-                T::IsAttached => {
-                    let kw = match nstr(p, "keyword") {
-                        Some(k) => format!("{k} "),
-                        None => String::new(),
-                    };
-                    format!("while this model is leading a {kw}unit")
-                }
-                T::RegionMembership => {
-                    format!("when {}", super::region_membership_phrase(p, false))
-                }
-                T::TimingIs => describe_timing(nstr(p, "timing").unwrap_or("?")),
-                T::PlayerTurnIs => match nstr(p, "turn") {
-                    Some("your-turn") | Some("your") | Some("own") | Some("self") => {
-                        "in your turn".to_string()
-                    }
-                    Some("opponent-turn") | Some("opponent") => {
-                        "in the opponent's turn".to_string()
-                    }
-                    _ => "in either player's turn".to_string(),
-                },
-                T::ArmyFactionIs => format!("if {}", describe_node(n)),
-                T::ModelIsLeader => "while this model leads a unit".to_string(),
-                T::ChargedThisTurn => {
-                    format!(
-                        "if {} charged this turn",
-                        condition_subject(s, "the unit", legacy_unit_subject(s))
-                    )
-                }
-                T::AdvancedThisTurn => format!(
-                    "if {} Advanced this turn",
-                    condition_subject(s, "the unit", legacy_unit_subject(s))
-                ),
-                T::DisembarkedFromTransport => {
-                    "if the unit disembarked from a Transport this turn".to_string()
-                }
-                T::FactionRuleActive => {
-                    format!("while the {} is active", title_case(&jv(p, "rule")))
-                }
-                T::BattleRound => match (num_param(p, "min"), num_param(p, "max")) {
-                    (Some(min), Some(max)) => {
-                        if min == max {
-                            format!("during the {} battle round", battle_round_ordinal(min))
-                        } else {
-                            format!("during battle rounds {min}-{max}")
-                        }
-                    }
-                    (Some(min), None) => {
-                        format!("from the {} battle round onward", battle_round_ordinal(min))
-                    }
-                    (None, Some(max)) => format!("during the first {max} battle rounds"),
-                    (None, None) => "during the battle round".to_string(),
-                },
-                T::TokenCountAtOrAbove => format!(
-                    "while the unit has {}+ {}",
-                    jv(p, "threshold"),
-                    p.get("pool_id")
-                        .map(pool_name)
-                        .unwrap_or_else(|| "?".to_string())
-                ),
-                T::RemainedStationary => "if the unit Remained Stationary".to_string(),
-                T::TargetHasKeyword => format!("against {} targets", jv(p, "keyword")),
-                T::UnitHasKeyword => format!("if the unit has the {} keyword", jv(p, "keyword")),
-                T::UnitModelCount => format!(
-                    "if the unit contains {}+ {} models",
-                    jv(p, "count_min"),
-                    jv(p, "keyword")
-                ),
-                T::UniformRangedLoadout => {
-                    let keyword = nstr(p, "model_keyword")
-                        .map(|value| format!("{value} "))
-                        .unwrap_or_default();
-                    format!("if all ranged weapons equipped by each {keyword}model in the unit are the same")
-                }
-                T::AllAttacksTargetSameUnit => {
-                    let attack_type = nstr(p, "attack_type")
-                        .map(|value| format!("{value} "))
-                        .unwrap_or_default();
-                    format!(
-                        "when all of the unit's {attack_type}attacks target the same enemy unit"
-                    )
-                }
-                T::IsBattleShocked => {
-                    format!(
-                        "while {} is Battle-shocked",
-                        condition_subject(s, "the unit", legacy_unit_subject(s))
-                    )
-                }
-                T::UnitBelowHalfStrength => {
-                    let legacy_subject = if nstr(p, "subject") == Some("target") {
-                        Some("the target unit")
-                    } else {
-                        None
-                    };
-                    format!(
-                        "while {} is below half strength",
-                        condition_subject(s, "the unit", legacy_subject)
-                    )
-                }
-                T::UnitBelowStartingStrength => {
-                    format!(
-                        "while {} is below its starting strength",
-                        condition_subject(s, "the unit", legacy_unit_subject(s))
-                    )
-                }
-                T::HasLostWounds => "while the model has lost wounds".to_string(),
-                T::AttackIsType => match nstr(p, "comparison") {
-                    Some("strength-greater-than-toughness") => {
-                        "when this attack's Strength is greater than the target's Toughness"
-                            .to_string()
-                    }
-                    Some(c) => format!("when {}", dekebab(c)),
-                    None => format!("while making {} attacks", jv(p, "attack_type")),
-                },
-                T::DestroyedByAttackType => {
-                    if jv(p, "attack_type") == "any" {
-                        "when destroyed by any attack".to_string()
-                    } else {
-                        format!("when destroyed by a {} attack", jv(p, "attack_type"))
-                    }
-                }
-                T::OpponentUnitWithinRange => {
-                    let where_ = if notnull(p, "weapon_name") {
-                        format!("range of {}", dekebab(&jv(p, "weapon_name")))
-                    } else if notnull(p, "range_multiplier") {
-                        "half range of its ranged weapons".to_string()
-                    } else {
-                        let rv = first(p, &["range", "range_inches", "within_inches"]);
-                        if rv.and_then(Value::as_str) == Some("engagement") {
-                            "engagement range".to_string()
-                        } else {
-                            format!("{}\"", rv.map(jval).unwrap_or_else(|| "?".to_string()))
-                        }
-                    };
-                    format!("while an enemy unit is within {where_}")
-                }
-                T::EngagementState => match nstr(p, "state") {
-                    None => "while the unit is within Engagement Range".to_string(),
-                    Some("on-battlefield") => "while the unit is on the battlefield".to_string(),
-                    Some("embarked") => "while the unit is embarked".to_string(),
-                    Some("engaged")
-                    | Some("within-engagement-range")
-                    | Some("in-engagement-range") => {
-                        "while the unit is within Engagement Range".to_string()
-                    }
-                    Some("not-in-engagement-range") | Some("not-within-engagement-range") => {
-                        "while the unit is not within Engagement Range".to_string()
-                    }
-                    Some(st) => format!("while the unit is {}", dekebab(st)),
-                },
-                T::DispositionMatches => match nstr(p, "disposition") {
-                    Some("strategic-reserves") => {
-                        "while the unit is in Strategic Reserves".to_string()
-                    }
-                    _ => format!(
-                        "while the unit's disposition is {}",
-                        dekebab(&jv(p, "disposition"))
-                    ),
-                },
-                T::FightsFirst => "while the unit has the Fights First ability".to_string(),
-                _ => format!("if {}", describe_node(n)),
-            }
-        }
-    }
+    super::condition::condition_lead_in_value(&super::condition_value(n))
 }
 
 fn named_region_title(v: Option<&Value>) -> String {
@@ -1907,22 +1546,53 @@ fn describe_named_region_state(m: &Map<String, Value>, ctx: &Ctx) -> String {
     )
 }
 
+/// `not(happened selected-to-fight this phase)`: the subject that has not fought yet, else None.
+fn fought_this_phase(c: &Value) -> Option<String> {
+    if c.get("operator").and_then(Value::as_str) != Some("not") {
+        return None;
+    }
+    let ops = c.get("operands").and_then(Value::as_array)?;
+    if ops.len() != 1 {
+        return None;
+    }
+    let inner = &ops[0];
+    let p = inner.get("parameters");
+    let param = |k: &str| p.and_then(|p| p.get(k));
+    let to = param("filter")
+        .and_then(|f| f.get("to"))
+        .and_then(Value::as_str);
+    if inner.get("type").and_then(Value::as_str) != Some("happened")
+        || param("event").and_then(Value::as_str) != Some("selected")
+        || to != Some("fight")
+        || param("window").and_then(Value::as_str) != Some("phase")
+    {
+        return None;
+    }
+    Some(
+        param("subject")
+            .and_then(Value::as_str)
+            .unwrap_or("this-unit")
+            .to_string(),
+    )
+}
+
 fn describe_named_region_conditional(
     m: &Map<String, Value>,
     condition: &ConditionNode,
     ctx: &Ctx,
 ) -> String {
-    let predicate = match condition {
-        ConditionNode::SimpleCondition(s) if s.type_ == SimpleConditionType::RegionMembership => {
-            super::region_membership_phrase(&s.parameters, false)
-        }
-        _ => super::describe_node(condition),
+    // `not` over one predicate reads as the unless-branch of the same predicate.
+    let value = super::condition_value(condition);
+    let negated = value.get("operator").and_then(Value::as_str) == Some("not")
+        && value
+            .get("operands")
+            .and_then(Value::as_array)
+            .is_some_and(|ops| ops.len() == 1);
+    let predicate = if negated {
+        super::describe_condition_value(&value["operands"][0])
+    } else {
+        super::describe_condition_value(&value)
     };
-    let negated = matches!(
-        condition,
-        ConditionNode::SimpleCondition(s)
-            if s.type_ == SimpleConditionType::RegionMembership && s.negated
-    );
     let whole_unit = m
         .get("consumer")
         .and_then(Value::as_object)
@@ -3658,25 +3328,20 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 };
                 let before = match m.get("eligibility").and_then(Value::as_object) {
                     Some(el) => {
-                        let negated = el.get("negated").and_then(Value::as_bool).unwrap_or(false);
-                        if negated
-                            && el.get("type").and_then(Value::as_str) == Some("has-fought-this-phase")
-                        {
-                            let who = if el
-                                .get("parameters")
-                                .and_then(|p| p.get("subject"))
-                                .and_then(Value::as_str)
-                                == Some("self")
-                            {
-                                "this model"
-                            } else {
-                                "this unit"
-                            };
-                            format!(" before {who} has fought this phase")
-                        } else {
-                            serde_json::from_value::<ConditionNode>(Value::Object(el.clone()))
-                                .map(|n| format!(" {}", condition_lead_in(&n)))
-                                .unwrap_or_default()
+                        let el = Value::Object(el.clone());
+                        match fought_this_phase(&el) {
+                            Some(who) => format!(
+                                " before {} has fought this phase",
+                                if who == "this-model" {
+                                    "this model"
+                                } else {
+                                    "this unit"
+                                }
+                            ),
+                            None => format!(
+                                " {}",
+                                super::condition::condition_lead_in_value(&el)
+                            ),
                         }
                     }
                     None => String::new(),
@@ -3687,13 +3352,11 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                         .get("condition")
                         .cloned()
                         .unwrap_or_else(|| Value::Object(Default::default()));
-                    if let Ok(n) = serde_json::from_value::<ConditionNode>(cond) {
-                        adds.push_str(&format!(
-                            ", adding {} {}",
-                            jval(gm.get("value").unwrap_or(&Value::Null)),
-                            condition_lead_in(&n)
-                        ));
-                    }
+                    adds.push_str(&format!(
+                        ", adding {} {}",
+                        jval(gm.get("value").unwrap_or(&Value::Null)),
+                        super::condition::condition_lead_in_value(&cond)
+                    ));
                 }
                 let comp: DiceGatedEffectComparison = gate
                     .get("comparison")
@@ -3787,8 +3450,9 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 "shoot"
             };
             format!(
-                "{subj} {} eligible to {acts} in a turn in which it Fell Back",
-                agree(&subj, "is")
+                "{subj} {} eligible to {acts} in a turn in which {} Fell Back",
+                agree(&subj, "is"),
+                if is_plural(&subj) { "they" } else { "it" }
             )
         }
         T::FightEligibilityExtension => {
@@ -4036,75 +3700,10 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
         }
     }
 }
+
+/// A menu action's `when` trigger: the shared reactive-trigger describer.
 fn describe_menu_trigger(t: &ResourceActionMenuTrigger) -> String {
-    let event = t.event.to_string();
-    let (mut s, split) = trigger_lead(&event, t.condition.as_ref());
-    let subject = t.subject.map(|subject| subject.to_string());
-    if t.subject == Some(ResourceActionMenuTriggerSubject::FriendlyUnit) {
-        s = replace_unit_noun(&s, "a friendly unit");
-    }
-    if t.subject == Some(ResourceActionMenuTriggerSubject::EnemyUnit) {
-        s = replace_unit_noun(&s, "an enemy unit");
-    }
-    if event == "on-model-destroyed" {
-        s = match subject.as_deref() {
-            Some("bearer" | "self") => "when this model is destroyed".to_string(),
-            Some("model-in-bearer") => "when a model in this unit is destroyed".to_string(),
-            _ => s,
-        };
-    }
-    let attack_model = match subject.as_deref() {
-        Some("bearer" | "self") => Some("this model"),
-        Some("model-in-bearer") => Some("a model in this unit"),
-        _ => None,
-    };
-    if matches!(
-        event.as_str(),
-        "before-hit-roll"
-            | "after-hit-roll"
-            | "before-wound-roll"
-            | "after-wound-roll"
-            | "before-damage-roll"
-            | "after-damage-roll"
-    ) {
-        if let Some(model) = attack_model {
-            s.push_str(&format!(" for an attack made by {model}"));
-        }
-    }
-    if event == "attack-scores-wound" {
-        if let Some(model) = attack_model {
-            s = format!("each time an attack made by {model} scores a wound");
-        }
-    }
-    if event == "falls-back" && t.subject == Some(ResourceActionMenuTriggerSubject::EnemyUnit) {
-        s = "an enemy unit Falls Back".to_string();
-    }
-    if !t.move_types.is_empty() {
-        let kinds = or_list(
-            &t.move_types
-                .iter()
-                .map(|mt| match mt {
-                    ResourceActionMenuTriggerMoveTypesItem::FallBack => "Fall Back".to_string(),
-                    other => cap_word(&other.to_string()),
-                })
-                .collect::<Vec<_>>(),
-        );
-        s = replace_first_word(&s, "move", &format!("{kinds} move"));
-    }
-    if let Some(prox) = &t.proximity {
-        let of = match prox.of {
-            Some(ResourceActionMenuTriggerProximityOf::AttachedUnit) => "the unit this model leads",
-            Some(ResourceActionMenuTriggerProximityOf::Self_)
-            | Some(ResourceActionMenuTriggerProximityOf::Bearer) => "this model",
-            None => "this unit",
-        };
-        s.push_str(&format!(" within {}\" of {of}", fmt_num(prox.range)));
-    }
-    append_trigger_condition(&mut s, split);
-    if t.optional {
-        s.push_str(", you may use this ability");
-    }
-    s
+    describe_trigger_typed(&t.0)
 }
 
 fn normalize_menu_triggers(
@@ -4366,7 +3965,7 @@ fn named_effect_inline(n: &crate::generated::NamedEffect, ctx: &Ctx) -> String {
         .map(|trigger| {
             normalize_triggers(Some(&trigger))
                 .iter()
-                .map(|trigger| describe_ability_trigger(trigger))
+                .map(|trigger| describe_trigger_typed(trigger))
                 .collect::<Vec<_>>()
                 .join(" or ")
         })
@@ -4418,7 +4017,7 @@ fn named_effect_inline(n: &crate::generated::NamedEffect, ctx: &Ctx) -> String {
 fn part_head(p: &AbilityPart) -> String {
     let moment = normalize_triggers(p.trigger.as_ref())
         .iter()
-        .map(|trigger| describe_ability_trigger(trigger))
+        .map(|trigger| describe_trigger_typed(trigger))
         .filter(|phrase| !phrase.is_empty())
         .collect::<Vec<_>>()
         .join(" or ");
@@ -4933,26 +4532,10 @@ fn selection_limit_phrase(limit: &Map<String, Value>, noun: &str) -> String {
     )
 }
 
+/// Selection eligibility as a relative clause on the candidate (see
+/// [`super::condition::describe_selection_eligibility_value`]).
 fn selection_eligibility(condition: &Condition) -> String {
-    if let ConditionNode::SimpleCondition(simple) = &condition.0 {
-        if simple.type_ == SimpleConditionType::IsBattleShocked {
-            return if simple.negated {
-                "that is not Battle-shocked".to_string()
-            } else {
-                "that is Battle-shocked".to_string()
-            };
-        }
-    }
-    let predicate = describe_node(&condition.0);
-    if let Some(rest) = predicate.strip_prefix("the unit is ") {
-        format!("that is {rest}")
-    } else if let Some(rest) = predicate.strip_prefix("not the unit is ") {
-        format!("that is not {rest}")
-    } else if let Some(rest) = predicate.strip_prefix("the unit has ") {
-        format!("with {rest}")
-    } else {
-        format!("if {predicate}")
-    }
+    super::condition::describe_selection_eligibility_value(&super::condition_value(&condition.0))
 }
 
 /// "each enemy unit within 6\"" — the `for-each-unit` selector phrase.
@@ -5615,476 +5198,19 @@ fn assemble_sentence(parts: &[String]) -> String {
     format!("{}{period}", capitalize(&body))
 }
 
-/// Is `b` a JS regex `\w` character (used for the `\bmove\b` word boundary)?
-fn is_word_byte(b: u8) -> bool {
-    b.is_ascii_alphanumeric() || b == b'_'
+/// A typed reactive trigger rendered by the shared trigger describer.
+fn describe_trigger_typed(t: &Trigger) -> String {
+    super::trigger::describe_trigger_value(&serde_json::to_value(t).unwrap_or(Value::Null))
 }
 
-/// Replace the first whole-word occurrence of `word` in `haystack` with
-/// `replacement` — the Rust equivalent of JS `s.replace(/\bword\b/, replacement)`
-/// (single replacement, ASCII word boundaries).
-fn replace_first_word(haystack: &str, word: &str, replacement: &str) -> String {
-    let bytes = haystack.as_bytes();
-    let mut from = 0;
-    while let Some(rel) = haystack[from..].find(word) {
-        let start = from + rel;
-        let end = start + word.len();
-        let before_ok = start == 0 || !is_word_byte(bytes[start - 1]);
-        let after_ok = end == bytes.len() || !is_word_byte(bytes[end]);
-        if before_ok && after_ok {
-            return format!("{}{}{}", &haystack[..start], replacement, &haystack[end..]);
-        }
-        from = start + 1;
-    }
-    haystack.to_string()
-}
-fn is_end_of_phase_disembark_battle_shock(event: &str, condition: Option<&Condition>) -> bool {
-    if event != "end-of-phase" {
-        return false;
-    }
-    let Some(condition) = condition else {
-        return false;
-    };
-    let ConditionNode::CompoundCondition(compound) = &condition.0 else {
-        return false;
-    };
-    if compound.operator != CompoundConditionOperator::And || compound.operands.len() != 2 {
-        return false;
-    }
-    matches!(
-        (&compound.operands[0], &compound.operands[1]),
-        (
-            ConditionNode::SimpleCondition(first),
-            ConditionNode::SimpleCondition(second),
-        ) if !first.negated
-            && !second.negated
-            && first.type_ == SimpleConditionType::DisembarkedFromTransport
-            && second.type_ == SimpleConditionType::IsBattleShocked
-    )
-}
-
-/// Reactive-trigger opener ("an enemy unit ends a move within 9" of this model,
-/// if ..."). Mirrors `describeTrigger` for ability `trigger` blocks.
-/// "At the start of your Command phase": a phase boundary narrowed only by phase and whose turn.
-fn phase_boundary(t: &Trigger) -> Option<String> {
-    let event = t.event.to_string();
-    let edge = match event.as_str() {
-        "start-of-phase" => "start",
-        "end-of-phase" => "end",
-        _ => return None,
-    };
-    let operands: Vec<&ConditionNode> = match t.condition.as_ref().map(|c| &c.0) {
-        None => Vec::new(),
-        Some(ConditionNode::CompoundCondition(compound))
-            if compound.operator == CompoundConditionOperator::And =>
-        {
-            compound.operands.iter().collect()
-        }
-        Some(node) => vec![node],
-    };
-    let mut simples = Vec::with_capacity(operands.len());
-    for node in operands {
-        match node {
-            ConditionNode::SimpleCondition(c)
-                if !c.negated
-                    && matches!(
-                        c.type_,
-                        SimpleConditionType::PhaseIs | SimpleConditionType::PlayerTurnIs
-                    ) =>
-            {
-                simples.push(c)
-            }
-            _ => return None,
-        }
-    }
-    let param = |ty: SimpleConditionType, key: &str| {
-        simples
-            .iter()
-            .find(|c| c.type_ == ty)
-            .and_then(|c| c.parameters.get(key))
-    };
-    let phase = param(SimpleConditionType::PhaseIs, "phase")?.as_str()?;
-    let turn = param(SimpleConditionType::PlayerTurnIs, "turn");
-    if simples.len() != if turn.is_none() { 1 } else { 2 } {
+/// The inch range of a top-level `within` condition, else `None`. Mirrors
+/// `conditionWithinRange`.
+fn condition_within_range(c: &ConditionNode) -> Option<f64> {
+    let v = super::condition_value(c);
+    if v.get("type").and_then(Value::as_str) != Some("within") {
         return None;
     }
-    // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
-    let owner = match turn {
-        None => "the",
-        Some(v) => turn_owner(v.as_str()?)?,
-    };
-    Some(format!(
-        "at the {edge} of {owner} {} phase",
-        cap_word(phase)
-    ))
-}
-
-/// Every whole-word "the unit" / "a unit" in `s` → `with`. Mirrors the TS
-/// `s.replace(/\b(?:the|a) unit\b/g, with)` on a trigger's subject.
-fn replace_unit_noun(s: &str, with: &str) -> String {
-    let word = |c: Option<char>| c.is_some_and(|c| c.is_ascii_alphanumeric() || c == '_');
-    let mut out = String::with_capacity(s.len());
-    let mut i = 0;
-    while i < s.len() {
-        let rest = &s[i..];
-        let matched = ["the unit", "a unit"].into_iter().find(|noun| {
-            rest.starts_with(noun)
-                && !word(s[..i].chars().next_back())
-                && !word(rest[noun.len()..].chars().next())
-        });
-        match matched {
-            Some(noun) => {
-                out.push_str(with);
-                i += noun.len();
-            }
-            None => {
-                let c = rest.chars().next().expect("i < len");
-                out.push(c);
-                i += c.len_utf8();
-            }
-        }
-    }
-    out
-}
-
-/// Whose turn, as a trigger window names it. Mirrors `TURN_OWNERS`.
-fn turn_owner(turn: &str) -> Option<&'static str> {
-    match turn {
-        "your" | "your-turn" | "own" | "self" => Some("your"),
-        "opponent" | "opponent-turn" => Some("your opponent's"),
-        _ => None,
-    }
-}
-
-/// A trigger condition's phase and whose turn, as a phrase on the moment ("during your Shooting
-/// phase", "in your opponent's turn"), and whatever else the condition says. Only a plain phase-is
-/// and player-turn-is (not negated, at most one each, joined by "and") make a window. Mirrors
-/// `phaseWindow`.
-fn phase_window(condition: &ConditionNode) -> PhaseWindow {
-    let operands: Vec<&ConditionNode> = match condition {
-        ConditionNode::CompoundCondition(compound)
-            if compound.operator == CompoundConditionOperator::And =>
-        {
-            compound.operands.iter().collect()
-        }
-        ConditionNode::CompoundCondition(_) => Vec::new(),
-        node => vec![node],
-    };
-    let plain = |node: &ConditionNode, ty: SimpleConditionType| matches!(node, ConditionNode::SimpleCondition(c) if !c.negated && c.type_ == ty);
-    let param = |node: &ConditionNode, key: &str| match node {
-        ConditionNode::SimpleCondition(c) => c.parameters.get(key).cloned(),
-        _ => None,
-    };
-    let phases: Vec<usize> = (0..operands.len())
-        .filter(|&i| plain(operands[i], SimpleConditionType::PhaseIs))
-        .collect();
-    let turns: Vec<usize> = (0..operands.len())
-        .filter(|&i| plain(operands[i], SimpleConditionType::PlayerTurnIs))
-        .collect();
-    let owner = turns.first().and_then(|&i| {
-        let turn = param(operands[i], "turn").unwrap_or(Value::Null);
-        turn_owner(&jval(&turn))
-    });
-    let phase = phases
-        .first()
-        .and_then(|&i| param(operands[i], "phase"))
-        .and_then(|v| v.as_str().map(str::to_string));
-    if phases.len() > 1
-        || turns.len() > 1
-        || (turns.len() == 1 && owner.is_none())
-        || (phases.len() == 1 && phase.is_none())
-        || phases.len() + turns.len() == 0
-    {
-        return PhaseWindow {
-            window: String::new(),
-            rest: Some(condition.clone()),
-            phase: None,
-            owner: None,
-        };
-    }
-    let window = match &phase {
-        Some(phase) => format!(
-            "during {} {} phase",
-            owner.unwrap_or("the"),
-            cap_word(phase)
-        ),
-        None => format!("in {} turn", owner.unwrap_or("the")),
-    };
-    let others: Vec<ConditionNode> = (0..operands.len())
-        .filter(|i| !phases.contains(i) && !turns.contains(i))
-        .map(|i| operands[i].clone())
-        .collect();
-    let rest = match others.len() {
-        0 => None,
-        1 => others.into_iter().next(),
-        _ => Some(ConditionNode::CompoundCondition(
-            crate::generated::CompoundCondition {
-                operands: others,
-                operator: CompoundConditionOperator::And,
-            },
-        )),
-    };
-    PhaseWindow {
-        window,
-        rest,
-        phase,
-        owner,
-    }
-}
-
-/// What [`phase_window`] reads off a trigger condition: the window phrase, the
-/// condition left over, and the phase and whose turn when the window names them.
-struct PhaseWindow {
-    window: String,
-    rest: Option<ConditionNode>,
-    phase: Option<String>,
-    owner: Option<&'static str>,
-}
-
-/// A trigger's moment, decided before any subject, keyword, move or proximity clause is added to
-/// it: the event phrase, or for a phase boundary its own phase ("at the end of your Command
-/// phase") or, naming none, every phase. Also returns what [`append_trigger_condition`] needs.
-/// Shared by ability and menu-action triggers, which the TS renders through one `describeTrigger`.
-fn trigger_lead(event: &str, condition: Option<&Condition>) -> (String, TriggerSplit) {
-    let edge = match event {
-        "start-of-phase" => Some("start"),
-        "end-of-phase" => Some("end"),
-        _ => None,
-    };
-    let disembark_shock = is_end_of_phase_disembark_battle_shock(event, condition);
-    let window = match condition {
-        Some(condition) if !disembark_shock => Some(phase_window(&condition.0)),
-        _ => None,
-    };
-    let lead = match (edge, window.as_ref().and_then(|w| w.phase.as_ref())) {
-        (None, _) => event_clause(event),
-        (Some(edge), Some(phase)) => format!(
-            "at the {edge} of {} {} phase",
-            window.as_ref().and_then(|w| w.owner).unwrap_or("the"),
-            cap_word(phase)
-        ),
-        (Some(edge), None) => format!("at the {edge} of each phase"),
-    };
-    (
-        lead,
-        TriggerSplit {
-            edge,
-            disembark_shock,
-            window,
-        },
-    )
-}
-
-/// How a trigger's condition splits, as [`trigger_lead`] decided it.
-struct TriggerSplit {
-    edge: Option<&'static str>,
-    disembark_shock: bool,
-    window: Option<PhaseWindow>,
-}
-
-/// A trigger's condition on its moment `s`: the disembark/Battle-shock case, a turn on a boundary,
-/// a phase or turn window on any other moment, and whatever else it says as ", if ...".
-fn append_trigger_condition(s: &mut String, split: TriggerSplit) {
-    if split.disembark_shock {
-        s.push_str(", if the unit disembarked from a Transport this turn and is Battle-shocked");
-    } else if let Some(PhaseWindow {
-        window,
-        rest,
-        phase,
-        owner,
-    }) = split.window
-    {
-        // Another moment takes the phase as its window ("… during your Shooting phase").
-        match (split.edge, &phase, owner) {
-            (Some(_), None, Some(owner)) => s.push_str(&format!(" in {owner} turn")),
-            (None, _, _) if !window.is_empty() => s.push_str(&format!(" {window}")),
-            _ => {}
-        }
-        if let Some(rest) = rest {
-            s.push_str(&format!(", if {}", describe_node(&rest)));
-        }
-    }
-}
-
-fn describe_ability_trigger(t: &Trigger) -> String {
-    let subject = t.subject.as_ref().map(ToString::to_string);
-    // The short form only when the boundary is all the trigger says; any other clause goes below.
-    let plain = t.proximity.is_none()
-        && t.move_types.is_empty()
-        && t.subject_keywords.as_ref().is_none_or(|k| k.is_empty())
-        && t.subject_excluded_keywords
-            .as_ref()
-            .is_none_or(|k| k.is_empty())
-        && t.caused_by.is_none()
-        && t.binds_die_variable.is_none()
-        && t.binds_selected_die_variable.is_none()
-        && matches!(subject.as_deref(), None | Some("self" | "unit"));
-    if let Some(boundary) = plain.then(|| phase_boundary(t)).flatten() {
-        return if t.optional {
-            format!("{boundary}, you may use this ability")
-        } else {
-            boundary
-        };
-    }
-    let event = t.event.to_string();
-    let (mut s, split) = trigger_lead(&event, t.condition.as_ref());
-    if subject.as_deref() == Some("friendly-unit") {
-        s = replace_unit_noun(&s, "a friendly unit");
-    }
-    if subject.as_deref() == Some("enemy-unit") {
-        s = replace_unit_noun(&s, "an enemy unit");
-    }
-    if event == "on-model-destroyed" {
-        s = match subject.as_deref() {
-            Some("bearer" | "self") => "when this model is destroyed".to_string(),
-            Some("model-in-bearer") => "when a model in this unit is destroyed".to_string(),
-            Some("friendly-model") => "when a friendly model is destroyed".to_string(),
-            Some("enemy-model") => "when an enemy model is destroyed".to_string(),
-            _ => s,
-        };
-    }
-    let attack_model = match subject.as_deref() {
-        Some("bearer" | "self") => Some("this model"),
-        Some("unit" | "model-in-bearer") => Some("a model in this unit"),
-        Some("friendly-unit") => Some("a model in a friendly unit"),
-        Some("enemy-unit") => Some("a model in an enemy unit"),
-        Some("friendly-model") => Some("a friendly model"),
-        Some("enemy-model") => Some("an enemy model"),
-        _ => None,
-    };
-    if matches!(
-        event.as_str(),
-        "before-hit-roll"
-            | "after-hit-roll"
-            | "before-wound-roll"
-            | "after-wound-roll"
-            | "before-damage-roll"
-            | "after-damage-roll"
-    ) {
-        if let Some(model) = attack_model {
-            s.push_str(&format!(" for an attack made by {model}"));
-        }
-    }
-    if event == "attack-scores-wound" {
-        if let Some(model) = attack_model {
-            s = format!("each time an attack made by {model} scores a wound");
-        }
-    }
-    if let Some(caused) = &t.caused_by {
-        let source = match caused.source {
-            TriggerCausedBySource::BearerModel => "this model",
-            TriggerCausedBySource::BearerUnit => "this unit",
-        };
-        let attack_type = caused
-            .attack_type
-            .as_ref()
-            .map(|attack_type| format!("{attack_type} "))
-            .unwrap_or_default();
-        let weapon = caused
-            .weapon_keyword
-            .as_ref()
-            .map(|keyword| {
-                format!(
-                    " with {} weapons",
-                    bracket_keyword(&Value::String(keyword.to_string()))
-                )
-            })
-            .unwrap_or_default();
-        if attack_type.is_empty() && weapon.is_empty() {
-            s.push_str(&format!(" by {source}"));
-        } else {
-            s.push_str(&format!(
-                " by {attack_type}attacks made by {source}{weapon}"
-            ));
-        }
-    }
-    if event == "stratagem-targeted" {
-        s = "when this model's unit is targeted with a Stratagem".to_string();
-    }
-    let value = serde_json::to_value(t).unwrap_or(Value::Null);
-    if event == "ability-target-selected" {
-        if let Some(source) = value.get("source_ability").and_then(Value::as_object) {
-            let keywords = source
-                .get("keywords")
-                .and_then(Value::as_array)
-                .map(|keywords| keywords.iter().map(jval).collect::<Vec<_>>().join(" "))
-                .unwrap_or_default();
-            let selected = match subject.as_deref() {
-                Some("friendly-unit") => "a friendly unit",
-                Some("enemy-unit") => "an enemy unit",
-                _ => "a unit",
-            };
-            s = format!(
-                "when {selected} is selected by the {} ability of a {} {keywords} unit",
-                title_case(&jv(source, "ability_id")),
-                jv(source, "owner")
-            );
-        }
-    }
-    if event == "falls-back" && subject.as_deref() == Some("enemy-unit") {
-        s = "an enemy unit Falls Back".to_string();
-    }
-    let actor = match subject.as_deref() {
-        Some("bearer" | "self" | "model-in-bearer" | "friendly-model" | "enemy-model") => "model",
-        _ => "unit",
-    };
-    if let Some(keywords) = value.get("subject_keywords").and_then(Value::as_array) {
-        if !keywords.is_empty() {
-            s.push_str(&format!(
-                " (the triggering {actor} must have {})",
-                and_list(&keywords.iter().map(jval).collect::<Vec<_>>())
-            ));
-        }
-    }
-    if let Some(keywords) = value
-        .get("subject_excluded_keywords")
-        .and_then(Value::as_array)
-    {
-        if !keywords.is_empty() {
-            s.push_str(&format!(
-                " (the triggering {actor} must not have {})",
-                or_list(&keywords.iter().map(jval).collect::<Vec<_>>())
-            ));
-        }
-    }
-    if !t.move_types.is_empty() {
-        let kinds = or_list(
-            &t.move_types
-                .iter()
-                .map(|move_type| match move_type {
-                    TriggerMoveTypesItem::FallBack => "Fall Back".to_string(),
-                    other => cap_word(&other.to_string()),
-                })
-                .collect::<Vec<_>>(),
-        );
-        s = replace_first_word(&s, "move", &format!("{kinds} move"));
-    }
-    if let Some(proximity) = &t.proximity {
-        let of = match proximity.of {
-            Some(TriggerProximityOf::BearerUnit) => "this model's unit",
-            Some(TriggerProximityOf::AttachedUnit) => "the unit this model leads",
-            Some(TriggerProximityOf::Self_) | Some(TriggerProximityOf::Bearer) => "this model",
-            None => "this unit",
-        };
-        s.push_str(&format!(" within {}\" of {of}", fmt_num(proximity.range)));
-    }
-    append_trigger_condition(&mut s, split);
-    if let Some(variable) = &t.binds_die_variable {
-        s.push_str(&format!(
-            " (binding the generated die as {})",
-            dekebab(&variable.replace('_', "-"))
-        ));
-    }
-    if let Some(variable) = &t.binds_selected_die_variable {
-        s.push_str(&format!(
-            " (binding one chosen die used in that Act of Faith as {})",
-            dekebab(&variable.replace('_', "-"))
-        ));
-    }
-    if t.optional {
-        s.push_str(", you may use this ability");
-    }
-    s
+    v.get("parameters")?.get("range")?.get("inches")?.as_f64()
 }
 
 /// Flatten the polymorphic `trigger` field to a list (empty when absent).
@@ -6095,34 +5221,6 @@ fn normalize_triggers(trigger: Option<&AbilityTrigger>) -> Vec<&Trigger> {
         Some(AbilityTrigger::Trigger(t)) => vec![t],
         Some(AbilityTrigger::Array(ts)) => ts.iter().collect(),
     }
-}
-
-/// The timing value of a bare `timing-is` condition, else `None`. Mirrors `timingOfCondition`.
-fn timing_of_condition(c: &ConditionNode) -> Option<String> {
-    match c {
-        ConditionNode::SimpleCondition(s) if matches!(s.type_, SimpleConditionType::TimingIs) => {
-            Some(jv(&s.parameters, "timing"))
-        }
-        _ => None,
-    }
-}
-
-/// The numeric range of a top-level within-range condition, else `None`. Mirrors
-/// `conditionWithinRange`.
-fn condition_within_range(c: &ConditionNode) -> Option<f64> {
-    let s = match c {
-        ConditionNode::SimpleCondition(s)
-            if matches!(
-                s.type_,
-                SimpleConditionType::UnitWithinRangeOf
-                    | SimpleConditionType::OpponentUnitWithinRange
-            ) =>
-        {
-            s
-        }
-        _ => return None,
-    };
-    first(&s.parameters, &["range", "range_inches", "within_inches"]).and_then(Value::as_f64)
 }
 
 /// Usage limit → front-of-sentence lead clause ("once per turn", "twice per
@@ -6200,8 +5298,6 @@ fn render_top_level(
     // sentence ("Each time ..."). B2: when a trigger's proximity just restates a
     // within-range condition on the effect, render the range once (drop it here).
     let triggers = normalize_triggers(trigger);
-    let trigger_events: std::collections::HashSet<String> =
-        triggers.iter().map(|t| t.event.to_string()).collect();
     let cond_range = match e {
         EffectNode::ConditionalEffect(c) => condition_within_range(&c.condition.0),
         _ => None,
@@ -6209,14 +5305,17 @@ fn render_top_level(
     let trig = triggers
         .iter()
         .map(|t| {
-            let drop_prox =
-                cond_range.is_some() && t.proximity.as_ref().map(|p| p.range) == cond_range;
+            let prox_inches = t.proximity.as_ref().and_then(|p| match p.range {
+                RangeRef::Inches(n) => Some(n),
+                _ => None,
+            });
+            let drop_prox = cond_range.is_some() && prox_inches == cond_range;
             if drop_prox {
                 let mut t2 = (*t).clone();
                 t2.proximity = None;
-                describe_ability_trigger(&t2)
+                describe_trigger_typed(&t2)
             } else {
-                describe_ability_trigger(t)
+                describe_trigger_typed(t)
             }
         })
         .filter(|s| !s.is_empty())
@@ -6231,11 +5330,7 @@ fn render_top_level(
                     return describe_named_region_conditional(&s.modifier, &c.condition.0, &ctx);
                 }
             }
-            let cond_timing = timing_of_condition(&c.condition.0);
-            let lead_in = match &cond_timing {
-                Some(timing) if trigger_events.contains(timing) => String::new(),
-                _ => condition_lead_in(&c.condition.0),
-            };
+            let lead_in = condition_lead_in(&c.condition.0);
             if is_container(inner) {
                 let header = [trig, lead, lead_in, trail]
                     .into_iter()

@@ -44,7 +44,7 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
             interactions, community_notes as applicable)…": null },
   "approx_notes": ["[APPROX] own-words note for each clause not modeled"],
   "dropped_clauses": [],
-  "adopted_shapes": ["re-roll", "charged-this-turn"],
+  "adopted_shapes": ["re-roll", "happened"],
   "resisted_schema": null,
   "self_grade": { "describer_output": "…", "verdict": "faithful|approx|needs-schema", "concerns": [] },
   "confidence": 0.85
@@ -74,8 +74,8 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
 - **Prose is authoritative.** Wrong scalars are bugs; a clause you cannot model
   becomes an `[APPROX] …` community_note in your own words — never a silent drop,
   never a distortion of the effect tree.
-- **Canonical condition ids are cruncher levers.** Use `charged-this-turn`, not a
-  `timing-is: charge-move` paraphrase; a precondition whose encoding would drop a
+- **Lever-bearing predicates stay as the cruncher reads them.** A charge
+  precondition is `happened {event: move-ended, filter: {move_types: [charge]}, window: turn}`, not a trigger-moment paraphrase; a precondition whose encoding would drop a
   stratagem/buff lever belongs in [APPROX] notes, not in the effect tree. Never
   chase cosine by re-phrasing canonical ids away — fidelity score is advisory,
   the levers are contractual.

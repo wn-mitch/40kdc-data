@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -50,21 +54,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -107,9 +104,13 @@
             }
           },
           {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           }
         ]
@@ -147,7 +148,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-half-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "half"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -318,7 +322,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -334,9 +342,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "WAR DOG"
+          "all_of": [
+            "WAR DOG"
+          ]
         }
       },
       "effect": {
@@ -438,7 +448,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -631,7 +645,7 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
@@ -692,7 +706,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -784,27 +802,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "WAR DOG"
+              "all_of": [
+                "WAR DOG"
+              ]
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "TITANIC"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "TOWERING"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "TITANIC",
+                "TOWERING"
+              ]
+            }
           }
         ]
       },
@@ -1297,15 +1310,18 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
-              "attack_type": "graviton-crusher"
+              "weapon_name": "Graviton crusher"
             }
           }
         ]
@@ -1345,7 +1361,14 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-scoring-hit",
+      "event": "after-roll",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "roll": "hit",
+        "result": "success"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -1418,7 +1441,10 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "moved-through-tall-terrain"
+              "event": "move-ended",
+              "filter": {
+                "through": "tall-terrain"
+              }
             },
             "effect": {
               "type": "dice-gated",
@@ -1466,9 +1492,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-battle-shocked",
+        "type": "unit-state",
         "parameters": {
-          "subject": "target"
+          "subject": "defender",
+          "state": "battle-shocked"
         }
       },
       "effect": {
@@ -1975,9 +2002,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "MARKED"
+              "subject": "defender",
+              "tag": "MARKED"
             }
           },
           "effect": {
@@ -2185,16 +2213,22 @@
       }
     },
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "friendly-unit",
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "friendly"
+      },
       "proximity": {
-        "of": "bearer",
-        "range": 9
+        "of": "this-model",
+        "range": {
+          "inches": 9
+        }
       },
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "WAR DOG"
+          "all_of": [
+            "WAR DOG"
+          ]
         }
       },
       "optional": true
@@ -2527,9 +2561,10 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "is-battle-shocked",
+                "type": "unit-state",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "state": "battle-shocked"
                 }
               },
               "effect": {
@@ -3981,8 +4016,16 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "charged-this-turn",
-                  "parameters": {}
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "filter": {
+                      "move_types": [
+                        "charge"
+                      ]
+                    },
+                    "window": "turn"
+                  }
                 }
               ]
             },
@@ -4038,9 +4081,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "is-battle-shocked",
+            "type": "unit-state",
             "parameters": {
-              "subject": "attacker"
+              "subject": "attacker",
+              "state": "battle-shocked"
             }
           },
           "effect": {

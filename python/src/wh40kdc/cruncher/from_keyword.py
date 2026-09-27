@@ -191,12 +191,8 @@ def _conditional_buffs(node: dict[str, Any], source: BuffSource, ctx: EngineCont
     effect = node.get("effect")
     if not _is_object(condition):
         return []
-    negated = condition.get("negated") is True
     verdict = _evaluate_condition(condition, ctx)
-    if verdict == "unknown":
-        return []
-    active = (not verdict) if negated else verdict
-    if not active:
+    if verdict is not True:
         return []
     return _walk(effect, source, ctx)
 
@@ -205,14 +201,40 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
     """True/False when the engine can evaluate the condition against ``ctx``;
     ``"unknown"`` when the condition references state the M1 engine has no
     channel for (the buff is then dropped)."""
+    operands = condition.get("operands")
+    if (
+        condition.get("operator") == "not"
+        and isinstance(operands, list)
+        and operands
+        and _is_object(operands[0])
+    ):
+        v = _evaluate_condition(operands[0], ctx)
+        return v if v == "unknown" else not v
+    parameters = condition.get("parameters")
+    parameters = parameters if _is_object(parameters) else {}
     ctype = condition.get("type")
-    if ctype == "remained-stationary":
-        return ctx.get("attackerStationary") is True
-    if ctype == "target-has-keyword":
-        parameters = condition.get("parameters")
-        parameters = parameters if _is_object(parameters) else {}
-        kw = parameters.get("keyword")
-        if not isinstance(kw, str):
+    if ctype == "happened":
+        filt = parameters.get("filter")
+        filt = filt if _is_object(filt) else {}
+        raw_types = filt.get("move_types")
+        types: list[Any] = raw_types if isinstance(raw_types, list) else []
+        if (
+            parameters.get("event") == "move-ended"
+            and len(types) == 1
+            and types[0] == "remain-stationary"
+            and parameters.get("subject") is None
+        ):
+            return ctx.get("attackerStationary") is True
+        return "unknown"
+    if ctype == "has-keyword":
+        raw_all = parameters.get("all_of")
+        all_of: list[Any] = raw_all if isinstance(raw_all, list) else []
+        if (
+            parameters.get("subject") != "defender"
+            or parameters.get("any_of") is not None
+            or len(all_of) != 1
+            or not isinstance(all_of[0], str)
+        ):
             return "unknown"
-        return kw.lower() in (ctx.get("targetKeywords") or [])
+        return all_of[0].lower() in (ctx.get("targetKeywords") or [])
     return "unknown"

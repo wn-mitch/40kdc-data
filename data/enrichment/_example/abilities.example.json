@@ -32,9 +32,29 @@
       "condition": {
         "operator": "and",
         "operands": [
-          { "type": "phase-is", "parameters": { "phase": "fight" } },
-          { "type": "timing-is", "parameters": { "timing": "on-destroyed" } },
-          { "type": "unit-below-half-strength" }
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "window": "event",
+              "object": "this-model",
+              "filter": {
+                "timing": "before-removal"
+              }
+            }
+          },
+          {
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
+          }
         ]
       },
       "effect": {
@@ -63,9 +83,25 @@
       "condition": {
         "operator": "and",
         "operands": [
-          { "type": "phase-is", "parameters": { "phase": "command" } },
-          { "type": "timing-is", "parameters": { "timing": "start-of-phase" } },
-          { "type": "player-turn-is", "parameters": { "turn": "your-turn" } }
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "phase-started",
+              "window": "event"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
         ]
       },
       "effect": {

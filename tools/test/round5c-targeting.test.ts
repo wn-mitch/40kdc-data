@@ -163,9 +163,9 @@ describe("Round 5C targeting families", () => {
       if (!result.ok) throw new Error(result.errors.join("; "));
       return (result.mechanics.effect as { condition: unknown }).condition;
     };
-    expect(onField("this-model")).toEqual({ type: "on-battlefield", parameters: { subject: "self" } });
-    expect(onField("this-unit", true)).toEqual({ type: "on-battlefield", parameters: { subject: "unit" }, negated: true });
-    expect(onField("target")).toEqual({ type: "on-battlefield", parameters: { subject: "target" } });
+    expect(onField("this-model")).toEqual({ type: "unit-state", parameters: { subject: "this-model", state: "on-battlefield" } });
+    expect(onField("this-unit", true)).toEqual({ operator: "not", operands: [{ type: "unit-state", parameters: { state: "on-battlefield" } }] });
+    expect(onField("target")).toEqual({ type: "unit-state", parameters: { subject: "defender", state: "on-battlefield" } });
     expect(() => normalizeFingerprintParameters("unit-state", { states: ["on-battlefield", "engaged"], subject: "this-model", negated: false }, 3)).toThrow(/only being on the battlefield/u);
     // Version 2 never had this model or the battlefield.
     expect(() => normalizeFingerprintParameters("unit-state", { states: ["on-battlefield"], subject: "this-unit", negated: false }, 2)).toThrow(/unit-state.states/u);

@@ -19,20 +19,20 @@ export class CompileError extends Error {}
 type Node = Record<string, unknown>;
 
 const TRIGGERS: Record<string, Node> = {
-  "event:charge": { event: "charge-move", subject: "self" },
-  "event:unit-destroyed": { event: "on-unit-destroyed" },
-  "event:model-destroyed": { event: "on-model-destroyed" },
-  "event:after-shooting": { event: "after-unit-resolves-attacks", subject: "self", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
-  "event:selected-to-shoot": { event: "selected-to-shoot", subject: "self" },
-  "event:selected-to-fight": { event: "selected-to-fight", subject: "self" },
-  // Enemy moments name the enemy unit as their subject, as the authored data does.
-  "event:enemy-selected-targets": { event: "enemy-unit-targets-bearer", subject: "enemy-unit" },
-  "event:enemy-ended-move": { event: "enemy-unit-ended-move", subject: "enemy-unit" },
-  "event:enemy-has-shot": { event: "after-enemy-unit-fires", subject: "enemy-unit" },
-  "event:enemy-declared-charge": { event: "charge-declaration", subject: "enemy-unit" },
-  "turn-start:battle-round": { event: "start-of-battle-round" },
-  "turn-start:player-turn": { event: "start-of-player-turn" },
-  "turn-start:opponent-turn": { event: "start-of-opponent-turn" },
+  "event:charge": { event: "move-ended", filter: { move_types: ["charge"] } },
+  "event:unit-destroyed": { event: "destroyed" },
+  "event:model-destroyed": { event: "model-destroyed", object: "model-in-this-unit" },
+  "event:after-shooting": { event: "attacks-resolved", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
+  "event:selected-to-shoot": { event: "selected", filter: { to: "shoot" } },
+  "event:selected-to-fight": { event: "selected", filter: { to: "fight" } },
+  // Enemy moments name the enemy unit as the one acting, and this unit as what it acts on.
+  "event:enemy-selected-targets": { event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" },
+  "event:enemy-ended-move": { event: "move-ended", subject: { owner: "enemy" } },
+  "event:enemy-has-shot": { event: "attacks-resolved", filter: { kind: "shoot" }, subject: { owner: "enemy" } },
+  "event:enemy-declared-charge": { event: "targets-selected", filter: { kind: "charge" }, subject: { owner: "enemy" } },
+  "turn-start:battle-round": { event: "round-started" },
+  "turn-start:player-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "your-turn" } } },
+  "turn-start:opponent-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "opponent-turn" } } },
 };
 
 export const DURATIONS: Record<string, string> = {
@@ -47,22 +47,28 @@ const RESOURCE_POOLS: Record<string, string> = {
 
 const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "unit", "this-model": "self", bearer: "bearer" };
 
-/** Marks as keyword tags, uppercase like every keyword reference: the cruncher matches them on the target. */
-const MARK_KEYWORDS: Record<string, string> = {
+/** Marks as the designations an effect applies, uppercase as the rules print them. */
+const MARK_TAGS: Record<string, string> = {
   "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "SPOTTED", hidden: "HIDDEN", marked: "MARKED",
 };
 
-const ACTIVITY_CONDITIONS: Record<string, string> = {
-  "charged-this-turn": "charged-this-turn", "advanced-this-turn": "advanced-this-turn", "remained-stationary": "remained-stationary",
-  "fought-this-phase": "has-fought-this-phase", "selected-to-shoot-this-phase": "unit-selected-to-shoot-this-phase",
-  "selected-to-move-this-phase": "unit-selected-to-move-this-phase",
+/** A unit's own activity, as the history it leaves: [event, filter, window]. */
+const ACTIVITIES: Record<string, [string, Node, string]> = {
+  "charged-this-turn": ["move-ended", { move_types: ["charge"] }, "turn"],
+  "advanced-this-turn": ["move-ended", { move_types: ["advance"] }, "turn"],
+  "remained-stationary": ["move-ended", { move_types: ["remain-stationary"] }, "turn"],
+  "fought-this-phase": ["selected", { to: "fight" }, "phase"],
+  "selected-to-shoot-this-phase": ["selected", { to: "shoot" }, "phase"],
+  "selected-to-move-this-phase": ["selected", { to: "move" }, "phase"],
 };
 
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "target", "this-unit": "unit", "this-model": "self" };
 
-const STATE_CONDITIONS: Record<string, string> = {
-  "below-starting-strength": "unit-below-starting-strength", "below-half-strength": "unit-below-half-strength", "battle-shocked": "is-battle-shocked",
-};
+/** A unit-state leaf's states that are not core-rules unit states. */
+const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "starting", "below-half-strength": "half" };
+
+/** A predicate with its subject: the target of the attack, or (by default) the ability's unit. */
+const pred = (type: string, parameters: Node, subject?: string): Node => ({ type, parameters: subject ? { subject, ...parameters } : parameters });
 
 /** Event kinds an attack-time effect already implies (event versions before 4); they add nothing. */
 export const ATTACK_EVENTS = new Set(["attack-made", "hit-roll", "wound-roll"]);
@@ -80,12 +86,10 @@ export function anyOf(nodes: Node[]): Node {
   return nodes.length === 1 ? nodes[0]! : { operator: "or", operands: nodes };
 }
 
-/** The opposite of a condition: a simple condition flips its flag, a compound one is wrapped. */
+/** The opposite of a condition: `not` it, or unwrap a `not`. */
 export function negate(node: Node): Node {
-  if ("operator" in node) return { operator: "not", operands: [node] };
-  const flipped = !node.negated;
-  const { negated: _drop, ...rest } = node;
-  return flipped ? { ...rest, negated: true } : rest;
+  if (node.operator === "not" && Array.isArray(node.operands) && node.operands.length === 1) return node.operands[0] as Node;
+  return { operator: "not", operands: [node] };
 }
 
 /** A predicate's own polarity: "not below half strength", "does not have FLY". */
@@ -95,7 +99,7 @@ function polarity(leaf: CompileLeaf, node: Node): Node {
 
 /** A phase-boundary trigger, narrowed by phase and whose turn unless either is "any". */
 function phaseTrigger(leaf: CompileLeaf): Node | null {
-  const event = leaf.parameters.kind === "phase-start" ? "start-of-phase" : leaf.parameters.kind === "phase-end" ? "end-of-phase" : null;
+  const event = leaf.parameters.kind === "phase-start" ? "phase-started" : leaf.parameters.kind === "phase-end" ? "phase-ended" : null;
   if (!event) return null;
   const operands: Node[] = [];
   if (leaf.parameters.phase && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: leaf.parameters.phase } });
@@ -118,51 +122,49 @@ export function trigger(leaf: CompileLeaf): Node {
 /** The condition an attack leaf adds: only melee or only ranged attacks. */
 export function attackTypeCondition(leaf: CompileLeaf): Node | null {
   const type = closed(leaf, "attack_type");
-  return type === "melee" || type === "ranged" ? { type: "attack-is-type", parameters: { attack_type: type } } : null;
+  return type === "melee" || type === "ranged" ? { type: "attack-is", parameters: { attack_type: type } } : null;
 }
 
 export function condition(leaf: CompileLeaf): Node {
   const target = closed(leaf, "subject") === "target";
+  const who = target ? "defender" : undefined;
   switch (leaf.family_id) {
     case "leading-unit":
-      return { type: "is-attached" };
+      return pred("attachment", { role: "leading" }, "this-model");
     case "below-starting-strength":
-      return target || leaf.parameters.subject === "target-unit"
-        ? { type: "unit-below-starting-strength", parameters: { subject: "target" } }
-        : { type: "unit-below-starting-strength" };
+      return pred("strength", { below: "starting" }, target || leaf.parameters.subject === "target-unit" ? "defender" : undefined);
     case "unit-state":
-      return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => state === "engaged"
-        ? { type: "engagement-state", parameters: { state: "engaged", ...(target ? { subject: "target" } : {}) } }
-        : state === "on-battlefield"
-          ? { type: "on-battlefield", parameters: { subject: target ? "target" : leaf.parameters.subject === "this-model" ? "self" : "unit" } }
-          : { type: STATE_CONDITIONS[state], ...(target ? { parameters: { subject: "target" } } : {}) })));
+      return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => {
+        if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, who);
+        const subject = state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
+        return pred("unit-state", { state }, subject);
+      })));
     case "unit-keyword": {
       const keywords = leaf.parameters.keywords as string[];
-      const type = target ? "target-has-keyword" : "unit-has-keyword";
       // "not a MONSTER or VEHICLE" excludes both, so each keyword carries the negation.
       if (leaf.parameters.negated === true) {
-        const each = keywords.map((keyword) => ({ type, parameters: { keyword }, negated: true }));
+        const each = keywords.map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, who)));
         return each.length === 1 ? each[0]! : { operator: "and", operands: each };
       }
-      return anyOf(keywords.map((keyword) => ({ type, parameters: { keyword } })));
+      return pred("has-keyword", keywords.length === 1 ? { all_of: keywords } : { any_of: keywords }, who);
     }
-    case "unit-activity":
-      return polarity(leaf, { type: ACTIVITY_CONDITIONS[String(closed(leaf, "activity"))], ...(target ? { parameters: { subject: "target" } } : {}) });
+    case "unit-activity": {
+      const [event, filter, window] = ACTIVITIES[String(closed(leaf, "activity"))]!;
+      return polarity(leaf, pred("happened", { event, filter: structuredClone(filter), window }, who));
+    }
     case "unit-mark":
-      return polarity(leaf, { type: target ? "target-has-keyword" : "unit-has-keyword", parameters: { keyword: MARK_KEYWORDS[String(closed(leaf, "mark"))] } });
+      return polarity(leaf, pred("designated", { tag: MARK_TAGS[String(closed(leaf, "mark"))] }, who));
     case "unit-position": {
       const kind = closed(leaf, "kind");
-      if (kind === "closest-eligible") return polarity(leaf, { type: "unit-within-range-of", parameters: { target_type: "closest-eligible" } });
+      if (kind === "closest-eligible") return polarity(leaf, pred("closest", { among: "eligible-targets" }, "defender"));
       if (kind === "within" || kind === "beyond") {
         // Distance from the attacking model to its target, as the authored data measures it.
-        const node = { type: "unit-within-range-of", parameters: { target_type: "current-ranged-attack-target", range: closed(leaf, "inches") } };
+        const node = pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
       const controlled = closed(leaf, "controlled_by");
-      return polarity(leaf, {
-        type: "within-range-of-objective",
-        parameters: { subject: target ? "target" : "unit", ...(controlled === "you" ? { controlled_by: "your-army" } : controlled === "opponent" ? { controlled_by: "opponent" } : {}) },
-      });
+      const objective = controlled === "you" ? { controlled_by: "friendly" } : controlled === "opponent" ? { controlled_by: "enemy" } : {};
+      return polarity(leaf, pred("within", { of: { objective }, range: "objective-control" }, who));
     }
     case "target-is-selected":
       throw new CompileError("target-is-selected only compiles with a select-unit leaf; the compiler resolves it there.");

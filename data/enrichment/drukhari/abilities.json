@@ -148,7 +148,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -200,7 +204,10 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           }
         ]
       },
@@ -266,10 +273,18 @@
     "behavior": "reactive",
     "community_notes": "[APPROX] add 1 to the roll if no model in this unit has a spirit vortex; Pain tokens spent for reasons other than Empowering do not trigger this ability",
     "trigger": {
-      "event": "unit-empowered",
-      "subject": "friendly-unit",
+      "event": "designation-changed",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "tag": "EMPOWERED"
+      },
       "proximity": {
-        "range": 9
+        "of": "this-model",
+        "range": {
+          "inches": 9
+        }
       }
     }
   },
@@ -341,7 +356,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -385,9 +404,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "subject": "defender",
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           }
         ]
@@ -515,8 +537,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -715,9 +739,14 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "opponent-unit-within-range",
+              "type": "within",
               "parameters": {
-                "range": 9
+                "of": {
+                  "owner": "enemy"
+                },
+                "range": {
+                  "inches": 9
+                }
               }
             },
             "effect": {
@@ -853,7 +882,10 @@
         "operator": "not",
         "operands": [
           {
-            "type": "is-battle-shocked"
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           }
         ]
       },
@@ -912,7 +944,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1093,7 +1129,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "fight-first",
@@ -1372,11 +1412,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "window": "this-attack",
-          "count_min": 1
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "event"
         }
       },
       "effect": {
@@ -1421,10 +1463,10 @@
             }
           },
           {
-            "type": "token-count-at-or-above",
+            "type": "resource",
             "parameters": {
-              "pool_id": "pain-token-pool",
-              "threshold": 1
+              "pool": "pain-token-pool",
+              "at_least": 1
             }
           }
         ]
@@ -1454,9 +1496,11 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "CHARACTER"
+                        "all_of": [
+                          "CHARACTER"
+                        ]
                       }
                     }
                   ]
@@ -1478,9 +1522,11 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "CHARACTER"
+                        "all_of": [
+                          "CHARACTER"
+                        ]
                       }
                     }
                   ]
@@ -1604,7 +1650,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -2226,8 +2275,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached",
-        "parameters": {}
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -2362,7 +2414,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -2400,10 +2456,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -2462,9 +2524,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -2600,7 +2665,7 @@
         "operator": "not",
         "operands": [
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "engaged"
             }
@@ -2640,7 +2705,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -2822,12 +2887,27 @@
             "operator": "or",
             "operands": [
               {
-                "type": "advanced-this-turn"
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "advance"
+                    ]
+                  },
+                  "window": "turn"
+                }
               },
               {
-                "type": "disposition-matches",
+                "type": "happened",
                 "parameters": {
-                  "disposition": "fell-back"
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "fall-back"
+                    ]
+                  },
+                  "window": "turn"
                 }
               }
             ]
@@ -2916,9 +2996,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "SUCCUBUS"
+          "all_of": [
+            "SUCCUBUS"
+          ]
         }
       },
       "effect": {
@@ -2954,9 +3036,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "SUCCUBUS"
+          "all_of": [
+            "SUCCUBUS"
+          ]
         }
       },
       "effect": {
@@ -2997,21 +3081,14 @@
         "operator": "not",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -3071,9 +3148,12 @@
             ]
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "subject": "defender",
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           }
         ]
@@ -3135,7 +3215,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3176,7 +3256,10 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3204,7 +3287,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3253,8 +3340,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader",
-        "parameters": {}
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -3294,28 +3384,26 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "CRONOS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TALOS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "CRONOS",
+                "TALOS"
+              ]
+            }
           },
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           }
         ]
@@ -3355,9 +3443,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "unit-state",
         "parameters": {
-          "keyword": "battle-shocked"
+          "subject": "defender",
+          "state": "battle-shocked"
         }
       },
       "effect": {
@@ -3404,11 +3493,13 @@
             }
           },
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "enemy",
-              "window": "this-phase",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "window": "phase"
             }
           }
         ]
@@ -3488,11 +3579,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -3722,7 +3819,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "disembarked-from-transport"
+        "type": "happened",
+        "parameters": {
+          "event": "disembarked",
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3778,9 +3879,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "Winning the Wager"
+              "tag": "winning-the-wager"
             }
           },
           "effect": {
@@ -3795,9 +3896,9 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "Losing the Wager"
+              "tag": "losing-the-wager"
             }
           },
           "effect": {
@@ -3855,15 +3956,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ARCHON"
+                  "all_of": [
+                    "ARCHON"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "KABALITE WARRIORS"
+                  "all_of": [
+                    "KABALITE WARRIORS"
+                  ]
                 }
               }
             ]
@@ -3883,15 +3988,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "SUCCUBUS"
+                  "all_of": [
+                    "SUCCUBUS"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "WYCHES"
+                  "all_of": [
+                    "WYCHES"
+                  ]
                 }
               }
             ]
@@ -3911,15 +4020,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "HAEMONCULUS"
+                  "all_of": [
+                    "HAEMONCULUS"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "WRACKS"
+                  "all_of": [
+                    "WRACKS"
+                  ]
                 }
               }
             ]
@@ -3941,7 +4054,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-battle"
+      "event": "battle-started"
     }
   },
   {
@@ -3963,11 +4076,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -4030,13 +4149,28 @@
     },
     "trigger": [
       {
-        "event": "normal-move"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        }
       },
       {
-        "event": "advance-move"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        }
       },
       {
-        "event": "fall-back-move"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ]
+        }
       }
     ]
   },
@@ -4059,11 +4193,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "window": "this-attack",
-          "count_min": 1
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "event"
         }
       },
       "effect": {
@@ -4111,7 +4247,13 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "before-battle-shock",
+            "event": "before-roll",
+            "subject": {
+              "owner": "any"
+            },
+            "filter": {
+              "roll": "battle-shock"
+            },
             "condition": {
               "operator": "and",
               "operands": [
@@ -4133,7 +4275,10 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "unit-below-starting-strength"
+              "type": "strength",
+              "parameters": {
+                "below": "starting"
+              }
             },
             "effect": {
               "type": "leadership-modifier",
@@ -4195,7 +4340,10 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "selected-to-fight",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {

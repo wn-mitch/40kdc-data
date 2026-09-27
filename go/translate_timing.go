@@ -1,0 +1,217 @@
+package wh40kdc
+
+import "strings"
+
+// Phrases for the free-text timing strings some effect fields still carry
+// (select.timing, a menu's select, a mortal-wound timing). Triggers and
+// conditions use the event families in translate_trigger.go instead. Mirror of
+// tools/src/translate/timing.ts.
+
+// timingAliases maps legacy timing slugs onto canonical game-event ids so
+// describeTiming can share the eventPhrases table.
+var timingAliases = map[string]string{
+	"advance":                               "advances",
+	"after-attacks":                         "after-unit-resolves-attacks",
+	"after-attacking-unit-finishes-attacks": "after-unit-resolves-attacks",
+	"after-shooting":                        "after-unit-resolves-attacks",
+	"after-unit-shot":                       "after-unit-resolves-attacks",
+	"after-unit-has-shot":                   "after-unit-resolves-attacks",
+	"after-this-model-has-shot":             "after-unit-resolves-attacks",
+	"after-shot-hits-scored":                "after-scoring-hit",
+	"deep-strike":                           "deep-strike-setup",
+	"end":                                   "end-of-turn",
+	"start":                                 "start-of-turn",
+	"fall-back":                             "falls-back",
+	"model-destroyed":                       "on-model-destroyed",
+	"on-destroyed":                          "on-unit-destroyed",
+	"before-this-model-removed":             "before-bearer-removed",
+	"reinforcements-step":                   "reinforcements",
+	"setup":                                 "unit-set-up",
+	"set-up-this-turn":                      "unit-set-up",
+	"after-move-through-terrain-over-4-inches": "moved-through-tall-terrain",
+	"after-moving-through-tall-terrain":        "moved-through-tall-terrain",
+	"when-selected-to-shoot":                   "selected-to-shoot",
+	"when-this-unit-selected-to-shoot":         "selected-to-shoot",
+}
+
+// timingOnlyPhrases are timing strings with no canonical game-event equivalent
+// but an established phrase (usage markers + a couple of phase/state gates).
+var timingOnlyPhrases = map[string]string{
+	"once-per-battle":                  "once per battle",
+	"once-per-phase":                   "once per phase",
+	"once-per-opponent-turn":           "once per opponent's turn",
+	"first-this-battle":                "the first time this battle",
+	"first-time-this-phase":            "the first time this phase",
+	"in-reserves":                      "while it is in Reserves",
+	"command-phase":                    "during the Command phase",
+	"shooting-phase":                   "in the Shooting phase",
+	"start-of-shooting-phase":          "at the start of your Shooting phase",
+	"start-of-fight-phase":             "at the start of the Fight phase",
+	"first-movement-phase":             "in your first Movement phase",
+	"start-of-first-battle-round":      "at the start of the first battle round",
+	"start-of-movement-phase":          "at the start of the Movement phase",
+	"shooting-or-fight-phase":          "in the Shooting or Fight phase",
+	"this-model-starts-or-ends-a-move": "each time this model starts or ends a move",
+	"friendly-unit-empowered-within-9": "each time you spend 1 Pain token to Empower a friendly unit within 9\" of this unit",
+	"enemy-unit-fails-battle-shock":    "each time an enemy unit fails a Battle-shock test",
+}
+
+func describeTiming(timing any) string {
+	t := cstr(timing)
+	if p, ok := timingOnlyPhrases[t]; ok {
+		return p
+	}
+	canon := t
+	if a, ok := timingAliases[t]; ok {
+		canon = a
+	}
+	if p, ok := eventPhrases[canon]; ok {
+		return p
+	}
+	if strings.HasPrefix(t, "after-") {
+		return "after " + dekebab(t[6:])
+	}
+	if strings.HasPrefix(t, "on-") {
+		return "when " + dekebab(t[3:])
+	}
+	if strings.HasSuffix(t, "-destroyed") {
+		return "each time " + dekebab(t)
+	}
+	return "at " + dekebab(t)
+}
+
+// negatedTiming renders a `timing-is` negation, generic over every
+// describeTiming phrase: a "when ..." clause becomes "unless ..."; anything
+// else is bare-prepended with "unless ". Mirrors the TS negatedTiming helper.
+func negatedTiming(timing any) string {
+	phrase := describeTiming(timing)
+	if rest, ok := strings.CutPrefix(phrase, "when "); ok {
+		return "unless " + rest
+	}
+	return "unless " + phrase
+}
+
+var eventPhrases = map[string]string{
+	"start-of-phase":                                 "at the start of the phase",
+	"end-of-phase":                                   "at the end of the phase",
+	"start-of-turn":                                  "at the start of the turn",
+	"end-of-turn":                                    "at the end of the turn",
+	"start-of-player-turn":                           "at the start of your turn",
+	"start-of-opponent-turn":                         "at the start of the opponent's turn",
+	"end-of-opponent-turn":                           "at the end of the opponent's turn",
+	"start-of-battle-round":                          "at the start of the battle round",
+	"start-of-battle":                                "at the start of the battle",
+	"end-of-battle-round":                            "at the end of the battle round",
+	"end-of-normal-move":                             "when the unit ends a Normal move",
+	"enemy-unit-destroyed":                           "each time an enemy unit is destroyed",
+	"selected-to-move":                               "when the unit is selected to move",
+	"selected-to-fall-back":                          "when the unit is selected to Fall Back",
+	"end-of-advance-move":                            "when the unit ends an Advance move",
+	"selected-to-disembark":                          "when the unit is selected to disembark",
+	"unit-disembarked":                               "when the unit disembarks from a Transport",
+	"becomes-battle-shocked":                         "when the unit becomes Battle-shocked",
+	"start-of-battle-shock-step":                     "at the start of the Battle-shock step",
+	"stratagem-used":                                 "each time you use a Stratagem",
+	"dark-pact-made":                                 "each time the unit makes a Dark Pact",
+	"agile-manoeuvre-performed":                      "each time the unit performs an Agile Manoeuvre",
+	"unit-empowered":                                 "each time the unit is Empowered",
+	"ritual-manifested":                              "each time the unit manifests a Ritual",
+	"oath-fulfilled":                                 "when you fulfil an Oath",
+	"shadow-in-the-warp-used":                        "when you use Shadow in the Warp",
+	"order-issued":                                   "each time the unit issues an Order",
+	"order-received":                                 "each time an Order is issued to the unit",
+	"reanimation-protocols-activated":                "each time the unit's Reanimation Protocols activate",
+	"ritual-attempted":                               "each time the unit attempts a Ritual",
+	"warp-channelled":                                "each time the unit Channels the Warp",
+	"after-psychic-test":                             "after a Psychic test is taken",
+	"blessings-of-khorne-rolled":                     "each time you make a Blessings of Khorne roll",
+	"observer-selected":                              "each time the unit is selected as an Observer unit",
+	"malefic-surge-made":                             "each time the unit makes a Malefic Surge",
+	"contract-invoked":                               "each time the unit invokes its contract",
+	"dark-pact-test-passed":                          "each time the unit makes a Dark Pact and passes its Leadership test",
+	"contract-completed":                             "each time you complete a Contract",
+	"favoured-champions-changed":                     "each time a unit becomes your Favoured Champions",
+	"cult-ambush-marker-removed":                     "each time one of your Cult Ambush markers is removed",
+	"set-up-from-cult-ambush":                        "when the unit is set up using Cult Ambush",
+	"quarry-destroyed":                               "each time your quarry is destroyed",
+	"combat-doctrine-selected":                       "when you select a Combat Doctrine",
+	"waaagh-called":                                  "when you call a Waaagh!",
+	"opponent-cp-gained":                             "each time your opponent gains a CP",
+	"flux-token-spent":                               "each time a Flux token is spent",
+	"yield-points-spent":                             "each time you spend Yield points",
+	"gate-of-infinity-used":                          "when you use Gate of Infinity",
+	"surge-move":                                     "when the unit makes a Surge move",
+	"army-selection":                                 "when you select this model to include in your army",
+	"start-of-command-phase":                         "at the start of the Command phase",
+	"declare-battle-formations":                      "when declaring Battle Formations",
+	"post-deployment":                                "after deployment",
+	"unit-set-up":                                    "when the unit is set up",
+	"set-up-from-reserves":                           "when the unit arrives from Reserves",
+	"arrives-from-strategic-reserves":                "when the unit arrives from Strategic Reserves",
+	"starts-in-strategic-reserves":                   "if the unit starts in Strategic Reserves",
+	"game-start-in-reserves":                         "if the unit begins the battle in Reserves",
+	"deep-strike-setup":                              "when the unit is set up by Deep Strike",
+	"reinforcements":                                 "when the unit arrives as Reinforcements",
+	"normal-move":                                    "when the unit makes a Normal move",
+	"advance-move":                                   "when the unit makes an Advance move",
+	"advances":                                       "when the unit Advances",
+	"fall-back-move":                                 "when the unit makes a Fall Back move",
+	"falls-back":                                     "when the unit Falls Back",
+	"charge-move":                                    "when the unit makes a Charge move",
+	"end-of-charge-move":                             "after the unit ends a Charge move",
+	"charge-declaration":                             "when a Charge is declared",
+	"moved-through-terrain":                          "when the unit moves through terrain",
+	"moved-through-tall-terrain":                     "when the unit moves through terrain over 4\" tall",
+	"enemy-unit-ended-move":                          "an enemy unit ends a move",
+	"enemy-unit-fell-back":                           "an enemy unit Falls Back",
+	"before-hit-roll":                                "before a Hit roll is made",
+	"after-hit-roll":                                 "after a Hit roll is made",
+	"before-wound-roll":                              "before a Wound roll is made",
+	"after-wound-roll":                               "after a Wound roll is made",
+	"attack-scores-wound":                            "each time an attack scores a wound",
+	"before-save-roll":                               "before a saving throw is made",
+	"after-save-roll":                                "after a saving throw is made",
+	"before-damage-roll":                             "before a Damage roll is made",
+	"after-damage-roll":                              "after a Damage roll is made",
+	"before-charge-roll":                             "before a Charge roll is made",
+	"after-charge-roll":                              "after a Charge roll is made",
+	"before-advance-roll":                            "before an Advance roll is made",
+	"after-advance-roll":                             "after an Advance roll is made",
+	"before-battle-shock":                            "before a Battle-shock test",
+	"after-battle-shock":                             "after a Battle-shock test",
+	"on-unit-selected":                               "when the unit is selected",
+	"selected-to-shoot":                              "when the unit is selected to shoot",
+	"selected-to-fight":                              "when the unit is selected to fight",
+	"selected-to-advance":                            "when the unit is selected to Advance",
+	"after-unit-resolves-attacks":                    "after the unit resolves its attacks",
+	"after-scoring-hit":                              "after scoring a hit",
+	"after-enemy-unit-fires":                         "after an enemy unit shoots",
+	"on-unit-destroyed":                              "when the unit is destroyed",
+	"on-model-destroyed":                             "when a model in the unit is destroyed",
+	"first-model-destroyed":                          "the first time a model in the unit is destroyed",
+	"before-bearer-removed":                          "before this model is removed from play",
+	"enemy-unit-destroyed-in-melee":                  "when an enemy unit is destroyed in melee",
+	"on-damage-allocated":                            "when damage is allocated",
+	"battle-shock-test":                              "when the unit takes a Battle-shock test",
+	"leadership-test":                                "when the unit takes a Leadership test",
+	"desperate-escape-test":                          "when the unit takes a Desperate Escape test",
+	"end-of-opponent-charge-phase":                   "at the end of the opponent's Charge phase",
+	"enemy-unit-completed-shooting-targeting-bearer": "after an enemy unit has shot and targeted this unit",
+	"enemy-unit-selects-bearer-as-charge-target":     "when an enemy unit selects this unit as a charge target",
+	"enemy-unit-targets-bearer":                      "when an enemy unit targets this unit",
+	"enemy-unit-completed-fall-back-from-bearer":     "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
+	"act-of-faith-completed":                         "after an Act of Faith is completed",
+	"act-of-faith-performed":                         "when an Act of Faith is performed",
+	"miracle-die-generated":                          "when a Miracle die is generated",
+	"enemy-unit-selected-charge-targets-before-charge-move": "after an enemy unit selects targets for its charge but before it makes a Charge move",
+}
+
+// eventClause maps a reactive-trigger event to its lead-in phrase; unmapped
+// events fall back to "when <dekebab>".
+func eventClause(event any) string {
+	e := cstr(event)
+	if v, ok := eventPhrases[e]; ok {
+		return v
+	}
+	return "when " + dekebab(e)
+}

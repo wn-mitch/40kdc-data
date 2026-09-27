@@ -132,9 +132,10 @@ pub mod cruncher;
 pub mod translate;
 
 pub use translate::{
-    describe_ability, describe_ability_parts, describe_applies_to, describe_award,
-    describe_condition, describe_effect, describe_effect_inline, describe_effect_with_scope,
-    describe_scope, describe_scoring_card, describe_trigger,
+    condition_lead_in_value, describe_ability, describe_ability_parts, describe_applies_to,
+    describe_award, describe_condition, describe_condition_value, describe_effect,
+    describe_effect_inline, describe_effect_with_scope, describe_scope, describe_scoring_card,
+    describe_selection_eligibility_value, describe_trigger, describe_trigger_value,
 };
 
 /// Roster-highlighting scope: resolve which units an ability's curated

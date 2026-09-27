@@ -8,16 +8,16 @@
       {
         "starts": "shooting",
         "player_turn": "your-turn",
-        "units": { "type": "unit-has-keyword", "parameters": { "keyword": "infantry" } },
+        "units": {"type":"designated","parameters":{"tag":"infantry"}},
         "use_limit": 1,
-        "completes": { "type": "within-range-of-objective" },
+        "completes": {"type":"within","parameters":{"of":{"objective":{}},"range":"objective-control"}},
         "effect": { "type": "terrain-area-tag", "target": "unit", "modifier": { "tag": "cleansed" } }
       }
     ],
     "awards": [
       {
         "trigger": { "phase": "command", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective" },
+        "when": {"type":"controls"},
         "vp": 5
       }
     ],
@@ -70,17 +70,17 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
+        "when": {"type":"happened","parameters":{"event":"destroyed","object":{"owner":"enemy"},"window":"turn"}},
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "battle_round": { "min": 2 } },
-        "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
+        "when": {"type":"controls","parameters":{"compare":"more-than-opponent"}},
         "vp": 6
       },
       {
         "trigger": { "timing": "end-of-turn" },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": {"type":"controls","parameters":{"objective":{"role":"central"}}},
         "vp_per": 1,
         "per": "operation-marker-within-range",
         "per_max": 3,
@@ -88,7 +88,7 @@
       },
       {
         "trigger": { "timing": "end-of-battle" },
-        "when": { "type": "units-destroyed-comparison", "parameters": { "subject": { "side": "enemy", "window": "this-turn" }, "comparator": "greater-than", "reference": { "side": "friendly", "window": "previous-turn" } } },
+        "when": {"type":"happened-compare","parameters":{"left":{"event":"destroyed","object":{"owner":"enemy"},"window":"turn"},"comparison":"greater-than","right":{"event":"destroyed","object":{"owner":"friendly"},"window":"previous-turn"}}},
         "vp": 4
       }
     ],

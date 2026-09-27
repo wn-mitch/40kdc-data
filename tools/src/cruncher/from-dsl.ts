@@ -928,7 +928,6 @@ function translateConditional(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return;
-  const negated = condition.negated === true;
   const verdict = evaluateCondition(condition, opts.context);
   if (verdict === "unknown") {
     // A timing the player controls (e.g. "start of phase") isn't a wall — it's
@@ -944,8 +943,7 @@ function translateConditional(
     }
     return;
   }
-  const active = negated ? !verdict : verdict;
-  if (!active) return;
+  if (!verdict) return;
   walk(effect, source, opts, out);
 }
 
@@ -992,14 +990,32 @@ function translateNamedEffect(
 // `applicableWhen` so the resolver gates them per-target.
 // ---------------------------------------------------------------------------
 
-/** Steps of every attack: something firing on one applies to each attack it modifies. */
-export const ATTACK_STEP_EVENTS: ReadonlySet<string> = new Set([
-  "before-hit-roll", "after-hit-roll", "before-wound-roll", "after-wound-roll", "attack-scores-wound", "after-scoring-hit",
-  "before-save-roll", "after-save-roll", "before-damage-roll", "after-damage-roll", "on-damage-allocated",
-]);
+/** Rolls inside every attack: a trigger on one applies to each attack it modifies. */
+const ATTACK_STEP_ROLLS: ReadonlySet<string> = new Set(["hit", "wound", "save", "damage"]);
 
-/** Moves the engine context records: a unit that made one has charged or advanced this turn. */
-const MOVE_FACTS: Record<string, string> = { "charge-move": "charged-this-turn", "advance-move": "advanced-this-turn" };
+/** A trigger on a step of every attack (a hit, wound, save or damage roll, or allocating damage). */
+export function isAttackStep(trigger: unknown): boolean {
+  if (!isObject(trigger)) return false;
+  if (trigger.event === "damage-allocated") return true;
+  const roll = isObject(trigger.filter) ? trigger.filter.roll : undefined;
+  return (trigger.event === "before-roll" || trigger.event === "after-roll") && typeof roll === "string" && ATTACK_STEP_ROLLS.has(roll);
+}
+
+/** The lever key of a trigger: its event family and the filter value that tells moments apart. */
+export function momentKey(trigger: Record<string, unknown>): string {
+  const f = isObject(trigger.filter) ? trigger.filter : {};
+  const detail = [f.to, f.kind, f.roll, Array.isArray(f.move_types) ? f.move_types.join("+") : undefined, f.from]
+    .find((v): v is string => typeof v === "string" && v.length > 0);
+  return detail ? `${String(trigger.event)}:${detail}` : String(trigger.event);
+}
+
+/** The unit's own move the engine context records: a Charge move is "charged this turn". */
+function ownMoveFact(trigger: Record<string, unknown>): Record<string, unknown> | undefined {
+  if (trigger.event !== "move-ended" || (trigger.subject != null && trigger.subject !== "this-unit")) return undefined;
+  const types = isObject(trigger.filter) && Array.isArray(trigger.filter.move_types) ? trigger.filter.move_types : [];
+  if (types.length !== 1 || (types[0] !== "charge" && types[0] !== "advance")) return undefined;
+  return { type: "happened", parameters: { event: "move-ended", filter: { move_types: types }, window: "turn" } };
+}
 
 /**
  * An effect gated on a trigger (one, or several alternatives) the way a `timing-is` condition
@@ -1014,10 +1030,9 @@ export function momentGate(trigger: unknown, effect: unknown): unknown {
   if (triggers.length === 0) return effect;
   const gates = triggers.map((item) => {
     const own = isObject(item.condition) ? item.condition : null;
-    if (ATTACK_STEP_EVENTS.has(item.event as string)) return own;
+    if (isAttackStep(item)) return own;
     // A unit's own Charge or Advance move is a fact the context carries, not a choice.
-    const ownMove = item.subject == null || item.subject === "self" || item.subject === "unit" ? MOVE_FACTS[item.event as string] : undefined;
-    const moment = ownMove ? { type: ownMove } : { type: "timing-is", parameters: { timing: item.event } };
+    const moment = ownMoveFact(item) ?? { type: "timing-is", parameters: { timing: momentKey(item) } };
     return own ? { operator: "and", operands: [moment, own] } : moment;
   });
   // Any alternative met by every attack without a condition leaves nothing to gate.
@@ -1281,7 +1296,6 @@ function extractTiming(condition: Record<string, unknown>): string | undefined {
 function conditionToApplicability(
   condition: Record<string, unknown>,
 ): BuffApplicability | "context" | "gate" {
-  if (condition.negated === true) return "context";
   if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
     if (condition.operator !== "and") return "context";
     let merged: BuffApplicability = {};
@@ -1302,18 +1316,16 @@ function conditionToApplicability(
       const phase = params?.phase;
       return typeof phase === "string" ? { phases: [phase as Phase] } : "context";
     }
-    case "target-has-keyword": {
-      const kw = params?.keyword;
-      return typeof kw === "string" ? { requiresTargetKeyword: kw } : "context";
+    case "has-keyword": {
+      const kw = singleKeyword(params);
+      if (kw === undefined) return "context";
+      if (params?.subject === "defender") return { requiresTargetKeyword: kw };
+      return isBuffedUnit(params?.subject) ? { requiresAttackerKeyword: kw } : "context";
     }
-    case "unit-has-keyword": {
-      const kw = params?.keyword;
-      return typeof kw === "string" ? { requiresAttackerKeyword: kw } : "context";
-    }
-    case "attack-is-type": {
-      const t = params?.attack_type;
-      if (t === "melee") return { phases: ["fight"] };
-      if (t === "ranged") return { phases: ["shooting"] };
+    case "attack-is": {
+      if (params == null || Object.keys(params).some((k) => k !== "attack_type")) return "context";
+      if (params.attack_type === "melee") return { phases: ["fight"] };
+      if (params.attack_type === "ranged") return { phases: ["shooting"] };
       return "context";
     }
     default:
@@ -1413,6 +1425,18 @@ function keywordLabel(ref: WeaponKeywordRef): string {
 // Condition evaluator
 // ---------------------------------------------------------------------------
 
+/** The buffed unit: the ability's own unit (or model), or the unit an aura is applied to. */
+function isBuffedUnit(subject: unknown): boolean {
+  return subject == null || subject === "this-unit" || subject === "this-model" || subject === "recipient";
+}
+
+/** The one keyword a `has-keyword` names, else undefined. */
+function singleKeyword(params: Record<string, unknown> | undefined): string | undefined {
+  const all = Array.isArray(params?.all_of) ? params!.all_of : [];
+  if (params?.any_of != null || all.length !== 1 || typeof all[0] !== "string") return undefined;
+  return all[0];
+}
+
 function evaluateCondition(
   condition: Record<string, unknown>,
   ctx: EngineContext,
@@ -1433,10 +1457,11 @@ function evaluateCondition(
       if (typeof wanted !== "string") return "unknown";
       return ctx.phase === wanted;
     }
-    case "attack-is-type": {
-      const attackType = (condition.parameters as Record<string, unknown> | undefined)?.attack_type;
-      if (attackType === "melee") return ctx.phase === "fight";
-      if (attackType === "ranged") return ctx.phase === "shooting";
+    case "attack-is": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      if (Object.keys(params).some((k) => k !== "attack_type")) return "unknown";
+      if (params.attack_type === "melee") return ctx.phase === "fight";
+      if (params.attack_type === "ranged") return ctx.phase === "shooting";
       return "unknown";
     }
     case "timing-is": {
@@ -1445,32 +1470,38 @@ function evaluateCondition(
       if (ctx.timing === undefined) return "unknown";
       return ctx.timing === wanted;
     }
-    case "remained-stationary":
-      return ctx.attackerStationary === true;
-    case "charged-this-turn":
-      // A player-controlled context flag (did the buffed unit charge this turn?),
-      // mirroring `remained-stationary`. Undefined → the caller couldn't pin it
-      // down, so stay "unknown" and let the SPA surface the gap.
-      if (ctx.attackerCharged === undefined) return "unknown";
-      return ctx.attackerCharged;
-    case "target-has-keyword": {
-      const kw = (condition.parameters as Record<string, unknown> | undefined)?.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.targetKeywords ?? []).includes(kw.toLowerCase());
+    case "happened": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      const types = isObject(params.filter) && Array.isArray(params.filter.move_types) ? params.filter.move_types : [];
+      const own = params.subject == null && params.object == null && params.count_min == null && params.window === "turn";
+      if (!own || params.event !== "move-ended" || types.length !== 1 || Object.keys(params.filter as object).length !== 1) return "unknown";
+      // Player-controlled context flags for the buffed unit's own move this turn. An undefined
+      // charge flag means the caller couldn't pin it down: stay "unknown" so the SPA surfaces it.
+      if (types[0] === "remain-stationary") return ctx.attackerStationary === true;
+      if (types[0] === "charge") return ctx.attackerCharged === undefined ? "unknown" : ctx.attackerCharged;
+      return "unknown";
     }
-    case "unit-has-keyword": {
-      const kw = (condition.parameters as Record<string, unknown> | undefined)?.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.attackerKeywords ?? []).includes(kw.toLowerCase());
+    case "has-keyword": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      // A keyword the player picked is not in the context.
+      if (params.chosen_by != null) return "unknown";
+      const pool = params.subject === "defender" ? ctx.targetKeywords : isBuffedUnit(params.subject) ? ctx.attackerKeywords : undefined;
+      if (pool === undefined && params.subject !== "defender" && !isBuffedUnit(params.subject)) return "unknown";
+      const have = (pool ?? []).map((k) => k.toLowerCase());
+      const all = Array.isArray(params.all_of) ? params.all_of : [];
+      const any = Array.isArray(params.any_of) ? params.any_of : [];
+      if (![...all, ...any].every((k) => typeof k === "string")) return "unknown";
+      return all.every((k) => have.includes(String(k).toLowerCase())) && (any.length === 0 || any.some((k) => have.includes(String(k).toLowerCase())));
     }
-    case "is-attached":
-    case "model-is-leader":
-      // True whenever the buffed unit is a combined ("attached") unit. We do
-      // not thread per-member leader identity — "attachment present" is the
-      // signal both conditions gate on. Undefined flag (caller couldn't
-      // determine attachment) stays "unknown" so the SPA surfaces the gap.
+    case "attachment": {
+      // True whenever the buffed unit is a combined ("attached") unit. We do not thread
+      // per-member leader identity, and a Leader keyword filter is not checked: "attachment
+      // present" is the signal. An undefined flag stays "unknown" so the SPA surfaces the gap.
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      if (params.role === "led" || params.with != null) return "unknown";
       if (ctx.attackerAttached === undefined) return "unknown";
       return ctx.attackerAttached;
+    }
     default:
       return "unknown";
   }
@@ -1639,7 +1670,7 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
 
 function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
   if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
-  return isObject(trigger) && (trigger.caused_by != null || trigger.source_ability != null);
+  return isObject(trigger) && ((isObject(trigger.filter) && trigger.filter.by != null) || trigger.source_ability != null);
 }
 
 /** Filters the recipient unit; emitter identity is not part of EngineContext. */

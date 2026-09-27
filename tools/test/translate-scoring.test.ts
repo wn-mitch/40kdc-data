@@ -34,17 +34,20 @@ describe("describeTrigger", () => {
 });
 
 describe("describeCondition", () => {
-  it("controls-objective with a role", () => {
+  it("controls with an objective role", () => {
     const c: Condition = {
-      type: "controls-objective",
-      parameters: { objective_role: "central", count_min: 1 },
+      type: "controls",
+      parameters: { objective: { role: "central" } },
     };
     expect(describeCondition(c)).toBe("you control 1+ central objectives");
+    expect(describeCondition({ type: "controls", parameters: { objective: { role: "central" }, count_min: 2 } })).toBe(
+      "you control 2+ central objectives",
+    );
   });
 
-  it("objective-majority", () => {
+  it("controls more objectives than the opponent", () => {
     expect(
-      describeCondition({ type: "objective-majority", parameters: { relative_to: "opponent" } }),
+      describeCondition({ type: "controls", parameters: { compare: "more-than-opponent" } }),
     ).toBe("you hold more objectives than the opponent");
   });
 
@@ -52,13 +55,23 @@ describe("describeCondition", () => {
     const c: Condition = {
       operator: "and",
       operands: [
-        { type: "terrain-has-tag", parameters: { tag: "mined" } },
-        { type: "units-destroyed", parameters: { side: "enemy", window: "this-turn", count_min: 1 } },
+        { type: "designated", parameters: { subject: { objective: {} }, tag: "mined", count_min: 1 } },
+        { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, window: "turn" } },
       ],
     };
     expect(describeCondition(c)).toBe(
-      "terrain tagged mined and 1+ enemy units destroyed this turn",
+      "1+ objectives tagged mined and 1+ enemy units destroyed this turn",
     );
+  });
+
+  it("a unit in tagged terrain names the tag", () => {
+    // The tag is the whole condition: "within a terrain area" alone is true of any terrain.
+    const text = describeCondition({
+      type: "in-region",
+      parameters: { subject: { owner: "friendly" }, region: { terrain_area: { designated: "mined" } } },
+    });
+    expect(text).toMatch(/^a friendly unit is within /);
+    expect(text).toContain("mined");
   });
 
   it("destroyed-in-tagged-terrain (start of turn)", () => {
@@ -84,7 +97,7 @@ describe("describeAward", () => {
   it("flat vp with a when clause", () => {
     const a: ScoringAward = {
       trigger: { timing: "end-of-turn", player_turn: "your-turn", battle_round: { max: 2 } },
-      when: { type: "objective-majority", parameters: { relative_to: "opponent" } },
+      when: { type: "controls", parameters: { compare: "more-than-opponent" } },
       vp: 2,
     };
     expect(describeAward(a)).toBe(
@@ -98,7 +111,7 @@ describe("describeAward", () => {
       vp_per: 2,
       per: "controlled-central-objective-at-end-of-command-phase",
       cumulative: true,
-      when: { type: "controls-objective", parameters: { objective_role: "central", count_min: 1 } },
+      when: { type: "controls", parameters: { objective: { role: "central" } } },
     };
     expect(describeAward(a)).toBe(
       "+ End of your Command phase (round 2+): 2 VP per controlled central objective at end of command phase when you control 1+ central objectives",

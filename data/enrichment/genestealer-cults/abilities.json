@@ -69,10 +69,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "range": 0,
-          "target_type": "cult-ambush-marker"
+          "of": {
+            "marker": "cult-ambush"
+          },
+          "range": {
+            "inches": 0
+          }
         }
       },
       "effect": {
@@ -108,8 +112,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "arrives-from-strategic-reserves",
-      "subject": "self"
+      "event": "set-up",
+      "filter": {
+        "from": "strategic-reserves"
+      }
     }
   },
   {
@@ -262,8 +268,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -500,8 +508,10 @@
     "ability_type": "unit",
     "behavior": "activated",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -518,7 +528,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -674,7 +688,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -755,7 +773,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -817,9 +839,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "INFANTRY"
+          "subject": "defender",
+          "all_of": [
+            "INFANTRY"
+          ]
         }
       },
       "effect": {
@@ -877,22 +902,27 @@
     "behavior": "passive",
     "effect": {
       "condition": {
-        "parameters": {},
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "steps": [
           {
             "condition": {
+              "operator": "not",
               "operands": [
                 {
+                  "type": "has-keyword",
                   "parameters": {
-                    "keyword": "HYBRID METAMORPHS"
-                  },
-                  "type": "unit-has-keyword"
+                    "all_of": [
+                      "HYBRID METAMORPHS"
+                    ]
+                  }
                 }
-              ],
-              "operator": "not"
+              ]
             },
             "effect": {
               "modifier": {
@@ -905,10 +935,12 @@
           },
           {
             "condition": {
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "HYBRID METAMORPHS"
-              },
-              "type": "unit-has-keyword"
+                "all_of": [
+                  "HYBRID METAMORPHS"
+                ]
+              }
             },
             "effect": {
               "modifier": {
@@ -1001,7 +1033,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1067,8 +1103,14 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "stratagem-targeted",
-            "subject": "self"
+            "event": "targets-selected",
+            "subject": {
+              "owner": "friendly"
+            },
+            "object": "this-unit",
+            "filter": {
+              "kind": "stratagem"
+            }
           },
           "effect": {
             "type": "cp-refund",
@@ -1164,7 +1206,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1273,7 +1319,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1422,8 +1472,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -1438,21 +1490,12 @@
     "source_digest": "26c9618c790ea1167c3082e1d6dc5a33db6c0a97090ba77872b37869d23f4d83",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached",
-        "parameters": {
-          "weapon": "sanctus-bio-dagger"
-        }
-      },
-      "effect": {
-        "type": "rule-state",
-        "target": "self",
-        "modifier": {
-          "direction": "suppressed",
-          "rule_kind": "core-rule",
-          "rule": "fire-overwatch"
-        }
+      "type": "rule-state",
+      "target": "self",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "fire-overwatch"
       }
     },
     "scope": {
@@ -1599,7 +1642,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1739,7 +1786,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "fight-first",
@@ -1770,7 +1821,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -1832,7 +1887,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2025,33 +2084,15 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KELERMORPH"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LOCUS"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "REDUCTUS SABOTEUR"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SANCTUS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "KELERMORPH",
+                "LOCUS",
+                "REDUCTUS SABOTEUR",
+                "SANCTUS"
+              ]
+            }
           },
           "effect": {
             "type": "keyword-grant",
@@ -2066,9 +2107,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "KILLER"
+              "all_of": [
+                "KILLER"
+              ]
             }
           },
           "effect": {
@@ -2170,9 +2213,11 @@
             ]
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "KILLER"
+              "all_of": [
+                "KILLER"
+              ]
             }
           }
         ]
@@ -2194,10 +2239,16 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": [
       {
-        "event": "selected-to-shoot"
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        }
       },
       {
-        "event": "selected-to-fight"
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        }
       }
     ]
   },
@@ -2232,8 +2283,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-fought-this-phase",
-                "parameters": {}
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
               }
             ]
           }
@@ -2350,8 +2407,10 @@
         "operator": "not",
         "operands": [
           {
-            "type": "engagement-state",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           }
         ]
       },
@@ -2369,7 +2428,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -2416,7 +2475,13 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-fall-back",
+      "event": "selected",
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "fall-back"
+        ]
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2444,10 +2509,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "opponent-movement"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
@@ -2494,8 +2570,10 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "community_notes": "When an enemy unit ends a move within 8\" of an unengaged PURESTRAIN GENESTEALERS unit, that unit can make a Normal move of up to D3+3\"."
@@ -2881,27 +2959,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "ABERRANTS"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "BIOPHAGUS"
-            }
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "PURESTRAIN GENESTEALERS"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "any_of": [
+            "ABERRANTS",
+            "BIOPHAGUS",
+            "PURESTRAIN GENESTEALERS"
+          ]
+        }
       },
       "effect": {
         "type": "sequence",
@@ -2918,8 +2983,16 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "charged-this-turn",
-              "parameters": {}
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "charge"
+                  ]
+                },
+                "window": "turn"
+              }
             },
             "effect": {
               "type": "stat-modifier",
@@ -2966,8 +3039,10 @@
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked",
-                "parameters": {}
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           },
@@ -2984,7 +3059,7 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "end-of-phase",
+            "event": "phase-ended",
             "condition": {
               "type": "phase-is",
               "parameters": {
@@ -2998,13 +3073,23 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "controls-objective",
-                  "parameters": {}
+                  "type": "controls"
                 },
                 {
-                  "type": "within-range-of-objective",
+                  "type": "within",
                   "parameters": {
-                    "target_type": "friendly-atalan-jackals"
+                    "subject": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ATALAN JACKALS"
+                      ]
+                    },
+                    "of": {
+                      "objective": {
+                        "controlled_by": "friendly"
+                      }
+                    },
+                    "range": "objective-control"
                   }
                 }
               ]
@@ -3100,8 +3185,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader",
-        "parameters": {}
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3125,27 +3213,14 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "MAGUS"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "PRIMUS"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "ACOLYTE ICONWARD"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "any_of": [
+                  "MAGUS",
+                  "PRIMUS",
+                  "ACOLYTE ICONWARD"
+                ]
+              }
             },
             "effect": {
               "type": "feel-no-pain",
@@ -3208,7 +3283,10 @@
     },
     "community_notes": "When a GENESTEALER CULTS unit is set up as Reinforcements, its weapons gain [SUSTAINED HITS 1] and [IGNORES COVER] until the end of your next Fight phase (modeled as a grant triggered on arrival).",
     "trigger": {
-      "event": "reinforcements"
+      "event": "set-up",
+      "filter": {
+        "from": "reserves"
+      }
     }
   },
   {
@@ -3232,14 +3310,19 @@
         "scope": "enemy-unit",
         "count": 1,
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged",
-            "source": {
-              "event_var": "claw-of-ascension-survey-augur-shooting"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged",
+              "by": {
+                "event_var": "claw-of-ascension-survey-augur-shooting"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -3265,8 +3348,7 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3297,14 +3379,19 @@
         "scope": "enemy-unit",
         "count": 1,
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged",
-            "source": {
-              "event_var": "claw-of-ascension-crossfire-shooting"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged",
+              "by": {
+                "event_var": "claw-of-ascension-crossfire-shooting"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -3330,8 +3417,7 @@
       "duration": "turn"
     },
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3384,10 +3470,16 @@
     },
     "trigger": [
       {
-        "event": "selected-to-shoot"
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        }
       },
       {
-        "event": "selected-to-fight"
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        }
       }
     ]
   },
@@ -3408,8 +3500,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "controls-objective",
-        "parameters": {}
+        "type": "controls"
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -3424,7 +3515,7 @@
       "duration": "battle"
     },
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3454,15 +3545,20 @@
         "scope": "enemy-unit",
         "count": 1,
         "eligibility": {
-          "type": "was-hit-by-attack",
+          "type": "happened",
           "parameters": {
-            "subject": "target",
-            "attack_type": "ranged",
-            "weapon_name": "Cult Sniper Rifle",
-            "source": {
-              "event_var": "claw-of-ascension-priority-target-shooting"
+            "event": "after-roll",
+            "object": "this-unit",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged",
+              "weapon_name": "Cult Sniper Rifle",
+              "by": {
+                "event_var": "claw-of-ascension-priority-target-shooting"
+              }
             },
-            "window": "just-finished-shooting-sequence"
+            "window": "event"
           }
         }
       },
@@ -3487,8 +3583,7 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3537,8 +3632,7 @@
       "duration": "turn"
     },
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {

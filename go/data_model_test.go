@@ -569,9 +569,9 @@ func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
 	raw["abilities"] = []any{
 		ability("fixture-usage", map[string]any{"behavior": "passive", "usage": map[string]any{"frequency": "n-per-battle", "count": 1}}),
 		ability("fixture-stratagem", map[string]any{"ability_type": "stratagem", "behavior": "activated", "usage": map[string]any{"frequency": "once-per-turn"}}),
-		ability("fixture-moment", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "selected-to-shoot", "subject": "self"}, "usage": map[string]any{"frequency": "once-per-turn"}}),
-		ability("fixture-attack-step", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "before-hit-roll"}}),
-		ability("fixture-charge", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "charge-move"}}),
+		ability("fixture-moment", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "selected", "filter": map[string]any{"to": "shoot"}}, "usage": map[string]any{"frequency": "once-per-turn"}}),
+		ability("fixture-attack-step", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "before-roll", "subject": map[string]any{"owner": "any"}, "filter": map[string]any{"roll": "hit"}}}),
+		ability("fixture-charge", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "move-ended", "filter": map[string]any{"move_types": []any{"charge"}}}}),
 	}
 	ds := NewDataset(raw)
 	gated := func(id string, ctx map[string]any) (int, []string) {
@@ -596,7 +596,7 @@ func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
 	}{
 		{"fixture-usage", fight, 0, "fixture-usage@n-per-battle"},
 		{"fixture-stratagem", fight, 1, ""},
-		{"fixture-moment", fight, 0, "fixture-moment@selected-to-shoot"},
+		{"fixture-moment", fight, 0, "fixture-moment@selected:shoot"},
 		{"fixture-attack-step", fight, 1, ""},
 		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": true}, 1, ""},
 		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": false}, 0, ""},

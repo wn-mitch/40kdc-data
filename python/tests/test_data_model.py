@@ -371,7 +371,7 @@ def _gating_dataset() -> Any:
             "ability_id": "fixture-moment",
             "name": "Fixture Moment",
             "behavior": "reactive",
-            "trigger": {"event": "selected-to-shoot", "subject": "self"},
+            "trigger": {"event": "selected", "filter": {"to": "shoot"}},
             "usage": {"frequency": "once-per-turn"},
         },
         {
@@ -379,14 +379,18 @@ def _gating_dataset() -> Any:
             "ability_id": "fixture-attack-step",
             "name": "Fixture Attack Step",
             "behavior": "reactive",
-            "trigger": {"event": "before-hit-roll"},
+            "trigger": {
+                "event": "before-roll",
+                "subject": {"owner": "any"},
+                "filter": {"roll": "hit"},
+            },
         },
         {
             **base,
             "ability_id": "fixture-charge",
             "name": "Fixture Charge",
             "behavior": "reactive",
-            "trigger": {"event": "charge-move"},
+            "trigger": {"event": "move-ended", "filter": {"move_types": ["charge"]}},
         },
     ]
     return Dataset(raw)
@@ -405,7 +409,7 @@ def _gated(ability_id: str, context: dict[str, Any] | None = None) -> tuple[int,
 def test_usage_and_trigger_gating_match_the_reference() -> None:
     assert _gated("fixture-usage") == (0, ["fixture-usage@n-per-battle"])
     assert _gated("fixture-stratagem") == (1, [])
-    assert _gated("fixture-moment") == (0, ["fixture-moment@selected-to-shoot"])
+    assert _gated("fixture-moment") == (0, ["fixture-moment@selected:shoot"])
     assert _gated("fixture-attack-step") == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": True}) == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": False}) == (0, [])

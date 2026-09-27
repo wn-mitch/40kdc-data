@@ -839,15 +839,15 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "triggers_for_event start-of-phase",
+    name: "triggers_for_event phase-started",
     query: "triggers_for_event",
-    args: { event: "start-of-phase" },
+    args: { event: "phase-started" },
     comparison: "ordered",
   },
   {
-    name: "triggers_for_event enemy-unit-targets-bearer",
+    name: "triggers_for_event targets-selected",
     query: "triggers_for_event",
-    args: { event: "enemy-unit-targets-bearer" },
+    args: { event: "targets-selected" },
     comparison: "ordered",
   },
 ];
@@ -1997,23 +1997,23 @@ function genEffectTranslation(): void {
     scope: Record<string, unknown>;
   }[] = [
     {
-      id: "engagement-state-engaged",
+      id: "unit-state-engaged",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
-          parameters: { state: "within-engagement-range" },
+          type: "unit-state",
+          parameters: { state: "engaged" },
         },
         effect: { type: "fight-first", target: "unit" },
       },
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "engagement-state-on-battlefield",
+      id: "unit-state-on-battlefield",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
+          type: "unit-state",
           parameters: { state: "on-battlefield" },
         },
         effect: { type: "deep-strike", target: "unit" },
@@ -2021,11 +2021,11 @@ function genEffectTranslation(): void {
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "engagement-state-embarked",
+      id: "unit-state-embarked",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
+          type: "unit-state",
           parameters: { state: "embarked" },
         },
         effect: { type: "deep-strike", target: "unit" },
@@ -2033,46 +2033,45 @@ function genEffectTranslation(): void {
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "engagement-state-empty",
+      id: "unit-state-unengaged",
       effect: {
         type: "conditional",
-        condition: { type: "engagement-state", parameters: {} },
+        condition: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
         effect: { type: "deep-strike", target: "unit" },
       },
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "engagement-state-negated",
+      id: "unit-state-negated",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
-          negated: true,
-          parameters: { state: "embarked" },
+          operator: "not",
+          operands: [{ type: "unit-state", parameters: { state: "embarked" } }],
         },
         effect: { type: "deep-strike", target: "unit" },
       },
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "disposition-matches-reserves",
+      id: "unit-state-in-strategic-reserves",
       effect: {
         type: "conditional",
         condition: {
-          type: "disposition-matches",
-          parameters: { disposition: "strategic-reserves" },
+          type: "unit-state",
+          parameters: { state: "in-strategic-reserves" },
         },
         effect: { type: "deep-strike", target: "unit" },
       },
       scope: { range: "unit", duration: "permanent" },
     },
     {
-      id: "disposition-matches-enemy",
+      id: "owned-by-enemy",
       effect: {
         type: "conditional",
         condition: {
-          type: "disposition-matches",
-          parameters: { disposition: "enemy" },
+          type: "owned-by",
+          parameters: { subject: "attacker", owner: "enemy" },
         },
         effect: { type: "deep-strike", target: "unit" },
       },
@@ -2082,7 +2081,7 @@ function genEffectTranslation(): void {
       id: "fights-first-cond",
       effect: {
         type: "conditional",
-        condition: { type: "fights-first", parameters: {} },
+        condition: { type: "unit-state", parameters: { state: "fights-first" } },
         effect: {
           type: "stat-modifier",
           target: "unit",
@@ -2139,14 +2138,13 @@ function genEffectTranslation(): void {
     },
     {
       // closest-eligible target with a range bound — pins the `within N"` clause
-      // (blood-hungry-annihilator's targeting); the auto-sample caps the
-      // unit-within-range-of condition before a ranged closest-eligible surfaces.
-      id: "unit-within-range-closest-eligible",
+      // (blood-hungry-annihilator's targeting).
+      id: "closest-eligible-within-range",
       effect: {
         type: "conditional",
         condition: {
-          type: "unit-within-range-of",
-          parameters: { range: 18, target_type: "closest-eligible" },
+          type: "closest",
+          parameters: { subject: "defender", among: "eligible-targets", range: { inches: 18 } },
         },
         effect: {
           type: "re-roll",
@@ -2480,9 +2478,9 @@ function genEffectTranslation(): void {
       },
       scope: { range: "self", duration: "one-use" },
       trigger: {
-        event: "enemy-unit-ended-move",
-        subject: "enemy-unit",
-        proximity: { of: "bearer", range: 9 },
+        event: "move-ended",
+        subject: { owner: "enemy" },
+        proximity: { of: "this-model", range: { inches: 9 } },
       },
     },
     {
@@ -2493,7 +2491,7 @@ function genEffectTranslation(): void {
         modifier: { count: 1 },
       },
       scope: { range: "aura-6", duration: "one-use", range_inches: 6 },
-      trigger: { event: "on-model-destroyed" },
+      trigger: { event: "model-destroyed", object: "model-in-this-unit" },
     },
     {
       id: "trigger-before-save-with-condition",
@@ -2504,9 +2502,9 @@ function genEffectTranslation(): void {
       },
       scope: { range: "unit", duration: "phase" },
       trigger: {
-        event: "before-save-roll",
-        subject: "self",
-        condition: { type: "is-battle-shocked" },
+        event: "before-roll",
+        filter: { roll: "save" },
+        condition: { type: "unit-state", parameters: { state: "battle-shocked" } },
       },
     },
   ];
@@ -2768,7 +2766,7 @@ function genEffectTranslation(): void {
       id: "superlative-strategist",
       effect: {
         type: "conditional",
-        condition: { type: "model-is-leader" },
+        condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } },
         effect: {
           type: "sequence",
           steps: [
@@ -2780,8 +2778,8 @@ function genEffectTranslation(): void {
             {
               type: "conditional",
               condition: {
-                type: "timing-is",
-                parameters: { timing: "agile-manoeuvre" },
+                type: "happened",
+                parameters: { event: "used", filter: { kind: "manoeuvre" }, window: "phase" },
               },
               effect: {
                 type: "re-roll",
@@ -2802,14 +2800,14 @@ function genEffectTranslation(): void {
           operator: "and",
           operands: [
             { type: "phase-is", parameters: { phase: "movement" } },
-            { type: "player-turn-is", parameters: { turn: "opponent" } },
+            { type: "player-turn-is", parameters: { turn: "opponent-turn" } },
             {
-              type: "opponent-unit-within-range",
-              parameters: { within_inches: 8 },
+              type: "within",
+              parameters: { of: { owner: "enemy" }, range: { inches: 8 } },
             },
-            { operator: "not", operands: [{ type: "engagement-state" }] },
-            { type: "unit-has-keyword", parameters: { keyword: "HARLEQUINS" } },
-            { type: "unit-has-keyword", parameters: { keyword: "INFANTRY" } },
+            { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+            { type: "has-keyword", parameters: { all_of: ["HARLEQUINS"] } },
+            { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } },
           ],
         },
         effect: {
@@ -2958,12 +2956,12 @@ function genEffectTranslation(): void {
       scope: { range: "unit", duration: "phase" },
     },
     {
-      id: "conditional-when-selected-to-shoot-alias",
+      id: "conditional-selected-to-shoot-this-phase",
       effect: {
         type: "conditional",
         condition: {
-          type: "timing-is",
-          parameters: { timing: "when-selected-to-shoot" },
+          type: "happened",
+          parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" },
         },
         effect: {
           type: "roll-modifier",
@@ -3072,14 +3070,10 @@ function genEffectTranslation(): void {
     });
   }
 
-  // moved-through-tall-terrain canonical game-event: pins the new timing-is
-  // negation arm (inline conditional lead-in AND trigger-condition predicate
-  // form), the event dispatched directly as a trigger.event, the two legacy
-  // TIMING_ALIASES strings resolving onto the same canonical phrase, and a
-  // generic moved-through-terrain control case proving the new alias doesn't
-  // bleed onto the untouched sibling timing. No enrichment ability exercises
-  // the trigger-condition/negated/legacy-alias forms directly, so these are
-  // forced synthetic exemplars; expected text still comes from the reference
+  // A move through tall terrain, as history and as a trigger: the inline lead-in and the
+  // trigger-condition form, each plain and negated, the move-ended trigger itself, and the
+  // generic through-terrain filter as a control. No enrichment ability exercises every form,
+  // so these are forced synthetic exemplars; expected text still comes from the reference
   // describer, so a second impl must independently reproduce it.
   const FORCED_MOVED_THROUGH_TALL_TERRAIN_CASES: {
     id: string;
@@ -3089,123 +3083,57 @@ function genEffectTranslation(): void {
   }[] = [
     {
       id: "moved-through-tall-terrain-inline",
-      effect: {
-        type: "conditional",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-        },
-        effect: {
+      effect: { type: "conditional", condition: { type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } }, effect: {
           type: "keyword-grant",
           target: "self",
           modifier: { keywords: ["stealth"] },
-        },
-      },
+        } },
       scope: { range: "self", duration: "permanent" },
     },
     {
       id: "moved-through-tall-terrain-trigger-condition",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
-      },
-      scope: { range: "self", duration: "permanent" },
-      trigger: {
-        event: "before-hit-roll",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-        },
-      },
-    },
-    {
-      id: "moved-through-tall-terrain-negated-inline",
-      effect: {
-        type: "conditional",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-          negated: true,
-        },
-        effect: {
           type: "keyword-grant",
           target: "self",
           modifier: { keywords: ["stealth"] },
         },
-      },
+      scope: { range: "self", duration: "permanent" },
+      trigger: { event: "before-roll", filter: { roll: "hit" }, condition: { type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } } },
+    },
+    {
+      id: "moved-through-tall-terrain-negated-inline",
+      effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } }] }, effect: {
+          type: "keyword-grant",
+          target: "self",
+          modifier: { keywords: ["stealth"] },
+        } },
       scope: { range: "self", duration: "permanent" },
     },
     {
       id: "moved-through-tall-terrain-negated-trigger-condition",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
-      },
-      scope: { range: "self", duration: "permanent" },
-      trigger: {
-        event: "before-hit-roll",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-          negated: true,
+          type: "keyword-grant",
+          target: "self",
+          modifier: { keywords: ["stealth"] },
         },
-      },
+      scope: { range: "self", duration: "permanent" },
+      trigger: { event: "before-roll", filter: { roll: "hit" }, condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } }] } },
     },
     {
       id: "moved-through-tall-terrain-trigger-event",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
-      },
+          type: "keyword-grant",
+          target: "self",
+          modifier: { keywords: ["stealth"] },
+        },
       scope: { range: "self", duration: "permanent" },
-      trigger: { event: "moved-through-tall-terrain" },
+      trigger: { event: "move-ended", filter: { through: "tall-terrain" } },
     },
     {
-      id: "moved-through-tall-terrain-legacy-aliases",
-      effect: {
-        type: "sequence",
-        steps: [
-          {
-            type: "conditional",
-            condition: {
-              type: "timing-is",
-              parameters: {
-                timing: "after-move-through-terrain-over-4-inches",
-              },
-            },
-            effect: {
-              type: "keyword-grant",
-              target: "self",
-              modifier: { keywords: ["stealth"] },
-            },
-          },
-          {
-            type: "conditional",
-            condition: {
-              type: "timing-is",
-              parameters: { timing: "after-moving-through-tall-terrain" },
-            },
-            effect: {
-              type: "keyword-grant",
-              target: "self",
-              modifier: { keywords: ["stealth"] },
-            },
-          },
-        ],
-      },
-      scope: { range: "self", duration: "permanent" },
-    },
-    {
-      id: "moved-through-terrain-generic-unaffected",
+      id: "moved-through-terrain-generic",
       effect: {
         type: "conditional",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-terrain" },
-        },
+        condition: { type: "happened", parameters: { event: "move-ended", filter: { through: "terrain" }, window: "turn" } },
         effect: {
           type: "keyword-grant",
           target: "self",
@@ -3287,7 +3215,7 @@ function genEffectTranslation(): void {
       on_success: { type: "no-effect" }, on_fail: { type: "no-effect" },
     } },
     { caseId: "fidelity/friendly-selected-target", trigger: {
-      event: "ability-target-selected", subject: "friendly-unit",
+      event: "targets-selected", filter: { kind: "ability" }, subject: { owner: "friendly" },
       source_ability: { ability_id: "example-selection", owner: "friendly", keywords: ["SOURCE"] },
     }, effect: { type: "no-effect" } },
     { caseId: "fidelity/non-numeric-weapon-characteristic", effect: {
@@ -3298,19 +3226,19 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/model-advance-reroll", effect: {
       type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "any-result" },
     } },
-    { caseId: "fidelity/condition-of-charged-this-turn", effect: {
+    { caseId: "fidelity/condition-subject-charged", effect: {
       type: "conditional",
-      condition: { type: "charged-this-turn", of: "target" },
+      condition: { type: "happened", parameters: { subject: "defender", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } },
       effect: { type: "no-effect" },
     } },
-    { caseId: "fidelity/condition-of-unit-below-half-strength", effect: {
+    { caseId: "fidelity/condition-subject-below-half-strength", effect: {
       type: "conditional",
-      condition: { type: "unit-below-half-strength", of: "target" },
+      condition: { type: "strength", parameters: { subject: "defender", below: "half" } },
       effect: { type: "no-effect" },
     } },
-    { caseId: "fidelity/condition-of-is-battle-shocked", effect: {
+    { caseId: "fidelity/condition-subject-battle-shocked", effect: {
       type: "conditional",
-      condition: { type: "is-battle-shocked", of: "target" },
+      condition: { type: "unit-state", parameters: { subject: "defender", state: "battle-shocked" } },
       effect: { type: "no-effect" },
     } },
     { caseId: "fidelity/reroll-count-one-hit", effect: {
@@ -3378,7 +3306,7 @@ function genEffectTranslation(): void {
         {
           id: "prescience",
           label: "Prescience",
-          when: { event: "start-of-phase" },
+          when: { event: "phase-started" },
           cost: { pool_id: "psychic-level", amount: 2, resource_label: "Psychic Level" },
           effect: { type: "stat-modifier", target: "unit", modifier: { stat: "Sv", operation: "add", value: -1 } },
         },
@@ -3402,7 +3330,7 @@ function genEffectTranslation(): void {
     } },
     { caseId: "fidelity/named-objective-state-self-clearing", effect: {
       type: "named-objective-state",
-      target: "objective",
+      target: "self",
       modifier: {
         state_label: "Mortis Snares",
         clears: "after-resolving",
@@ -3411,7 +3339,7 @@ function genEffectTranslation(): void {
     } },
     { caseId: "fidelity/named-objective-state-persistent", effect: {
       type: "named-objective-state",
-      target: "objective",
+      target: "self",
       modifier: {
         state_label: "Mortis Snares",
         resolution: { type: "mortal-wounds", target: "unit", modifier: { amount: 1 } },
@@ -3466,7 +3394,7 @@ function genEffectTranslation(): void {
       type: "fight-on-death",
       target: "destroyed-model",
       modifier: {
-        eligibility: { type: "has-fought-this-phase", negated: true },
+        eligibility: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } }] },
         gate: { dice: "D6", threshold: 4, comparison: "gte", modifiers: [] },
         resolution: "when-unit-fights",
         removal: "after-unit-fights-or-phase-end",
@@ -3476,13 +3404,13 @@ function genEffectTranslation(): void {
       type: "fight-on-death",
       target: "destroyed-model",
       modifier: {
-        eligibility: { type: "has-fought-this-phase", negated: true },
+        eligibility: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } }] },
         gate: {
           dice: "D6",
           threshold: 4,
           comparison: "gte",
           modifiers: [
-            { condition: { type: "faction-rule-active", parameters: { rule: "assault-doctrine" } }, value: 1 },
+            { condition: { type: "rule-active", parameters: { rule: "assault-doctrine" } }, value: 1 },
           ],
         },
         resolution: "when-unit-fights",
@@ -3491,7 +3419,7 @@ function genEffectTranslation(): void {
     } },
     { caseId: "fidelity/selected-to-move-condition", effect: {
       type: "conditional",
-      condition: { type: "unit-selected-to-move-this-phase", negated: true },
+      condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "move" }, window: "phase" } }] },
       effect: { type: "fight-first", target: "unit", modifier: {} },
     } },
     { caseId: "fidelity/weapon-grant-curated-label", effect: {

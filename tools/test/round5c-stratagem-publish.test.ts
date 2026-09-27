@@ -88,7 +88,7 @@ describe("Round 5C stratagem targets", () => {
     const core = JSON.parse(readFileSync(stratagemsFile, "utf8")) as Array<Record<string, unknown>>;
     expect(core[0]!.target_restrictions).toEqual({
       required_keywords: ["Stellar Wardens", "Infantry"], count: "one", side: "your-army", selects: "unit",
-      eligibility: { type: "unit-selected-to-shoot-this-phase", negated: true },
+      eligibility: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } }] },
     });
     // Phases were only checked against core, never rewritten.
     expect(core[0]!.phases).toEqual(["shooting"]);

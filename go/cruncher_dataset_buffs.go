@@ -117,8 +117,8 @@ func triggerGatedStep(behavior any, trigger any, effect any) (any, bool) {
 	hasEvent := false
 	for _, candidate := range candidates {
 		if t, ok := asMap(candidate); ok && t != nil {
-			event, isEvent := t["event"].(string)
-			if attackStepEvents[event] {
+			_, isEvent := t["event"].(string)
+			if isAttackStep(t) {
 				return effect, false
 			}
 			hasEvent = hasEvent || isEvent

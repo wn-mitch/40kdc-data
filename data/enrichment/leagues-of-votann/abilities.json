@@ -48,10 +48,16 @@
             }
           },
           {
-            "type": "within-range-of-objective"
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "controls-objective"
+            "type": "controls"
           }
         ]
       },
@@ -220,7 +226,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -532,7 +542,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -724,7 +738,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -885,13 +903,20 @@
           "operator": "and",
           "operands": [
             {
-              "type": "has-lost-wounds"
+              "type": "wounds",
+              "parameters": {
+                "subject": "this-model",
+                "lost": true
+              }
             },
             {
               "operator": "not",
               "operands": [
                 {
-                  "type": "is-battle-shocked"
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "battle-shocked"
+                  }
                 }
               ]
             },
@@ -899,7 +924,10 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "engagement-state"
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "engaged"
+                  }
                 }
               ]
             }
@@ -928,7 +956,13 @@
       "frequency": "first-time-this-phase"
     },
     "trigger": {
-      "event": "after-enemy-unit-fires"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
     }
   },
   {
@@ -1063,7 +1097,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "melee"
         }
@@ -1253,7 +1287,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
@@ -1327,8 +1365,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -1348,7 +1388,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1649,7 +1693,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1684,11 +1732,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "window": "phase",
-          "count_min": 1
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "phase"
         }
       },
       "effect": {
@@ -1921,7 +1971,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2003,11 +2053,17 @@
             }
           },
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           }
         ]
@@ -2155,7 +2211,10 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2193,9 +2252,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "scornful-analysis-designated"
+              "subject": "defender",
+              "tag": "scornful-analysis-designated"
             }
           },
           "effect": {
@@ -2217,7 +2277,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2260,16 +2320,26 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },
@@ -2316,9 +2386,11 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PIONEERS"
+              "all_of": [
+                "PIONEERS"
+              ]
             }
           }
         ]
@@ -2470,11 +2542,16 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "set-up-from-reserves",
-      "subject": "friendly-unit",
-      "subject_keywords": [
-        "EINHYR HEARTHGUARD"
-      ],
+      "event": "set-up",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EINHYR HEARTHGUARD"
+        ]
+      },
+      "filter": {
+        "from": "reserves"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -2491,9 +2568,11 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "DEEP STRIKE"
+              "all_of": [
+                "DEEP STRIKE"
+              ]
             }
           }
         ]
@@ -2562,7 +2641,7 @@
                 }
               },
               {
-                "type": "controls-objective"
+                "type": "controls"
               }
             ]
           },
@@ -2646,10 +2725,15 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "target",
-              "count_min": 1
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "phase"
             }
           },
           "effect": {
@@ -2658,9 +2742,10 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "type": "target-has-keyword",
+                  "type": "designated",
                   "parameters": {
-                    "keyword": "assailed"
+                    "subject": "defender",
+                    "tag": "assailed"
                   }
                 },
                 "effect": {
@@ -2705,7 +2790,10 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2733,11 +2821,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "count_min": 1,
-          "window": "any"
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "battle"
         }
       },
       "effect": {
@@ -2777,15 +2867,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CTHONIAN"
+              "all_of": [
+                "CTHONIAN"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BESERKS"
+              "all_of": [
+                "BESERKS"
+              ]
             }
           }
         ]
@@ -2826,13 +2920,16 @@
         "operator": "or",
         "operands": [
           {
-            "type": "engagement-state",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           },
           {
-            "type": "disposition-matches",
+            "type": "closest",
             "parameters": {
-              "disposition": "closest-eligible-target"
+              "subject": "defender",
+              "among": "eligible-targets"
             }
           }
         ]
@@ -2851,27 +2948,14 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "K\u00c2HL"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "EINHYR HEARTHGUARD"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "\u00dbTHAR THE DESTINED"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "any_of": [
+                  "KÂHL",
+                  "EINHYR HEARTHGUARD",
+                  "ÛTHAR THE DESTINED"
+                ]
+              }
             },
             "effect": {
               "type": "stat-modifier",
@@ -3077,9 +3161,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "disposition-matches",
+        "type": "closest",
         "parameters": {
-          "disposition": "closest-eligible-target"
+          "subject": "defender",
+          "among": "eligible-targets"
         }
       },
       "effect": {
@@ -3259,14 +3344,19 @@
       "count": 1,
       "timing": "after-this-unit-resolves-shooting-attacks",
       "eligibility": {
-        "type": "was-hit-by-attack",
+        "type": "happened",
         "parameters": {
-          "subject": "target",
-          "attack_type": "ranged",
-          "source": {
-            "event_var": "breaching-fire-shooting"
+          "event": "after-roll",
+          "object": "this-unit",
+          "filter": {
+            "roll": "hit",
+            "result": "success",
+            "attack_type": "ranged",
+            "by": {
+              "event_var": "breaching-fire-shooting"
+            }
           },
-          "window": "just-finished-shooting-sequence"
+          "window": "event"
         }
       }
     },
@@ -3297,8 +3387,7 @@
   "ability_type": "unit",
   "behavior": "reactive",
   "trigger": {
-    "event": "after-unit-resolves-attacks",
-    "subject": "self",
+    "event": "attacks-resolved",
     "condition": {
       "operator": "and",
       "operands": [

@@ -100,7 +100,7 @@ describe("schema-loader", () => {
     );
   });
 
-  it("requires a valid army faction ID and accepts distinct turn-start events", () => {
+  it("requires a valid rule ID, drops army-faction-is, and keeps round and turn starts distinct", () => {
     const ajv = createValidator();
     const condition = ajv.getSchema(
       "https://40kdc.dev/schemas/enrichment/ability-dsl/condition.schema.json",
@@ -108,11 +108,20 @@ describe("schema-loader", () => {
     const event = ajv.getSchema(
       "https://40kdc.dev/schemas/defs/common.schema.json#/$defs/game-event",
     )!;
-    expect(condition({ type: "army-faction-is", parameters: { faction_id: "adepta-sororitas" } })).toBe(true);
-    expect(condition({ type: "army-faction-is" })).toBe(false);
-    expect(condition({ type: "army-faction-is", parameters: { faction_id: "Adepta Sororitas" } })).toBe(false);
+    expect(condition({ type: "rule-active", parameters: { rule: "adepta-sororitas" } })).toBe(true);
+    expect(condition({ type: "rule-active" })).toBe(false);
+    expect(condition({ type: "rule-active", parameters: { rule: "Adepta Sororitas" } })).toBe(false);
+    // The army-faction predicate had no users and is gone from the vocabulary.
+    expect(condition({ type: "army-faction-is", parameters: { faction_id: "adepta-sororitas" } })).toBe(false);
+    // A round start and a turn start are distinct families; whose turn is a condition on it.
+    for (const kind of ["round-started", "turn-started"]) expect(event(kind)).toBe(true);
+    for (const turn of ["your-turn", "opponent-turn"]) {
+      expect(condition({ type: "player-turn-is", parameters: { turn } })).toBe(true);
+    }
+    expect(condition({ type: "player-turn-is", parameters: { turn: "opponent" } })).toBe(false);
+    // The legacy names packed the player into the event.
     for (const kind of ["start-of-battle-round", "start-of-player-turn", "start-of-opponent-turn"]) {
-      expect(event(kind)).toBe(true);
+      expect(event(kind)).toBe(false);
     }
   });
 
@@ -199,21 +208,35 @@ describe("schema-loader", () => {
     ).toBe(true);
   });
 
-  it("accepts the was-hit-by-attack condition and still rejects unknown types", () => {
+  it("accepts a was-hit history condition and still rejects unknown types", () => {
     const ajv = createValidator();
     const validate = ajv.getSchema(
       "https://40kdc.dev/schemas/enrichment/ability-dsl/condition.schema.json",
     );
     expect(validate).toBeDefined();
 
-    // The reactive trigger added for "when this unit was hit" rules — the enum
-    // gate is why such effect trees were schema-invalid before.
+    // "When this unit was hit" rules: a successful Hit roll aimed at the unit, looked back
+    // on over a window.
+    const wasHit = {
+      type: "happened",
+      parameters: {
+        event: "after-roll",
+        object: "defender",
+        filter: { roll: "hit", result: "success", weapon_name: "graviton-crusher" },
+        window: "phase",
+      },
+    };
+    expect(validate!(wasHit)).toBe(true);
+    // A history condition must say how far back it looks.
+    const { window: _window, ...unwindowed } = wasHit.parameters;
+    expect(validate!({ ...wasHit, parameters: unwindowed })).toBe(false);
+    // The legacy predicate is gone.
     expect(
       validate!({
         type: "was-hit-by-attack",
         parameters: { subject: "target", weapon_name: "graviton-crusher" },
       }),
-    ).toBe(true);
+    ).toBe(false);
 
     // The enum is still closed — a fabricated condition type must fail.
     expect(validate!({ type: "was-not-a-real-condition" })).toBe(false);
@@ -225,16 +248,38 @@ describe("schema-loader", () => {
     );
     expect(validate).toBeDefined();
 
-    expect(validate!({ type: "charged-this-turn", of: "target" })).toBe(true);
+    // The actor is the predicate's `subject`: a unit-ref, never a free top-level `of`.
+    const charged = {
+      type: "happened",
+      parameters: { event: "move-ended", subject: "defender", filter: { move_types: ["charge"] }, window: "turn" },
+    };
+    expect(validate!(charged)).toBe(true);
     expect(
-      validate!({ type: "is-battle-shocked", parameters: { subject: "target" } }),
+      validate!({ type: "unit-state", parameters: { subject: "defender", state: "battle-shocked" } }),
     ).toBe(true);
-    expect(validate!({ type: "remained-stationary", of: "target" })).toBe(false);
+    expect(validate!({ ...charged, of: "defender" })).toBe(false);
+    // "target" was a legacy actor alias; the unit-ref names the attack's role instead.
+    expect(
+      validate!({ type: "unit-state", parameters: { subject: "target", state: "battle-shocked" } }),
+    ).toBe(false);
+    // A clock predicate has no actor at all.
+    expect(
+      validate!({ type: "phase-is", parameters: { phase: "fight", subject: "defender" } }),
+    ).toBe(false);
+    // Negation is only the `not` operator over one operand.
+    expect(
+      validate!({ type: "unit-state", negated: true, parameters: { state: "battle-shocked" } }),
+    ).toBe(false);
+    expect(
+      validate!({ operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] }),
+    ).toBe(true);
     expect(
       validate!({
-        type: "is-battle-shocked",
-        of: "target",
-        parameters: { subject: "unit" },
+        operator: "not",
+        operands: [
+          { type: "unit-state", parameters: { state: "battle-shocked" } },
+          { type: "phase-is", parameters: { phase: "fight" } },
+        ],
       }),
     ).toBe(false);
   });
@@ -389,7 +434,7 @@ describe("schema-loader", () => {
           activation: {
             event: "phase-start",
             evaluation: "snapshot-once",
-            canonical_condition_ids: ["timing-is", "objective-majority"],
+            canonical_condition_ids: ["controls"],
           },
           expiry: { event: "phase-end" },
         },
@@ -404,7 +449,7 @@ describe("schema-loader", () => {
           activation: {
             event: "phase-start",
             evaluation: "snapshot-once",
-            canonical_condition_ids: ["timing-is", "objective-majority"],
+            canonical_condition_ids: ["controls"],
           },
           expiry: { event: "phase-end" },
         },
@@ -439,8 +484,8 @@ describe("schema-loader", () => {
           },
           membership: { unit_scope: "model", relation: "within" },
           qualified_condition: {
-            type: "region-membership",
-            parameters: { unit_scope: "model", relation: "within" },
+            type: "in-region",
+            parameters: { subject: "this-model", region: { rule_region: regionRef } },
           },
           default_branch: branch({
             type: "re-roll",

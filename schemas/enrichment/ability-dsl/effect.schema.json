@@ -4358,87 +4358,8 @@
       ]
     },
     "resource-action-menu-trigger": {
-      "type": "object",
-      "additionalProperties": false,
-      "$comment": "Same shape as ability.schema.json#/$defs/trigger, plus an optional `binds_event_variable` naming the specific game-object this trigger's `event` matched (e.g. the enemy unit that just performed the triggering Fall Back move), so a sibling `eligibility.requires` predicate can test a historical relation against that SAME bound object rather than 'some enemy unit'. Local to resource-action-menu actions pending a general home for event-variable binding on the shared trigger $def.",
-      "properties": {
-        "event": {
-          "$ref": "../../defs/common.schema.json#/$defs/game-event"
-        },
-        "subject": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "friendly-unit",
-            "enemy-unit",
-            "any-unit",
-            "model-in-bearer"
-          ]
-        },
-        "proximity": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "of": {
-              "type": "string",
-              "enum": [
-                "self",
-                "bearer",
-                "attached-unit"
-              ]
-            },
-            "range": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
-          "required": [
-            "range"
-          ]
-        },
-        "move_types": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "advance",
-              "fall-back",
-              "charge"
-            ]
-          }
-        },
-        "condition": {
-          "$ref": "condition.schema.json"
-        },
-        "optional": {
-          "type": "boolean",
-          "default": false
-        },
-        "cost": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "cp": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        },
-        "window": {
-          "type": "string"
-        },
-        "binds_event_variable": {
-          "type": "string",
-          "minLength": 1,
-          "$comment": "Names the triggering event's bound object (e.g. 'triggering-enemy') for later reference by this action's eligibility.requires predicates. Purely an internal reference id; NEVER rendered to players."
-        }
-      },
-      "required": [
-        "event"
-      ]
+      "$ref": "ability.schema.json#/$defs/trigger",
+      "$comment": "A resource-action-menu action's `when` is an ordinary trigger; binds_event_variable names the object it matched for a sibling eligibility predicate."
     },
     "named-region-ref": {
       "type": "object",
@@ -4704,8 +4625,7 @@
             },
             "canonical_condition_ids": {
               "const": [
-                "timing-is",
-                "objective-majority"
+                "controls"
               ]
             }
           },

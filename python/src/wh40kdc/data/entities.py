@@ -51,19 +51,14 @@ def trigger_gated(behavior: Any, trigger: Any, effect: Any) -> Any:
     on an attack step is met by every attack, and an activated ability (a stratagem) is already
     opt-in, so neither is gated.
     """
-    from wh40kdc.cruncher.from_dsl import ATTACK_STEP_EVENTS, moment_gate
+    from wh40kdc.cruncher.from_dsl import is_attack_step, moment_gate
 
     if behavior != "reactive":
         return effect
     triggers = trigger if isinstance(trigger, list) else [trigger]
     # An ability firing on an attack step applies to every attack; its trigger condition is
     # already how the authored data gates such abilities (in the effect), so nothing is added.
-    if any(
-        isinstance(item, dict)
-        and isinstance(item.get("event"), str)
-        and item["event"] in ATTACK_STEP_EVENTS
-        for item in triggers
-    ):
+    if any(is_attack_step(item) for item in triggers):
         return effect
     return moment_gate(trigger, effect)
 

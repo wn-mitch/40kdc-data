@@ -14,7 +14,11 @@
  * Unknown leaf types degrade to a deterministic bracketed form (`[the-type]`).
  */
 
-import { conditionSubject, dekebab, describeCondition, LEGACY_UNIT_SUBJECTS, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, titleCase, type Condition } from "./condition.js";
+import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
+import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadin.js";
+import { describeTiming, eventClause } from "./timing.js";
+import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
+export { describeTrigger };
 
 /** Independent all-required/none-excluded keyword predicate for aura roles. */
 export interface KeywordFilter {
@@ -208,35 +212,7 @@ export interface AbilityUsage {
   per?: string;
 }
 
-/** Reactive-trigger block: the event the ability fires on + structured guards. */
-export interface AbilityTrigger {
-  event?: string;
-  subject?: string;
-  subject_keywords?: string[];
-  subject_excluded_keywords?: string[];
-  caused_by?: { source: "bearer-model" | "bearer-unit"; attack_type?: "melee" | "ranged"; weapon_keyword?: string };
-  proximity?: { of?: string; range?: number };
-  /** Restricts a move event (e.g. enemy-unit-ended-move) to the given move kinds. */
-  move_types?: string[];
-  condition?: Condition;
-  optional?: boolean;
-  cost?: { cp?: number };
-  window?: string;
-  /** Internal event-object binding; never rendered. */
-  binds_event_variable?: string;
-  binds_die_variable?: string;
-  binds_selected_die_variable?: string;
-  source_ability?: { ability_id: string; owner: string; keywords: string[] };
-}
-
-/** A trigger is one object, or an array (the ability fires on ANY listed trigger). */
-export type AbilityTriggerSpec = AbilityTrigger | AbilityTrigger[];
-
-/** Normalize the polymorphic trigger field to a flat list (empty when absent). */
-function normalizeTriggers(t?: AbilityTriggerSpec | null): AbilityTrigger[] {
-  if (t == null) return [];
-  return Array.isArray(t) ? t : [t];
-}
+export type { AbilityTrigger, AbilityTriggerSpec } from "./trigger.js";
 
 /** Minimal ability view for `describeAbility`. */
 export interface AbilityLike {
@@ -915,141 +891,6 @@ export function durationClauses(duration: string | undefined): { lead: string; t
   }
 }
 
-function endOfPhaseDisembarkBattleShockCondition(c: Condition | undefined): boolean {
-  if (c?.operator !== "and" || c.operands?.length !== 2) return false;
-  const [first, second] = c.operands;
-  return (
-    !first.negated &&
-    !second.negated &&
-    first.type === "disembarked-from-transport" &&
-    second.type === "is-battle-shocked"
-  );
-}
-
-const TRIGGER_ATTACK_MODELS: Record<string, string> = {
-  bearer: "this model",
-  self: "this model",
-  unit: "a model in this unit",
-  "model-in-bearer": "a model in this unit",
-  "friendly-unit": "a model in a friendly unit",
-  "enemy-unit": "a model in an enemy unit",
-  "friendly-model": "a friendly model",
-  "enemy-model": "an enemy model",
-};
-
-/** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
-/** "At the start of your Command phase": a phase boundary narrowed only by phase and whose turn. */
-function phaseBoundary(t: AbilityTrigger): string | null {
-  if (t.event !== "start-of-phase" && t.event !== "end-of-phase") return null;
-  const operands = !t.condition ? [] : t.condition.operator === "and" ? t.condition.operands ?? [] : [t.condition];
-  if (operands.some((c) => c.operator || c.negated || (c.type !== "phase-is" && c.type !== "player-turn-is"))) return null;
-  const phase = operands.find((c) => c.type === "phase-is")?.parameters?.phase;
-  const turn = operands.find((c) => c.type === "player-turn-is")?.parameters?.turn;
-  if (typeof phase !== "string" || operands.length !== (turn === undefined ? 1 : 2)) return null;
-  // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
-  if (turn !== undefined && !(String(turn) in TURN_OWNERS)) return null;
-  const owner = turn === undefined ? "the" : TURN_OWNERS[String(turn)]!;
-  return `at the ${t.event === "start-of-phase" ? "start" : "end"} of ${owner} ${capWord(phase)} phase`;
-}
-
-/**
- * A trigger condition's phase and whose turn, as a phrase on the moment ("during your Shooting
- * phase", "in your opponent's turn"), and whatever else the condition says. Only a plain phase-is
- * and player-turn-is (not negated, at most one each, joined by "and") make a window.
- */
-function phaseWindow(condition: Condition): { window: string; rest: Condition | null; phase?: string; owner?: string } {
-  const operands = condition.operator === "and" ? condition.operands ?? [] : condition.operator ? [] : [condition];
-  const plain = (c: Condition, type: string) => !c.operator && !c.negated && c.type === type;
-  const phases = operands.filter((c) => plain(c, "phase-is"));
-  const turns = operands.filter((c) => plain(c, "player-turn-is"));
-  const owner = TURN_OWNERS[jstr(turns[0]?.parameters?.turn)];
-  const phase = phases[0]?.parameters?.phase;
-  if (phases.length > 1 || turns.length > 1 || (turns.length === 1 && !owner) || (phases.length === 1 && typeof phase !== "string") || phases.length + turns.length === 0) {
-    return { window: "", rest: condition };
-  }
-  const window = phases.length ? `during ${owner ?? "the"} ${capWord(phase as string)} phase` : `in ${owner} turn`;
-  const others = operands.filter((c) => !phases.includes(c) && !turns.includes(c));
-  return {
-    window, rest: others.length === 0 ? null : others.length === 1 ? others[0]! : { operator: "and", operands: others },
-    ...(phases.length ? { phase: phase as string } : {}), ...(owner ? { owner } : {}),
-  };
-}
-
-/** Whose turn, as a trigger window names it. */
-const TURN_OWNERS: Record<string, string> = { your: "your", "your-turn": "your", own: "your", self: "your", opponent: "your opponent's", "opponent-turn": "your opponent's" };
-
-export function describeTrigger(t: AbilityTrigger): string {
-  // The short form only when the boundary is all the trigger says; any other clause goes below.
-  const plain = !t.proximity && !t.move_types?.length && !t.subject_keywords?.length && !t.subject_excluded_keywords?.length
-    && !t.caused_by && !t.binds_die_variable && !t.binds_selected_die_variable && (t.subject == null || t.subject === "self" || t.subject === "unit");
-  const boundary = plain ? phaseBoundary(t) : null;
-  if (boundary) return t.optional ? `${boundary}, you may use this ability` : boundary;
-  const edge = t.event === "start-of-phase" ? "start" : t.event === "end-of-phase" ? "end" : null;
-  const disembarkShock = t.event === "end-of-phase" && endOfPhaseDisembarkBattleShockCondition(t.condition);
-  const split = t.condition && !disembarkShock ? phaseWindow(t.condition) : null;
-  // A boundary leads with its own phase ("at the end of your Command phase"); one that names no
-  // phase is the boundary of every phase. Decided first, so the clauses below add to it.
-  let s = !edge ? eventClause(t.event)
-    : split?.phase ? `at the ${edge} of ${split.owner ?? "the"} ${capWord(split.phase)} phase`
-      : `at the ${edge} of each phase`;
-  if (t.subject === "friendly-unit") s = s.replace(/\b(?:the|a) unit\b/g, "a friendly unit");
-  if (t.subject === "enemy-unit") s = s.replace(/\b(?:the|a) unit\b/g, "an enemy unit");
-  if (t.event === "on-model-destroyed") {
-    if (t.subject === "bearer" || t.subject === "self") s = "when this model is destroyed";
-    if (t.subject === "model-in-bearer") s = "when a model in this unit is destroyed";
-    if (t.subject === "friendly-model") s = "when a friendly model is destroyed";
-    if (t.subject === "enemy-model") s = "when an enemy model is destroyed";
-  }
-  const attackModel = TRIGGER_ATTACK_MODELS[t.subject ?? ""];
-  if (/^(?:before|after)-(?:hit|wound|damage)-roll$/.test(t.event ?? "") && attackModel)
-    s += ` for an attack made by ${attackModel}`;
-  if (t.event === "attack-scores-wound" && attackModel)
-    s = `each time an attack made by ${attackModel} scores a wound`;
-  if (t.caused_by) {
-    const source = t.caused_by.source === "bearer-model" ? "this model" : "this unit";
-    const type = t.caused_by.attack_type ? `${t.caused_by.attack_type} ` : "";
-    const weapon = t.caused_by.weapon_keyword ? ` with ${bracketKeyword(t.caused_by.weapon_keyword)} weapons` : "";
-    s += type || weapon ? ` by ${type}attacks made by ${source}${weapon}` : ` by ${source}`;
-  }
-  if (t.event === "stratagem-targeted") s = "when this model's unit is targeted with a Stratagem";
-  if (t.event === "ability-target-selected" && t.source_ability) {
-    const source = t.source_ability;
-    s = `when ${t.subject === "friendly-unit" ? "a friendly unit" : t.subject === "enemy-unit" ? "an enemy unit" : "a unit"} is selected by the ${titleCase(source.ability_id)} ability of a ${source.owner} ${source.keywords.join(" ")} unit`;
-  }
-  if (t.event === "falls-back" && t.subject === "enemy-unit") s = "an enemy unit Falls Back";
-  const actor = ["bearer", "self", "model-in-bearer", "friendly-model", "enemy-model"].includes(t.subject ?? "") ? "model" : "unit";
-  if (t.subject_keywords?.length) s += ` (the triggering ${actor} must have ${andList(t.subject_keywords)})`;
-  if (t.subject_excluded_keywords?.length) s += ` (the triggering ${actor} must not have ${orList(t.subject_excluded_keywords)})`;
-  // Narrow a move event to its move kinds: "ends a move" → "ends a Normal,
-  // Advance or Fall Back move".
-  if (t.move_types?.length) {
-    const kinds = orList(t.move_types.map((mt) => (mt === "fall-back" ? "Fall Back" : capWord(mt))));
-    s = s.replace(/\bmove\b/, `${kinds} move`);
-  }
-  if (t.proximity?.range != null) {
-    const of =
-      t.proximity.of === "bearer-unit"
-        ? "this model's unit"
-        : t.proximity.of === "attached-unit"
-        ? "the unit this model leads"
-        : t.proximity.of === "self" || t.proximity.of === "bearer"
-          ? "this model"
-          : "this unit";
-    s += ` within ${jstr(t.proximity.range)}" of ${of}`;
-  }
-  if (disembarkShock) s += ", if the unit disembarked from a Transport this turn and is Battle-shocked";
-  else if (split) {
-    // Another moment takes the phase as its window ("… during your Shooting phase").
-    if (edge && !split.phase && split.owner) s += ` in ${split.owner} turn`;
-    else if (!edge && split.window) s += ` ${split.window}`;
-    if (split.rest) s += `, if ${describeCondition(split.rest)}`;
-  }
-  if (t.binds_die_variable) s += ` (binding the generated die as ${dekebab(t.binds_die_variable.replace(/_/g, "-"))})`;
-  if (t.binds_selected_die_variable) s += ` (binding one chosen die used in that Act of Faith as ${dekebab(t.binds_selected_die_variable.replace(/_/g, "-"))})`;
-  if (t.optional) s += ", you may use this ability";
-  return s;
-}
-
 /** `excludes_keyword`/`requires_keyword` → the eligible-unit noun phrase for a menu action ("one friendly non-TITANIC unit" / "a friendly VEHICLE unit"). Absent eligibility keywords fall back to the plain subject. */
 function menuActionSubject(elig: MenuAction["eligibility"]): string {
   const requires = elig?.requires_keyword ?? [];
@@ -1174,213 +1015,9 @@ function usageClause(u: AbilityUsage): string {
 }
 
 /** "against a unit that is not a Monster or Vehicle" from a run of excluded target keywords. */
-function negatedTargetKeywords(keywords: string[]): string {
-  return `against a unit that is not a ${keywords.join(" or ")}`;
-}
-
 /** Capitalize the first character and lowercase the rest (`MONSTER` -> `Monster`). */
 function capWord(s: string): string {
   return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1).toLowerCase();
-}
-
-/**
- * The keyword of a `not`-wrapping-a-single-`target-has-keyword` operand, else
- * `null`. This is the aura-subject exclusion encoding (`not[target-has-keyword X]`),
- * distinct from the bare `{negated:true, type:"target-has-keyword"}` form.
- */
-function notWrappedTargetKeyword(op: Condition): string | null {
-  if (op.operator !== "not" || !op.operands || op.operands.length !== 1) return null;
-  const inner = op.operands[0];
-  if (inner.type !== "target-has-keyword" || inner.negated) return null;
-  return jstr((inner.parameters ?? {}).keyword);
-}
-
-/** "(excluding Monster or Vehicle units)" from a run of `not`-wrapped target-keyword exclusions. */
-function excludedTargetKeywords(keywords: string[]): string {
-  return `(excluding ${keywords.map(capWord).join(" or ")} units)`;
-}
-
-/**
- * Join the operands of an `and` lead-in. Two exclusion encodings collapse into a
- * single clause: a run of bare-negated `target-has-keyword` becomes "against a
- * unit that is not a X or Y" (attack-context voice), and a run of `not`-wrapped
- * `target-has-keyword` becomes "(excluding X or Y units)" (aura-subject voice,
- * matching the `applies_to` "(excluding …)" idiom). Either collapsed clause
- * attaches to the preceding clause with a space; all other operands join with ", ".
- */
-function joinAndLeadIns(operands: Condition[]): string {
-  const parts: string[] = [];
-  for (let i = 0; i < operands.length; ) {
-    const op = operands[i];
-    if (op.negated && op.type === "target-has-keyword") {
-      const kws: string[] = [];
-      while (i < operands.length && operands[i].negated && operands[i].type === "target-has-keyword") {
-        kws.push(jstr((operands[i].parameters ?? {}).keyword));
-        i++;
-      }
-      parts.push(negatedTargetKeywords(kws));
-      continue;
-    }
-    if (notWrappedTargetKeyword(op) != null) {
-      const kws: string[] = [];
-      let kw: string | null;
-      while (i < operands.length && (kw = notWrappedTargetKeyword(operands[i])) != null) {
-        kws.push(kw);
-        i++;
-      }
-      parts.push(excludedTargetKeywords(kws));
-      continue;
-    }
-    if (!op.negated && op.type === "unit-has-keyword") {
-      const kws: string[] = [];
-      while (i < operands.length && !operands[i].negated && operands[i].type === "unit-has-keyword") {
-        kws.push(jstr((operands[i].parameters ?? {}).keyword));
-        i++;
-      }
-      parts.push(kws.length >= 2 ? `if the unit is a ${kws.join(" ")} unit` : `if the unit has the ${kws[0]} keyword`);
-      continue;
-    }
-    parts.push(conditionLeadIn(op));
-    i++;
-  }
-  return parts.reduce(
-    (acc, part) =>
-      acc === ""
-        ? part
-        : part.startsWith("against ") || part.startsWith("(excluding ")
-          ? `${acc} ${part}`
-          : `${acc}, ${part}`,
-    ""
-  );
-}
-
-/**
- * A condition rendered as a natural lead-in clause (lowercase-initial — the
- * caller capitalizes at the sentence boundary). Falls back to `if <condition>`
- * for shapes without a dedicated framing.
- */
-function conditionLeadIn(c: Condition): string {
-  // Compound nodes recurse so each part reads in its natural framing.
-  if (c.operator === "and" && c.operands) return joinAndLeadIns(c.operands);
-  if (c.operator === "or" && c.operands) {
-    const keywordOperands = c.operands.every((o) => !o.negated && o.type === "unit-has-keyword");
-    if (keywordOperands)
-      return `if the unit has the ${orList(c.operands.map((o) => jstr((o.parameters ?? {}).keyword)))} keywords`;
-    return c.operands.map(conditionLeadIn).join(" or ");
-  }
-  if (c.operator === "not" && c.operands)
-    return `unless ${c.operands.map((o) => conditionLeadIn(o).replace(/^if /, "")).join(" or ")}`;
-  // Negated keyword gates read as an exclusion clause, not the generic "if not …".
-  if (c.negated && c.type === "target-has-keyword")
-    return negatedTargetKeywords([jstr((c.parameters ?? {}).keyword)]);
-  if (c.negated && c.type === "unit-has-keyword")
-    return `unless the unit has the ${jstr((c.parameters ?? {}).keyword)} keyword`;
-  if (c.negated && c.type === "timing-is") return negatedTiming((c.parameters ?? {}).timing);
-  if (c.negated) return `if ${describeCondition(c)}`;
-
-  const p = c.parameters ?? {};
-  switch (c.type) {
-    case "phase-is":
-      return jstr(p.phase) === "command" || jstr(p.phase) === "command-phase"
-        ? "during the Command phase"
-        : `during the ${titleCase(jstr(p.phase))} phase`;
-    case "is-attached":
-      return `while this model is leading a ${p.keyword ? `${jstr(p.keyword)} ` : ""}unit`;
-    case "timing-is":
-      return describeTiming(p.timing);
-    case "player-turn-is": {
-      const t = jstr(p.turn);
-      const phrase =
-        t === "your-turn" || t === "your" || t === "own" || t === "self"
-          ? "your"
-          : t === "opponent-turn" || t === "opponent"
-            ? "the opponent's"
-            : "either player's";
-      return `in ${phrase} turn`;
-    }
-    case "model-is-leader":
-      return "while this model leads a unit";
-    case "charged-this-turn":
-      return `if ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} charged this turn`;
-    case "advanced-this-turn":
-      return `if ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} Advanced this turn`;
-    case "disembarked-from-transport":
-      return "if the unit disembarked from a Transport this turn";
-    case "faction-rule-active":
-      return `while the ${titleCase(jstr(p.rule))} is active`;
-    case "battle-round": {
-      const bMin = p.min != null ? Number(p.min) : undefined;
-      const bMax = p.max != null ? Number(p.max) : undefined;
-      const bOrd = (n: number): string =>
-        ["zeroth", "first", "second", "third", "fourth", "fifth"][n] ?? `${n}th`;
-      if (bMin != null && bMax != null)
-        return bMin === bMax ? `during the ${bOrd(bMin)} battle round` : `during battle rounds ${bMin}-${bMax}`;
-      if (bMin != null) return `from the ${bOrd(bMin)} battle round onward`;
-      if (bMax != null) return `during the first ${bMax} battle rounds`;
-      return "during the battle round";
-    }
-    case "token-count-at-or-above":
-      return `while the unit has ${jstr(p.threshold)}+ ${poolName(p.pool_id)}`;
-    case "remained-stationary":
-      return "if the unit Remained Stationary";
-    case "target-has-keyword":
-      return `against ${jstr(p.keyword)} targets`;
-    case "unit-has-keyword":
-      return `if the unit has the ${jstr(p.keyword)} keyword`;
-    case "is-battle-shocked":
-      return `while ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is Battle-shocked`;
-    case "unit-below-half-strength":
-      return `while ${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
-    case "unit-below-starting-strength":
-      return `while ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is below its starting strength`;
-    case "has-lost-wounds":
-      return "while the model has lost wounds";
-    case "attack-is-type":
-      if (p.comparison === "strength-greater-than-toughness")
-        return "when this attack's Strength is greater than the target's Toughness";
-      if (p.comparison != null) return `when ${dekebab(jstr(p.comparison))}`;
-      return `while making ${jstr(p.attack_type)} attacks`;
-    case "destroyed-by-attack-type":
-      return p.attack_type === "any"
-        ? "when destroyed by any attack"
-        : `when destroyed by a ${jstr(p.attack_type)} attack`;
-    case "unit-model-count":
-      return `if the unit contains ${jstr(p.count_min)}+ ${jstr(p.keyword)} models`;
-    case "uniform-ranged-loadout":
-      return `if all ranged weapons equipped by each ${p.model_keyword ? `${jstr(p.model_keyword)} ` : ""}model in the unit are the same`;
-    case "all-attacks-target-same-unit":
-      return `when all of the unit's ${p.attack_type ? `${jstr(p.attack_type)} ` : ""}attacks target the same enemy unit`;
-    case "opponent-unit-within-range": {
-      let where: string;
-      if (p.weapon_name != null) where = `range of ${dekebab(jstr(p.weapon_name))}`;
-      else if (p.range_multiplier != null) where = "half range of its ranged weapons";
-      else {
-        const range = p.range ?? p.range_inches ?? p.within_inches;
-        where = range === "engagement" ? "engagement range" : `${jstr(range)}"`;
-      }
-      return `while an enemy unit is within ${where}`;
-    }
-    case "engagement-state": {
-      if (p.state == null) return "while the unit is within Engagement Range";
-      const st = jstr(p.state);
-      if (st === "on-battlefield") return "while the unit is on the battlefield";
-      if (st === "embarked") return "while the unit is embarked";
-      if (st === "engaged" || st === "within-engagement-range" || st === "in-engagement-range")
-        return "while the unit is within Engagement Range";
-      if (st === "not-in-engagement-range" || st === "not-within-engagement-range")
-        return "while the unit is not within Engagement Range";
-      return `while the unit is ${dekebab(st)}`;
-    }
-    case "disposition-matches": {
-      const d = jstr(p.disposition);
-      if (d === "strategic-reserves") return "while the unit is in Strategic Reserves";
-      return `while the unit's disposition is ${dekebab(d)}`;
-    }
-    case "fights-first":
-      return "while the unit has the Fights First ability";
-    default:
-      return `if ${describeCondition(c)}`;
-  }
 }
 
 /** Humanized noun for a scaling `of` dimension (`enemy-models-in-range` → `enemy models`). */
@@ -2156,8 +1793,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
               : `a model in ${subj}`;
         const elig = m.eligibility as Condition | undefined;
         const before =
-          elig && elig.negated && elig.type === "has-fought-this-phase"
-            ? ` before ${elig.parameters?.subject === "self" ? "this model" : "this unit"} has fought this phase`
+          elig && foughtThisPhase(elig)
+            ? ` before ${foughtThisPhase(elig) === "this-model" ? "this model" : "this unit"} has fought this phase`
             : elig
               ? ` ${conditionLeadIn(elig)}`
               : "";
@@ -2265,7 +1902,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     }
     case "fallback-and-act": {
       const acts = m.can_charge === true ? "shoot and declare a charge" : "shoot";
-      return `${subj} is eligible to ${acts} in a turn in which it Fell Back`;
+      return `${subj} ${v(subj, "is")} eligible to ${acts} in a turn in which ${isPlural(subj) ? "they" : "it"} Fell Back`;
     }
     case "fight-eligibility-extension": {
       const r = jstr(m.range);
@@ -2632,14 +2269,23 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
   const consumer = namedRegionRecord(m.consumer);
   const membership = namedRegionRecord(consumer.membership);
   const wholeUnit = membership.unit_scope === "whole-unit";
-  const positive: Condition = { ...condition, negated: false };
-  const predicate = describeCondition(positive);
+  const negated = condition.operator === "not" && condition.operands?.length === 1;
+  const predicate = describeCondition(negated ? condition.operands![0]! : condition);
   const defaultText = namedRegionBranchText(m, wholeUnit, false, true, ctx);
   const qualifiedText = namedRegionBranchText(m, wholeUnit, true, true, ctx);
-  if (condition.negated) {
+  if (negated) {
     return `${namedRegionPrefix(m)} Unless ${predicate}, ${defaultText}. If ${predicate}, ${qualifiedText}.`;
   }
   return `${namedRegionPrefix(m)} When ${predicate}, ${qualifiedText}. Otherwise, ${defaultText}.`;
+}
+
+/** `not(happened selected-to-fight this phase)`: the subject that has not fought yet, else null. */
+function foughtThisPhase(c: Condition): string | null {
+  if (c.operator !== "not" || c.operands?.length !== 1) return null;
+  const p = c.operands[0]!.parameters ?? {};
+  const f = (p.filter ?? {}) as Record<string, unknown>;
+  if (c.operands[0]!.type !== "happened" || p.event !== "selected" || f.to !== "fight" || p.window !== "phase") return null;
+  return typeof p.subject === "string" ? p.subject : "this-unit";
 }
 
 /** Per-slug GW-prose for `attack-restriction` (reads `restriction` or `restriction_type`). */
@@ -3010,17 +2656,11 @@ function auraRadius(scope?: AbilityScope): number | undefined {
   return m ? Number(m[1]) : undefined;
 }
 
-/** The timing value of a bare `timing-is` condition, else undefined. */
-function timingOfCondition(c?: Condition): string | undefined {
-  return c?.type === "timing-is" ? jstr((c.parameters ?? {}).timing) : undefined;
-}
-
-/** The numeric range of a top-level within-range condition, else undefined. */
+/** The inch range of a top-level `within` condition, else undefined. */
 function conditionWithinRange(c?: Condition): number | undefined {
-  if (c?.type !== "unit-within-range-of" && c?.type !== "opponent-unit-within-range") return undefined;
-  const params = c.parameters ?? {};
-  const r = params.range ?? params.range_inches ?? params.within_inches;
-  return typeof r === "number" ? r : undefined;
+  if (c?.type !== "within") return undefined;
+  const r = (c.parameters ?? {}).range as { inches?: unknown } | undefined;
+  return typeof r?.inches === "number" ? r.inches : undefined;
 }
 
 function renderTopLevel(
@@ -3042,21 +2682,17 @@ function renderTopLevel(
   // sentence ("Each time …"). B2: when a trigger's proximity just restates a
   // within-range condition on the effect, render the range once (drop it here).
   const triggers = normalizeTriggers(trigger).filter((t) => t.event != null);
-  const triggerEvents = new Set(triggers.map((t) => t.event));
   const condRange = conditionWithinRange(e.type === "conditional" ? e.condition : undefined);
   const trig = triggers
     .map((t) =>
-      describeTrigger(condRange != null && t.proximity?.range === condRange ? { ...t, proximity: undefined } : t),
+      describeTrigger(condRange != null && (t.proximity?.range as { inches?: unknown } | undefined)?.inches === condRange ? { ...t, proximity: undefined } : t),
     )
     .filter((s) => s.length > 0)
     .join(" or ");
 
   if (e.type === "conditional") {
     const inner = e.effect ?? {};
-    // B1: drop the condition lead-in when it merely restates a trigger's timing
-    // (e.g. trigger start-of-phase + condition timing-is start-of-phase).
-    const condTiming = timingOfCondition(e.condition);
-    const leadIn = condTiming != null && triggerEvents.has(condTiming) ? "" : conditionLeadIn(e.condition ?? {});
+    const leadIn = conditionLeadIn(e.condition ?? {});
     if (CONTAINER_TYPES.has(inner.type ?? "")) {
       // Block: "<trigger>[, <lead-in>][, <duration>]:" then the indented container.
       const header = [trig, lead, leadIn, trail].filter((p) => p.length > 0).join(", ");

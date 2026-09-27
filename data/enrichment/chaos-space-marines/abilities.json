@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -294,7 +298,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -406,7 +414,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -511,10 +523,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -593,7 +611,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -626,7 +648,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -697,7 +723,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -797,7 +827,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
@@ -894,8 +928,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "dark-pact-made",
-      "subject": "self",
+      "event": "used",
+      "filter": {
+        "kind": "dark-pact"
+      },
       "optional": true
     }
   },
@@ -912,7 +948,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1141,7 +1181,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -1234,7 +1278,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1310,7 +1358,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "cp-refund",
@@ -1384,7 +1436,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1514,9 +1570,12 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "subject": "recipient",
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]
@@ -1576,7 +1635,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1670,8 +1733,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -1901,34 +1966,30 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-within-range-of",
+            "type": "closest",
             "parameters": {
-              "range": 18,
-              "target_type": "closest-eligible"
+              "subject": "defender",
+              "among": "eligible-targets",
+              "range": {
+                "inches": 18
+              }
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -1959,8 +2020,11 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "before-wound-roll",
-      "subject": "bearer"
+      "event": "before-roll",
+      "subject": "this-model",
+      "filter": {
+        "roll": "wound"
+      }
     },
     "unit_ids": [
       "chaos-predator-annihilator"
@@ -2048,9 +2112,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "HERETIC ASTARTES"
+          "subject": "defender",
+          "all_of": [
+            "HERETIC ASTARTES"
+          ]
         }
       },
       "effect": {
@@ -2177,17 +2244,33 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": [
       {
-        "event": "battle-shock-test",
-        "subject": "enemy-unit",
+        "event": "before-roll",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "roll": "battle-shock"
+        },
         "proximity": {
-          "range": 6
+          "of": "this-model",
+          "range": {
+            "inches": 6
+          }
         }
       },
       {
-        "event": "leadership-test",
-        "subject": "enemy-unit",
+        "event": "before-roll",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "roll": "leadership"
+        },
         "proximity": {
-          "range": 6
+          "of": "this-model",
+          "range": {
+            "inches": 6
+          }
         }
       }
     ]
@@ -2516,21 +2599,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -2700,9 +2776,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "FLY"
+          "subject": "defender",
+          "all_of": [
+            "FLY"
+          ]
         }
       },
       "effect": {
@@ -3081,13 +3160,23 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -3164,7 +3253,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3220,9 +3313,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "CHARACTER"
+              "subject": "defender",
+              "all_of": [
+                "CHARACTER"
+              ]
             }
           }
         ]
@@ -3288,17 +3384,29 @@
             }
           },
           {
-            "type": "destroyed-by-attack-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "ranged"
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "ranged"
+              },
+              "window": "event"
             }
           },
           {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "range": "engagement"
-            },
-            "negated": true
+            "operator": "not",
+            "operands": [
+              {
+                "type": "within",
+                "parameters": {
+                  "of": {
+                    "owner": "enemy"
+                  },
+                  "range": "engagement"
+                }
+              }
+            ]
           }
         ]
       },
@@ -3349,15 +3457,22 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "dark-pact-made",
-      "subject": "friendly-unit",
-      "proximity": {
-        "of": "self",
-        "range": 6
+      "event": "used",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "HERETIC ASTARTES"
+        ]
       },
-      "subject_keywords": [
-        "HERETIC ASTARTES"
-      ]
+      "filter": {
+        "kind": "dark-pact"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 6
+        }
+      }
     }
   },
   {
@@ -3402,9 +3517,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "AFFLICTED"
+          "subject": "defender",
+          "tag": "AFFLICTED"
         }
       },
       "effect": {
@@ -3495,7 +3611,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -3604,7 +3724,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -3644,19 +3773,24 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "enemy",
-              "window": "this-phase",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "window": "phase"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "opponent-unit-within-range",
+                "type": "within",
                 "parameters": {
+                  "of": {
+                    "owner": "enemy"
+                  },
                   "range": "engagement"
                 }
               }
@@ -3683,7 +3817,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3708,7 +3842,13 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "starts-in-strategic-reserves"
+            "event": "battle-started",
+            "condition": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "in-strategic-reserves"
+              }
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -3721,11 +3861,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "on-battlefield",
-            "negated": true,
-            "parameters": {
-              "subject": "self"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": "this-model",
+                  "state": "on-battlefield"
+                }
+              }
+            ]
           },
           "effect": {
             "type": "ability-grant",
@@ -3792,10 +3937,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -3910,10 +4061,16 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -4154,8 +4311,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -4281,7 +4440,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "resurrection",
@@ -4317,13 +4479,13 @@
         "operator": "or",
         "operands": [
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "on-battlefield"
             }
           },
           {
-            "type": "engagement-state",
+            "type": "unit-state",
             "parameters": {
               "state": "embarked"
             }
@@ -4349,7 +4511,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "post-deployment"
+      "event": "deployment-ended"
     }
   },
   {
@@ -4545,8 +4707,10 @@
     "ability_type": "unit",
     "behavior": "activated",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -4563,7 +4727,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -4596,7 +4764,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -4731,7 +4902,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -4820,7 +4995,11 @@
     "behavior": "reactive",
     "community_notes": "[APPROX] applies to this unit's Fabius Bile model; if he was attached when destroyed, he is set back up attached to that unit",
     "trigger": {
-      "event": "first-model-destroyed"
+      "event": "model-destroyed",
+      "object": "model-in-this-unit",
+      "filter": {
+        "first": true
+      }
     }
   },
   {
@@ -4955,7 +5134,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -5022,7 +5205,7 @@
     "behavior": "reactive",
     "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll. Shared datasheet ability (Khorne Lord of Skulls); the world-eaters copy is the authored original — the linked API resolves each faction's own copy, so the two may evolve independently.",
     "trigger": {
-      "event": "start-of-battle-round"
+      "event": "round-started"
     }
   },
   {
@@ -5165,13 +5348,17 @@
     },
     "trigger": [
       {
-        "event": "selected-to-shoot",
-        "subject": "self",
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
         "optional": true
       },
       {
-        "event": "selected-to-fight",
-        "subject": "self",
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
         "optional": true
       }
     ],
@@ -5582,9 +5769,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "destroyed-by-attack-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "ranged"
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "ranged"
+              },
+              "window": "event"
             }
           },
           "effect": {
@@ -5778,10 +5970,23 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "battle-shocked-or-below-half"
-            }
+            "operator": "or",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": "defender",
+                  "state": "battle-shocked"
+                }
+              },
+              {
+                "type": "strength",
+                "parameters": {
+                  "subject": "defender",
+                  "below": "half"
+                }
+              }
+            ]
           },
           "effect": {
             "type": "re-roll",
@@ -6135,7 +6340,7 @@
       ]
     },
     "trigger": {
-      "event": "unit-set-up"
+      "event": "set-up"
     }
   },
   {
@@ -6225,7 +6430,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "set-up-from-reserves"
+            "event": "set-up",
+            "filter": {
+              "from": "reserves"
+            }
           },
           "effect": {
             "type": "stat-modifier",
@@ -6788,9 +6996,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "character-monster-or-vehicle"
+          "subject": "defender",
+          "any_of": [
+            "CHARACTER",
+            "MONSTER",
+            "VEHICLE"
+          ]
         }
       },
       "effect": {
@@ -7017,8 +7230,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           "effect": {
             "type": "stat-modifier",
@@ -7066,19 +7284,27 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "DAMNED"
+                  "all_of": [
+                    "DAMNED"
+                  ]
                 }
               }
             ]
           },
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           }
         ]
@@ -7122,21 +7348,13 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LEGIONARIES"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "CULTIST MOB"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "LEGIONARIES",
+                "CULTIST MOB"
+              ]
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -7152,16 +7370,21 @@
             "operator": "and",
             "operands": [
               {
-                "type": "is-attached",
-                "parameters": {}
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "EPIC HEROES"
+                      "all_of": [
+                        "EPIC HEROES"
+                      ]
                     }
                   }
                 ]
@@ -7341,9 +7564,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "DAMNED"
+          "all_of": [
+            "DAMNED"
+          ]
         }
       },
       "effect": {
@@ -7452,7 +7677,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -7497,16 +7725,34 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "KHORNE"
+                  "all_of": [
+                    "KHORNE"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LETHAL HITS"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "after-roll",
+                      "filter": {
+                        "roll": "dark-pact",
+                        "result": "success"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_keyword": "LETHAL HITS"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -7527,16 +7773,34 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "TZEENTCH"
+                  "all_of": [
+                    "TZEENTCH"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LETHAL HITS"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "after-roll",
+                      "filter": {
+                        "roll": "dark-pact",
+                        "result": "success"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_keyword": "LETHAL HITS"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -7557,16 +7821,34 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "NURGLE"
+                  "all_of": [
+                    "NURGLE"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SUSTAINED HITS 1"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "after-roll",
+                      "filter": {
+                        "roll": "dark-pact",
+                        "result": "success"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_keyword": "SUSTAINED HITS 1"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -7587,16 +7869,34 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "SLAANESH"
+                  "all_of": [
+                    "SLAANESH"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "SUSTAINED HITS 1"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "after-roll",
+                      "filter": {
+                        "roll": "dark-pact",
+                        "result": "success"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapon_keyword": "SUSTAINED HITS 1"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -7617,25 +7917,59 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "CHAOS UNDIVIDED"
+                  "all_of": [
+                    "CHAOS UNDIVIDED"
+                  ]
                 }
               },
               {
                 "operator": "or",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "LETHAL HITS"
-                    }
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "event": "after-roll",
+                          "filter": {
+                            "roll": "dark-pact",
+                            "result": "success"
+                          },
+                          "window": "phase"
+                        }
+                      },
+                      {
+                        "type": "attack-is",
+                        "parameters": {
+                          "weapon_keyword": "LETHAL HITS"
+                        }
+                      }
+                    ]
                   },
                   {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "SUSTAINED HITS 1"
-                    }
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "event": "after-roll",
+                          "filter": {
+                            "roll": "dark-pact",
+                            "result": "success"
+                          },
+                          "window": "phase"
+                        }
+                      },
+                      {
+                        "type": "attack-is",
+                        "parameters": {
+                          "weapon_keyword": "SUSTAINED HITS 1"
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -7775,9 +8109,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "opponent-unit-within-range",
+        "type": "closest",
         "parameters": {
-          "target_qualifier": "closest-eligible-enemy-unit"
+          "subject": "defender",
+          "among": "eligible-targets"
         }
       },
       "effect": {
@@ -7862,7 +8197,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -7928,8 +8267,10 @@
       "per": "unit"
     },
     "trigger": {
-      "event": "dark-pact-made",
-      "subject": "self",
+      "event": "used",
+      "filter": {
+        "kind": "dark-pact"
+      },
       "optional": true
     }
   },
@@ -7964,9 +8305,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           },
           "effect": {
@@ -8045,10 +8390,16 @@
     },
     "trigger": [
       {
-        "event": "selected-to-shoot"
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        }
       },
       {
-        "event": "selected-to-fight"
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        }
       }
     ]
   },
@@ -8074,7 +8425,7 @@
       "name": "Combat Squad",
       "optional": true,
       "trigger": {
-        "event": "declare-battle-formations"
+        "event": "battle-formations-declared"
       },
       "effect": {
         "type": "unit-division",

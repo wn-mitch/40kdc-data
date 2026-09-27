@@ -9,9 +9,9 @@ function dataset() {
   raw.abilities = [
     { ability_id: "fixture-usage", name: "Fixture Usage", faction_id: "orks", behavior: "passive", usage: { frequency: "n-per-battle", count: 1 }, effect: reroll },
     { ability_id: "fixture-stratagem", name: "Fixture Stratagem", faction_id: "orks", ability_type: "stratagem", behavior: "activated", usage: { frequency: "once-per-turn" }, effect: reroll },
-    { ability_id: "fixture-moment", name: "Fixture Moment", faction_id: "orks", behavior: "reactive", trigger: { event: "selected-to-shoot", subject: "self" }, usage: { frequency: "once-per-turn" }, effect: reroll },
-    { ability_id: "fixture-attack-step", name: "Fixture Attack Step", faction_id: "orks", behavior: "reactive", trigger: { event: "before-hit-roll" }, effect: reroll },
-    { ability_id: "fixture-charge", name: "Fixture Charge", faction_id: "orks", behavior: "reactive", trigger: { event: "charge-move" }, effect: reroll },
+    { ability_id: "fixture-moment", name: "Fixture Moment", faction_id: "orks", behavior: "reactive", trigger: { event: "selected", filter: { to: "shoot" } }, usage: { frequency: "once-per-turn" }, effect: reroll },
+    { ability_id: "fixture-attack-step", name: "Fixture Attack Step", faction_id: "orks", behavior: "reactive", trigger: { event: "before-roll", subject: { owner: "any" }, filter: { roll: "hit" } }, effect: reroll },
+    { ability_id: "fixture-charge", name: "Fixture Charge", faction_id: "orks", behavior: "reactive", trigger: { event: "move-ended", filter: { move_types: ["charge"] } }, effect: reroll },
   ] as never;
   return new Dataset(raw);
 }
@@ -31,7 +31,7 @@ describe("ability-level gating of buffs", () => {
   });
 
   it("gates on the moment when there is one, so a usage limit adds no second lever", () => {
-    expect(buffs("fixture-moment")).toEqual({ applied: 0, levers: ["fixture-moment@selected-to-shoot"] });
+    expect(buffs("fixture-moment")).toEqual({ applied: 0, levers: ["fixture-moment@selected:shoot"] });
   });
 
   it("applies an attack-step trigger to every attack", () => {

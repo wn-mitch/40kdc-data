@@ -32,7 +32,7 @@
             </profile>
             <profile name="Stirring Rhetoric" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an Act of Faith is performed, while this model leads a unit, until the end of the phase, the unit gains the Miracle Dice Value Set 6 ability.</characteristic>
+                <characteristic name="Description">When an Act of Faith is performed, while this model is leading a unit, until the end of the phase, the unit gains the Miracle Dice Value Set 6 ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -104,7 +104,7 @@
             </profile>
             <profile name="Litany of Deeds" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If 1+ friendly units destroyed current, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, this model gains the Miracle Dice Reroll Before Pool ability.</characteristic>
+                <characteristic name="Description">If 1+ friendly units destroyed, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, this model gains the Miracle Dice Reroll Before Pool ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stanchion of Holy Martyrs" typeName="Abilities">

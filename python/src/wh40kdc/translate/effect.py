@@ -17,18 +17,15 @@ from typing import Any
 
 from wh40kdc.translate.condition import (
     Condition,
-    condition_subject,
     dekebab,
     describe_condition,
-    describe_selection_eligibility,
-    describe_timing,
-    event_clause,
-    legacy_unit_subject,
-    negated_timing,
 )
 from wh40kdc.translate.condition import (
     title_case as _title_case,
 )
+from wh40kdc.translate.condition_leadin import condition_lead_in, describe_selection_eligibility
+from wh40kdc.translate.timing import describe_timing, event_clause
+from wh40kdc.translate.trigger import describe_trigger, normalize_triggers
 
 Effect = dict[str, Any]
 Ctx = dict[str, Any]
@@ -982,281 +979,6 @@ def _resource_noun(m: dict[str, Any], count: Any = None) -> str:
     return label if n == 1 else f"{label}s"
 
 
-def _is_end_of_phase_disembark_battle_shock(t: dict[str, Any]) -> bool:
-    condition = t.get("condition")
-    if t.get("event") != "end-of-phase" or not isinstance(condition, dict):
-        return False
-    operands = condition.get("operands")
-    return (
-        condition.get("operator") == "and"
-        and isinstance(operands, list)
-        and len(operands) == 2
-        and not operands[0].get("negated")
-        and not operands[1].get("negated")
-        and operands[0].get("type") == "disembarked-from-transport"
-        and operands[1].get("type") == "is-battle-shocked"
-    )
-
-
-_TRIGGER_ATTACK_MODELS = {
-    "bearer": "this model",
-    "self": "this model",
-    "unit": "a model in this unit",
-    "model-in-bearer": "a model in this unit",
-    "friendly-unit": "a model in a friendly unit",
-    "enemy-unit": "a model in an enemy unit",
-    "friendly-model": "a friendly model",
-    "enemy-model": "an enemy model",
-}
-
-
-_MISSING: Any = object()
-
-# Whose turn, as a trigger window names it. Authored data spells whose turn several ways; an
-# unknown spelling keeps the generic wording.
-_TURN_OWNERS = {
-    "your": "your",
-    "your-turn": "your",
-    "own": "your",
-    "self": "your",
-    "opponent": "your opponent's",
-    "opponent-turn": "your opponent's",
-}
-
-
-def _phase_boundary(t: dict[str, Any]) -> str | None:
-    """Render "at the start of your Command phase": a phase boundary narrowed only by
-    phase and whose turn."""
-    event = t.get("event")
-    if event not in ("start-of-phase", "end-of-phase"):
-        return None
-    cond = t.get("condition")
-    if not cond:
-        operands: list[Any] = []
-    elif cond.get("operator") == "and":
-        operands = cond.get("operands") or []
-    else:
-        operands = [cond]
-    for c in operands:
-        if c.get("operator") or c.get("negated"):
-            return None
-        if c.get("type") not in ("phase-is", "player-turn-is"):
-            return None
-
-    def param(ctype: str, key: str) -> Any:
-        for c in operands:
-            if c.get("type") == ctype:
-                params = c.get("parameters")
-                return params.get(key, _MISSING) if isinstance(params, dict) else _MISSING
-        return _MISSING
-
-    phase = param("phase-is", "phase")
-    turn = param("player-turn-is", "turn")
-    if not isinstance(phase, str) or len(operands) != (1 if turn is _MISSING else 2):
-        return None
-    if turn is _MISSING:
-        owner = "the"
-    elif isinstance(turn, str) and turn in _TURN_OWNERS:
-        owner = _TURN_OWNERS[turn]
-    else:
-        return None
-    edge = "start" if event == "start-of-phase" else "end"
-    return f"at the {edge} of {owner} {_cap_word(phase)} phase"
-
-
-def _phase_window(condition: dict[str, Any]) -> tuple[str, Any, str | None, str | None]:
-    """A trigger condition's phase and whose turn, as a phrase on the moment ("during your
-    Shooting phase", "in your opponent's turn"), and whatever else the condition says. Only a
-    plain phase-is and player-turn-is (not negated, at most one each, joined by "and") make a
-    window. Returns ``(window, rest, phase, owner)``; ``rest`` is ``None`` when nothing else
-    remains, and ``phase``/``owner`` are ``None`` when the window names no phase/turn."""
-    if condition.get("operator") == "and":
-        operands = [c for c in condition.get("operands") or [] if isinstance(c, dict)]
-    elif condition.get("operator"):
-        operands = []
-    else:
-        operands = [condition]
-
-    def plain(c: dict[str, Any], ctype: str) -> bool:
-        return not c.get("operator") and not c.get("negated") and c.get("type") == ctype
-
-    phases = [c for c in operands if plain(c, "phase-is")]
-    turns = [c for c in operands if plain(c, "player-turn-is")]
-
-    def params(c: dict[str, Any]) -> dict[str, Any]:
-        p = c.get("parameters")
-        return p if isinstance(p, dict) else {}
-
-    owner = _TURN_OWNERS.get(_jstr(params(turns[0]).get("turn"))) if turns else None
-    phase = params(phases[0]).get("phase") if phases else None
-    if (
-        len(phases) > 1
-        or len(turns) > 1
-        or (len(turns) == 1 and not owner)
-        or (len(phases) == 1 and not isinstance(phase, str))
-        or len(phases) + len(turns) == 0
-    ):
-        return "", condition, None, None
-    # A phase, when there is one, is a string (checked above).
-    window = (
-        f"during {owner or 'the'} {_cap_word(phase)} phase"
-        if isinstance(phase, str)
-        else f"in {owner} turn"
-    )
-    others = [
-        c for c in operands if not any(c is x for x in phases) and not any(c is x for x in turns)
-    ]
-    window_phase = phase if phases else None
-    window_owner = owner or None
-    if not others:
-        return window, None, window_phase, window_owner
-    if len(others) == 1:
-        return window, others[0], window_phase, window_owner
-    return window, {"operator": "and", "operands": others}, window_phase, window_owner
-
-
-def _describe_trigger(t: dict[str, Any]) -> str:
-    """Reactive trigger -> front-of-sentence lead clause
-    ("an enemy unit ends a move within 9\" of this model")."""
-    # The short form only when the boundary is all the trigger says; any other clause goes below.
-    plain = (
-        t.get("proximity") is None
-        and not t.get("move_types")
-        and not t.get("subject_keywords")
-        and not t.get("subject_excluded_keywords")
-        and t.get("caused_by") is None
-        and not t.get("binds_die_variable")
-        and not t.get("binds_selected_die_variable")
-        and t.get("subject") in (None, "self", "unit")
-    )
-    boundary = _phase_boundary(t) if plain else None
-    if boundary:
-        return f"{boundary}, you may use this ability" if t.get("optional") else boundary
-    event = t.get("event")
-    edge = "start" if event == "start-of-phase" else "end" if event == "end-of-phase" else None
-    disembark_shock = _is_end_of_phase_disembark_battle_shock(t)
-    condition = t.get("condition")
-    split = (
-        _phase_window(condition) if isinstance(condition, dict) and not disembark_shock else None
-    )
-    # A boundary leads with its own phase ("at the end of your Command phase"); one that names no
-    # phase is the boundary of every phase. Decided first, so the clauses below add to it.
-    if not edge:
-        s = event_clause(event)
-    elif split is not None and split[2]:
-        s = f"at the {edge} of {split[3] or 'the'} {_cap_word(split[2])} phase"
-    else:
-        s = f"at the {edge} of each phase"
-    subject = t.get("subject")
-    if subject == "friendly-unit":
-        s = re.sub(r"\b(?:the|a) unit\b", "a friendly unit", s)
-    if subject == "enemy-unit":
-        s = re.sub(r"\b(?:the|a) unit\b", "an enemy unit", s)
-    if t.get("event") == "on-model-destroyed":
-        if subject in ("bearer", "self"):
-            s = "when this model is destroyed"
-        elif subject == "model-in-bearer":
-            s = "when a model in this unit is destroyed"
-        elif subject == "friendly-model":
-            s = "when a friendly model is destroyed"
-        elif subject == "enemy-model":
-            s = "when an enemy model is destroyed"
-    attack_model = _TRIGGER_ATTACK_MODELS.get(subject) if isinstance(subject, str) else None
-    if (
-        re.fullmatch(r"(?:before|after)-(?:hit|wound|damage)-roll", _jstr(t.get("event")))
-        and attack_model
-    ):
-        s += f" for an attack made by {attack_model}"
-    if t.get("event") == "attack-scores-wound" and attack_model:
-        s = f"each time an attack made by {attack_model} scores a wound"
-    caused_by = t.get("caused_by")
-    if isinstance(caused_by, dict):
-        source = "this model" if caused_by.get("source") == "bearer-model" else "this unit"
-        attack_type = f"{caused_by['attack_type']} " if caused_by.get("attack_type") else ""
-        weapon = (
-            f" with {_bracket_keyword(caused_by['weapon_keyword'])} weapons"
-            if caused_by.get("weapon_keyword")
-            else ""
-        )
-        s += (
-            f" by {attack_type}attacks made by {source}{weapon}"
-            if attack_type or weapon
-            else f" by {source}"
-        )
-    if t.get("event") == "stratagem-targeted":
-        s = "when this model's unit is targeted with a Stratagem"
-    if t.get("event") == "ability-target-selected" and t.get("source_ability"):
-        source = t["source_ability"]
-        source_keywords = " ".join(source.get("keywords") or [])
-        source_subject = {
-            "friendly-unit": "a friendly unit",
-            "enemy-unit": "an enemy unit",
-        }.get(_jstr(t.get("subject")), "a unit")
-        s = (
-            f"when {source_subject} is selected by the {_title_case(source['ability_id'])} "
-            f"ability of a {source['owner']} {source_keywords} unit"
-        )
-    if t.get("event") == "falls-back" and t.get("subject") == "enemy-unit":
-        s = "an enemy unit Falls Back"
-    actor = (
-        "model"
-        if subject in ("bearer", "self", "model-in-bearer", "friendly-model", "enemy-model")
-        else "unit"
-    )
-    keywords = t.get("subject_keywords")
-    if isinstance(keywords, list) and keywords:
-        s += (
-            f" (the triggering {actor} must have "
-            f"{_and_list([_jstr(keyword) for keyword in keywords])})"
-        )
-    excluded_keywords = t.get("subject_excluded_keywords")
-    if isinstance(excluded_keywords, list) and excluded_keywords:
-        s += (
-            f" (the triggering {actor} must not have "
-            f"{_or_list([_jstr(keyword) for keyword in excluded_keywords])})"
-        )
-    # Narrow a move event to its move kinds: "ends a move" -> "ends a Normal,
-    # Advance or Fall Back move".
-    move_types = t.get("move_types")
-    if isinstance(move_types, list) and move_types:
-        kinds = _or_list(
-            ["Fall Back" if mt == "fall-back" else _cap_word(_jstr(mt)) for mt in move_types]
-        )
-        s = re.sub(r"\bmove\b", lambda _m: f"{kinds} move", s, count=1)
-    prox = t.get("proximity") or {}
-    if prox.get("range") is not None:
-        of_kind = prox.get("of")
-        if of_kind == "bearer-unit":
-            of = "this model's unit"
-        elif of_kind == "attached-unit":
-            of = "the unit this model leads"
-        elif of_kind in ("self", "bearer"):
-            of = "this model"
-        else:
-            of = "this unit"
-        s += f' within {_jstr(prox["range"])}" of {of}'
-    if disembark_shock:
-        s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
-    elif split is not None:
-        window, rest, phase, owner = split
-        # Another moment takes the phase as its window ("... during your Shooting phase").
-        if edge and not phase and owner:
-            s += f" in {owner} turn"
-        elif not edge and window:
-            s += f" {window}"
-        if rest is not None:
-            s += f", if {describe_condition(rest)}"
-    if t.get("binds_die_variable"):
-        binding = _jstr(t["binds_die_variable"]).replace("_", "-")
-        s += f" (binding the generated die as {dekebab(binding)})"
-    if t.get("binds_selected_die_variable"):
-        binding = _jstr(t["binds_selected_die_variable"]).replace("_", "-")
-        s += f" (binding one chosen die used in that Act of Faith as {dekebab(binding)})"
-    if t.get("optional"):
-        s += ", you may use this ability"
-    return s
-
-
 def _menu_action_subject(elig: dict[str, Any] | None) -> str:
     """``excludes_keyword``/``requires_keyword`` -> the eligible-unit noun
     phrase for a menu action ("one friendly non-TITANIC unit" / "a friendly
@@ -1307,8 +1029,8 @@ def _describe_menu_action(a: dict[str, Any], ctx: Ctx) -> str:
     """One ``resource-action-menu`` action -> a bullet body ("Label: trigger,
     spend N tokens, effect, duration (notes).")."""
     label = _jstr(a.get("label") if a.get("label") is not None else a.get("id"))
-    triggers = _normalize_triggers(a.get("when"))
-    trig = " or ".join(s for s in (_describe_trigger(t) for t in triggers) if s)
+    triggers = normalize_triggers(a.get("when"))
+    trig = " or ".join(s for s in (describe_trigger(t) for t in triggers) if s)
     cost = a.get("cost") or {}
     cost_phrase = f"spend {_jstr(cost.get('amount'))} {_resource_noun(cost, cost.get('amount'))}"
     eff_clause = describe_effect_inline(a.get("effect") or {}, ctx)
@@ -1375,231 +1097,6 @@ def _shared_usage_clause(su: dict[str, Any] | None) -> str:
             )
         )
     return "; ".join(parts)
-
-
-def _negated_target_keywords(keywords: list[str]) -> str:
-    """ "against a unit that is not a Monster or Vehicle" from excluded target keywords."""
-    return "against a unit that is not a " + " or ".join(keywords)
-
-
-def _cap_word(s: str) -> str:
-    """Naturally capitalize a display word (``MONSTER`` → ``Monster``)."""
-    return s[:1].upper() + s[1:].lower() if s else s
-
-
-def _not_wrapped_target_keyword(op: Condition) -> str | None:
-    """The keyword of a `not`-wrapping-a-single-`target-has-keyword` operand, else None.
-    The aura-subject exclusion encoding, distinct from the bare negated form."""
-    if op.get("operator") != "not":
-        return None
-    operands = op.get("operands")
-    if not operands or len(operands) != 1:
-        return None
-    inner = operands[0]
-    if inner.get("type") != "target-has-keyword" or inner.get("negated"):
-        return None
-    return _jstr((inner.get("parameters") or {}).get("keyword"))
-
-
-def _excluded_target_keywords(keywords: list[str]) -> str:
-    """ "(excluding Monster or Vehicle units)" from a run of `not`-wrapped exclusions."""
-    return "(excluding " + " or ".join(_cap_word(k) for k in keywords) + " units)"
-
-
-def _join_and_lead_ins(operands: list[Condition]) -> str:
-    """Join `and` operands. Two exclusion encodings collapse: a run of bare-negated
-    target-has-keyword becomes "against a unit that is not a X or Y", and a run of
-    `not`-wrapped target-has-keyword becomes "(excluding X or Y units)". Either
-    attaches to the preceding clause with a space; all other operands join with ", "."""
-    parts: list[str] = []
-    i = 0
-    while i < len(operands):
-        op = operands[i]
-        if op.get("negated") and op.get("type") == "target-has-keyword":
-            kws: list[str] = []
-            while (
-                i < len(operands)
-                and operands[i].get("negated")
-                and operands[i].get("type") == "target-has-keyword"
-            ):
-                kws.append(_jstr((operands[i].get("parameters") or {}).get("keyword")))
-                i += 1
-            parts.append(_negated_target_keywords(kws))
-            continue
-        if _not_wrapped_target_keyword(op) is not None:
-            kws = []
-            while i < len(operands):
-                kw = _not_wrapped_target_keyword(operands[i])
-                if kw is None:
-                    break
-                kws.append(kw)
-                i += 1
-            parts.append(_excluded_target_keywords(kws))
-            continue
-        if not op.get("negated") and op.get("type") == "unit-has-keyword":
-            kws = []
-            while (
-                i < len(operands)
-                and not operands[i].get("negated")
-                and operands[i].get("type") == "unit-has-keyword"
-            ):
-                kws.append(_jstr((operands[i].get("parameters") or {}).get("keyword")))
-                i += 1
-            if len(kws) >= 2:
-                parts.append(f"if the unit is a {' '.join(kws)} unit")
-            else:
-                parts.append(f"if the unit has the {kws[0]} keyword")
-            continue
-        parts.append(_condition_lead_in(op))
-        i += 1
-    acc = ""
-    for part in parts:
-        if acc == "":
-            acc = part
-        elif part.startswith("against ") or part.startswith("(excluding "):
-            acc = f"{acc} {part}"
-        else:
-            acc = f"{acc}, {part}"
-    return acc
-
-
-def _join_or_lead_ins(operands: list[Condition]) -> str:
-    """Join `or` operands, collapsing only an all-keyword group into one clause."""
-    if operands and all(
-        not op.get("negated") and op.get("type") == "unit-has-keyword" for op in operands
-    ):
-        keywords = [_jstr((op.get("parameters") or {}).get("keyword")) for op in operands]
-        return f"if the unit has the {_or_list(keywords)} keywords"
-    return " or ".join(_condition_lead_in(op) for op in operands)
-
-
-def _condition_lead_in(c: Condition) -> str:
-    operands = c.get("operands")
-    if c.get("operator") == "and" and operands:
-        return _join_and_lead_ins(operands)
-    if c.get("operator") == "or" and operands:
-        return _join_or_lead_ins(operands)
-    if c.get("operator") == "not" and operands:
-        return "unless " + " or ".join(re.sub(r"^if ", "", _condition_lead_in(o)) for o in operands)
-    # Negated keyword gates read as an exclusion clause, not the generic "if not …".
-    if c.get("negated") and c.get("type") == "target-has-keyword":
-        return _negated_target_keywords([_jstr((c.get("parameters") or {}).get("keyword"))])
-    if c.get("negated") and c.get("type") == "unit-has-keyword":
-        kw = _jstr((c.get("parameters") or {}).get("keyword"))
-        return f"unless the unit has the {kw} keyword"
-    if c.get("negated") and c.get("type") == "timing-is":
-        return negated_timing((c.get("parameters") or {}).get("timing"))
-    if c.get("negated"):
-        return f"if {describe_condition(c)}"
-
-    p = c.get("parameters") or {}
-    ctype = c.get("type")
-    if ctype == "phase-is":
-        return f"during the {_title_case(_jstr(p.get('phase')))} phase"
-    if ctype == "is-attached":
-        kw = f"{_jstr(p.get('keyword'))} " if p.get("keyword") else ""
-        return f"while this model is leading a {kw}unit"
-    if ctype == "timing-is":
-        return describe_timing(p.get("timing"))
-    if ctype == "player-turn-is":
-        turn = p.get("turn")
-        if turn in ("your-turn", "your", "own", "self"):
-            return "in your turn"
-        if turn in ("opponent-turn", "opponent"):
-            return "in the opponent's turn"
-        return "in either player's turn"
-    if ctype == "model-is-leader":
-        return "while this model leads a unit"
-    if ctype == "charged-this-turn":
-        return f"if {legacy_unit_subject(c)} charged this turn"
-    if ctype == "advanced-this-turn":
-        return f"if {legacy_unit_subject(c)} Advanced this turn"
-    if ctype == "disembarked-from-transport":
-        return "if the unit disembarked from a Transport this turn"
-    if ctype == "faction-rule-active":
-        return f"while the {_title_case(_jstr(p.get('rule')))} is active"
-    if ctype == "battle-round":
-        b_min = _round_number(p.get("min")) if p.get("min") is not None else None
-        b_max = _round_number(p.get("max")) if p.get("max") is not None else None
-        if b_min is not None and b_max is not None:
-            if b_min == b_max:
-                return f"during the {_battle_round_ord(b_min)} battle round"
-            return f"during battle rounds {_jstr(b_min)}-{_jstr(b_max)}"
-        if b_min is not None:
-            return f"from the {_battle_round_ord(b_min)} battle round onward"
-        if b_max is not None:
-            return f"during the first {_jstr(b_max)} battle rounds"
-        return "during the battle round"
-    if ctype == "token-count-at-or-above":
-        return f"while the unit has {_jstr(p.get('threshold'))}+ {_pool_name(p.get('pool_id'))}"
-    if ctype == "remained-stationary":
-        return "if the unit Remained Stationary"
-    if ctype == "target-has-keyword":
-        return f"against {_jstr(p.get('keyword'))} targets"
-    if ctype == "unit-has-keyword":
-        return f"if the unit has the {_jstr(p.get('keyword'))} keyword"
-    if ctype == "unit-model-count":
-        return f"if the unit contains {_jstr(p.get('count_min'))}+ {_jstr(p.get('keyword'))} models"
-    if ctype == "uniform-ranged-loadout":
-        keyword = f"{_jstr(p.get('model_keyword'))} " if p.get("model_keyword") else ""
-        return f"if all ranged weapons equipped by each {keyword}model in the unit are the same"
-    if ctype == "all-attacks-target-same-unit":
-        attack_type = f"{_jstr(p.get('attack_type'))} " if p.get("attack_type") else ""
-        return f"when all of the unit's {attack_type}attacks target the same enemy unit"
-    if ctype == "is-battle-shocked":
-        return f"while {legacy_unit_subject(c)} is Battle-shocked"
-    if ctype == "unit-below-half-strength":
-        subject = condition_subject(c, "the unit", {"target": "the target unit"})
-        return f"while {subject} is below half strength"
-    if ctype == "unit-below-starting-strength":
-        return f"while {legacy_unit_subject(c)} is below its starting strength"
-    if ctype == "has-lost-wounds":
-        return "while the model has lost wounds"
-    if ctype == "attack-is-type":
-        if p.get("comparison") == "strength-greater-than-toughness":
-            return "when this attack's Strength is greater than the target's Toughness"
-        if p.get("comparison") is not None:
-            return f"when {dekebab(_jstr(p.get('comparison')))}"
-        return f"while making {_jstr(p.get('attack_type'))} attacks"
-    if ctype == "destroyed-by-attack-type":
-        if p.get("attack_type") == "any":
-            return "when destroyed by any attack"
-        return f"when destroyed by a {_jstr(p.get('attack_type'))} attack"
-    if ctype == "opponent-unit-within-range":
-        if p.get("weapon_name") is not None:
-            where = f"range of {dekebab(_jstr(p.get('weapon_name')))}"
-        elif p.get("range_multiplier") is not None:
-            where = "half range of its ranged weapons"
-        else:
-            range_ = p.get("range")
-            if range_ is None:
-                range_ = p.get("range_inches")
-            if range_ is None:
-                range_ = p.get("within_inches")
-            where = "engagement range" if range_ == "engagement" else f'{_jstr(range_)}"'
-        return f"while an enemy unit is within {where}"
-    if ctype == "engagement-state":
-        state = p.get("state")
-        if state is None:
-            return "while the unit is within Engagement Range"
-        st = _jstr(state)
-        if st == "on-battlefield":
-            return "while the unit is on the battlefield"
-        if st == "embarked":
-            return "while the unit is embarked"
-        if st in ("engaged", "within-engagement-range", "in-engagement-range"):
-            return "while the unit is within Engagement Range"
-        if st in ("not-in-engagement-range", "not-within-engagement-range"):
-            return "while the unit is not within Engagement Range"
-        return f"while the unit is {dekebab(st)}"
-    if ctype == "disposition-matches":
-        d = _jstr(p.get("disposition"))
-        if d == "strategic-reserves":
-            return "while the unit is in Strategic Reserves"
-        return f"while the unit's disposition is {dekebab(d)}"
-    if ctype == "fights-first":
-        return "while the unit has the Fights First ability"
-    return f"if {describe_condition(c)}"
 
 
 def _named_region_title(value: Any) -> str:
@@ -1776,15 +1273,40 @@ def _describe_named_region_conditional(
     consumer = m.get("consumer") or {}
     membership = consumer.get("membership") or {}
     whole_unit = membership.get("unit_scope") == "whole-unit"
-    positive = {**condition, "negated": False}
-    predicate = describe_condition(positive)
+    operands = condition.get("operands")
+    negated = (
+        condition.get("operator") == "not" and isinstance(operands, list) and len(operands) == 1
+    )
+    predicate = describe_condition(operands[0] if negated and operands else condition)
     default = _named_region_branch(m, whole_unit, False, True, ctx)
     qualified = _named_region_branch(m, whole_unit, True, True, ctx)
-    if condition.get("negated"):
+    if negated:
         return (
             f"{_named_region_prefix(m)} Unless {predicate}, {default}. If {predicate}, {qualified}."
         )
     return f"{_named_region_prefix(m)} When {predicate}, {qualified}. Otherwise, {default}."
+
+
+def _fought_this_phase(c: Condition) -> str | None:
+    """``not(happened selected-to-fight this phase)``: the subject that has not fought yet,
+    else None."""
+    operands = c.get("operands")
+    if c.get("operator") != "not" or not isinstance(operands, list) or len(operands) != 1:
+        return None
+    inner: dict[str, Any] = operands[0] if isinstance(operands[0], dict) else {}
+    raw_p = inner.get("parameters")
+    p: dict[str, Any] = raw_p if isinstance(raw_p, dict) else {}
+    raw_f = p.get("filter")
+    f: dict[str, Any] = raw_f if isinstance(raw_f, dict) else {}
+    if (
+        inner.get("type") != "happened"
+        or p.get("event") != "selected"
+        or f.get("to") != "fight"
+        or p.get("window") != "phase"
+    ):
+        return None
+    subject = p.get("subject")
+    return subject if isinstance(subject, str) else "this-unit"
 
 
 def _describe_rule_state(m: dict[str, Any], subj: str) -> str:
@@ -2822,17 +2344,14 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             fod_before = ""
             fod_elig = m.get("eligibility")
             if isinstance(fod_elig, dict):
-                if fod_elig.get("negated") and fod_elig.get("type") == "has-fought-this-phase":
-                    fod_who = (
-                        "this model"
-                        if (fod_elig.get("parameters") or {}).get("subject") == "self"
-                        else "this unit"
-                    )
+                fought = _fought_this_phase(fod_elig)
+                if fought:
+                    fod_who = "this model" if fought == "this-model" else "this unit"
                     fod_before = f" before {fod_who} has fought this phase"
                 else:
-                    fod_before = f" {_condition_lead_in(fod_elig)}"
+                    fod_before = f" {condition_lead_in(fod_elig)}"
             fod_adds = "".join(
-                f", adding {gm.get('value')} {_condition_lead_in(gm.get('condition') or {})}"
+                f", adding {gm.get('value')} {condition_lead_in(gm.get('condition') or {})}"
                 for gm in (fod_gate.get("modifiers") or [])
                 if isinstance(gm, dict)
             )
@@ -2986,7 +2505,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         )
     if etype == "fallback-and-act":
         acts = "shoot and declare a charge" if m.get("can_charge") is True else "shoot"
-        return f"{subj} {_v(subj, 'is')} eligible to {acts} in a turn in which it Fell Back"
+        they = "they" if _is_plural(subj) else "it"
+        return f"{subj} {_v(subj, 'is')} eligible to {acts} in a turn in which {they} Fell Back"
     if etype == "fight-eligibility-extension":
         r = _jstr(m.get("range"))
         return (
@@ -3076,7 +2596,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             return _describe_named_region_conditional(
                 inner.get("modifier") or {}, e.get("condition") or {}, ctx
             )
-        lead = _condition_lead_in(e.get("condition") or {})
+        lead = condition_lead_in(e.get("condition") or {})
         return f"{lead}, {describe_effect_inline(inner, ctx)}"
     if etype in ("rules-bundle", "sequence"):
         steps = e.get("steps") or []
@@ -3097,8 +2617,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
                 part
                 for part in (
                     " or ".join(
-                        _describe_trigger(trigger)
-                        for trigger in _normalize_triggers(e.get("trigger"))
+                        describe_trigger(trigger)
+                        for trigger in normalize_triggers(e.get("trigger"))
                     ),
                     _usage_clause(e["usage"]) if isinstance(e.get("usage"), dict) else "",
                 )
@@ -3268,9 +2788,7 @@ def _part_head(e: Effect) -> str:
     choice to use it and its cost ("at the end of your Movement phase, once per battle, you
     can")."""
     moment = " or ".join(
-        part
-        for part in (_describe_trigger(t) for t in _normalize_triggers(e.get("trigger")))
-        if part
+        part for part in (describe_trigger(t) for t in normalize_triggers(e.get("trigger"))) if part
     )
     level = (
         f" (Psychic level {_jstr(e.get('level'))})"
@@ -3312,10 +2830,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
             return f"{indent}{arrow}{text if text.endswith('.') else text + '.'}"
         if inner.get("type") in _CONTAINER_TYPES:
             return (
-                f"{indent}{_capitalize(_condition_lead_in(e.get('condition') or {}))}:\n"
+                f"{indent}{_capitalize(condition_lead_in(e.get('condition') or {}))}:\n"
                 + describe_effect(inner, depth + 1, ctx)
             )
-        lead = _capitalize(_condition_lead_in(e.get("condition") or {}))
+        lead = _capitalize(condition_lead_in(e.get("condition") or {}))
         return f"{indent}{arrow}{lead}, {describe_effect_inline(inner, ctx)}."
     if etype in ("rules-bundle", "sequence"):
         steps = e.get("steps") or []
@@ -3591,31 +3109,13 @@ def _aura_radius(scope: dict[str, Any] | None) -> float | int | None:
     return int(m.group(1)) if m else None
 
 
-def _normalize_triggers(t: Any) -> list[dict[str, Any]]:
-    """Normalize the polymorphic trigger field to a flat list (empty when absent)."""
-    if t is None:
-        return []
-    return list(t) if isinstance(t, list) else [t]
-
-
-def _timing_of_condition(c: dict[str, Any] | None) -> str | None:
-    """The timing value of a bare ``timing-is`` condition, else None."""
-    if c and c.get("type") == "timing-is":
-        return _jstr((c.get("parameters") or {}).get("timing"))
-    return None
-
-
 def _condition_within_range(c: dict[str, Any] | None) -> float | int | None:
-    """The numeric range of a top-level within-range condition, else None."""
-    if not c or c.get("type") not in ("unit-within-range-of", "opponent-unit-within-range"):
+    """The inch range of a top-level ``within`` condition, else None."""
+    if not c or c.get("type") != "within":
         return None
-    params = c.get("parameters") or {}
-    r = params.get("range")
-    if r is None:
-        r = params.get("range_inches")
-    if r is None:
-        r = params.get("within_inches")
-    return r if isinstance(r, (int, float)) and not isinstance(r, bool) else None
+    r = (c.get("parameters") or {}).get("range")
+    inches = r.get("inches") if isinstance(r, dict) else None
+    return inches if isinstance(inches, (int, float)) and not isinstance(inches, bool) else None
 
 
 def _render_top_level(
@@ -3636,19 +3136,20 @@ def _render_top_level(
     # A reactive trigger (or several — the ability fires on any) opens the
     # sentence ("Each time ..."). B2: when a trigger's proximity just restates a
     # within-range condition on the effect, render the range once (drop it here).
-    triggers = [t for t in _normalize_triggers(trigger) if t.get("event") is not None]
-    trigger_events = {t.get("event") for t in triggers}
+    triggers = [t for t in normalize_triggers(trigger) if t.get("event") is not None]
     cond_range = _condition_within_range(
         e.get("condition") if e.get("type") == "conditional" else None
     )
     trig_parts: list[str] = []
     for t in triggers:
-        prox = t.get("proximity") or {}
-        if cond_range is not None and prox.get("range") == cond_range:
+        prox = t.get("proximity")
+        prox_range = prox.get("range") if isinstance(prox, dict) else None
+        prox_inches = prox_range.get("inches") if isinstance(prox_range, dict) else None
+        if cond_range is not None and prox_inches == cond_range:
             t_render = {k: val for k, val in t.items() if k != "proximity"}
         else:
             t_render = t
-        s = _describe_trigger(t_render)
+        s = describe_trigger(t_render)
         if s:
             trig_parts.append(s)
     trig = " or ".join(trig_parts)
@@ -3659,14 +3160,7 @@ def _render_top_level(
             return _describe_named_region_conditional(
                 inner.get("modifier") or {}, e.get("condition") or {}, ctx
             )
-        # B1: drop the condition lead-in when it merely restates a trigger's timing
-        # (e.g. trigger start-of-phase + condition timing-is start-of-phase).
-        cond_timing = _timing_of_condition(e.get("condition"))
-        lead_in = (
-            ""
-            if (cond_timing is not None and cond_timing in trigger_events)
-            else _condition_lead_in(e.get("condition") or {})
-        )
+        lead_in = condition_lead_in(e.get("condition") or {})
         if inner.get("type") in _CONTAINER_TYPES:
             header = ", ".join(part for part in (trig, lead, lead_in, trail) if part)
             return _capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)

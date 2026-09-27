@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -116,7 +120,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -218,7 +226,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -574,7 +586,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "remained-stationary"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "remain-stationary"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -824,7 +845,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1339,15 +1364,18 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
-              "attack_type": "graviton-crusher"
+              "weapon_name": "Graviton crusher"
             }
           }
         ]
@@ -1387,7 +1415,14 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-scoring-hit",
+      "event": "after-roll",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "roll": "hit",
+        "result": "success"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -1546,7 +1581,10 @@
           {
             "type": "ability-part",
             "trigger": {
-              "event": "moved-through-tall-terrain"
+              "event": "move-ended",
+              "filter": {
+                "through": "tall-terrain"
+              }
             },
             "effect": {
               "type": "dice-gated",
@@ -2478,7 +2516,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "advanced-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2519,9 +2566,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "IMPERIAL KNIGHTS"
+              "all_of": [
+                "IMPERIAL KNIGHTS"
+              ]
             }
           },
           "effect": {
@@ -2554,9 +2603,11 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "TECH-PRIEST"
+                  "all_of": [
+                    "TECH PRIEST"
+                  ]
                 }
               },
               {
@@ -2602,9 +2653,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "territory-control",
+        "type": "in-region",
         "parameters": {
-          "zone": "defensive-line"
+          "region": {
+            "rule_region": {
+              "region_id": "defensive-line",
+              "owner_faction": "imperial-knights"
+            }
+          }
         }
       },
       "effect": {
@@ -2660,9 +2716,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "HONOURED"
+                  "all_of": [
+                    "HONOURED"
+                  ]
                 }
               }
             ]
@@ -2678,9 +2736,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "HONOURED"
+              "all_of": [
+                "HONOURED"
+              ]
             }
           },
           "effect": {
@@ -2767,7 +2827,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "oath-fulfilled"
+            "event": "designation-resolved",
+            "filter": {
+              "tag": "OATH OF MOMENT TARGET"
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -2858,8 +2921,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within-range-of-objective",
-        "parameters": {}
+        "type": "within",
+        "parameters": {
+          "of": {
+            "objective": {}
+          },
+          "range": "objective-control"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2950,9 +3018,11 @@
                 {
                   "type": "conditional",
                   "condition": {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "CHARACTER"
+                      "all_of": [
+                        "CHARACTER"
+                      ]
                     }
                   },
                   "effect": {
@@ -2961,7 +3031,12 @@
                       {
                         "type": "conditional",
                         "condition": {
-                          "type": "destroyed-by-attack-type"
+                          "type": "happened",
+                          "parameters": {
+                            "event": "destroyed",
+                            "object": "event-object",
+                            "window": "event"
+                          }
                         },
                         "effect": {
                           "type": "ability-grant",
@@ -3015,9 +3090,9 @@
                 {
                   "type": "conditional",
                   "condition": {
-                    "type": "objective-majority",
+                    "type": "controls",
                     "parameters": {
-                      "relative_to": "opponent"
+                      "compare": "more-than-opponent"
                     }
                   },
                   "effect": {
@@ -3060,15 +3135,17 @@
                 {
                   "type": "conditional",
                   "condition": {
-                    "type": "units-destroyed-comparison",
+                    "type": "happened-compare",
                     "parameters": {
-                      "subject": {
-                        "side": "enemy",
-                        "window": "this-turn"
+                      "left": {
+                        "event": "destroyed",
+                        "object": {
+                          "owner": "enemy"
+                        },
+                        "window": "turn"
                       },
-                      "comparator": "greater-or-equal",
-                      "reference": {
-                        "side": "self",
+                      "comparison": "greater-or-equal",
+                      "right": {
                         "value": 0
                       }
                     }

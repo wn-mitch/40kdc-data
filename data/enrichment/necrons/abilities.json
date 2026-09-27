@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -102,7 +106,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -132,7 +140,7 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -301,21 +309,14 @@
         "operator": "not",
         "operands": [
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -407,7 +408,7 @@
     "behavior": "reactive",
     "community_notes": "[APPROX] Full rule in raw-text store.",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -456,7 +457,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -538,7 +543,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "reinforcements",
+      "event": "set-up",
+      "filter": {
+        "from": "reserves"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -650,7 +658,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "resurrection",
@@ -717,7 +729,10 @@
         "owner": "friendly",
         "within_inches": 12,
         "eligibility": {
-          "type": "is-battle-shocked"
+          "type": "unit-state",
+          "parameters": {
+            "state": "battle-shocked"
+          }
         }
       },
       "effect": {
@@ -727,7 +742,7 @@
       }
     },
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "optional": true
     },
     "scope": {
@@ -905,7 +920,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
@@ -1012,7 +1031,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1043,7 +1066,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "selected-to-shoot",
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -1217,7 +1243,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -1290,10 +1319,56 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "weapon_name": "Enmitic exterminator"
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "has-keyword",
+                    "parameters": {
+                      "subject": "defender",
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "weapon_name": "Gauss destructor"
+                }
+              },
+              {
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "re-roll",
@@ -1312,9 +1387,7 @@
       "lokhust-heavy-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "whirling-onslaught",
@@ -1341,7 +1414,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           },
           "effect": {
             "type": "re-roll",
@@ -1527,7 +1609,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "unit-set-up"
+      "event": "set-up"
     }
   },
   {
@@ -1543,7 +1625,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1761,7 +1847,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1893,9 +1983,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "NECRONS"
+          "all_of": [
+            "NECRONS"
+          ]
         }
       },
       "effect": {
@@ -1953,7 +2045,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -2063,7 +2159,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2149,7 +2249,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "reinforcements",
+      "event": "set-up",
+      "filter": {
+        "from": "reserves"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2239,8 +2342,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "engagement-state",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           },
           "effect": {
             "type": "objective-control-modifier",
@@ -2254,10 +2359,17 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly-cryptek",
-              "range": 6
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "CRYPTEK"
+                ]
+              },
+              "range": {
+                "inches": 6
+              }
             }
           },
           "effect": {
@@ -2322,7 +2434,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -2370,7 +2486,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2401,7 +2517,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2437,7 +2557,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-half-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "half"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -2572,15 +2695,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "melee"
             }
           },
           {
-            "type": "unit-below-half-strength",
+            "type": "strength",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "below": "half"
             }
           }
         ]
@@ -2743,11 +2867,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "window": "this-phase",
-          "count_min": 1
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "phase"
         }
       },
       "effect": {
@@ -2769,7 +2895,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2843,9 +2969,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "DESTROYER CULT"
+          "all_of": [
+            "DESTROYER CULT"
+          ]
         }
       },
       "effect": {
@@ -2956,9 +3084,14 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 12
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 12
+              }
             }
           }
         ]
@@ -3025,8 +3158,10 @@
         "operator": "not",
         "operands": [
           {
-            "type": "engagement-state",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           }
         ]
       },
@@ -3047,7 +3182,13 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-opponent-turn"
+      "event": "turn-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "opponent-turn"
+        }
+      }
     }
   },
   {
@@ -3072,7 +3213,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -3372,12 +3517,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "controls-objective",
-            "parameters": {}
+            "type": "controls"
           }
         ]
       },
@@ -3417,15 +3566,27 @@
         "operator": "and",
         "operands": [
           {
-            "type": "is-attached",
+            "type": "attachment",
             "parameters": {
-              "keyword": "CANOPTEK"
+              "subject": "this-model",
+              "role": "leading",
+              "with": {
+                "all_of": [
+                  "CANOPTEK"
+                ]
+              }
             }
           },
           {
-            "type": "is-attached",
+            "type": "attachment",
             "parameters": {
-              "keyword": "MACROCYTES"
+              "subject": "this-model",
+              "role": "leading",
+              "with": {
+                "all_of": [
+                  "MACROCYTES"
+                ]
+              }
             }
           }
         ]
@@ -3483,7 +3644,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -3662,9 +3827,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader",
+        "type": "model-profile",
         "parameters": {
-          "leader_type": "szarekh"
+          "subject": "event-object",
+          "profile": "szarekh"
         }
       },
       "effect": {
@@ -3686,7 +3852,8 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "on-model-destroyed"
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
     }
   },
   {
@@ -3729,7 +3896,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3808,9 +3979,11 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "unit-has-keyword",
+          "type": "has-keyword",
           "parameters": {
-            "keyword": "CANOPTEK SCARAB SWARM"
+            "all_of": [
+              "CANOPTEK SCARAB SWARM"
+            ]
           }
         },
         "effect": {
@@ -3920,7 +4093,7 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -3970,7 +4143,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4069,7 +4242,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4091,9 +4264,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "NECRONS"
+          "all_of": [
+            "NECRONS"
+          ]
         }
       },
       "effect": {
@@ -4126,7 +4301,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "post-deployment"
+      "event": "deployment-ended"
     }
   },
   {
@@ -4151,8 +4326,16 @@
             }
           },
           {
-            "type": "advanced-this-turn",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -4392,7 +4575,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4435,10 +4618,16 @@
             }
           },
           {
-            "type": "was-hit-by-attack",
+            "type": "happened",
             "parameters": {
-              "subject": "self",
-              "attack_type": "ranged"
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
             }
           }
         ]
@@ -4588,17 +4777,24 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "engagement-state",
-                "parameters": {}
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
               }
             ]
           }
@@ -4652,11 +4848,17 @@
             }
           },
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           }
         ]
@@ -4731,15 +4933,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "DESTROYER CULT"
+              "all_of": [
+                "DESTROYER CULT"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "MOUNTED"
+              "all_of": [
+                "MOUNTED"
+              ]
             }
           }
         ]
@@ -4821,7 +5027,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-phase",
+      "event": "phase-started",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4938,9 +5144,11 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "OBELISK"
+              "all_of": [
+                "OBELISK"
+              ]
             }
           },
           {
@@ -4956,7 +5164,10 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           }
         ]
       },
@@ -5006,7 +5217,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "selected-to-shoot"
+            "event": "selected",
+            "filter": {
+              "to": "shoot"
+            }
           },
           "effect": {
             "type": "choice",
@@ -5092,7 +5306,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective"
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -5198,7 +5418,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -5335,27 +5558,14 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "NOBLE"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "LYCHGUARD"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "TRIARCH"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "NOBLE",
+                "LYCHGUARD",
+                "TRIARCH"
+              ]
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -5435,8 +5645,7 @@
                 "event": "phase-start",
                 "evaluation": "snapshot-once",
                 "canonical_condition_ids": [
-                  "timing-is",
-                  "objective-majority"
+                  "controls"
                 ]
               },
               "expiry": {
@@ -5458,8 +5667,7 @@
                 "event": "phase-start",
                 "evaluation": "snapshot-once",
                 "canonical_condition_ids": [
-                  "timing-is",
-                  "objective-majority"
+                  "controls"
                 ]
               },
               "expiry": {
@@ -5488,16 +5696,17 @@
             "relation": "wholly-within"
           },
           "qualified_condition": {
-            "type": "region-membership",
-            "state_ref": {
-              "region_id": "power-matrix",
-              "owner_faction": "necrons"
-            },
-            "unit_scope": "whole-unit",
-            "relation": "wholly-within",
-            "canonical_condition_ids": [
-              "terrain-area-control"
-            ]
+            "type": "in-region",
+            "parameters": {
+              "region": {
+                "rule_region": {
+                  "region_id": "power-matrix",
+                  "owner_faction": "necrons"
+                }
+              },
+              "wholly": true,
+              "models": "every"
+            }
           },
           "default_branch": {
             "source": {
@@ -5577,7 +5786,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -5636,8 +5849,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "selected-to-fight",
-      "subject": "self",
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
       "optional": true
     },
     "effect": {
@@ -5710,9 +5925,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "wounds-remaining-at-or-below",
+        "type": "wounds",
         "parameters": {
-          "threshold": 4
+          "subject": "this-model",
+          "remaining_max": 4
         }
       },
       "effect": {
@@ -5744,8 +5960,8 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "on-model-destroyed",
-      "subject": "bearer",
+      "event": "model-destroyed",
+      "object": "this-model",
       "condition": {
         "operator": "and",
         "operands": [
@@ -5756,11 +5972,19 @@
             }
           },
           {
-            "type": "has-fought-this-phase",
-            "parameters": {
-              "subject": "unit"
-            },
-            "negated": true
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
           }
         ]
       }

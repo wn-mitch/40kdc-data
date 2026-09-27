@@ -212,7 +212,7 @@ pub struct EngineContext {
     /// Attacker has not moved this turn — Heavy fires its +1 to hit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_stationary: Option<bool>,
-    /// Attacker made a charge move this turn — drives `charged-this-turn`.
+    /// Attacker made a charge move this turn — drives a `happened` Charge-move condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_charged: Option<bool>,
     /// Within half the weapon's range — Melta / Rapid Fire fire.

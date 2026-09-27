@@ -221,7 +221,7 @@ test('move consequences and selector eligibility remain linked graph children', 
       owner: 'friendly',
       target_kind: 'model',
       selection_limit: { count: 1, period: 'turn' },
-      eligibility: { type: 'is-battle-shocked' },
+      eligibility: { type: 'unit-state', parameters: { state: 'battle-shocked' } },
     },
     effect: {
       type: 'movement-modifier',
@@ -233,7 +233,7 @@ test('move consequences and selector eligibility remain linked graph children', 
   const result = mapEffectNodeToCandidates({ origin_id, node })
   assert.deepEqual(result.unresolved, [])
   const selection = byPredicate(result.assertions, 'mechanic.composition.select-units')[0]
-  const eligibility = byPredicate(result.assertions, 'mechanic.condition.is-battle-shocked')[0]
+  const eligibility = byPredicate(result.assertions, 'mechanic.condition.unit-state')[0]
   assert.equal(argument(selection, 'condition'), eligibility.semantic_key)
   assert.deepEqual(argument(selection, 'parameters').selector.selection_limit, node.selector.selection_limit)
   const movement = byPredicate(result.assertions, 'mechanic.composition.movement-modifier')[0]
@@ -265,12 +265,12 @@ test('model membership and designation history remain in claim import', () => {
       type: 'designate-target',
       select: {
         eligibility: {
-          type: 'was-hit-by-attack',
+          type: 'happened',
           parameters: {
-            subject: 'target',
-            attack_type: 'ranged',
-            source: { event_var: 'fabricated-shot' },
-            window: 'just-finished-shooting-sequence',
+            event: 'after-roll',
+            object: 'this-unit',
+            filter: { roll: 'hit', result: 'success', attack_type: 'ranged', by: { event_var: 'fabricated-shot' } },
+            window: 'event',
           },
         },
       },
@@ -279,7 +279,7 @@ test('model membership and designation history remain in claim import', () => {
   })
   assert.deepEqual(designation.unresolved, [])
   const target = byPredicate(designation.assertions, 'mechanic.composition.designate-target')[0]
-  const history = byPredicate(designation.assertions, 'mechanic.condition.was-hit-by-attack')[0]
+  const history = byPredicate(designation.assertions, 'mechanic.condition.happened')[0]
   assert.equal(argument(target, 'condition'), history.semantic_key)
   assert.deepEqual(argument(target, 'parameters').applies.attacker_keywords, ['FABRICATED'])
 })
@@ -292,10 +292,10 @@ test('region attack eligibility differs from qualified-branch membership', () =>
       modifier: {
         producer: { region_ref: 'fabricated' },
         consumer: {
-          attack_condition: { type: 'target-is-visible' },
+          attack_condition: { type: 'visible', parameters: { subject: 'defender', to: 'attacker' } },
           qualified_condition: {
-            type: 'unit-has-keyword',
-            parameters: { keyword: 'FABRICATED' },
+            type: 'has-keyword',
+            parameters: { all_of: ['FABRICATED'] },
           },
           default_branch: { effect: leaf('deep-strike') },
           qualified_branch: { effect: leaf('fight-first') },
@@ -305,8 +305,8 @@ test('region attack eligibility differs from qualified-branch membership', () =>
   })
   assert.deepEqual(result.unresolved, [])
   const parent = byPredicate(result.assertions, 'mechanic.effect.named-region-state')[0]
-  const visible = byPredicate(result.assertions, 'mechanic.condition.target-is-visible')[0]
-  const qualified = byPredicate(result.assertions, 'mechanic.condition.unit-has-keyword')[0]
+  const visible = byPredicate(result.assertions, 'mechanic.condition.visible')[0]
+  const qualified = byPredicate(result.assertions, 'mechanic.condition.has-keyword')[0]
   assert.equal(argument(parent, 'attack-condition'), visible.semantic_key)
   assert.equal(argument(parent, 'condition'), qualified.semantic_key)
   assert.notEqual(argument(parent, 'attack-condition'), argument(parent, 'condition'))

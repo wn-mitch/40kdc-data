@@ -48,7 +48,7 @@ describe("Round 5C restrictions", () => {
 
   it("turns a choice into an optional trigger, or an activated ability without one", () => {
     const withEvent = compiled([leaf("RESTRICTION", "optional-use", { who: "you" }), leaf("EVENT", "event", { kind: "charge" }), grant()]);
-    expect(withEvent.mechanics).toMatchObject({ behavior: "reactive", trigger: { event: "charge-move", optional: true } });
+    expect(withEvent.mechanics).toMatchObject({ behavior: "reactive", trigger: { event: "move-ended", filter: { move_types: ["charge"] }, optional: true } });
     expect(compiled([leaf("RESTRICTION", "optional-use", { who: "bearer" }), grant()]).mechanics).toMatchObject({ behavior: "activated", trigger: null });
   });
 
@@ -81,12 +81,12 @@ describe("Round 5C restrictions", () => {
 
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
-    expect(trigger("enemy-selected-targets")).toEqual({ event: "enemy-unit-targets-bearer", subject: "enemy-unit" });
-    expect(trigger("enemy-ended-move")).toEqual({ event: "enemy-unit-ended-move", subject: "enemy-unit" });
-    expect(trigger("enemy-has-shot")).toEqual({ event: "after-enemy-unit-fires", subject: "enemy-unit" });
+    expect(trigger("enemy-selected-targets")).toEqual({ event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" });
+    expect(trigger("enemy-ended-move")).toEqual({ event: "move-ended", subject: { owner: "enemy" } });
+    expect(trigger("enemy-has-shot")).toEqual({ event: "attacks-resolved", filter: { kind: "shoot" }, subject: { owner: "enemy" } });
     // Any enemy charge declared, as the authored data spells it, not only one that targets this unit.
-    expect(trigger("enemy-declared-charge")).toEqual({ event: "charge-declaration", subject: "enemy-unit" });
-    expect(trigger("selected-to-fight")).toEqual({ event: "selected-to-fight", subject: "self" });
+    expect(trigger("enemy-declared-charge")).toEqual({ event: "targets-selected", filter: { kind: "charge" }, subject: { owner: "enemy" } });
+    expect(trigger("selected-to-fight")).toEqual({ event: "selected", filter: { to: "fight" } });
   });
 
   it("compiles a stratagem TARGET to core target_restrictions, qualifiers included, leaving the effect alone", () => {
@@ -100,8 +100,8 @@ describe("Round 5C restrictions", () => {
     expect(result.core).toEqual({ target_restrictions: {
       count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY", "WARDENS"], excluded_keywords: ["TITANIC"],
       eligibility: { operator: "and", operands: [
-        { type: "unit-selected-to-shoot-this-phase", negated: true },
-        { type: "engagement-state", parameters: { state: "engaged" }, negated: true },
+        { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } }] },
+        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
       ] },
     } });
     // The qualifiers say who can be picked, not when the effect applies.
@@ -115,7 +115,8 @@ describe("Round 5C restrictions", () => {
       grant(),
     ]);
     expect(result.core?.target_restrictions).toEqual({ count: "one", selects: "unit", required_keywords: ["WARDENS"], bound_to: "triggering-unit" });
-    expect(result.mechanics.trigger).toEqual({ event: "selected-to-shoot", subject: "self", subject_keywords: ["WARDENS"] });
+    // The moment's unit is this unit, so "that WARDENS unit" is a keyword condition on it, not any WARDENS unit.
+    expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" }, condition: { type: "has-keyword", parameters: { all_of: ["WARDENS"] } } });
     const attacked = compiled([
       { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["WARDENS", "ORACLES"], match: "any", excluded_keywords: [] }), fragment: "TARGET" },
       { ...leaf("RESTRICTION", "target-binding", { bound_to: "attacked-unit" }), fragment: "TARGET" },

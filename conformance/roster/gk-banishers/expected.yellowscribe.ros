@@ -133,7 +133,7 @@
             </profile>
             <profile name="Surge of Wrath (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against MONSTER targets or against VEHICLE targets:
+                <characteristic name="Description">Against MONSTER or VEHICLE targets:
   -&gt; You can re-roll the Hit roll for attacks made by this model with melee weapons.
   -&gt; You can re-roll the Wound roll for attacks made by this model with melee weapons.
   -&gt; You can re-roll the Damage roll for attacks made by this model with melee weapons.</characteristic>
@@ -221,7 +221,7 @@
             <profile name="Sanctity of Purpose" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Unless the target unit is within range of an objective marker, re-roll a Wound roll of 1.
-If the target unit is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+While the target unit is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

@@ -80,7 +80,7 @@ was launched elsewhere. The worked example of one converged campaign is
 ## Does NOT count as done (ten hard rejects — inquisitor enforces per batch AND at close)
 
 1. **Placeholder lies** — valid DSL encoding a different mechanic.
-2. **Cosine-chasing lever drops** — e.g. `charged-this-turn` → `timing-is charge-move`.
+2. **Cosine-chasing lever drops** — e.g. the charged-this-turn `happened` history → a trigger moment.
 3. **APPROX-stuffing** — clauses evacuated into `[APPROX]` notes to dodge refutation.
 4. **needs-schema as escape hatch** when an honest existing-shape fit exists.
 5. **Weakened verification** — panel <2 voters, goldens loosened/deleted, unrun gates

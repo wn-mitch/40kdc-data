@@ -123,121 +123,37 @@
     },
     "game-event": {
       "type": "string",
-      "description": "The single canonical 'when' vocabulary, shared by the reactive `trigger.event` (the dispatch key an event-driven consumer subscribes on) and the `timing-is` condition. Supersedes the former timing-flag entity's step-level vocabulary, adding movement/lifecycle/targeting events. Grouped: phase/turn structure, setup/reserves, movement, combat dice steps, attack lifecycle, destruction, and tests.",
+      "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.",
       "enum": [
-        "start-of-phase",
-        "end-of-phase",
-        "start-of-turn",
-        "end-of-turn",
-        "start-of-player-turn",
-        "start-of-opponent-turn",
-        "end-of-opponent-turn",
-        "start-of-battle-round",
-        "end-of-battle-round",
-        "start-of-battle",
-        "start-of-command-phase",
-        "declare-battle-formations",
-        "post-deployment",
-        "unit-set-up",
-        "set-up-from-reserves",
-        "arrives-from-strategic-reserves",
-        "starts-in-strategic-reserves",
-        "game-start-in-reserves",
-        "deep-strike-setup",
-        "reinforcements",
-        "normal-move",
-        "end-of-normal-move",
-        "end-of-advance-move",
-        "surge-move",
-        "advance-move",
-        "advances",
-        "fall-back-move",
-        "falls-back",
-        "charge-move",
-        "end-of-charge-move",
-        "charge-declaration",
-        "moved-through-terrain",
-        "moved-through-tall-terrain",
-        "enemy-unit-ended-move",
-        "enemy-unit-fell-back",
-        "before-hit-roll",
-        "after-hit-roll",
-        "before-wound-roll",
-        "after-wound-roll",
-        "attack-scores-wound",
-        "before-save-roll",
-        "after-save-roll",
-        "before-damage-roll",
-        "after-damage-roll",
-        "before-charge-roll",
-        "after-charge-roll",
-        "before-advance-roll",
-        "after-advance-roll",
-        "before-battle-shock",
-        "after-battle-shock",
-        "on-unit-selected",
-        "selected-to-shoot",
-        "selected-to-fight",
-        "selected-to-advance",
-        "selected-to-move",
-        "selected-to-fall-back",
-        "selected-to-disembark",
-        "unit-disembarked",
-        "after-unit-resolves-attacks",
-        "after-scoring-hit",
-        "after-enemy-unit-fires",
-        "on-unit-destroyed",
-        "on-model-destroyed",
-        "first-model-destroyed",
-        "before-bearer-removed",
-        "enemy-unit-destroyed",
-        "enemy-unit-destroyed-in-melee",
-        "on-damage-allocated",
-        "battle-shock-test",
-        "becomes-battle-shocked",
-        "start-of-battle-shock-step",
-        "leadership-test",
-        "desperate-escape-test",
-        "stratagem-targeted",
-        "stratagem-used",
-        "ability-target-selected",
-        "end-of-opponent-charge-phase",
-        "enemy-unit-completed-shooting-targeting-bearer",
-        "enemy-unit-selects-bearer-as-charge-target",
-        "enemy-unit-targets-bearer",
-        "enemy-unit-completed-fall-back-from-bearer",
-        "act-of-faith-completed",
-        "act-of-faith-performed",
-        "miracle-die-generated",
-        "dark-pact-made",
-        "agile-manoeuvre-performed",
-        "unit-empowered",
-        "ritual-manifested",
-        "oath-fulfilled",
-        "shadow-in-the-warp-used",
-        "order-issued",
-        "order-received",
-        "reanimation-protocols-activated",
-        "ritual-attempted",
-        "warp-channelled",
-        "after-psychic-test",
-        "blessings-of-khorne-rolled",
-        "observer-selected",
-        "malefic-surge-made",
-        "contract-invoked",
-        "dark-pact-test-passed",
-        "contract-completed",
-        "favoured-champions-changed",
-        "cult-ambush-marker-removed",
-        "set-up-from-cult-ambush",
-        "quarry-destroyed",
-        "combat-doctrine-selected",
-        "waaagh-called",
-        "opponent-cp-gained",
-        "flux-token-spent",
-        "yield-points-spent",
-        "gate-of-infinity-used",
-        "enemy-unit-selected-charge-targets-before-charge-move"
+        "battle-started",
+        "battle-formations-declared",
+        "deployment-ended",
+        "round-started",
+        "round-ended",
+        "turn-started",
+        "turn-ended",
+        "phase-started",
+        "phase-ended",
+        "step-started",
+        "selected",
+        "targets-selected",
+        "move-ended",
+        "set-up",
+        "disembarked",
+        "before-roll",
+        "after-roll",
+        "damage-allocated",
+        "attacks-resolved",
+        "destroyed",
+        "model-destroyed",
+        "used",
+        "state-changed",
+        "designation-changed",
+        "designation-resolved",
+        "marker-removed",
+        "objective-gained",
+        "resource-gained",
+        "resource-spent"
       ]
     },
     "battle-size": {
@@ -437,6 +353,460 @@
         "shape"
       ],
       "additionalProperties": false
+    },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "friendly",
+        "enemy",
+        "any"
+      ],
+      "description": "Which player a unit, objective or resource belongs to."
+    },
+    "unit-state": {
+      "type": "string",
+      "enum": [
+        "engaged",
+        "battle-shocked",
+        "embarked",
+        "in-strategic-reserves",
+        "in-reserves",
+        "on-battlefield",
+        "hidden",
+        "fights-first",
+        "benefit-of-cover"
+      ],
+      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged)."
+    },
+    "unit-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.",
+      "properties": {
+        "owner": {
+          "$ref": "#/$defs/owner"
+        },
+        "all_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "any_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "none_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "designated": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The unit carries this designation (a tag an effect applied)."
+        },
+        "state": {
+          "$ref": "#/$defs/unit-state"
+        },
+        "level": {
+          "enum": [
+            "unit",
+            "model"
+          ],
+          "description": "model: the filter matches individual models. Default unit."
+        },
+        "visible": {
+          "const": true,
+          "description": "Only units visible to the subject of the enclosing predicate."
+        }
+      }
+    },
+    "unit-ref": {
+      "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "this-unit",
+            "this-model",
+            "model-in-this-unit",
+            "attacker",
+            "defender",
+            "event-subject",
+            "event-object",
+            "stratagem-target",
+            "selected-unit",
+            "recipient"
+          ],
+          "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to."
+        },
+        {
+          "$ref": "#/$defs/unit-filter"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_var"
+          ],
+          "properties": {
+            "event_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "The object a sibling trigger bound with binds_event_variable."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selection_var"
+          ],
+          "properties": {
+            "selection_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "A unit an earlier selection step bound."
+        }
+      ]
+    },
+    "range-ref": {
+      "description": "One reference for every distance.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inches"
+          ],
+          "properties": {
+            "inches": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "string",
+          "enum": [
+            "engagement",
+            "aura",
+            "weapon",
+            "half-weapon",
+            "detection",
+            "objective-control"
+          ],
+          "description": "engagement: Engagement Range. aura: this ability's own aura range. weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "aura_of"
+          ],
+          "properties": {
+            "aura_of": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "description": "The current aura range of another ability, extensions included (Contagion Range is {aura_of: nurgle-s-gift-aura})."
+        }
+      ]
+    },
+    "history-window": {
+      "type": "string",
+      "enum": [
+        "phase",
+        "turn",
+        "round",
+        "battle",
+        "previous-turn",
+        "event"
+      ],
+      "description": "How far back a history condition looks. event: during the triggering event (this attack, this move)."
+    },
+    "objective-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Which objectives. Every listed property must hold.",
+      "properties": {
+        "role": {
+          "enum": [
+            "central",
+            "expansion",
+            "home",
+            "non-home"
+          ]
+        },
+        "home_of": {
+          "enum": [
+            "friendly",
+            "enemy"
+          ],
+          "description": "The friendly or the enemy home objective."
+        },
+        "territory": {
+          "enum": [
+            "your-territory",
+            "enemy-territory",
+            "no-mans-land"
+          ]
+        },
+        "controlled_by": {
+          "$ref": "#/$defs/owner"
+        },
+        "designated": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "$ref": "#/$defs/entity-id",
+          "description": "A mission-specific named objective."
+        }
+      }
+    },
+    "region-ref": {
+      "description": "A region of the battlefield.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "territory"
+          ],
+          "properties": {
+            "territory": {
+              "enum": [
+                "your-territory",
+                "enemy-territory",
+                "no-mans-land",
+                "your-deployment-zone",
+                "enemy-deployment-zone",
+                "attacker-territory"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "terrain_area"
+          ],
+          "properties": {
+            "terrain_area": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "designated": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "footprint": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule_region"
+          ],
+          "properties": {
+            "rule_region": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "region_id"
+              ],
+              "properties": {
+                "region_id": {
+                  "$ref": "#/$defs/entity-id"
+                },
+                "owner_faction": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              }
+            }
+          },
+          "description": "A region an army rule defines (Flow of Magic, Hallowed Ground)."
+        }
+      ]
+    },
+    "event-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Narrows an event family: which selection, move, roll or rule. Only the properties that make sense for the family are used.",
+      "properties": {
+        "to": {
+          "enum": [
+            "move",
+            "shoot",
+            "fight",
+            "attack",
+            "disembark",
+            "observe",
+            "declare-charge"
+          ],
+          "description": "selected: what the unit was selected to do. attack means shoot or fight."
+        },
+        "kind": {
+          "enum": [
+            "attack",
+            "shoot",
+            "fight",
+            "charge",
+            "stratagem",
+            "ability",
+            "action",
+            "manoeuvre",
+            "order",
+            "ritual",
+            "dark-pact",
+            "act-of-faith",
+            "doctrine",
+            "contract"
+          ],
+          "description": "targets-selected / attacks-resolved / used: which kind of targeting, attack or rule."
+        },
+        "id": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Which one of `kind` (a Stratagem, ability, action…)."
+        },
+        "move_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "normal",
+              "advance",
+              "remain-stationary",
+              "fall-back",
+              "charge",
+              "pile-in",
+              "consolidation",
+              "ingress",
+              "surge",
+              "scout",
+              "disembark"
+            ]
+          }
+        },
+        "mode": {
+          "enum": [
+            "ordered-retreat",
+            "desperate-escape",
+            "ongoing",
+            "engaging",
+            "objective",
+            "rapid",
+            "tactical",
+            "combat",
+            "emergency",
+            "assault"
+          ],
+          "description": "A move type's named mode (a Fall Back's desperate escape, a combat disembark)."
+        },
+        "roll": {
+          "$ref": "#/$defs/roll-kind"
+        },
+        "result": {
+          "$ref": "#/$defs/roll-outcome"
+        },
+        "from": {
+          "enum": [
+            "reserves",
+            "strategic-reserves",
+            "deep-strike",
+            "cult-ambush",
+            "transport"
+          ]
+        },
+        "through": {
+          "enum": [
+            "terrain",
+            "tall-terrain"
+          ]
+        },
+        "attack_type": {
+          "enum": [
+            "ranged",
+            "melee",
+            "psychic",
+            "mortal"
+          ]
+        },
+        "weapon_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "weapon_keyword": {
+          "type": "string",
+          "minLength": 1
+        },
+        "by": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Who caused it (the unit or model whose attack destroyed the object)."
+        },
+        "timing": {
+          "enum": [
+            "before-removal"
+          ],
+          "description": "destroyed: resolve before the model is removed."
+        },
+        "first": {
+          "const": true,
+          "description": "Only the first time this happens in the window."
+        },
+        "step": {
+          "enum": [
+            "battle-shock"
+          ]
+        },
+        "state": {
+          "$ref": "#/$defs/unit-state"
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pool": {
+          "type": "string",
+          "minLength": 1
+        },
+        "marker": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "roll-kind": {
+      "enum": [
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "dark-pact",
+        "blessings-of-khorne"
+      ]
+    },
+    "roll-outcome": {
+      "enum": [
+        "success",
+        "failure",
+        "critical"
+      ]
     },
     "game-version-ref": {
       "title": "Game Version Reference",
@@ -3539,86 +3909,40 @@
       "additionalProperties": false
     },
     "trigger": {
-      "description": "A single reactive trigger: the game `event` (closed dispatch key), `subject` (whose action triggered it), `proximity` (spatial gate in inches), optional `move_types` (restricts a move event to given move kinds), `condition` (extra gate reusing the condition tree), `optional` ('you can' reactions), `cost` (stratagem-style CP), and `window` (how long the granted reaction stays open).",
+      "description": "A single reactive trigger: an event family (`event`), who acted (`subject`, default this-unit; clock events have none), what the action was aimed at (`object`), which one (`filter`: the move, roll, Stratagem or ability), a spatial gate (`proximity`), an extra gate (`condition`, where phase and turn go), `optional` for 'you can' reactions, a CP `cost`, and the `window` a granted reaction stays open.",
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event"
+      ],
       "properties": {
         "event": {
           "$ref": "#/$defs/game-event"
         },
         "subject": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "friendly-unit",
-            "enemy-unit",
-            "any-unit",
-            "model-in-bearer",
-            "friendly-model",
-            "enemy-model"
-          ]
+          "$ref": "#/$defs/unit-ref"
         },
-        "caused_by": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "source": {
-              "enum": [
-                "bearer-model",
-                "bearer-unit"
-              ]
-            },
-            "attack_type": {
-              "enum": [
-                "melee",
-                "ranged"
-              ]
-            },
-            "weapon_keyword": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "required": [
-            "source"
-          ],
-          "description": "Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source."
+        "object": {
+          "$ref": "#/$defs/unit-ref"
+        },
+        "filter": {
+          "$ref": "#/$defs/event-filter"
         },
         "proximity": {
           "type": "object",
-          "properties": {
-            "of": {
-              "type": "string",
-              "enum": [
-                "self",
-                "bearer",
-                "attached-unit",
-                "bearer-unit"
-              ]
-            },
-            "range": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
+          "additionalProperties": false,
           "required": [
             "range"
           ],
-          "additionalProperties": false
-        },
-        "move_types": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "advance",
-              "fall-back",
-              "charge"
-            ]
+          "properties": {
+            "of": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "range": {
+              "$ref": "#/$defs/range-ref"
+            }
           },
-          "description": "Restricts a move-related event (e.g. enemy-unit-ended-move) to these move kinds — e.g. [normal, advance, fall-back] for 'a Normal, Advance or Fall Back move'."
+          "description": "The event happened within range of `of` (default this-unit)."
         },
         "condition": {
           "$ref": "#/$defs/condition"
@@ -3644,6 +3968,16 @@
           "type": "string",
           "minLength": 1,
           "$comment": "Names the triggering event's bound object for later reference by a condition in the same reactive action. Internal only; never rendered."
+        },
+        "binds_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
+        },
+        "binds_selected_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
         },
         "source_ability": {
           "type": "object",
@@ -3675,43 +4009,9 @@
             "keywords"
           ],
           "additionalProperties": false,
-          "description": "Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase."
-        },
-        "subject_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer."
-        },
-        "subject_excluded_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "The event subject must have none of these keywords."
-        },
-        "binds_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
-        },
-        "binds_selected_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
+          "description": "The ability whose selection fired a `targets-selected {kind: ability}` trigger. Required there and allowed nowhere else."
         }
-      },
-      "required": [
-        "event"
-      ],
-      "additionalProperties": false
+      }
     },
     "ability-trigger": {
       "description": "For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.",
@@ -3938,157 +4238,1607 @@
         }
       ]
     },
+    "simple-condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "phase-is condition",
+          "description": "[clock] It is this phase.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "phase-is"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "phase": {
+                  "$ref": "#/$defs/phase"
+                }
+              },
+              "required": [
+                "phase"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "player-turn-is condition",
+          "description": "[clock] It is this player's turn.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "player-turn-is"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "turn": {
+                  "enum": [
+                    "your-turn",
+                    "opponent-turn"
+                  ]
+                }
+              },
+              "required": [
+                "turn"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "battle-round condition",
+          "description": "[clock] The battle round is within [min, max].",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "battle-round"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "minProperties": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "rule-active condition",
+          "description": "[army] This army or detachment rule is active now (a doctrine, Waaagh!, a pact).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "rule-active"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "rule": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "rule"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "has-keyword condition",
+          "description": "[identity] The subject carries every keyword in all_of and at least one in any_of (or the keyword `chosen_by` an ability had the player pick). Designations (RILED UP, SPOTTED) are `designated`, not keywords.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "has-keyword"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "all_of": {
+                  "$ref": "#/$defs/keyword-list"
+                },
+                "any_of": {
+                  "$ref": "#/$defs/keyword-list"
+                },
+                "chosen_by": {
+                  "$ref": "#/$defs/entity-id",
+                  "description": "The keyword this ability had the player pick (at the start of the battle), rather than a fixed keyword."
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "all_of"
+                  ]
+                },
+                {
+                  "required": [
+                    "any_of"
+                  ]
+                },
+                {
+                  "required": [
+                    "chosen_by"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "owned-by condition",
+          "description": "[identity] The subject belongs to this player.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "owned-by"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "owner": {
+                  "enum": [
+                    "friendly",
+                    "enemy"
+                  ]
+                }
+              },
+              "required": [
+                "owner"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "has-ability condition",
+          "description": "[identity] The subject has this ability (Deep Strike, Oath of Moment, a Discipline).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "has-ability"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "ability": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "ability"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "same-unit condition",
+          "description": "[identity] The subject is the same unit as `as` (not(same-unit) is 'another unit').",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "same-unit"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "as": {
+                  "$ref": "#/$defs/unit-ref"
+                }
+              },
+              "required": [
+                "as"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "attachment condition",
+          "description": "[composition] leading: the subject model is leading a unit (matching `with`, if given). led: the subject unit is led by a Leader matching `with`. attached: the subject is part of an attached unit.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "attachment"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "role": {
+                  "enum": [
+                    "leading",
+                    "led",
+                    "attached"
+                  ]
+                },
+                "with": {
+                  "$ref": "#/$defs/unit-filter"
+                }
+              },
+              "required": [
+                "role"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "strength condition",
+          "description": "[composition] The subject is below its Starting Strength, or below Half-strength.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "strength"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "below": {
+                  "enum": [
+                    "starting",
+                    "half"
+                  ]
+                }
+              },
+              "required": [
+                "below"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "model-count condition",
+          "description": "[composition] The subject has this many models (with `keyword`, if given).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "model-count"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "keyword": {
+                  "$ref": "#/$defs/keyword"
+                },
+                "min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "min"
+                  ]
+                },
+                {
+                  "required": [
+                    "max"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "model-profile condition",
+          "description": "[composition] The subject model uses this datasheet model profile (Szarekh, not a Triarchal Menhir).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "model-profile"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "profile": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "wounds condition",
+          "description": "[composition] lost: the subject has lost wounds. remaining_max: it has at most this many left. damaged: it is in its datasheet's Damaged bracket.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "wounds"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "lost": {
+                  "const": true
+                },
+                "remaining_max": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "damaged": {
+                  "const": true
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "lost"
+                  ]
+                },
+                {
+                  "required": [
+                    "remaining_max"
+                  ]
+                },
+                {
+                  "required": [
+                    "damaged"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "loadout condition",
+          "description": "[composition] Each model (with model_keyword, if given) carries identical weapons of this kind.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "loadout"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "model_keyword": {
+                  "$ref": "#/$defs/keyword"
+                },
+                "uniform": {
+                  "enum": [
+                    "ranged",
+                    "melee"
+                  ]
+                }
+              },
+              "required": [
+                "uniform"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "unit-state condition",
+          "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "unit-state"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "state": {
+                  "$ref": "#/$defs/unit-state"
+                },
+                "with": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "at": {
+                  "enum": [
+                    "now",
+                    "phase-start",
+                    "turn-start"
+                  ]
+                }
+              },
+              "required": [
+                "state"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "eligible condition",
+          "description": "[state] The subject is eligible to do this. be-selected: eligible for `source_ability`'s selection.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "eligible"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "to": {
+                  "enum": [
+                    "shoot",
+                    "declare-charge",
+                    "fight",
+                    "start-action",
+                    "be-selected"
+                  ]
+                },
+                "source_ability": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "ability_id": {
+                      "$ref": "#/$defs/entity-id"
+                    },
+                    "owner": {
+                      "enum": [
+                        "friendly",
+                        "enemy"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ability_id"
+                  ]
+                },
+                "at": {
+                  "enum": [
+                    "now",
+                    "opponents-previous-turn-end"
+                  ]
+                }
+              },
+              "required": [
+                "to"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "happened condition",
+          "description": "[history] An event happened within `window`: the subject did it, to the object, matching the filter, at least count_min times (default 1).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "happened"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "$ref": "#/$defs/game-event"
+                },
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "object": {
+                  "$ref": "#/$defs/event-target"
+                },
+                "filter": {
+                  "$ref": "#/$defs/event-filter"
+                },
+                "window": {
+                  "$ref": "#/$defs/history-window"
+                },
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "count_max": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "proximity": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "of": {
+                      "$ref": "#/$defs/unit-ref"
+                    },
+                    "range": {
+                      "$ref": "#/$defs/range-ref"
+                    }
+                  },
+                  "required": [
+                    "range"
+                  ]
+                }
+              },
+              "required": [
+                "event",
+                "window"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "happened-compare condition",
+          "description": "[history] Compares how many times two events happened (mission cards).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "happened-compare"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "left": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "event": {
+                      "$ref": "#/$defs/game-event"
+                    },
+                    "subject": {
+                      "$ref": "#/$defs/unit-ref"
+                    },
+                    "object": {
+                      "$ref": "#/$defs/event-target"
+                    },
+                    "filter": {
+                      "$ref": "#/$defs/event-filter"
+                    },
+                    "window": {
+                      "$ref": "#/$defs/history-window"
+                    }
+                  },
+                  "required": [
+                    "event",
+                    "window"
+                  ]
+                },
+                "comparison": {
+                  "enum": [
+                    "greater-than",
+                    "greater-or-equal"
+                  ]
+                },
+                "right": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "event": {
+                          "$ref": "#/$defs/game-event"
+                        },
+                        "subject": {
+                          "$ref": "#/$defs/unit-ref"
+                        },
+                        "object": {
+                          "$ref": "#/$defs/event-target"
+                        },
+                        "filter": {
+                          "$ref": "#/$defs/event-filter"
+                        },
+                        "window": {
+                          "$ref": "#/$defs/history-window"
+                        }
+                      },
+                      "required": [
+                        "event",
+                        "window"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "pool"
+                      ],
+                      "properties": {
+                        "pool": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "description": "The current value of a resource pool (a pledged number)."
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "left",
+                "comparison",
+                "right"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "within condition",
+          "description": "[position] The subject is within `range` of `of`. models: every means every model of the subject; wholly means wholly within. `at` reads the position at an earlier point.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "within"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "of": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/unit-ref"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "objective": {
+                          "$ref": "#/$defs/objective-filter"
+                        }
+                      },
+                      "required": [
+                        "objective"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "marker": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "marker"
+                      ]
+                    },
+                    {
+                      "const": "battlefield-edge"
+                    }
+                  ]
+                },
+                "range": {
+                  "$ref": "#/$defs/range-ref"
+                },
+                "wholly": {
+                  "const": true
+                },
+                "models": {
+                  "enum": [
+                    "any",
+                    "every"
+                  ]
+                },
+                "at": {
+                  "enum": [
+                    "now",
+                    "phase-start"
+                  ]
+                },
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "of"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "in-region condition",
+          "description": "[position] The subject is inside a region (wholly, if set).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "in-region"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "region": {
+                  "$ref": "#/$defs/region-ref"
+                },
+                "wholly": {
+                  "const": true
+                },
+                "models": {
+                  "enum": [
+                    "any",
+                    "every"
+                  ]
+                }
+              },
+              "required": [
+                "region"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "closest condition",
+          "description": "[position] The subject is the closest of `among` to `to` (default the attacker), within `range` if given.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "closest"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "among": {
+                  "oneOf": [
+                    {
+                      "const": "eligible-targets"
+                    },
+                    {
+                      "$ref": "#/$defs/unit-filter"
+                    }
+                  ]
+                },
+                "to": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "range": {
+                  "$ref": "#/$defs/range-ref"
+                }
+              },
+              "required": [
+                "among"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "controls condition",
+          "description": "[board] A player (default you) controls objectives matching the filter: at least count_min (default 1), at most count_max. compare: more-than-opponent means more objectives than the opponent.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "controls"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "by": {
+                  "enum": [
+                    "friendly",
+                    "enemy"
+                  ]
+                },
+                "objective": {
+                  "$ref": "#/$defs/objective-filter"
+                },
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "count_max": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "compare": {
+                  "const": "more-than-opponent"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "attack-is condition",
+          "description": "[attack] The attack being resolved matches every filter.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "attack-is"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "attack_type": {
+                  "enum": [
+                    "ranged",
+                    "melee",
+                    "psychic"
+                  ]
+                },
+                "shooting_type": {
+                  "enum": [
+                    "normal",
+                    "assault",
+                    "close-quarters",
+                    "indirect",
+                    "snap"
+                  ]
+                },
+                "fight_type": {
+                  "enum": [
+                    "normal",
+                    "overrun"
+                  ]
+                },
+                "weapon_keyword": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "weapon_name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "all_target_same_unit": {
+                  "const": true
+                }
+              },
+              "minProperties": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "attack-compare condition",
+          "description": "[attack] Compares a stat of one side of the attack with a stat of the other, or with a value.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "attack-compare"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "left": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "of": {
+                      "enum": [
+                        "attacker",
+                        "defender"
+                      ]
+                    },
+                    "stat": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reduce": {
+                      "enum": [
+                        "max",
+                        "min"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "of",
+                    "stat"
+                  ]
+                },
+                "comparison": {
+                  "enum": [
+                    "greater-than",
+                    "less-than",
+                    "equal-to",
+                    "greater-or-equal",
+                    "less-or-equal"
+                  ]
+                },
+                "right": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "of": {
+                          "enum": [
+                            "attacker",
+                            "defender"
+                          ]
+                        },
+                        "stat": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "reduce": {
+                          "enum": [
+                            "max",
+                            "min"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "of",
+                        "stat"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "left",
+                "comparison",
+                "right"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "roll-result condition",
+          "description": "[attack] A roll came out this way.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "roll-result"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "roll": {
+                  "$ref": "#/$defs/roll-kind"
+                },
+                "result": {
+                  "$ref": "#/$defs/roll-outcome"
+                },
+                "source": {
+                  "$ref": "#/$defs/event-bound-reference"
+                }
+              },
+              "required": [
+                "roll",
+                "result"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "visible condition",
+          "description": "[visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "visible"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "to": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "fully": {
+                  "const": true
+                },
+                "blocked_by": {
+                  "$ref": "#/$defs/unit-ref",
+                  "description": "The view is blocked by this unit: the subject is not (fully) visible to `to` because of it."
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "designated condition",
+          "description": "[designation] The subject carries this designation. With count_min/count_max, counts how many units or objectives carry it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "designated"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/unit-ref"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "objective": {
+                          "$ref": "#/$defs/objective-filter"
+                        }
+                      },
+                      "required": [
+                        "objective"
+                      ]
+                    }
+                  ]
+                },
+                "tag": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "count_max": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "tag"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "resource condition",
+          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "resource"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "pool": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "at_least": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "at_most": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "below_max": {
+                  "const": true
+                },
+                "source_ability": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "ability_id": {
+                      "$ref": "#/$defs/entity-id"
+                    },
+                    "owner": {
+                      "enum": [
+                        "friendly",
+                        "enemy"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ability_id"
+                  ]
+                },
+                "at": {
+                  "enum": [
+                    "now",
+                    "opponents-previous-turn-end"
+                  ]
+                }
+              },
+              "required": [
+                "pool"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "operation-markers condition",
+          "description": "[board] Mission: operation markers on the battlefield.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "operation-markers"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "side": {
+                  "enum": [
+                    "friendly",
+                    "opponent"
+                  ]
+                },
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "count_max": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "friendly_unit_in_same_terrain_area": {
+                  "const": true
+                },
+                "no_enemy_in_terrain_area": {
+                  "const": true
+                },
+                "within_range_of": {
+                  "const": "opponent-home-objective"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "engagement-fronts condition",
+          "description": "[board] Mission: you are engaged on at least count_min fronts.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "engagement-fronts"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "count_min"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "destroyed-while-on-objective condition",
+          "description": "[board] Mission: enemy units destroyed on, or by a unit on, an objective.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "destroyed-while-on-objective"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "objective_role": {
+                  "enum": [
+                    "central",
+                    "expansion"
+                  ]
+                },
+                "destroyer_on_objective": {
+                  "const": true
+                },
+                "victim_on_objective": {
+                  "const": true
+                },
+                "victim_started_turn_on_objective": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "destroyed-in-tagged-terrain condition",
+          "description": "[board] Mission: enemy units destroyed in (or that started the turn in) designated terrain.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "destroyed-in-tagged-terrain"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count_min": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "tag": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "at_start_of_turn": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "terrain-area-control condition",
+          "description": "[board] Mission: you control this terrain area with at least min_models models.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "terrain-area-control"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "footprint_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "min_models": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "footprint_ref"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "compound-condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operator",
+            "operands"
+          ],
+          "properties": {
+            "operator": {
+              "enum": [
+                "and",
+                "or"
+              ]
+            },
+            "operands": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/condition-node"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operator",
+            "operands"
+          ],
+          "properties": {
+            "operator": {
+              "const": "not"
+            },
+            "operands": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {
+                "$ref": "#/$defs/condition-node"
+              }
+            }
+          }
+        }
+      ]
+    },
     "event-bound-reference": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "References a game-object bound to a named event variable by a sibling trigger (e.g. `binds_event_variable` on a resource-action-menu action's `when`, or any future producer of a bound event-variable). `event_var` is an internal linking id and MUST NOT be rendered to players — the describer always renders a generic relationship phrase instead of the id string. Reusable across any historical-relation condition that needs to reference a specific bound game-object rather than 'any unit of a kind'. Consumed today by `unit-was-in-engagement-range-of`'s `object` parameter: { \"type\": \"unit-was-in-engagement-range-of\", \"parameters\": { \"subject\": \"selected-friendly-unit\", \"object\": { \"event_var\": \"<name>\" }, \"snapshot\": \"phase-start\" } } tests whether the selected friendly unit was within Engagement Range of the game-object bound to `object.event_var`, snapshotted at the start of the current phase — no game phase is assumed. `snapshot` is currently only `phase-start`; the shape leaves room for future historical points (e.g. turn-start) without a new condition type.",
+      "required": [
+        "event_var"
+      ],
       "properties": {
         "event_var": {
           "type": "string",
           "minLength": 1
         }
       },
-      "required": [
-        "event_var"
-      ]
+      "$comment": "A game object a sibling trigger bound with binds_event_variable. event_var is an internal linking id and is never rendered."
     },
-    "simple-condition": {
-      "type": "object",
-      "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Combat-reactive predicate: `was-hit-by-attack` { subject?: 'self'|'target' (default 'self'), attack_type?: 'melee'|'ranged', weapon_name?: string, count_min?: int (default 1) } — the named unit was hit by at least count_min attacks this phase (distinct from `has-lost-wounds`, which fires only when a wound got through — a hit that is saved or shrugged still satisfies this). `subject:'self'` = the bearer was hit (reactive defensive triggers); `subject:'target'` = the unit the bearer attacked was hit (offensive follow-ups, e.g. a debuff applied to a unit the bearer's named weapon hit). Optional `attack_type`/`weapon_name` narrow which attacks count. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'decoyed'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'condemned'|'spotted'|'surveilled', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'left-battlefield-this-turn'|'this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with an event window — Punishment scores when a condemned unit was destroyed or left the battlefield this turn; Surveil the Foe scores on units tagged this turn). `terrain-has-tag` { tag: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, victim_started_turn_on_objective?: bool, objective_role?: 'central', count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were within range of an objective at the moment of the kill; `victim_started_turn_on_objective` instead tests the victim's position at the start of the turn, and `objective_role` narrows which objectives count — Secure Asset's central-objective kill row). `destroyed-in-tagged-terrain` { tag?: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`). With `tag` omitted, any terrain area qualifies (Search and Scour). `operation-markers` { side?: 'friendly'|'opponent', count_min?: int, count_max?: int, within_range_of?: 'opponent-home-objective', friendly_unit_in_same_terrain_area?: bool, no_enemy_in_terrain_area?: bool } — counts operation markers on the battlefield (side omitted counts both sides' markers); count_max: 0 is 'none remain', count_min == count_max == 1 is 'exactly one'; the terrain-area flags add the co-location proviso used by Locate and Deny / Extract Relic ('one of your units is within the same terrain area as that marker, and no enemy units are within it'). Combat/structural predicates: `attack-stat-compare` { attacker_stat: 'S'|'A'|'AP'|'D', comparison: 'greater-than'|'less-than'|'greater-or-equal'|'less-or-equal'|'equal', target_stat: 'T'|'Sv'|'W'|'OC' } — compares a characteristic of the incoming attack to a characteristic of the target unit (e.g. attack Strength greater than the unit's Toughness). `made-ingress-move-this-turn` {} — the named unit arrived from Reserves / made an ingress (Deep Strike-style set-up) move this turn (parallels charged-this-turn / advanced-this-turn). `wounds-remaining-at-or-below` { threshold: int } — the bearer model currently has `threshold` or fewer wounds remaining; the standard way to model a datasheet **Damaged profile** bracket ('while this model has 1-N wounds remaining, …'), used as the condition of a conditional-effect whose effect is the bracket's penalty (e.g. -1 to Hit rolls, reduced Objective Control). Distinct from `has-lost-wounds` (binary: any wound lost) and `unit-below-half-strength` (model COUNT in a multi-model unit, not a single model's wounds). `token-count-at-or-above` { pool_id: string, threshold: int } — the bearer's named pooled resource currently holds at least `threshold` tokens; the standard threshold-unlock gate for pooled-resource economies ('while this unit has 3+ Pain tokens, …'), used as the condition of a conditional-effect. `of` names the subject explicitly; see its own $comment.",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "phase-is",
-            "timing-is",
-            "player-turn-is",
-            "army-faction-is",
-            "unit-below-starting-strength",
-            "unit-below-half-strength",
-            "unit-has-keyword",
-            "unit-within-range-of",
-            "model-is-leader",
-            "target-has-keyword",
-            "charged-this-turn",
-            "advanced-this-turn",
-            "remained-stationary",
-            "is-battle-shocked",
-            "has-lost-wounds",
-            "wounds-remaining-at-or-below",
-            "was-hit-by-attack",
-            "wounds-lost-from-attack",
-            "opponent-unit-within-range",
-            "within-range-of-objective",
-            "attack-is-type",
-            "has-fought-this-phase",
-            "destroyed-by-attack-type",
-            "controls-objective",
-            "is-attached",
-            "terrain-area-control",
-            "region-membership",
-            "engagement-state",
-            "territory-control",
-            "fights-first",
-            "disposition-matches",
-            "units-destroyed",
-            "units-destroyed-comparison",
-            "objective-majority",
-            "action-completed",
-            "objective-has-tag",
-            "unit-has-tag",
-            "terrain-has-tag",
-            "new-objective-controlled",
-            "engagement-fronts",
-            "destroyed-while-on-objective",
-            "destroyed-in-tagged-terrain",
-            "operation-markers",
-            "attack-stat-compare",
-            "made-ingress-move-this-turn",
-            "disembarked-from-transport",
-            "faction-rule-active",
-            "battle-round",
-            "token-count-at-or-above",
-            "unit-was-in-engagement-range-of",
-            "unit-model-count",
-            "uniform-ranged-loadout",
-            "all-attacks-target-same-unit",
-            "target-is-visible",
-            "ability-window-capacity",
-            "candidate-eligible-in-ability-window",
-            "unit-is-led-by",
-            "on-battlefield",
-            "target-within-half-weapon-range",
-            "has-destroyed",
-            "roll-succeeded",
-            "unit-selected-to-shoot-this-phase",
-            "unit-selected-to-move-this-phase",
-            "eligible-to-shoot",
-            "selection-has-keyword",
-            "target-of-triggering-charge",
-            "every-model-within-range-of-bearer",
-            "event-source-is-bearer-unit",
-            "event-source-is-attached-unit",
-            "miracle-die-generation-reason",
-            "miracle-die-generation-timing",
-            "destroyed-event-within-range",
-            "destroyed-by-friendly-unit"
-          ],
-          "description": " target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective."
+    "event-target": {
+      "description": "What the event was aimed at: a unit, or (for actions) an objective or terrain area.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/unit-ref"
         },
-        "of": {
-          "type": "string",
-          "enum": [
-            "bearer",
-            "unit",
-            "led-unit",
-            "attacker",
-            "defender",
-            "target",
-            "friendly",
-            "enemy"
-          ],
-          "$comment": "The actor or state holder whose condition is tested. Optional so legacy condition records remain valid. Supported only for condition types whose describers resolve this field; it takes precedence over legacy implicit or parameter subjects."
-        },
-        "parameters": {
+        {
           "type": "object",
-          "additionalProperties": true,
-          "$comment": "For `was-hit-by-attack`, optional `source` is an event-bound-reference supplied by the sibling trigger and optional `window` may be `just-finished-shooting-sequence`; these fields keep source-sensitive predicates reusable without closing the shared parameter bag."
+          "additionalProperties": false,
+          "required": [
+            "objective"
+          ],
+          "properties": {
+            "objective": {
+              "$ref": "#/$defs/objective-filter"
+            }
+          }
         },
-        "negated": {
-          "type": "boolean",
-          "default": false
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "terrain_area"
+          ],
+          "properties": {
+            "terrain_area": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "territory": {
+                  "enum": [
+                    "your-territory",
+                    "enemy-territory",
+                    "no-mans-land"
+                  ]
+                }
+              }
+            }
+          }
         }
-      },
-      "required": [
-        "type"
-      ]
-    },
-    "compound-condition": {
-      "type": "object",
-      "properties": {
-        "operator": {
-          "type": "string",
-          "enum": [
-            "and",
-            "or",
-            "not"
-          ]
-        },
-        "operands": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/condition-node"
-          },
-          "minItems": 1
-        }
-      },
-      "required": [
-        "operator",
-        "operands"
       ]
     },
     "condition": {
-      "title": "Ability Condition",
+      "title": "Ability DSL condition",
+      "description": "A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.",
       "$ref": "#/$defs/condition-node"
     },
     "effect-node": {
@@ -6015,87 +7765,8 @@
       ]
     },
     "resource-action-menu-trigger": {
-      "type": "object",
-      "additionalProperties": false,
-      "$comment": "Same shape as ability.schema.json#/$defs/trigger, plus an optional `binds_event_variable` naming the specific game-object this trigger's `event` matched (e.g. the enemy unit that just performed the triggering Fall Back move), so a sibling `eligibility.requires` predicate can test a historical relation against that SAME bound object rather than 'some enemy unit'. Local to resource-action-menu actions pending a general home for event-variable binding on the shared trigger $def.",
-      "properties": {
-        "event": {
-          "$ref": "#/$defs/game-event"
-        },
-        "subject": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "friendly-unit",
-            "enemy-unit",
-            "any-unit",
-            "model-in-bearer"
-          ]
-        },
-        "proximity": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "of": {
-              "type": "string",
-              "enum": [
-                "self",
-                "bearer",
-                "attached-unit"
-              ]
-            },
-            "range": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
-          "required": [
-            "range"
-          ]
-        },
-        "move_types": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "advance",
-              "fall-back",
-              "charge"
-            ]
-          }
-        },
-        "condition": {
-          "$ref": "#/$defs/condition"
-        },
-        "optional": {
-          "type": "boolean",
-          "default": false
-        },
-        "cost": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "cp": {
-              "type": "integer",
-              "minimum": 0
-            }
-          }
-        },
-        "window": {
-          "type": "string"
-        },
-        "binds_event_variable": {
-          "type": "string",
-          "minLength": 1,
-          "$comment": "Names the triggering event's bound object (e.g. 'triggering-enemy') for later reference by this action's eligibility.requires predicates. Purely an internal reference id; NEVER rendered to players."
-        }
-      },
-      "required": [
-        "event"
-      ]
+      "$ref": "#/$defs/trigger",
+      "$comment": "A resource-action-menu action's `when` is an ordinary trigger; binds_event_variable names the object it matched for a sibling eligibility predicate."
     },
     "named-region-ref": {
       "type": "object",
@@ -6361,8 +8032,7 @@
             },
             "canonical_condition_ids": {
               "const": [
-                "timing-is",
-                "objective-majority"
+                "controls"
               ]
             }
           },

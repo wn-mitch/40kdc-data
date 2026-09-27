@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -105,9 +109,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "AFFLICTED"
+          "subject": "defender",
+          "tag": "AFFLICTED"
         }
       },
       "effect": {
@@ -257,7 +262,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -332,9 +341,11 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PSYKER"
+              "all_of": [
+                "PSYKER"
+              ]
             }
           },
           "effect": {
@@ -427,7 +438,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -462,7 +477,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -600,8 +619,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -704,7 +725,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -775,7 +800,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -837,7 +866,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -932,7 +965,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1173,8 +1210,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -1315,7 +1354,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1424,8 +1467,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -1515,7 +1560,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-battle-round"
+      "event": "round-started"
     }
   },
   {
@@ -1688,21 +1733,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -1952,9 +1990,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "CHARACTER"
+          "subject": "defender",
+          "all_of": [
+            "CHARACTER"
+          ]
         }
       },
       "effect": {
@@ -2038,7 +2079,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "reinforcements",
+      "event": "set-up",
+      "filter": {
+        "from": "reserves"
+      },
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2119,10 +2163,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within-range-of-objective"
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "controls-objective"
+            "type": "controls"
           }
         ]
       },
@@ -2245,7 +2295,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "targeting-permission",
@@ -2284,21 +2338,31 @@
         "operator": "and",
         "operands": [
           {
-            "type": "disposition-matches",
+            "type": "owned-by",
             "parameters": {
-              "disposition": "enemy"
+              "owner": "enemy"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "Arcane Fire"
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapon_name": "Arcane Fire"
+              },
+              "window": "event"
             }
           }
         ]
@@ -2338,7 +2402,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2391,10 +2455,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -2509,10 +2579,16 @@
             }
           },
           {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -2564,7 +2640,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
@@ -2597,7 +2677,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -2630,7 +2714,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -2907,34 +2995,30 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-within-range-of",
+            "type": "closest",
             "parameters": {
-              "range": 18,
-              "target_type": "closest-eligible"
+              "subject": "defender",
+              "among": "eligible-targets",
+              "range": {
+                "inches": 18
+              }
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -2965,8 +3049,11 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "before-wound-roll",
-      "subject": "bearer"
+      "event": "before-roll",
+      "subject": "this-model",
+      "filter": {
+        "roll": "wound"
+      }
     },
     "unit_ids": [
       "chaos-predator-annihilator"
@@ -3123,9 +3210,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "FLY"
+          "subject": "defender",
+          "all_of": [
+            "FLY"
+          ]
         }
       },
       "effect": {
@@ -3262,15 +3352,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "THOUSAND SONS"
+              "all_of": [
+                "THOUSAND SONS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -3420,8 +3514,11 @@
       ]
     },
     "trigger": {
-      "event": "ritual-manifested",
-      "subject": "self"
+      "event": "used",
+      "filter": {
+        "kind": "ritual",
+        "result": "success"
+      }
     }
   },
   {
@@ -4228,8 +4325,7 @@
                 "event": "phase-start",
                 "evaluation": "snapshot-once",
                 "canonical_condition_ids": [
-                  "timing-is",
-                  "objective-majority"
+                  "controls"
                 ]
               },
               "expiry": {
@@ -4251,8 +4347,7 @@
                 "event": "phase-start",
                 "evaluation": "snapshot-once",
                 "canonical_condition_ids": [
-                  "timing-is",
-                  "objective-majority"
+                  "controls"
                 ]
               },
               "expiry": {
@@ -4280,16 +4375,17 @@
             "relation": "wholly-within"
           },
           "qualified_condition": {
-            "type": "region-membership",
-            "state_ref": {
-              "region_id": "flow-of-magic",
-              "owner_faction": "thousand-sons"
-            },
-            "unit_scope": "model",
-            "relation": "wholly-within",
-            "canonical_condition_ids": [
-              "terrain-area-control"
-            ]
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-model",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
           },
           "default_branch": {
             "source": {
@@ -4372,9 +4468,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "terrain-area-control",
+                "type": "in-region",
                 "parameters": {
-                  "area": "flow-of-magic"
+                  "region": {
+                    "rule_region": {
+                      "region_id": "flow-of-magic",
+                      "owner_faction": "thousand-sons"
+                    }
+                  }
                 }
               }
             ]
@@ -4393,9 +4494,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "terrain-area-control",
+            "type": "in-region",
             "parameters": {
-              "area": "flow-of-magic"
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              }
             }
           },
           "effect": {
@@ -4434,9 +4540,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "terrain-area-control",
+        "type": "in-region",
         "parameters": {
-          "area": "flow-of-magic"
+          "region": {
+            "rule_region": {
+              "region_id": "flow-of-magic",
+              "owner_faction": "thousand-sons"
+            }
+          }
         }
       },
       "effect": {
@@ -4590,8 +4701,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-fought-this-phase",
-            "parameters": {}
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "window": "phase"
+            }
           }
         ]
       },
@@ -4604,9 +4721,9 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-has-keyword",
+                  "type": "designated",
                   "parameters": {
-                    "keyword": "wholly-within-flow-of-magic"
+                    "tag": "wholly-within-flow-of-magic"
                   }
                 }
               ]
@@ -4626,9 +4743,9 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "designated",
               "parameters": {
-                "keyword": "wholly-within-flow-of-magic"
+                "tag": "wholly-within-flow-of-magic"
               }
             },
             "effect": {
@@ -4697,9 +4814,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "RUBRIC MARINES"
+              "all_of": [
+                "RUBRIC MARINES"
+              ]
             }
           },
           "effect": {
@@ -4711,9 +4830,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "SCARAB OCCULT TERMINATORS"
+              "all_of": [
+                "SCARAB OCCULT TERMINATORS"
+              ]
             }
           },
           "effect": {
@@ -4763,10 +4884,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "terrain-area-control",
+        "type": "in-region",
         "parameters": {
-          "area": "flow-of-magic",
-          "relation": "wholly-within"
+          "region": {
+            "rule_region": {
+              "region_id": "flow-of-magic",
+              "owner_faction": "thousand-sons"
+            }
+          },
+          "wholly": true
         }
       },
       "effect": {
@@ -4857,9 +4983,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-lost-wounds",
+        "type": "wounds",
         "parameters": {
-          "wounds_remaining_max": 6
+          "subject": "this-model",
+          "lost": true,
+          "remaining_max": 6
         }
       },
       "effect": {
@@ -4908,30 +5036,44 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "SCINTILLATING LEGIONS"
+                  "all_of": [
+                    "SCINTILLATING LEGIONS"
+                  ]
                 }
               },
               {
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-within-range-of",
+                    "type": "within",
                     "parameters": {
-                      "target_type": "friendly",
-                      "keyword": "THOUSAND SONS",
-                      "range": 6,
-                      "visible": true
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "THOUSAND SONS"
+                        ],
+                        "visible": true
+                      },
+                      "range": {
+                        "inches": 6
+                      }
                     }
                   },
                   {
-                    "type": "unit-within-range-of",
+                    "type": "within",
                     "parameters": {
-                      "target_type": "friendly",
-                      "keyword": "PSYKER",
-                      "range": 6,
-                      "visible": true
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "PSYKER"
+                        ],
+                        "visible": true
+                      },
+                      "range": {
+                        "inches": 6
+                      }
                     }
                   }
                 ]
@@ -4941,7 +5083,7 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "attack-is-type",
+              "type": "attack-is",
               "parameters": {
                 "attack_type": "ranged"
               }
@@ -4961,18 +5103,27 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "THOUSAND SONS"
+                  "all_of": [
+                    "THOUSAND SONS"
+                  ]
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "SCINTILLATING LEGIONS PSYKER",
-                  "range": 6,
-                  "visible": true
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "SCINTILLATING LEGIONS",
+                      "PSYKER"
+                    ],
+                    "visible": true
+                  },
+                  "range": {
+                    "inches": 6
+                  }
                 }
               }
             ]
@@ -5018,21 +5169,31 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "THOUSAND SONS",
-                  "range": 6,
-                  "visible": false
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "PSYKER",
-                  "range": 6,
-                  "visible": false
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
                 }
               }
             ]
@@ -5076,21 +5237,31 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-within-range-of",
+                    "type": "within",
                     "parameters": {
-                      "target_type": "friendly",
-                      "keyword": "THOUSAND SONS",
-                      "range": 6,
-                      "visible": false
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "THOUSAND SONS"
+                        ]
+                      },
+                      "range": {
+                        "inches": 6
+                      }
                     }
                   },
                   {
-                    "type": "unit-within-range-of",
+                    "type": "within",
                     "parameters": {
-                      "target_type": "friendly",
-                      "keyword": "PSYKER",
-                      "range": 6,
-                      "visible": false
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "PSYKER"
+                        ]
+                      },
+                      "range": {
+                        "inches": 6
+                      }
                     }
                   }
                 ]
@@ -5298,17 +5469,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "D",
+              "left": {
+                "of": "attacker",
+                "stat": "D"
+              },
               "comparison": "equal-to",
-              "value": 1
+              "right": {
+                "value": 1
+              }
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "RUBRICAE"
+              "subject": "defender",
+              "all_of": [
+                "RUBRICAE"
+              ]
             }
           }
         ]
@@ -6618,11 +6797,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -6720,7 +6905,10 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "is-battle-shocked"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               },
               "effect": {
                 "type": "mortal-wounds",
@@ -7248,7 +7436,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -7406,9 +7598,11 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "RUBRICAE"
+              "all_of": [
+                "RUBRICAE"
+              ]
             }
           },
           "effect": {
@@ -7451,7 +7645,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -7609,9 +7807,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           },
           "effect": {
@@ -7627,11 +7829,19 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
-            "negated": true,
-            "parameters": {
-              "subject": "target"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "within",
+                "parameters": {
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            ]
           },
           "effect": {
             "type": "re-roll",

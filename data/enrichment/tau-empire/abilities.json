@@ -89,7 +89,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -186,7 +190,13 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "stratagem-targeted"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "stratagem"
+      }
     }
   },
   {
@@ -246,11 +256,16 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-below-starting-strength",
-              "parameters": {
-                "subject": "target"
-              },
-              "negated": true
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "strength",
+                  "parameters": {
+                    "subject": "defender",
+                    "below": "starting"
+                  }
+                }
+              ]
             },
             "effect": {
               "type": "re-roll",
@@ -448,7 +463,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -546,7 +565,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "ranged"
         }
@@ -593,15 +612,16 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "GUIDED"
+              "tag": "GUIDED"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "SPOTTED"
+              "subject": "defender",
+              "tag": "SPOTTED"
             }
           }
         ]
@@ -702,7 +722,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1001,7 +1025,16 @@
             }
           },
           {
-            "type": "remained-stationary"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "remain-stationary"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -1112,9 +1145,10 @@
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "closest",
             "parameters": {
-              "target_qualifier": "closest-eligible-enemy-unit"
+              "subject": "defender",
+              "among": "eligible-targets"
             }
           }
         ]
@@ -1342,7 +1376,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -1694,10 +1732,18 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "within",
         "parameters": {
-          "target_type": "friendly-kroot-character",
-          "range": 12
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "KROOT",
+              "CHARACTER"
+            ]
+          },
+          "range": {
+            "inches": 12
+          }
         }
       },
       "effect": {
@@ -1761,7 +1807,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -1872,7 +1922,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -2016,7 +2070,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2209,7 +2267,7 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
@@ -2372,10 +2430,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "opponent-unit-within-range",
+        "type": "within",
         "parameters": {
-          "range_multiplier": 0.5,
-          "reference": "weapon-max-range"
+          "of": {
+            "owner": "enemy"
+          },
+          "range": "half-weapon"
         }
       },
       "effect": {
@@ -2422,9 +2482,12 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "FLY"
+              "subject": "defender",
+              "all_of": [
+                "FLY"
+              ]
             }
           }
         ]
@@ -2547,7 +2610,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -2623,8 +2690,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -2766,7 +2835,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2804,7 +2877,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -2953,7 +3030,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -2990,9 +3071,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "happened",
         "parameters": {
-          "phase": "reserves"
+          "event": "set-up",
+          "window": "event",
+          "subject": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "from": "reserves"
+          }
         }
       },
       "effect": {
@@ -3103,21 +3191,14 @@
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -3167,9 +3248,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "SPOTTED"
+          "subject": "defender",
+          "tag": "SPOTTED"
         }
       },
       "effect": {
@@ -3386,7 +3468,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -3430,7 +3516,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -3511,9 +3601,10 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "SPOTTED"
+              "subject": "defender",
+              "tag": "SPOTTED"
             }
           }
         ]
@@ -3602,7 +3693,11 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -3621,15 +3716,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "GUIDED"
+              "tag": "GUIDED"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "SPOTTED"
+              "subject": "defender",
+              "tag": "SPOTTED"
             }
           }
         ]
@@ -3953,10 +4049,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "enemy",
-              "range": 12
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 12
+              }
             }
           },
           "effect": {
@@ -3973,10 +4073,14 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "enemy",
-              "range": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           },
           "effect": {
@@ -4048,9 +4152,9 @@
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "designated",
                 "parameters": {
-                  "keyword": "GUIDED"
+                  "tag": "GUIDED"
                 }
               }
             ]
@@ -4096,7 +4200,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-starting-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -4111,7 +4218,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -4153,7 +4263,7 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "melee"
             }
@@ -4169,7 +4279,7 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
@@ -4274,21 +4384,22 @@
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "designated",
                 "parameters": {
-                  "keyword": "GUIDED"
+                  "tag": "GUIDED"
                 }
               },
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "ranged"
                 }
               },
               {
-                "type": "target-has-keyword",
+                "type": "designated",
                 "parameters": {
-                  "keyword": "SPOTTED"
+                  "subject": "defender",
+                  "tag": "SPOTTED"
                 }
               }
             ]
@@ -4344,21 +4455,13 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "KROOT"
-                }
-              },
-              {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "VESPID STINGWINGS"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "any_of": [
+                "KROOT",
+                "VESPID STINGWINGS"
+              ]
+            }
           },
           "effect": {
             "type": "ability-grant",
@@ -4377,23 +4480,29 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "GHOSTKEEL"
+                      "all_of": [
+                        "GHOSTKEEL"
+                      ]
                     }
                   },
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "BATTLESUIT"
+                      "all_of": [
+                        "BATTLESUIT"
+                      ]
                     }
                   }
                 ]
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "STEALTH BATTLESUITS"
+                  "all_of": [
+                    "STEALTH BATTLESUITS"
+                  ]
                 }
               }
             ]
@@ -4723,8 +4832,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "disembarked-from-transport",
-        "parameters": {}
+        "type": "happened",
+        "parameters": {
+          "event": "disembarked",
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -5338,9 +5450,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "SPOTTED"
+          "subject": "defender",
+          "tag": "SPOTTED"
         }
       },
       "effect": {
@@ -5358,9 +5471,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-has-keyword",
+              "type": "has-keyword",
               "parameters": {
-                "keyword": "MARKERLIGHT"
+                "all_of": [
+                  "MARKERLIGHT"
+                ]
               }
             },
             "effect": {
@@ -6121,7 +6236,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -6216,7 +6335,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -6812,7 +6935,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "ranged"
         }
@@ -6860,9 +6983,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within-range-of-objective",
+        "type": "within",
         "parameters": {
-          "subject": "target"
+          "subject": "defender",
+          "of": {
+            "objective": {}
+          },
+          "range": "objective-control"
         }
       },
       "effect": {
@@ -6906,15 +7033,16 @@
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "SPOTTED"
+              "subject": "defender",
+              "tag": "SPOTTED"
             }
           }
         ]

@@ -34,7 +34,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -117,10 +121,20 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": [
       {
-        "event": "normal-move"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        }
       },
       {
-        "event": "advances"
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        }
       }
     ]
   },
@@ -372,9 +386,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "LEGIONES DAEMONICA"
+          "subject": "defender",
+          "all_of": [
+            "LEGIONES DAEMONICA"
+          ]
         }
       },
       "effect": {
@@ -465,7 +482,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -511,15 +532,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NURGLE"
+              "all_of": [
+                "NURGLE"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -781,7 +806,10 @@
             }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -969,7 +997,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1142,11 +1174,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "self",
-              "window": "phase",
-              "count_min": 1
+              "event": "destroyed",
+              "window": "event",
+              "object": "this-unit"
             }
           }
         ]
@@ -1162,9 +1194,11 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "PINK-HORROR"
+                  "all_of": [
+                    "PINK HORROR"
+                  ]
                 }
               },
               "effect": {
@@ -1179,9 +1213,11 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "BLUE-HORROR"
+                  "all_of": [
+                    "BLUE HORROR"
+                  ]
                 }
               },
               "effect": {
@@ -1208,7 +1244,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks"
+      "event": "attacks-resolved"
     }
   },
   {
@@ -1224,11 +1260,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
-        "parameters": {
-          "keyword": "PINK HORROR"
-        },
-        "negated": true
+        "operator": "not",
+        "operands": [
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "PINK HORROR"
+              ]
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -1262,7 +1304,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "resurrection",
@@ -1296,9 +1342,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "PSYKER"
+          "subject": "defender",
+          "all_of": [
+            "PSYKER"
+          ]
         }
       },
       "effect": {
@@ -1366,15 +1415,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "SLAANESH"
+              "all_of": [
+                "SLAANESH"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -1692,15 +1745,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TZEENTCH"
+              "all_of": [
+                "TZEENTCH"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -1828,7 +1885,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1902,15 +1963,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NURGLE"
+              "subject": "defender",
+              "all_of": [
+                "NURGLE"
+              ]
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "subject": "defender",
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -2027,15 +2094,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NURGLE"
+              "subject": "defender",
+              "all_of": [
+                "NURGLE"
+              ]
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "subject": "defender",
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -2162,15 +2235,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "KHORNE"
+              "all_of": [
+                "KHORNE"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -2263,7 +2340,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -2297,9 +2378,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-within-range-of",
+        "type": "in-region",
         "parameters": {
-          "target_type": "area-terrain"
+          "region": {
+            "terrain_area": {}
+          }
         }
       },
       "effect": {
@@ -2321,7 +2404,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-turn",
+      "event": "turn-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -2354,7 +2437,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -2451,7 +2538,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -2515,7 +2606,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2587,7 +2682,16 @@
             }
           },
           {
-            "type": "charged-this-turn"
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
           }
         ]
       },
@@ -2688,7 +2792,7 @@
         "effect": {
           "type": "conditional",
           "condition": {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "melee"
             }
@@ -2764,7 +2868,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2862,7 +2970,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -2924,7 +3036,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
@@ -2984,7 +3100,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -3083,7 +3203,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -3118,7 +3242,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -3206,7 +3334,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -3241,9 +3373,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "CHARACTER"
+          "subject": "defender",
+          "all_of": [
+            "CHARACTER"
+          ]
         }
       },
       "effect": {
@@ -3382,15 +3517,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "KHORNE"
+                  "all_of": [
+                    "KHORNE"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "LEGIONES DAEMONICA"
+                  "all_of": [
+                    "LEGIONES DAEMONICA"
+                  ]
                 }
               }
             ]
@@ -3466,7 +3605,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -3745,8 +3888,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           },
           "effect": {
             "type": "attack-restriction",
@@ -3820,7 +3965,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3933,7 +4082,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -3980,24 +4133,29 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "BEASTS OF NURGLE"
+              "all_of": [
+                "BEASTS OF NURGLE"
+              ]
             }
           },
           {
-            "type": "has-lost-wounds",
-            "parameters": {}
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-model",
+              "lost": true
+            }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "units-destroyed",
+                "type": "happened",
                 "parameters": {
-                  "side": "self",
-                  "window": "phase",
-                  "count_min": 1
+                  "event": "model-destroyed",
+                  "object": "this-model",
+                  "window": "phase"
                 }
               }
             ]
@@ -4025,7 +4183,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase"
+      "event": "phase-ended"
     }
   },
   {
@@ -4279,9 +4437,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "advanced-this-turn",
+        "type": "happened",
         "parameters": {
-          "move": "fall-back"
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "fall-back"
+            ]
+          },
+          "window": "turn"
         }
       },
       "effect": {
@@ -4382,9 +4546,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "advanced-this-turn",
+        "type": "happened",
         "parameters": {
-          "move": "advance"
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "window": "turn"
         }
       },
       "effect": {
@@ -4484,7 +4654,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -4720,8 +4899,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -4740,8 +4921,16 @@
       "duration": "phase"
     },
     "trigger": {
-      "event": "selected-to-fall-back",
-      "subject": "enemy-unit",
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "fall-back"
+        ]
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -4758,15 +4947,17 @@
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly-keyword",
-              "keywords": [
-                "LEGIONES DAEMONICA",
-                "MOUNTED"
-              ],
-              "range": "engagement",
-              "subject": "triggering-unit"
+              "subject": "event-subject",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEGIONES DAEMONICA",
+                  "MOUNTED"
+                ]
+              },
+              "range": "engagement"
             }
           }
         ]
@@ -4831,7 +5022,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -5098,17 +5298,25 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "AIRCRAFT"
+                  "subject": "recipient",
+                  "all_of": [
+                    "AIRCRAFT"
+                  ]
                 }
               }
             ]
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range_inches": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           }
         ]
@@ -5150,20 +5358,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "enemy",
-              "window": "this-phase",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "window": "phase"
             }
           },
           {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "controls-objective",
-            "parameters": {}
+            "type": "controls"
           }
         ]
       },
@@ -5181,7 +5395,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase"
+      "event": "phase-ended"
     }
   },
   {
@@ -5277,9 +5491,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "KHORNE"
+              "all_of": [
+                "KHORNE"
+              ]
             }
           },
           "effect": {
@@ -5308,9 +5524,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "TZEENTCH"
+              "all_of": [
+                "TZEENTCH"
+              ]
             }
           },
           "effect": {
@@ -5328,7 +5546,7 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "type": "attack-is-type",
+                  "type": "attack-is",
                   "parameters": {
                     "attack_type": "melee"
                   }
@@ -5349,19 +5567,27 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NURGLE"
+              "all_of": [
+                "NURGLE"
+              ]
             }
           },
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "attack-stat-compare",
+              "type": "attack-compare",
               "parameters": {
-                "attacker_stat": "S",
+                "left": {
+                  "of": "attacker",
+                  "stat": "S"
+                },
                 "comparison": "greater-than",
-                "target_stat": "T"
+                "right": {
+                  "of": "defender",
+                  "stat": "T"
+                }
               }
             },
             "effect": {
@@ -5378,9 +5604,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "SLAANESH"
+              "all_of": [
+                "SLAANESH"
+              ]
             }
           },
           "effect": {
@@ -5394,9 +5622,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "Undivided"
+              "all_of": [
+                "UNDIVIDED"
+              ]
             }
           },
           "effect": {
@@ -5412,8 +5642,11 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "type": "model-is-leader",
-                  "parameters": {}
+                  "type": "attachment",
+                  "parameters": {
+                    "subject": "this-model",
+                    "role": "leading"
+                  }
                 },
                 "effect": {
                   "type": "leadership-modifier",
@@ -5529,8 +5762,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn",
-        "parameters": {}
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -5587,15 +5828,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "NURGLE"
+              "subject": "defender",
+              "all_of": [
+                "NURGLE"
+              ]
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIONES DAEMONICA"
+              "subject": "defender",
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
             }
           }
         ]
@@ -5647,15 +5894,19 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "KHORNE"
+                  "all_of": [
+                    "KHORNE"
+                  ]
                 }
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "LEGIONES DAEMONICA"
+                  "all_of": [
+                    "LEGIONES DAEMONICA"
+                  ]
                 }
               }
             ]

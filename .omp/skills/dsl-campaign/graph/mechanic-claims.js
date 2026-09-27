@@ -116,9 +116,12 @@ export function buildMechanicRegistry({
   }
   const effectTypes = [...singleEffectTypes, ...terminalEffectTypes]
   const wrapperTypes = effectNodeTypes.filter(type => !MECHANIC_TERMINAL_EFFECT_TYPES.includes(type))
-  const conditionTypes = conditionSchema.$defs['simple-condition'].properties.type.enum
+  const conditionTypes = conditionSchema.$defs['simple-condition'].oneOf.map(variant => variant.properties.type.const)
   assertChildDescriptors(wrapperTypes)
-  const compoundTypes = conditionSchema.$defs['compound-condition'].properties.operator.enum
+  const compoundTypes = [...new Set(conditionSchema.$defs['compound-condition'].oneOf.flatMap(variant => {
+    const operator = variant.properties.operator
+    return operator.enum ?? [operator.const]
+  }))]
   const predicates = [
     ...effectTypes.map(type => `mechanic.effect.${type}`),
     ...conditionTypes.map(type => `mechanic.condition.${type}`),

@@ -144,8 +144,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within-range-of-objective",
-        "parameters": {}
+        "type": "within",
+        "parameters": {
+          "of": {
+            "objective": {}
+          },
+          "range": "objective-control"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -180,8 +185,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -218,8 +229,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -281,8 +298,13 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-enemy-unit-fires",
-      "subject": "enemy-unit"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
     },
     "effect": {
       "type": "movement-modifier",
@@ -315,8 +337,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "self"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     },
     "effect": {
       "type": "roll-modifier",
@@ -381,8 +407,10 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit"
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
     },
     "effect": {
       "type": "movement-modifier",
@@ -415,8 +443,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "stat-modifier",
@@ -451,8 +485,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "roll-modifier",
@@ -515,7 +555,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -624,7 +664,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -673,8 +713,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "sequence",
@@ -691,11 +737,17 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           },
           "effect": {
@@ -777,8 +829,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "stat-modifier",
@@ -879,8 +937,15 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "enemy-unit"
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     },
     "effect": {
       "type": "roll-modifier",
@@ -914,8 +979,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "stat-modifier",
@@ -950,8 +1021,13 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-enemy-unit-fires",
-      "subject": "enemy-unit"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
     },
     "effect": {
       "type": "ability-grant",
@@ -1099,7 +1175,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "operator": "and",
         "operands": [
@@ -1267,8 +1343,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "stat-modifier",
@@ -1319,27 +1401,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "DEATHWING"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "RAVENWING"
-                    }
-                  },
-                  {
-                    "type": "unit-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "any_of": [
+                    "DEATHWING",
+                    "RAVENWING",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           },
@@ -1391,8 +1460,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           "effect": {
             "type": "re-roll",
@@ -1428,8 +1502,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "stat-modifier",
@@ -1464,8 +1544,14 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -1502,17 +1588,29 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-targets-bearer",
-      "subject": "enemy-unit"
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
     },
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-stat-compare",
+        "type": "attack-compare",
         "parameters": {
-          "attacker_stat": "S",
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
           "comparison": "greater-than",
-          "target_stat": "T"
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
         }
       },
       "effect": {
@@ -1548,8 +1646,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "self"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -1632,8 +1734,13 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -2119,8 +2226,10 @@
         "operator": "not",
         "operands": [
           {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           }
         ]
       },
@@ -2218,8 +2327,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-below-starting-strength",
-            "parameters": {}
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
           },
           "effect": {
             "type": "roll-modifier",
@@ -2237,12 +2348,16 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-below-starting-strength",
-                "parameters": {}
+                "type": "strength",
+                "parameters": {
+                  "below": "starting"
+                }
               },
               {
-                "type": "is-battle-shocked",
-                "parameters": {}
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           },
@@ -2293,8 +2408,10 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "is-battle-shocked",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "battle-shocked"
+            }
           },
           "effect": {
             "type": "feel-no-pain",

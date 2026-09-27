@@ -17,7 +17,7 @@
             </profile>
             <profile name="Blood Surge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When damage is allocated, you may use this ability, during the Shooting phase, in the opponent's turn, while the model has lost wounds, until the end of the phase, the unit can make a Reactive move of up to D6+2" (Blood Surge).</characteristic>
+                <characteristic name="Description">When damage is allocated to an enemy unit, you may use this ability, during the Shooting phase, in the opponent's turn, while the model has lost wounds, until the end of the phase, the unit can make a Reactive move of up to D6+2" (Blood Surge).</characteristic>
               </characteristics>
             </profile>
             <profile name="Icon of Khorne" typeName="Abilities">

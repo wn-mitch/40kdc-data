@@ -209,7 +209,7 @@ describe("effectToBuffs: nested relationship containers", () => {
           recipient_filter: { required_keywords: ["ALLY"] },
           effect: {
             type: "conditional",
-            condition: { type: "attack-is-type", parameters: { attack_type: "ranged" } },
+            condition: { type: "attack-is", parameters: { attack_type: "ranged" } },
             effect: {
               type: "re-roll",
               target: "unit",
@@ -458,7 +458,7 @@ describe("effectToBuffs: compound", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "is-attached" },
+        condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } },
         effect: {
           type: "roll-modifier",
           target: "unit",
@@ -480,7 +480,10 @@ describe("effectToBuffs: compound", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "was-hit-by-attack", parameters: { subject: "self" } },
+        condition: {
+          type: "happened",
+          parameters: { event: "after-roll", object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" },
+        },
         effect: {
           type: "roll-modifier",
           target: "unit",
@@ -867,7 +870,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -883,7 +886,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -899,7 +902,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // false
-          { type: "is-attached" }, // unknown
+          { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, // unknown
         ],
       }),
       unitRule,
@@ -915,7 +918,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // true
-          { type: "is-attached" }, // unknown
+          { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, // unknown
         ],
       }),
       unitRule,
@@ -992,7 +995,7 @@ describe("effectToBuffs: compound conditions", () => {
               { type: "phase-is", parameters: { phase: "fight" } },
             ],
           },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -1005,7 +1008,7 @@ describe("effectToBuffs: compound conditions", () => {
 describe("effectToBuffs: timing-is condition", () => {
   const effect = {
     type: "conditional",
-    condition: { type: "timing-is", parameters: { timing: "end-of-phase" } },
+    condition: { type: "timing-is", parameters: { timing: "phase-ended" } },
     effect: {
       type: "roll-modifier",
       target: "unit",
@@ -1016,7 +1019,7 @@ describe("effectToBuffs: timing-is condition", () => {
   it("fires when context timing matches", () => {
     const result = effectToBuffs(effect, unitRule, {
       phase: "fight",
-      timing: "end-of-phase",
+      timing: "phase-ended",
     });
     expect(result.applied).toHaveLength(1);
   });
@@ -1024,7 +1027,7 @@ describe("effectToBuffs: timing-is condition", () => {
   it("drops cleanly when context timing differs", () => {
     const result = effectToBuffs(effect, unitRule, {
       phase: "fight",
-      timing: "start-of-phase",
+      timing: "phase-started",
     });
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([]);
@@ -1037,7 +1040,7 @@ describe("effectToBuffs: timing-is condition", () => {
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([]);
     expect(result.activatable).toHaveLength(1);
-    expect(result.activatable[0].id).toBe("fury@end-of-phase");
+    expect(result.activatable[0].id).toBe("fury@phase-ended");
     expect(result.activatable[0].buffs[0].contribution).toEqual({ type: "wound-mod", value: 1 });
   });
 });
@@ -1126,8 +1129,8 @@ describe("effectToBuffs: activatable gates", () => {
               condition: {
                 operator: "and",
                 operands: [
-                  { type: "target-has-keyword", parameters: { keyword: "Infantry" } },
-                  { type: "attack-is-type", parameters: { attack_type: "melee" } },
+                  { type: "has-keyword", parameters: { subject: "defender", all_of: ["INFANTRY"] } },
+                  { type: "attack-is", parameters: { attack_type: "melee" } },
                 ],
               },
               effect: {
@@ -1150,7 +1153,7 @@ describe("effectToBuffs: activatable gates", () => {
     });
     // The "vs Infantry, in the fight phase" gate rides on the buff so the
     // resolver applies it per-target rather than the lever vanishing.
-    expect(buff.applicableWhen).toEqual({ requiresTargetKeyword: "Infantry", phases: ["fight"] });
+    expect(buff.applicableWhen).toEqual({ requiresTargetKeyword: "INFANTRY", phases: ["fight"] });
   });
 
   it("a timing gate around a sequence yields one lever bundling its buffs", () => {
@@ -1158,7 +1161,7 @@ describe("effectToBuffs: activatable gates", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "timing-is", parameters: { timing: "start-of-phase" } },
+        condition: { type: "timing-is", parameters: { timing: "phase-started" } },
         effect: {
           type: "sequence",
           steps: [
@@ -1171,7 +1174,7 @@ describe("effectToBuffs: activatable gates", () => {
       { phase: "fight" },
     );
     expect(result.activatable).toHaveLength(1);
-    expect(result.activatable[0].id).toBe("fury@start-of-phase");
+    expect(result.activatable[0].id).toBe("fury@phase-started");
     expect(result.activatable[0].buffs.map((b) => b.contribution.type)).toEqual([
       "attacks-mod",
       "extra-keyword",
@@ -1190,7 +1193,7 @@ describe("effectToBuffs: activatable gates", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "timing-is", parameters: { timing: "on-destroyed" } },
+        condition: { type: "timing-is", parameters: { timing: "destroyed" } },
         effect: gate,
       },
       unitRule,
@@ -1304,7 +1307,7 @@ describe("effectToBuffs: charged-this-turn condition", () => {
   // Relentless Rage shape: charged this turn → +1 A, +2 S in melee.
   const relentlessRage = {
     type: "conditional",
-    condition: { type: "charged-this-turn" },
+    condition: { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } },
     effect: {
       type: "sequence",
       steps: [
@@ -1371,7 +1374,7 @@ describe("effectToBuffs: named activations", () => {
     const effect = {
       type: "named-effect",
       name: "Close Combat",
-      trigger: { event: "unit-selected-to-fight", condition: { type: "phase-is", parameters: { phase: "fight" } } },
+      trigger: { event: "selected", filter: { to: "fight" }, condition: { type: "phase-is", parameters: { phase: "fight" } } },
       effect: hit,
     };
     expect(effectToBuffs(effect, unitRule, ctx).activatable).toEqual([]);

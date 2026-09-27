@@ -77,7 +77,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -135,7 +139,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -392,7 +400,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -486,8 +498,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
@@ -590,7 +604,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -684,9 +702,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -695,9 +716,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -706,24 +730,45 @@
             "operator": "or",
             "operands": [
               {
-                "type": "destroyed-by-attack-type",
+                "type": "happened",
                 "parameters": {
-                  "attack_type": "melee"
+                  "event": "destroyed",
+                  "object": "event-object",
+                  "filter": {
+                    "attack_type": "melee"
+                  },
+                  "window": "event"
                 }
               },
               {
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "TYPHUS"
+                      "all_of": [
+                        "TYPHUS"
+                      ]
                     }
                   },
                   {
-                    "type": "destroyed-by-attack-type",
+                    "type": "happened",
                     "parameters": {
-                      "attack_type": "eater-plague"
+                      "event": "model-destroyed",
+                      "window": "event",
+                      "object": {
+                        "owner": "enemy",
+                        "level": "model"
+                      },
+                      "filter": {
+                        "kind": "ability",
+                        "id": "eater-plague-psychic",
+                        "by": {
+                          "all_of": [
+                            "TYPHUS"
+                          ]
+                        }
+                      }
                     }
                   }
                 ]
@@ -751,7 +796,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks"
+      "event": "attacks-resolved"
     }
   },
   {
@@ -792,7 +837,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -993,34 +1042,30 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-within-range-of",
+            "type": "closest",
             "parameters": {
-              "range": 18,
-              "target_type": "closest-eligible"
+              "subject": "defender",
+              "among": "eligible-targets",
+              "range": {
+                "inches": 18
+              }
             }
           },
           {
-            "type": "attack-is-type",
+            "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
             }
           },
           {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "defender",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
+            }
           }
         ]
       },
@@ -1051,8 +1096,11 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "before-wound-roll",
-      "subject": "bearer"
+      "event": "before-roll",
+      "subject": "this-model",
+      "filter": {
+        "roll": "wound"
+      }
     },
     "unit_ids": [
       "chaos-predator-annihilator"
@@ -1162,21 +1210,14 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "MONSTER"
-                    }
-                  },
-                  {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "VEHICLE"
-                    }
-                  }
-                ]
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "defender",
+                  "any_of": [
+                    "MONSTER",
+                    "VEHICLE"
+                  ]
+                }
               }
             ]
           }
@@ -1266,9 +1307,14 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "destroyed-by-attack-type",
+          "type": "happened",
           "parameters": {
-            "attack_type": "ranged"
+            "event": "destroyed",
+            "object": "event-object",
+            "filter": {
+              "attack_type": "ranged"
+            },
+            "window": "event"
           }
         },
         "effect": {
@@ -1277,9 +1323,10 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "target-has-keyword",
+                "type": "designated",
                 "parameters": {
-                  "keyword": "AFFLICTED"
+                  "subject": "defender",
+                  "tag": "AFFLICTED"
                 }
               },
               "effect": {
@@ -1304,9 +1351,10 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "target-has-keyword",
+                    "type": "designated",
                     "parameters": {
-                      "keyword": "AFFLICTED"
+                      "subject": "recipient",
+                      "tag": "AFFLICTED"
                     }
                   }
                 ]
@@ -1391,7 +1439,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "keyword-grant",
@@ -1527,7 +1579,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "resurrection",
@@ -1570,7 +1626,10 @@
             }
           },
           {
-            "type": "unit-below-half-strength"
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
           }
         ]
       },
@@ -1699,7 +1758,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
@@ -1756,7 +1819,10 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "deep-strike-setup"
+      "event": "set-up",
+      "filter": {
+        "from": "deep-strike"
+      }
     }
   },
   {
@@ -1781,7 +1847,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -1881,7 +1951,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -1915,7 +1989,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
+        "type": "strength",
+        "parameters": {
+          "below": "starting"
+        }
       },
       "effect": {
         "type": "leadership-modifier",
@@ -1981,9 +2058,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -1992,9 +2072,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -2016,8 +2099,10 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "is-battle-shocked",
-              "parameters": {}
+              "type": "unit-state",
+              "parameters": {
+                "state": "battle-shocked"
+              }
             },
             "effect": {
               "type": "roll-modifier",
@@ -2213,9 +2298,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "designated",
         "parameters": {
-          "keyword": "AFFLICTED"
+          "subject": "defender",
+          "tag": "AFFLICTED"
         }
       },
       "effect": {
@@ -2418,7 +2504,11 @@
     "ability_type": "core",
     "behavior": "reactive",
     "trigger": {
-      "event": "before-bearer-removed"
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
     }
   },
   {
@@ -2521,12 +2611,17 @@
         "operator": "and",
         "operands": [
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "AFFLICTED"
+              "subject": "defender",
+              "tag": "AFFLICTED"
             }
           }
         ]
@@ -2567,15 +2662,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "attack-is-type",
+            "type": "happened",
             "parameters": {
-              "attack_type": "plague-wind"
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapon_name": "Plague Wind"
+              },
+              "window": "event"
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "INFANTRY"
+              "subject": "defender",
+              "all_of": [
+                "INFANTRY"
+              ]
             }
           }
         ]
@@ -2601,7 +2706,7 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -2812,8 +2917,10 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     }
   },
@@ -2920,7 +3027,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "objective-control-modifier",
@@ -2990,7 +3101,11 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           }
         ]
       },
@@ -3073,12 +3188,17 @@
             }
           },
           {
-            "type": "is-attached"
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "AFFLICTED"
+              "subject": "defender",
+              "tag": "AFFLICTED"
             }
           }
         ]
@@ -3458,7 +3578,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-fought-this-phase"
+        "type": "happened",
+        "parameters": {
+          "event": "selected",
+          "filter": {
+            "to": "fight"
+          },
+          "window": "phase"
+        }
       },
       "effect": {
         "type": "ability-grant",
@@ -3895,7 +4022,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-lost-wounds"
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "lost": true
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -3940,22 +4071,33 @@
         "operator": "and",
         "operands": [
           {
-            "type": "controls-objective"
+            "type": "controls"
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "DEATH GUARD"
+              "all_of": [
+                "DEATH GUARD"
+              ]
             }
           },
           {
-            "type": "within-range-of-objective"
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "is-battle-shocked"
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
               }
             ]
           }
@@ -3987,7 +4129,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "end-of-phase",
+      "event": "phase-ended",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4021,17 +4163,25 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "PLAGUE LEGIONS"
+                  "all_of": [
+                    "PLAGUE LEGIONS"
+                  ]
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "DEATH GUARD",
-                  "within_inches": 7
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "DEATH GUARD"
+                    ]
+                  },
+                  "range": {
+                    "inches": 7
+                  }
                 }
               }
             ]
@@ -4050,17 +4200,25 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "DEATH GUARD"
+                  "all_of": [
+                    "DEATH GUARD"
+                  ]
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "PLAGUE LEGIONS",
-                  "within_inches": 7
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PLAGUE LEGIONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 7
+                  }
                 }
               }
             ]
@@ -4110,7 +4268,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-battle-round"
+      "event": "round-started"
     }
   },
   {
@@ -4135,10 +4293,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly",
-              "within_inches": 12
+              "of": {
+                "owner": "friendly"
+              },
+              "range": {
+                "inches": 12
+              }
             }
           }
         ]
@@ -4157,7 +4319,7 @@
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "start-of-battle-round"
+      "event": "round-started"
     }
   },
   {
@@ -4243,9 +4405,10 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "designated",
             "parameters": {
-              "keyword": "AFFLICTED"
+              "subject": "defender",
+              "tag": "AFFLICTED"
             }
           }
         ]
@@ -4256,7 +4419,10 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-below-half-strength"
+              "type": "strength",
+              "parameters": {
+                "below": "half"
+              }
             },
             "effect": {
               "type": "dice-gated",
@@ -4278,7 +4444,10 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-below-half-strength"
+                  "type": "strength",
+                  "parameters": {
+                    "below": "half"
+                  }
                 }
               ]
             },
@@ -4349,8 +4518,7 @@
     "ability_type": "unit",
     "behavior": "activated",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "self",
+      "event": "attacks-resolved",
       "condition": {
         "type": "phase-is",
         "parameters": {
@@ -4361,11 +4529,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "was-hit-by-attack",
+        "type": "happened",
         "parameters": {
-          "subject": "target",
-          "attack_type": "ranged",
-          "window": "just-finished-shooting-sequence"
+          "event": "after-roll",
+          "object": "defender",
+          "filter": {
+            "roll": "hit",
+            "result": "success",
+            "attack_type": "ranged"
+          },
+          "window": "event"
         }
       },
       "effect": {
@@ -4401,7 +4574,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "engagement-state",
+        "type": "unit-state",
         "parameters": {
           "state": "engaged"
         }

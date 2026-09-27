@@ -195,7 +195,7 @@ contents). Minimal valid add example:
   at the cost of overstating/understating the mechanic. The bar is *tortured-fit*:
   every existing shape must genuinely fail.
 - **Canonical levers are contractual.** A proposed shape must preserve any cruncher
-  lever the mechanic carries (charged-this-turn and friends); a shape that reads
+  lever the mechanic carries (the charged-this-turn `happened` form and friends); a shape that reads
   prettier but drops a lever is a regression, not a proposal.
 - **Cost calibration.** A new leaf costs a schema oneOf branch + four-language type
   regen + a describer arm (inline AND container) in each port + cruncher recursion
