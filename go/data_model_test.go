@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -550,5 +551,60 @@ func TestWeaponKeywordTargetGatesApplyInLinkedBuffAPI(t *testing.T) {
 	})
 	if hasKeywordBuff(excluded, "lethal-hits") {
 		t.Fatal("excluded target retained conditional Lethal Hits")
+	}
+}
+
+// TestUsageAndTriggerGatingMatchTheReference pins the five fabricated gating
+// abilities also pinned in tools/test/buff-gating.test.ts and the Python tests.
+func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
+	reroll := map[string]any{"type": "re-roll", "target": "unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}}
+	ability := func(id string, fields map[string]any) map[string]any {
+		out := map[string]any{"ability_id": id, "name": id, "faction_id": "orks", "effect": reroll}
+		for k, v := range fields {
+			out[k] = v
+		}
+		return out
+	}
+	raw := emptyRawData()
+	raw["abilities"] = []any{
+		ability("fixture-usage", map[string]any{"behavior": "passive", "usage": map[string]any{"frequency": "n-per-battle", "count": 1}}),
+		ability("fixture-stratagem", map[string]any{"ability_type": "stratagem", "behavior": "activated", "usage": map[string]any{"frequency": "once-per-turn"}}),
+		ability("fixture-moment", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "selected-to-shoot", "subject": "self"}, "usage": map[string]any{"frequency": "once-per-turn"}}),
+		ability("fixture-attack-step", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "before-hit-roll"}}),
+		ability("fixture-charge", map[string]any{"behavior": "reactive", "trigger": map[string]any{"event": "charge-move"}}),
+	}
+	ds := NewDataset(raw)
+	gated := func(id string, ctx map[string]any) (int, []string) {
+		view, ok := ds.Abilities.GetInFaction(id, "orks")
+		if !ok {
+			t.Fatalf("%s missing", id)
+		}
+		result := view.describeBuffs(map[string]any{"kind": "ability", "abilityId": id, "abilityKind": "unit"}, ctx, "attacker")
+		levers := []string{}
+		for _, lever := range result.activatable {
+			m, _ := asMap(lever)
+			levers = append(levers, getStr(m, "id"))
+		}
+		return len(result.applied), levers
+	}
+	fight := map[string]any{"phase": "fight"}
+	cases := []struct {
+		id      string
+		ctx     map[string]any
+		applied int
+		levers  string
+	}{
+		{"fixture-usage", fight, 0, "fixture-usage@n-per-battle"},
+		{"fixture-stratagem", fight, 1, ""},
+		{"fixture-moment", fight, 0, "fixture-moment@selected-to-shoot"},
+		{"fixture-attack-step", fight, 1, ""},
+		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": true}, 1, ""},
+		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": false}, 0, ""},
+	}
+	for _, c := range cases {
+		applied, levers := gated(c.id, c.ctx)
+		if applied != c.applied || strings.Join(levers, ",") != c.levers {
+			t.Fatalf("%s: applied %d levers %v, want %d %q", c.id, applied, levers, c.applied, c.levers)
+		}
 	}
 }

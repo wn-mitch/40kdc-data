@@ -81,8 +81,31 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 // attack, and an activated ability (a stratagem) is already opt-in, so neither is
 // gated.
 func triggerGated(behavior any, trigger any, effect any) any {
-	if behavior != "reactive" {
+	gated, _ := triggerGatedStep(behavior, trigger, effect)
+	return gated
+}
+
+// usageGated gates an ability's effect on its usage limit ("once per battle",
+// "once per turn"): using it is the player's choice, so its buffs are an opt-in
+// lever (<ability>@<frequency>). Called only when no trigger already gates the
+// effect. A stratagem is already opt-in.
+func usageGated(abilityType any, usage any, effect any) any {
+	u, ok := asMap(usage)
+	if effect == nil || !ok || u == nil || abilityType == "stratagem" {
 		return effect
+	}
+	frequency, ok := u["frequency"].(string)
+	if !ok {
+		return effect
+	}
+	return map[string]any{"type": "conditional", "condition": map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": frequency}}, "effect": effect}
+}
+
+// triggerGatedStep is triggerGated, also reporting whether a trigger gated the
+// effect (a usage limit then adds nothing).
+func triggerGatedStep(behavior any, trigger any, effect any) (any, bool) {
+	if behavior != "reactive" {
+		return effect, false
 	}
 	candidates, ok := trigger.([]any)
 	if !ok {
@@ -91,14 +114,19 @@ func triggerGated(behavior any, trigger any, effect any) any {
 	// An ability firing on an attack step applies to every attack; its trigger
 	// condition is already how the authored data gates such abilities (in the
 	// effect), so nothing is added.
+	hasEvent := false
 	for _, candidate := range candidates {
 		if t, ok := asMap(candidate); ok && t != nil {
-			if event, _ := t["event"].(string); attackStepEvents[event] {
-				return effect
+			event, isEvent := t["event"].(string)
+			if attackStepEvents[event] {
+				return effect, false
 			}
+			hasEvent = hasEvent || isEvent
 		}
 	}
-	return momentGate(trigger, effect)
+	// With attack steps excluded, momentGate leaves the effect ungated only when
+	// there is no effect or no trigger with an event.
+	return momentGate(trigger, effect), effect != nil && hasEvent
 }
 
 // describeBuffs is the full DSL->Buff translation (applied/unsupported/
@@ -109,7 +137,11 @@ func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, p
 		ctx = map[string]any{"phase": "shooting"}
 	}
 	resolvedEffect, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
-	translated := effectToBuffs(triggerGated(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect), source, ctx, perspective)
+	gated, byTrigger := triggerGatedStep(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
+	if !byTrigger {
+		gated = usageGated(a.Raw["ability_type"], a.Raw["usage"], resolvedEffect)
+	}
+	translated := effectToBuffs(gated, source, ctx, perspective)
 	scope, _ := getMap(a.Raw, "scope")
 	rngVal := scope["range_inches"]
 	if !isNumber(rngVal) {

@@ -27,6 +27,22 @@ def _resolve_all(ids: list[str] | None, get: Any) -> list[Any]:
     return out
 
 
+def usage_gated(ability_type: Any, usage: Any, effect: Any) -> Any:
+    """An ability's effect gated on its usage limit ("once per battle", "once per turn").
+
+    Using it is the player's choice, so its buffs are an opt-in lever (``<ability>@<frequency>``).
+    Called only when no trigger already gates the effect. A stratagem is already opt-in.
+    """
+    frequency = usage.get("frequency") if isinstance(usage, dict) else None
+    if effect is None or not isinstance(frequency, str) or ability_type == "stratagem":
+        return effect
+    return {
+        "type": "conditional",
+        "condition": {"type": "timing-is", "parameters": {"timing": frequency}},
+        "effect": effect,
+    }
+
+
 def trigger_gated(behavior: Any, trigger: Any, effect: Any) -> Any:
     """A reactive ability's effect gated on its trigger, the way a ``timing-is`` condition gates it.
 
@@ -293,12 +309,12 @@ class AbilityView:
         from wh40kdc.cruncher.from_dsl import effect_to_buffs
 
         ctx = context if context is not None else {"phase": "shooting"}
+        resolved = self._resolve_rules_bundles(self.raw.get("effect"))
+        moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
         translated = effect_to_buffs(
-            trigger_gated(
-                self.raw.get("behavior"),
-                self.raw.get("trigger"),
-                self._resolve_rules_bundles(self.raw.get("effect")),
-            ),
+            moment
+            if moment is not resolved
+            else usage_gated(self.raw.get("ability_type"), self.raw.get("usage"), resolved),
             source,
             ctx,
             perspective,

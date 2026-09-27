@@ -282,8 +282,10 @@ export class AbilityView {
     perspective: TranslationPerspective = "attacker",
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
+    const resolved = this.resolveRulesBundles(this.raw.effect);
+    const moment = triggerGated(this.raw.behavior, this.raw.trigger, resolved);
     const translated = effectToBuffs(
-      triggerGated(this.raw.behavior, this.raw.trigger, this.resolveRulesBundles(this.raw.effect)),
+      moment !== resolved ? moment : usageGated(this.raw.ability_type, this.raw.usage, resolved),
       source,
       ctx,
       perspective,
@@ -320,6 +322,17 @@ export function triggerGated(behavior: unknown, trigger: unknown, effect: unknow
   // already how the authored data gates such abilities (in the effect), so nothing is added.
   if (triggers.some((item) => item !== null && typeof item === "object" && ATTACK_STEP_EVENTS.has(String((item as { event?: unknown }).event)))) return effect;
   return momentGate(trigger, effect);
+}
+
+/**
+ * An ability's effect gated on its usage limit ("once per battle", "once per turn"): using it is
+ * the player's choice, so its buffs are an opt-in lever (`<ability>@<frequency>`). Called only
+ * when no trigger already gates the effect. A stratagem is already opt-in as a stratagem.
+ */
+export function usageGated(abilityType: unknown, usage: unknown, effect: unknown): unknown {
+  const frequency = usage !== null && typeof usage === "object" ? (usage as { frequency?: unknown }).frequency : undefined;
+  if (effect == null || typeof frequency !== "string" || abilityType === "stratagem") return effect;
+  return { type: "conditional", condition: { type: "timing-is", parameters: { timing: frequency } }, effect };
 }
 
 /** A weapon, linked to the units that carry it. */

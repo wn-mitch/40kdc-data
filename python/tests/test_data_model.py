@@ -340,3 +340,72 @@ def test_weapon_keyword_target_gates_apply_in_linked_buff_apis(dataset: Any) -> 
         for group in stackable
         for buff in group["buffs"]
     )
+
+
+def _gating_dataset() -> Any:
+    """The five fabricated gating abilities also pinned in tools/test/buff-gating.test.ts and Go."""
+    from wh40kdc.data.bundle import empty_raw_data
+    from wh40kdc.data.dataset import Dataset
+
+    reroll = {"type": "re-roll", "target": "unit", "modifier": {"roll": "hit", "subset": "ones"}}
+    base = {"faction_id": "orks", "effect": reroll}
+    raw = empty_raw_data()
+    raw["abilities"] = [
+        {
+            **base,
+            "ability_id": "fixture-usage",
+            "name": "Fixture Usage",
+            "behavior": "passive",
+            "usage": {"frequency": "n-per-battle", "count": 1},
+        },
+        {
+            **base,
+            "ability_id": "fixture-stratagem",
+            "name": "Fixture Stratagem",
+            "ability_type": "stratagem",
+            "behavior": "activated",
+            "usage": {"frequency": "once-per-turn"},
+        },
+        {
+            **base,
+            "ability_id": "fixture-moment",
+            "name": "Fixture Moment",
+            "behavior": "reactive",
+            "trigger": {"event": "selected-to-shoot", "subject": "self"},
+            "usage": {"frequency": "once-per-turn"},
+        },
+        {
+            **base,
+            "ability_id": "fixture-attack-step",
+            "name": "Fixture Attack Step",
+            "behavior": "reactive",
+            "trigger": {"event": "before-hit-roll"},
+        },
+        {
+            **base,
+            "ability_id": "fixture-charge",
+            "name": "Fixture Charge",
+            "behavior": "reactive",
+            "trigger": {"event": "charge-move"},
+        },
+    ]
+    return Dataset(raw)
+
+
+def _gated(ability_id: str, context: dict[str, Any] | None = None) -> tuple[int, list[str]]:
+    ability = _gating_dataset().abilities.get_in_faction(ability_id, "orks")
+    assert ability is not None
+    result = ability.describe_buffs(
+        {"kind": "ability", "abilityId": ability_id, "abilityKind": "unit"},
+        context or {"phase": "fight"},
+    )
+    return len(result["applied"]), [lever["id"] for lever in result["activatable"]]
+
+
+def test_usage_and_trigger_gating_match_the_reference() -> None:
+    assert _gated("fixture-usage") == (0, ["fixture-usage@n-per-battle"])
+    assert _gated("fixture-stratagem") == (1, [])
+    assert _gated("fixture-moment") == (0, ["fixture-moment@selected-to-shoot"])
+    assert _gated("fixture-attack-step") == (1, [])
+    assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": True}) == (1, [])
+    assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": False}) == (0, [])
