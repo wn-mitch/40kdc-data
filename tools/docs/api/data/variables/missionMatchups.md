@@ -8,6 +8,6 @@
 
 > `const` **missionMatchups**: [`Collection`](../classes/Collection.md)\<[`MissionMatchup`](../../generated/interfaces/MissionMatchup.md), [`MissionMatchup`](../../generated/interfaces/MissionMatchup.md)\> = `dataset.missionMatchups`
 
-Defined in: [data/index.ts:101](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L101)
+Defined in: [data/index.ts:178](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/index.ts#L178)
 
 All mission matchups.

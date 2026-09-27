@@ -8,7 +8,7 @@
 
 > **resolveAttachmentPartners**(`roster`, `unitId`): `RosterUnit`[]
 
-Defined in: [data/roster-resolve.ts:85](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/roster-resolve.ts#L85)
+Defined in: [data/roster-resolve.ts:529](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/roster-resolve.ts#L529)
 
 Every roster unit attached to `unitId`, resolved from *either* end of the
 attachment. A leader+bodyguard are one combined unit, so a selection UI may

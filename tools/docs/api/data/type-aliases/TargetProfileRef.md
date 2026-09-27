@@ -8,7 +8,7 @@
 
 > **TargetProfileRef** = `object`
 
-Defined in: [cruncher/engine.ts:24](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L24)
+Defined in: [cruncher/engine.ts:25](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/engine.ts#L25)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [cruncher/engine.ts:24](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **unit**: [`Unit`](../../generated/interfaces/Unit.md)
 
-Defined in: [cruncher/engine.ts:25](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L25)
+Defined in: [cruncher/engine.ts:26](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/engine.ts#L26)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [cruncher/engine.ts:25](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **profileIndex**: `number`
 
-Defined in: [cruncher/engine.ts:26](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L26)
+Defined in: [cruncher/engine.ts:27](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/engine.ts#L27)
 
 ***
 
@@ -32,6 +32,6 @@ Defined in: [cruncher/engine.ts:26](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **modelCount?**: `number`
 
-Defined in: [cruncher/engine.ts:28](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L28)
+Defined in: [cruncher/engine.ts:29](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/engine.ts#L29)
 
 Override target model count (otherwise read from `unit.model_count.min`).

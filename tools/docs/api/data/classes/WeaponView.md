@@ -6,7 +6,7 @@
 
 # Class: WeaponView
 
-Defined in: [data/entities.ts:146](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L146)
+Defined in: [data/entities.ts:339](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L339)
 
 A weapon, linked to the units that carry it.
 
@@ -16,7 +16,7 @@ A weapon, linked to the units that carry it.
 
 > **new WeaponView**(`raw`, `ds`): `WeaponView`
 
-Defined in: [data/entities.ts:147](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L147)
+Defined in: [data/entities.ts:340](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L340)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ The full generated `Weapon` record.
 
 > `readonly` **raw**: [`Weapon`](../../generated/interfaces/Weapon.md)
 
-Defined in: [data/entities.ts:149](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L149)
+Defined in: [data/entities.ts:342](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L342)
 
 The full generated `Weapon` record.
 
@@ -52,7 +52,7 @@ The full generated `Weapon` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:153](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L153)
+Defined in: [data/entities.ts:346](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L346)
 
 ##### Returns
 
@@ -66,11 +66,55 @@ Defined in: [data/entities.ts:153](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:157](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L157)
+Defined in: [data/entities.ts:350](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L350)
 
 ##### Returns
 
 `string`
+
+***
+
+### type
+
+#### Get Signature
+
+> **get** **type**(): `string`
+
+Defined in: [data/entities.ts:354](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L354)
+
+##### Returns
+
+`string`
+
+***
+
+### profiles
+
+#### Get Signature
+
+> **get** **profiles**(): readonly (\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \} \| \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \})[]
+
+Defined in: [data/entities.ts:359](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L359)
+
+All stat profiles for this weapon (at least one is always present).
+
+##### Returns
+
+readonly (\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \} \| \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \})[]
+
+***
+
+### profileCount
+
+#### Get Signature
+
+> **get** **profileCount**(): `number`
+
+Defined in: [data/entities.ts:363](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L363)
+
+##### Returns
+
+`number`
 
 ***
 
@@ -80,7 +124,7 @@ Defined in: [data/entities.ts:157](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **units**(): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/entities.ts:162](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L162)
+Defined in: [data/entities.ts:368](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L368)
 
 Units that list this weapon in their `weapon_ids`.
 
@@ -92,9 +136,9 @@ Units that list this weapon in their `weapon_ids`.
 
 ### profileAt()
 
-> **profileAt**(`i?`): \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \} \| \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}
+> **profileAt**(`i?`): \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \} \| \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \}
 
-Defined in: [data/entities.ts:167](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L167)
+Defined in: [data/entities.ts:373](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L373)
 
 The stat profile at index `i` (default 0).
 
@@ -108,7 +152,7 @@ The stat profile at index `i` (default 0).
 
 ##### Type Literal
 
-\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}
+\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \}
 
 ###### name
 
@@ -155,12 +199,18 @@ The stat profile at index `i` (default 0).
 > `optional` **keywords?**: `object`[]
 
 References into the weapon-keyword catalog. Each entry names the catalog id and supplies parameter values (e.g. `Sustained Hits 1` → `{keyword_id: 'sustained-hits', parameters: {value: 1}}`).
+
+###### target\_restrictions?
+
+> `optional` **target\_restrictions?**: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`
+
+Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
 
 ***
 
 ##### Type Literal
 
-\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}
+\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`; \}
 
 ###### name
 
@@ -207,6 +257,12 @@ References into the weapon-keyword catalog. Each entry names the catalog id and 
 > `optional` **keywords?**: `object`[]
 
 References into the weapon-keyword catalog. Each entry names the catalog id and supplies parameter values (e.g. `Sustained Hits 1` → `{keyword_id: 'sustained-hits', parameters: {value: 1}}`).
+
+###### target\_restrictions?
+
+> `optional` **target\_restrictions?**: \{ `required_keywords_any?`: [`KeywordList10`](../../generated/type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../../generated/type-aliases/KeywordList11.md); \} \| `null`
+
+Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
 
 ***
 
@@ -214,7 +270,7 @@ References into the weapon-keyword catalog. Each entry names the catalog id and 
 
 > **keywordsAt**(`i?`): `object`[]
 
-Defined in: [data/entities.ts:181](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L181)
+Defined in: [data/entities.ts:387](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L387)
 
 Catalog views for each keyword referenced by profile `i`, paired with the
 reference-site parameters. Unresolved keyword ids are skipped.
@@ -235,7 +291,7 @@ reference-site parameters. Unresolved keyword ids are skipped.
 
 > **profileBuffs**(`i`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/entities.ts:203](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L203)
+Defined in: [data/entities.ts:409](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L409)
 
 Buffs contributed by profile `i`'s intrinsic keywords against `context` —
 the natural "what does this profile bring on its own?" call the engine

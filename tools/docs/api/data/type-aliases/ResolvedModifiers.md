@@ -8,7 +8,7 @@
 
 > **ResolvedModifiers** = `object`
 
-Defined in: [cruncher/buffs.ts:160](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L160)
+Defined in: [cruncher/buffs.ts:173](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L173)
 
 Read-out of a resolved buff stack, with provenance per field.
 
@@ -18,7 +18,7 @@ Read-out of a resolved buff stack, with provenance per field.
 
 > **hitMod**: `object`
 
-Defined in: [cruncher/buffs.ts:161](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L161)
+Defined in: [cruncher/buffs.ts:174](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L174)
 
 #### value
 
@@ -34,7 +34,7 @@ Defined in: [cruncher/buffs.ts:161](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **woundMod**: `object`
 
-Defined in: [cruncher/buffs.ts:162](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L162)
+Defined in: [cruncher/buffs.ts:175](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L175)
 
 #### value
 
@@ -50,7 +50,7 @@ Defined in: [cruncher/buffs.ts:162](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **saveMod**: `object`
 
-Defined in: [cruncher/buffs.ts:163](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L163)
+Defined in: [cruncher/buffs.ts:176](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L176)
 
 #### value
 
@@ -66,7 +66,7 @@ Defined in: [cruncher/buffs.ts:163](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **cover**: `object`
 
-Defined in: [cruncher/buffs.ts:164](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L164)
+Defined in: [cruncher/buffs.ts:177](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L177)
 
 #### active
 
@@ -82,7 +82,7 @@ Defined in: [cruncher/buffs.ts:164](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **rerolls**: `Partial`\<`Record`\<`"hit"` \| `"wound"` \| `"save"` \| `"damage"`, \{ `subset`: `"ones"` \| `"all-failures"`; `dominantSource`: [`BuffSource`](BuffSource.md); \}\>\>
 
-Defined in: [cruncher/buffs.ts:165](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L165)
+Defined in: [cruncher/buffs.ts:178](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L178)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [cruncher/buffs.ts:165](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **extraKeywords**: `object`[]
 
-Defined in: [cruncher/buffs.ts:171](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L171)
+Defined in: [cruncher/buffs.ts:184](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L184)
 
 #### keywordRef
 
@@ -106,7 +106,7 @@ Defined in: [cruncher/buffs.ts:171](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **feelNoPain**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
 
-Defined in: [cruncher/buffs.ts:173](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L173)
+Defined in: [cruncher/buffs.ts:186](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L186)
 
 All-wound FNP — fires on the main and mortal damage streams alike.
 
@@ -116,7 +116,7 @@ All-wound FNP — fires on the main and mortal damage streams alike.
 
 > **feelNoPainMortal**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
 
-Defined in: [cruncher/buffs.ts:175](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L175)
+Defined in: [cruncher/buffs.ts:188](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L188)
 
 Mortal-only FNP — fires only on the mortal-wound damage stream.
 
@@ -126,7 +126,7 @@ Mortal-only FNP — fires only on the mortal-wound damage stream.
 
 > **damageMod**: `object`
 
-Defined in: [cruncher/buffs.ts:176](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L176)
+Defined in: [cruncher/buffs.ts:189](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L189)
 
 #### value
 
@@ -142,7 +142,7 @@ Defined in: [cruncher/buffs.ts:176](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **attacksMod**: `object`
 
-Defined in: [cruncher/buffs.ts:177](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L177)
+Defined in: [cruncher/buffs.ts:190](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L190)
 
 #### value
 
@@ -158,7 +158,7 @@ Defined in: [cruncher/buffs.ts:177](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **strengthMod**: `object`
 
-Defined in: [cruncher/buffs.ts:178](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L178)
+Defined in: [cruncher/buffs.ts:191](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L191)
 
 #### value
 
@@ -174,7 +174,7 @@ Defined in: [cruncher/buffs.ts:178](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **toughnessMod**: `object`
 
-Defined in: [cruncher/buffs.ts:179](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L179)
+Defined in: [cruncher/buffs.ts:192](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L192)
 
 #### value
 
@@ -190,7 +190,7 @@ Defined in: [cruncher/buffs.ts:179](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **apMod**: `object`
 
-Defined in: [cruncher/buffs.ts:180](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L180)
+Defined in: [cruncher/buffs.ts:193](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L193)
 
 #### value
 
@@ -206,7 +206,7 @@ Defined in: [cruncher/buffs.ts:180](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **damageReduction**: `object`
 
-Defined in: [cruncher/buffs.ts:186](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L186)
+Defined in: [cruncher/buffs.ts:199](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L199)
 
 Defender-side damage reduction. Highest-wins (multiple sources do not
 stack in 10e); the dominant source is the one whose value matches the
@@ -226,7 +226,7 @@ surviving reduction.
 
 > **invulnerable**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
 
-Defined in: [cruncher/buffs.ts:192](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L192)
+Defined in: [cruncher/buffs.ts:205](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/buffs.ts#L205)
 
 Ability-granted invulnerable save. Best (lowest) threshold wins. `null`
 when no ability granted one; the engine still uses the unit's printed

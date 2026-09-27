@@ -8,7 +8,7 @@
 
 > **StackableBuffGroup** = `object`
 
-Defined in: [data/dataset.ts:75](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L75)
+Defined in: [data/dataset.ts:83](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L83)
 
 A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` at once.
 
@@ -18,7 +18,7 @@ A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` a
 
 > **id**: `string`
 
-Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L76)
+Defined in: [data/dataset.ts:84](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L84)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **label**: `string`
 
-Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L77)
+Defined in: [data/dataset.ts:85](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L85)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **maxActivations**: `number`
 
-Defined in: [data/dataset.ts:78](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L78)
+Defined in: [data/dataset.ts:86](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L86)

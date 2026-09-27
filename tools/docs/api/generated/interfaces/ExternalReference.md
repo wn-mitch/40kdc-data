@@ -6,7 +6,7 @@
 
 # Interface: ExternalReference
 
-Defined in: [generated.ts:587](https://github.com/wn-mitch/40kdc-data/blob/c9c88e6391023daf41c88513e9ecb21950c56b1c/tools/src/generated.ts#L587)
+Defined in: [generated.ts:868](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L868)
 
 A stable identifier assigned to the same entity by an external data source.
 
@@ -19,7 +19,7 @@ via the `definition` "external-reference".
 
 > **namespace**: `string`
 
-Defined in: [generated.ts:591](https://github.com/wn-mitch/40kdc-data/blob/c9c88e6391023daf41c88513e9ecb21950c56b1c/tools/src/generated.ts#L591)
+Defined in: [generated.ts:872](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L872)
 
 Open source namespace, such as 'mfm', 'bsdata', or 'game-datacards'.
 
@@ -29,6 +29,6 @@ Open source namespace, such as 'mfm', 'bsdata', or 'game-datacards'.
 
 > **id**: `string`
 
-Defined in: [generated.ts:595](https://github.com/wn-mitch/40kdc-data/blob/c9c88e6391023daf41c88513e9ecb21950c56b1c/tools/src/generated.ts#L595)
+Defined in: [generated.ts:876](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L876)
 
 Identifier exactly as assigned by the external source.

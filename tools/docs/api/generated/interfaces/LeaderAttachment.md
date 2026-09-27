@@ -6,7 +6,7 @@
 
 # Interface: LeaderAttachment
 
-Defined in: [generated.ts:425](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L425)
+Defined in: [generated.ts:1502](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1502)
 
 Defines which character units can attach to which bodyguard units.
 
@@ -19,7 +19,7 @@ via the `definition` "leader-attachment".
 
 > **leader\_id**: `string`
 
-Defined in: [generated.ts:426](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L426)
+Defined in: [generated.ts:1503](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1503)
 
 ***
 
@@ -27,7 +27,21 @@ Defined in: [generated.ts:426](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **eligible\_bodyguard\_ids**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:430](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L430)
+Defined in: [generated.ts:1507](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1507)
+
+#### Min Items
+
+1
+
+***
+
+### eligible\_bodyguard\_keywords?
+
+> `optional` **eligible\_bodyguard\_keywords?**: \[`string`, `...string[]`\]
+
+Defined in: [generated.ts:1513](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1513)
+
+Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
 
 #### Min Items
 
@@ -39,4 +53,4 @@ Defined in: [generated.ts:430](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:431](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L431)
+Defined in: [generated.ts:1514](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1514)

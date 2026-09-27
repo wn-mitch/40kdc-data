@@ -8,7 +8,7 @@
 
 > **KeywordList** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:33](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L33)
+Defined in: [generated.ts:33](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L33)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "keyword-list".

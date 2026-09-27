@@ -6,9 +6,9 @@
 
 # Function: validateLoadout()
 
-> **validateLoadout**(`unit`, `modelCount`, `options`, `counts`): [`Violation`](../interfaces/Violation.md)[]
+> **validateLoadout**(`unit`, `modelCount`, `options`, `counts`, `models?`): [`Violation`](../interfaces/Violation.md)[]
 
-Defined in: [data/loadout.ts:155](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/loadout.ts#L155)
+Defined in: [data/loadout.ts:1244](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L1244)
 
 Report every weapon/wargear count that falls outside its valid range.
 
@@ -29,6 +29,10 @@ readonly [`WargearOption`](../../generated/interfaces/WargearOption.md)[]
 ### counts
 
 `Map`\<`string`, `number`\>
+
+### models?
+
+readonly [`LoadoutModel`](../interfaces/LoadoutModel.md)[]
 
 ## Returns
 

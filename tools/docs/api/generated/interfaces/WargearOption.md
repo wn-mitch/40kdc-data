@@ -6,9 +6,9 @@
 
 # Interface: WargearOption
 
-Defined in: [generated.ts:1248](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1248)
+Defined in: [generated.ts:4222](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4222)
 
-A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.
+An item-level weapon/wargear swap, addition, or choice available to models within a unit. An option transforms a model's default or selected whole-model loadout only when its model constraints and replacement prerequisites are satisfied. Whole-model alternatives belong in the composition's loadout_variants; applying an option must not bypass the resulting variant's selection limits or the unit's equipment budgets.
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "wargear-option".
@@ -19,7 +19,7 @@ via the `definition` "wargear-option".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1249](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1249)
+Defined in: [generated.ts:4223](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4223)
 
 ***
 
@@ -27,7 +27,17 @@ Defined in: [generated.ts:1249](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **unit\_id**: `string`
 
-Defined in: [generated.ts:1250](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1250)
+Defined in: [generated.ts:4224](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4224)
+
+***
+
+### faction\_id
+
+> **faction\_id**: `string`
+
+Defined in: [generated.ts:4228](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4228)
+
+Kebab-case identifier
 
 ***
 
@@ -35,7 +45,7 @@ Defined in: [generated.ts:1250](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **model\_constraint?**: \{ `model_name?`: `string`; `per_n_models?`: `number`; `max_count?`: `number`; `any_number?`: `boolean`; \} \| `null`
 
-Defined in: [generated.ts:1251](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1251)
+Defined in: [generated.ts:4229](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4229)
 
 #### Union Members
 
@@ -71,7 +81,7 @@ When true, every model in the unit may take the option ('Any number of models ca
 
 > `optional` **replaces?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:1265](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1265)
+Defined in: [generated.ts:4243](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4243)
 
 Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear).
 
@@ -85,7 +95,7 @@ Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option
 
 > `optional` **replacement?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:1271](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1271)
+Defined in: [generated.ts:4249](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4249)
 
 Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present.
 
@@ -99,7 +109,7 @@ Weapon or wargear IDs added to the model — all of them. Exactly one of `replac
 
 > `optional` **replacement\_choice?**: \[\[`string`, `...string[]`\], \[`string`, `...string[]`\], `...[string, ...string[]][]`\]
 
-Defined in: [generated.ts:1277](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1277)
+Defined in: [generated.ts:4255](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4255)
 
 A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present.
 
@@ -113,7 +123,7 @@ A choice of replacements ('one of the following'): pick exactly one inner group;
 
 > `optional` **is\_free?**: `boolean`
 
-Defined in: [generated.ts:1278](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1278)
+Defined in: [generated.ts:4256](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4256)
 
 ***
 
@@ -121,7 +131,7 @@ Defined in: [generated.ts:1278](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **additional\_cost?**: `number` \| `null`
 
-Defined in: [generated.ts:1279](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1279)
+Defined in: [generated.ts:4257](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4257)
 
 ***
 
@@ -129,4 +139,12 @@ Defined in: [generated.ts:1279](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1280](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1280)
+Defined in: [generated.ts:4258](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4258)
+
+***
+
+### game\_modes?
+
+> `optional` **game\_modes?**: [`GameModes6`](../type-aliases/GameModes6.md)
+
+Defined in: [generated.ts:4259](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4259)

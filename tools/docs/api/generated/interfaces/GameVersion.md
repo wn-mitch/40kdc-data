@@ -6,7 +6,7 @@
 
 # Interface: GameVersion
 
-Defined in: [generated.ts:412](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L412)
+Defined in: [generated.ts:1464](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1464)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "game-version".
@@ -17,7 +17,7 @@ via the `definition` "game-version".
 
 > **edition**: `string`
 
-Defined in: [generated.ts:413](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L413)
+Defined in: [generated.ts:1465](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1465)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:413](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **dataslate**: `string`
 
-Defined in: [generated.ts:414](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L414)
+Defined in: [generated.ts:1466](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1466)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:414](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **effective\_date**: `string`
 
-Defined in: [generated.ts:415](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L415)
+Defined in: [generated.ts:1467](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1467)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:415](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > `optional` **label?**: `string`
 
-Defined in: [generated.ts:416](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L416)
+Defined in: [generated.ts:1468](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1468)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [generated.ts:416](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > `optional` **supersedes?**: `string` \| `null`
 
-Defined in: [generated.ts:417](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L417)
+Defined in: [generated.ts:1469](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1469)
