@@ -471,7 +471,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "assault"
+          "Assault"
         ]
       }
     },
@@ -1641,8 +1641,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Dominus"
+        "IMPERIAL KNIGHTS",
+        "DOMINUS"
       ]
     },
     "community_notes": "terrain-area target qualifier carried as prose; no target-in-terrain condition node, gated on shooting phase"
@@ -1678,8 +1678,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Dominus"
+        "IMPERIAL KNIGHTS",
+        "DOMINUS"
       ]
     }
   },
@@ -1713,8 +1713,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Dominus"
+        "IMPERIAL KNIGHTS",
+        "DOMINUS"
       ]
     },
     "community_notes": "re-roll the dice that determine weapon Attacks characteristic (random A); encoded as re-roll all-failures over a weapon-attacks roll"
@@ -1750,8 +1750,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Dominus"
+        "IMPERIAL KNIGHTS",
+        "DOMINUS"
       ]
     }
   },
@@ -1786,8 +1786,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Dominus"
+        "IMPERIAL KNIGHTS",
+        "DOMINUS"
       ]
     },
     "community_notes": "BLAST removal from the unit's [BLAST] ranged attacks carried as prose; modeled buff is +1 A"
@@ -1842,11 +1842,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -1855,8 +1855,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     },
     "community_notes": "applies while the ARMIGER unit is affected by a Bondsman ability; bondsman gating carried as prose"
@@ -1892,8 +1892,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     }
   },
@@ -1926,8 +1926,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     },
     "community_notes": "-1 CP when targeting bearer with Fire Overwatch/Heroic Intervention stratagem",
@@ -1992,7 +1992,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     }
   },
@@ -2031,8 +2031,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     },
     "community_notes": "shooting does not prevent the ARMIGER unit from being eligible to start an action"
@@ -2079,7 +2079,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     }
   },
@@ -2110,7 +2110,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "grants Deep Strike; once-per-battle redeploy (remove and set up >9\" away) carried as prose"
@@ -2144,7 +2144,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     }
   },
@@ -2196,7 +2196,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     }
   },
@@ -2220,11 +2220,11 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -2233,7 +2233,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     }
   },
@@ -2267,7 +2267,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "Deadly Demise triggers on 4+ (Armiger adds 1 to the result) instead of only 6; threshold lowered to 4"
@@ -2301,7 +2301,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "Blast weapons may target units in Engagement Range and ignore the engaged hit penalty; self-inflicted MW on unmodified 1 carried as prose"
@@ -2349,7 +2349,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "applies only if no other friendly units are within 9\"; isolation condition carried as prose"
@@ -2385,7 +2385,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "-1 to Wound only when attack Strength exceeds the unit's Toughness; S>T gate carried as prose"
@@ -2420,7 +2420,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights"
+        "IMPERIAL KNIGHTS"
       ]
     },
     "community_notes": "on Advance, no Advance roll; +6\" M (or +9\" if Armiger/Destrier). Armiger variant carried as prose"
@@ -2454,8 +2454,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     }
   },
@@ -2484,10 +2484,10 @@
         "type": "keyword-grant",
         "target": "all-friendly",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Assault"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -2539,10 +2539,10 @@
                 "type": "keyword-grant",
                 "target": "friendly-within-aura",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Heavy"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               }
             ]

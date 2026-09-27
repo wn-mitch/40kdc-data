@@ -1344,10 +1344,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "condition": "equipped_with_two_macro_scalpels",
         "keywords": [
-          "twin-linked"
-        ],
-        "condition": "equipped_with_two_macro_scalpels"
+          "Twin-linked"
+        ]
       }
     },
     "scope": {
@@ -1504,10 +1504,10 @@
                       "type": "keyword-grant",
                       "target": "unit",
                       "modifier": {
+                        "weapon_type": "melee",
                         "keywords": [
                           "Hazardous"
-                        ],
-                        "weapon_type": "melee"
+                        ]
                       }
                     }
                   ]
@@ -2932,10 +2932,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -3173,10 +3173,10 @@
         "type": "keyword-grant",
         "target": "all-friendly",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -3318,10 +3318,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -3519,7 +3519,7 @@
         "target": "self",
         "modifier": {
           "keywords": [
-            "devastating-wounds"
+            "Devastating Wounds"
           ]
         }
       }
@@ -3885,20 +3885,20 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lance"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ]

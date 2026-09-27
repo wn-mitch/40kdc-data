@@ -741,7 +741,7 @@
     "behavior": "reactive",
     "applies_to": {
       "required_keywords": [
-        "Necrons"
+        "NECRONS"
       ]
     },
     "community_notes": "[APPROX] Once per battle, at the start of any phase, the bearer selects one friendly NECRONS unit that is Battle-shocked and within 12\", and that unit is no longer Battle-shocked. Battle-shock remains implicit in remove-battle-shock; full rule in raw-text store."
@@ -2684,8 +2684,8 @@
         "range": 3,
         "recipient_filter": {
           "required_keywords": [
-            "Necrons",
-            "Battleline"
+            "NECRONS",
+            "BATTLELINE"
           ]
         },
         "effect": {
@@ -2724,8 +2724,8 @@
     "behavior": "aura",
     "applies_to": {
       "required_keywords": [
-        "Necrons",
-        "Battleline"
+        "NECRONS",
+        "BATTLELINE"
       ]
     },
     "community_notes": "defensive ability (skipped for damage calc)"
@@ -2845,7 +2845,7 @@
       "condition": {
         "type": "unit-has-keyword",
         "parameters": {
-          "keyword": "Destroyer Cult"
+          "keyword": "DESTROYER CULT"
         }
       },
       "effect": {
@@ -2869,11 +2869,11 @@
     "behavior": "aura",
     "applies_to": {
       "required_keywords": [
-        "Necrons"
+        "NECRONS"
       ],
       "excluded_keywords": [
-        "Monster",
-        "Titanic"
+        "MONSTER",
+        "TITANIC"
       ]
     },
     "community_notes": "[APPROX] Aura (6\"): a friendly NECRONS unit (excluding MONSTER and TITANIC) within range grants each of its attacks [SUSTAINED HITS 1] when the attacking model is DESTROYER CULT. The rules text's alternate OR-branch (an attack into the closest eligible target also qualifies) is a per-attack, per-target gate the schema has no leaf for and is not modeled here; only the DESTROYER CULT keyword branch is represented."
@@ -3414,10 +3414,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached",
-        "parameters": {
-          "keyword": "CANOPTEK MACROCYTES"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "is-attached",
+            "parameters": {
+              "keyword": "CANOPTEK"
+            }
+          },
+          {
+            "type": "is-attached",
+            "parameters": {
+              "keyword": "MACROCYTES"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -3966,7 +3977,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "heavy"
+          "Heavy"
         ]
       }
     },
@@ -4746,10 +4757,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -4840,8 +4851,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Titanic",
-        "Fly"
+        "TITANIC",
+        "FLY"
       ]
     },
     "community_notes": "Applies to friendly NECRONS TITANIC FLY units: +6\" Move."
@@ -5030,7 +5041,7 @@
       "target": "self",
       "modifier": {
         "keywords": [
-          "rapid-fire-1"
+          "Rapid Fire 1"
         ]
       }
     },
@@ -5270,10 +5281,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
-            "ASSAULT"
-          ],
-          "weapon_type": "ranged"
+            "Assault"
+          ]
         }
       }
     },
@@ -5587,7 +5598,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Cryptek"
+        "CRYPTEK"
       ]
     },
     "community_notes": "Detachment rule: CRYPTEK ranged weapons gain [ASSAULT]; additionally, each time a CRYPTEK unit is selected to shoot, one listed weapon ability may be chosen for its ranged weapons until end of phase."

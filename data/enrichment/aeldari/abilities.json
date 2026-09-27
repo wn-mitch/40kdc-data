@@ -1850,7 +1850,7 @@
             "parameters": {
               "side": "friendly",
               "window": "this-turn",
-              "keyword": "aeldari"
+              "keyword": "AELDARI"
             }
           }
         ]
@@ -2839,7 +2839,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "lance"
+          "Lance"
         ]
       }
     },
@@ -3311,7 +3311,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "hazardous"
+          "Hazardous"
         ]
       }
     },
@@ -5119,13 +5119,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Rangers"
+              "keyword": "RANGERS"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Shroud Runners"
+              "keyword": "SHROUD RUNNERS"
             }
           }
         ]
@@ -5451,10 +5451,10 @@
                 "type": "keyword-grant",
                 "target": "unit",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               }
             },
@@ -6202,10 +6202,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -6398,10 +6398,21 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "ASURYANI MOUNTED"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "ASURYANI"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "MOUNTED"
+                }
+              }
+            ]
           },
           {
             "type": "unit-has-keyword",
@@ -6660,7 +6671,7 @@
                 "parameters": {
                   "side": "friendly",
                   "window": "this-phase",
-                  "keyword": "ynnari",
+                  "keyword": "YNNARI",
                   "count_min": 1
                 }
               }
@@ -6826,7 +6837,7 @@
       "target": "friendly-within-aura",
       "modifier": {
         "keywords": [
-          "assault"
+          "Assault"
         ]
       }
     },
@@ -7450,7 +7461,7 @@
       "modifier": {
         "weapon_type": "ranged",
         "keywords": [
-          "Anti-Infantry 3+"
+          "Anti INFANTRY 3+"
         ]
       }
     },
@@ -7490,7 +7501,7 @@
         "parameters": {
           "subject": "unit",
           "target_type": "friendly-keyword",
-          "keyword": "Wraith Construct",
+          "keyword": "WRAITH CONSTRUCT",
           "range": 3
         }
       },
@@ -7531,8 +7542,8 @@
           "subject": "unit",
           "target_type": "friendly-keyword",
           "keywords": [
-            "Aeldari",
-            "Psyker"
+            "AELDARI",
+            "PSYKER"
           ],
           "range": 12
         }

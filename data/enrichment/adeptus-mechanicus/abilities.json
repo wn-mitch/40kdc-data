@@ -1062,11 +1062,23 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "unit-within-range-of",
-          "parameters": {
-            "target_type": "friendly-keyword",
-            "keyword": "ADEPTUS MECHANICUS BATTLELINE"
-          }
+          "operator": "and",
+          "operands": [
+            {
+              "type": "unit-within-range-of",
+              "parameters": {
+                "target_type": "friendly-keyword",
+                "keyword": "ADEPTUS MECHANICUS"
+              }
+            },
+            {
+              "type": "unit-within-range-of",
+              "parameters": {
+                "target_type": "friendly-keyword",
+                "keyword": "BATTLELINE"
+              }
+            }
+          ]
         },
         "effect": {
           "type": "leadership-modifier",
@@ -1415,11 +1427,23 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-within-range-of",
-              "parameters": {
-                "target_type": "friendly-keyword",
-                "keyword": "ADEPTUS MECHANICUS BATTLELINE"
-              }
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "unit-within-range-of",
+                  "parameters": {
+                    "target_type": "friendly-keyword",
+                    "keyword": "ADEPTUS MECHANICUS"
+                  }
+                },
+                {
+                  "type": "unit-within-range-of",
+                  "parameters": {
+                    "target_type": "friendly-keyword",
+                    "keyword": "BATTLELINE"
+                  }
+                }
+              ]
             },
             "effect": {
               "type": "sequence",
@@ -2499,16 +2523,29 @@
                     {
                       "type": "unit-has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "keyword": "BATTLELINE"
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "ADEPTUS MECHANICUS"
+                          }
+                        },
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "BATTLELINE"
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -2557,16 +2594,29 @@
                     {
                       "type": "unit-has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "keyword": "BATTLELINE"
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "ADEPTUS MECHANICUS"
+                          }
+                        },
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "BATTLELINE"
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -2621,15 +2671,15 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Recon Augury"
-            ],
             "applies_to_keywords": [
               "Pteraxii",
               "Infiltrators",
               "Rangers",
               "Serberys Raiders",
               "Serberys Sulphurhounds"
+            ],
+            "keywords": [
+              "Recon Augury"
             ]
           }
         },
@@ -2660,7 +2710,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -2693,7 +2743,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
@@ -2727,7 +2778,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Serberys Raiders"
+        "SERBERYS RAIDERS"
       ]
     }
   },
@@ -2751,11 +2802,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -2764,7 +2815,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -2832,7 +2883,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -2879,13 +2930,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
     "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
-    "name": "Vingh\u2019s Wafers of Dynamism",
+    "name": "Vingh’s Wafers of Dynamism",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2920,13 +2971,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Cybernetica Datasmith"
+        "CYBERNETICA DATASMITH"
       ]
     }
   },
   {
     "ability_id": "tl-4-9-lords-of-the-forge",
-    "name": "TL-4\u00d89",
+    "name": "TL-4Ø9",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2944,13 +2995,13 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "grants_weapon": true,
         "keywords": [
           "Devastating Wounds",
           "Hazardous"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged",
-        "grants_weapon": true
+        ]
       }
     },
     "scope": {
@@ -2959,7 +3010,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -2995,7 +3046,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3035,7 +3086,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3074,7 +3125,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3102,18 +3153,18 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Corpuscarii"
+              "keyword": "CORPUSCARII"
             }
           },
           "effect": {
             "type": "keyword-grant",
             "target": "all-friendly",
             "modifier": {
+              "scope": "weapon",
+              "attack_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "scope": "weapon",
-              "attack_type": "ranged"
+              ]
             }
           }
         },
@@ -3122,7 +3173,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Fulgurite"
+              "keyword": "FULGURITE"
             }
           },
           "effect": {
@@ -3143,7 +3194,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -3176,7 +3227,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3209,7 +3260,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3256,7 +3307,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
@@ -3295,7 +3346,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
@@ -3329,7 +3380,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
@@ -3394,7 +3445,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii"
+        "SKITARII"
       ]
     }
   },
@@ -3439,7 +3490,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
@@ -3474,7 +3526,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
@@ -3527,13 +3579,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
     "ability_id": "omnissiahs-fury-eradication-cohort",
-    "name": "Omnissiah\u2019s Fury",
+    "name": "Omnissiah’s Fury",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3591,7 +3643,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
@@ -3615,11 +3668,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "scope": "weapon",
-        "attack_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -3628,7 +3681,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -3666,8 +3719,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii",
-        "Vehicle"
+        "SKITARII",
+        "VEHICLE"
       ]
     }
   },
@@ -3707,7 +3760,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
@@ -3746,7 +3799,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sicarian"
+        "SICARIAN"
       ]
     }
   },
@@ -3773,35 +3826,35 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Sustained Hits 1",
               "Lethal Hits",
               "Hazardous"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         }
       ]
@@ -3812,7 +3865,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii"
+        "SKITARII"
       ]
     }
   },
@@ -3846,8 +3899,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii",
-        "Infantry"
+        "SKITARII",
+        "INFANTRY"
       ]
     }
   },
@@ -4307,7 +4360,7 @@
   },
   {
     "ability_id": "broad-spectrum-targeting-augurs",
-    "name": "Broad\u2011spectrum Targeting Augurs",
+    "name": "Broad‑spectrum Targeting Augurs",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4348,10 +4401,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_name": "eradication caster",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_name": "eradication caster"
+          ]
         }
       }
     },
@@ -4399,10 +4452,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_name": "neutron-fusil",
           "keywords": [
             "Ignores Cover"
-          ],
-          "weapon_name": "neutron-fusil"
+          ]
         }
       }
     },
@@ -4616,8 +4669,8 @@
                   "subject": "unit",
                   "range": 6,
                   "keywords": [
-                    "Adeptus Mechanicus",
-                    "Battleline"
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
                   ]
                 }
               }
@@ -4659,10 +4712,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {

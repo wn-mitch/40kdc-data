@@ -3506,7 +3506,7 @@
               {
                 "type": "unit-has-keyword",
                 "parameters": {
-                  "keyword": "VON RYAN'S LEAPERS"
+                  "keyword": "VON RYAN’S LEAPERS"
                 }
               }
             ]
@@ -3566,7 +3566,7 @@
       "condition": {
         "type": "unit-has-keyword",
         "parameters": {
-          "keyword": "VON RYAN'S LEAPERS"
+          "keyword": "VON RYAN’S LEAPERS"
         }
       },
       "effect": {
@@ -3767,10 +3767,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
-          "Anti-character 2+"
-        ],
-        "weapon_type": "ranged"
+          "Anti CHARACTER 2+"
+        ]
       }
     },
     "scope": {
@@ -4219,8 +4219,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tyranids",
-        "Monster"
+        "TYRANIDS",
+        "MONSTER"
       ]
     },
     "community_notes": "[APPROX] Target prerequisite 'has not been selected to move this phase' is a selection-sequencing precondition with no condition-schema representation, so it is not encoded in the effect tree. The effect models the co-occurring move permissions of one Normal, Advance or Fall Back move rather than gating each on which passthrough is used."
@@ -4905,7 +4905,7 @@
         "range": 6,
         "eligible": {
           "required_keywords": [
-            "Tyranids"
+            "TYRANIDS"
           ]
         },
         "effect": {

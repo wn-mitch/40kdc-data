@@ -33,7 +33,7 @@
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model's unit is targeted with a Stratagem (the triggering unit must have World Eaters), you may use this ability, if within 12" of a friendly unit, until the end of the battle round, you can use one Stratagem on this model for 0CP.</characteristic>
+                <characteristic name="Description">When this model's unit is targeted with a Stratagem (the triggering unit must have WORLD EATERS), you may use this ability, if within 12" of a friendly unit, until the end of the battle round, you can use one Stratagem on this model for 0CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">

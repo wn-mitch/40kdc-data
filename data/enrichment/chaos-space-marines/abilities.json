@@ -1011,7 +1011,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "indirect fire"
+            "Indirect Fire"
           ]
         }
       }
@@ -1920,13 +1920,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -2051,7 +2051,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "heretic-astartes"
+          "keyword": "HERETIC ASTARTES"
         }
       },
       "effect": {
@@ -6139,7 +6139,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "assault"
+            "Assault"
           ]
         }
       }
@@ -6495,10 +6495,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Khorne"
+        "KHORNE"
       ]
     }
   },
@@ -6534,10 +6534,10 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "scope": "weapon",
             "keywords": [
               "Psychic"
-            ],
-            "scope": "weapon"
+            ]
           }
         }
       ]
@@ -6548,10 +6548,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Khorne"
+        "KHORNE"
       ]
     }
   },
@@ -6575,11 +6575,11 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "scope": "weapon",
-        "attack_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -6588,11 +6588,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Daemon"
+        "HERETIC ASTARTES",
+        "DAEMON"
       ],
       "excluded_keywords": [
-        "Khorne"
+        "KHORNE"
       ]
     }
   },
@@ -6626,10 +6626,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Khorne"
+        "KHORNE"
       ]
     }
   },
@@ -6671,8 +6671,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Psyker"
+        "HERETIC ASTARTES",
+        "PSYKER"
       ]
     }
   },
@@ -6696,11 +6696,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -6709,8 +6709,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Psyker"
+        "HERETIC ASTARTES",
+        "PSYKER"
       ]
     }
   },
@@ -6734,14 +6734,14 @@
       "type": "keyword-grant",
       "target": "all-friendly",
       "modifier": {
-        "keywords": [
-          "Heavy"
-        ],
         "scope": "weapon",
         "attack_type": "ranged",
         "applies_to_keywords": [
           "Havocs",
           "Obliterators"
+        ],
+        "keywords": [
+          "Heavy"
         ]
       }
     },
@@ -6751,7 +6751,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -6809,7 +6809,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Warpsmith"
+        "WARPSMITH"
       ]
     }
   },
@@ -6846,7 +6846,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Warpsmith"
+        "WARPSMITH"
       ]
     }
   },
@@ -6870,13 +6870,13 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "requires": "dark-pact",
         "keywords": [
           "Lethal Hits",
           "Sustained Hits 1"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged",
-        "requires": "dark-pact"
+        ]
       }
     },
     "scope": {
@@ -6885,7 +6885,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -6919,7 +6919,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Havocs"
+        "HAVOCS"
       ]
     }
   },
@@ -6956,7 +6956,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7015,9 +7015,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Infantry",
-        "Fly"
+        "HERETIC ASTARTES",
+        "INFANTRY",
+        "FLY"
       ]
     }
   },
@@ -7124,11 +7124,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "scope": "weapon",
-        "attack_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -7137,9 +7137,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Infantry",
-        "Fly"
+        "HERETIC ASTARTES",
+        "INFANTRY",
+        "FLY"
       ]
     }
   },
@@ -7178,9 +7178,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes",
-        "Infantry",
-        "Fly"
+        "HERETIC ASTARTES",
+        "INFANTRY",
+        "FLY"
       ]
     }
   },
@@ -7221,7 +7221,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Warp Talons"
+        "WARP TALONS"
       ]
     }
   },
@@ -7263,7 +7263,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7298,10 +7298,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -7335,7 +7335,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     },
     "trigger": {
@@ -7376,7 +7376,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7449,7 +7449,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7485,10 +7485,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -7523,7 +7523,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7547,12 +7547,12 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
-        "keywords": [
-          "Ignores Cover"
-        ],
         "scope": "weapon",
         "attack_type": "ranged",
-        "max_units": 2
+        "max_units": 2,
+        "keywords": [
+          "Ignores Cover"
+        ]
       }
     },
     "scope": {
@@ -7561,7 +7561,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7595,7 +7595,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7635,7 +7635,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7669,7 +7669,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7696,23 +7696,23 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
+            "applies_to_keyword": "Vehicle",
             "keywords": [
               "Daemon"
-            ],
-            "applies_to_keyword": "Vehicle"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Soul Forge"
-            ],
             "applies_to_keywords": [
               "Vehicle",
               "Lord Discordant",
               "Vashtorr the Arkifane"
+            ],
+            "keywords": [
+              "Soul Forge"
             ]
           }
         },
@@ -7732,7 +7732,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -7781,10 +7781,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -7819,10 +7819,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -7856,10 +7856,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -7899,7 +7899,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Warpsmith"
+        "WARPSMITH"
       ]
     }
   },
@@ -7932,10 +7932,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ],
       "excluded_keywords": [
-        "Damned"
+        "DAMNED"
       ]
     }
   },
@@ -8048,7 +8048,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -8091,7 +8091,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     }
   },
@@ -8212,10 +8212,10 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -8479,10 +8479,10 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       ]
@@ -8718,10 +8718,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         },
@@ -8748,10 +8748,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -8778,10 +8778,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -8808,10 +8808,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         },

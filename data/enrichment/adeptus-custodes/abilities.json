@@ -2213,8 +2213,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     }
   },
@@ -2267,8 +2267,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     }
   },
@@ -2302,8 +2302,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     }
   },
@@ -2347,8 +2347,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     }
   },
@@ -2383,8 +2383,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     }
   },
@@ -2411,24 +2411,24 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "keywords": [
-              "Rapid Fire 6"
-            ],
             "scope": "weapon",
             "attack_type": "ranged",
-            "weapon": "Arachnus Storm Cannon"
+            "weapon": "Arachnus Storm Cannon",
+            "keywords": [
+              "Rapid Fire 6"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "keywords": [
-              "Rapid Fire 2"
-            ],
             "scope": "weapon",
             "attack_type": "ranged",
-            "weapon": "Iliastus Accelerator Culverin"
+            "weapon": "Iliastus Accelerator Culverin",
+            "keywords": [
+              "Rapid Fire 2"
+            ]
           }
         }
       ]
@@ -2439,7 +2439,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Telemon Heavy Dreadnought"
+        "TELEMON HEAVY DREADNOUGHT"
       ]
     }
   },
@@ -2478,7 +2478,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     }
   },
@@ -2513,8 +2513,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana",
-        "Infantry"
+        "ANATHEMA PSYKANA",
+        "INFANTRY"
       ]
     }
   },
@@ -2549,7 +2549,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     }
   },
@@ -2576,11 +2576,11 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "melee",
             "keywords": [
               "Lance"
-            ],
-            "scope": "weapon",
-            "attack_type": "melee"
+            ]
           }
         },
         {
@@ -2588,7 +2588,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Psyker"
+              "keyword": "PSYKER"
             }
           },
           "effect": {
@@ -2609,7 +2609,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Vigilators"
+        "VIGILATORS"
       ]
     }
   },
@@ -2636,12 +2636,12 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
-            "keywords": [
-              "Rapid Fire 2"
-            ],
             "scope": "weapon",
             "attack_type": "ranged",
-            "weapon": "Boltgun"
+            "weapon": "Boltgun",
+            "keywords": [
+              "Rapid Fire 2"
+            ]
           }
         },
         {
@@ -2663,7 +2663,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Prosecutors"
+        "PROSECUTORS"
       ]
     }
   },
@@ -2687,12 +2687,12 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
-        "keywords": [
-          "Blast"
-        ],
         "scope": "weapon",
         "attack_type": "ranged",
-        "requires": "Torrent"
+        "requires": "Torrent",
+        "keywords": [
+          "Blast"
+        ]
       }
     },
     "scope": {
@@ -2701,7 +2701,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Witchseekers"
+        "WITCHSEEKERS"
       ]
     }
   },
@@ -2744,8 +2744,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     }
   },
@@ -2778,8 +2778,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     }
   },
@@ -2819,8 +2819,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     }
   },
@@ -2855,8 +2855,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     }
   },
@@ -2889,7 +2889,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Allarus Custodians"
+        "ALLARUS CUSTODIANS"
       ]
     }
   },
@@ -2926,8 +2926,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     }
   },
@@ -3092,7 +3092,7 @@
                   {
                     "type": "unit-has-keyword",
                     "parameters": {
-                      "keyword": "Aircraft"
+                      "keyword": "AIRCRAFT"
                     }
                   }
                 ]
@@ -3466,7 +3466,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Roll one D6 per destroyed model that has not fought this phase, adding 2 to the roll if that model has the Character keyword; the Character bonus is not encoded. A model kept in play fights with 1 wound remaining and is then removed."
@@ -3505,8 +3505,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "The model can use a datasheet ability that states it can only be used once per battle one additional time, but not in the same phase. Cannot be used on the same Character model more than once per battle."
@@ -3538,7 +3538,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -3562,10 +3562,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Precision"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -3574,7 +3574,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Targets one unit that has not been selected to fight this phase."
@@ -3609,7 +3609,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your unit; the unit makes a Normal move of up to D6\". Vehicle units cannot be selected."
@@ -3643,7 +3643,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used in your Command phase on one Allarus Custodians or Aquilon Custodians unit on the battlefield: the unit is split into separate single-model units, each with a Starting Strength of 1."
@@ -3672,13 +3672,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -3711,8 +3711,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "Targets up to two Character units that have not been selected to fight this phase; only attacks made by Character models benefit."
@@ -3744,8 +3744,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "Used in your Movement phase before the Reinforcements step on a Character model that is not leading a unit: it attaches as a Leader to one friendly unit it could lead (excluding Battle-shocked and Attached units) within 2\" horizontally and 5\" vertically. The unit's Starting Strength changes accordingly."
@@ -3793,8 +3793,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "Usable just after a Character unit destroys the target of your Assemblage of Might ability; only attacks made by Adeptus Custodes Character models gain the bonus. If the destroyed unit was a Character unit, you also gain 1CP (not encoded)."
@@ -3833,7 +3833,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
+        "ADEPTUS CUSTODES",
         "Warlord"
       ]
     },
@@ -3868,8 +3868,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "Only Character models in the unit gain the Feel No Pain 4+ ability."
@@ -3913,8 +3913,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Character"
+        "ADEPTUS CUSTODES",
+        "CHARACTER"
       ]
     },
     "community_notes": "Used on a Character model that was just destroyed and has not fought this phase; it fights after the attacking unit finishes its attacks and is then removed from play."
@@ -3964,7 +3964,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Add 1 to the roll if the unit has the Walker keyword (not encoded). A model kept in play fights as if it has 1 wound remaining and is then removed."
@@ -4002,8 +4002,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Vehicle"
+        "ADEPTUS CUSTODES",
+        "VEHICLE"
       ]
     }
   },
@@ -4030,10 +4030,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -4052,7 +4052,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Targets one unit that has not been selected to shoot this phase; modifiers to the attack's Ballistic Skill characteristic can also be ignored."
@@ -4080,10 +4080,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -4091,7 +4091,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Walker"
+              "keyword": "WALKER"
             }
           },
           "effect": {
@@ -4110,8 +4110,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Vehicle"
+        "ADEPTUS CUSTODES",
+        "VEHICLE"
       ]
     },
     "community_notes": "Used just after the Vehicle unit Advances; Walker units are eligible to shoot and declare a charge this turn, other Vehicles are eligible to shoot only."
@@ -4147,7 +4147,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used in your Movement or Charge phase on one Vehicle or Mounted unit; its models can move through terrain features until the end of the phase."
@@ -4182,7 +4182,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used just before the unit Piles In: each model can make its Pile-in move up to D3+3\" instead of up to 3\"."
@@ -4217,7 +4217,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used just after a mortal wound is allocated to a model in the unit; Anathema Psykana units cannot be selected."
@@ -4246,20 +4246,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       ]
@@ -4270,7 +4270,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Targets one unit (excluding Anathema Psykana units) that has not been selected to shoot this phase."
@@ -4314,7 +4314,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Excludes Anathema Psykana units. If the unit is Below Half-strength, add 2 to the Attacks characteristic instead (escalation not encoded)."
@@ -4346,7 +4346,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -4391,8 +4391,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Infantry"
+        "ADEPTUS CUSTODES",
+        "INFANTRY"
       ]
     },
     "community_notes": "Excludes Anathema Psykana units; the unit must be within range of an objective marker you control."
@@ -4426,8 +4426,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Battleline"
+        "ADEPTUS CUSTODES",
+        "BATTLELINE"
       ]
     },
     "community_notes": "Excludes Anathema Psykana units; the objective the unit is in range of remains under your control until your opponent's Level of Control exceeds yours at the end of a phase."
@@ -4473,7 +4473,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Psyker"
+              "keyword": "PSYKER"
             }
           },
           "effect": {
@@ -4493,7 +4493,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Vigilators"
+        "VIGILATORS"
       ]
     },
     "community_notes": "Wound re-rolls also apply against Battle-shocked targets (not encoded)."
@@ -4525,7 +4525,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "community_notes": "Used just after an enemy Psyker unit within 18\" uses a Psychic ability or makes Psychic Attacks: that unit takes a Leadership test. If passed it is Battle-shocked; if failed it suffers 3 mortal wounds and is Battle-shocked (encoded as a Battle-shock test; the mortal-wound rider is not encoded)."
@@ -4574,7 +4574,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Prosecutors"
+        "PROSECUTORS"
       ]
     },
     "community_notes": "Only Anathema Psykana models improve their AP against the prosecuted unit. While a Psyker or Battle-shocked unit is prosecuted, its models also subtract 1 from their Hit rolls (not encoded)."
@@ -4608,8 +4608,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana",
-        "Infantry"
+        "ANATHEMA PSYKANA",
+        "INFANTRY"
       ]
     },
     "community_notes": "In addition, Battle-shocked and Psyker models can only select the unit as a target of a ranged attack while within 12\" (not encoded)."
@@ -4647,7 +4647,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Witchseekers"
+        "WITCHSEEKERS"
       ]
     },
     "community_notes": "If a Torrent weapon targets a Psyker or Battle-shocked unit this phase, add 2 to its Attacks characteristic instead (escalation not encoded)."
@@ -4698,7 +4698,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "community_notes": "While active, models in the unit can only target Psyker units with their attacks (restriction not encoded)."
@@ -4743,7 +4743,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Targets up to two units at the start of the Fight phase; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
@@ -4778,7 +4778,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Requires a friendly Anathema Psykana unit within 6\" of the targeted unit."
@@ -4810,7 +4810,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Targets up to two units at the start of your Movement phase; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
@@ -4844,8 +4844,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana",
-        "Infantry"
+        "ANATHEMA PSYKANA",
+        "INFANTRY"
       ]
     },
     "community_notes": "Targets one Anathema Psykana Infantry unit that was selected as a target and one other friendly Adeptus Custodes Infantry unit (excluding Anathema Psykana) within 6\": until the end of the phase, attacks that target the Anathema Psykana unit must instead target the other unit, unless it is not an eligible target."
@@ -4880,7 +4880,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Used just after an enemy unit ends a Normal, Advance or Fall Back move: up to two units within 8\" of it can make a Normal move of up to 6\". Units in Engagement Range cannot be selected; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
@@ -4932,8 +4932,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Infantry"
+        "ADEPTUS CUSTODES",
+        "INFANTRY"
       ]
     },
     "community_notes": "Targets up to two Infantry units and one enemy unit that is an eligible target for all of them; your units can only target that enemy unit this phase. Two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
@@ -4968,7 +4968,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades"
+        "TRISTRAEN'S GILDED BLADES"
       ]
     }
   },
@@ -5002,8 +5002,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades",
-        "Blade Champion"
+        "TRISTRAEN'S GILDED BLADES",
+        "BLADE CHAMPION"
       ]
     },
     "community_notes": "Used in your opponent's Shooting phase after an enemy unit has shot, on an unengaged Blade Champion unit that lost a wound to those attacks."
@@ -5047,7 +5047,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades"
+        "TRISTRAEN'S GILDED BLADES"
       ]
     }
   },
@@ -5089,8 +5089,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Infantry"
+        "ADEPTUS CUSTODES",
+        "INFANTRY"
       ]
     },
     "community_notes": "The bearer is set back up as close as possible to where it was destroyed and not within Engagement Range of enemy units, with its full wounds remaining."
@@ -5136,7 +5136,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -5172,7 +5172,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Shield-Captain"
+        "SHIELD-CAPTAIN"
       ]
     },
     "community_notes": "At the start of the Fight phase, add 2 Attacks for every 5 enemy models within 6\" of the bearer, rounding down (per-5-models scaling not encoded)."
@@ -5234,7 +5234,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Shield-Captain"
+        "SHIELD-CAPTAIN"
       ]
     }
   },
@@ -5280,7 +5280,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Each time the bearer's unit ends a Charge move, select one enemy unit within Engagement Range of the bearer for the roll. Once per battle, after the bearer's unit ends a Charge move, all enemy units within 6\" of the bearer must take a Battle-shock test (not encoded)."
@@ -5317,7 +5317,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Once per battle, at the start of any phase, one friendly Adeptus Custodes unit that is Battle-shocked and within 12\" of the bearer is no longer Battle-shocked. The bearer also has a Leadership characteristic of 5+ (not encoded)."
@@ -5354,7 +5354,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Once per battle, at the start of any Command phase, triple the bearer's Objective Control characteristic until the end of the turn (not encoded)."
@@ -5386,7 +5386,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "The bearer's unit is eligible to shoot and/or declare a charge in a turn in which it Fell Back. Once per battle, when an enemy unit ends a Normal, Advance or Fall Back move within 8\" of the bearer, the bearer's unit can make a Normal move of up to 6\" if unengaged (not encoded)."
@@ -5448,7 +5448,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -5481,7 +5481,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -5515,8 +5515,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Vehicle"
+        "ADEPTUS CUSTODES",
+        "VEHICLE"
       ]
     },
     "community_notes": "Affects friendly Adeptus Custodes Infantry and Adeptus Custodes Mounted units within 6\" of the bearer."
@@ -5556,7 +5556,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "In your Command phase, select one Adeptus Custodes Vehicle or Mounted unit within 6\" of the bearer; until the start of your next Command phase, that unit is eligible to shoot in a turn in which it Fell Back. Bearer must be an Infantry or Mounted model."
@@ -5608,7 +5608,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Shield-Captain"
+        "SHIELD-CAPTAIN"
       ]
     }
   },
@@ -5642,7 +5642,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Shield-Captain"
+        "SHIELD-CAPTAIN"
       ]
     },
     "community_notes": "After both players deploy, select up to two Adeptus Custodes units (excluding Anathema Psykana) and redeploy them; any of them can be placed into Strategic Reserves regardless of how many units are already there."
@@ -5678,7 +5678,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Shield-Captain or Blade Champion model only."
@@ -5709,10 +5709,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Ignores Cover"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -5722,7 +5722,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Shield-Captain or Blade Champion model only."
@@ -5784,7 +5784,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "community_notes": "While the bearer is within Engagement Range of one or more Battle-shocked enemy Psyker units, the bonus is +2 to each characteristic instead (escalation not encoded)."
@@ -5818,7 +5818,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "community_notes": "If the attack was made by a Psyker or Battle-shocked model, change its Damage characteristic to 1 instead (not encoded)."
@@ -5850,7 +5850,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "community_notes": "In your Command phase, select one enemy unit within 12\" of the bearer; that unit must take a Battle-shock test."
@@ -5894,7 +5894,7 @@
             "condition": {
               "type": "target-has-keyword",
               "parameters": {
-                "keyword": "Psyker"
+                "keyword": "PSYKER"
               }
             },
             "effect": {
@@ -5916,7 +5916,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     }
   },
@@ -5952,7 +5952,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Applies only while the attacking model is within 12\" of the bearer's unit (range condition not encoded)."
@@ -5997,7 +5997,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     }
   },
@@ -6030,7 +6030,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "The range of the bearer's Null Aegis or Deadly Unity ability is increased to 9\"."
@@ -6067,7 +6067,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "community_notes": "Once per turn, the first time a saving throw is failed for the bearer's unit, change the Damage characteristic of that attack to 0."
@@ -6102,8 +6102,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades",
-        "Allarus Custodians"
+        "TRISTRAEN'S GILDED BLADES",
+        "ALLARUS CUSTODIANS"
       ]
     },
     "community_notes": "Upgrade for a Gilded Blades Allarus Custodians unit."
@@ -6145,8 +6145,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades",
-        "Blade Champion"
+        "TRISTRAEN'S GILDED BLADES",
+        "BLADE CHAMPION"
       ]
     },
     "community_notes": "When the bearer's unit ends a Charge move, select one enemy unit engaged with it: that unit makes a Battle-shock roll with -1 to the roll."

@@ -664,7 +664,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "anti-psyker 4+"
+            "Anti PSYKER 4+"
           ]
         }
       }
@@ -2668,8 +2668,8 @@
       "selector": {
         "max_count": 3,
         "keywords": [
-          "Imperium",
-          "Battleline"
+          "IMPERIUM",
+          "BATTLELINE"
         ],
         "owner": "friendly"
       },
@@ -2692,7 +2692,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 \u2014 the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 — the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "healing-serum",
@@ -3091,11 +3091,11 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon": "exitus-rifle",
         "keywords": [
-          "anti-monster",
-          "anti-vehicle"
-        ],
-        "weapon": "exitus-rifle"
+          "Anti MONSTER",
+          "Anti VEHICLE"
+        ]
       }
     },
     "scope": {
@@ -3174,7 +3174,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Eversor Assassin"
+              "keyword": "EVERSOR ASSASSIN"
             }
           },
           "effect": {
@@ -3224,7 +3224,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Culexus Assassin"
+              "keyword": "CULEXUS ASSASSIN"
             }
           },
           "effect": {
@@ -3335,7 +3335,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Callidus Assassin"
+              "keyword": "CALLIDUS ASSASSIN"
             }
           },
           "effect": {
@@ -3654,8 +3654,8 @@
           "selector": {
             "max_count": 3,
             "keywords": [
-              "Agents of the Imperium",
-              "Infantry"
+              "AGENTS OF THE IMPERIUM",
+              "INFANTRY"
             ],
             "owner": "friendly"
           },
@@ -3673,8 +3673,8 @@
           "selector": {
             "max_count": 1,
             "keywords": [
-              "Imperium",
-              "Battleline"
+              "IMPERIUM",
+              "BATTLELINE"
             ],
             "owner": "friendly"
           },
@@ -3792,11 +3792,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
-        "keywords": [
-          "devastating-wounds"
-        ],
         "applies_to": "melee-weapons",
-        "condition": "chaplain-cassius-in-unit"
+        "condition": "chaplain-cassius-in-unit",
+        "keywords": [
+          "Devastating Wounds"
+        ]
       }
     },
     "scope": {
@@ -4340,10 +4340,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "applies_to": "ranged-weapons",
           "keywords": [
-            "lethal-hits"
-          ],
-          "applies_to": "ranged-weapons"
+            "Lethal Hits"
+          ]
         }
       }
     },
@@ -4731,7 +4731,7 @@
             "count": 1,
             "range_inches": 6,
             "keywords": [
-              "Agents of the Imperium"
+              "AGENTS OF THE IMPERIUM"
             ],
             "eligibility": {
               "type": "is-battle-shocked"
@@ -4937,10 +4937,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },

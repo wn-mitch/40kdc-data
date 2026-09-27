@@ -2380,7 +2380,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "assault"
+          "Assault"
         ]
       }
     },
@@ -5320,13 +5320,13 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Abhuman"
-            ],
             "applies_to_keywords": [
               "Bullgryn Squad",
               "Ogryn Squad",
               "Ratlings"
+            ],
+            "keywords": [
+              "Abhuman"
             ]
           }
         },
@@ -5348,7 +5348,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -5392,7 +5392,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Ratlings"
+        "RATLINGS"
       ]
     }
   },
@@ -5425,7 +5425,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Commissar"
+        "COMMISSAR"
       ]
     }
   },
@@ -5461,7 +5461,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -5494,7 +5494,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Ratlings"
+        "RATLINGS"
       ]
     }
   },
@@ -5528,7 +5528,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -5569,7 +5569,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -5636,7 +5636,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum Infantry Platoon"
+        "ASTRA MILITARUM",
+        "INFANTRY",
+        "PLATOON"
       ]
     }
   },
@@ -5672,7 +5674,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum Infantry"
+        "ASTRA MILITARUM",
+        "INFANTRY"
       ]
     }
   },
@@ -5706,7 +5709,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum Infantry"
+        "ASTRA MILITARUM",
+        "INFANTRY"
       ]
     }
   },
@@ -5739,7 +5743,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum Infantry"
+        "ASTRA MILITARUM",
+        "INFANTRY"
       ]
     }
   },
@@ -5778,7 +5783,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -5816,9 +5821,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic",
-        "Character"
+        "ASTRA MILITARUM",
+        "TITANIC",
+        "CHARACTER"
       ]
     }
   },
@@ -5852,9 +5857,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic",
-        "Character"
+        "ASTRA MILITARUM",
+        "TITANIC",
+        "CHARACTER"
       ]
     }
   },
@@ -5890,8 +5895,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Tech-Priest Enginseer"
+        "ASTRA MILITARUM",
+        "TECH-PRIEST ENGINSEER"
       ]
     }
   },
@@ -5924,10 +5929,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic",
-        "Character",
-        "Transport"
+        "ASTRA MILITARUM",
+        "TITANIC",
+        "CHARACTER",
+        "TRANSPORT"
       ]
     }
   },
@@ -5980,8 +5985,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic"
+        "ASTRA MILITARUM",
+        "TITANIC"
       ]
     }
   },
@@ -6016,8 +6021,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic"
+        "ASTRA MILITARUM",
+        "TITANIC"
       ]
     }
   },
@@ -6052,8 +6057,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Titanic"
+        "ASTRA MILITARUM",
+        "TITANIC"
       ]
     }
   },
@@ -6088,8 +6093,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Vehicle"
+        "ASTRA MILITARUM",
+        "VEHICLE"
       ]
     }
   },
@@ -6124,8 +6129,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Vehicle"
+        "ASTRA MILITARUM",
+        "VEHICLE"
       ]
     }
   },
@@ -6159,7 +6164,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6196,7 +6201,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6231,9 +6236,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Officer",
-        "Infantry"
+        "ASTRA MILITARUM",
+        "OFFICER",
+        "INFANTRY"
       ]
     }
   },
@@ -6267,9 +6272,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Officer",
-        "Infantry"
+        "ASTRA MILITARUM",
+        "OFFICER",
+        "INFANTRY"
       ]
     }
   },
@@ -6306,8 +6311,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Tech-Priest Enginseer"
+        "ASTRA MILITARUM",
+        "TECH-PRIEST ENGINSEER"
       ]
     }
   },
@@ -6340,8 +6345,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Officer"
+        "ASTRA MILITARUM",
+        "OFFICER"
       ]
     }
   },
@@ -6376,7 +6381,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6404,13 +6409,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -6556,7 +6561,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6591,7 +6596,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6631,7 +6636,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     },
     "trigger": {
@@ -6669,9 +6674,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Militarum Tempestus",
-        "Officer"
+        "ASTRA MILITARUM",
+        "MILITARUM TEMPESTUS",
+        "OFFICER"
       ]
     }
   },
@@ -6705,9 +6710,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Militarum Tempestus",
-        "Officer"
+        "ASTRA MILITARUM",
+        "MILITARUM TEMPESTUS",
+        "OFFICER"
       ]
     }
   },
@@ -6760,8 +6765,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Regiment"
+        "ASTRA MILITARUM",
+        "REGIMENT"
       ]
     }
   },
@@ -6814,7 +6819,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     }
   },
@@ -6838,15 +6843,15 @@
       "type": "keyword-grant",
       "target": "all-friendly",
       "modifier": {
-        "keywords": [
-          "Ignores Cover"
-        ],
         "scope": "weapon",
         "attack_type": "ranged",
         "applies_to_keywords": [
           "Militarum Tempestus"
         ],
-        "vs_target": "one-enemy-hit-this-phase"
+        "vs_target": "one-enemy-hit-this-phase",
+        "keywords": [
+          "Ignores Cover"
+        ]
       }
     },
     "scope": {
@@ -6855,8 +6860,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Militarum Tempestus"
+        "ASTRA MILITARUM",
+        "MILITARUM TEMPESTUS"
       ]
     }
   },
@@ -7009,10 +7014,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -7056,10 +7061,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -7837,7 +7842,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           },
           "effect": {
@@ -7861,7 +7866,7 @@
             "type": "target-has-keyword",
             "negated": true,
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           },
           "effect": {
@@ -7916,7 +7921,7 @@
             "parameters": {
               "subject": "unit",
               "keywords": [
-                "Officer"
+                "OFFICER"
               ],
               "range": 6
             }
@@ -7944,7 +7949,7 @@
             "parameters": {
               "subject": "unit",
               "keywords": [
-                "Officer"
+                "OFFICER"
               ],
               "range": 6
             }

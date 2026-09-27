@@ -312,7 +312,7 @@ describe("Round 5C composition rules", () => {
         { type: "target-has-keyword", parameters: { keyword: "MONSTER" }, negated: true }, { type: "target-has-keyword", parameters: { keyword: "VEHICLE" }, negated: true }] }],
       ["unit-keyword", { keywords: ["FLY"], subject: "this-unit", negated: false }, { type: "unit-has-keyword", parameters: { keyword: "FLY" } }],
       ["unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }, { type: "is-battle-shocked" }],
-      ["unit-mark", { mark: "oath-of-moment", subject: "target", negated: false }, { type: "target-has-keyword", parameters: { keyword: "Oath of Moment target" } }],
+      ["unit-mark", { mark: "oath-of-moment", subject: "target", negated: false }, { type: "target-has-keyword", parameters: { keyword: "OATH OF MOMENT TARGET" } }],
       ["unit-position", { kind: "closest-eligible", subject: "target", negated: false }, { type: "unit-within-range-of", parameters: { target_type: "closest-eligible" } }],
       ["unit-position", { kind: "beyond", inches: 12, subject: "target", negated: false }, { type: "unit-within-range-of", parameters: { target_type: "current-ranged-attack-target", range: 12 }, negated: true }],
       ["unit-position", { kind: "objective-range", controlled_by: "you", subject: "target", negated: false }, { type: "within-range-of-objective", parameters: { subject: "target", controlled_by: "your-army" } }],

@@ -47,9 +47,9 @@ const RESOURCE_POOLS: Record<string, string> = {
 
 const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "unit", "this-model": "self", bearer: "bearer" };
 
-/** Marks as the authored data spells them: pseudo-keywords the cruncher matches on the target. */
+/** Marks as keyword tags, uppercase like every keyword reference: the cruncher matches them on the target. */
 const MARK_KEYWORDS: Record<string, string> = {
-  "oath-of-moment": "Oath of Moment target", afflicted: "AFFLICTED", spotted: "SPOTTED", hidden: "HIDDEN", marked: "Marked",
+  "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "SPOTTED", hidden: "HIDDEN", marked: "MARKED",
 };
 
 const ACTIVITY_CONDITIONS: Record<string, string> = {

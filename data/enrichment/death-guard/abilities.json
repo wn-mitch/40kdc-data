@@ -1017,13 +1017,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -3309,27 +3309,27 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Contagion Engine"
-            ],
             "applies_to_keywords": [
               "Foetid Bloat-drone",
               "Helbrute",
               "Myphitic Blight-hauler"
             ],
-            "purpose": "combat"
+            "purpose": "combat",
+            "keywords": [
+              "Contagion Engine"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Assault"
-            ],
             "applies_to_keyword": "Contagion Engine",
             "scope": "weapon",
-            "attack_type": "ranged"
+            "attack_type": "ranged",
+            "keywords": [
+              "Assault"
+            ]
           }
         }
       ]
@@ -3340,7 +3340,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard"
+        "DEATH GUARD"
       ]
     }
   },
@@ -3375,8 +3375,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Plague Marines"
+        "DEATH GUARD",
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3413,8 +3413,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Character"
+        "DEATH GUARD",
+        "CHARACTER"
       ]
     }
   },
@@ -3449,7 +3449,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Plague Marines"
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3485,7 +3485,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Plague Marines"
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3522,11 +3522,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Infantry"
+        "DEATH GUARD",
+        "INFANTRY"
       ],
       "excluded_keywords": [
-        "Terminator"
+        "TERMINATOR"
       ]
     }
   },
@@ -3600,7 +3600,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Helbrute"
+        "HELBRUTE"
       ]
     }
   },
@@ -3636,8 +3636,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Infantry"
+        "DEATH GUARD",
+        "INFANTRY"
       ]
     }
   },
@@ -3672,7 +3672,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Plague Marines"
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3722,7 +3722,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Plague Marines"
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3746,11 +3746,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
-        "keywords": [
-          "Close-Quarters"
-        ],
         "scope": "weapon",
-        "attack_type": "ranged"
+        "attack_type": "ranged",
+        "keywords": [
+          "Close-quarters"
+        ]
       }
     },
     "scope": {
@@ -3759,7 +3759,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Plague Marines"
+        "PLAGUE MARINES"
       ]
     }
   },
@@ -3897,8 +3897,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Character"
+        "DEATH GUARD",
+        "CHARACTER"
       ]
     }
   },
@@ -3935,8 +3935,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Character"
+        "DEATH GUARD",
+        "CHARACTER"
       ]
     }
   },
@@ -3969,8 +3969,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Guard",
-        "Character"
+        "DEATH GUARD",
+        "CHARACTER"
       ]
     }
   },

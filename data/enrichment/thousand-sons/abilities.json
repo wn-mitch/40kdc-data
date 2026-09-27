@@ -2012,10 +2012,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_name": "Dark Blessing",
             "keywords": [
               "Sustained Hits D3"
-            ],
-            "weapon_name": "Dark Blessing"
+            ]
           }
         },
         {
@@ -2925,13 +2925,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -3412,11 +3412,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     },
     "trigger": {
@@ -3447,11 +3447,11 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
+            "applies_to_keyword": "Sekhetar Robots",
+            "scope": "weapon",
             "keywords": [
               "Psychic"
-            ],
-            "applies_to_keyword": "Sekhetar Robots",
-            "scope": "weapon"
+            ]
           }
         },
         {
@@ -3474,7 +3474,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     }
   },
@@ -3501,11 +3501,11 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
+            "applies_to_keyword": "Tzaangors",
+            "purpose": "construction",
             "keywords": [
               "Battleline"
-            ],
-            "applies_to_keyword": "Tzaangors",
-            "purpose": "construction"
+            ]
           }
         },
         {
@@ -3535,7 +3535,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     }
   },
@@ -3574,11 +3574,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -3613,11 +3613,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     },
     "interactions": [
@@ -3682,8 +3682,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Sorcerer"
+        "THOUSAND SONS",
+        "SORCERER"
       ]
     }
   },
@@ -3729,8 +3729,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Sorcerer"
+        "THOUSAND SONS",
+        "SORCERER"
       ]
     }
   },
@@ -3774,8 +3774,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Tzaangor Shaman"
+        "THOUSAND SONS",
+        "TZAANGOR SHAMAN"
       ]
     }
   },
@@ -3812,11 +3812,11 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "melee",
             "keywords": [
               "Cleave 1"
-            ],
-            "scope": "weapon",
-            "attack_type": "melee"
+            ]
           }
         }
       ]
@@ -3827,7 +3827,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Spawn"
+        "SPAWN"
       ]
     }
   },
@@ -3861,8 +3861,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     }
   },
@@ -3931,8 +3931,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     }
   },
@@ -3966,7 +3966,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sekhetar Robots"
+        "SEKHETAR ROBOTS"
       ]
     }
   },
@@ -3999,7 +3999,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sekhetar Robots"
+        "SEKHETAR ROBOTS"
       ]
     }
   },
@@ -4037,7 +4037,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sekhetar Robots"
+        "SEKHETAR ROBOTS"
       ]
     }
   },
@@ -4064,11 +4064,11 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         },
         {
@@ -4094,7 +4094,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Mutant"
+        "MUTANT"
       ]
     }
   },
@@ -4131,7 +4131,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Mutant"
+        "MUTANT"
       ]
     }
   },
@@ -4164,8 +4164,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Monster",
-        "Mutant"
+        "MONSTER",
+        "MUTANT"
       ]
     }
   },
@@ -4776,10 +4776,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -4914,13 +4914,27 @@
                 }
               },
               {
-                "type": "unit-within-range-of",
-                "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "THOUSAND SONS PSYKER",
-                  "range": 6,
-                  "visible": true
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "unit-within-range-of",
+                    "parameters": {
+                      "target_type": "friendly",
+                      "keyword": "THOUSAND SONS",
+                      "range": 6,
+                      "visible": true
+                    }
+                  },
+                  {
+                    "type": "unit-within-range-of",
+                    "parameters": {
+                      "target_type": "friendly",
+                      "keyword": "PSYKER",
+                      "range": 6,
+                      "visible": true
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -5001,13 +5015,27 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "friendly",
-              "keyword": "THOUSAND SONS PSYKER",
-              "range": 6,
-              "visible": false
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly",
+                  "keyword": "THOUSAND SONS",
+                  "range": 6,
+                  "visible": false
+                }
+              },
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly",
+                  "keyword": "PSYKER",
+                  "range": 6,
+                  "visible": false
+                }
+              }
+            ]
           },
           "effect": {
             "type": "sequence",
@@ -5045,13 +5073,27 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-within-range-of",
-                "parameters": {
-                  "target_type": "friendly",
-                  "keyword": "THOUSAND SONS PSYKER",
-                  "range": 6,
-                  "visible": false
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "unit-within-range-of",
+                    "parameters": {
+                      "target_type": "friendly",
+                      "keyword": "THOUSAND SONS",
+                      "range": 6,
+                      "visible": false
+                    }
+                  },
+                  {
+                    "type": "unit-within-range-of",
+                    "parameters": {
+                      "target_type": "friendly",
+                      "keyword": "PSYKER",
+                      "range": 6,
+                      "visible": false
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -5149,10 +5191,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_keyword": "Psychic",
               "keywords": [
                 "Devastating Wounds"
-              ],
-              "weapon_keyword": "Psychic"
+              ]
             }
           }
         }
@@ -5359,7 +5401,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "[APPROX] Enemy models within Engagement Range of this unit can only target it if there are no eligible Scintillating Legions targets for their attacks; the forced target-priority rule is encoded as an opaque grant. Full rule in raw-text store."
@@ -5424,7 +5466,7 @@
     },
     "applies_to": {
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     },
     "community_notes": "Scintillating Legions units (excluding Monsters) only; the unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
@@ -5518,8 +5560,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Requires a friendly Thousand Sons Psyker unit within 6\" of the Vehicle when used."
@@ -5547,10 +5589,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Psychic"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -5571,8 +5613,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Requires a friendly Thousand Sons Psyker unit within 6\"; applies to ranged weapons equipped by Vehicle models in the unit."
@@ -5609,8 +5651,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks."
@@ -5657,8 +5699,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Requires a friendly Thousand Sons Psyker unit within 6\" when used; modifiers to saving throws are still applied (the exclusion is not encoded)."
@@ -5704,8 +5746,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     },
     "community_notes": "[APPROX] The controlled objective becomes mutated: it stays under your control until the opponent's Level of Control exceeds yours at the end of a phase, and while mutated each enemy unit ending a Normal, Advance, Fall Back or Charge move within range suffers D3 mortal wounds on a D6 roll of 4+; the hazard rider is encoded as an opaque grant."
@@ -5755,8 +5797,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range of the Vehicle; roll six D6, one mortal wound per 5+, then that enemy unit takes a Battle-shock test."
@@ -5791,7 +5833,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "Used just after taking a Psychic test for a model that Channelled the Warp, before resolving the Ritual; re-roll all of the D6 rolled for that test, including the additional Channelling die."
@@ -5825,8 +5867,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     },
     "community_notes": "The objective marker the unit is in range of remains under your control until the opponent's Level of Control over it is greater than yours at the end of a phase."
@@ -5860,8 +5902,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     },
     "community_notes": "Used just after a saving throw is failed for the Psyker model; the Damage characteristic of that attack is changed to 0. With fast dice rolling, select one of the failed saves."
@@ -5922,8 +5964,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     }
   },
@@ -5956,8 +5998,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     },
     "interactions": [
@@ -6010,7 +6052,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "[APPROX] Attacks made against this unit with Psychic weapons gain [HAZARDOUS] (encoded as an opaque grant) and models in the unit have Feel No Pain 4+ against Psychic Attacks."
@@ -6045,7 +6087,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangors"
+        "TZAANGORS"
       ]
     },
     "community_notes": "Used in your Command phase on a Tzaangors unit below Starting Strength within 12\" of a friendly Thousand Sons Psyker model; return up to D3+1 destroyed models (excluding Characters) to the unit."
@@ -6100,8 +6142,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzeentch",
-        "Mutant"
+        "TZEENTCH",
+        "MUTANT"
       ]
     },
     "community_notes": "Models within 3\" of enemy models are eligible to fight and can target an enemy unit within 3\" of them that is within Engagement Range of their unit."
@@ -6179,8 +6221,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzeentch",
-        "Mutant"
+        "TZEENTCH",
+        "MUTANT"
       ]
     },
     "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Advanced (one of the two, chosen when acting)."
@@ -6228,8 +6270,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzeentch",
-        "Mutant"
+        "TZEENTCH",
+        "MUTANT"
       ]
     },
     "community_notes": "The unit arriving from Strategic Reserves can be set up anywhere more than 6\" horizontally from all enemy units (more than 8\" for a Monster unit); it is not eligible to charge this turn."
@@ -6263,7 +6305,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangors"
+        "TZAANGORS"
       ]
     }
   },
@@ -6294,7 +6336,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubricae"
+        "RUBRICAE"
       ]
     }
   },
@@ -6327,8 +6369,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubric Marines",
-        "Psyker"
+        "RUBRIC MARINES",
+        "PSYKER"
       ]
     },
     "community_notes": "Each time an attack is allocated to a model in the unit (excluding Psyker models), subtract 1 from its Damage characteristic; the Psyker-model exclusion is not encoded."
@@ -6363,10 +6405,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       ]
@@ -6377,7 +6419,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubricae"
+        "RUBRICAE"
       ]
     }
   },
@@ -6404,10 +6446,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Psychic"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -6428,8 +6470,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Psyker"
+        "THOUSAND SONS",
+        "PSYKER"
       ]
     },
     "community_notes": "Applies only to inferno bolt pistols, inferno boltguns, inferno combi-bolters and inferno combi-weapons equipped by models in the unit; the weapon-name scoping is not encoded."
@@ -6463,7 +6505,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubricae"
+        "RUBRICAE"
       ]
     },
     "community_notes": "Used just after a Thousand Sons Psyker model is destroyed within 6\" of the unit; after the attacking unit has shot, this unit can shoot, but may only target the enemy unit that destroyed the Psyker (if eligible)."
@@ -6500,7 +6542,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubric Marines"
+        "RUBRIC MARINES"
       ]
     },
     "community_notes": "Used just after an enemy unit ends a Charge move within Engagement Range; each time an attack targets this unit, subtract 1 from the Wound roll (incoming modifier)."
@@ -6528,10 +6570,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Close-quarters"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -6552,7 +6594,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubric Marines"
+        "RUBRIC MARINES"
       ]
     },
     "community_notes": "Applies only to the unit's malefic curse weapon; the weapon-name scoping is not encoded."
@@ -6601,7 +6643,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubric Marines"
+        "RUBRIC MARINES"
       ]
     },
     "community_notes": "Ranged attacks targeting this unit with a Strength greater than the unit's Toughness have -1 to Wound rolls."
@@ -6635,7 +6677,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Mutant"
+        "MUTANT"
       ]
     }
   },
@@ -6730,8 +6772,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Infantry"
+        "THOUSAND SONS",
+        "INFANTRY"
       ]
     },
     "community_notes": "Applies while the bearer is within 6\" of one or more friendly Scintillating Legions units, each time the bearer Channels the Warp; the proximity gate is not encoded."
@@ -6812,8 +6854,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Infantry"
+        "THOUSAND SONS",
+        "INFANTRY"
       ]
     }
   },
@@ -6846,7 +6888,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "[APPROX] While within 6\" of a friendly Thousand Sons Vehicle unit, after rolling the additional Channelling die but before checking doubles or triples, the bearer may have a selected Vehicle unit suffer 1 mortal wound to re-roll that die; encoded as an opaque grant. Full rule in raw-text store."
@@ -6880,8 +6922,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Infantry"
+        "THOUSAND SONS",
+        "INFANTRY"
       ]
     },
     "community_notes": "Applies while the bearer is within 3\" of one or more friendly Thousand Sons Vehicle units; the proximity gate is not encoded."
@@ -6935,7 +6977,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "In your Command phase, one friendly Thousand Sons Vehicle model within 6\" regains up to D3 lost wounds."
@@ -6969,7 +7011,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "Applies while the bearer is within 6\" of one or more friendly Thousand Sons Vehicle units; the proximity gate is not encoded."
@@ -7003,7 +7045,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     }
   },
@@ -7041,7 +7083,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Exalted Sorcerer"
+        "EXALTED SORCERER"
       ]
     },
     "community_notes": "Once per battle, when selecting a Ritual for the bearer, Doombolt can be selected even if a model from your army has already attempted to manifest it this phase."
@@ -7097,7 +7139,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "In your Command phase, if the bearer's unit is unengaged: place it into Strategic Reserves; it has Deep Strike until the start of your next Shooting phase and must make an ingress move in your next Movement phase (including on your first turn)."
@@ -7149,7 +7191,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     }
   },
@@ -7182,7 +7224,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangor Shaman"
+        "TZAANGOR SHAMAN"
       ]
     },
     "community_notes": "[APPROX] When attempting a Ritual, just before determining the Psychic test result, the bearer can suffer D3 mortal wounds; if not destroyed, add 1 to the test result for each mortal wound suffered. Encoded as an opaque grant. Full rule in raw-text store."
@@ -7225,7 +7267,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangor Shaman"
+        "TZAANGOR SHAMAN"
       ]
     },
     "community_notes": "While the bearer is leading a unit, each time an attack targets that unit, subtract 1 from the Hit roll (incoming modifier)."
@@ -7302,7 +7344,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangor Shaman"
+        "TZAANGOR SHAMAN"
       ]
     }
   },
@@ -7335,7 +7377,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "[APPROX] At the start of the Declare Battle Formations step, select either two Rubricae Battleline units or one other Rubricae unit from your army; models in the selected units gain the Infiltrators ability. Encoded as an opaque grant."
@@ -7386,7 +7428,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     }
   },
@@ -7427,7 +7469,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "community_notes": "While the bearer is leading a unit, add 1 to Hit rolls for attacks made by Rubricae models in that unit; the per-model Rubricae scoping is not encoded."
@@ -7452,11 +7494,11 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Sustained Hits D3",
           "Devastating Wounds"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -7465,8 +7507,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Infantry"
+        "THOUSAND SONS",
+        "INFANTRY"
       ]
     }
   },
@@ -7504,7 +7546,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzaangor Shaman"
+        "TZAANGOR SHAMAN"
       ]
     },
     "community_notes": "In the opponent's Movement phase, when an enemy unit ends a move within 8\" of the bearer's unengaged unit, that unit can make a Normal move of up to D3+1\"."
@@ -7529,10 +7571,10 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Psychic"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -7541,7 +7583,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Daemon Prince"
+        "DAEMON PRINCE"
       ]
     },
     "community_notes": "Applies only to the bearer's infernal cannon; the weapon-name scoping is not encoded."

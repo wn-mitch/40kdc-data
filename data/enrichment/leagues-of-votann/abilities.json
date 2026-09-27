@@ -2050,7 +2050,7 @@
       "target": "self",
       "modifier": {
         "keywords": [
-          "ignores-cover"
+          "Ignores Cover"
         ]
       }
     },
@@ -2143,10 +2143,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -2202,10 +2202,10 @@
             "type": "keyword-grant",
             "target": "all-friendly",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -2757,7 +2757,7 @@
   },
   {
     "ability_id": "fury-from-the-delve",
-    "name": "Fury From The D\u00ealve",
+    "name": "Fury From The Dêlve",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2774,10 +2774,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
-        "parameters": {
-          "keyword": "CTHONIAN BESERKS"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "CTHONIAN"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "BESERKS"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
@@ -2964,10 +2975,10 @@
       "type": "keyword-grant",
       "target": "friendly-within-aura",
       "modifier": {
+        "value": 1,
         "keywords": [
-          "sustained-hits"
-        ],
-        "value": 1
+          "Sustained Hits"
+        ]
       }
     },
     "scope": {
@@ -3106,7 +3117,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "assault"
+          "Assault"
         ]
       }
     },

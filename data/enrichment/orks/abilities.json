@@ -348,10 +348,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Lethal Hits"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -617,10 +617,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -635,10 +635,10 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -1856,10 +1856,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Lethal Hits"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             }
           ]
@@ -2335,10 +2335,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -2693,10 +2693,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -4920,7 +4920,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "orks"
+          "keyword": "ORKS"
         }
       },
       "effect": {
@@ -5228,13 +5228,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -6156,7 +6156,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "sustained-hits"
+          "Sustained Hits"
         ]
       }
     },
@@ -7040,7 +7040,7 @@
         "type": "unit-within-range-of",
         "parameters": {
           "target_type": "friendly",
-          "keyword": "BEAST-SNAGGA",
+          "keyword": "BEAST SNAGGA",
           "exclude_keyword": "MONSTER CHARACTER",
           "range": 3
         }
@@ -7629,10 +7629,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -8081,10 +8081,10 @@
         "type": "keyword-grant",
         "target": "attacker",
         "modifier": {
+          "value": 1,
           "keywords": [
-            "sustained-hits"
-          ],
-          "value": 1
+            "Sustained Hits"
+          ]
         }
       }
     },
@@ -8439,11 +8439,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Assault",
           "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -8807,7 +8807,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "hidden"
+          "keyword": "HIDDEN"
         }
       },
       "effect": {
@@ -9314,10 +9314,10 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Hazardous"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ]
@@ -9815,10 +9815,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -9958,11 +9958,11 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lethal Hits",
                 "Psychic"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ]
@@ -10040,10 +10040,10 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Psychic"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ]
@@ -10159,10 +10159,10 @@
                   "type": "keyword-grant",
                   "target": "unit",
                   "modifier": {
+                    "weapon_type": "ranged",
                     "keywords": [
                       "Assault"
-                    ],
-                    "weapon_type": "ranged"
+                    ]
                   }
                 },
                 {
@@ -10852,20 +10852,20 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_name": "da-gobshot-thunderbuss",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_name": "da-gobshot-thunderbuss"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_name": "da-gobshot-thunderbuss",
               "keywords": [
                 "Rapid Fire 6"
-              ],
-              "weapon_name": "da-gobshot-thunderbuss"
+              ]
             }
           },
           {
@@ -11041,10 +11041,10 @@
             "type": "keyword-grant",
             "target": "all-friendly",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -11203,10 +11203,10 @@
         "type": "keyword-grant",
         "target": "all-friendly",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -11497,12 +11497,12 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_name": "’Eadbanger",
               "keywords": [
                 "Hazardous",
                 "Precision",
                 "Psychic"
-              ],
-              "weapon_name": "’Eadbanger"
+              ]
             }
           }
         ]
@@ -11746,10 +11746,21 @@
                 "operator": "or",
                 "operands": [
                   {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "ORKS AIRCRAFT"
-                    }
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "target-has-keyword",
+                        "parameters": {
+                          "keyword": "ORKS"
+                        }
+                      },
+                      {
+                        "type": "target-has-keyword",
+                        "parameters": {
+                          "keyword": "AIRCRAFT"
+                        }
+                      }
+                    ]
                   },
                   {
                     "type": "target-has-keyword",
@@ -12086,10 +12097,10 @@
         "type": "keyword-grant",
         "target": "all-friendly",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -12669,10 +12680,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lethal Hits"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -13517,10 +13528,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         },
@@ -13580,10 +13591,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         }
@@ -13906,10 +13917,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "level": 1,
           "keywords": [
-            "sustained-hits"
-          ],
-          "level": 1
+            "Sustained Hits"
+          ]
         }
       }
     },
@@ -14679,12 +14690,12 @@
             "type": "keyword-grant",
             "target": "bearer",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
-                "Anti-Infantry 4+",
+                "Anti INFANTRY 4+",
                 "Devastating Wounds",
                 "Supa-Hazardous"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -14728,10 +14739,10 @@
       "type": "keyword-grant",
       "target": "self",
       "modifier": {
+        "weapon_name": "Snazzgun",
         "keywords": [
           "Rapid Fire 1"
-        ],
-        "weapon_name": "Snazzgun"
+        ]
       }
     },
     "scope": {
@@ -15030,11 +15041,11 @@
                 "type": "keyword-grant",
                 "target": "bearer",
                 "modifier": {
+                  "weapon_type": "ranged",
+                  "weapon_name": "Shokk Attack Gun",
                   "keywords": [
                     "Torrent"
-                  ],
-                  "weapon_type": "ranged",
-                  "weapon_name": "Shokk Attack Gun"
+                  ]
                 }
               },
               {
@@ -15078,11 +15089,11 @@
             "type": "keyword-grant",
             "target": "bearer",
             "modifier": {
+              "weapon_type": "ranged",
+              "weapon_name": "Shokk Attack Gun",
               "keywords": [
                 "Sustained Hits 2"
-              ],
-              "weapon_type": "ranged",
-              "weapon_name": "Shokk Attack Gun"
+              ]
             }
           }
         }
@@ -15169,10 +15180,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -15774,32 +15785,32 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Hazardous",
                 "Lethal Hits",
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         ]
@@ -16366,10 +16377,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -16429,13 +16440,27 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "friendly",
-              "range": 3,
-              "keyword": "ORKS WALKER",
-              "exclude_keyword": "BIG MEK"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly",
+                  "range": 3,
+                  "keyword": "ORKS",
+                  "exclude_keyword": "BIG MEK"
+                }
+              },
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly",
+                  "range": 3,
+                  "keyword": "WALKER",
+                  "exclude_keyword": "BIG MEK"
+                }
+              }
+            ]
           },
           "effect": {
             "type": "ability-grant",
@@ -16567,10 +16592,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       ]
@@ -16700,20 +16725,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         }
       ]

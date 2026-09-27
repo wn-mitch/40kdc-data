@@ -123,10 +123,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Precision"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {

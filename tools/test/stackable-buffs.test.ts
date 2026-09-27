@@ -32,7 +32,7 @@ describe("Dataset.stackableBuffsFor", () => {
     const decap = buffs.find((b) => b.id === "blessings-of-khorne#Decapitating Strikes")!;
     expect(decap.buffs[0].contribution).toMatchObject({ type: "extra-keyword" });
     expect(decap.buffs[0].applicableWhen).toEqual({
-      requiresTargetKeyword: "Infantry",
+      requiresTargetKeyword: "INFANTRY",
       phases: ["fight"],
     });
   });

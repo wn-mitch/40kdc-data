@@ -2220,8 +2220,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR"
       ]
     },
     "trigger": {
@@ -2268,8 +2268,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     }
   },
@@ -2300,8 +2300,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Flawless Blades"
+        "EMPEROR’S CHILDREN",
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -2333,11 +2333,11 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         }
       ]
@@ -2348,8 +2348,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Lord Kakophonist"
+        "EMPEROR’S CHILDREN",
+        "LORD KAKOPHONIST"
       ]
     }
   },
@@ -2373,10 +2373,10 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "scope": "weapon",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "scope": "weapon"
+        ]
       }
     },
     "scope": {
@@ -2385,8 +2385,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator Squad"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR SQUAD"
       ]
     }
   },
@@ -2422,8 +2422,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Lord Exultant"
+        "EMPEROR’S CHILDREN",
+        "LORD EXULTANT"
       ]
     }
   },
@@ -2459,8 +2459,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Lord Exultant"
+        "EMPEROR’S CHILDREN",
+        "LORD EXULTANT"
       ]
     }
   },
@@ -2496,8 +2496,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Flawless Blades"
+        "EMPEROR’S CHILDREN",
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -2531,8 +2531,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Flawless Blades"
+        "EMPEROR’S CHILDREN",
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -2569,8 +2569,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR"
       ]
     }
   },
@@ -2605,8 +2605,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR"
       ]
     }
   },
@@ -2639,8 +2639,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR"
       ]
     }
   },
@@ -2677,8 +2677,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     }
   },
@@ -2715,8 +2715,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     }
   },
@@ -2749,8 +2749,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     }
   },
@@ -2774,11 +2774,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "melee",
         "keywords": [
           "Precision"
-        ],
-        "scope": "weapon",
-        "attack_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -2787,7 +2787,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Flawless Blades"
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -2824,7 +2824,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Flawless Blades"
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -2858,7 +2858,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Flawless Blades"
+        "FLAWLESS BLADES"
       ]
     },
     "trigger": {
@@ -3010,20 +3010,20 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ],
@@ -3373,8 +3373,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Character"
+        "EMPEROR’S CHILDREN",
+        "CHARACTER"
       ]
     },
     "community_notes": "Add 1 to the roll while this unit is your army's Favoured Champions; the Favoured Champions bonus is not encoded."
@@ -3399,10 +3399,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -3411,8 +3411,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Character"
+        "EMPEROR’S CHILDREN",
+        "CHARACTER"
       ]
     },
     "community_notes": "Targets one or more Character units that have not fought this phase; the ability applies only while attacking one selected enemy unit."
@@ -3462,7 +3462,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Used just after a Character unit becomes your army's Favoured Champions; each enemy unit within 6\" takes a Battle-shock test with -1 to the result."
@@ -3507,7 +3507,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Applies to Emperor's Children Character units that are NOT your army's Favoured Champions; the Favoured Champions exclusion is not encoded."
@@ -3542,8 +3542,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Character"
+        "EMPEROR’S CHILDREN",
+        "CHARACTER"
       ]
     },
     "community_notes": "Used when charging within 12\" of an engaged enemy unit; the unit must end the charge move engaged with one or more of those enemy units."
@@ -3578,8 +3578,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Character"
+        "EMPEROR’S CHILDREN",
+        "CHARACTER"
       ]
     },
     "community_notes": "If the unit is not your army's Favoured Champions, you can re-roll the surge-distance dice; the re-roll rider is not encoded."
@@ -3626,7 +3626,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Daemonettes"
+        "DAEMONETTES"
       ]
     },
     "community_notes": "The 6\" (instead of 9\") Deep Strike return applies only in the Reinforcements step of your next Movement phase and requires setting up wholly within 8\" of one or more friendly Emperor's Children units."
@@ -3660,7 +3660,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Used after a Legions of Excess unit destroys an enemy unit in the Fight phase; a friendly unengaged Emperor's Children unit within 6\" of it can declare a charge. If it already fought this phase, it cannot fight again."
@@ -3708,7 +3708,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "After this unit destroys an enemy unit in the Fight phase, one friendly Legions of Excess unit within 6\" either has one model recover up to 3 lost wounds or, if it is a Daemonettes unit, returns up to D3+3 destroyed models instead."
@@ -3791,7 +3791,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Slaanesh"
+        "SLAANESH"
       ]
     }
   },
@@ -3838,7 +3838,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Slaanesh"
+        "SLAANESH"
       ]
     },
     "community_notes": "Pile-in and Consolidation moves need not end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit."
@@ -3875,7 +3875,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The unit must have made a Charge move this turn."
@@ -3909,7 +3909,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Used just after an enemy unit Falls Back within 6\"; the charge must target that enemy unit and the unit receives no Charge bonus this turn. Vehicles can only be selected if they are Walkers."
@@ -3953,7 +3953,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -3989,7 +3989,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4023,7 +4023,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The unit must end the Consolidation move within Engagement Range of one or more enemy units."
@@ -4057,7 +4057,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Used in the opponent's Command phase on a unit that Charged and destroyed an enemy unit last turn; each enemy unit within 6\" takes a Battle-shock test, at -1 if Below Half-strength, and affected units skip their other Battle-shock tests this phase."
@@ -4091,8 +4091,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Transport"
+        "EMPEROR’S CHILDREN",
+        "TRANSPORT"
       ]
     },
     "community_notes": "The Transport must have one or more non-Battle-shocked Tormentors units embarked; the objective it is in range of becomes sticky."
@@ -4126,7 +4126,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The unit disembarked from a Transport that made a Normal move this turn and is eligible to declare a charge this phase."
@@ -4158,8 +4158,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Vehicle"
+        "EMPEROR’S CHILDREN",
+        "VEHICLE"
       ]
     },
     "community_notes": "Models can move through enemy models (excluding Monsters and Vehicles) without ending in Engagement Range; Desperate Escape tests are automatically passed."
@@ -4193,7 +4193,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "At the end of the Fight phase, a unit that destroyed an enemy unit this phase and is wholly within 6\" of a friendly Transport it can embark within may embark, even in a turn it disembarked."
@@ -4228,8 +4228,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Transport"
+        "EMPEROR’S CHILDREN",
+        "TRANSPORT"
       ]
     },
     "community_notes": "At the end of the opponent's Fight phase, one Transport (or up to two Dedicated Transports) wholly within 9\" of a battlefield edge is placed into Strategic Reserves."
@@ -4261,8 +4261,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Transport"
+        "EMPEROR’S CHILDREN",
+        "TRANSPORT"
       ]
     },
     "community_notes": "Used when the Transport is targeted; one embarked Emperor's Children unit disembarks anywhere wholly within 6\" of the Transport and outside Engagement Range."
@@ -4299,7 +4299,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4335,8 +4335,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     }
   },
@@ -4370,7 +4370,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "At the end of the opponent's Fight phase, a unit wholly within 9\" of a battlefield edge and more than 3\" horizontally from all enemy units is placed into Strategic Reserves."
@@ -4405,8 +4405,8 @@
     },
     "applies_to": {
       "excluded_keywords": [
-        "Beasts",
-        "Vehicle"
+        "BEASTS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Triggered just after an enemy unit ends a Normal, Advance or Fall Back move within 8\"; the unit makes a Normal move of up to 6\"."
@@ -4440,8 +4440,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase."
@@ -4466,10 +4466,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -4478,7 +4478,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4512,7 +4512,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Used just after an enemy unit has shot, on a unit that lost one or more wounds to those attacks."
@@ -4562,7 +4562,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Applies only to attacks made by Emperor's Children models against eligible targets within 12\"; the range gate is not encoded."
@@ -4600,7 +4600,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4641,8 +4641,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Daemon"
+        "EMPEROR’S CHILDREN",
+        "DAEMON"
       ]
     }
   },
@@ -4698,7 +4698,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4738,8 +4738,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Daemon"
+        "EMPEROR’S CHILDREN",
+        "DAEMON"
       ]
     }
   },
@@ -4775,7 +4775,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Worsens the Armour Penetration of incoming attacks by 1 until the attacking unit has finished making its attacks."
@@ -4809,8 +4809,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "community_notes": "[APPROX] Each enemy model within Engagement Range of this unit must select it as the target of its attacks; encoded as an opaque grant."
@@ -4845,7 +4845,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4891,7 +4891,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -4928,7 +4928,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "interactions": [
@@ -4982,7 +4982,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Also ignores modifiers to the attack's Ballistic Skill or Weapon Skill characteristic."
@@ -5032,7 +5032,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Callous Blades"
+        "CALLOUS BLADES"
       ]
     },
     "community_notes": "Add 1 to the roll if the unit has Flawless Blades; the bonus is not encoded."
@@ -5066,7 +5066,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Callous Blades"
+        "CALLOUS BLADES"
       ]
     },
     "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured."
@@ -5103,8 +5103,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Callous Blades",
-        "Flawless Blades"
+        "CALLOUS BLADES",
+        "FLAWLESS BLADES"
       ]
     }
   },
@@ -5138,7 +5138,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 2\" to the Move characteristic of its models; the Favoured Champions rider is not encoded."
@@ -5172,7 +5172,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "[APPROX] Enemy units (excluding Monsters and Vehicles) Falling Back from within Engagement Range of the bearer's unit take Desperate Escape tests, at -1 while the bearer's unit is your army's Favoured Champions. Encoded as an opaque grant."
@@ -5220,7 +5220,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 1 to the Objective Control characteristic of its models; the rider is not encoded."
@@ -5248,10 +5248,10 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Precision"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -5296,7 +5296,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -5329,7 +5329,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The Heroic Intervention stratagem costs 1 CP less when targeting the bearer's unit."
@@ -5368,8 +5368,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     }
   },
@@ -5417,7 +5417,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "[APPROX] One selected melee weapon gains +1 Attacks. Additionally, each time the bearer is selected to fight it can empower that weapon: +1 Damage plus [DEVASTATING WOUNDS] and [HAZARDOUS] for those attacks. The optional empowerment is encoded as an opaque grant."
@@ -5502,7 +5502,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The Heroic Intervention stratagem can target the bearer's unit regardless of other uses this phase, costs 1 CP less when doing so, and does not prevent uses on other units."
@@ -5539,7 +5539,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -5590,7 +5590,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -5628,8 +5628,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "interactions": [
@@ -5673,8 +5673,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "community_notes": "In your Movement phase, one friendly Emperor's Children Transport in Strategic Reserves treats the battle round as one higher for arrival purposes."
@@ -5728,8 +5728,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     }
   },
@@ -5766,8 +5766,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "community_notes": "[APPROX] In the opponent's Shooting phase, just after an enemy unit has shot, one friendly Emperor's Children unit within 9\" of the bearer that was hit can embark within a friendly Transport it is wholly within 6\" of. Encoded as an opaque grant."
@@ -5804,8 +5804,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "community_notes": "When a saving throw is failed for a friendly Emperor's Children Vehicle model within 6\" of the bearer, change that attack's Damage characteristic to 0."
@@ -5873,7 +5873,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -5911,7 +5911,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     }
   },
@@ -5957,7 +5957,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "After deployment, redeploy up to two Emperor's Children units, optionally into Strategic Reserves regardless of the usual limits."
@@ -5989,7 +5989,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Models in the bearer's unit can move through enemy models on Normal, Advance and Fall Back moves (not ending in Engagement Range); Desperate Escape tests are automatically passed."
@@ -6039,7 +6039,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Also ignores modifiers to the attack's Weapon Skill characteristic."
@@ -6075,7 +6075,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Lord Exultant"
+        "LORD EXULTANT"
       ]
     }
   },
@@ -6121,7 +6121,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "At the start of the Fight phase, one enemy unit within Engagement Range of the bearer takes a Battle-shock test with -1 to the result."
@@ -6173,8 +6173,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Daemon Prince"
+        "EMPEROR’S CHILDREN",
+        "DAEMON PRINCE"
       ]
     }
   },
@@ -6229,7 +6229,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Improves Leadership by 1 (lower is better, encoded as -1) and Objective Control by 1 while the bearer is leading a unit."
@@ -6276,7 +6276,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "[APPROX] At the start of your Shooting phase, one visible enemy unit within 12\" takes a Leadership test (-2 if Battle-shocked); if failed, it suffers 3 mortal wounds. The test-then-damage is encoded as an opaque grant."
@@ -6314,7 +6314,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "Once per turn, just after making a Hit roll, Wound roll or saving throw for a model in the bearer's unit, if the bearer is not Battle-shocked, treat the result as an unmodified 6."
@@ -6352,7 +6352,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "community_notes": "The return is gated on passing a Leadership test taken for the bearer at the end of the phase; the test gate is not encoded. Wounds regained are capped at the bearer's Wounds characteristic."
@@ -6392,8 +6392,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Callous Blades",
-        "Lord Exultant"
+        "CALLOUS BLADES",
+        "LORD EXULTANT"
       ]
     },
     "community_notes": "In the opponent's Shooting phase, after an enemy unit has shot and hit this unit, the unit can make a surge move of up to D3+1\"."
@@ -6435,8 +6435,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Callous Blades",
-        "Infractors"
+        "CALLOUS BLADES",
+        "INFRACTORS"
       ]
     },
     "community_notes": "Unit Upgrade (Infractors unit only, not a Character Enhancement): once per battle, in the Fight phase when an enemy unit targets this unit, attacks that target it get -1 to Hit rolls."

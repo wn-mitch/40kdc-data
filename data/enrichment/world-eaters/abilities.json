@@ -158,7 +158,7 @@
                 {
                   "type": "target-has-keyword",
                   "parameters": {
-                    "keyword": "Infantry"
+                    "keyword": "INFANTRY"
                   }
                 },
                 {
@@ -953,7 +953,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "Fly"
+          "keyword": "FLY"
         }
       },
       "effect": {
@@ -1116,13 +1116,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -1339,7 +1339,7 @@
         "parameters": {
           "range": 3,
           "target_type": "friendly-infantry",
-          "keyword": "World Eaters"
+          "keyword": "WORLD EATERS"
         }
       },
       "effect": {
@@ -1504,13 +1504,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -1837,14 +1837,14 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             },
             "negated": true
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             },
             "negated": true
           }
@@ -2716,7 +2716,7 @@
         "parameters": {
           "range": 12,
           "target_type": "friendly",
-          "keyword": "World Eaters"
+          "keyword": "WORLD EATERS"
         }
       },
       "effect": {
@@ -2736,7 +2736,7 @@
       "event": "stratagem-targeted",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ],
       "proximity": {
         "of": "self",
@@ -2991,7 +2991,7 @@
       "condition": {
         "type": "is-attached",
         "parameters": {
-          "keyword": "Possessed"
+          "keyword": "POSSESSED"
         }
       },
       "effect": {
@@ -3102,7 +3102,7 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Possessed"
+              "keyword": "POSSESSED"
             }
           },
           {
@@ -3127,7 +3127,7 @@
     "community_notes": "In your opponent's Shooting phase, when an enemy unit has shot, if a model in this unit was destroyed, the unit can make a D6\" Brazen Fury surge move.",
     "applies_to": {
       "required_keywords": [
-        "Possessed"
+        "POSSESSED"
       ]
     },
     "trigger": {
@@ -3201,11 +3201,11 @@
       "event": "selected-to-fight",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "World Eaters",
-        "Character"
+        "WORLD EATERS",
+        "CHARACTER"
       ],
       "subject_excluded_keywords": [
-        "Epic Hero"
+        "EPIC HERO"
       ],
       "condition": {
         "type": "phase-is",
@@ -3217,11 +3217,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Character"
+        "WORLD EATERS",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Epic Hero"
+        "EPIC HERO"
       ]
     }
   },
@@ -3844,7 +3844,7 @@
       "event": "unit-disembarked",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -3895,7 +3895,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "community_notes": "excludes Extra Attacks weapons"
@@ -3929,7 +3929,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -3964,7 +3964,7 @@
     "community_notes": "[APPROX] Modeled as re-rolling the Blessings of Khorne roll while the bearer is on the battlefield; the cap of re-rolling only up to two of the D6 is not modeled (upper bound).",
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -4021,7 +4021,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -4055,8 +4055,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Monster"
+        "WORLD EATERS",
+        "MONSTER"
       ]
     }
   },
@@ -4108,8 +4108,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Infantry"
+        "WORLD EATERS",
+        "INFANTRY"
       ]
     },
     "community_notes": "[APPROX] may only be attached to a JAKHALS or GOREMONGERS unit"
@@ -4157,8 +4157,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Monster"
+        "WORLD EATERS",
+        "MONSTER"
       ]
     }
   },
@@ -4203,7 +4203,7 @@
     "community_notes": "After both players deploy, redeploy up to three JAKHALS and/or GOREMONGERS units; they may be set up in Strategic Reserves regardless of Reserves limits.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "trigger": {
@@ -4353,7 +4353,7 @@
     "community_notes": "[APPROX] The suppressed unit must have been hit by the selected vehicle's attacks and the vehicle is chosen within 6\" of the bearer (or is its transport); the hit-gate and the 6\" pick are not modeled.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -4387,7 +4387,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "trigger": {
@@ -4546,7 +4546,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Lord on Juggernaut"
+        "LORD ON JUGGERNAUT"
       ]
     },
     "community_notes": "[APPROX] may only be attached to a BLOODCRUSHERS or FLESH HOUNDS unit; the BLOOD LEGIONS Faction keyword replaces WORLD EATERS while leading"
@@ -4623,7 +4623,7 @@
     "community_notes": "Melee weapons get +1 A/S/D; each time the bearer's unit destroys an enemy unit in melee you automatically gain 1 Blood Tithe point (no 3+ roll needed).",
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -4657,7 +4657,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Slaughterbound"
+        "SLAUGHTERBOUND"
       ]
     },
     "community_notes": "Each Brazen Fury move made by the bearer's unit counts as having rolled a 6 for its distance."
@@ -4731,8 +4731,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Daemon"
+        "WORLD EATERS",
+        "DAEMON"
       ]
     }
   },
@@ -4781,8 +4781,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Daemon"
+        "WORLD EATERS",
+        "DAEMON"
       ]
     }
   },
@@ -4878,8 +4878,8 @@
     "community_notes": "WORLD EATERS DAEMON PRINCE model only: the bearer has MOBILE and adds 1 to Charge rolls.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Daemon Prince"
+        "WORLD EATERS",
+        "DAEMON PRINCE"
       ]
     }
   },
@@ -4924,7 +4924,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "community_notes": "[APPROX] The unit must have made a Charge move this turn and must not yet have been selected to fight this phase; both preconditions are left out of the effect tree so the stratagem stays a toggleable lever for the cruncher."
@@ -5087,7 +5087,8 @@
       "event": "selected-to-advance",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "Khorne Berzerkers"
+        "KHORNE",
+        "BERZERKERS"
       ],
       "condition": {
         "operator": "and",
@@ -5159,7 +5160,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Khorne Berzerkers"
+        "KHORNE",
+        "BERZERKERS"
       ]
     },
     "community_notes": "replaces the D6 surge-move roll: models move up to 8\" instead"
@@ -5378,7 +5380,7 @@
     "community_notes": "[APPROX] The selected Idol is active for this unit instead of any other active Idol and may repeat an already-used Idol; the grant_type slugs are display labels for the three Idols of Khorne auras (see idols-of-khorne), not ability_id references.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     }
   },
@@ -5411,12 +5413,25 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "friendly-keyword",
-              "keyword": "WORLD EATERS MONSTER",
-              "range": 6
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly-keyword",
+                  "keyword": "WORLD EATERS",
+                  "range": 6
+                }
+              },
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "friendly-keyword",
+                  "keyword": "MONSTER",
+                  "range": 6
+                }
+              }
+            ]
           },
           "effect": {
             "type": "feel-no-pain",
@@ -5434,7 +5449,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Jakhals"
+        "JAKHALS"
       ]
     },
     "community_notes": "[APPROX] the 5+ also applies within 9\" of a friendly WORLD EATERS TITANIC unit; usable in your opponent's Shooting phase or the Fight phase, just after an enemy unit selects your JAKHALS or GOREMONGERS unit as a target"
@@ -5535,7 +5550,7 @@
       "event": "on-unit-destroyed",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "Jakhals"
+        "JAKHALS"
       ],
       "optional": true
     }
@@ -5590,8 +5605,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Infantry"
+        "WORLD EATERS",
+        "INFANTRY"
       ]
     },
     "community_notes": "[APPROX] The unit must be WHOLLY within 6\" of the selected transport (modeled as within 6\"), and the transport must be one it is able to embark within."
@@ -5651,8 +5666,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Vehicle"
+        "WORLD EATERS",
+        "VEHICLE"
       ]
     }
   },
@@ -5707,8 +5722,8 @@
     "community_notes": "[APPROX] The Rhino must not have been selected to move this phase (precondition not modeled). The disembarking unit sets up wholly within 6\" of the Rhino and may be placed within Engagement Range.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Rhino"
+        "WORLD EATERS",
+        "RHINO"
       ]
     }
   },
@@ -5819,8 +5834,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Vehicle"
+        "WORLD EATERS",
+        "VEHICLE"
       ]
     },
     "community_notes": "cannot be combined with the Fury Unleashed Stratagem in the same phase"
@@ -5885,7 +5900,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rhino"
+        "RHINO"
       ]
     },
     "community_notes": "[APPROX] used just after an enemy unit shoots a WORLD EATERS RHINO with wounds remaining: one embarked KHORNE BERZERKERS unit makes the disembark move then the surge move; cannot be combined with Unrelenting Advance in the same phase"
@@ -6090,7 +6105,7 @@
               "victim_kind": "model",
               "victim_owner": "enemy",
               "victim_keywords": [
-                "Character"
+                "CHARACTER"
               ],
               "window": "just-finished-attack-sequence"
             }
@@ -6102,7 +6117,7 @@
               "victim_kind": "model",
               "victim_owner": "enemy",
               "victim_keywords": [
-                "Monster"
+                "MONSTER"
               ],
               "window": "just-finished-attack-sequence"
             }
@@ -6412,8 +6427,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Possessed"
+        "WORLD EATERS",
+        "POSSESSED"
       ]
     },
     "community_notes": "[APPROX] EIGHTBOUND get the bonus against targets that are not MONSTERS or VEHICLES; EXALTED EIGHTBOUND get it against MONSTERS and VEHICLES instead"
@@ -6484,8 +6499,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Possessed"
+        "WORLD EATERS",
+        "POSSESSED"
       ]
     },
     "community_notes": "used just after an enemy unit selects your unit as a target; only models that have not fought this phase fight after the attacking unit finishes its attacks"
@@ -6601,8 +6616,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Possessed"
+        "WORLD EATERS",
+        "POSSESSED"
       ]
     },
     "community_notes": "[APPROX] Move-through excludes enemy MONSTER and VEHICLE models, and a Charge move may end within Engagement Range (both nuances not modeled). Applies to Normal, Advance, Fall Back and Charge moves; the unit must not have been selected to move or declare a charge this phase."
@@ -6670,8 +6685,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Possessed"
+        "WORLD EATERS",
+        "POSSESSED"
       ]
     }
   },
@@ -6724,11 +6739,11 @@
       "event": "selected-to-fight",
       "subject": "friendly-unit",
       "subject_keywords": [
-        "World Eaters",
-        "Character"
+        "WORLD EATERS",
+        "CHARACTER"
       ],
       "subject_excluded_keywords": [
-        "Epic Hero"
+        "EPIC HERO"
       ],
       "condition": {
         "type": "phase-is",
@@ -6740,11 +6755,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Character"
+        "WORLD EATERS",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Epic Hero"
+        "EPIC HERO"
       ]
     },
     "community_notes": "[APPROX] Only the unit's CHARACTER models' melee attacks gain +1 A / +2 S; modeled unit-wide."
@@ -6897,8 +6912,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Daemon",
-        "Vehicle"
+        "DAEMON",
+        "VEHICLE"
       ]
     },
     "community_notes": "[APPROX] The same enemy unit cannot be selected for this effect more than once per phase (cap not modeled). Grants friendly DAEMON VEHICLE units the Terror of Khorne ability; BRAZEN ENGINES is an onslaught detachment and cannot be combined with another onslaught detachment."
@@ -6963,8 +6978,8 @@
     "community_notes": "WORLD EATERS VEHICLE model only: the unit gains the DAEMON keyword.",
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Vehicle"
+        "WORLD EATERS",
+        "VEHICLE"
       ]
     }
   },
@@ -7018,8 +7033,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Daemon",
-        "Vehicle"
+        "DAEMON",
+        "VEHICLE"
       ]
     }
   },
@@ -7072,8 +7087,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Daemon",
-        "Vehicle"
+        "DAEMON",
+        "VEHICLE"
       ]
     }
   },
@@ -7156,7 +7171,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Terminator Squad"
+        "TERMINATOR SQUAD"
       ]
     },
     "community_notes": "At the start of the Fight phase, if a friendly TERMINATOR SQUAD is engaged, make a Blessings of Khorne roll and activate one Blessing of Khorne for friendly TERMINATOR SQUAD units (in addition to any already active).",
@@ -7200,7 +7215,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Terminator Squad"
+        "TERMINATOR SQUAD"
       ]
     }
   },
@@ -7237,7 +7252,7 @@
     "community_notes": "+1 Weapon Skill on melee attacks, modeled as a WS characteristic modifier (distinct from +1 to Hit; the two stack and must not collide under the single +1-to-Hit cap).",
     "applies_to": {
       "required_keywords": [
-        "Terminator Squad"
+        "TERMINATOR SQUAD"
       ]
     }
   },
@@ -7296,13 +7311,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -7373,7 +7388,7 @@
     "community_notes": "lasts until the attacking enemy unit has finished its attacks",
     "applies_to": {
       "required_keywords": [
-        "Terminator Squad"
+        "TERMINATOR SQUAD"
       ]
     }
   },
@@ -7432,7 +7447,7 @@
         "parameters": {
           "range": 3,
           "target_type": "friendly-infantry",
-          "keyword": "Frenzied Reavers"
+          "keyword": "FRENZIED REAVERS"
         }
       },
       "effect": {
@@ -7535,7 +7550,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Frenzied Reavers"
+        "FRENZIED REAVERS"
       ]
     }
   }

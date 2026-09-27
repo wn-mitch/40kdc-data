@@ -3,8 +3,9 @@
 //! roster-highlighting contract consumers replicate: a unit matches iff it
 //! carries every `required_keywords` entry and none of the `excluded_keywords`,
 //! compared against the union of its `keywords` and `faction_keywords`.
-//! Matching is exact-string and case-sensitive — keywords are authored in
-//! datasheet Title Case on both sides.
+//! Keywords compare without regard to case or apostrophe style
+//! ([`keyword_key`]): rules print them uppercase, as `applies_to` spells them,
+//! while units store datasheet spelling.
 //!
 //! Two distinct "no constraint" forms, both deliberate:
 //!   - a `None`/absent filter has no resolvable scope and matches nothing (the
@@ -31,18 +32,24 @@ pub fn unit_matches_applies_to<'a>(
     let Some(filter) = filter else {
         return false;
     };
-    let owned: HashSet<&str> = owned_keywords.into_iter().collect();
+    let owned: HashSet<String> = owned_keywords.into_iter().map(keyword_key).collect();
     if let Some(required) = filter.required_keywords.as_ref() {
-        if !required.0.iter().all(|kw| owned.contains(kw.as_str())) {
+        if !required.0.iter().all(|kw| owned.contains(&keyword_key(kw))) {
             return false;
         }
     }
     if let Some(excluded) = filter.excluded_keywords.as_ref() {
-        if excluded.0.iter().any(|kw| owned.contains(kw.as_str())) {
+        if excluded.0.iter().any(|kw| owned.contains(&keyword_key(kw))) {
             return false;
         }
     }
     true
+}
+
+/// How two keyword spellings compare: uppercase, with a curly apostrophe read
+/// as a straight one.
+pub fn keyword_key(keyword: &str) -> String {
+    keyword.to_uppercase().replace('’', "'")
 }
 
 /// Convenience over [`unit_matches_applies_to`] for a typed [`Unit`]: unions the

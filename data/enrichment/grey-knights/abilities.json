@@ -546,10 +546,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -2418,22 +2418,22 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
+              "weapon_keyword": "Psychic",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
+              "weapon_keyword": "Psychic",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              ]
             }
           }
         ]
@@ -2753,10 +2753,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
-        "parameters": {
-          "keyword": "GREY KNIGHTS TERMINATOR"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "GREY KNIGHTS"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "TERMINATOR"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -2822,10 +2833,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         ]

@@ -1460,20 +1460,37 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-within-range-of",
-                "negated": true,
-                "parameters": {
-                  "target_type": "friendly-keyword",
-                  "keyword": "Blood Angels Character",
-                  "range": 6
-                }
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "unit-within-range-of",
+                        "parameters": {
+                          "target_type": "friendly-keyword",
+                          "keyword": "BLOOD ANGELS",
+                          "range": 6
+                        }
+                      },
+                      {
+                        "type": "unit-within-range-of",
+                        "parameters": {
+                          "target_type": "friendly-keyword",
+                          "keyword": "CHARACTER",
+                          "range": 6
+                        }
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "type": "unit-within-range-of",
                 "negated": true,
                 "parameters": {
                   "target_type": "friendly-keyword",
-                  "keyword": "Chaplain",
+                  "keyword": "CHAPLAIN",
                   "range": 12
                 }
               }
@@ -2638,7 +2655,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "anti-monster 4+"
+            "Anti MONSTER 4+"
           ]
         }
       }
@@ -4598,7 +4615,7 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "ADEPTUS-ASTARTES"
+              "keyword": "ADEPTUS ASTARTES"
             }
           }
         ]
@@ -5006,7 +5023,7 @@
               {
                 "type": "unit-has-keyword",
                 "parameters": {
-                  "keyword": "TERMINATOR-SQUAD"
+                  "keyword": "TERMINATOR SQUAD"
                 }
               }
             ]
@@ -8861,7 +8878,7 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "ADEPTUS-ASTARTES"
+              "keyword": "ADEPTUS ASTARTES"
             }
           },
           {
@@ -10225,7 +10242,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "assault"
+            "Assault"
           ]
         }
       }
@@ -10883,7 +10900,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "assault"
+            "Assault"
           ]
         }
       }
@@ -11261,7 +11278,7 @@
       "target": "unit",
       "modifier": {
         "keywords": [
-          "twin-linked"
+          "Twin-linked"
         ]
       }
     },
@@ -12246,7 +12263,7 @@
             {
               "type": "target-has-keyword",
               "parameters": {
-                "keyword": "Oath of Moment target"
+                "keyword": "OATH OF MOMENT TARGET"
               }
             }
           ]
@@ -12294,10 +12311,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -12848,10 +12865,10 @@
                 "type": "keyword-grant",
                 "target": "unit",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               },
               {
@@ -13156,10 +13173,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_name": "heavy bolter",
           "keywords": [
             "Blast 1"
-          ],
-          "weapon_name": "heavy bolter"
+          ]
         }
       }
     },
@@ -13387,7 +13404,7 @@
               {
                 "type": "unit-has-keyword",
                 "parameters": {
-                  "keyword": "Phobos"
+                  "keyword": "PHOBOS"
                 }
               },
               {
@@ -13439,10 +13456,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lance"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -13597,10 +13614,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -13708,10 +13725,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Precision"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -13772,10 +13789,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -13788,10 +13805,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -14102,13 +14119,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -14456,20 +14473,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -14484,11 +14501,11 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1",
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -14654,13 +14671,13 @@
                   {
                     "type": "target-has-keyword",
                     "parameters": {
-                      "keyword": "Monster"
+                      "keyword": "MONSTER"
                     }
                   },
                   {
                     "type": "target-has-keyword",
                     "parameters": {
-                      "keyword": "Vehicle"
+                      "keyword": "VEHICLE"
                     }
                   }
                 ]
@@ -14725,10 +14742,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -14835,19 +14852,19 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Character"
+              "keyword": "CHARACTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -15136,10 +15153,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_keyword": "Torrent",
         "keywords": [
           "Devastating Wounds"
-        ],
-        "weapon_keyword": "Torrent"
+        ]
       }
     },
     "scope": {
@@ -15172,13 +15189,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -15462,13 +15479,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -15634,20 +15651,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_keyword": "Assault",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_keyword": "Assault"
+            ]
           }
         }
       ]
@@ -15691,7 +15708,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Mounted"
+              "keyword": "MOUNTED"
             }
           },
           "effect": {
@@ -15710,7 +15727,7 @@
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "Mounted or non-Walker Vehicle unit: when it Advances, no Advance roll is made \u2014 instead add 6\" to Move (9\" for Mounted); the bonuses do not stack"
+    "community_notes": "Mounted or non-Walker Vehicle unit: when it Advances, no Advance roll is made — instead add 6\" to Move (9\" for Mounted); the bonuses do not stack"
   },
   {
     "ability_id": "mercy-is-weakness-ironstorm-spearhead",
@@ -15753,7 +15770,7 @@
             "condition": {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "Vehicle"
+                "keyword": "VEHICLE"
               }
             },
             "effect": {
@@ -15892,10 +15909,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -16045,7 +16062,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Character"
+              "keyword": "CHARACTER"
             }
           },
           "effect": {
@@ -16244,7 +16261,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "The unit-wide +1 Attacks is a once-per-battle activation at the start of any phase, lasting until the end of that phase"
@@ -16276,13 +16293,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -16300,7 +16317,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Each time an enemy unit (excluding Monsters/Vehicles) within 6\" fails a Battle-shock test, one model in it is destroyed (controller's choice); once per battle you can destroy D3 models instead"
@@ -16360,8 +16377,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Terminator"
+        "ADEPTUS ASTARTES",
+        "TERMINATOR"
       ]
     },
     "community_notes": "The unit-wide +1 OC is a once-per-battle activation at the start of any phase, lasting until the end of that phase"
@@ -16420,8 +16437,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Terminator"
+        "ADEPTUS ASTARTES",
+        "TERMINATOR"
       ]
     },
     "community_notes": "The unit-wide Feel No Pain 5+ is a once-per-battle activation after the bearer's unit is targeted, lasting until the end of the phase"
@@ -16462,7 +16479,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Gravis"
+        "GRAVIS"
       ]
     },
     "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up as close as possible to where it was destroyed, outside Engagement Range, with full wounds"
@@ -16508,10 +16525,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Captain"
+        "CAPTAIN"
       ]
     },
-    "community_notes": "Once per battle orbital-line bombardment: place a marker in your Shooting phase, a second within 12\" next Shooting phase, draw a line between them and roll one D6 per unit the line crosses \u2014 on a 3+ that unit suffers D3 mortal wounds"
+    "community_notes": "Once per battle orbital-line bombardment: place a marker in your Shooting phase, a second within 12\" next Shooting phase, draw a line between them and roll one D6 per unit the line crosses — on a 3+ that unit suffers D3 mortal wounds"
   },
   {
     "ability_id": "stoic-defender-anvil-siege-force",
@@ -16557,7 +16574,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "While the led unit is Battle-shocked, models' OC is halved instead of set to 0 (not modeled)"
@@ -16587,10 +16604,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Ignores Cover"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -16600,7 +16617,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -16643,7 +16660,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "At the end of your Command phase, an objective you control in range of the bearer's unit (or its Heavy Transport) stays under your control until the opponent's Level of Control exceeds yours at the end of a phase",
@@ -16698,7 +16715,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "If the bearer starts the battle embarked within a Transport, that Transport gains Scouts 6\"",
@@ -16732,10 +16749,10 @@
         "type": "keyword-grant",
         "target": "unit",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -16745,7 +16762,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Terminator or Gravis model only; applies when the bearer's unit shoots after disembarking from a Transport this turn"
@@ -16780,7 +16797,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per turn in your Movement phase: one friendly Transport in Strategic Reserves treats the battle round as one higher for set-up purposes"
@@ -16805,10 +16822,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Precision"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -16817,7 +16834,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Applies to the bearer and Battleline models in the bearer's unit"
@@ -16857,7 +16874,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -16893,7 +16910,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Applies to melee weapons of the bearer and Battleline models in the bearer's unit"
@@ -16934,7 +16951,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Each time the bearer's unit is targeted by a Stratagem, roll one D6 (+1 if the unit is Battleline): on a 4+ you gain 1CP"
@@ -16982,7 +16999,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -17067,7 +17084,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Under the Assault Doctrine the bonus is +2 instead of +1 (not cumulative)"
@@ -17103,7 +17120,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Captain"
+        "CAPTAIN"
       ]
     },
     "community_notes": "At the start of your Command phase, instead of selecting an army-wide Combat Doctrine you can make the Tactical Doctrine active for the bearer's unit only, even if already selected this battle"
@@ -17136,10 +17153,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -17168,7 +17185,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -17220,7 +17237,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tacticus"
+        "TACTICUS"
       ]
     },
     "community_notes": "Excluding modifiers to saving throws"
@@ -17257,8 +17274,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Infantry"
+        "ADEPTUS ASTARTES",
+        "INFANTRY"
       ]
     }
   },
@@ -17302,7 +17319,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per turn, after making a Hit roll or a saving throw for a model in the led unit, change the result to an unmodified 6"
@@ -17339,7 +17356,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Attacks allocated to the bearer lose 1 Damage; attacks made with Melta or Torrent weapons have their Damage changed to 1 instead (weapon-keyword gate not modeled)"
@@ -17387,7 +17404,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Speeder"
+        "SPEEDER"
       ]
     },
     "community_notes": "Re-roll Damage rolls and rolls to determine the Attacks characteristic of a weapon"
@@ -17412,10 +17429,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -17424,7 +17441,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Speeder"
+        "SPEEDER"
       ]
     }
   },
@@ -17464,7 +17481,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Gravis"
+        "GRAVIS"
       ]
     },
     "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up as close as possible to where it was destroyed, outside Engagement Range, with full wounds"
@@ -17521,7 +17538,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Each time the bearer's unit Falls Back, choose one option to apply until the end of the turn"
@@ -17557,7 +17574,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "After both players deploy, redeploy up to three Adeptus Astartes units; they may be placed in Strategic Reserves regardless of the reserves limit"
@@ -17615,8 +17632,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Vehicle"
+        "ADEPTUS ASTARTES",
+        "VEHICLE"
       ]
     },
     "community_notes": "The wound is regained at the end of your Command phase"
@@ -17676,8 +17693,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Vehicle"
+        "ADEPTUS ASTARTES",
+        "VEHICLE"
       ]
     },
     "community_notes": "Once per phase: one Hit roll, one Wound roll and one Damage roll"
@@ -17702,10 +17719,10 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -17714,8 +17731,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Vehicle"
+        "ADEPTUS ASTARTES",
+        "VEHICLE"
       ]
     }
   },
@@ -17751,13 +17768,13 @@
             {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "Adeptus Astartes"
+                "keyword": "ADEPTUS ASTARTES"
               }
             },
             {
               "type": "unit-has-keyword",
               "parameters": {
-                "keyword": "Vehicle"
+                "keyword": "VEHICLE"
               }
             }
           ]
@@ -17766,10 +17783,10 @@
           "type": "keyword-grant",
           "target": "friendly-within-aura",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       }
@@ -17780,8 +17797,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Vehicle"
+        "ADEPTUS ASTARTES",
+        "VEHICLE"
       ]
     }
   },
@@ -17864,8 +17881,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Mounted"
+        "ADEPTUS ASTARTES",
+        "MOUNTED"
       ]
     },
     "community_notes": "After ending a Charge move the improvement is 2 instead of 1 until the end of the turn (not cumulative)"
@@ -17906,7 +17923,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -17943,13 +17960,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
   {
     "ability_id": "hunters-instincts-stormlance-task-force",
-    "name": "Hunter\u2019s Instincts",
+    "name": "Hunter’s Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -17973,8 +17990,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Mounted"
+        "ADEPTUS ASTARTES",
+        "MOUNTED"
       ]
     },
     "community_notes": "While the bearer's unit is in Strategic Reserves, treat the battle round as one higher for set-up purposes"
@@ -18029,8 +18046,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     },
     "community_notes": "The Fall Back clause requires the Biomancy Discipline ability"
@@ -18100,11 +18117,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ],
       "excluded_keywords": [
-        "Terminator"
+        "TERMINATOR"
       ]
     },
     "community_notes": "Unit must be unengaged"
@@ -18160,8 +18177,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     },
     "community_notes": "Enemy units cannot target this unit with snap shooting attacks"
@@ -18227,8 +18244,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     },
     "community_notes": "At the end of the opponent's Fight phase, if unengaged, the unit can be placed in Strategic Reserves and make an ingress move in your next Movement phase (including your first turn)"
@@ -18256,10 +18273,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -18274,10 +18291,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -18289,8 +18306,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     }
   },
@@ -18329,8 +18346,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Infantry"
+        "ADEPTUS ASTARTES",
+        "INFANTRY"
       ]
     }
   },
@@ -18366,7 +18383,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -18400,7 +18417,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Phobos"
+        "PHOBOS"
       ]
     },
     "community_notes": "After the bearer's unit shoots, if unengaged, it can make a Normal move of up to 6\" but cannot declare a charge this turn; once per Shooting phase"
@@ -18440,7 +18457,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Phobos"
+        "PHOBOS"
       ]
     },
     "community_notes": "Lord of Deceit (Aura): once per turn, a Stratagem your opponent uses on one of their units within 12\" costs 1CP more"
@@ -18475,7 +18492,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Re-roll Charge rolls in a turn in which the bearer's unit was set up on the battlefield",
@@ -18513,7 +18530,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -18548,7 +18565,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "After both players deploy, redeploy up to three Adeptus Astartes units; they may be placed in Strategic Reserves regardless of the reserves limit"
@@ -18577,13 +18594,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Adeptus Astartes"
+              "keyword": "ADEPTUS ASTARTES"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -18604,7 +18621,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Techmarine"
+        "TECHMARINE"
       ]
     },
     "community_notes": "In your Command phase, select one Vehicle model within 6\" of the bearer"
@@ -18638,7 +18655,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -18686,7 +18703,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Techmarine"
+        "TECHMARINE"
       ]
     },
     "community_notes": "Once per battle round, when a saving throw is failed for a friendly Vehicle model within 6\", change that attack's Damage to 0"
@@ -18715,13 +18732,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Adeptus Astartes"
+              "keyword": "ADEPTUS ASTARTES"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -18733,10 +18750,10 @@
             "type": "keyword-grant",
             "target": "friendly-within-aura",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -18753,7 +18770,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "In your Command phase, select one Vehicle model within 6\" of the bearer"
@@ -18790,7 +18807,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Phobos"
+        "PHOBOS"
       ]
     }
   },
@@ -18835,8 +18852,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Infantry",
-        "Phobos"
+        "INFANTRY",
+        "PHOBOS"
       ]
     },
     "community_notes": "Applies to attacks targeting a hidden unit"
@@ -18876,8 +18893,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Terminator"
+        "ADEPTUS ASTARTES",
+        "TERMINATOR"
       ]
     },
     "community_notes": "Once per battle, at the end of the opponent's Fight phase, if unengaged, the bearer's unit is placed into Strategic Reserves"

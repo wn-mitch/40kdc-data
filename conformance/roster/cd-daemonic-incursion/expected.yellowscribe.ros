@@ -39,7 +39,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit is a nurgle legiones-daemonica unit, for the rest of the battle, friendly units within 6" gain the Shadow of Chaos ability.</characteristic>
+                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" gain the Shadow of Chaos ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Virulent Blessing (Psychic)" typeName="Abilities">
@@ -131,7 +131,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Daemon Lord of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against nurgle targets against legiones-daemonica targets, until the end of the battle round, add 1 to the Toughness characteristic of friendly units within 6".</characteristic>
+                <characteristic name="Description">Against NURGLE targets against LEGIONES DAEMONICA targets, until the end of the battle round, add 1 to the Toughness characteristic of friendly units within 6".</characteristic>
               </characteristics>
             </profile>
             <profile name="Nurgle’s Rot (Psychic)" typeName="Abilities">

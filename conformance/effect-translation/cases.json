@@ -252,11 +252,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit gets +1 to Wound rolls for ranged attacks.\nApplies to: units with T'au Empire."
+      "text": "Until the end of the phase, the unit gets +1 to Wound rolls for ranged attacks.\nApplies to: units with T’AU EMPIRE."
     }
   },
   {
@@ -289,11 +289,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "expected": {
-      "text": "After this unit attacks, select one enemy unit (your A Trap Well Laid target). Until the end of the phase, each time a friendly unit makes an attack against it, subtract 1 from the unit's Armour Penetration characteristic.\nApplies to: units with Kroot."
+      "text": "After this unit attacks, select one enemy unit (your A Trap Well Laid target). Until the end of the phase, each time a friendly unit makes an attack against it, subtract 1 from the unit's Armour Penetration characteristic.\nApplies to: units with KROOT."
     }
   },
   {
@@ -306,13 +306,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -332,7 +332,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Against Monster targets or against Vehicle targets, until the end of the phase, the unit gets +1 to Wound rolls."
+      "text": "Against MONSTER targets or against VEHICLE targets, until the end of the phase, the unit gets +1 to Wound rolls."
     }
   },
   {
@@ -465,7 +465,7 @@
               "victim_kind": "model",
               "victim_owner": "enemy",
               "victim_keywords": [
-                "Character"
+                "CHARACTER"
               ],
               "window": "just-finished-attack-sequence"
             }
@@ -477,7 +477,7 @@
               "victim_kind": "model",
               "victim_owner": "enemy",
               "victim_keywords": [
-                "Monster"
+                "MONSTER"
               ],
               "window": "just-finished-attack-sequence"
             }
@@ -522,7 +522,7 @@
       "optional": true
     },
     "expected": {
-      "text": "After a friendly unit resolves its attacks during the Fight phase, you may use this ability, if the unit has destroyed 1+ enemy Character models with its just-resolved attacks or if the unit has destroyed 1+ enemy Monster models with its just-resolved attacks:\n  -> You gain D3 Blood Tithe Pool.\n  -> Spend one or more Blood Tithe Pool."
+      "text": "After a friendly unit resolves its attacks during the Fight phase, you may use this ability, if the unit has destroyed 1+ enemy CHARACTER models with its just-resolved attacks or if the unit has destroyed 1+ enemy MONSTER models with its just-resolved attacks:\n  -> You gain D3 Blood Tithe Pool.\n  -> Spend one or more Blood Tithe Pool."
     }
   },
   {
@@ -612,12 +612,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit gains the Remain Hidden After Shooting ability.\nApplies to: units with Emperor's Children, Battleline."
+      "text": "Until the end of the phase, the unit gains the Remain Hidden After Shooting ability.\nApplies to: units with EMPEROR’S CHILDREN, BATTLELINE."
     }
   },
   {
@@ -629,13 +629,13 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Abhuman"
-            ],
             "applies_to_keywords": [
               "Bullgryn Squad",
               "Ogryn Squad",
               "Ratlings"
+            ],
+            "keywords": [
+              "Abhuman"
             ]
           }
         },
@@ -657,11 +657,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> All friendly units' weapons gain [ABHUMAN].\n  -> All friendly units gain the Issue Extra Order to Abhuman Unit ability.\nApplies to: units with Astra Militarum."
+      "text": "For the rest of the battle:\n  -> All friendly units' weapons gain [ABHUMAN].\n  -> All friendly units gain the Issue Extra Order to Abhuman Unit ability.\nApplies to: units with ASTRA MILITARUM."
     }
   },
   {
@@ -718,8 +718,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Infantry"
+        "EMPEROR’S CHILDREN",
+        "INFANTRY"
       ]
     },
     "usage": {
@@ -727,7 +727,7 @@
       "per": "unit"
     },
     "expected": {
-      "text": "Once per turn per unit, until the end of the phase, friendly units within 9\" gain the Embark After Enemy Shooting ability.\nApplies to: units with Emperor's Children, Infantry."
+      "text": "Once per turn per unit, until the end of the phase, friendly units within 9\" gain the Embark After Enemy Shooting ability.\nApplies to: units with EMPEROR’S CHILDREN, INFANTRY."
     }
   },
   {
@@ -746,11 +746,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum"
+        "ASTRA MILITARUM"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, you can re-roll a failed Hit roll.\nApplies to: units with Astra Militarum."
+      "text": "Until the end of the phase, you can re-roll a failed Hit roll.\nApplies to: units with ASTRA MILITARUM."
     }
   },
   {
@@ -969,12 +969,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Astra Militarum",
-        "Vehicle"
+        "ASTRA MILITARUM",
+        "VEHICLE"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit can move over terrain features as though they were not there.\nApplies to: units with Astra Militarum, Vehicle."
+      "text": "Until the end of the phase, the unit can move over terrain features as though they were not there.\nApplies to: units with ASTRA MILITARUM, VEHICLE."
     }
   },
   {
@@ -995,11 +995,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "Subtract 1 from the bearer's Damage characteristic.\nApplies to: units with Adeptus Astartes."
+      "text": "Subtract 1 from the bearer's Damage characteristic.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -1045,11 +1045,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "expected": {
-      "text": "Add 1 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 1 to the Strength characteristic of melee weapons equipped by this model.\nAdd 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with Adeptus Custodes."
+      "text": "Add 1 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 1 to the Strength characteristic of melee weapons equipped by this model.\nAdd 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -1171,11 +1171,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Captain"
+        "CAPTAIN"
       ]
     },
     "expected": {
-      "text": "Until the start of your next Command phase, the unit gains the Tactical Doctrine keyword.\nApplies to: units with Captain."
+      "text": "Until the start of your next Command phase, the unit gains the Tactical Doctrine keyword.\nApplies to: units with CAPTAIN."
     }
   },
   {
@@ -1196,7 +1196,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Techmarine"
+        "TECHMARINE"
       ]
     },
     "usage": {
@@ -1212,7 +1212,7 @@
       }
     },
     "expected": {
-      "text": "After a saving throw is made within 6\" of this model, once per battle round per model, modify the Damage characteristic of friendly units within 6\" to 0.\nApplies to: units with Techmarine."
+      "text": "After a saving throw is made within 6\" of this model, once per battle round per model, modify the Damage characteristic of friendly units within 6\" to 0.\nApplies to: units with TECHMARINE."
     }
   },
   {
@@ -1258,11 +1258,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Shield-Captain"
+        "SHIELD-CAPTAIN"
       ]
     },
     "expected": {
-      "text": "Add 3 to the Strength characteristic of melee weapons equipped by this model.\nSubtract 1 from the Armour Penetration characteristic of melee weapons equipped by this model.\nAdd 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with Shield-Captain."
+      "text": "Add 3 to the Strength characteristic of melee weapons equipped by this model.\nSubtract 1 from the Armour Penetration characteristic of melee weapons equipped by this model.\nAdd 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with SHIELD-CAPTAIN."
     }
   },
   {
@@ -1326,10 +1326,10 @@
                   "type": "keyword-grant",
                   "target": "unit",
                   "modifier": {
+                    "weapon_type": "ranged",
                     "keywords": [
                       "Assault"
-                    ],
-                    "weapon_type": "ranged"
+                    ]
                   }
                 },
                 {
@@ -1381,12 +1381,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Transport"
+        "EMPEROR’S CHILDREN",
+        "TRANSPORT"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, the unit retains control of objective markers even after no models remain in range, until the enemy retakes them (sticky objectives).\nApplies to: units with Emperor's Children, Transport."
+      "text": "For the rest of the battle, the unit retains control of objective markers even after no models remain in range, until the enemy retakes them (sticky objectives).\nApplies to: units with EMPEROR’S CHILDREN, TRANSPORT."
     }
   },
   {
@@ -1532,14 +1532,14 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "usage": {
       "frequency": "once-per-turn"
     },
     "expected": {
-      "text": "Once per turn, until the end of the phase, each time an attack targets the unit, reduce the Damage of that attack to 0.\nApplies to: units with Adeptus Custodes."
+      "text": "Once per turn, until the end of the phase, each time an attack targets the unit, reduce the Damage of that attack to 0.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -1684,10 +1684,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_name": "Dark Blessing",
             "keywords": [
               "Sustained Hits D3"
-            ],
-            "weapon_name": "Dark Blessing"
+            ]
           }
         },
         {
@@ -1810,12 +1810,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Rhino"
+        "WORLD EATERS",
+        "RHINO"
       ]
     },
     "expected": {
-      "text": "During the Movement phase, in your turn, until the end of the turn, the unit can disembark and be set up wholly within 6\" of the transport, even within Engagement Range of enemy units.\nApplies to: units with World Eaters, Rhino."
+      "text": "During the Movement phase, in your turn, until the end of the turn, the unit can disembark and be set up wholly within 6\" of the transport, even within Engagement Range of enemy units.\nApplies to: units with WORLD EATERS, RHINO."
     }
   },
   {
@@ -1828,10 +1828,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -1852,10 +1852,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -1994,11 +1994,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, the bearer has the Deep Strike ability.\nApplies to: units with Heretic Astartes."
+      "text": "For the rest of the battle, the bearer has the Deep Strike ability.\nApplies to: units with HERETIC ASTARTES."
     }
   },
   {
@@ -2300,7 +2300,7 @@
           "condition": {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Psyker"
+              "keyword": "PSYKER"
             }
           },
           "effect": {
@@ -2320,11 +2320,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Vigilators"
+        "VIGILATORS"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> While making melee attacks, you can re-roll a failed Hit roll.\n  -> Against Psyker targets, you can re-roll a failed Wound roll.\nApplies to: units with Vigilators."
+      "text": "Until the end of the phase:\n  -> While making melee attacks, you can re-roll a failed Hit roll.\n  -> Against PSYKER targets, you can re-roll a failed Wound roll.\nApplies to: units with VIGILATORS."
     }
   },
   {
@@ -2398,12 +2398,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Imperial Knights",
-        "Armiger"
+        "IMPERIAL KNIGHTS",
+        "ARMIGER"
       ]
     },
     "expected": {
-      "text": "You can use the Fire Overwatch or Heroic Stratagem on the bearer for 0CP.\nApplies to: units with Imperial Knights, Armiger."
+      "text": "You can use the Fire Overwatch or Heroic Stratagem on the bearer for 0CP.\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER."
     }
   },
   {
@@ -2474,20 +2474,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         }
       ]
@@ -2498,12 +2498,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  Select one of the following (Weapon Ability):\n    - Melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\nApplies to: units with Adeptus Astartes, Jump Pack."
+      "text": "Until the end of the phase:\n  Select one of the following (Weapon Ability):\n    - Melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\nApplies to: units with ADEPTUS ASTARTES, JUMP PACK."
     }
   },
   {
@@ -2656,11 +2656,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Knight Tyrant"
+        "KNIGHT TYRANT"
       ]
     },
     "expected": {
-      "text": "While the target unit is Battle-shocked, the unit gets +1 to Hit rolls.\nApplies to: units with Knight Tyrant."
+      "text": "While the target unit is Battle-shocked, the unit gets +1 to Hit rolls.\nApplies to: units with KNIGHT TYRANT."
     }
   },
   {
@@ -2828,11 +2828,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit has the Feel No Pain 4+ ability against mortal wounds.\nApplies to: units with Adeptus Custodes."
+      "text": "Until the end of the phase, the unit has the Feel No Pain 4+ ability against mortal wounds.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -2948,11 +2948,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, each friendly unit within 9\" if the unit has the RUBRICAE keyword, you can re-roll the Battle Shock roll.\nApplies to: units with Thousand Sons."
+      "text": "For the rest of the battle, each friendly unit within 9\" if the unit has the RUBRICAE keyword, you can re-roll the Battle Shock roll.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -2971,11 +2971,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sekhetar Robots"
+        "SEKHETAR ROBOTS"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the objective is marked as secured.\nApplies to: units with Sekhetar Robots."
+      "text": "Until the end of the phase, the objective is marked as secured.\nApplies to: units with SEKHETAR ROBOTS."
     }
   },
   {
@@ -3133,11 +3133,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rubricae"
+        "RUBRICAE"
       ]
     },
     "expected": {
-      "text": "Until the end of the turn, the unit is eligible to shoot in a turn in which it Fell Back.\nApplies to: units with Rubricae."
+      "text": "Until the end of the turn, the unit is eligible to shoot in a turn in which it Fell Back.\nApplies to: units with RUBRICAE."
     }
   },
   {
@@ -3214,11 +3214,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Heretic Astartes"
+        "HERETIC ASTARTES"
       ]
     },
     "expected": {
-      "text": "Until the end of the turn, each time an attack targets the unit, reduce the Damage of that attack by 1.\nApplies to: units with Heretic Astartes."
+      "text": "Until the end of the turn, each time an attack targets the unit, reduce the Damage of that attack by 1.\nApplies to: units with HERETIC ASTARTES."
     }
   },
   {
@@ -3251,7 +3251,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "usage": {
@@ -3259,7 +3259,7 @@
       "per": "model"
     },
     "expected": {
-      "text": "Once per turn per model, until the end of the phase, the unit can arrive from Strategic Reserves regardless of mission rules.\nApplies to: units with Adeptus Astartes."
+      "text": "Once per turn per model, until the end of the phase, the unit can arrive from Strategic Reserves regardless of mission rules.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -3840,20 +3840,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -3868,11 +3868,11 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1",
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -3940,12 +3940,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Walker"
+        "ADEPTUS CUSTODES",
+        "WALKER"
       ]
     },
     "expected": {
-      "text": "You can use one Stratagem on this model for 0CP.\nApplies to: units with Adeptus Custodes, Walker."
+      "text": "You can use one Stratagem on this model for 0CP.\nApplies to: units with ADEPTUS CUSTODES, WALKER."
     }
   },
   {
@@ -3964,11 +3964,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "The unit gets -3 to detection range.\nApplies to: units with Adeptus Astartes."
+      "text": "The unit gets -3 to detection range.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -3995,7 +3995,7 @@
                   {
                     "type": "unit-has-keyword",
                     "parameters": {
-                      "keyword": "Aircraft"
+                      "keyword": "AIRCRAFT"
                     }
                   }
                 ]
@@ -4054,7 +4054,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> Unless while the unit is below its starting strength, unless the unit has the Aircraft keyword, unless while the unit is Battle-shocked, this model gets +2 to its Objective Control characteristic.\n  -> While the unit is below its starting strength, you can re-roll a Hit roll of 1 for attacks made by this model.\n  -> While the unit is below half strength, you can re-roll a Wound roll of 1 for attacks made by this model."
+      "text": "For the rest of the battle:\n  -> Unless while the unit is below its starting strength, unless the unit has the AIRCRAFT keyword, unless while the unit is Battle-shocked, this model gets +2 to its Objective Control characteristic.\n  -> While the unit is below its starting strength, you can re-roll a Hit roll of 1 for attacks made by this model.\n  -> While the unit is below half strength, you can re-roll a Wound roll of 1 for attacks made by this model."
     }
   },
   {
@@ -4082,11 +4082,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "expected": {
-      "text": "While the unit is below its starting strength, until the end of the phase, add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.\nApplies to: units with Adeptus Custodes."
+      "text": "While the unit is below its starting strength, until the end of the phase, add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -4135,10 +4135,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -4151,10 +4151,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Critical Hits 5+"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -4301,10 +4301,10 @@
                 "type": "keyword-grant",
                 "target": "unit",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               }
             },
@@ -4506,11 +4506,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "expected": {
-      "text": "You can re-roll a failed Charge roll.\nIf the unit has the Unbridled Bloodlust active keyword, the unit gets +1 to Charge rolls.\nApplies to: units with World Eaters."
+      "text": "You can re-roll a failed Charge roll.\nIf the unit has the Unbridled Bloodlust active keyword, the unit gets +1 to Charge rolls.\nApplies to: units with WORLD EATERS."
     }
   },
   {
@@ -4546,14 +4546,14 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             },
             "negated": true
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             },
             "negated": true
           }
@@ -4605,7 +4605,7 @@
       }
     },
     "expected": {
-      "text": "Before a Hit roll is made for an attack made by a model in a friendly unit within 6\" of this model, while making melee attacks against a unit that is not a Monster or Vehicle:\n  -> Friendly units within 6\" get +1 to Hit rolls.\n  -> While the target unit is below half strength, friendly units within 6\" get +1 to Wound rolls."
+      "text": "Before a Hit roll is made for an attack made by a model in a friendly unit within 6\" of this model, while making melee attacks against a unit that is not a MONSTER or VEHICLE:\n  -> Friendly units within 6\" get +1 to Hit rolls.\n  -> While the target unit is below half strength, friendly units within 6\" get +1 to Wound rolls."
     }
   },
   {
@@ -4778,12 +4778,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Character"
+        "EMPEROR’S CHILDREN",
+        "CHARACTER"
       ]
     },
     "expected": {
-      "text": "Unless has fought this phase, until the end of the phase:\n  -> Roll one D6: on a 4+, each time a model in the unit is destroyed, it can fight before being removed from play.\nApplies to: units with Emperor's Children, Character."
+      "text": "Unless has fought this phase, until the end of the phase:\n  -> Roll one D6: on a 4+, each time a model in the unit is destroyed, it can fight before being removed from play.\nApplies to: units with EMPEROR’S CHILDREN, CHARACTER."
     }
   },
   {
@@ -5052,16 +5052,16 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Nurgle"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "NURGLE"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, roll 7D6: for each 4+, each enemy unit within 8\" suffers 1 mortal wound.\nApplies to: units with Legiones Daemonica, Character, Nurgle (excluding Monster)."
+      "text": "Until the end of the phase, roll 7D6: for each 4+, each enemy unit within 8\" suffers 1 mortal wound.\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, NURGLE (excluding MONSTER)."
     }
   },
   {
@@ -5092,7 +5092,7 @@
         "range": 6,
         "eligible": {
           "required_keywords": [
-            "Tyranids"
+            "TYRANIDS"
           ]
         },
         "effect": {
@@ -5109,7 +5109,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Each friendly Tyranids unit within 6\" friendly units within 6\" have the Feel No Pain 6+ ability."
+      "text": "Each friendly TYRANIDS unit within 6\" friendly units within 6\" have the Feel No Pain 6+ ability."
     }
   },
   {
@@ -5147,11 +5147,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "expected": {
-      "text": "During the Command phase, in your turn, for the rest of the battle, friendly units within 6\" regain up to D3 lost wounds.\nApplies to: units with Thousand Sons."
+      "text": "During the Command phase, in your turn, for the rest of the battle, friendly units within 6\" regain up to D3 lost wounds.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -5174,20 +5174,37 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-within-range-of",
-                "negated": true,
-                "parameters": {
-                  "target_type": "friendly-keyword",
-                  "keyword": "Blood Angels Character",
-                  "range": 6
-                }
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "unit-within-range-of",
+                        "parameters": {
+                          "target_type": "friendly-keyword",
+                          "keyword": "BLOOD ANGELS",
+                          "range": 6
+                        }
+                      },
+                      {
+                        "type": "unit-within-range-of",
+                        "parameters": {
+                          "target_type": "friendly-keyword",
+                          "keyword": "CHARACTER",
+                          "range": 6
+                        }
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "type": "unit-within-range-of",
                 "negated": true,
                 "parameters": {
                   "target_type": "friendly-keyword",
-                  "keyword": "Chaplain",
+                  "keyword": "CHAPLAIN",
                   "range": 12
                 }
               }
@@ -5224,7 +5241,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll a failed Hit roll for melee attacks.\nIf not within 6\" of a friendly Blood Angels Character unit, if not within 12\" of a friendly Chaplain unit:\n  -> The unit cannot Fall Back.\n  -> Modify the unit's Objective Control characteristic to 0."
+      "text": "You can re-roll a failed Hit roll for melee attacks.\nUnless within 6\" of a friendly BLOOD ANGELS unit, if within 6\" of a friendly CHARACTER unit, if not within 12\" of a friendly CHAPLAIN unit:\n  -> The unit cannot Fall Back.\n  -> Modify the unit's Objective Control characteristic to 0."
     }
   },
   {
@@ -5272,11 +5289,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "expected": {
-      "text": "If the unit charged this turn, until the end of the phase:\n  -> Roll one D6: on a 4+, that unit suffers D3 mortal wounds.\nApplies to: units with Adeptus Custodes."
+      "text": "If the unit charged this turn, until the end of the phase:\n  -> Roll one D6: on a 4+, that unit suffers D3 mortal wounds.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -5288,10 +5305,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -5366,11 +5383,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters"
+        "WORLD EATERS"
       ]
     },
     "expected": {
-      "text": "Add 1 to this model's Attacks characteristic (melee).\nAdd 1 to this model's Strength characteristic (melee).\nAdd 1 to this model's Damage characteristic (melee).\n-> When an enemy unit is destroyed in melee: you gain 1 Blood Tithe Pool.\nApplies to: units with World Eaters."
+      "text": "Add 1 to this model's Attacks characteristic (melee).\nAdd 1 to this model's Strength characteristic (melee).\nAdd 1 to this model's Damage characteristic (melee).\n-> When an enemy unit is destroyed in melee: you gain 1 Blood Tithe Pool.\nApplies to: units with WORLD EATERS."
     }
   },
   {
@@ -5402,10 +5419,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Precision"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         }
       ]
@@ -5416,11 +5433,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "Add 1 to the Strength characteristic of melee weapons equipped by this model.\nSubtract 1 from the Armour Penetration characteristic of melee weapons equipped by this model.\nMelee weapons equipped by this model gain [PRECISION].\nApplies to: units with Adepta Sororitas."
+      "text": "Add 1 to the Strength characteristic of melee weapons equipped by this model.\nSubtract 1 from the Armour Penetration characteristic of melee weapons equipped by this model.\nMelee weapons equipped by this model gain [PRECISION].\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -5475,12 +5492,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Transport"
+        "ADEPTA SORORITAS",
+        "TRANSPORT"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> The unit can disembark.\n  -> The unit gains the Shoot As If Shooting Phase ability.\nApplies to: units with Adepta Sororitas, Transport."
+      "text": "Until the end of the phase:\n  -> The unit can disembark.\n  -> The unit gains the Shoot As If Shooting Phase ability.\nApplies to: units with ADEPTA SORORITAS, TRANSPORT."
     }
   },
   {
@@ -5701,7 +5718,7 @@
                 {
                   "type": "target-has-keyword",
                   "parameters": {
-                    "keyword": "Infantry"
+                    "keyword": "INFANTRY"
                   }
                 },
                 {
@@ -5732,7 +5749,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of the battle round, you may use this ability, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): all friendly units get +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): all friendly units can Consolidate up to 6\".\n    - Total Carnage (requires pair of 3+): when destroyed by a melee attack, if not has fought this phase, roll one D6: on a 4+, each time this model is destroyed, it can fight before being removed from play.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by all friendly units gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by all friendly units gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): against Infantry targets, while making melee attacks, all friendly units' weapons gain [DEVASTATING WOUNDS]."
+      "text": "At the start of the battle round, you may use this ability, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): all friendly units get +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): all friendly units can Consolidate up to 6\".\n    - Total Carnage (requires pair of 3+): when destroyed by a melee attack, if not has fought this phase, roll one D6: on a 4+, each time this model is destroyed, it can fight before being removed from play.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by all friendly units gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by all friendly units gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): against INFANTRY targets, while making melee attacks, all friendly units' weapons gain [DEVASTATING WOUNDS]."
     }
   },
   {
@@ -5748,7 +5765,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "usage": {
@@ -5757,7 +5774,7 @@
       "per": "unit"
     },
     "expected": {
-      "text": "Once per battle per unit, until the end of the phase, the unit has the Fights First ability.\nApplies to: units with Emperor's Children."
+      "text": "Once per battle per unit, until the end of the phase, the unit has the Fights First ability.\nApplies to: units with EMPEROR’S CHILDREN."
     }
   },
   {
@@ -5832,11 +5849,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "expected": {
-      "text": "Once per battle:\n  -> Roll one D6: on a 2+, the bearer regains up to 3 lost wounds.\nApplies to: units with Death Company."
+      "text": "Once per battle:\n  -> Roll one D6: on a 2+, the bearer regains up to 3 lost wounds.\nApplies to: units with DEATH COMPANY."
     }
   },
   {
@@ -6081,10 +6098,10 @@
         "type": "keyword-grant",
         "target": "all-friendly",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
             "Assault"
-          ],
-          "weapon_type": "ranged"
+          ]
         }
       }
     },
@@ -6303,11 +6320,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "Roll one D6: on a 4+, you gain 1CP.\nApplies to: units with Adeptus Astartes."
+      "text": "Roll one D6: on a 4+, you gain 1CP.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -6542,11 +6559,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot Flesh Shaper"
+        "KROOT",
+        "FLESH SHAPER"
       ]
     },
     "expected": {
-      "text": "While this model leads a unit, for the rest of the battle, the unit scores Critical Hits on Hit rolls of 5+.\nApplies to: units with Kroot Flesh Shaper."
+      "text": "While this model leads a unit, for the rest of the battle, the unit scores Critical Hits on Hit rolls of 5+.\nApplies to: units with KROOT, FLESH SHAPER."
     }
   },
   {
@@ -6557,7 +6575,7 @@
         "type": "unit-within-range-of",
         "parameters": {
           "target_type": "friendly",
-          "keyword": "BEAST-SNAGGA",
+          "keyword": "BEAST SNAGGA",
           "exclude_keyword": "MONSTER CHARACTER",
           "range": 3
         }
@@ -6624,7 +6642,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "lance"
+            "Lance"
           ]
         }
       }
@@ -6963,12 +6981,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Infantry"
+        "WORLD EATERS",
+        "INFANTRY"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> At the start of the Declare Battle Formations step, this model can join one friendly unit, becoming part of that Bodyguard unit.\n  -> While this model is leading a GOREMONGERS unit, this model gains the Infiltrators ability.\nApplies to: units with World Eaters, Infantry."
+      "text": "For the rest of the battle:\n  -> At the start of the Declare Battle Formations step, this model can join one friendly unit, becoming part of that Bodyguard unit.\n  -> While this model is leading a GOREMONGERS unit, this model gains the Infiltrators ability.\nApplies to: units with WORLD EATERS, INFANTRY."
     }
   },
   {
@@ -6985,11 +7003,11 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         }
       ]
@@ -7000,12 +7018,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Lord Kakophonist"
+        "EMPEROR’S CHILDREN",
+        "LORD KAKOPHONIST"
       ]
     },
     "expected": {
-      "text": "The bearer has the Deep Strike ability.\nThe bearer's weapons gain [IGNORES COVER].\nApplies to: units with Emperor's Children, Lord Kakophonist."
+      "text": "The bearer has the Deep Strike ability.\nThe bearer's weapons gain [IGNORES COVER].\nApplies to: units with EMPEROR’S CHILDREN, LORD KAKOPHONIST."
     }
   },
   {
@@ -7032,16 +7050,16 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Khorne"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "KHORNE"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     },
     "expected": {
-      "text": "If the unit charged this turn, until the end of the phase, add 1 to the unit's Attacks characteristic (melee).\nApplies to: units with Legiones Daemonica, Character, Khorne (excluding Monster)."
+      "text": "If the unit charged this turn, until the end of the phase, add 1 to the unit's Attacks characteristic (melee).\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, KHORNE (excluding MONSTER)."
     }
   },
   {
@@ -7076,11 +7094,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "This model gains the PENITENT keyword.\nApplies to: units with Adepta Sororitas."
+      "text": "This model gains the PENITENT keyword.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -7180,11 +7198,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tacticus"
+        "TACTICUS"
       ]
     },
     "expected": {
-      "text": "While this model is leading a unit:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with Tacticus."
+      "text": "While this model is leading a unit:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with TACTICUS."
     }
   },
   {
@@ -7196,10 +7214,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -7362,12 +7380,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "World Eaters",
-        "Monster"
+        "WORLD EATERS",
+        "MONSTER"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, the range of this model's Aura abilities is increased by 3\".\nApplies to: units with World Eaters, Monster."
+      "text": "For the rest of the battle, the range of this model's Aura abilities is increased by 3\".\nApplies to: units with WORLD EATERS, MONSTER."
     }
   },
   {
@@ -7883,10 +7901,10 @@
                 "type": "keyword-grant",
                 "target": "friendly-within-aura",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Heavy"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               }
             ]
@@ -7970,12 +7988,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Infantry"
+        "T’AU EMPIRE",
+        "INFANTRY"
       ]
     },
     "expected": {
-      "text": "If the unit disembarked from a Transport this turn, until the end of the phase, you can re-roll the Wound roll.\nApplies to: units with T'au Empire, Infantry."
+      "text": "If the unit disembarked from a Transport this turn, until the end of the phase, you can re-roll the Wound roll.\nApplies to: units with T’AU EMPIRE, INFANTRY."
     }
   },
   {
@@ -7992,10 +8010,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -8239,12 +8257,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tristraen's Gilded Blades",
-        "Allarus Custodians"
+        "TRISTRAEN'S GILDED BLADES",
+        "ALLARUS CUSTODIANS"
       ]
     },
     "expected": {
-      "text": "The unit gets +1 to Charge rolls.\nApplies to: units with Tristraen's Gilded Blades, Allarus Custodians."
+      "text": "The unit gets +1 to Charge rolls.\nApplies to: units with TRISTRAEN'S GILDED BLADES, ALLARUS CUSTODIANS."
     }
   },
   {
@@ -9296,12 +9314,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Infantry",
-        "Phobos"
+        "INFANTRY",
+        "PHOBOS"
       ]
     },
     "expected": {
-      "text": "If the target unit is tagged hidden, the unit gets +1 to Hit rolls.\nApplies to: units with Infantry, Phobos."
+      "text": "If the target unit is tagged hidden, the unit gets +1 to Hit rolls.\nApplies to: units with INFANTRY, PHOBOS."
     }
   },
   {
@@ -9482,12 +9500,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzeentch",
-        "Mutant"
+        "TZEENTCH",
+        "MUTANT"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> The unit can Pile In up to 6\".\n  -> The unit can Consolidate up to 6\".\n  -> When determining which models in the unit are eligible to fight, models within 3\" of one or more enemy models are eligible and can target enemy units within 3\".\nApplies to: units with Tzeentch, Mutant."
+      "text": "Until the end of the phase:\n  -> The unit can Pile In up to 6\".\n  -> The unit can Consolidate up to 6\".\n  -> When determining which models in the unit are eligible to fight, models within 3\" of one or more enemy models are eligible and can target enemy units within 3\".\nApplies to: units with TZEENTCH, MUTANT."
     }
   },
   {
@@ -9535,11 +9553,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with Anathema Psykana."
+      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with ANATHEMA PSYKANA."
     }
   },
   {
@@ -9570,14 +9588,14 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "usage": {
       "frequency": "once-per-battle-round"
     },
     "expected": {
-      "text": "Once per battle round, until the end of the phase:\n  -> Enemy units within 6\" gain the Battle Shock Test ability.\n  -> Enemy units within 6\" get -1 to Ballistic Skill.\nApplies to: units with Emperor's Children."
+      "text": "Once per battle round, until the end of the phase:\n  -> Enemy units within 6\" gain the Battle Shock Test ability.\n  -> Enemy units within 6\" get -1 to Ballistic Skill.\nApplies to: units with EMPEROR’S CHILDREN."
     }
   },
   {
@@ -9597,7 +9615,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Frenzied Reavers"
+        "FRENZIED REAVERS"
       ]
     },
     "usage": {
@@ -9614,7 +9632,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When this model's unit is targeted with a Stratagem within 12\" of this model, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.\nApplies to: units with Frenzied Reavers."
+      "text": "When this model's unit is targeted with a Stratagem within 12\" of this model, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.\nApplies to: units with FRENZIED REAVERS."
     }
   },
   {
@@ -9660,11 +9678,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Lord on Juggernaut"
+        "LORD ON JUGGERNAUT"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> At the start of the Declare Battle Formations step, this model can join one friendly unit, becoming part of that Bodyguard unit.\n  While this model leads a unit:\n    -> This model gains the Deep Strike ability.\n    -> This model gains the BLOOD LEGIONS keyword.\nApplies to: units with Lord on Juggernaut."
+      "text": "For the rest of the battle:\n  -> At the start of the Declare Battle Formations step, this model can join one friendly unit, becoming part of that Bodyguard unit.\n  While this model leads a unit:\n    -> This model gains the Deep Strike ability.\n    -> This model gains the BLOOD LEGIONS keyword.\nApplies to: units with LORD ON JUGGERNAUT."
     }
   },
   {
@@ -9770,11 +9788,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with Adepta Sororitas."
+      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -9792,8 +9810,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians",
-        "Battle Sisters Squad"
+        "SANCTUARY GUARDIANS",
+        "BATTLE SISTERS SQUAD"
       ]
     },
     "usage": {
@@ -9802,7 +9820,7 @@
       "per": "unit"
     },
     "expected": {
-      "text": "Once per battle per unit, until the end of the phase, the unit regains up to D3+2 lost wounds.\nApplies to: units with Sanctuary Guardians, Battle Sisters Squad."
+      "text": "Once per battle per unit, until the end of the phase, the unit regains up to D3+2 lost wounds.\nApplies to: units with SANCTUARY GUARDIANS, BATTLE SISTERS SQUAD."
     }
   },
   {
@@ -9860,16 +9878,29 @@
                     {
                       "type": "unit-has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "keyword": "BATTLELINE"
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "ADEPTUS MECHANICUS"
+                          }
+                        },
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "BATTLELINE"
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -9918,16 +9949,29 @@
                     {
                       "type": "unit-has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "keyword": "BATTLELINE"
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "ADEPTUS MECHANICUS"
+                          }
+                        },
+                        {
+                          "type": "unit-within-range-of",
+                          "parameters": {
+                            "range": 6,
+                            "target_type": "friendly-keyword",
+                            "keyword": "BATTLELINE"
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -9951,7 +9995,7 @@
       "duration": "battle-round"
     },
     "expected": {
-      "text": "Until the end of the battle round:\n  -> At the start of the battle round, select one:\n    - Protector Imperative: ranged weapons equipped by models in this unit gain [HEAVY]; improve the Ballistic Skill of attacks made by models in this unit by 1; if the unit has the Battleline keyword or if within 6\" of a friendly Adeptus Mechanicus Battleline unit, the attacking unit gets -1 to Hit rolls (melee).\n    - Conqueror Imperative: ranged weapons equipped by models in this unit gain [ASSAULT]; improve the unit's Weapon Skill characteristic by 1 (melee); if the unit has the Battleline keyword or if within 6\" of a friendly Adeptus Mechanicus Battleline unit, subtract 1 from the unit's Armour Penetration characteristic."
+      "text": "Until the end of the battle round:\n  -> At the start of the battle round, select one:\n    - Protector Imperative: ranged weapons equipped by models in this unit gain [HEAVY]; improve the Ballistic Skill of attacks made by models in this unit by 1; if the unit has the BATTLELINE keyword or if within 6\" of a friendly ADEPTUS MECHANICUS unit, if within 6\" of a friendly BATTLELINE unit, the attacking unit gets -1 to Hit rolls (melee).\n    - Conqueror Imperative: ranged weapons equipped by models in this unit gain [ASSAULT]; improve the unit's Weapon Skill characteristic by 1 (melee); if the unit has the BATTLELINE keyword or if within 6\" of a friendly ADEPTUS MECHANICUS unit, if within 6\" of a friendly BATTLELINE unit, subtract 1 from the unit's Armour Penetration characteristic."
     }
   },
   {
@@ -10075,12 +10119,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Vehicle"
+        "EMPEROR’S CHILDREN",
+        "VEHICLE"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit can move through enemy models.\nApplies to: units with Emperor's Children, Vehicle."
+      "text": "Until the end of the phase, the unit can move through enemy models.\nApplies to: units with EMPEROR’S CHILDREN, VEHICLE."
     }
   },
   {
@@ -10099,15 +10143,15 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Terminator"
+        "EMPEROR’S CHILDREN",
+        "TERMINATOR"
       ]
     },
     "trigger": {
       "event": "unit-set-up"
     },
     "expected": {
-      "text": "When the unit is set up, until the end of the turn, the unit gets +1 to Charge rolls.\nApplies to: units with Emperor's Children, Terminator."
+      "text": "When the unit is set up, until the end of the turn, the unit gets +1 to Charge rolls.\nApplies to: units with EMPEROR’S CHILDREN, TERMINATOR."
     }
   },
   {
@@ -10196,12 +10240,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes",
-        "Terminator"
+        "ADEPTUS CUSTODES",
+        "TERMINATOR"
       ]
     },
     "expected": {
-      "text": "Once per battle, while the model has lost wounds, the unit can make a Normal move of up to D6+1\".\nApplies to: units with Adeptus Custodes, Terminator."
+      "text": "Once per battle, while the model has lost wounds, the unit can make a Normal move of up to D6+1\".\nApplies to: units with ADEPTUS CUSTODES, TERMINATOR."
     }
   },
   {
@@ -10369,11 +10413,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.\nApplies to: units with Adeptus Custodes."
+      "text": "Until the end of the phase, the unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -10473,7 +10517,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Necrons"
+        "NECRONS"
       ]
     },
     "trigger": {
@@ -10481,7 +10525,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of each phase, you may use this ability, once per battle:\n  -> Select one friendly NECRONS unit within 12\" that is Battle-shocked: that unit is no longer Battle-shocked.\nApplies to: units with Necrons."
+      "text": "At the start of each phase, you may use this ability, once per battle:\n  -> Select one friendly NECRONS unit within 12\" that is Battle-shocked: that unit is no longer Battle-shocked.\nApplies to: units with NECRONS."
     }
   },
   {
@@ -10683,11 +10727,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "This model's weapons gain [PRECISION].\nEach time this model's unit destroys a Character model, you gain 1CP.\nApplies to: units with Adepta Sororitas."
+      "text": "This model's weapons gain [PRECISION].\nEach time this model's unit destroys a Character model, you gain 1CP.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -10732,13 +10776,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -10756,11 +10800,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "Unless against Monster targets or against Vehicle targets, destroy 1 model in enemy units within 6\".\nApplies to: units with Adeptus Astartes."
+      "text": "Unless against MONSTER targets or against VEHICLE targets, destroy 1 model in enemy units within 6\".\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -10834,10 +10878,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -10866,11 +10910,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "While this model is leading a unit:\n  -> Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n  -> While the Devastator Doctrine is active, you can re-roll the Advance roll.\nApplies to: units with Adeptus Astartes."
+      "text": "While this model is leading a unit:\n  -> Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n  -> While the Devastator Doctrine is active, you can re-roll the Advance roll.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -10883,7 +10927,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Khorne"
+              "keyword": "KHORNE"
             }
           },
           "effect": {
@@ -10893,10 +10937,10 @@
                 "type": "keyword-grant",
                 "target": "unit",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               },
               {
@@ -10914,7 +10958,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Tzeentch"
+              "keyword": "TZEENTCH"
             }
           },
           "effect": {
@@ -10955,7 +10999,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Nurgle"
+              "keyword": "NURGLE"
             }
           },
           "effect": {
@@ -10984,7 +11028,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Slaanesh"
+              "keyword": "SLAANESH"
             }
           },
           "effect": {
@@ -11043,7 +11087,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "For the rest of the battle:\n  If the unit has the Khorne keyword:\n    -> Ranged weapons equipped by models in this unit gain [ASSAULT].\n    -> The unit is eligible to declare a charge in a turn in which it Advanced.\n  If the unit has the Tzeentch keyword:\n    -> The unit's weapons gain [STEALTH].\n    -> While making melee attacks, the attacking unit gets -1 to Hit rolls.\n  -> If the unit has the Nurgle keyword, if the attack's S is greater than the target's T, the attacking unit gets -1 to Wound rolls.\n  -> If the unit has the Slaanesh keyword, all enemy units: no snap shots.\n  If the unit has the Undivided keyword:\n    -> The unit gains the Dark Pacts ability.\n    -> While this model leads a unit, modify the unit's Leadership characteristic.\n    -> The unit has the Deep Strike ability."
+      "text": "For the rest of the battle:\n  If the unit has the KHORNE keyword:\n    -> Ranged weapons equipped by models in this unit gain [ASSAULT].\n    -> The unit is eligible to declare a charge in a turn in which it Advanced.\n  If the unit has the TZEENTCH keyword:\n    -> The unit's weapons gain [STEALTH].\n    -> While making melee attacks, the attacking unit gets -1 to Hit rolls.\n  -> If the unit has the NURGLE keyword, if the attack's S is greater than the target's T, the attacking unit gets -1 to Wound rolls.\n  -> If the unit has the SLAANESH keyword, all enemy units: no snap shots.\n  If the unit has the Undivided keyword:\n    -> The unit gains the Dark Pacts ability.\n    -> While this model leads a unit, modify the unit's Leadership characteristic.\n    -> The unit has the Deep Strike ability."
     }
   },
   {
@@ -11436,12 +11480,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children",
-        "Battleline"
+        "EMPEROR’S CHILDREN",
+        "BATTLELINE"
       ]
     },
     "expected": {
-      "text": "If the unit Advanced this turn, until the end of the turn, add 1 to all friendly units' Strength characteristic.\nApplies to: units with Emperor's Children, Battleline."
+      "text": "If the unit Advanced this turn, until the end of the turn, add 1 to all friendly units' Strength characteristic.\nApplies to: units with EMPEROR’S CHILDREN, BATTLELINE."
     }
   },
   {
@@ -11514,11 +11558,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Rhino"
+        "RHINO"
       ]
     },
     "expected": {
-      "text": "During the Shooting phase, in the opponent's turn, until the end of the phase:\n  -> The unit can disembark.\n  -> The unit can make a Surge move of up to D6+2\".\nApplies to: units with Rhino."
+      "text": "During the Shooting phase, in the opponent's turn, until the end of the phase:\n  -> The unit can disembark.\n  -> The unit can make a Surge move of up to D6+2\".\nApplies to: units with RHINO."
     }
   },
   {
@@ -11891,15 +11935,15 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Character"
+        "ADEPTA SORORITAS",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  Select one of the following (Hagiomnifex Sermon):\n    - All enemy units gain the Detection Range Modifier ability.\n    - The unit is marked as battle shock auto succeed.\n    - Add 1 to the unit's Move characteristic.\n    - Add 1 to the unit's Strength characteristic.\n    - The attacking unit gets -1 to Wound rolls.\nApplies to: units with Adepta Sororitas, Character (excluding Penitent)."
+      "text": "Until the end of the phase:\n  Select one of the following (Hagiomnifex Sermon):\n    - All enemy units gain the Detection Range Modifier ability.\n    - The unit is marked as battle shock auto succeed.\n    - Add 1 to the unit's Move characteristic.\n    - Add 1 to the unit's Strength characteristic.\n    - The attacking unit gets -1 to Wound rolls.\nApplies to: units with ADEPTA SORORITAS, CHARACTER (excluding PENITENT)."
     }
   },
   {
@@ -12273,11 +12317,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "expected": {
-      "text": "While this model is leading a unit, the bearer gains the BATTLELINE keyword.\nApplies to: units with Adeptus Astartes."
+      "text": "While this model is leading a unit, the bearer gains the BATTLELINE keyword.\nApplies to: units with ADEPTUS ASTARTES."
     }
   },
   {
@@ -12289,10 +12333,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lance"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -12353,12 +12397,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Mounted"
+        "ADEPTUS ASTARTES",
+        "MOUNTED"
       ]
     },
     "expected": {
-      "text": "The unit can arrive from Strategic Reserves regardless of mission rules.\nApplies to: units with Adeptus Astartes, Mounted."
+      "text": "The unit can arrive from Strategic Reserves regardless of mission rules.\nApplies to: units with ADEPTUS ASTARTES, MOUNTED."
     }
   },
   {
@@ -12374,11 +12418,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Anathema Psykana"
+        "ANATHEMA PSYKANA"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with Anathema Psykana."
+      "text": "Until the end of the phase, the target must make a Battle-shock roll.\nApplies to: units with ANATHEMA PSYKANA."
     }
   },
   {
@@ -12582,7 +12626,7 @@
             "parameters": {
               "side": "friendly",
               "window": "this-turn",
-              "keyword": "aeldari"
+              "keyword": "AELDARI"
             }
           }
         ]
@@ -12692,11 +12736,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "The unit is marked as battle shocked.\nApplies to: units with Adepta Sororitas."
+      "text": "The unit is marked as battle shocked.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -12712,7 +12756,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Custodes"
+        "ADEPTUS CUSTODES"
       ]
     },
     "usage": {
@@ -12721,7 +12765,7 @@
       "per": "unit"
     },
     "expected": {
-      "text": "Once per battle per unit, until the end of the phase, the unit is no longer Battle-shocked.\nApplies to: units with Adeptus Custodes."
+      "text": "Once per battle per unit, until the end of the phase, the unit is no longer Battle-shocked.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -12816,10 +12860,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -12846,10 +12890,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -12891,11 +12935,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "Until the end of the turn:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with Adepta Sororitas."
+      "text": "Until the end of the turn:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -13022,11 +13066,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, the unit can move through enemy models.\nApplies to: units with Emperor's Children."
+      "text": "For the rest of the battle, the unit can move through enemy models.\nApplies to: units with EMPEROR’S CHILDREN."
     }
   },
   {
@@ -13199,12 +13243,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons",
-        "Vehicle"
+        "THOUSAND SONS",
+        "VEHICLE"
       ]
     },
     "expected": {
-      "text": "Until the start of your next Command phase:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with Thousand Sons, Vehicle."
+      "text": "Until the start of your next Command phase:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Any rolls.\nApplies to: units with THOUSAND SONS, VEHICLE."
     }
   },
   {
@@ -13485,11 +13529,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii"
+        "SKITARII"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> If the unit is tagged protector imperative active, you can re-roll a Hit roll of 1.\n  -> If the unit is tagged conqueror imperative active, you can re-roll a Wound roll of 1.\nApplies to: units with Skitarii."
+      "text": "For the rest of the battle:\n  -> If the unit is tagged protector imperative active, you can re-roll a Hit roll of 1.\n  -> If the unit is tagged conqueror imperative active, you can re-roll a Wound roll of 1.\nApplies to: units with SKITARII."
     }
   },
   {
@@ -13541,15 +13585,15 @@
           "type": "keyword-grant",
           "target": "all-friendly",
           "modifier": {
-            "keywords": [
-              "Recon Augury"
-            ],
             "applies_to_keywords": [
               "Pteraxii",
               "Infiltrators",
               "Rangers",
               "Serberys Raiders",
               "Serberys Sulphurhounds"
+            ],
+            "keywords": [
+              "Recon Augury"
             ]
           }
         },
@@ -13580,11 +13624,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> All friendly units' weapons gain [RECON AUGURY].\n  -> During the Shooting phase, enemy units anywhere on the battlefield are marked as analysed.\nApplies to: units with Adeptus Mechanicus."
+      "text": "For the rest of the battle:\n  -> All friendly units' weapons gain [RECON AUGURY].\n  -> During the Shooting phase, enemy units anywhere on the battlefield are marked as analysed.\nApplies to: units with ADEPTUS MECHANICUS."
     }
   },
   {
@@ -13642,12 +13686,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     },
     "expected": {
-      "text": "The unit: no snap shooting.\nIf the unit has the Telepathy Discipline keyword, the unit gets -3 to detection range.\nApplies to: units with Adeptus Astartes, Psyker."
+      "text": "The unit: no snap shooting.\nIf the unit has the Telepathy Discipline keyword, the unit gets -3 to detection range.\nApplies to: units with ADEPTUS ASTARTES, PSYKER."
     }
   },
   {
@@ -13771,11 +13815,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Warpsmith"
+        "WARPSMITH"
       ]
     },
     "expected": {
-      "text": "You can re-roll a failed Leadership roll.\nWhen destroyed by a ranged attack, the unit gains the Heal Wounds ability.\nApplies to: units with Warpsmith."
+      "text": "You can re-roll a failed Leadership roll.\nWhen destroyed by a ranged attack, the unit gains the Heal Wounds ability.\nApplies to: units with WARPSMITH."
     }
   },
   {
@@ -13826,10 +13870,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -14430,11 +14474,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> Spend 1 Miracle Dice Pool.\n  -> Add a die showing 6 to your Miracle Dice Pool.\nApplies to: units with Adepta Sororitas."
+      "text": "For the rest of the battle:\n  -> Spend 1 Miracle Dice Pool.\n  -> Add a die showing 6 to your Miracle Dice Pool.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -14465,11 +14509,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Thousand Sons"
+        "THOUSAND SONS"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> The unit has the Feel No Pain 4+ ability against Psychic Attacks.\n  -> The unit gains the Incoming Psychic Attacks Hazardous ability.\nApplies to: units with Thousand Sons."
+      "text": "Until the end of the phase:\n  -> The unit has the Feel No Pain 4+ ability against Psychic Attacks.\n  -> The unit gains the Incoming Psychic Attacks Hazardous ability.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -14663,20 +14707,20 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lance"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         ]
@@ -14804,20 +14848,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lance"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -14831,11 +14875,11 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "melee",
                 "keywords": [
                   "Lance",
                   "Lethal Hits"
-                ],
-                "weapon_type": "melee"
+                ]
               }
             }
           ]
@@ -14860,10 +14904,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -14884,10 +14928,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -14948,12 +14992,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Vehicle"
+        "ADEPTUS ASTARTES",
+        "VEHICLE"
       ]
     },
     "expected": {
-      "text": "The bearer has a 5+ invulnerable save.\n-> At the start of the Command phase: the bearer regains up to 1 lost wound.\nApplies to: units with Adeptus Astartes, Vehicle."
+      "text": "The bearer has a 5+ invulnerable save.\n-> At the start of the Command phase: the bearer regains up to 1 lost wound.\nApplies to: units with ADEPTUS ASTARTES, VEHICLE."
     }
   },
   {
@@ -14964,10 +15008,21 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "ASURYANI MOUNTED"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "ASURYANI"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "MOUNTED"
+                }
+              }
+            ]
           },
           {
             "type": "unit-has-keyword",
@@ -15020,7 +15075,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If the unit has the ASURYANI MOUNTED or VYPER keywords, for the rest of the battle:\n  -> The unit can start the battle in Reserves.\n  -> The unit can arrive from Strategic Reserves regardless of mission rules.\n  -> The unit treats the current battle round number as being one higher than it actually is when arriving from Reserves.\n  -> At the end of the opponent's turn: the unit can be placed into Strategic Reserves."
+      "text": "If the unit is a ASURYANI MOUNTED unit or if the unit has the VYPER keyword, for the rest of the battle:\n  -> The unit can start the battle in Reserves.\n  -> The unit can arrive from Strategic Reserves regardless of mission rules.\n  -> The unit treats the current battle round number as being one higher than it actually is when arriving from Reserves.\n  -> At the end of the opponent's turn: the unit can be placed into Strategic Reserves."
     }
   },
   {
@@ -15032,10 +15087,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -15183,7 +15238,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "usage": {
@@ -15192,7 +15247,7 @@
       "per": "model"
     },
     "expected": {
-      "text": "Once per battle per model, while the unit is within Engagement Range, until the end of the phase, when determining which models in the bearer are eligible to fight, models within 1\" of one or more enemy models are eligible and can target enemy units within 1\".\nApplies to: units with Death Company."
+      "text": "Once per battle per model, while the unit is within Engagement Range, until the end of the phase, when determining which models in the bearer are eligible to fight, models within 1\" of one or more enemy models are eligible and can target enemy units within 1\".\nApplies to: units with DEATH COMPANY."
     }
   },
   {
@@ -15240,10 +15295,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           },
           {
@@ -15541,11 +15596,11 @@
             "type": "keyword-grant",
             "target": "all-friendly",
             "modifier": {
+              "scope": "weapon",
+              "attack_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "scope": "weapon",
-              "attack_type": "ranged"
+              ]
             }
           },
           {
@@ -15570,12 +15625,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     },
     "expected": {
-      "text": "If the unit Advanced this turn, until the end of the turn:\n  -> All friendly units' weapons gain [ASSAULT].\n  -> All friendly units gain the Act After Move ability.\nApplies to: units with Legiones Daemonica, Battleline."
+      "text": "If the unit Advanced this turn, until the end of the turn:\n  -> All friendly units' weapons gain [ASSAULT].\n  -> All friendly units gain the Act After Move ability.\nApplies to: units with LEGIONES DAEMONICA, BATTLELINE."
     }
   },
   {
@@ -15749,10 +15804,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -15893,11 +15948,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Emperor's Children"
+        "EMPEROR’S CHILDREN"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  Select one of the following (Sustained By Agony):\n    - Friendly units within 6\" regain up to 3 lost wounds.\n    - Friendly units within 6\" gain the Return Destroyed Models ability.\nApplies to: units with Emperor's Children."
+      "text": "Until the end of the phase:\n  Select one of the following (Sustained By Agony):\n    - Friendly units within 6\" regain up to 3 lost wounds.\n    - Friendly units within 6\" gain the Return Destroyed Models ability.\nApplies to: units with EMPEROR’S CHILDREN."
     }
   },
   {
@@ -16004,11 +16059,11 @@
                 "type": "keyword-grant",
                 "target": "bearer",
                 "modifier": {
+                  "weapon_type": "ranged",
+                  "weapon_name": "Shokk Attack Gun",
                   "keywords": [
                     "Torrent"
-                  ],
-                  "weapon_type": "ranged",
-                  "weapon_name": "Shokk Attack Gun"
+                  ]
                 }
               },
               {
@@ -16052,11 +16107,11 @@
             "type": "keyword-grant",
             "target": "bearer",
             "modifier": {
+              "weapon_type": "ranged",
+              "weapon_name": "Shokk Attack Gun",
               "keywords": [
                 "Sustained Hits 2"
-              ],
-              "weapon_type": "ranged",
-              "weapon_name": "Shokk Attack Gun"
+              ]
             }
           }
         }
@@ -16279,12 +16334,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Tzeentch",
-        "Mutant"
+        "TZEENTCH",
+        "MUTANT"
       ]
     },
     "expected": {
-      "text": "Until the end of the turn:\n  -> The unit can arrive from Strategic Reserves regardless of mission rules.\n  -> The unit cannot charge.\nApplies to: units with Tzeentch, Mutant."
+      "text": "Until the end of the turn:\n  -> The unit can arrive from Strategic Reserves regardless of mission rules.\n  -> The unit cannot charge.\nApplies to: units with TZEENTCH, MUTANT."
     }
   },
   {
@@ -19483,10 +19538,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -19936,22 +19991,22 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
+              "weapon_keyword": "Psychic",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              ]
             }
           },
           {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
+              "weapon_keyword": "Psychic",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "melee",
-              "weapon_keyword": "Psychic"
+              ]
             }
           }
         ]
@@ -20559,10 +20614,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_name": "arco-flails",
             "keywords": [
               "Hazardous"
-            ],
-            "weapon_name": "arco-flails"
+            ]
           }
         }
       ]
@@ -21498,13 +21553,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Infantry",
-        "Fly"
+        "ADEPTA SORORITAS",
+        "INFANTRY",
+        "FLY"
       ]
     },
     "expected": {
-      "text": "During the Shooting phase, for the rest of the battle, all enemy units gain the Detection Range Modifier ability.\nApplies to: units with Adepta Sororitas, Infantry, Fly."
+      "text": "During the Shooting phase, for the rest of the battle, all enemy units gain the Detection Range Modifier ability.\nApplies to: units with ADEPTA SORORITAS, INFANTRY, FLY."
     }
   },
   {
@@ -21572,11 +21627,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "expected": {
-      "text": "The unit is marked as battle shocked.\nApplies to: units with Adepta Sororitas."
+      "text": "The unit is marked as battle shocked.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -21597,11 +21652,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Exorcist"
+        "EXORCIST"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit gets +1 to Hit rolls for ranged attacks.\nApplies to: units with Exorcist."
+      "text": "Until the end of the phase, the unit gets +1 to Hit rolls for ranged attacks.\nApplies to: units with EXORCIST."
     }
   },
   {
@@ -21610,11 +21665,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Devastating Wounds"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -21623,13 +21678,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Infantry",
-        "Fly"
+        "ADEPTA SORORITAS",
+        "INFANTRY",
+        "FLY"
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, the unit's weapons gain [DEVASTATING WOUNDS].\nApplies to: units with Adepta Sororitas, Infantry, Fly."
+      "text": "Until the end of the phase, the unit's weapons gain [DEVASTATING WOUNDS].\nApplies to: units with ADEPTA SORORITAS, INFANTRY, FLY."
     }
   },
   {
@@ -21649,11 +21704,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, all friendly units get +1 to Hit rolls.\nApplies to: units with Celestian Sacresants."
+      "text": "For the rest of the battle, all friendly units get +1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
     }
   },
   {

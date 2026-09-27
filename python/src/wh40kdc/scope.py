@@ -3,9 +3,9 @@ detachment rule) benefits, from its curated ``applies_to`` keyword filter.
 
 This is the contract consumers replicate: a unit matches iff it carries every
 ``required_keywords`` entry and none of the ``excluded_keywords``, compared
-against the union of its ``keywords`` and ``faction_keywords``. Matching is
-exact-string and case-sensitive — keywords are authored in datasheet Title Case
-on both sides.
+against the union of its ``keywords`` and ``faction_keywords``. Keywords compare
+without regard to case or apostrophe style (:func:`keyword_key`): rules print them
+uppercase, as ``applies_to`` spells them, while units store datasheet spelling.
 
 Two distinct "no constraint" forms, both deliberate:
   - a ``None``/absent filter has no resolvable scope and matches nothing (the
@@ -35,12 +35,20 @@ def unit_matches_applies_to(
     docstring for the ``None``-vs-empty-filter semantics."""
     if applies_to is None:
         return False
-    owned = set(owned_keywords)
-    if any(kw not in owned for kw in applies_to.get("required_keywords") or []):
+    owned = {keyword_key(kw) for kw in owned_keywords}
+    if any(keyword_key(kw) not in owned for kw in applies_to.get("required_keywords") or []):
         return False
-    if any(kw in owned for kw in applies_to.get("excluded_keywords") or []):
+    if any(keyword_key(kw) in owned for kw in applies_to.get("excluded_keywords") or []):
         return False
     return True
+
+
+def keyword_key(keyword: str) -> str:
+    """How two keyword spellings compare.
+
+    Uppercase, with a curly apostrophe read as a straight one.
+    """
+    return keyword.upper().replace("’", "'")
 
 
 def ability_applies_to_unit(applies_to: dict[str, Any] | None, unit: dict[str, Any]) -> bool:

@@ -596,10 +596,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -1030,12 +1030,12 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Assault",
           "Heavy",
           "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -1154,10 +1154,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -1623,10 +1623,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -1947,10 +1947,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Precision"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -2578,10 +2578,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {

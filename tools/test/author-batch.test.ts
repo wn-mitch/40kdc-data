@@ -304,6 +304,18 @@ describe("lintCanonical", () => {
     expect(bad.issues.join()).toContain("unknown turn");
   });
 
+  it("rejects a keyword condition that is not one uppercase unit keyword", () => {
+    const effect = (keyword: string) => ({
+      type: "conditional",
+      condition: { type: "target-has-keyword", parameters: { keyword } },
+      effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
+    });
+    expect(lintCanonical(effect("VEHICLE")).canonical).toBe(true);
+    expect(lintCanonical(effect("SPOTTED")).canonical).toBe(true);
+    // The old extraction's capital A, datasheet spelling, and two keywords joined into one.
+    for (const bad of ["A", "Vehicle", "ORKS WALKER"]) expect(lintCanonical(effect(bad)).issues.join()).toContain("is not a unit keyword");
+  });
+
   it("recurses compound-condition operands for stray top-level params", () => {
     const bad = lintCanonical({ type: "conditional", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "units-destroyed", side: "friendly", count_min: 1 }] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);

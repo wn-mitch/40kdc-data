@@ -3,9 +3,10 @@
  * from its curated `applies_to` keyword filter. This is the roster-highlighting
  * contract consumers replicate: a unit matches iff it carries every
  * `required_keywords` entry and none of the `excluded_keywords`, compared
- * against the union of its `keywords` and `faction_keywords`. Matching is
- * exact-string and case-sensitive — keywords are authored in datasheet Title
- * Case on both sides.
+ * against the union of its `keywords` and `faction_keywords`. Keywords compare
+ * without regard to case or apostrophe style: rules print them uppercase
+ * ("LEGIONES DAEMONICA"), which is how `applies_to` spells them, while units
+ * store datasheet spelling ("Legiones Daemonica", "T’au Empire").
  *
  * Two distinct "no constraint" forms, both deliberate:
  *   - a `null`/absent filter has no resolvable scope → matches nothing (the app
@@ -35,12 +36,17 @@ export function unitMatchesAppliesTo(
   unit: UnitKeywordSource,
 ): boolean {
   if (filter == null) return false;
-  const owned = new Set<string>([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])]);
+  const owned = new Set<string>([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map(keywordKey));
   for (const kw of filter.required_keywords ?? []) {
-    if (!owned.has(kw)) return false;
+    if (!owned.has(keywordKey(kw))) return false;
   }
   for (const kw of filter.excluded_keywords ?? []) {
-    if (owned.has(kw)) return false;
+    if (owned.has(keywordKey(kw))) return false;
   }
   return true;
+}
+
+/** How two keyword spellings compare: uppercase, with a curly apostrophe read as a straight one. */
+export function keywordKey(keyword: string): string {
+  return keyword.toUpperCase().replaceAll("’", "'");
 }

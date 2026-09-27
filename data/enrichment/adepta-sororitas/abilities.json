@@ -597,10 +597,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_name": "arco-flails",
             "keywords": [
               "Hazardous"
-            ],
-            "weapon_name": "arco-flails"
+            ]
           }
         }
       ]
@@ -2827,7 +2827,7 @@
               {
                 "type": "unit-has-keyword",
                 "parameters": {
-                  "keyword": "ADEPTA-SORORITAS"
+                  "keyword": "ADEPTA SORORITAS"
                 }
               },
               {
@@ -2851,7 +2851,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "ADEPTA-SORORITAS"
+              "keyword": "ADEPTA SORORITAS"
             }
           },
           "effect": {
@@ -2959,9 +2959,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Infantry",
-        "Fly"
+        "ADEPTA SORORITAS",
+        "INFANTRY",
+        "FLY"
       ]
     }
   },
@@ -3055,7 +3055,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Exorcist"
+        "EXORCIST"
       ]
     },
     "community_notes": "Re-roll the dice that determine the random Attacks characteristic of the bearer's weapon (modeled as re-roll all)."
@@ -3090,7 +3090,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     }
   },
@@ -3126,7 +3126,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Exorcist"
+        "EXORCIST"
       ]
     }
   },
@@ -3150,11 +3150,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Devastating Wounds"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -3163,9 +3163,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Infantry",
-        "Fly"
+        "ADEPTA SORORITAS",
+        "INFANTRY",
+        "FLY"
       ]
     }
   },
@@ -3200,7 +3200,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     }
   },
@@ -3234,7 +3234,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     }
   },
@@ -3269,7 +3269,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     }
   },
@@ -3320,7 +3320,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     }
   },
@@ -3354,7 +3354,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     }
   },
@@ -3381,11 +3381,11 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "scope": "weapon",
+            "attack_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            ]
           }
         },
         {
@@ -3411,7 +3411,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     }
   },
@@ -3445,8 +3445,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Character"
+        "ADEPTA SORORITAS",
+        "CHARACTER"
       ]
     },
     "community_notes": "Models only the +1 Ld to ADEPTA SORORITAS CHARACTERs. The 'enhancements from this detachment do not count toward the army enhancement total' clause is an army-construction rule with no combat-DSL slot."
@@ -3523,11 +3523,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Character"
+        "ADEPTA SORORITAS",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     }
   },
@@ -3895,7 +3895,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Fell Back; Penitent units are eligible to shoot and declare a charge instead."
@@ -3930,7 +3930,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your unit."
@@ -3964,7 +3964,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Used on a Penitent unit that was just destroyed while within range of an objective marker you controlled: that objective remains under your control until your opponent's Level of Control exceeds yours at the end of a phase."
@@ -4000,7 +4000,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Penitent Engines"
+              "keyword": "PENITENT ENGINES"
             }
           },
           "effect": {
@@ -4019,7 +4019,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Used just before the unit Advances. Penitent Engines units do not make an Advance roll; instead add 6\" to their Move characteristic until the end of the phase."
@@ -4063,7 +4063,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Only attacks made by Penitent models in the unit benefit."
@@ -4097,7 +4097,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Only Penitent models in the unit gain the Feel No Pain 4+ ability."
@@ -4138,8 +4138,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Character"
+        "ADEPTA SORORITAS",
+        "CHARACTER"
       ]
     },
     "community_notes": "You can discard 1-3 Miracle dice when using this Stratagem; the model returns with D3 wounds remaining plus 1 per Miracle dice discarded (up to its starting wounds), unengaged, not part of an Attached unit, with a Starting Strength of 1. Saint Celestine cannot be selected; the same Character cannot be selected more than once per battle."
@@ -4173,7 +4173,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot and destroyed one or more models in your unit; your unit must target only that enemy unit, and only if it is an eligible target."
@@ -4237,7 +4237,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     }
   },
@@ -4271,8 +4271,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Vehicle"
+        "ADEPTA SORORITAS",
+        "VEHICLE"
       ]
     },
     "community_notes": "Used on a Vehicle model with the Deadly Demise ability that was just destroyed: do not roll for Deadly Demise; mortal wounds are automatically inflicted."
@@ -4316,7 +4316,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Each destroyed model that has not fought this phase fights after the attacking unit finishes its attacks and is then removed from play."
@@ -4350,7 +4350,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Used at the start of the Fight phase on one Infantry or Walker unit: until the end of the phase, each enemy model within Engagement Range of your unit must select your unit as the target of its attacks."
@@ -4394,8 +4394,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Transport"
+        "ADEPTA SORORITAS",
+        "TRANSPORT"
       ]
     },
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your Transport: one embarked unit can disembark as if it were your Movement phase, then shoot as if it were your Shooting phase, targeting only the attacking enemy unit (and only if it is an eligible target)."
@@ -4444,8 +4444,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Transport"
+        "ADEPTA SORORITAS",
+        "TRANSPORT"
       ]
     },
     "community_notes": "Used just before the Transport Advances: re-roll its Advance rolls, and units can disembark from it even though it Advanced. Units that do so count as having made a Normal move and cannot declare a charge this turn."
@@ -4470,11 +4470,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
+        "weapon_keyword": "Torrent",
         "keywords": [
           "Devastating Wounds"
-        ],
-        "weapon_type": "ranged",
-        "weapon_keyword": "Torrent"
+        ]
       }
     },
     "scope": {
@@ -4483,7 +4483,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Targets one unit that has not been selected to shoot this phase; only Torrent weapons gain [Devastating Wounds]."
@@ -4508,10 +4508,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lethal Hits"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -4520,7 +4520,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If one or more enemy models are destroyed by those weapons this phase, one destroyed model's unit must take a Battle-shock test (rider not encoded)."
@@ -4563,7 +4563,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Ranged attacks only, against enemy units within 6\" that are also within range of an objective marker (target conditions not encoded). If enemy models are destroyed by those attacks, one destroyed model's unit must take a Battle-shock test (rider not encoded)."
@@ -4598,7 +4598,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Lasts until the attacking unit has finished making its attacks."
@@ -4635,7 +4635,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Celestian Sacresants"
+        "CELESTIAN SACRESANTS"
       ]
     },
     "community_notes": "If your unit is Righteous, you can also select one other Celestian Sacresants unit (not Battle-shocked, within 6\") to receive the same protection (extension not encoded)."
@@ -4675,7 +4675,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Used just after the unit Falls Back. If the unit is Righteous, it is eligible to shoot and declare a charge in a turn in which it Fell Back instead (escalation not encoded)."
@@ -4723,7 +4723,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If the unit is Righteous, those moves do not need to end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit (relaxation not encoded)."
@@ -4758,7 +4758,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Used just after a mortal wound is allocated to the unit. If the unit is Righteous, the Feel No Pain is 5+ against mortal wounds instead (escalation not encoded)."
@@ -4809,7 +4809,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "The unit must be Righteous and not have been selected to shoot or fight this phase."
@@ -4846,7 +4846,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If the unit is Righteous, also improve the Armour Penetration characteristic of its melee weapons by 1 until the end of the phase (rider not encoded)."
@@ -4887,8 +4887,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas",
-        "Jump Pack"
+        "ADEPTA SORORITAS",
+        "JUMP PACK"
       ]
     },
     "community_notes": "Used at the end of your opponent's Fight phase: remove the unit from the battlefield and place it into Strategic Reserves."
@@ -4925,7 +4925,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Targets one Infantry unit that was selected as a target, or one friendly Jump Pack unit within 3\" of such a unit. If a Jump Pack unit was targeted, friendly Infantry units within 3\" of it also impose -1 to Hit (extension not encoded)."
@@ -4961,7 +4961,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If one or more enemy models are destroyed by those attacks, you gain 1 Miracle dice (rider not encoded)."
@@ -4986,10 +4986,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lance"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -4998,7 +4998,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If one or more enemy models are destroyed by the unit's attacks this phase, you gain 1 Miracle dice (rider not encoded)."
@@ -5045,7 +5045,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "The blessed unit can ignore modifiers to its models' profile characteristics, its weapons' WS/BS, and any roll or test made for it (excluding saving throw modifiers). If the unit has the Jump Pack keyword, friendly Adepta Sororitas units within 3\" are also blessed (extension not encoded)."
@@ -5080,7 +5080,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Used just after the unit suffers a mortal wound; can instead target one friendly Jump Pack unit within 3\" of it, in which case friendly Adepta Sororitas units within 3\" of that unit also gain the Feel No Pain (extension not encoded)."
@@ -5122,7 +5122,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians"
+        "SANCTUARY GUARDIANS"
       ]
     },
     "community_notes": "Used when the unit is selected to make an Advance or Fall Back move: that move does not prevent it from being eligible to shoot or declare a charge."
@@ -5173,7 +5173,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians"
+        "SANCTUARY GUARDIANS"
       ]
     },
     "community_notes": "Used when the unit is selected to shoot or fight: its Torrent weapons have an Attacks characteristic of 6, and all of its attacks improve their Armour Penetration by 1."
@@ -5209,7 +5209,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians"
+        "SANCTUARY GUARDIANS"
       ]
     },
     "community_notes": "Used when an enemy unit targets your unit while it is within a terrain area; Arco-flagellants units cannot be selected."
@@ -5257,7 +5257,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "While the bearer is on the battlefield, each time an enemy unit is destroyed by a Penitent unit from your army, you can discard 1 Miracle dice and then gain 1 Miracle dice showing a value of 6."
@@ -5298,7 +5298,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     },
     "community_notes": "Once per battle, at the start of the battle round, select one Vow of Atonement (see the Desperate for Redemption detachment rule): until the start of the next battle round it is active for the bearer's unit in addition to any active for your army, even if already selected this battle."
@@ -5339,7 +5339,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Penitent"
+        "PENITENT"
       ]
     }
   },
@@ -5372,7 +5372,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Canoness, Palatine or Ministorum Priest model only."
@@ -5407,7 +5407,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "When the bearer is destroyed, you gain an additional D3 Miracle dice."
@@ -5469,7 +5469,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "If the bearer has lost one or more wounds, the bonus is +2 to each characteristic instead (escalation not encoded)."
@@ -5504,7 +5504,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "At the end of your Command phase, if the bearer is on the battlefield, re-roll 1 Miracle dice from your pool and return it showing the new result; if the bearer's unit is below its Starting Strength, re-roll up to 3 Miracle dice instead."
@@ -5541,7 +5541,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Canoness or Palatine model only: each time an attack is allocated to the bearer, change the Damage characteristic of that attack to 1."
@@ -5606,7 +5606,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Each time the bearer is selected to fight, you can first discard up to 3 Miracle dice; the bonus is +1 Attacks and +1 Strength per die discarded."
@@ -5654,7 +5654,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "At the start of your Command phase, you can discard up to 2 Miracle dice; the gained Miracle dice shows a value equal to the sum of the discarded dice (maximum 6)."
@@ -5698,10 +5698,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         ]
@@ -5713,7 +5713,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Torrent weapons get +1 Attacks; all other ranged weapons in the led unit have [Sustained Hits 1]."
@@ -5761,7 +5761,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Canoness or Palatine model only."
@@ -5808,7 +5808,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Each time a model in the bearer's unit makes an attack, you can ignore modifiers to that attack's BS/WS and/or modifiers to the Hit roll."
@@ -5845,7 +5845,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "While the bearer's unit is Righteous, the bonus is +2 Attacks and +1 Damage instead (escalation not encoded)."
@@ -5894,7 +5894,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "The bearer's weapons have [Precision]; each time the bearer's unit destroys an enemy Character model, you gain 1CP."
@@ -5929,7 +5929,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     }
   },
@@ -5963,7 +5963,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Canoness or Palatine model only. At the start of your Command phase, if the bearer is on the battlefield, take a Leadership test for it; the Miracle dice is gained only if the test is passed (gate not encoded)."
@@ -6011,10 +6011,10 @@
           "type": "keyword-grant",
           "target": "self",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Precision"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         }
       ]
@@ -6025,7 +6025,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Each time the bearer fights, if one or more enemy models are destroyed by those attacks, you gain 1 Miracle dice (rider not encoded)."
@@ -6057,7 +6057,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "In your Movement phase, select one enemy unit within 12\" of the bearer; it must take a Battle-shock test. If the test is failed, you gain 1 Miracle dice (rider not encoded)."
@@ -6092,7 +6092,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adepta Sororitas"
+        "ADEPTA SORORITAS"
       ]
     },
     "community_notes": "Applies only to saving throws substituted with an Act of Faith: that saving throw is successful irrespective of the value of the Miracle dice used."
@@ -6131,8 +6131,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians",
-        "Battle Sisters Squad"
+        "SANCTUARY GUARDIANS",
+        "BATTLE SISTERS SQUAD"
       ]
     },
     "community_notes": "Upgrade for a Sanctuary Guardians Battle Sisters Squad unit: once per battle, at the start of any phase, the unit heals D3+2 wounds."
@@ -6192,8 +6192,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sanctuary Guardians",
-        "Canoness"
+        "SANCTUARY GUARDIANS",
+        "CANONESS"
       ]
     },
     "community_notes": "The bearer's melee attacks have +1 Damage; the bearer's unit adds 1 to Wound rolls for melee attacks."

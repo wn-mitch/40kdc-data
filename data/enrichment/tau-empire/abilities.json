@@ -2203,7 +2203,7 @@
         "range": 6,
         "recipient_filter": {
           "required_keywords": [
-            "T\u2019au Empire"
+            "T’AU EMPIRE"
           ]
         },
         "effect": {
@@ -2382,10 +2382,10 @@
         "type": "keyword-grant",
         "target": "self",
         "modifier": {
+          "weapon_type": "ranged",
           "keywords": [
-            "anti-titanic-3plus"
-          ],
-          "weapon_type": "ranged"
+            "Anti TITANIC 3PLUS"
+          ]
         }
       }
     },
@@ -3607,7 +3607,7 @@
         "target": "self",
         "modifier": {
           "keywords": [
-            "lance"
+            "Lance"
           ]
         }
       }
@@ -4062,7 +4062,7 @@
           "terrain-le-4"
         ],
         "vertical_limit": 4,
-        "excludes_keyword": "titanic",
+        "excludes_keyword": "TITANIC",
         "applies_to_moves": [
           "normal",
           "advance",
@@ -4419,10 +4419,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -4449,10 +4449,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -4644,10 +4644,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         },
@@ -4764,10 +4764,21 @@
             "operator": "or",
             "operands": [
               {
-                "type": "unit-has-keyword",
-                "parameters": {
-                  "keyword": "GHOSTKEEL BATTLESUIT"
-                }
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "unit-has-keyword",
+                    "parameters": {
+                      "keyword": "GHOSTKEEL"
+                    }
+                  },
+                  {
+                    "type": "unit-has-keyword",
+                    "parameters": {
+                      "keyword": "BATTLESUIT"
+                    }
+                  }
+                ]
               },
               {
                 "type": "unit-has-keyword",
@@ -4822,8 +4833,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "[APPROX] Used when a Battlesuit model is destroyed: if it has Deadly Demise, choose the roll result to be 1 or 6 instead of rolling; otherwise roll one D6 per unit within 6\" and on a 4+ that unit suffers D3 mortal wounds. Encoded as an opaque grant."
@@ -4872,8 +4883,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Used just after an enemy unit declares a charge against the Battlesuit unit: that enemy unit takes a Battle-shock test and you roll one D6 per model in it, suffering 1 mortal wound per 6."
@@ -4907,8 +4918,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     }
   },
@@ -4932,10 +4943,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -4944,8 +4955,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Applies only against enemy units containing 6 or more models; against units of 11 or more models the attacks gain [SUSTAINED HITS 2] instead. The model-count scaling is not encoded."
@@ -4993,8 +5004,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "A unit arriving via Deep Strike can be set up more than 6\" horizontally from all enemy models; it cannot declare a charge this turn."
@@ -5042,9 +5053,9 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit",
-        "Fly"
+        "T’AU EMPIRE",
+        "BATTLESUIT",
+        "FLY"
       ]
     },
     "community_notes": "After its attacks are resolved, an unengaged unit can make a Normal move but cannot declare a charge this turn."
@@ -5078,7 +5089,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase."
@@ -5120,8 +5131,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Infantry"
+        "T’AU EMPIRE",
+        "INFANTRY"
       ]
     },
     "community_notes": "Applies only to attacks that target the closest enemy unit; the closest-target gate is not encoded."
@@ -5155,7 +5166,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     }
   },
@@ -5190,7 +5201,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "Targets two T'au Empire units and one enemy unit: both units can only attack that enemy unit this phase, with AP improved by 1. Cannot be used in the fourth or fifth battle rounds."
@@ -5303,8 +5314,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Infantry"
+        "T’AU EMPIRE",
+        "INFANTRY"
       ]
     },
     "community_notes": "The selected enemy unit (excluding Monsters and Vehicles) hit by this unit's attacks is shaken until the end of your opponent's next turn."
@@ -5353,7 +5364,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "community_notes": "Applies to attacks made by Kroot models against the selected unit, unless the attacking unit is Battle-shocked."
@@ -5403,8 +5414,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot",
-        "Grenades"
+        "KROOT",
+        "GRENADES"
       ]
     },
     "community_notes": "Worsens the Weapon Skill and Ballistic Skill characteristics of the selected enemy Vehicle unit's weapons by 1 (higher is worse)."
@@ -5436,7 +5447,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     }
   },
@@ -5470,7 +5481,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "community_notes": "The unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
@@ -5509,7 +5520,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "community_notes": "[APPROX] Used on a just-destroyed Kroot Infantry or Kroot Hounds unit: add an identical unit to your army in Strategic Reserves at Starting Strength. Cannot return destroyed Character units to Attached units. Encoded as an opaque grant."
@@ -5543,7 +5554,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "community_notes": "Used on a unit that destroyed an enemy unit this Fight phase: in the opponent's next Command phase each enemy unit within 6\" takes a Battle-shock test (-1 if Below Half-strength) and skips its other Battle-shock tests that phase."
@@ -5605,10 +5616,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Hazardous"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             }
           ]
@@ -5621,8 +5632,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Battlesuit",
-        "Character"
+        "BATTLESUIT",
+        "CHARACTER"
       ]
     }
   },
@@ -5658,7 +5669,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "The first use designates one objective marker outside the opponent's deployment zone as your Trap objective; the bonus applies only to ranged attacks against enemy units within range of it. Cannot be used in the first or second battle rounds."
@@ -5692,8 +5703,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Infantry"
+        "T’AU EMPIRE",
+        "INFANTRY"
       ]
     },
     "community_notes": "[APPROX] Used just after an enemy unit declares a charge against this unit: the unit embarks within a friendly Transport if every model is within 3\" of it and capacity suffices. Encoded as an opaque grant."
@@ -5746,10 +5757,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Ignores Cover"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             }
           }
@@ -5762,7 +5773,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "Used on a unit just selected as an Observer: its attacks against their Spotted unit have Ballistic Skill improved by 1 and, if the unit has Markerlight, [IGNORES COVER]."
@@ -5809,8 +5820,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Grenades"
+        "T’AU EMPIRE",
+        "GRENADES"
       ]
     },
     "community_notes": "Used just after an enemy unit declares a charge against this unengaged unit: the charging unit takes a Battle-shock test and has -2 to Charge rolls this phase."
@@ -5847,7 +5858,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "Applies only to ranged attacks against enemy units within 9\"; cannot be used in the first or second battle rounds."
@@ -5882,7 +5893,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "At the end of the opponent's Fight phase, one unengaged Stealth, Ghostkeel or Commander Shadowsun unit is placed into Strategic Reserves."
@@ -5967,10 +5978,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -5979,7 +5990,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "Applies only to ranged attacks against units within 9\" of a friendly Kroot or Vespid Stingwings unit; the proximity gate is not encoded. Cannot target Kroot or Vespid Stingwings units."
@@ -6013,7 +6024,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sudden Dawn Cadre"
+        "SUDDEN DAWN CADRE"
       ]
     },
     "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured."
@@ -6062,8 +6073,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sudden Dawn Cadre",
-        "Infantry"
+        "SUDDEN DAWN CADRE",
+        "INFANTRY"
       ]
     },
     "community_notes": "One enemy unit hit by this unit's attacks is pinned (-2\" Move) until the start of your next Command phase."
@@ -6097,8 +6108,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sudden Dawn Cadre",
-        "Infantry"
+        "SUDDEN DAWN CADRE",
+        "INFANTRY"
       ]
     },
     "community_notes": "At the end of the opponent's Fight phase, an unengaged unit that was eligible to fight, wholly within 6\" of a friendly Sudden Dawn Cadre Transport it can embark within, embarks within it."
@@ -6138,8 +6149,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Each time you target the bearer's unit with a Stratagem, roll one D6: on a 4+ you gain 1 CP."
@@ -6174,8 +6185,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "At the end of the opponent's turn, if the bearer's unit is unengaged, it can be removed from the battlefield and placed into Strategic Reserves."
@@ -6224,8 +6235,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "The mortal wounds trigger each time the bearer ends a Normal move, against one enemy unit it moved over: roll six D6, 1 mortal wound per 4+."
@@ -6254,20 +6265,20 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         }
       ]
@@ -6278,8 +6289,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire",
-        "Battlesuit"
+        "T’AU EMPIRE",
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Selected each time the bearer is selected to shoot; applies to the bearer's ranged weapons until those attacks are resolved."
@@ -6313,7 +6324,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "interactions": [
@@ -6353,7 +6364,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "In the Resolve Pre-battle Abilities step, up to two friendly T'au Empire units within 6\" that lack Scouts gain the Scouts 6\" ability."
@@ -6387,7 +6398,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "[APPROX] At the start of the first battle round select one objective marker; while the bearer is on the battlefield, friendly T'au Empire models within range of it get +1 Objective Control. Encoded as an opaque grant."
@@ -6421,7 +6432,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "interactions": [
@@ -6455,10 +6466,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -6476,7 +6487,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot"
+        "KROOT"
       ]
     },
     "community_notes": "Enemy units arriving as Reinforcements cannot be set up within 12\" horizontally of the bearer; encoded as an opaque grant."
@@ -6518,10 +6529,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         ]
@@ -6533,7 +6544,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot Trail Shaper"
+        "KROOT",
+        "TRAIL SHAPER"
       ]
     }
   },
@@ -6569,7 +6581,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot War Shaper"
+        "KROOT",
+        "WAR SHAPER"
       ]
     },
     "community_notes": "Applies to all weapons equipped by the bearer."
@@ -6611,7 +6624,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot Flesh Shaper"
+        "KROOT",
+        "FLESH SHAPER"
       ]
     },
     "community_notes": "While the bearer is leading a unit, melee attacks made by models in that unit score Critical Hits on unmodified Hit rolls of 5+."
@@ -6673,7 +6687,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Battlesuit"
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Applies to one Airbursting Fragmentation Projector selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
@@ -6735,7 +6749,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Battlesuit"
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Applies to one T'au Flamer selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
@@ -6807,7 +6821,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Battlesuit"
+        "BATTLESUIT"
       ]
     },
     "community_notes": "Applies to one Plasma Rifle selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
@@ -6841,7 +6855,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "interactions": [
@@ -6884,7 +6898,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "From the third battle round onwards, also add 1 to the Wound roll; the round-gated wound bonus is not encoded."
@@ -6931,7 +6945,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "After deployment, redeploy up to three T'au Empire units, optionally into Strategic Reserves regardless of the usual limits."
@@ -6965,7 +6979,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "interactions": [
@@ -7005,7 +7019,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Kroot Shaper"
+        "KROOT",
+        "SHAPER"
       ]
     },
     "community_notes": "[APPROX] In the Declare Battle Formations step, up to three friendly Kroot Carnivores or Farstalker Kinband units gain Deep Strike. Encoded as an opaque grant."
@@ -7055,7 +7070,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "T'au Empire"
+        "T’AU EMPIRE"
       ]
     },
     "community_notes": "In your Command phase, one Kroot or Vespid Stingwings unit within 12\" gets improved Leadership (encoded as -1, lower is better) and +1 Objective Control until the start of your next Command phase. Kroot models cannot take this."
@@ -7101,8 +7116,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sudden Dawn Cadre",
-        "Commander in Enforcer Battlesuit"
+        "SUDDEN DAWN CADRE",
+        "COMMANDER IN ENFORCER BATTLESUIT"
       ]
     },
     "community_notes": "[APPROX] After this unit shoots, one enemy unit hit is suppressed (-1 to Hit rolls) until the start of your next turn; and this unit's ingress moves can be set up more than 6\" (instead of 8\") from enemies at the cost of not charging that turn. Both encoded as opaque grants."
@@ -7136,8 +7151,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Sudden Dawn Cadre",
-        "Devilfish"
+        "SUDDEN DAWN CADRE",
+        "DEVILFISH"
       ]
     },
     "community_notes": "[APPROX] Unit Upgrade (Devilfish unit, not a Character Enhancement): when a friendly unit disembarks from this unit, its pulse blaster and pulse carbine weapons get +1 Attacks. Encoded as an opaque grant."
@@ -7311,10 +7326,10 @@
             "type": "keyword-grant",
             "target": "self",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         ]

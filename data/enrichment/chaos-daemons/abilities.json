@@ -376,7 +376,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "legiones-daemonica"
+          "keyword": "LEGIONES DAEMONICA"
         }
       },
       "effect": {
@@ -516,13 +516,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "nurgle"
+              "keyword": "NURGLE"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -1301,17 +1301,17 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "psyker"
+          "keyword": "PSYKER"
         }
       },
       "effect": {
         "type": "keyword-grant",
         "target": "enemy-within-aura",
         "modifier": {
+          "weapon_name": "psychic",
           "keywords": [
-            "hazardous"
-          ],
-          "weapon_name": "psychic"
+            "Hazardous"
+          ]
         }
       }
     },
@@ -1371,13 +1371,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "slaanesh"
+              "keyword": "SLAANESH"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -1697,13 +1697,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "tzeentch"
+              "keyword": "TZEENTCH"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -1908,13 +1908,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "nurgle"
+              "keyword": "NURGLE"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -2033,13 +2033,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "nurgle"
+              "keyword": "NURGLE"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -2168,13 +2168,13 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "khorne"
+              "keyword": "KHORNE"
             }
           },
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]
@@ -2776,7 +2776,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "assault"
+            "Assault"
           ]
         }
       }
@@ -3987,7 +3987,7 @@
           {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "BEASTS-OF-NURGLE"
+              "keyword": "BEASTS OF NURGLE"
             }
           },
           {
@@ -4140,7 +4140,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "nurgle"
+          "keyword": "NURGLE"
         }
       },
       "effect": {
@@ -4178,7 +4178,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "slaanesh"
+          "keyword": "SLAANESH"
         }
       },
       "effect": {
@@ -4313,7 +4313,7 @@
         "target": "unit",
         "modifier": {
           "keywords": [
-            "lance"
+            "Lance"
           ]
         }
       }
@@ -4711,8 +4711,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Mounted"
+        "LEGIONES DAEMONICA",
+        "MOUNTED"
       ]
     }
   },
@@ -4761,11 +4761,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character"
+        "LEGIONES DAEMONICA",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -4800,11 +4800,11 @@
             "type": "keyword-grant",
             "target": "all-friendly",
             "modifier": {
+              "scope": "weapon",
+              "attack_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "scope": "weapon",
-              "attack_type": "ranged"
+              ]
             }
           },
           {
@@ -4829,8 +4829,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     }
   },
@@ -4866,8 +4866,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Mounted"
+        "LEGIONES DAEMONICA",
+        "MOUNTED"
       ]
     }
   },
@@ -4907,8 +4907,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Mounted"
+        "LEGIONES DAEMONICA",
+        "MOUNTED"
       ]
     }
   },
@@ -4943,11 +4943,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character"
+        "LEGIONES DAEMONICA",
+        "CHARACTER"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -4982,8 +4982,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     }
   },
@@ -5021,8 +5021,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     }
   },
@@ -5056,8 +5056,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Mounted"
+        "LEGIONES DAEMONICA",
+        "MOUNTED"
       ]
     }
   },
@@ -5090,8 +5090,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Mounted"
+        "LEGIONES DAEMONICA",
+        "MOUNTED"
       ]
     }
   },
@@ -5209,12 +5209,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Slaanesh"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "SLAANESH"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -5256,12 +5256,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Khorne"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "KHORNE"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -5300,12 +5300,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Nurgle"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "NURGLE"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -5329,11 +5329,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "scope": "weapon",
+        "attack_type": "ranged",
         "keywords": [
           "Lethal Hits"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -5342,12 +5342,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Character",
-        "Tzeentch"
+        "LEGIONES DAEMONICA",
+        "CHARACTER",
+        "TZEENTCH"
       ],
       "excluded_keywords": [
-        "Monster"
+        "MONSTER"
       ]
     }
   },
@@ -5381,11 +5381,12 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ],
       "excluded_keywords": [
-        "Pink Horrors"
+        "PINK",
+        "HORRORS"
       ]
     }
   },
@@ -5422,8 +5423,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     }
   },
@@ -5461,8 +5462,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Legiones Daemonica",
-        "Battleline"
+        "LEGIONES DAEMONICA",
+        "BATTLELINE"
       ]
     }
   },
@@ -5684,7 +5685,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Khorne"
+              "keyword": "KHORNE"
             }
           },
           "effect": {
@@ -5694,10 +5695,10 @@
                 "type": "keyword-grant",
                 "target": "unit",
                 "modifier": {
+                  "weapon_type": "ranged",
                   "keywords": [
                     "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  ]
                 }
               },
               {
@@ -5715,7 +5716,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Tzeentch"
+              "keyword": "TZEENTCH"
             }
           },
           "effect": {
@@ -5756,7 +5757,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Nurgle"
+              "keyword": "NURGLE"
             }
           },
           "effect": {
@@ -5785,7 +5786,7 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Slaanesh"
+              "keyword": "SLAANESH"
             }
           },
           "effect": {
@@ -5994,13 +5995,13 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "nurgle"
+              "keyword": "NURGLE"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "legiones-daemonica"
+              "keyword": "LEGIONES DAEMONICA"
             }
           }
         ]

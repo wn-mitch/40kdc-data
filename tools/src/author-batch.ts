@@ -36,6 +36,8 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { createValidator } from "./schema-loader.js";
 import { hasEmptyModifier } from "./audit-coverage.js";
+import { keywordIndex } from "./round5c/core-keywords.js";
+import { round5cDataRoot } from "./round5c/entries.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -359,6 +361,15 @@ const CANONICAL_SUBSETS = new Set(["ones", "all-failures"]);
 const CANONICAL_RESULT_SCOPES = new Set(["any-result"]);
 const CANONICAL_ATTACK_TYPES = new Set(["melee", "ranged"]);
 const CANONICAL_PHASES = new Set(["command", "movement", "shooting", "charge", "fight"]);
+/** Tags the data still writes as keywords, until they get a designation condition of their own. */
+const TAG_KEYWORDS = new Set(["RILED UP", "SPOTTED", "AFFLICTED", "GUIDED", "HIDDEN", "MARKED", "OATH OF MOMENT TARGET"]);
+
+/** A keyword condition's value: one core unit keyword, uppercase as rules print it, or a known tag. */
+function canonicalKeyword(value: unknown): boolean {
+  if (typeof value !== "string") return false;
+  return TAG_KEYWORDS.has(value) || (value === value.toUpperCase() && keywordIndex(round5cDataRoot()).has(value));
+}
+
 /** Whose turn, as the schema's player-turn enum spells it. */
 const CANONICAL_PLAYER_TURNS = new Set(["your-turn", "opponent-turn"]);
 const CANONICAL_CONDITION_CHILD_KEYS = new Set([
@@ -397,6 +408,9 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
       }
       if (c.type === "player-turn-is" && !CANONICAL_PLAYER_TURNS.has(String(c.parameters?.turn))) {
         issues.push(`condition player-turn-is: unknown turn "${String(c.parameters?.turn)}"`);
+      }
+      if ((c.type === "unit-has-keyword" || c.type === "target-has-keyword") && !canonicalKeyword(c.parameters?.keyword)) {
+        issues.push(`condition ${c.type}: "${String(c.parameters?.keyword)}" is not a unit keyword as rules print it (uppercase, one keyword)`);
       }
     }
   };

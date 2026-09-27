@@ -127,10 +127,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -219,10 +219,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -230,17 +230,17 @@
           "condition": {
             "type": "unit-has-keyword",
             "parameters": {
-              "keyword": "Character"
+              "keyword": "CHARACTER"
             }
           },
           "effect": {
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Lance"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         }
@@ -336,11 +336,11 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Lethal Hits",
           "Precision"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -369,10 +369,10 @@
       "type": "keyword-grant",
       "target": "unit",
       "modifier": {
+        "weapon_type": "ranged",
         "keywords": [
           "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        ]
       }
     },
     "scope": {
@@ -941,10 +941,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "melee",
               "keywords": [
                 "Hazardous"
-              ],
-              "weapon_type": "melee"
+              ]
             }
           }
         }
@@ -980,10 +980,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -1004,10 +1004,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -1075,10 +1075,10 @@
             "type": "keyword-grant",
             "target": "unit",
             "modifier": {
+              "weapon_type": "ranged",
               "keywords": [
                 "Assault"
-              ],
-              "weapon_type": "ranged"
+              ]
             }
           }
         }
@@ -1114,10 +1114,10 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "ranged",
             "keywords": [
               "Assault"
-            ],
-            "weapon_type": "ranged"
+            ]
           }
         },
         {
@@ -1138,10 +1138,10 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "ranged",
                 "keywords": [
                   "Assault"
-                ],
-                "weapon_type": "ranged"
+                ]
               }
             },
             {
@@ -1611,20 +1611,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lance"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
@@ -1638,11 +1638,11 @@
               "type": "keyword-grant",
               "target": "unit",
               "modifier": {
+                "weapon_type": "melee",
                 "keywords": [
                   "Lance",
                   "Lethal Hits"
-                ],
-                "weapon_type": "melee"
+                ]
               }
             }
           ]
@@ -1653,7 +1653,7 @@
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "Choose Lance or Lethal Hits \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both. Target must not have been selected to fight this phase"
+    "community_notes": "Choose Lance or Lethal Hits — or give in to the Red Thirst (unit becomes Battle-shocked) to take both. Target must not have been selected to fight this phase"
   },
   {
     "ability_id": "relentless-assault-liberator-assault-group",
@@ -1915,7 +1915,7 @@
   },
   {
     "ability_id": "sanguinius-grace-the-lost-brethren",
-    "name": "Sanguinius\u2019 Grace",
+    "name": "Sanguinius’ Grace",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1956,7 +1956,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "community_notes": "Once per battle, at the end of the Fight phase, if the bearer is within Engagement Range of three or more enemy models, it can fight one additional time (extra fight not tracked by the buff layer)"
@@ -1997,7 +1997,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up as close as possible to where it was destroyed, outside Engagement Range, with 3 wounds remaining"
@@ -2028,7 +2028,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "Character"
+          "keyword": "CHARACTER"
         }
       },
       "effect": {
@@ -2052,10 +2052,10 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
-    "community_notes": "Once per battle, at the start of the Fight phase: select one enemy Character unit in Engagement Range and roll six D6 \u2014 each 4+ inflicts 1 mortal wound on a Character model in that unit"
+    "community_notes": "Once per battle, at the start of the Fight phase: select one enemy Character unit in Engagement Range and roll six D6 — each 4+ inflicts 1 mortal wound on a Character model in that unit"
   },
   {
     "ability_id": "vengeful-onslaught-the-lost-brethren",
@@ -2082,7 +2082,7 @@
       "condition": {
         "type": "unit-has-keyword",
         "parameters": {
-          "keyword": "Death Company"
+          "keyword": "DEATH COMPANY"
         }
       },
       "effect": {
@@ -2101,7 +2101,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "community_notes": "If the bearer is destroyed, friendly Death Company models get +1 to Hit rolls until the end of your next turn"
@@ -2151,8 +2151,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     }
   },
@@ -2183,13 +2183,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -2210,15 +2210,15 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "community_notes": "In the Battle-shock step of the opponent's Command phase, enemy units (excluding Monsters/Vehicles) in Engagement Range of the bearer take a Battle-shock test"
   },
   {
     "ability_id": "archangels-shard-the-angelic-host",
-    "name": "Archangel\u2019s Shard",
+    "name": "Archangel’s Shard",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2236,12 +2236,12 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
-        "keywords": [
-          "Lance"
-        ],
         "weapon_type": "melee",
         "anti_keyword": "Chaos",
-        "anti_threshold": 5
+        "anti_threshold": 5,
+        "keywords": [
+          "Lance"
+        ]
       }
     },
     "scope": {
@@ -2250,8 +2250,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "community_notes": "The bearer's melee weapons have [ANTI-CHAOS 5+] and [LANCE]"
@@ -2294,8 +2294,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "community_notes": "Unit must not be within Engagement Range of enemy units"
@@ -2330,7 +2330,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -2370,7 +2370,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per battle, in your Command phase: all Angelic Legacy abilities (Legacy of the Angel detachment rule) are active for the bearer's unit instead of only two"
@@ -2406,8 +2406,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Infantry"
+        "ADEPTUS ASTARTES",
+        "INFANTRY"
       ]
     },
     "community_notes": "Enemy units cannot use the Fire Overwatch Stratagem to shoot at the bearer's unit"
@@ -2448,7 +2448,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up unengaged as close as possible to where it was destroyed, with 3 wounds, as its own unit of starting strength 1"
@@ -2496,7 +2496,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Chaplain"
+        "CHAPLAIN"
       ]
     },
     "community_notes": "The bearer's unit has Scouts 6\"; Battle-shock tests for Adeptus Astartes units within 6\" of the bearer can be re-rolled"
@@ -2532,7 +2532,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per battle, at the start of the Fight phase: models in the bearer's unit have Fights First until the end of the phase"
@@ -2558,7 +2558,7 @@
       "condition": {
         "type": "unit-has-keyword",
         "parameters": {
-          "keyword": "Death Company"
+          "keyword": "DEATH COMPANY"
         }
       },
       "effect": {
@@ -2577,13 +2577,13 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
   {
     "ability_id": "angels-fang-rage-cursed-onslaught",
-    "name": "Angel\u2019s Fang",
+    "name": "Angel’s Fang",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2605,19 +2605,19 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Character"
+              "keyword": "CHARACTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Monster"
+              "keyword": "MONSTER"
             }
           },
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "Vehicle"
+              "keyword": "VEHICLE"
             }
           }
         ]
@@ -2626,10 +2626,10 @@
         "type": "keyword-grant",
         "target": "bearer",
         "modifier": {
+          "weapon_type": "melee",
           "keywords": [
             "Sustained Hits 2"
-          ],
-          "weapon_type": "melee"
+          ]
         }
       }
     },
@@ -2639,7 +2639,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -2667,20 +2667,20 @@
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         },
         {
           "type": "keyword-grant",
           "target": "unit",
           "modifier": {
+            "weapon_type": "melee",
             "keywords": [
               "Sustained Hits 1"
-            ],
-            "weapon_type": "melee"
+            ]
           }
         }
       ]
@@ -2691,8 +2691,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "community_notes": "Chosen when the unit is selected to fight"
@@ -2734,8 +2734,8 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Jump Pack"
+        "ADEPTUS ASTARTES",
+        "JUMP PACK"
       ]
     },
     "community_notes": "Once per battle, when the unit is selected to fight: the bearer's melee attacks get +1 Damage"
@@ -2763,10 +2763,10 @@
           "type": "keyword-grant",
           "target": "bearer",
           "modifier": {
+            "weapon_keyword": "Psychic",
             "keywords": [
-              "Anti-Infantry 5+"
-            ],
-            "weapon_keyword": "Psychic"
+              "Anti INFANTRY 5+"
+            ]
           }
         },
         {
@@ -2786,11 +2786,11 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes",
-        "Psyker"
+        "ADEPTUS ASTARTES",
+        "PSYKER"
       ]
     },
-    "community_notes": "The Anti ability applies against all non-Monster, non-Vehicle units (modeled as Anti-Infantry 5+ \u2014 closest printed keyword)"
+    "community_notes": "The Anti ability applies against all non-Monster, non-Vehicle units (modeled as Anti-Infantry 5+ — closest printed keyword)"
   },
   {
     "ability_id": "aureole-of-the-angel-legacy-of-grace",
@@ -2822,7 +2822,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     }
   },
@@ -2855,7 +2855,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     },
     "community_notes": "The Heroic Intervention Stratagem costs 1CP less when targeting this unit (modeled as a CP refund on that stratagem)"
@@ -2891,7 +2891,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per battle, at the start of the Fight phase: models in the bearer's unit have Fights First until the end of the phase"
@@ -2921,10 +2921,10 @@
       "type": "keyword-grant",
       "target": "bearer",
       "modifier": {
+        "weapon_type": "melee",
         "keywords": [
           "Sustained Hits 3"
-        ],
-        "weapon_type": "melee"
+        ]
       }
     },
     "scope": {
@@ -2933,7 +2933,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per battle, at the start of the Fight phase, until the end of the phase"
@@ -2965,13 +2965,13 @@
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Monster"
+                  "keyword": "MONSTER"
                 }
               },
               {
                 "type": "target-has-keyword",
                 "parameters": {
-                  "keyword": "Vehicle"
+                  "keyword": "VEHICLE"
                 }
               }
             ]
@@ -3017,7 +3017,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Enemy units (excluding Monsters/Vehicles) falling back from the bearer's unit take Desperate Escape tests as if Battle-shocked; if also genuinely Battle-shocked, those tests are at -1"
@@ -3056,7 +3056,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Astartes"
+        "ADEPTUS ASTARTES"
       ]
     },
     "community_notes": "Once per battle round, just after making a Hit roll, Wound roll or saving throw for the bearer, treat the result as an unmodified 6"
@@ -3108,7 +3108,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Captain"
+        "CAPTAIN"
       ]
     }
   },
@@ -3179,7 +3179,7 @@
     },
     "applies_to": {
       "required_keywords": [
-        "Death Company"
+        "DEATH COMPANY"
       ]
     }
   }

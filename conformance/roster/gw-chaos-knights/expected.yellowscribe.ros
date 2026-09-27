@@ -1175,7 +1175,7 @@
             </profile>
             <profile name="Grotesque Regeneration" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of each phase, if the unit has the BEASTS-OF-NURGLE keyword, while the model has lost wounds, unless 1+ self units destroyed phase, until the end of the phase, modify this model's Wounds characteristic to 7.</characteristic>
+                <characteristic name="Description">At the end of each phase, if the unit has the BEASTS OF NURGLE keyword, while the model has lost wounds, unless 1+ self units destroyed phase, until the end of the phase, modify this model's Wounds characteristic to 7.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts 6&quot;" typeName="Abilities">
