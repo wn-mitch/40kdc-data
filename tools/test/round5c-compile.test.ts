@@ -80,7 +80,7 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }), { type: "fallback-and-act", target: "unit", modifier: { can_charge: true } }],
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot"] }), { type: "fallback-and-act", target: "unit", modifier: {} }],
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance", "fall-back"], acts: ["shoot"] }), { type: "sequence", steps: [
-        { type: "ability-grant", target: "unit", modifier: { grant_type: "shoot-after-advance" } }, { type: "fallback-and-act", target: "unit", modifier: {} }] }],
+        { type: "keyword-grant", target: "unit", modifier: { keywords: ["Assault"], weapon_type: "ranged" } }, { type: "fallback-and-act", target: "unit", modifier: {} }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "bearer", amount: "D3" }), { type: "heal-wounds", target: "bearer", modifier: { amount: "D3" } }],
     ];
     for (const [input, expected] of cases) {
@@ -116,13 +116,36 @@ describe("Round 5C leaf compiler", () => {
     expect(rendered(authored("adeptus-mechanicus", "control-edict"), leaves).length).toBeGreaterThan(0);
   });
 
+  it("gives each later moment its own part of one compound ability", () => {
+    const result = compiled([
+      leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }),
+      leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, 3),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+      leaf("EVENT", "event", { kind: "phase-end", phase: "movement", turn: "your" }, 3),
+      leaf("EVENT", "event", { kind: "phase-end", phase: "shooting", turn: "your" }, 3),
+      leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }),
+    ]);
+    const window = (phase: string) => ({ operator: "and", operands: [{ type: "phase-is", parameters: { phase } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] });
+    // One ability: no trigger of its own, its leading condition gates both parts, and the two
+    // moments with no effect between them are alternatives for the second part.
+    expect(result.mechanics).toMatchObject({ behavior: "reactive", trigger: null, effect: { type: "conditional", condition: { type: "is-attached" }, effect: { type: "sequence", steps: [
+      { type: "ability-part", trigger: { event: "start-of-phase", condition: window("movement") }, effect: { type: "re-roll" } },
+      { type: "ability-part", trigger: [{ event: "end-of-phase", condition: window("movement") }, { event: "end-of-phase", condition: window("shooting") }], effect: { type: "cp-gain" } },
+    ] } } });
+  });
+
+  it("fires on any of several leading moments", () => {
+    const either = compiled([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EVENT", "event", { kind: "selected-to-fight" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    expect(either.mechanics).toMatchObject({ behavior: "reactive", trigger: [{ event: "selected-to-shoot", subject: "self" }, { event: "selected-to-fight", subject: "self" }] });
+  });
+
   it("narrows a phase-boundary trigger by phase and whose turn", () => {
     const command = compiled([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]);
     expect(command.mechanics.trigger).toEqual({ event: "start-of-phase", condition: { operator: "and", operands: [
-      { type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your" } },
+      { type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } },
     ] } });
     expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "fight", turn: "opponent" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger)
-      .toEqual({ event: "end-of-phase", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent" } }] } });
+      .toEqual({ event: "end-of-phase", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }] } });
     expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]))
       .toMatch(/Command phase/iu);
     expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger).toEqual({ event: "end-of-phase" });
@@ -161,7 +184,7 @@ describe("Round 5C leaf compiler", () => {
     expect(fail([leaf("EFFECT", "reroll", { roll: { source: "Hit" }, subset: "ones" })])[0]).toMatch(/quoted source text/u);
     expect(fail([leaf("EFFECT", "resource-action", { resource: "command-point", operation: "spend", amount: 1 })])[0]).toMatch(/Only resource gains/u);
     expect(fail([leaf("CONDITION", "army-faction", { faction: { source: "Fabricated" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })])[0]).toMatch(/army-faction has no DSL fragment/u);
-    expect(fail([leaf("EVENT", "event", { kind: "phase-start" }, 2), leaf("EVENT", "event", { kind: "phase-end" }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]))
-      .toContain("More than one trigger event; the shape needs a combinator the compiler does not have.");
+    expect(fail([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }), leaf("EVENT", "event", { kind: "selected-to-fight" })]))
+      .toContain("A moment ends the ability with no effect after it.");
   });
 });

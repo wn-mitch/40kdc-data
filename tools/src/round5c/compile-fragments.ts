@@ -25,10 +25,11 @@ const TRIGGERS: Record<string, Node> = {
   "event:after-shooting": { event: "after-unit-resolves-attacks", subject: "self", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
   "event:selected-to-shoot": { event: "selected-to-shoot", subject: "self" },
   "event:selected-to-fight": { event: "selected-to-fight", subject: "self" },
-  "event:enemy-selected-targets": { event: "enemy-unit-targets-bearer" },
-  "event:enemy-ended-move": { event: "enemy-unit-ended-move" },
-  "event:enemy-has-shot": { event: "after-enemy-unit-fires" },
-  "event:enemy-declared-charge": { event: "enemy-unit-selects-bearer-as-charge-target" },
+  // Enemy moments name the enemy unit as their subject, as the authored data does.
+  "event:enemy-selected-targets": { event: "enemy-unit-targets-bearer", subject: "enemy-unit" },
+  "event:enemy-ended-move": { event: "enemy-unit-ended-move", subject: "enemy-unit" },
+  "event:enemy-has-shot": { event: "after-enemy-unit-fires", subject: "enemy-unit" },
+  "event:enemy-declared-charge": { event: "charge-declaration", subject: "enemy-unit" },
   "turn-start:battle-round": { event: "start-of-battle-round" },
   "turn-start:player-turn": { event: "start-of-player-turn" },
   "turn-start:opponent-turn": { event: "start-of-opponent-turn" },
@@ -98,7 +99,8 @@ function phaseTrigger(leaf: CompileLeaf): Node | null {
   if (!event) return null;
   const operands: Node[] = [];
   if (leaf.parameters.phase && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: leaf.parameters.phase } });
-  if (leaf.parameters.turn && leaf.parameters.turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: leaf.parameters.turn } });
+  // The DSL spells whose turn as the schema's player-turn enum does.
+  if (leaf.parameters.turn && leaf.parameters.turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: `${String(leaf.parameters.turn)}-turn` } });
   if (operands.length === 0) return { event };
   return { event, condition: operands.length === 1 ? operands[0] : { operator: "and", operands } };
 }
@@ -237,13 +239,19 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         ? { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
         : { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
     case "act-after-move": {
-      // The DSL's own forms: advancing is two separate grants; falling back is one effect that can add a charge.
+      // The DSL's own forms. Shooting after Advancing is [ASSAULT] on every ranged weapon (as
+      // Devastator Doctrine is written); charging after Advancing is a grant; falling back is one
+      // effect that can add a charge.
       const owner = target(leaf.parameters.subject);
       const acts = leaf.parameters.acts as string[];
       const steps: Record<string, unknown>[] = [];
       for (const move of leaf.parameters.moves as string[]) {
         if (move === "advance") {
-          for (const act of acts) steps.push({ type: "ability-grant", target: owner, modifier: { grant_type: `${act}-after-advance` } });
+          for (const act of acts) {
+            steps.push(act === "shoot"
+              ? { type: "keyword-grant", target: owner, modifier: { keywords: ["Assault"], weapon_type: "ranged" } }
+              : { type: "ability-grant", target: owner, modifier: { grant_type: `${act}-after-advance` } });
+          }
         } else if (acts.includes("shoot")) {
           steps.push({ type: "fallback-and-act", target: owner, modifier: acts.includes("charge") ? { can_charge: true } : {} });
         } else {

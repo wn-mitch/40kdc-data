@@ -296,7 +296,9 @@ describe("lintCanonical", () => {
       condition: { type: "player-turn-is", parameters: { turn } },
       effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
     });
-    expect(lintCanonical(effect("your")).canonical).toBe(true);
+    expect(lintCanonical(effect("your-turn")).canonical).toBe(true);
+    // The legacy spellings the data used to mix are no longer accepted.
+    expect(lintCanonical(effect("your")).canonical).toBe(false);
     const bad = lintCanonical(effect(1));
     expect(bad.canonical).toBe(false);
     expect(bad.issues.join()).toContain("unknown turn");

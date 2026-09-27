@@ -81,9 +81,11 @@ describe("Round 5C restrictions", () => {
 
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
-    expect(trigger("enemy-selected-targets")).toEqual({ event: "enemy-unit-targets-bearer" });
-    expect(trigger("enemy-ended-move")).toEqual({ event: "enemy-unit-ended-move" });
-    expect(trigger("enemy-has-shot")).toEqual({ event: "after-enemy-unit-fires" });
+    expect(trigger("enemy-selected-targets")).toEqual({ event: "enemy-unit-targets-bearer", subject: "enemy-unit" });
+    expect(trigger("enemy-ended-move")).toEqual({ event: "enemy-unit-ended-move", subject: "enemy-unit" });
+    expect(trigger("enemy-has-shot")).toEqual({ event: "after-enemy-unit-fires", subject: "enemy-unit" });
+    // Any enemy charge declared, as the authored data spells it, not only one that targets this unit.
+    expect(trigger("enemy-declared-charge")).toEqual({ event: "charge-declaration", subject: "enemy-unit" });
     expect(trigger("selected-to-fight")).toEqual({ event: "selected-to-fight", subject: "self" });
   });
 

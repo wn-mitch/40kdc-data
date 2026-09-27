@@ -201,6 +201,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const selectedSentences = new Set<number>();
   let selectedGlobally = false;
   const triggers: Node[] = [];
+  const triggerIndexes: number[] = [];
   const durations: string[] = [];
   const selections: CompileLeaf[] = [];
   const rolls: CompileLeaf[] = [];
@@ -249,7 +250,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
           if (gate) scope(gate);
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
-        else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) triggers.push(trigger(leaf));
+        else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
+          triggers.push(trigger(leaf));
+          triggerIndexes.push(index);
+        }
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
     });
   });
@@ -301,7 +305,22 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     replacement.replaces = true;
   }
 
-  if (triggers.length > 1) errors.push("More than one trigger event; the shape needs a combinator the compiler does not have.");
+  // Moments before the first effect are the ability's own (several are alternatives: "selected
+  // to shoot or to fight"). A moment after an effect starts a part of a compound ability: the
+  // effects from it to the next such moment fire then, as one bullet of the same ability.
+  const firstEffectIndex = list.findIndex((leaf) => leaf.role === "EFFECT");
+  const partStarts: Array<{ index: number; moments: number[] }> = [];
+  triggerIndexes.forEach((index, position) => {
+    if (firstEffectIndex === -1 || index < firstEffectIndex) return;
+    const last = partStarts.at(-1);
+    // A moment right after another, with no effect between, is an alternative for the same part.
+    if (last && !planned.some((item) => item.index > last.index && item.index < index)) last.moments.push(position);
+    else partStarts.push({ index, moments: [position] });
+  });
+  if (partStarts.some((part, position) => !planned.some((item) => item.index > part.index && (partStarts[position + 1] === undefined || item.index < partStarts[position + 1]!.index)))) {
+    errors.push("A moment ends the ability with no effect after it.");
+  }
+  if (partStarts.length && selections.length) errors.push("A unit is selected in an ability with parts; the compiler binds a selection only for one moment.");
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   const target = attempt(() => targetRestrictions(targetParts, targetEligibility));
@@ -313,18 +332,39 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
-  const steps = attempt(() => resolveRolls(planned, global, rolls));
-  if (!steps) return { ok: false, signature, errors };
+  const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;
+  const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
+    planned.filter((item) => partOf(item.index) === part),
+    part === 0 ? global : [],
+    rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part),
+  )));
+  if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
+  const steps = pieces[0]!;
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
   if (!body) return { ok: false, signature, errors };
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
-  const entryTrigger = triggers[0] ? (optional ? { ...triggers[0], optional: true } : triggers[0]) : null;
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
-  if (entryTrigger && bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
-    (entryTrigger as Node).subject_keywords = bound.parameters.keywords;
+  const moments = triggers.map((node) => {
+    const moment: Node = optional ? { ...node, optional: true } : { ...node };
+    if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) moment.subject_keywords = bound.parameters.keywords;
+    return moment;
+  });
+  const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
+  const leading = moments.filter((_, position) => !partStarts.some((part) => part.moments.includes(position)));
+  let entryTrigger = asTrigger(leading);
+  if (partStarts.length) {
+    // The first part fires on the ability's leading moment, if it has one; each later part on its own.
+    const first = pieces[0]!;
+    const partSteps: Node[] = entryTrigger ? [{ type: "ability-part", trigger: entryTrigger, effect: body }] : first;
+    partStarts.forEach((part, position) => {
+      const own = pieces[position + 1]!;
+      partSteps.push({ type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own } });
+    });
+    body = { type: "sequence", steps: partSteps };
+    entryTrigger = null;
   }
   return {
     ok: true,
