@@ -927,43 +927,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "digestion-spine",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chitinous-horrors",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prey-adaptation",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "synaptic-channelling",
     "source_type": "stratagem",
     "phases": [

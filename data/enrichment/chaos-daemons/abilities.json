@@ -58,9 +58,7 @@
     },
     "unit_ids": [
       "soul-grinder",
-      "belakor",
-      "aetaosraukeres",
-      "anggrath-the-unbound"
+      "belakor"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -462,8 +460,7 @@
     },
     "unit_ids": [
       "rotigus",
-      "belakor",
-      "aetaosraukeres"
+      "belakor"
     ],
     "ability_type": "core",
     "behavior": "reactive",
@@ -1812,8 +1809,7 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "lord-of-change",
-      "aetaosraukeres"
+      "lord-of-change"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -2750,8 +2746,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "bloodthirster",
-      "anggrath-the-unbound"
+      "bloodthirster"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -4126,298 +4121,6 @@
     "behavior": "passive"
   },
   {
-    "ability_id": "emissary-of-the-plague-god-aura",
-    "name": "Emissary of the Plague God (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "76717c91c44c1dded932a9689d4c4745796e975abc785e35a31b8fe431415580",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "NURGLE"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "friendly-within-aura",
-        "modifier": {
-          "test": "battle-shock",
-          "operation": "re-roll"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "scabeiathrax-the-bloated"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "emissary-of-the-prince-of-excess-aura",
-    "name": "Emissary of the Prince of Excess (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9c1f5b777e2a1d597988230a3f0afa755f612c2905dbdd7f175f42a0b986859d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "SLAANESH"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "friendly-within-aura",
-        "modifier": {
-          "test": "battle-shock",
-          "operation": "re-roll"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "zarakynel"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "regenerating-monstrosity",
-    "name": "Regenerating Monstrosity",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b828e9343c8218c2ceb7a4b9276ba40ee482bc69fe24b97cc24a549bade07dd8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "resurrection",
-      "target": "self",
-      "modifier": {
-        "count": "d3",
-        "type": "wounds"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "giant-chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "lethal-caress",
-    "name": "Lethal Caress",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "088a952bd6ff0ae3a31ff072a2d2f1bc0e5797d6a7dc49bdf5a16a5a294823c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "add",
-          "value": -1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "herald-of-slaanesh-on-steed-of-slaanesh"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "prey-on-the-weak",
-    "name": "Prey on the Weak",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1d779bc42f58116e6d911ba7e2f3ffce7dc9382ecee2593498fdf347e5bf6c65",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "wound",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "furies"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "bounding-assault",
-    "name": "Bounding Assault",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "46a03bb55efb433d6df2463ae24a1cccebdc55ed5b81a4c113f0b2cbe6685431",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "charged-this-turn"
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
-        "modifier": {
-          "keywords": [
-            "Lance"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "pox-riders"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "grandfather-s-blessing",
-    "name": "GRANDFATHER'S BLESSING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cd804be3d0c8e9398997e6d8e499a311a1fb2770974f3ea29fb7e38edf145e76",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "attached-unit-eligibility"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "pox-riders"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "pouncing-leap",
-    "name": "Pouncing Leap",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "cp-refund",
-      "target": "self",
-      "modifier": {
-        "stratagem": "fire-overwatch-or-heroic"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "plague-toads"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: references stratagem id \"fire-overwatch-or-heroic\", which no stratagem file defines; the intended stratagem is unrecoverable from the encoding."
-  },
-  {
-    "ability_id": "warp-spines",
-    "name": "Warp Spines",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "07e598c118df427c3d46d4935f4934a2e86fd805b06dee41328877a4e7b40755",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d3"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "spined-chaos-beast"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
     "ability_id": "the-shadow-of-chaos",
     "name": "The Shadow of Chaos",
     "authored_by": "40kdc-community",
@@ -4443,8 +4146,6 @@
     "behavior": "passive",
     "unit_ids": [
       "belakor",
-      "aetaosraukeres",
-      "anggrath-the-unbound",
       "feculent-gnarlmaw",
       "skull-altar"
     ]
@@ -4554,113 +4255,6 @@
     },
     "unit_ids": [
       "belakor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "emissary-of-the-great-mutator-aura",
-    "name": "Emissary of the Great Mutator (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5f1b2b550abff3d3137cd0b0af32c6aeff6fe6277ea49e26b02440a5627986fe",
-    "version": "2025-q3",
-    "effect": {
-      "type": "leadership-modifier",
-      "target": "friendly-within-aura",
-      "modifier": {
-        "test": "battle-shock",
-        "operation": "re-roll"
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "aetaosraukeres"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "mortal-wounds",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "count": "D6+2"
-            }
-          },
-          {
-            "type": "mortal-wounds",
-            "target": "enemy-within-aura",
-            "modifier": {
-              "count": "D6+2"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "anggrath-the-unbound"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "before-bearer-removed"
-    }
-  },
-  {
-    "ability_id": "emissary-of-the-blood-god-aura",
-    "name": "Emissary of the Blood God (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "347849ff97fb5a9f5cd705e4fc380f4d417658f9d98f181d9e9f6b4266f407d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "leadership-modifier",
-      "target": "friendly-within-aura",
-      "modifier": {
-        "test": "battle-shock",
-        "operation": "re-roll"
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "anggrath-the-unbound"
     ],
     "ability_type": "unit",
     "behavior": "passive",

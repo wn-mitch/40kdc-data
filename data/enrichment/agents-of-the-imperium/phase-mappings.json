@@ -858,54 +858,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grim-spectres",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "that-redeploy-units-roll-off",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-third-eye-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "evade-and-survive",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "close-quarters-barrage",
     "source_type": "stratagem",
     "phases": [

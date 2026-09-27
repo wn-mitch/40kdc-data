@@ -637,44 +637,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "infectious-bloodshed",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "diseased-icon",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "possessed",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "droning-horror",
     "source_type": "stratagem",
     "phases": [

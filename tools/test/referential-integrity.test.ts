@@ -204,3 +204,14 @@ describe("referential integrity", () => {
     expect(FACTION_HOME_KEYWORD["chaos-space-marines"]).toBe("Heretic Astartes");
   });
 });
+
+describe("ability unit references", () => {
+  it("flags each ability unit_id that names no core unit, and only those", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-ability-units"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+    expect(messages.filter((m) => m.includes("is no core unit"))).toEqual([
+      'ability "star-lantern": unit_id "retired-walker" is no core unit — drop it (and the ability, if no unit is left)',
+      'ability "old-oath": unit_id "retired-walker" is no core unit — drop it (and the ability, if no unit is left)',
+    ]);
+  });
+});

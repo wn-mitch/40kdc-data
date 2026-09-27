@@ -354,6 +354,47 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
   return errors;
 }
 
+/**
+ * Every ability `unit_ids` entry must name a core unit (in any faction dir: a chapter's
+ * enrichment can list its parent roster's units). A unit the live game dropped takes its
+ * abilities with it (`ingest-mfm cull-legends`), so a dangling id is a missed prune.
+ */
+async function checkAbilityUnitRefs(root: string, result: ValidationResult): Promise<void> {
+  const units = new Set<string>();
+  for (const f of await glob("core/*/units.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_")) continue;
+    try {
+      for (const u of readArray<{ id?: string }>(f)) if (u.id) units.add(u.id);
+    } catch {
+      // structural problems are the AJV pass's job
+    }
+  }
+  const files = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
+  for (const file of files.sort()) {
+    const faction = basename(dirname(file));
+    if (faction.startsWith("_") && faction !== "_core") continue;
+    let abilities: Array<{ ability_id?: string; id?: string; unit_ids?: string[] }>;
+    try {
+      abilities = readArray(file);
+    } catch {
+      continue;
+    }
+    abilities.forEach((a, index) => {
+      const dangling = (a.unit_ids ?? []).filter((u) => !units.has(u));
+      if (!dangling.length) return;
+      result.failed++;
+      result.errors.push({
+        file,
+        index,
+        errors: dangling.map((u) => ({
+          path: `/${index}/unit_ids`,
+          message: `ability "${a.ability_id ?? a.id}": unit_id "${u}" is no core unit — drop it (and the ability, if no unit is left)`,
+        })),
+      });
+    });
+  }
+}
+
 function checkMissionCardLinks(root: string, result: ValidationResult): void {
   const missionsFile = resolve(root, "core/missions.json");
   const missionCardsFile = resolve(root, "core/mission-cards.json");
@@ -512,6 +553,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   };
 
   checkMissionCardLinks(root, result);
+  await checkAbilityUnitRefs(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();

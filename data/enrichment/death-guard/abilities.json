@@ -21,10 +21,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "lord-of-poxes",
-      "death-guard-chaos-lord",
-      "death-guard-chaos-lord-in-terminator-armour",
-      "death-guard-sorcerer-in-terminator-armour"
+      "lord-of-poxes"
     ],
     "ability_type": "core",
     "behavior": "passive"
@@ -421,8 +418,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "chaos-spawn",
-      "death-guard-cultists"
+      "chaos-spawn"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -778,9 +774,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "lord-of-contagion",
-      "death-guard-chaos-lord-in-terminator-armour",
-      "death-guard-sorcerer-in-terminator-armour"
+      "lord-of-contagion"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -3110,91 +3104,6 @@
     "behavior": "passive"
   },
   {
-    "ability_id": "infectious-bloodshed",
-    "name": "Infectious Bloodshed",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9a8642194129af1c76614b88ba2be175bbed79caa3eddfaab8e734ec81a54be6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Sustained Hits 1"
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "death-guard-possessed"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "diseased-icon",
-    "name": "Diseased Icon",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a0e92aa892d06dbc9b0e739abfa236f53bd7e6ed4d1a732cbe23b4009c1f2fab",
-    "version": "2025-q3",
-    "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Lethal Hits"
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "death-guard-possessed"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "possessed",
-    "name": "POSSESSED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4994dd6d561552a0dc71cf4f9d623ce914e60ede7f6b6845032efa5b7d04af42",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "ability_id": "special-embark-rule"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "death-guard-possessed"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
     "ability_id": "nurgle-s-gift-aura",
     "name": "Nurgle\u2019s Gift (Aura)",
     "authored_by": "40kdc-community",
@@ -4033,182 +3942,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "chaos-lord",
-    "name": "Chaos Lord",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "746b4263d248e6dc9f49d93f626bcffa56a749e8a1945cbcb6c8977044663eee",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "model-is-leader"
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "death-guard-chaos-lord",
-      "death-guard-chaos-lord-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "desiccation-conduit-aura",
-    "name": "Desiccation Conduit (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0230f11b1a8439353495e076ce2ac7615eae184c0b39b46af8d7784e2943ab54",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "opponent-unit-within-range"
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3"
-          }
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-custom",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "death-guard-chaos-lord",
-      "death-guard-chaos-lord-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "end-of-turn"
-    }
-  },
-  {
-    "ability_id": "putrescent-vitality-psychic",
-    "name": "Putrescent Vitality (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "83383cb39ade3f3dc70aaa8299306404535c1fd8c7a6ada6cc4fb9ad02fbec25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 2,
-      "comparison": "gte",
-      "on_success": {
-        "type": "damage-reduction",
-        "target": "self",
-        "modifier": {
-          "reduction": 1
-        }
-      },
-      "on_fail": {
-        "type": "mortal-wounds",
-        "target": "self",
-        "modifier": {
-          "count": "D3"
-        }
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "death-guard-sorcerer-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "start-of-phase",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      }
-    }
-  },
-  {
-    "ability_id": "pestilent-familiar-psychic",
-    "name": "Pestilent Familiar (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b9e09639fd1eb49b64c80771cb5bc2e2f6732ec90964fc6338ad62fb7093528a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "self",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 2,
-            "weapon_keyword": "Psychic"
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "self",
-          "modifier": {
-            "stat": "D",
-            "operation": "add",
-            "value": 2,
-            "weapon_keyword": "Psychic"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "self",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "death-guard-sorcerer-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {

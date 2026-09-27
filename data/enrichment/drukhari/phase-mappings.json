@@ -899,18 +899,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strafing-run",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "deadly-debut",
     "source_type": "stratagem",
     "phases": [

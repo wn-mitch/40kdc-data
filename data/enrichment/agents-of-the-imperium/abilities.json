@@ -232,8 +232,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "watch-captain-artemis",
-      "inquisitor-in-terminator-armour"
+      "watch-captain-artemis"
     ],
     "ability_type": "core",
     "behavior": "passive"
@@ -431,8 +430,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "callidus-assassin",
-      "inquisitor-in-terminator-armour"
+      "callidus-assassin"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -637,9 +635,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "inquisitor-greyfax",
-      "inquisitor-in-terminator-armour",
-      "inquisitor-ostromandeus"
+      "inquisitor-greyfax"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -861,8 +857,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "inquisitor",
-      "inquisitor-in-terminator-armour"
+      "inquisitor"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -895,8 +890,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "inquisitor",
-      "inquisitor-in-terminator-armour"
+      "inquisitor"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -925,8 +919,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "inquisitor",
-      "inquisitor-in-terminator-armour"
+      "inquisitor"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -1284,8 +1277,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "imperial-rhino",
-      "ur-025"
+      "imperial-rhino"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -2645,9 +2637,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "rogue-trader-entourage",
-      "neyam-shai-murad",
-      "janus-draik"
+      "rogue-trader-entourage"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -2686,9 +2676,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "rogue-trader-entourage",
-      "neyam-shai-murad",
-      "janus-draik"
+      "rogue-trader-entourage"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -2728,166 +2716,6 @@
     "behavior": "passive"
   },
   {
-    "ability_id": "grim-spectres",
-    "name": "Grim Spectres",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "00def0ae1f124898cbb62173d0a537e1674de38c190a6b5d1a6771cfe0db1b38",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "damned-legionnaires"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "that-redeploy-units-roll-off",
-    "name": "that redeploy units, roll off",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ea810b503c4375bc6ae0dda763d98cce0a558d8c0447ed0854ee741e23fbc1e5",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "roll-off-winner-chooses-redeploy-order"
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "janus-draik"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "the-third-eye-psychic",
-    "name": "The Third Eye (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "40a88233692d86cb13b393e89c43578b60a89bea5b2b4a09d61cb371c2e7692f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "espern-locarno"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "gaze-into-the-immaterium-psychic",
-    "name": "Gaze into the Immaterium (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "dabbbe97c2cc7a581c821795a4785fcfae4fef260d5d1cb73e6d4896fbb8b3c8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "attack-restriction",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "restriction": "reinforcement-denial",
-        "range": 12
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "espern-locarno"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "evade-and-survive",
-    "name": "Evade and Survive",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ada12ef28bb102c748256b3ef3f75c5aa13562e4a99ce52de24c036454cf0bd0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "reactive"
-      }
-    },
-    "scope": {
-      "range": "aura-9",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ur-025"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
-      "optional": true
-    }
-  },
-  {
     "ability_id": "assigned-agents",
     "name": "Assigned Agents",
     "authored_by": "40kdc-community",
@@ -2912,7 +2740,6 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": [
-      "inquisitor-in-terminator-armour",
       "inquisitor-kroyle"
     ]
   },
@@ -3459,451 +3286,6 @@
     "community_notes": "[APPROX] After this unit shoots, if the Jindarii tox-cycler scored a hit, that weapon gains +2 Strength and +2 Damage for the rest of the battle; the maximum Damage cap of 6 is not modeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "ward-against-the-malefic-arts",
-    "name": "Ward Against the Malefic Arts",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "51e7f246d81a8fd5bda9552e840a7fd8b426dd2459a9cde95a1c871411389659",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "is-attached"
-          },
-          {
-            "type": "attack-is-type",
-            "parameters": {
-              "attack_type": "psychic"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "wound",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitor-ostromandeus"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies while this model is leading a unit; the \u22121 to Hit and \u22121 to Wound affect Psychic Attacks targeting the led unit."
-  },
-  {
-    "ability_id": "vox-cast-proclamations-aura",
-    "name": "Vox-cast Proclamations (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "606dc3d4756ba59cbcb59b5c81358dd96a391a36c5dc898e3431299721d4ce61",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stratagem-cost-modifier",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "operation": "increase",
-        "amount": 1,
-        "applies_to": "stratagems-targeting-bearer"
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitor-ostromandeus"
-    ],
-    "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Each time the opponent targets a unit within 12\" of this model with a Stratagem, that use costs 1CP more; encoded following the aura stratagem-cost family (cf. callidus-assassin/lord-of-deceit-aura)."
-  },
-  {
-    "ability_id": "vox-skull",
-    "name": "Vox-skull",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c80690e0a321b686d6e79295a292403e1d6bdd1329cbe1af7cc9de31138c5799",
-    "version": "2025-q3",
-    "effect": {
-      "type": "leadership-modifier",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "test": "battle-shock"
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "inquisitor-ostromandeus"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] Once per battle, forces a Battle-shock test on one enemy unit within 12\"; the exclusion of Monsters and Vehicles from selection, and the consequence on a failed test (that unit cannot have the Benefit of Cover until the end of your next turn), are not modeled. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "throne-of-judgement-aura",
-    "name": "Throne of Judgement (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3156cef774869d381b6b3559b4bd8568cdd9f64725822e6ba8efaae9c6d8f52f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "aura",
-          "target": "friendly-within-aura",
-          "modifier": {
-            "range": 6,
-            "effect": {
-              "type": "stat-modifier",
-              "target": "unit",
-              "modifier": {
-                "stat": "Ld",
-                "operation": "add",
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "type": "aura",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "range": 6,
-            "effect": {
-              "type": "stat-modifier",
-              "target": "unit",
-              "modifier": {
-                "stat": "Ld",
-                "operation": "subtract",
-                "value": 1
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitor-karamazov"
-    ],
-    "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Friendly units within 6\" improve Leadership by 1, enemy units within 6\" worsen it by 1; per the file convention (cf. simulacrum-imperialis) improving Ld is add and worsening is subtract."
-  },
-  {
-    "ability_id": "unsubtle-crusader",
-    "name": "Unsubtle Crusader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d38840e11b60d83f18a6af246cd1d4ab36d3fdcaf29bf5dd8dd9baf6345af870",
-    "version": "2025-q3",
-    "effect": {
-      "type": "choice",
-      "choice_label": "unsubtle-crusader",
-      "options": [
-        {
-          "type": "select-units",
-          "selector": {
-            "max_count": 3,
-            "keywords": [
-              "AGENTS OF THE IMPERIUM",
-              "INFANTRY"
-            ],
-            "owner": "friendly"
-          },
-          "effect": {
-            "type": "movement-modifier",
-            "target": "unit",
-            "modifier": {
-              "move_type": "scout",
-              "distance": 6
-            }
-          }
-        },
-        {
-          "type": "select-units",
-          "selector": {
-            "max_count": 1,
-            "keywords": [
-              "IMPERIUM",
-              "BATTLELINE"
-            ],
-            "owner": "friendly"
-          },
-          "effect": {
-            "type": "movement-modifier",
-            "target": "unit",
-            "modifier": {
-              "move_type": "scout",
-              "distance": 6
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitor-karamazov"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. At Declare Battle Formations, pick one option: up to three Agents of the Imperium Infantry units, or one Imperium Battleline unit, gain the Scouts 6\" ability."
-  },
-  {
-    "ability_id": "malus-codicium",
-    "name": "Malus Codicium",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca41e20d2486f566782629853b541178486a7057c116a917219397ae6946b6b6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "model-is-leader"
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "A",
-          "operation": "multiply",
-          "factor": 2,
-          "applies_to": "daemonhost-models",
-          "weapon_type": "melee",
-          "attack_type": "melee"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "inquisitor-eisenhorn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "dominate-will-psychic",
-    "name": "Dominate Will (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "648f20b373bbb817aadf07411f7f2508e87ce3dc8dcd01c9e74298b8b083519e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "inquisitor-eisenhorn"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] Encodes the 2\u20135 D6 result (\u22121 to the dominated enemy Infantry unit's Hit rolls). The selection is one enemy Infantry unit within 12\" and visible; the D6=1 branch (bearer suffers D3 mortal wounds) and D6=6 branch (target not eligible to shoot) are not modeled. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "catechism-of-death",
-    "name": "Catechism of Death",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d12365a8cf0f5bae59852ef36e7eb285463564918b019e39b44391de198af54a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "applies_to": "melee-weapons",
-        "condition": "chaplain-cassius-in-unit",
-        "keywords": [
-          "Devastating Wounds"
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "kill-team-cassius"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "unflinching",
-    "name": "Unflinching",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4a995c05bf43fe3ec8b81659e4a21ca0d04f5de3db4c25d0dcdc70ec3cf03bff",
-    "version": "2025-q3",
-    "effect": {
-      "type": "leadership-modifier",
-      "target": "unit",
-      "modifier": {
-        "test": "battle-shock",
-        "operation": "re-roll"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "kill-team-cassius"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "jump-pack",
-    "name": "Jump Pack",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "26726e75b1a8f66bf69f707d9f450d00e5880c29b5da89039fb484082bd84bb6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "self",
-      "modifier": {
-        "move_type": "normal",
-        "distance": 12,
-        "replaces_default": true,
-        "passthrough": [
-          "all-terrain",
-          "non-titanic-models"
-        ],
-        "ignore_vertical": true
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kill-team-cassius"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "psychic-hood",
-    "name": "Psychic Hood",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2565b224bcae41f8c2db0d018c001b2caac3eff77bcc7f33baf5e94742523ab4",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 4,
-        "against_attack_type": "psychic"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "kill-team-cassius"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
     "ability_id": "terminatus-assault",
     "name": "Terminatus Assault",
     "authored_by": "40kdc-community",
@@ -3990,78 +3372,6 @@
     },
     "unit_ids": [
       "deathwatch-terminator-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "turbo-boost",
-    "name": "Turbo-boost",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3118bebade9bc3c39b6a628c245254b8abd07e01e90e994906d9e2b14bad03ac",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "movement-modifier",
-          "target": "unit",
-          "modifier": {
-            "move_type": "advance",
-            "distance": 6
-          }
-        },
-        {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "no-advance-roll"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "veteran-bike-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "proteus-doctrines",
-    "name": "Proteus Doctrines",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a331c92ca8968edb6547ae6158ad659f0c34d91b976d93460f264fa64e1098b3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "operation": "add",
-        "roll": "hit",
-        "value": 1,
-        "target_condition": "target_not_below_half_strength"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "proteus-kill-team"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -4250,161 +3560,6 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Triggered each time the bearer's unit is targeted with a Stratagem."
-  },
-  {
-    "ability_id": "malefic-warding",
-    "name": "Malefic Warding",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "abc65fb306f4e2a6f841a57392ff6367a9d0b7121ea38040abef8e565c8e09b1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "invulnerable-save",
-        "target": "unit",
-        "modifier": {
-          "invuln_sv": 5
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "daemonhost"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies while an Inquisitor is leading a unit that includes one or more Daemonhost models."
-  },
-  {
-    "ability_id": "bound-daemon",
-    "name": "Bound Daemon",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "476bf82e693fa2670c5cadeaf00fded01387b2174e033d7fe9be7bb30c117aa7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "OC",
-          "operation": "set",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "daemonhost"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies while an Inquisitor is leading the Daemonhost unit."
-  },
-  {
-    "ability_id": "inconceivable-augmentation",
-    "name": "Inconceivable Augmentation",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0d395659efd1385397d7ea2c15b673e734b1d212d3fa3c95601fd004eccef4dd",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "model-is-leader"
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
-        "modifier": {
-          "applies_to": "ranged-weapons",
-          "keywords": [
-            "Lethal Hits"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "jokaero-weaponsmith"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "a-weaponsmith-not-a-warlord",
-    "name": "A Weaponsmith, Not a Warlord",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "76f32ad2f7d01cfe8594a1d3b50c9f71509a2dcc6c96cb6c44d79d80c31cdc9a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "attack-restriction",
-          "target": "self",
-          "modifier": {
-            "restriction": "cannot-be-warlord"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "is-attached"
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "unit",
-            "modifier": {
-              "stat": "OC",
-              "operation": "set",
-              "value": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "jokaero-weaponsmith"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. OC set to 1 applies while an Inquisitor is leading the Jokaero Weaponsmith unit."
   },
   {
     "ability_id": "at-all-costs",

@@ -388,7 +388,7 @@ describe("production dangling-reference disputes", () => {
     expect(
       [...new Set(keywordFindings.map((finding) => finding.ability_id))].sort(),
     ).toEqual(["fated-hero", "oathbound", "optimised-for-slaughter"]);
-    expect(stratagemFindings).toHaveLength(18);
+    expect(stratagemFindings).toHaveLength(15);
 
     for (const finding of confirmed) {
       const abilities = JSON.parse(

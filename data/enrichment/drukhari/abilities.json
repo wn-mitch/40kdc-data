@@ -445,8 +445,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "hellions",
-      "reaper"
+      "hellions"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -908,8 +907,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "raider",
-      "reaper"
+      "raider"
     ],
     "ability_type": "core",
     "behavior": "reactive",
@@ -2015,8 +2013,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "ravager",
-      "reaper"
+      "ravager"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -2700,157 +2697,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive"
-  },
-  {
-    "ability_id": "strafing-run",
-    "name": "Strafing Run",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "FLY"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "raven-strike-fighter"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "power-from-pain",
-    "name": "Power From Pain",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "85a34fca269c9b5af99cad8e07e018e380a24a6980d761c6228a743d84ef2d8c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "start-of-phase",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "phase-is",
-                  "parameters": {
-                    "phase": "command"
-                  }
-                },
-                {
-                  "type": "player-turn-is",
-                  "parameters": {
-                    "turn": "your-turn"
-                  }
-                }
-              ]
-            }
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pain-token-pool",
-              "amount": 1
-            }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "enemy-unit-destroyed"
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pain-token-pool",
-              "amount": 1
-            }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "after-battle-shock",
-            "subject": "enemy-unit",
-            "binds_event_variable": "tested-enemy",
-            "condition": {
-              "type": "roll-succeeded",
-              "negated": true,
-              "parameters": {
-                "roll": "battle-shock",
-                "source": {
-                  "event_var": "tested-enemy"
-                }
-              }
-            }
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "self",
-            "modifier": {
-              "pool_id": "pain-token-pool",
-              "amount": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "any-on-battlefield",
-      "duration": "battle"
-    },
-    "faction_id": "drukhari",
-    "ability_type": "faction",
-    "behavior": "passive",
-    "unit_ids": [
-      "reaper"
-    ],
-    "community_notes": "[APPROX] spend Pain tokens to Empower a unit until the end of the phase, activating all its Pain abilities; an Empowered Attached unit activates its Leader and Bodyguard Pain abilities together"
   },
   {
     "ability_id": "corsairs-and-travelling-players",

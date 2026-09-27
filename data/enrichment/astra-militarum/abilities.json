@@ -30,9 +30,6 @@
     },
     "unit_ids": [
       "scout-sentinels",
-      "hydra-platform",
-      "manticore-platform",
-      "earthshaker-platform",
       "cyclops-demolition-vehicle",
       "hippogriff-afv"
     ],
@@ -132,7 +129,6 @@
     },
     "unit_ids": [
       "cadian-castellan",
-      "death-rider-commissar",
       "commissar-graves-on-foot",
       "commissar-yarrick"
     ],
@@ -228,8 +224,7 @@
     },
     "unit_ids": [
       "cadian-castellan",
-      "gaunts-ghosts",
-      "death-rider-commissar"
+      "gaunts-ghosts"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -997,9 +992,6 @@
     },
     "unit_ids": [
       "leman-russ-battle-tank",
-      "storm-chimera",
-      "aquila-lander",
-      "griffon-mortar-carrier",
       "centaur-rsv",
       "commissar-graves"
     ],
@@ -1067,10 +1059,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "stormsword",
-      "dominus-armoured-siege-bombard",
-      "gorgon-heavy-transport",
-      "arkurian-stormhammer"
+      "stormsword"
     ],
     "ability_type": "core",
     "behavior": "reactive",
@@ -1181,8 +1170,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "field-ordnance-battery",
-      "heavy-mortar-team"
+      "field-ordnance-battery"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -1810,10 +1798,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "aegis-defence-line",
-      "hydra-platform",
-      "manticore-platform",
-      "earthshaker-platform"
+      "aegis-defence-line"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -1879,10 +1864,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "aegis-defence-line",
-      "hydra-platform",
-      "manticore-platform",
-      "earthshaker-platform"
+      "aegis-defence-line"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -1985,8 +1967,7 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "commissar",
-      "death-rider-commissar"
+      "commissar"
     ],
     "ability_type": "unit",
     "behavior": "activated"
@@ -2023,8 +2004,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "commissar",
-      "death-rider-commissar"
+      "commissar"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -2268,8 +2248,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "stormlord",
-      "gorgon-heavy-transport"
+      "stormlord"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -2865,8 +2844,7 @@
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
-      "wyvern",
-      "griffon-mortar-carrier"
+      "wyvern"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -3666,8 +3644,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "valkyrie",
-      "aquila-lander"
+      "valkyrie"
     ],
     "ability_type": "core",
     "behavior": "activated"
@@ -3829,8 +3806,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "manticore",
-      "manticore-platform"
+      "manticore"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -3858,8 +3834,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "chimera",
-      "storm-chimera"
+      "chimera"
     ],
     "ability_type": "core",
     "behavior": "passive"
@@ -3886,8 +3861,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "chimera",
-      "storm-chimera"
+      "chimera"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -4037,8 +4011,7 @@
       "duration": "turn"
     },
     "unit_ids": [
-      "basilisk",
-      "earthshaker-platform"
+      "basilisk"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
@@ -4075,8 +4048,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "baneblade",
-      "arkurian-stormhammer"
+      "baneblade"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -4179,8 +4151,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "hydra",
-      "hydra-platform"
+      "hydra"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -4220,842 +4191,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive"
-  },
-  {
-    "ability_id": "meteoric-descent",
-    "name": "Meteoric Descent",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "56dc3facedac2aa76775c49386e441c27488565e2dfba95d1eff041d2cd2cd17",
-    "version": "2025-q3",
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "ability-grant",
-              "target": "self",
-              "modifier": {
-                "grant_type": "meteoric-descent-placement-beyond-three-inches"
-              }
-            },
-            {
-              "type": "attack-restriction",
-              "target": "self",
-              "modifier": {
-                "restriction_type": "cannot-declare-charge"
-              }
-            }
-          ]
-        },
-        {
-          "type": "deep-strike",
-          "target": "self",
-          "modifier": {}
-        }
-      ],
-      "choice_label": "Perform meteoric descent"
-    },
-    "scope": {
-      "range": "self",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "elysian-drop-sentinel"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "deep-strike-setup"
-    }
-  },
-  {
-    "ability_id": "aerial-deployment",
-    "name": "Aerial Deployment",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0498f1f874f3045d180e3e4beaa0a52f54fd79dd0d191761c477e33dc5cc033e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "HOVER"
-            }
-          },
-          {
-            "type": "battle-round",
-            "parameters": {
-              "max": 3
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "strategic-reserves-arrival",
-        "target": "self",
-        "modifier": {}
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "arvus-lighter",
-      "aquila-lander"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "[APPROX] If this model starts the game in Hover mode and in Strategic Reserves, it can arrive in the Reinforcements step of the first, second or third battle round regardless of mission rules. Aligned to the orks/aerial-deployment encoding. Full rule in raw-text store.",
-    "trigger": {
-      "event": "starts-in-strategic-reserves"
-    }
-  },
-  {
-    "ability_id": "turbo-boost",
-    "name": "Turbo-boost",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2abe005c9a007148938ac2b6419647cbbc655a7bc6219760769ffea9a8d7ffb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {
-        "stat": "M",
-        "operation": "add",
-        "value": 6
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "tauros-assault-vehicle"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "powerlifter-charge",
-    "name": "Powerlifter Charge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e530f07881849198d3dbb8c2f3737ea9883efb0238d4b4f6e7c5485ccc96903f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d3"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sentinel-powerlifter"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mobile-hunter-killer",
-    "name": "Mobile Hunter-killer",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "214c261ce0fe18aaa8b822a409452af48f2caab9da2f47455553605af0c3d310",
-    "version": "2025-q3",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "wound",
-        "subset": "all-failures"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tauros-venator"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "blistering-advance",
-    "name": "Blistering Advance",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d2bfbac73dac869045afb0b3e7b9a78bac5e0b16c6754afcfd1c6504f386186a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "disembark-after-move",
-      "target": "self",
-      "modifier": {
-        "after": "advance",
-        "can_charge": false,
-        "counts_as_normal_move": true
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "centaur-light-carrier"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "anti-armour-gunship",
-    "name": "Anti-armour Gunship",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b6bb67747d3817d217e7dd4efc85a86a7a7aee4dc6c69fa8ffe1b0c6b3c97c28",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "damage",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "vendetta-gunship"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "outflank",
-    "name": "Outflank",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "outflank-set-up-in-opponent-deployment-zone"
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "salamander-scout-vehicle"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "arrives-from-strategic-reserves"
-    }
-  },
-  {
-    "ability_id": "recovery-vehicle",
-    "name": "Recovery Vehicle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f98c2265f28cdd0f2416ebc2f71a955c409a1aeabfaf323a9231e4e9ca56c02a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "resurrection",
-      "target": "self",
-      "modifier": {
-        "count": "d3",
-        "type": "wounds"
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "atlas-recovery-vehicle"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "auspex-surveyor",
-    "name": "Auspex Surveyor",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a2185e67f704fc1d8e0d43c3f58773662f60e2968f82eef43037162e9af9c47c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "benefit-of-cover"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "salamander-command-vehicle"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "tank-hunter",
-    "name": "Tank Hunter",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "588f919ae196ac9146f6c4d7e19d909548ba772e1cbe9928d918876cc80b312b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stygies-destroyer-tank-hunter"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "pinning-bombardment",
-    "name": "Pinning Bombardment",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "852ccc3fcd5995d13a8321a68ddd8937cb53fb6095930d8717e163b6f9b02411",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "armageddon-pattern-medusa",
-      "dominus-armoured-siege-bombard"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fire-support",
-    "name": "Fire Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "valkyrie-sky-talon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "armoured-frontis",
-    "name": "Armoured Frontis",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "8345cb8d1ba9fb3d1a909a511f4f84c0fd5b2026060b5f8f36a7ac8eb243da18",
-    "version": "2025-q3",
-    "effect": {
-      "type": "damage-reduction",
-      "target": "unit",
-      "modifier": {
-        "reduction": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "minotaur"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "overwhelming-short-range-firepower",
-    "name": "Overwhelming Short-range Firepower",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9974c3e16c14bcf5818e79bdac29cc8d67fa92bb7deb88cf718e7b2636393094",
-    "version": "2025-q3",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "macharius-omega"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mark-the-target",
-    "name": "Mark the Target",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c0c2725c001cd96acd3345003c7a9490a8f0d8222e02ae3b554f7d4eeda0da00",
-    "version": "2025-q3",
-    "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Devastating Wounds"
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "elysian-sniper-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "the-ratling-twins",
-    "name": "The Ratling Twins",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e475579df8de351d25eb0a61fb3647e069e106fb9ae2340797cb7c42a06e5fea",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rein-and-raus"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
-  },
-  {
-    "ability_id": "mindlock",
-    "name": "Mindlock",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca96724d99c0f0cac13138cb990c7d74b82952a05be583cf1089a97e52a1df76",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "operation": "add",
-          "stat": "WS",
-          "value": 1,
-          "weapon_filter": "Medical scalpels",
-          "condition": "unit contains Quartermaster Revenant",
-          "attack_type": "melee"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "quartermaster-cadre-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "medicae-medi-packs",
-    "name": "Medicae Medi-packs",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "050c8f9733645d6d78eb4f899a62be7fd7c30adb4965f353fc795a56be037dd6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "quartermaster-cadre-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "desert-riders",
-    "name": "Desert Riders",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1cc9679eebea53b14b7940ece4080cb52bb5e4aaa3d5e6d23c31c93167de5058",
-    "version": "2025-q3",
-    "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mukaali-riders"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "sentinel-directives",
-    "name": "Sentinel Directives",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d04e741c5904458141a15bf79b3792176b15d968355d012912262091410de924",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "set",
-        "value": 5,
-        "context": "overwatch"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sabre-weapons-battery"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "defence-searchlight",
-    "name": "Defence Searchlight",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ea1cfaf4deb0357fb434182ff0413dcd5bf6a12eb1770ea98bdf3de57d95bd1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "benefit-of-cover"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-custom",
-      "duration": "phase",
-      "range_inches": 24
-    },
-    "unit_ids": [
-      "sabre-weapons-battery"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "artillery-team",
-    "name": "ARTILLERY TEAM",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b3fe8505b6efe6bea3f5974428c5fcbe47d716433cdb6b608d1d1554a0ac6616",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "crew-tokens",
-        "count": 3,
-        "token_name": "Crew"
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "heavy-quad-launcher-team",
-      "heavy-mortar-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "primed-and-ready",
-    "name": "Primed and Ready",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e5cd8659b50c895b4b6545e1c3cc33177c23ad58764895f31ecb519927c673bc",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "grenade-stratagem-free-use"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "death-korps-grenadier-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21; the free use is barred if this unit was already the Grenade target this phase (paid or free)",
-    "usage": {
-      "frequency": "once-per-phase",
-      "per": "unit"
-    }
   },
   {
     "ability_id": "voice-of-command",
@@ -5168,7 +4303,6 @@
     "community_notes": "Each OFFICER datasheet specifies how many Orders it can issue per battle round and which units are eligible; Orders are issued in your Command phase (and at the end of a phase in which the OFFICER disembarked from a TRANSPORT or was set up). A unit can be affected by only one Order at a time. TAKE COVER! cannot improve a Save to better than 3+. Only ASTRA MILITARUM models benefit from an Order.",
     "unit_ids": [
       "gaunts-ghosts",
-      "death-rider-commissar",
       "commissar-graves",
       "commissar-graves-on-foot",
       "commissar-yarrick"

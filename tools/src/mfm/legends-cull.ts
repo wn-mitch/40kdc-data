@@ -27,8 +27,10 @@
  *                              unit.weapon_ids / wargear-option refs /
  *                              unit-composition models[].default_weapon_ids
  *
- * Enrichment abilities are NOT edited (community-authored, often shared): abilities
- * left referenced by zero surviving units are reported for manual review only.
+ * Enrichment abilities follow their units (see `ability-prune.ts`): dead `unit_ids`
+ * are stripped, and an ability no surviving unit carries is removed with its phase
+ * mappings. That pass runs against every surviving unit, so it also clears abilities
+ * left behind by an earlier cull.
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -37,6 +39,7 @@ import { MfmDump, type DatasheetRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { pruneAbilities, type AbilityPrune } from "./ability-prune.js";
 
 
 
@@ -87,12 +90,12 @@ export interface DirCull {
   bodyguardRefsStripped: number;
   weaponsRemoved: string[];
   wargearRemoved: string[];
-  abilitiesOrphaned: string[]; // ability_ids referenced by zero surviving units (report only)
 }
 export interface CullReport {
   dirs: DirCull[];
   totalDropped: number;
   aborted: string | null; // reason, if the sanity tripwire fired
+  abilities: AbilityPrune[];
   staged: StagedWrite[];
 }
 
@@ -178,6 +181,7 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
       totalDropped,
       aborted: `cull set is ${totalDropped} units (> ${SANITY_MAX_DROP}) — implausible; refusing to write. Inspect the dump / name matching before proceeding.`,
       staged: [],
+      abilities: [],
     };
   }
 
@@ -195,7 +199,6 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
       bodyguardRefsStripped: 0,
       weaponsRemoved: [],
       wargearRemoved: [],
-      abilitiesOrphaned: [],
     };
 
     for (const u of dropList) {
@@ -247,20 +250,6 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     const survivingWargear = wargear.filter((w) => w.id && globalReferenced.has(w.id));
     res.wargearRemoved = wargear.filter((w) => w.id && !globalReferenced.has(w.id)).map((w) => w.id!).sort();
 
-    // orphaned abilities (report only): an ability a dropped unit carried that no
-    // surviving unit still references — i.e. the cull removed its last user. (Not
-    // "every unreferenced ability": detachment/stratagem/enhancement entries in
-    // abilities.json are never unit-referenced and are not orphaned by a unit cull.)
-    const droppedAbilityIds = new Set<string>();
-    for (const u of dropList)
-      for (const aid of (u as { ability_ids?: string[] }).ability_ids ?? []) droppedAbilityIds.add(aid);
-    if (droppedAbilityIds.size) {
-      const stillUsed = new Set<string>();
-      for (const u of survivingUnits)
-        for (const aid of (u as { ability_ids?: string[] }).ability_ids ?? []) stillUsed.add(aid);
-      res.abilitiesOrphaned = [...droppedAbilityIds].filter((a) => !stillUsed.has(a)).sort();
-    }
-
     // Stage the surviving sets in BOTH modes (same per-file conditions as the prior
     // write) so the dry-run rehearsal validates the post-cull tree — catching e.g. a
     // surviving option/composition that referenced a now-dropped unit. applyWrites
@@ -280,7 +269,10 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     dirs.push(res);
   }
 
-  return { dirs, totalDropped, aborted: null, staged };
+  const surviving = new Map(all.map((d) => [d.dir, d.units.filter((u) => !d.droppedIds.has(u.id))]));
+  const abilities = pruneAbilities(surviving as Map<string, { id: string; ability_ids?: string[] }[]>);
+  staged.push(...abilities.staged);
+  return { dirs, totalDropped, aborted: null, staged, abilities: abilities.dirs };
 }
 
 export function buildCullReport(report: CullReport, write: boolean): string {
@@ -297,24 +289,24 @@ export function buildCullReport(report: CullReport, write: boolean): string {
     "Drops repo units absent from the live (non-Legends) dump and prunes their wargear-options,"
   );
   L.push(
-    "unit-compositions, leader-attachment refs, and now-orphaned weapons/wargear. Abilities are"
+    "unit-compositions, leader-attachment refs, and now-orphaned weapons/wargear. Abilities follow"
   );
-  L.push("reported, not edited.");
+  L.push("their units: dead `unit_ids` are stripped, and an ability no surviving unit carries is removed.");
   L.push("");
   const sum = (f: (d: DirCull) => number) => dirs.reduce((a, d) => a + f(d), 0);
   L.push(
-    "| Dir | Units dropped | (legends/FW) | Wargear-opts | Comps | Leader entries | Bodyguard refs | Weapons | Wargear | Abilities orphaned |"
+    "| Dir | Units dropped | (legends/FW) | Wargear-opts | Comps | Leader entries | Bodyguard refs | Weapons | Wargear |"
   );
-  L.push("|---|--:|:--|--:|--:|--:|--:|--:|--:|--:|");
+  L.push("|---|--:|:--|--:|--:|--:|--:|--:|--:|");
   for (const d of dirs) {
     const leg = d.dropped.filter((x) => x.kind === "legends").length;
     const fw = d.dropped.filter((x) => x.kind === "forge-world").length;
     L.push(
-      `| ${d.dir} | ${d.dropped.length} | ${leg}/${fw} | ${d.wargearOptionsRemoved} | ${d.compositionsRemoved} | ${d.leaderEntriesRemoved} | ${d.bodyguardRefsStripped} | ${d.weaponsRemoved.length} | ${d.wargearRemoved.length} | ${d.abilitiesOrphaned.length} |`
+      `| ${d.dir} | ${d.dropped.length} | ${leg}/${fw} | ${d.wargearOptionsRemoved} | ${d.compositionsRemoved} | ${d.leaderEntriesRemoved} | ${d.bodyguardRefsStripped} | ${d.weaponsRemoved.length} | ${d.wargearRemoved.length} |`
     );
   }
   L.push(
-    `| **TOTAL** | **${totalDropped}** | ${sum((d) => d.dropped.filter((x) => x.kind === "legends").length)}/${sum((d) => d.dropped.filter((x) => x.kind === "forge-world").length)} | **${sum((d) => d.wargearOptionsRemoved)}** | **${sum((d) => d.compositionsRemoved)}** | **${sum((d) => d.leaderEntriesRemoved)}** | **${sum((d) => d.bodyguardRefsStripped)}** | **${sum((d) => d.weaponsRemoved.length)}** | **${sum((d) => d.wargearRemoved.length)}** | **${sum((d) => d.abilitiesOrphaned.length)}** |`
+    `| **TOTAL** | **${totalDropped}** | ${sum((d) => d.dropped.filter((x) => x.kind === "legends").length)}/${sum((d) => d.dropped.filter((x) => x.kind === "forge-world").length)} | **${sum((d) => d.wargearOptionsRemoved)}** | **${sum((d) => d.compositionsRemoved)}** | **${sum((d) => d.leaderEntriesRemoved)}** | **${sum((d) => d.bodyguardRefsStripped)}** | **${sum((d) => d.weaponsRemoved.length)}** | **${sum((d) => d.wargearRemoved.length)}** |`
   );
   L.push("");
 
@@ -337,8 +329,17 @@ export function buildCullReport(report: CullReport, write: boolean): string {
       L.push(`- ${x.id} (${x.kind}${x.flaggedLegend ? ", is_legend" : ""})`);
     if (d.weaponsRemoved.length) L.push("", `**Weapons removed (orphaned):** ${d.weaponsRemoved.join(", ")}`);
     if (d.wargearRemoved.length) L.push("", `**Wargear removed (orphaned):** ${d.wargearRemoved.join(", ")}`);
-    if (d.abilitiesOrphaned.length)
-      L.push("", `**Abilities now referenced by 0 surviving units (review):** ${d.abilitiesOrphaned.join(", ")}`);
+    L.push("");
+  }
+  if (report.abilities.length) {
+    L.push("## Abilities", "");
+    L.push("| Dir | Removed | Unit refs stripped | Phase mappings removed |");
+    L.push("|---|--:|--:|--:|");
+    for (const a of report.abilities)
+      L.push(`| ${a.dir} | ${a.removed.length} | ${a.unitRefsStripped} | ${a.phaseMappingsRemoved} |`);
+    L.push("");
+    for (const a of report.abilities)
+      if (a.removed.length) L.push(`- ${a.dir}: ${a.removed.join(", ")}`);
     L.push("");
   }
   return L.join("\n") + "\n";

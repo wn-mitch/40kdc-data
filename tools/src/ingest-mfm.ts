@@ -977,7 +977,9 @@ async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
     `Dropped ${report.totalDropped} units; pruned wargear-options ${sum((d) => d.wargearOptionsRemoved)}, ` +
       `compositions ${sum((d) => d.compositionsRemoved)}, leader-entries ${sum((d) => d.leaderEntriesRemoved)}, ` +
       `bodyguard-refs ${sum((d) => d.bodyguardRefsStripped)}, orphan weapons ${sum((d) => d.weaponsRemoved.length)}, ` +
-      `orphan wargear ${sum((d) => d.wargearRemoved.length)}; abilities flagged ${sum((d) => d.abilitiesOrphaned.length)}.`,
+      `orphan wargear ${sum((d) => d.wargearRemoved.length)}; abilities removed ` +
+      `${report.abilities.reduce((n, a) => n + a.removed.length, 0)}, ability unit refs stripped ` +
+      `${report.abilities.reduce((n, a) => n + a.unitRefsStripped, 0)}.`,
   );
   const susp = sum((d) => d.suspicious.length);
   if (susp)

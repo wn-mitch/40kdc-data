@@ -595,30 +595,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "manufactorum-cover",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tectonic-fragdrill",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "symbiotic-destruction",
     "source_type": "stratagem",
     "phases": [

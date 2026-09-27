@@ -204,7 +204,6 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "megatrakk-scrapjet",
       "deff-dread"
     ],
     "ability_type": "core",
@@ -213,33 +212,6 @@
     "trigger": {
       "event": "before-bearer-removed"
     }
-  },
-  {
-    "ability_id": "drill-through",
-    "name": "Drill Through",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e530f07881849198d3dbb8c2f3737ea9883efb0238d4b4f6e7c5485ccc96903f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d3"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "megatrakk-scrapjet"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
   },
   {
     "ability_id": "drive-by-dakka",
@@ -311,7 +283,6 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "deffkoptas-with-big-shootas",
       "deffkoptas"
     ],
     "ability_type": "core",
@@ -360,51 +331,12 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "deffkoptas-with-big-shootas",
       "deffkoptas"
     ],
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks"
-  },
-  {
-    "ability_id": "rivetin-dakka",
-    "name": "Rivetin’ Dakka",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "35760e3385d94d0f87332c199dc9cc47538d22beb7bbd192088b4fac0e9c02b7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kustom-boosta-blasta"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
   },
   {
     "ability_id": "dok-s-toolz",
@@ -562,43 +494,6 @@
     "behavior": "activated",
     "community_notes": "auto-generated, partial",
     "faction_id": "orks"
-  },
-  {
-    "ability_id": "dat-s-our-loot",
-    "name": "Dat’s Our Loot!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "403d3dd9f94a3346d9c1b8e29185eeabbcb800a47ec1fdba9e1f8eb224155fbc",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lootas"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
   },
   {
     "ability_id": "more-dakka",
@@ -2515,75 +2410,11 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "wurrboy",
       "beast-snagga-boyz"
     ],
     "ability_type": "core",
     "behavior": "passive",
     "faction_id": "orks"
-  },
-  {
-    "ability_id": "unstable-oracle",
-    "name": "Unstable Oracle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cf6681169fddc682fcf01b359a26ea955b9f839b321fbf5041326ce62bf34433",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "A",
-          "operation": "add",
-          "value": 2
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wurrboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "roar-of-mork-psychic",
-    "name": "Roar of Mork (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4434a7bf41003696d7e018a1b9689cd63434a20c1ee198234c24e4b901460faa",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d3"
-      }
-    },
-    "scope": {
-      "range": "aura-custom",
-      "duration": "permanent",
-      "range_inches": 18
-    },
-    "unit_ids": [
-      "wurrboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
   },
   {
     "ability_id": "beastboss",
@@ -2830,71 +2661,6 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "buzzer-squigs",
-    "name": "Buzzer Squigs",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "e113f5c68855581546381a366fb095a3eb6ff5fc633f0067f15503348797814a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "defender",
-        "modifier": {
-          "ability_id": "post-attack-debuff"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rukkatrukk-squigbuggy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "squig-mine",
-    "name": "Squig Mine",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d418d51747ac24906a7aab59867a4352fb6d91740a710d7dea51381f863f8898",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d6"
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "rukkatrukk-squigbuggy"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
     "ability_id": "monster-hunters",
     "name": "Monster Hunters",
     "authored_by": "40kdc-community",
@@ -3126,61 +2892,6 @@
           }
         ]
       }
-    }
-  },
-  {
-    "ability_id": "shokk-tunnel",
-    "name": "Shokk Tunnel",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "47629474bd8f0741537345c1fae7200cfc42f1eb2d4fd7f73a24ab267034e331",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "range": 9
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "deep-strike",
-            "target": "self",
-            "modifier": {}
-          },
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "counts-as-advanced-this-turn"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "shokkjump-dragsta"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "selected-to-advance"
     }
   },
   {
@@ -3631,44 +3342,6 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "pyromaniaks",
-    "name": "Pyromaniaks",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "df40c1edbd49ac78bb493c5b3c9615750f6eff2d08c65b02772ac978640702d8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "burna-boyz",
-      "skorchas"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
     "ability_id": "da-boss-ladz",
     "name": "Da Boss’ Ladz",
     "authored_by": "40kdc-community",
@@ -3825,60 +3498,6 @@
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks"
-  },
-  {
-    "ability_id": "billowing-fumes-aura",
-    "name": "Billowing Fumes (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c4a801b27139bf8eb2e2a27dec7564f3a426ddd24500047ca7a0437ae9c335a6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              },
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boomdakka-snazzwagon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
   },
   {
     "ability_id": "firing-deck-20",
@@ -4156,153 +3775,6 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "aerial-deployment",
-    "name": "Aerial Deployment",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "bf27d89f997c6cddc9ae72c106baa3a241aba0be7f1f4c50fe729db01850cb28",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "battle-round",
-        "parameters": {
-          "max": 3
-        }
-      },
-      "effect": {
-        "type": "strategic-reserves-arrival",
-        "target": "self",
-        "modifier": {}
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chinork-warkopta"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "starts-in-strategic-reserves"
-    }
-  },
-  {
-    "ability_id": "big-bomms",
-    "name": "Big Bomms",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1ae24862d9800cf029471cd538361c94b40170e579a35b5157fc58e1589e9973",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "target",
-      "modifier": {
-        "dice": "6D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "mortal_per_success": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "chinork-warkopta"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "interceptor",
-    "name": "Interceptor",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "36049ce61a9d40c2936dc47122d01f6f8ad4fe3c43d5d0b45efec40d7a87c6b1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "FLY"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "attack-fighta"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "small-bomms",
-    "name": "Small Bomms",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b24fd9af348b04a7b31b81c3744f91646f0ff5ee086334b683af709754c35feb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "target",
-      "modifier": {
-        "dice": "3D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "mortal_per_success": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "attack-fighta"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
     "ability_id": "strafing-run",
     "name": "Strafing Run",
     "authored_by": "40kdc-community",
@@ -4341,343 +3813,12 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "fighta-bommer",
       "dakkajet"
     ],
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks"
-  },
-  {
-    "ability_id": "firing-deck-6",
-    "name": "Firing Deck 6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 6
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kannonwagon"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "big-booms",
-    "name": "Big Booms",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "03d71541369213015232b83a978be3e2b0957cbf8ede58d51a543e98bb026eaa",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "d3"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kannonwagon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "da-bigger-dey-are-da-better-dey-drop",
-    "name": "Da Bigger Dey Are, da Better Dey Drop",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7c0a459701541f36e3a614073681f75cc5312613bba00c0a1150644ff5d5e941",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "trigger": "deadly-demise",
-        "threshold": 3
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lifta-wagon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "count": "D6+2",
-          "range": 6
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kill-krusha"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "before-bearer-removed"
-    }
-  },
-  {
-    "ability_id": "da-biggest-booms",
-    "name": "Da Biggest Booms",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6f22bf541c6b3eef42e9ba0eaa4c8bb7d497eeced0f36466dd4b5d6da42884ba",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kill-krusha"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "firing-deck-22",
-    "name": "Firing Deck 22",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 22
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deff-rolla-battle-fortress"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "rolling-fortress",
-    "name": "Rolling Fortress",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "911bd7c26dc810d5aa109b7267b2f274468967adb237d1ceb1659a815a1e0500",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "benefit-of-cover"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deff-rolla-battle-fortress"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "has-yoo-been-a-good-little-grot-this-year",
-    "name": "Has Yoo Been a Good Little Grot This Year?",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d8cde40963d440dd9e4c3a611d58175f2233a7119de2fae5d1c9ad1c09d961af",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "cp-refund",
-        "target": "self",
-        "modifier": {
-          "type": "stratagem-for-0cp"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "da-red-gobbo"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "da-revolushun",
-    "name": "Da Revolushun!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "af8a3b928af9c5c4e2526416350b28e08b21090d758e2d12af41507ab7c15a22",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "da-red-gobbo"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "big-gunz",
-    "name": "BIG GUNZ",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "21f83303869381d196eb0529adc1ef04cd5e1c48db354544f85718c80852e3f8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "crew-tokens",
-        "count": 2,
-        "token_name": "Grot Crew"
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "big-gunz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] tokens are placed per Mek Gun model (2 each), removing one each time that Big Gun model loses a wound"
   },
   {
     "ability_id": "speed-freeks",
@@ -4707,45 +3848,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "wartrakks",
-      "skorchas"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "furious-barrage",
-    "name": "Furious Barrage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "68d2f376a566db784eb4184bf62b5e88fd6556a384889d746519edbe4b80dcd2",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grot-bomm-launcha"
+      "wartrakks"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -4861,8 +3964,6 @@
     "ability_type": "faction",
     "behavior": "activated",
     "unit_ids": [
-      "deffkoptas-with-big-shootas",
-      "skorchas",
       "bannernob"
     ],
     "community_notes": "community-authored from 10e source (provisional 11e); see #21. The source requires Army Faction ORKS; faction_id and explicit unit_ids provide the static faction and ability-possession boundary because the trigger schema has no honest Army Faction predicate."

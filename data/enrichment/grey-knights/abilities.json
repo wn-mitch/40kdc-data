@@ -97,8 +97,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "grand-master-in-nemesis-dreadknight",
-      "grey-knights-relic-razorback"
+      "grand-master-in-nemesis-dreadknight"
     ],
     "ability_type": "core",
     "behavior": "reactive",
@@ -451,8 +450,7 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "razorback",
-      "grey-knights-relic-razorback"
+      "razorback"
     ],
     "ability_type": "unit",
     "behavior": "passive"
@@ -868,8 +866,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "venerable-dreadnought",
-      "grey-knights-dreadnought"
+      "venerable-dreadnought"
     ],
     "ability_type": "core",
     "behavior": "reactive",
