@@ -772,7 +772,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityBehavior {
 ///      "const": true
 ///    },
 ///    "value": {
-///      "type": "number"
+///      "oneOf": [
+///        {
+///          "type": "number"
+///        },
+///        {
+///          "$ref": "#/$defs/unit-rating"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -786,7 +793,40 @@ pub struct AbilityGrantEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rules_bundle: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<f64>,
+    pub value: ::std::option::Option<AbilityGrantEffectModifierValue>,
+}
+///`AbilityGrantEffectModifierValue`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "number"
+///    },
+///    {
+///      "$ref": "#/$defs/unit-rating"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum AbilityGrantEffectModifierValue {
+    Number(f64),
+    UnitRating(UnitRating),
+}
+impl ::std::convert::From<f64> for AbilityGrantEffectModifierValue {
+    fn from(value: f64) -> Self {
+        Self::Number(value)
+    }
+}
+impl ::std::convert::From<UnitRating> for AbilityGrantEffectModifierValue {
+    fn from(value: UnitRating) -> Self {
+        Self::UnitRating(value)
+    }
 }
 ///`AbilityInteractionsItem`
 ///
@@ -18262,9 +18302,16 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 ///      ]
 ///    },
 ///    "threshold": {
-///      "type": "integer",
-///      "maximum": 6.0,
-///      "minimum": 2.0
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "maximum": 6.0,
+///          "minimum": 2.0
+///        },
+///        {
+///          "$ref": "#/$defs/unit-rating"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -18276,7 +18323,7 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 pub struct FeelNoPainEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub against: ::std::option::Option<FeelNoPainEffectModifierAgainst>,
-    pub threshold: i64,
+    pub threshold: FeelNoPainEffectModifierThreshold,
 }
 ///`FeelNoPainEffectModifierAgainst`
 ///
@@ -18362,6 +18409,41 @@ impl ::std::convert::TryFrom<::std::string::String> for FeelNoPainEffectModifier
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`FeelNoPainEffectModifierThreshold`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer",
+///      "maximum": 6.0,
+///      "minimum": 2.0
+///    },
+///    {
+///      "$ref": "#/$defs/unit-rating"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum FeelNoPainEffectModifierThreshold {
+    Integer(i64),
+    UnitRating(UnitRating),
+}
+impl ::std::convert::From<i64> for FeelNoPainEffectModifierThreshold {
+    fn from(value: i64) -> Self {
+        Self::Integer(value)
+    }
+}
+impl ::std::convert::From<UnitRating> for FeelNoPainEffectModifierThreshold {
+    fn from(value: UnitRating) -> Self {
+        Self::UnitRating(value)
     }
 }
 ///A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.
@@ -36713,13 +36795,13 @@ for PlayerTurnIsConditionParametersTurn {
         value.parse()
     }
 }
-///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.
+///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.",
+///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer",
@@ -36737,6 +36819,9 @@ for PlayerTurnIsConditionParametersTurn {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/count-of"
+///    },
+///    {
+///      "$ref": "#/$defs/unit-rating"
 ///    }
 ///  ]
 ///}
@@ -36750,6 +36835,7 @@ pub enum Quantity {
     BattleSizeValue(BattleSizeValue),
     RollReference(RollReference),
     CountOf(CountOf),
+    UnitRating(UnitRating),
 }
 impl ::std::convert::From<u64> for Quantity {
     fn from(value: u64) -> Self {
@@ -36774,6 +36860,11 @@ impl ::std::convert::From<RollReference> for Quantity {
 impl ::std::convert::From<CountOf> for Quantity {
     fn from(value: CountOf) -> Self {
         Self::CountOf(value)
+    }
+}
+impl ::std::convert::From<UnitRating> for Quantity {
+    fn from(value: UnitRating) -> Self {
+        Self::UnitRating(value)
     }
 }
 ///`QuantityString`
@@ -62434,9 +62525,34 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerSourceAbilityOwne
 ///  ],
 ///  "properties": {
 ///    "ability_ids": {
+///      "description": "The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9\", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).",
 ///      "type": "array",
 ///      "items": {
-///        "$ref": "#/$defs/entity-id"
+///        "oneOf": [
+///          {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          {
+///            "title": "Unit ability ref",
+///            "type": "object",
+///            "required": [
+///              "id"
+///            ],
+///            "properties": {
+///              "id": {
+///                "$ref": "#/$defs/entity-id"
+///              },
+///              "value": {
+///                "$ref": "#/$defs/stat-value"
+///              },
+///              "wargear": {
+///                "description": "The wargear item (a weapons.json or wargear.json id) that prints this ability.",
+///                "$ref": "#/$defs/entity-id"
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        ]
 ///      }
 ///    },
 ///    "aliases": {
@@ -62870,8 +62986,9 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerSourceAbilityOwne
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Unit {
+    ///The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub ability_ids: ::std::vec::Vec<EntityId>,
+    pub ability_ids: ::std::vec::Vec<UnitAbilityIdsItem>,
     ///Alternate names this unit is known by (e.g. spelling variants in other tools' roster exports). Consulted by name lookup so an import matches despite a spelling difference; never displayed.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub aliases: ::std::vec::Vec<UnitAliasesItem>,
@@ -62926,6 +63043,58 @@ pub struct Unit {
     pub wargear_costs: ::std::vec::Vec<UnitWargearCostsItem>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub weapon_ids: ::std::vec::Vec<EntityId>,
+}
+///`UnitAbilityIdsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    {
+///      "title": "Unit ability ref",
+///      "type": "object",
+///      "required": [
+///        "id"
+///      ],
+///      "properties": {
+///        "id": {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        "value": {
+///          "$ref": "#/$defs/stat-value"
+///        },
+///        "wargear": {
+///          "description": "The wargear item (a weapons.json or wargear.json id) that prints this ability.",
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum UnitAbilityIdsItem {
+    EntityId(EntityId),
+    UnitAbilityRef {
+        id: EntityId,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        value: ::std::option::Option<StatValue>,
+        ///The wargear item (a weapons.json or wargear.json id) that prints this ability.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        wargear: ::std::option::Option<EntityId>,
+    },
+}
+impl ::std::convert::From<EntityId> for UnitAbilityIdsItem {
+    fn from(value: EntityId) -> Self {
+        Self::EntityId(value)
+    }
 }
 ///`UnitAliasesItem`
 ///
@@ -65061,6 +65230,31 @@ pub struct UnitProfilesItem {
     pub t: ::std::num::NonZeroU64,
     #[serde(rename = "W")]
     pub w: ::std::num::NonZeroU64,
+}
+///The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect.",
+///  "type": "object",
+///  "required": [
+///    "rating"
+///  ],
+///  "properties": {
+///    "rating": {
+///      "const": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitRating {
+    pub rating: ::serde_json::Value,
 }
 ///Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 ///

@@ -10,6 +10,7 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+use super::ability_refs::{rating_of, with_rating};
 use super::dataset::Dataset;
 use crate::cruncher::buffs::{Buff, BuffSource, EngineContext};
 use crate::cruncher::from_dsl::{
@@ -73,6 +74,8 @@ pub struct EligibleAbility<'a> {
     pub source: EligibleAbilitySource,
     /// The subset of the ability's phases that intersect the requested phase.
     pub phases: Vec<Phase>,
+    /// The rating the owning unit prints for a rated rule (Feel No Pain 5+ → `5`).
+    pub rating: Option<Value>,
 }
 
 /// A serde enum or newtype as its JSON string ("" when it is not one).
@@ -108,20 +111,32 @@ impl<'a> Collector<'a> {
     }
 
     /// Push a phase-matched ability with its intersected phases.
-    fn push_phased(&mut self, ability: &'a Ability, source: EligibleAbilitySource) {
+    fn push_phased(
+        &mut self,
+        ability: &'a Ability,
+        source: EligibleAbilitySource,
+        rating: Option<Value>,
+    ) {
         if self.phase_matches(ability) {
             let phases = self.intersect(ability);
-            self.push(ability, source, phases);
+            self.push(ability, source, phases, rating);
         }
     }
 
-    fn push(&mut self, ability: &'a Ability, source: EligibleAbilitySource, phases: Vec<Phase>) {
+    fn push(
+        &mut self,
+        ability: &'a Ability,
+        source: EligibleAbilitySource,
+        phases: Vec<Phase>,
+        rating: Option<Value>,
+    ) {
         let key = format!("{}::{}", source.kind(), ability.ability_id.as_str());
         if self.seen.insert(key) {
             self.out.push(EligibleAbility {
                 ability,
                 source,
                 phases,
+                rating,
             });
         }
     }
@@ -165,7 +180,7 @@ impl Dataset {
         // 1. Army: faction-typed abilities of the faction.
         for ability in self.abilities.by_faction(&faction_id) {
             if json_str(&ability.ability_type) == "faction" {
-                c.push_phased(ability, EligibleAbilitySource::Army);
+                c.push_phased(ability, EligibleAbilitySource::Army, None);
             }
         }
         if let Some(detachment_id) = input.detachment_id.as_deref() {
@@ -176,7 +191,7 @@ impl Dataset {
                     let source = EligibleAbilitySource::Detachment {
                         detachment_id: detachment_id.to_string(),
                     };
-                    c.push_phased(ability, source);
+                    c.push_phased(ability, source, None);
                 }
             }
             // 3. Detachment stratagems, each yielding the ability it references.
@@ -194,11 +209,12 @@ impl Dataset {
                 if !stratagem.phases.contains(&phase) {
                     continue;
                 }
-                let ability = stratagem.ability_id.as_ref().and_then(|id| {
-                    self.abilities
-                        .get_in_faction(id.as_str(), &faction_id)
-                        .or_else(|| self.abilities.get_any(id.as_str()))
-                });
+                // Ability ids are unique: one record per stratagem, wherever its detachment is
+                // replicated.
+                let ability = stratagem
+                    .ability_id
+                    .as_ref()
+                    .and_then(|id| self.abilities.get(id.as_str()));
                 let Some(ability) = ability else {
                     continue;
                 };
@@ -207,7 +223,7 @@ impl Dataset {
                     cp_cost: stratagem.cp_cost,
                 };
                 // The stratagem's printed phase governs eligibility.
-                c.push(ability, source, vec![phase]);
+                c.push(ability, source, vec![phase], None);
             }
         }
         // 4. The unit's own abilities.
@@ -215,7 +231,11 @@ impl Dataset {
             let source = EligibleAbilitySource::Unit {
                 unit_id: input.unit_id.clone(),
             };
-            c.push_phased(ability, source);
+            c.push_phased(
+                ability,
+                source,
+                rating_of(unit, ability.ability_id.as_str()),
+            );
         }
         // 5. Attached members: the combined unit pools every member's abilities in full.
         for member_id in &input.attached_unit_ids {
@@ -226,7 +246,11 @@ impl Dataset {
                 let source = EligibleAbilitySource::Attached {
                     unit_id: member_id.clone(),
                 };
-                c.push_phased(ability, source);
+                c.push_phased(
+                    ability,
+                    source,
+                    rating_of(member, ability.ability_id.as_str()),
+                );
             }
         }
         // 6. Supporting units: only aura-scoped abilities reach the input unit.
@@ -245,21 +269,25 @@ impl Dataset {
                 let source = EligibleAbilitySource::Support {
                     source_unit_id: support_id.clone(),
                 };
-                c.push_phased(ability, source);
+                let rating = rating_of(supporter, ability.ability_id.as_str());
+                c.push_phased(ability, source, rating);
             }
         }
         c.out
     }
 
     /// The ability's buff translation: its rules bundles expanded, gated on its trigger (or
-    /// else its usage limit), with an aura's single inch range stamped on every buff. Mirrors
-    /// TS `AbilityView.describeBuffs`; `context` defaults to the shooting phase.
+    /// else its usage limit), with an aura's single inch range stamped on every buff. A rated
+    /// rule (`{rating: true}`) reads `rating`, the rating the owning unit prints
+    /// ([`EligibleAbility::rating`]). Mirrors TS `AbilityView.describeBuffs`; `context`
+    /// defaults to the shooting phase.
     pub fn describe_buffs(
         &self,
         ability: &Ability,
         source: &BuffSource,
         context: Option<&EngineContext>,
         perspective: TranslationPerspective,
+        rating: Option<&Value>,
     ) -> EffectTranslation {
         let default_ctx;
         let ctx = match context {
@@ -272,7 +300,7 @@ impl Dataset {
         let raw = strip_nulls(&serde_json::to_value(ability).expect("an ability serializes"));
         let effect = raw.get("effect").cloned().unwrap_or(Value::Null);
         let mut seen = vec![ability.ability_id.to_string()];
-        let resolved = self.resolve_rules_bundles(&effect, &mut seen, ability);
+        let resolved = with_rating(&self.resolve_rules_bundles(&effect, &mut seen), rating);
         let gated = trigger_gated(raw.get("behavior"), raw.get("trigger"), &resolved)
             .unwrap_or_else(|| usage_gated(raw.get("ability_type"), raw.get("usage"), &resolved));
         let mut translated = effect_to_buffs(&gated, source, ctx, perspective);
@@ -298,40 +326,36 @@ impl Dataset {
         source: &BuffSource,
         context: Option<&EngineContext>,
         perspective: TranslationPerspective,
+        rating: Option<&Value>,
     ) -> Vec<Buff> {
-        self.describe_buffs(ability, source, context, perspective)
+        self.describe_buffs(ability, source, context, perspective, rating)
             .applied
     }
 
     /// Expand entity-backed ability grants (`ability-grant` with `rules_bundle: true`) into
     /// the referenced rules bundle. Unresolved, malformed and cyclic references stay as they
     /// are so the translator reports them.
-    fn resolve_rules_bundles(
-        &self,
-        effect: &Value,
-        seen: &mut Vec<String>,
-        owner: &Ability,
-    ) -> Value {
+    fn resolve_rules_bundles(&self, effect: &Value, seen: &mut Vec<String>) -> Value {
         match effect {
             Value::Array(items) => Value::Array(
                 items
                     .iter()
-                    .map(|x| self.resolve_rules_bundles(x, seen, owner))
+                    .map(|x| self.resolve_rules_bundles(x, seen))
                     .collect(),
             ),
             Value::Object(node) => {
-                if let Some(target) = self.rules_bundle_target(node, seen, owner) {
+                if let Some(target) = self.rules_bundle_target(node, seen) {
                     let id = node["modifier"]["ability"]
                         .as_str()
                         .unwrap_or("")
                         .to_string();
                     let mut next = seen.clone();
                     next.push(id);
-                    return self.resolve_rules_bundles(&target, &mut next, owner);
+                    return self.resolve_rules_bundles(&target, &mut next);
                 }
                 Value::Object(
                     node.iter()
-                        .map(|(k, v)| (k.clone(), self.resolve_rules_bundles(v, seen, owner)))
+                        .map(|(k, v)| (k.clone(), self.resolve_rules_bundles(v, seen)))
                         .collect(),
                 )
             }
@@ -344,7 +368,6 @@ impl Dataset {
         &self,
         node: &serde_json::Map<String, Value>,
         seen: &[String],
-        owner: &Ability,
     ) -> Option<Value> {
         if node.get("type").and_then(Value::as_str) != Some("ability-grant") {
             return None;
@@ -355,11 +378,7 @@ impl Dataset {
         {
             return None;
         }
-        let target = owner
-            .faction_id
-            .as_ref()
-            .and_then(|f| self.abilities.get_in_faction(id, f.as_str()))
-            .or_else(|| self.abilities.get_any(id))?;
+        let target = self.abilities.get(id)?;
         let effect = strip_nulls(&serde_json::to_value(&target.effect).ok()?);
         (effect.get("type").and_then(Value::as_str) == Some("rules-bundle")).then_some(effect)
     }

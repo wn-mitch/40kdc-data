@@ -76,7 +76,7 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
         }
         "player-turn-is" | "battle-round" => onward_to_from(pred()),
-        "rule-active" => format!("while the {} is active", title_case(&st(p.get("rule")))),
+        "rule-active" => format!("while the {} is active", id_label(p.get("rule"))),
         "has-keyword" => {
             if nn(p, "chosen_by").is_some() {
                 return format!("if {}", pred());

@@ -164,10 +164,10 @@ fn linked_query_abilities_of_returns_ordered_ids() {
             .map(|v| v.as_str().unwrap())
             .collect::<Vec<_>>(),
         vec![
-            "berzerker-frenzy",
+            "berzerker-frenzy-world-eaters",
             "leader",
-            "legendary-killer",
-            "the-betrayer"
+            "legendary-killer-world-eaters",
+            "the-betrayer-world-eaters"
         ],
     );
 }

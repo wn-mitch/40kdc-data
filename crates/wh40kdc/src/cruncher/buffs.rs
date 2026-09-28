@@ -16,7 +16,7 @@ use crate::Phase;
 
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
 /// inside [`resolve_buffs`].
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum AbilityKind {
     Army,
@@ -25,6 +25,11 @@ pub enum AbilityKind {
     Unit,
     Attached,
     Support,
+    /// Any other kind a caller tags its source with (`enhancement`, `faction`, …). TS does not
+    /// check the kind at runtime and the abilities-resolver corpus uses such kinds; it round-trips
+    /// as written and ranks last in tie-breaks, as TS ranks an unlisted kind.
+    #[serde(untagged)]
+    Other(String),
 }
 
 /// Where a buff originated. Drives stable tie-breaking inside [`resolve_buffs`].
@@ -389,6 +394,8 @@ fn rank(source: &BuffSource) -> u32 {
             AbilityKind::Unit => 3,
             AbilityKind::Attached => 4,
             AbilityKind::Support => 5,
+            // TS `SOURCE_KIND_RANK[...] ?? 99` for a kind the table does not list.
+            AbilityKind::Other(_) => 99,
         },
         BuffSource::Manual { .. } => 6,
         BuffSource::WeaponKeyword { .. } => 7,

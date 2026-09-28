@@ -59,10 +59,10 @@ fn a_bundle_grant_expands_into_the_bundle_it_names() {
     let ds = Dataset::embedded();
     let runts = ds
         .abilities
-        .get_in_faction("super-runts", "orks")
-        .expect("super-runts");
-    let src = source("super-runts", AbilityKind::Unit);
-    let expanded = ds.describe_buffs(runts, &src, None, TranslationPerspective::Attacker);
+        .get_in_faction("super-runts-orks", "orks")
+        .expect("super-runts-orks");
+    let src = source("super-runts-orks", AbilityKind::Unit);
+    let expanded = ds.describe_buffs(runts, &src, None, TranslationPerspective::Attacker, None);
     // Riled Up's [ASSAULT] grant reaches the unit only through the expansion.
     assert_eq!(keyword_ids(&expanded), ["assault"]);
     let raw = effect_to_buffs(
@@ -103,6 +103,7 @@ fn a_cyclic_or_non_bundle_grant_stays_unexpanded() {
         &source("granter", AbilityKind::Unit),
         None,
         TranslationPerspective::Attacker,
+        None,
     );
     // bundle-a expands (one [ASSAULT]); its grant of bundle-b expands, whose grant of
     // bundle-a is a cycle and stays; the grant of a non-bundle ability stays.
@@ -133,6 +134,7 @@ fn a_usage_limit_makes_the_buff_a_lever_named_by_the_first_limit() {
         &source("once", AbilityKind::Unit),
         None,
         TranslationPerspective::Attacker,
+        None,
     );
     assert!(t.applied.is_empty(), "a limited use is not always on");
     let ids: Vec<&str> = t.activatable.iter().map(|l| l.id.as_str()).collect();
@@ -174,6 +176,7 @@ fn only_a_single_aura_range_gates_the_buffs() {
         &source("aura", AbilityKind::Unit),
         None,
         TranslationPerspective::Attacker,
+        None,
     );
     let gate = t.applied[0]
         .applicable_when
@@ -216,4 +219,48 @@ fn eligible_abilities_keep_the_source_order_and_dedupe_per_kind() {
             Phase::Shooting
         )
         .is_empty());
+}
+
+#[test]
+fn a_rated_rule_reads_the_rating_its_unit_prints() {
+    let ds = Dataset::embedded();
+    let input = EligibilityInput {
+        unit_id: "mortifiers".into(),
+        faction_id: Some("adepta-sororitas".into()),
+        ..EligibilityInput::default()
+    };
+    let fnp = ds
+        .eligible_abilities(&input, Phase::Shooting)
+        .into_iter()
+        .find(|e| e.ability.ability_id.as_str() == "feel-no-pain")
+        .expect("Mortifiers list Feel No Pain");
+    assert_eq!(fnp.rating, Some(json!(5)));
+    let src = source("feel-no-pain", AbilityKind::Unit);
+    let rated = ds.describe_buffs(
+        fnp.ability,
+        &src,
+        None,
+        TranslationPerspective::Target,
+        fnp.rating.as_ref(),
+    );
+    assert_eq!(
+        rated
+            .applied
+            .iter()
+            .map(|b| b.contribution.clone())
+            .collect::<Vec<_>>(),
+        [BuffContribution::FeelNoPain {
+            threshold: 5.0,
+            scope: Default::default()
+        }]
+    );
+    // Without a unit in context the reference stays unresolved: no flat guess.
+    let unrated = ds.describe_buffs(
+        fnp.ability,
+        &src,
+        None,
+        TranslationPerspective::Target,
+        None,
+    );
+    assert!(unrated.applied.is_empty());
 }

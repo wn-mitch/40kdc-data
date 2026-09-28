@@ -62,6 +62,9 @@ fn battle_sized(q: &P) -> Option<String> {
 /// A non-literal quantity as a noun phrase: one value per battle size, a bound roll's result,
 /// or a count.
 pub(crate) fn quantity_phrase(q: &P) -> String {
+    if q.get("rating") == Some(&Value::Bool(true)) {
+        return "its rating".to_string();
+    }
     if let Some(sizes) = battle_sized(q) {
         return format!("{sizes} (Incursion/Strike Force/Onslaught)");
     }

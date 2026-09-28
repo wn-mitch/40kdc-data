@@ -8,6 +8,71 @@ use crate::translate::dekebab;
 use crate::translate::designations::designation_label;
 use crate::translate::effect::title_case;
 
+// ── Ids as names ────────────────────────────────────────────────────────────
+
+/// Faction dir slugs an ability or Stratagem id ends with (`<name>-<faction>`), longest first.
+/// The suffix is identity, not name, so it never reaches the English.
+const FACTION_SUFFIXES: &[&str] = &[
+    "agents-of-the-imperium",
+    "chaos-space-marines",
+    "adeptus-mechanicus",
+    "leagues-of-votann",
+    "emperors-children",
+    "genestealer-cults",
+    "adepta-sororitas",
+    "imperial-knights",
+    "adeptus-custodes",
+    "adeptus-astartes",
+    "astra-militarum",
+    "black-templars",
+    "imperial-fists",
+    "crimson-fists",
+    "chaos-knights",
+    "thousand-sons",
+    "chaos-daemons",
+    "blood-angels",
+    "ultramarines",
+    "space-wolves",
+    "grey-knights",
+    "world-eaters",
+    "white-scars",
+    "raven-guard",
+    "dark-angels",
+    "salamanders",
+    "death-guard",
+    "iron-hands",
+    "tau-empire",
+    "deathwatch",
+    "drukhari",
+    "tyranids",
+    "aeldari",
+    "necrons",
+    "orks",
+];
+
+/// An ability or Stratagem id without its faction suffix
+/// (`acts-of-faith-adepta-sororitas` → `acts-of-faith`).
+pub(crate) fn without_faction_suffix(id: &str) -> &str {
+    for f in FACTION_SUFFIXES {
+        if let Some(head) = id.strip_suffix(f).and_then(|h| h.strip_suffix('-')) {
+            if !head.is_empty() {
+                return head;
+            }
+        }
+    }
+    id
+}
+
+/// An ability or Stratagem id as a name: its name part in Title Case. An id whose name itself
+/// ends with the faction (the suffix was never added) keeps it.
+pub(crate) fn id_label(id: Option<&Value>) -> String {
+    let s = st(id);
+    match s.as_str() {
+        "lord-of-the-death-guard" => "Lord of the Death Guard".to_string(),
+        _ => title_case(without_faction_suffix(&s)),
+    }
+}
+
 // ── Shared references ───────────────────────────────────────────────────────
 
 pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
@@ -57,7 +122,7 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(none) = strs(f.get("none_of")) {
         s.push_str(&format!(" (excluding {} {noun}s)", or_list(&none)));
     }
-    let titled = |v: &Value| title_case(&st(Some(v)));
+    let titled = |v: &Value| id_label(Some(v));
     if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
         let names: Vec<String> = has.iter().map(titled).collect();
         s.push_str(&format!(" with the {} ability", and_list(&names)));
@@ -186,8 +251,8 @@ pub(crate) fn range_phrase(r: Option<&Value>) -> String {
             if let Some(aura) = nn(o, "aura_of") {
                 let id = st(Some(aura));
                 return match id.as_str() {
-                    "nurgle-s-gift-aura" => "Contagion Range".to_string(),
-                    _ => format!("the {} range", title_case(&id)),
+                    "nurgles-gift-death-guard" => "Contagion Range".to_string(),
+                    _ => format!("the {} range", id_label(Some(aura))),
                 };
             }
             "?\"".to_string()
@@ -323,7 +388,7 @@ pub(crate) fn move_kinds(types: Option<&Value>) -> String {
 pub(crate) fn roll_word(roll: Option<&Value>) -> String {
     if let Some(Value::Object(o)) = roll {
         if nn(o, "of_ability").is_some() {
-            return title_case(&st(o.get("of_ability")));
+            return id_label(o.get("of_ability"));
         }
     }
     dekebab(&st(roll))

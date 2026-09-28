@@ -283,7 +283,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 );
             }
             let which = match nn(f, "id") {
-                Some(id) => format!("the {} ", title_case(&st(Some(id)))),
+                Some(id) => format!("the {} ", id_label(Some(id))),
                 None => "a ".to_string(),
             };
             let kind = match nn(f, "kind") {

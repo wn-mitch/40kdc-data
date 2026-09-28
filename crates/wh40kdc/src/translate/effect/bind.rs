@@ -79,7 +79,7 @@ fn objective_selector_phrase(sel: &P) -> String {
             } else {
                 "a friendly"
             },
-            title_case(&jstr(req.get("requires_ability")))
+            ability_label(req.get("requires_ability"))
         ));
     }
     s

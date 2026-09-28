@@ -11,7 +11,7 @@ pub(crate) use super::quantity::*;
 pub(crate) use super::subject::*;
 use serde_json::Value;
 
-use crate::translate::condition::{article, nn, obj, P};
+use crate::translate::condition::{article, id_label, nn, obj, P};
 use crate::translate::dekebab;
 use crate::translate::designations::designation_label;
 
@@ -367,14 +367,22 @@ pub(crate) fn pronoun(subj: &str) -> &'static str {
     }
 }
 
-/// The display label for an ability id: a curated override, else Title Case.
+/// The display name for an ability or Stratagem id: a curated override, else its name part in
+/// Title Case.
 pub(crate) fn ability_label(id: Option<&Value>) -> String {
     let id = jstr(id);
     match id.as_str() {
-        "nurgle-s-gift-aura" => "Nurgle's Gift (Aura)".to_string(),
+        "nurgles-gift-death-guard" => "Nurgle's Gift (Aura)".to_string(),
         "fights-first" => "Fights First".to_string(),
-        _ => title_case(&id),
+        _ => id_label(Some(&Value::String(id))),
     }
+}
+
+/// `{rating: true}`: the rating the unit's datasheet prints for this rule (substituted when a
+/// unit is known).
+pub(crate) fn is_rating_ref(v: Option<&Value>) -> bool {
+    v.and_then(Value::as_object)
+        .is_some_and(|o| o.get("rating") == Some(&Value::Bool(true)))
 }
 
 /// The display name for a granted weapon id: a curated override, else Title Case.

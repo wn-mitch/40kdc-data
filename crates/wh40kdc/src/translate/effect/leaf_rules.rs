@@ -93,7 +93,7 @@ pub(super) fn cost_modifier(m: &P, subj: &str) -> String {
     }
     let named = nn(m, "id");
     let which = match named {
-        Some(id) => format!("the {} {noun}", title_case(&jv(id))),
+        Some(id) => format!("the {} {noun}", ability_label(Some(id))),
         None if noun == "ability" => "abilities".to_string(),
         None => format!("{noun}s"),
     };

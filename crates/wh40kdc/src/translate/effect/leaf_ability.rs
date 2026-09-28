@@ -19,8 +19,9 @@ pub(super) fn ability_grant(m: &P, subj: &str) -> String {
     } else {
         ""
     };
+    let rated = is_rating_ref(m.get("value"));
     let value = nn(m, "value")
-        .map(|x| format!(" {}{inch}", jv(x)))
+        .map(|x| format!(" {}{inch}", if rated { "X".to_string() } else { jv(x) }))
         .unwrap_or_default();
     let noun = if is_true(m, "rules_bundle") {
         "rules"
@@ -28,9 +29,10 @@ pub(super) fn ability_grant(m: &P, subj: &str) -> String {
         "ability"
     };
     format!(
-        "{subj} {} the {}{value} {noun}",
+        "{subj} {} the {}{value} {noun}{}",
         v(subj, "gains"),
-        ability_label(m.get("ability"))
+        ability_label(m.get("ability")),
+        if rated { ", X being its rating" } else { "" }
     )
 }
 
@@ -275,7 +277,10 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     let act_key = jstr(m.get("activity"));
     let act = match nn(m, "stratagem") {
         Some(strat) if act_key == "use-stratagem" => {
-            format!("be targeted with the {} Stratagem", title_case(&jv(strat)))
+            format!(
+                "be targeted with the {} Stratagem",
+                ability_label(Some(strat))
+            )
         }
         _ => activity(&act_key)
             .map(str::to_string)
@@ -386,7 +391,7 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
     let kind_key = jstr(m.get("kind"));
     let kind = match nn(m, "stratagem") {
         Some(strat) if kind_key == "stratagem" => {
-            format!(" with the {} Stratagem", title_case(&jv(strat)))
+            format!(" with the {} Stratagem", ability_label(Some(strat)))
         }
         _ if has_weapon(m) => format!(" with {}", weapon_noun(m)),
         _ => match kind_key.as_str() {
@@ -513,9 +518,13 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
     let kind = sv(m, "rule_kind");
     if kind == Some("faction-rule") {
         return if granted {
-            format!("{subj} {} {}", v(subj, "gains"), title_case(&rule))
+            format!(
+                "{subj} {} {}",
+                v(subj, "gains"),
+                ability_label(m.get("rule"))
+            )
         } else {
-            format!("{subj} cannot use {}", title_case(&rule))
+            format!("{subj} cannot use {}", ability_label(m.get("rule")))
         };
     }
     if rule == "overwatch-against-bearer" {
@@ -549,7 +558,12 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
         _ => "ability",
     };
     let verb = if granted { "gains" } else { "loses" };
-    format!("{subj} {} the {} {noun}", v(subj, verb), title_case(&rule))
+    let label = if kind == Some("ability") {
+        ability_label(m.get("rule"))
+    } else {
+        title_case(&rule)
+    };
+    format!("{subj} {} the {label} {noun}", v(subj, verb))
 }
 
 /// `s.replace(/\bword\b/g, repl)`.

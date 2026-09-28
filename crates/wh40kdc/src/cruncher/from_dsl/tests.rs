@@ -141,3 +141,26 @@ fn army_faction_battle_size_and_guided_read_the_context() {
     );
     assert_eq!(t(json!({ "type": "guided", "parameters": {} })), 0);
 }
+
+#[test]
+fn an_unlisted_ability_kind_round_trips_as_written() {
+    let source: BuffSource = serde_json::from_value(
+        json!({ "kind": "ability", "abilityId": "x", "abilityKind": "enhancement" }),
+    )
+    .expect("an unlisted kind deserializes");
+    assert_eq!(
+        serde_json::to_value(&source).unwrap()["abilityKind"],
+        json!("enhancement")
+    );
+    let listed: BuffSource = serde_json::from_value(
+        json!({ "kind": "ability", "abilityId": "x", "abilityKind": "unit" }),
+    )
+    .unwrap();
+    assert!(matches!(
+        listed,
+        BuffSource::Ability {
+            ability_kind: AbilityKind::Unit,
+            ..
+        }
+    ));
+}

@@ -28,7 +28,7 @@
 //!     .filter(|a| ds.phases_of(a).contains(&Phase::Shooting))
 //!     .map(|a| a.ability_id.as_str())
 //!     .collect();
-//! assert_eq!(shooting, ["berzerker-frenzy"]);
+//! assert_eq!(shooting, ["berzerker-frenzy-world-eaters"]);
 //! # }
 //! ```
 

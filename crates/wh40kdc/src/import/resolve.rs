@@ -1404,12 +1404,8 @@ fn resolve_unit_ability_id<'a>(
     if let Some(stripped) = strip_leading_the(raw_name) {
         targets.push(normalize_name(&stripped));
     }
-    for id in &unit.ability_ids {
-        let Some(ability) = ds
-            .abilities
-            .get_in_faction(id.as_str(), unit.faction_id.as_str())
-            .or_else(|| ds.abilities.get_any(id.as_str()))
-        else {
+    for ability_ref in &unit.ability_ids {
+        let Some(ability) = ds.abilities.get_any(ability_ref.id()) else {
             continue;
         };
         if targets

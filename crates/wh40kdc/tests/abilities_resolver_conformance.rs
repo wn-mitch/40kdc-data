@@ -1,14 +1,15 @@
 //! The abilities resolver and the DSL→buff translator against the shared goldens in
 //! `conformance/abilities-resolver/`: `0*.json` pins the eligible ability ids per source kind
 //! (as sorted sets, per CONFORMANCE.md), and `from-dsl.json` / `defensive-from-dsl.json` pin
-//! each ability effect's applied buffs, unsupported reasons and opt-in levers, in order.
+//! each ability effect's applied buffs, unsupported reasons and opt-in levers, in order (a
+//! case's `rating` stands in for the unit's printed rating of a rated rule).
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use serde_json::{json, Value};
 use wh40kdc::cruncher::{effect_to_buffs, BuffSource, EngineContext, TranslationPerspective};
-use wh40kdc::data::EligibilityInput;
+use wh40kdc::data::{with_rating, EligibilityInput};
 use wh40kdc::{Dataset, Phase};
 
 fn corpus_dir() -> PathBuf {
@@ -89,7 +90,11 @@ fn run_dsl_corpus(filename: &str) {
             Some("target") => TranslationPerspective::Target,
             _ => TranslationPerspective::Attacker,
         };
-        let effect = serde_json::to_value(&ability.effect).unwrap();
+        // A rated rule reads the unit's printed rating; the case supplies it.
+        let effect = with_rating(
+            &serde_json::to_value(&ability.effect).unwrap(),
+            case.get("rating").filter(|r| !r.is_null()),
+        );
         let result = effect_to_buffs(&effect, &source, &context, perspective);
         let expected = &case["expected"];
         let applied: Vec<Value> = result

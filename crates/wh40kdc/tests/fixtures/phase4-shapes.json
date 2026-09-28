@@ -601,7 +601,7 @@
     "target": "this-unit",
     "modifier": {
      "roll": {
-      "of_ability": "reanimation-protocols"
+      "of_ability": "reanimation-protocols-necrons"
      },
      "operation": "add",
      "value": 1
@@ -857,7 +857,7 @@
     "type": "ability-modifier",
     "target": "this-unit",
     "modifier": {
-     "ability": "killing-blow",
+     "ability": "killing-blow-tau-empire",
      "aspect": "end-round",
      "operation": "set",
      "value": 4
@@ -940,7 +940,7 @@
     "type": "ability-activate",
     "target": "this-unit",
     "modifier": {
-     "ability": "reanimation-protocols",
+     "ability": "reanimation-protocols-necrons",
      "override": {
       "amount": "D6"
      }

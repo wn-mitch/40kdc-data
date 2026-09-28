@@ -149,7 +149,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             };
             format!("{neg}during {where_}")
         }
-        "rule-active" => format!("the {} is {not_}active", title_case(&st(p.get("rule")))),
+        "rule-active" => format!("the {} is {not_}active", id_label(p.get("rule"))),
         "has-keyword" => {
             let who = if is(p, "subject", "defender") {
                 "the target".to_string()
@@ -185,7 +185,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
         "has-ability" => format!(
             "{neg}{} has the {} ability",
             subject_of(p, "the unit"),
-            title_case(&st(p.get("ability")))
+            id_label(p.get("ability"))
         ),
         "attachment" => {
             let w = obj(p.get("with"));

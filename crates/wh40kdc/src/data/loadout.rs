@@ -910,8 +910,8 @@ fn option_bundles(option: &WargearOption) -> Vec<Vec<String>> {
         .collect()
 }
 
-/// Unit abilities printed in an aggregate loadout are carried as synthetic pure-add
-/// options when no ordinary option reaches them. This lets the exact-cover solver
+/// Wargear whose ability the datasheet prints, present in an aggregate loadout, is carried as
+/// a synthetic pure-add option when no ordinary option reaches it. This lets the exact-cover solver
 /// assign them to models without treating source-printed abilities as global noise.
 fn options_with_printed_unit_abilities(
     unit: &Unit,
@@ -928,8 +928,10 @@ fn options_with_printed_unit_abilities(
     }
     let mut effective: Vec<WargearOption> =
         options.iter().map(|option| (*option).clone()).collect();
-    for ability_id in &unit.ability_ids {
-        let id = ability_id.as_str().to_owned();
+    // A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+    // equipment even when no option reaches it.
+    for wargear_id in super::printed_wargear_ids(unit) {
+        let id = wargear_id.to_owned();
         let Some(&count) = counts.get(&id) else {
             continue;
         };
@@ -952,7 +954,9 @@ fn options_with_printed_unit_abilities(
                 model_name: None,
                 per_n_models: None,
             }),
-            replacement: vec![ability_id.clone()],
+            replacement: vec![wargear_id
+                .parse::<EntityId>()
+                .expect("a wargear id is a valid entity id")],
             replacement_choice: Vec::new(),
             replaces: Vec::new(),
             unit_id: unit.id.clone(),

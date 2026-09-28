@@ -219,10 +219,22 @@ fn get_panics_for_a_shared_weapon_id_without_a_faction() {
 }
 
 #[test]
-#[should_panic(expected = "Ambiguous ability lookup")]
-fn get_panics_for_a_shared_ability_id_without_a_faction() {
+fn ability_get_is_exact_and_an_old_bare_faction_id_resolves_to_nothing() {
+    // Ability ids are unique; the pre-mirror bare ids carry no alias, so a stale reference
+    // misses rather than guessing a faction. Mirror of the TS data-model test.
     let ds = Dataset::embedded();
-    let _ = ds.abilities.get("idol-of-blessed-blood");
+    let idol = ds
+        .abilities
+        .get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")
+        .expect("the World Eaters idol");
+    assert_eq!(
+        idol.faction_id.as_ref().map(|f| f.as_str()),
+        Some("world-eaters")
+    );
+    assert!(ds.abilities.get("idol-of-blessed-blood").is_none());
+    assert!(ds.abilities.get("berzerker-frenzy").is_none());
+    assert!(ds.abilities.get("berzerker-frenzy-world-eaters").is_some());
+    assert!(ds.abilities.get("deadly-demise-d3").is_none());
 }
 
 // --- internationalization ---------------------------------------------------
@@ -296,10 +308,10 @@ fn kharn_links_faction_weapons_abilities() {
     assert_eq!(
         ability_ids,
         [
-            "berzerker-frenzy",
+            "berzerker-frenzy-world-eaters",
             "leader",
-            "legendary-killer",
-            "the-betrayer"
+            "legendary-killer-world-eaters",
+            "the-betrayer-world-eaters"
         ]
     );
 }
@@ -314,7 +326,7 @@ fn kharn_filters_abilities_by_phase() {
         .filter(|a| ds.phases_of(a).contains(&Phase::Shooting))
         .map(|a| a.ability_id.as_str())
         .collect();
-    assert_eq!(shooting, ["berzerker-frenzy"]);
+    assert_eq!(shooting, ["berzerker-frenzy-world-eaters"]);
 }
 
 // --- phases (joined via phase-mappings) -------------------------------------
@@ -324,8 +336,8 @@ fn phases_union_across_a_mapping() {
     let ds = Dataset::embedded();
     let ability = ds
         .abilities
-        .get_any("deadly-demise-d3")
-        .expect("deadly-demise-d3 exists");
+        .get("deadly-demise")
+        .expect("deadly-demise exists");
     let mut phases: Vec<Phase> = ds.phases_of(ability).to_vec();
     phases.sort_unstable();
     assert_eq!(phases, [Phase::Shooting, Phase::Fight]);
@@ -346,7 +358,7 @@ fn phases_empty_for_ability_without_a_mapping() {
 #[test]
 fn ability_reverse_links_to_units() {
     let ds = Dataset::embedded();
-    let units = ds.units_with_ability("berzerker-frenzy");
+    let units = ds.units_with_ability("berzerker-frenzy-world-eaters");
     assert!(units.iter().any(|u| u.id.as_str() == "kharn-the-betrayer"));
 }
 
@@ -470,57 +482,47 @@ fn exposes_the_embedded_data() {
 }
 
 #[test]
-fn deduplicates_abilities_by_faction_and_id() {
-    // A shared ability_id keeps one copy per faction (the copies legitimately
-    // diverge); only true within-faction duplicates collapse. Mirror of the TS
-    // data-model test.
+fn ability_ids_are_unique_across_the_dataset() {
     let ds = Dataset::embedded();
-    let keys: std::collections::HashSet<String> = ds
+    let ids: std::collections::HashSet<&str> = ds
         .abilities
         .all()
         .iter()
-        .map(|a| {
-            format!(
-                "{}::{}",
-                a.faction_id.as_ref().map(|e| e.as_str()).unwrap_or(""),
-                a.ability_id.as_str()
-            )
-        })
+        .map(|a| a.ability_id.as_str())
         .collect();
-    assert_eq!(
-        keys.len(),
-        ds.abilities.len(),
-        "no duplicate (faction_id, ability_id) pairs in .all()"
-    );
-    let idols = ds
-        .abilities
-        .all()
-        .iter()
-        .filter(|a| a.ability_id.as_str() == "idol-of-blessed-blood")
-        .count();
-    assert_eq!(
-        idols, 2,
-        "both factions' idol-of-blessed-blood copies survive dedupe"
-    );
+    assert_eq!(ids.len(), ds.abilities.len(), "no ability id repeats");
 }
 
 #[test]
-fn resolves_a_shared_ability_id_to_the_units_own_factions_copy() {
-    // `idol-of-blessed-blood` is authored in both world-eaters and
-    // chaos-space-marines (shared Khorne Lord of Skulls datasheet); each
-    // faction's unit must see its own faction's copy. Mirror of the TS test.
+fn a_shared_datasheet_lists_only_what_its_own_faction_prints() {
+    // The World Eaters Lord of Skulls prints the Idol of Blessed Blood; the CSM one does not.
+    // Both print Deadly Demise at the same rating, read from the unit. Mirror of the TS test.
     let ds = Dataset::embedded();
-    for faction in ["world-eaters", "chaos-space-marines"] {
-        let unit = ds
-            .units
-            .get_in_faction("khorne-lord-of-skulls", faction)
-            .expect("khorne-lord-of-skulls exists in both factions");
-        let idol = ds
-            .abilities_of(unit)
+    let we = ds
+        .units
+        .get_in_faction("khorne-lord-of-skulls", "world-eaters")
+        .unwrap();
+    let csm = ds
+        .units
+        .get_in_faction("khorne-lord-of-skulls", "chaos-space-marines")
+        .unwrap();
+    let ids = |u| {
+        ds.abilities_of(u)
             .into_iter()
-            .find(|a| a.ability_id.as_str() == "idol-of-blessed-blood")
-            .unwrap_or_else(|| panic!("idol-of-blessed-blood on {faction} lord of skulls"));
-        assert_eq!(idol.faction_id.as_ref().map(|e| e.as_str()), Some(faction));
+            .map(|a| a.ability_id.to_string())
+            .collect::<Vec<_>>()
+    };
+    assert!(
+        ids(we).contains(&"idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters".to_string())
+    );
+    assert!(!ids(csm)
+        .iter()
+        .any(|id| id.starts_with("idol-of-blessed-blood")));
+    for unit in [we, csm] {
+        assert_eq!(
+            wh40kdc::data::rating_of(unit, "deadly-demise"),
+            Some(serde_json::json!("D6+2"))
+        );
     }
 }
 

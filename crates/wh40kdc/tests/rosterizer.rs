@@ -184,7 +184,10 @@ fn resolves_enhancement_scoped_to_detachment() {
     let gm = unit_by_id(&roster, "grand-master-in-nemesis-dreadknight").unwrap();
     assert!(gm.is_warlord);
     let enh = gm.enhancement.as_ref().unwrap();
-    assert_eq!(enh.id.as_deref(), Some("pyresoul-psychic-banishers"));
+    assert_eq!(
+        enh.id.as_deref(),
+        Some("pyresoul-psychic-banishers-grey-knights")
+    );
     assert_eq!(gm.enhancement_points, Some(20));
 }
 

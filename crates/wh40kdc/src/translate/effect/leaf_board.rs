@@ -315,10 +315,16 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                 "psychic-and-mortal" => " against Psychic Attacks and mortal wounds",
                 _ => "",
             };
+            let rated = is_rating_ref(m.get("threshold"));
             format!(
-                "{subj} {} the Feel No Pain {}+ ability{against}",
+                "{subj} {} the Feel No Pain {}+ ability{against}{}",
                 v(subj, "has"),
-                jstr(m.get("threshold"))
+                if rated {
+                    "X".to_string()
+                } else {
+                    jstr(m.get("threshold"))
+                },
+                if rated { ", X being its rating" } else { "" }
             )
         }
         Some("invulnerable-save") => {

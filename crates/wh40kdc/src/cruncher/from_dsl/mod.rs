@@ -130,7 +130,7 @@ pub fn effect_to_buffs(
             ability_id,
             ability_kind,
             ..
-        } => (ability_id.clone(), Some(*ability_kind)),
+        } => (ability_id.clone(), Some(ability_kind.clone())),
         _ => ("effect".to_string(), None),
     };
     let opts = WalkOpts {

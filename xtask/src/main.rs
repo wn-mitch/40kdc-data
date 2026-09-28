@@ -150,19 +150,20 @@ fn presence_only(node: &serde_json::Value) -> bool {
         })
 }
 
-/// Drop presence-only `not` and `allOf` constraints from every object schema that
+/// Drop presence-only `not`, `allOf` and `anyOf` constraints from every object schema that
 /// declares `properties`. typify cannot express them: it emits an empty enum for an
 /// `allOf` of key-exclusivity `oneOf`s (`dice-gated`: exactly one of `dice`/`from`) and
 /// silently drops properties from a struct with a sibling `not` (resource-spend's `face`
-/// and `requirement`). Dropping them keeps every key optional; the validator still
-/// enforces the constraint from the real schema. `oneOf`/`anyOf` siblings are left to
-/// typify (and to [`hoist_member_objects`]), which already generates working types for
-/// them. Only codegen's input changes; the schema does not.
+/// and `requirement`), and splits an `anyOf` of `required` lists into one strict variant per
+/// list, rejecting records that set several (a unit ability ref with `value` and `wargear`).
+/// Dropping them keeps every key optional; the validator still
+/// enforces the constraint from the real schema. `oneOf` siblings are left to typify,
+/// which generates working types for them. Only codegen's input changes; the schema does not.
 fn strip_presence_constraints(node: &mut serde_json::Value) {
     match node {
         serde_json::Value::Object(obj) => {
             if obj.contains_key("properties") {
-                for key in ["not", "allOf"] {
+                for key in ["not", "allOf", "anyOf"] {
                     if obj.get(key).is_some_and(|v| {
                         v.as_array()
                             .map_or_else(|| presence_only(v), |m| m.iter().all(presence_only))
@@ -270,29 +271,16 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
 /// (`_core` is deliberately *not* excluded — its shared abilities are bundled.)
 const EXCLUDED_DIRS: &[&str] = &["_example", "_port-audit"];
 
-/// When a faction-stamped record is eligible for stamping (see [`STAMP_FACTION`]).
-#[derive(Clone, Copy, PartialEq)]
-enum StampRule {
-    /// Stamp only when the record has no `faction_id` key at all (an authored
-    /// value, even `null`, is preserved verbatim for byte-stability).
-    Absent,
-    /// Additionally overwrite an explicit `null` (ability records author
-    /// `faction_id: null` on non-faction-typed entries; the null carries no
-    /// information the directory doesn't).
-    AbsentOrNull,
-}
-
 /// Collections whose records are stamped with their owning faction (the
 /// `data/{core,enrichment}/<faction>/` directory) at bundle time, so ids
 /// shared across factions resolve faction-scoped in the linked API instead of
-/// first-wins (issue #59 generalized). Records in `_`-prefixed directories
-/// (the shared `enrichment/_core` pool) are never stamped — they stay
-/// faction-less on purpose so faction-scoped lookup falls back to them.
+/// first-wins (issue #59 generalized). A record is stamped only when it has no
+/// `faction_id` key at all (an authored value, even `null`, is kept verbatim for
+/// byte-stability). Records in `_`-prefixed directories (the shared
+/// `enrichment/_core` pool) are never stamped. Abilities are not stamped: their
+/// ids are unique and every faction record names its faction.
 /// Mirrors `tools/src/codegen-data.ts` `STAMP_FACTION` — keep the two in sync.
-const STAMP_FACTION: &[(&str, StampRule)] = &[
-    ("weapons", StampRule::Absent),
-    ("abilities", StampRule::AbsentOrNull),
-];
+const STAMP_FACTION: &[&str] = &["weapons"];
 
 /// Bundle every authored `data/` file into one embedded JSON object.
 ///
@@ -338,17 +326,12 @@ fn bundle_data() -> Result<()> {
         // across factions resolve faction-scoped rather than first-wins (see
         // STAMP_FACTION for the per-collection rules and the `_core`
         // exclusion). Mirrors the TS bundler.
-        if let Some(&(_, rule)) = STAMP_FACTION.iter().find(|&&(name, _)| name == key) {
+        if STAMP_FACTION.contains(&key) {
             if let Some(faction) = faction_of_path(file) {
                 if !faction.starts_with('_') {
                     for item in &mut items {
                         if let Value::Object(map) = item {
-                            let stampable = match map.get("faction_id") {
-                                None => true,
-                                Some(Value::Null) => rule == StampRule::AbsentOrNull,
-                                Some(_) => false,
-                            };
-                            if stampable {
+                            if !map.contains_key("faction_id") {
                                 map.insert(
                                     "faction_id".to_string(),
                                     Value::String(faction.clone()),

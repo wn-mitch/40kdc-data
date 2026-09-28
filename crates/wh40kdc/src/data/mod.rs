@@ -23,6 +23,7 @@
 // translator.
 #[cfg(feature = "cruncher")]
 mod abilities;
+mod ability_refs;
 mod collection;
 mod dataset;
 mod loadout;
@@ -44,6 +45,7 @@ pub use abilities::{
     aura_inches, trigger_gated, usage_gated, EligibilityInput, EligibleAbility,
     EligibleAbilitySource,
 };
+pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 pub use loadout::{
