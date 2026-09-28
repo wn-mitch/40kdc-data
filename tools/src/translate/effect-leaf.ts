@@ -5,9 +5,10 @@
  */
 
 import { describeBoardLeaf } from "./effect-leaf-board.js";
+import { describeShapeLeaf } from "./effect-leaf-shapes.js";
 import {
   abilityLabel, andList, bracketKeyword, dekebab, diceCase, effectSubject, hasWeapon, isPlural, jstr, ofOrPossessive, orList, pronoun,
-  noneOf, rangePhrase, regionPhrase, rollName, signed, statName, titleCase, v, weaponHolder, weaponLabel, weaponNoun,
+  movedPhrase, noneOf, rangePhrase, regionPhrase, rollName, signed, statName, titleCase, v, weaponHolder, weaponLabel, weaponNoun,
   weaponRollScope, type Ctx,
 } from "./effect-words.js";
 import type { P } from "./condition-refs.js";
@@ -29,7 +30,7 @@ export const LEAF_TYPES = new Set([
   "counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
-  "objective-sticky", "designate", "army-rule",
+  "objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
 ]);
 
 /** "each time an attack targets the unit, " — the lead of an `incoming` change. */
@@ -96,9 +97,13 @@ function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): st
   const rn = jstr(m.roll);
   const noun = rn === "any" ? "roll" : `${rollName(m.roll)} roll`;
   const cnt = typeof m.count === "number" ? m.count : undefined;
+  // A counted allowance ("one for each model equipped with …") reads as a number of rolls.
+  const counted = m.count != null && typeof m.count === "object" ? `a number of ${failedNoun(m, noun)}s equal to ${diceCase(m.count)}` : undefined;
   const failed = m.subset === "all-failures" ? "failed " : "";
   const which =
-    cnt != null
+    counted != null
+      ? counted
+      : cnt != null
       ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${failed}${noun}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : ""}`
       : m.subset === "ones"
         ? `${rn === "any" ? "any" : "a"} ${noun} of 1`
@@ -106,13 +111,18 @@ function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): st
           ? `a failed ${noun}`
           : rn === "any" ? "any roll" : `the ${noun}`;
   const pool = m.pool != null ? ` by spending a die from your ${titleCase(jstr(m.pool))}` : "";
-  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking player can re-roll ${which}${pool}`;
+  const can = m.mandatory === true ? "must" : "can";
+  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking player ${can} re-roll ${which}${pool}`;
   // "you can re-roll …" names whose roll it is unless that is the ability's own unit.
   const own = e.target == null || e.target === "this-unit" || e.target === "attacker" || (e.target === "recipient" && !ctx.auraRecipient);
   const model = e.target === "this-model" || (e.target === "selected-unit" && ctx.selectedModel);
   const holder = model ? weaponHolder(e.target, ctx) : subj;
   const owner = own ? "" : ` for ${["hit", "wound", "damage"].includes(rn) ? "attacks made by " : ""}${holder}`;
-  return `you can re-roll ${which}${owner}${weaponRollScope(m)}${pool}`;
+  return `you ${can} re-roll ${which}${owner}${weaponRollScope(m)}${pool}`;
+}
+
+function failedNoun(m: Record<string, unknown>, noun: string): string {
+  return m.subset === "all-failures" ? `failed ${noun}` : m.subset === "ones" ? `${noun} of 1` : noun;
 }
 
 function rollResult(m: Record<string, unknown>, subj: string): string {
@@ -122,6 +132,12 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
     const crit = m.roll === "wound" ? "Critical Wound" : "Critical Hit";
     if (m.critical_on === "success") return `${lead}each successful ${roll} roll${lead ? "" : ` made by ${subj}`}${weaponRollScope(m)} is a ${crit}`;
     return `${lead}${lead ? "a" : `${subj} ${v(subj, "scores")}`} ${crit}${lead ? "" : "s"} on ${roll} rolls of ${jstr(m.critical_on)}+${weaponRollScope(m)}${lead ? " for that attack" : ""}`;
+  }
+  if (m.fails_on != null) {
+    const n = Number(m.fails_on);
+    const range = n === 1 ? "1" : `1-${n}`;
+    if (lead) return `${lead}an unmodified ${roll} roll of ${range} for that attack always fails`;
+    return `${ofOrPossessive(subj, `${roll} rolls`)}${weaponRollScope(m)} always fail on an unmodified ${range}`;
   }
   if (m.succeeds_on != null) {
     const rolls = lead ? `the ${roll} roll for that attack` : ofOrPossessive(subj, `${roll} rolls`);
@@ -135,7 +151,8 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
   const whose = lead ? `the ${roll} roll for that attack` : ofOrPossessive(subj, `${roll} rolls`);
   const verb = lead ? { pass: "automatically succeeds", fail: "automatically fails" } : { pass: "automatically succeed", fail: "automatically fail" };
   if (m.result === "pass" || m.result === "fail") return `${lead}${whose}${lead ? "" : weaponRollScope(m)} ${verb[m.result]}`;
-  return `${lead}${whose}${lead ? " counts" : `${weaponRollScope(m)} count`} as ${jstr(m.result)}`;
+  const unmod = m.unmodified === true ? "an unmodified " : "";
+  return `${lead}${whose}${lead ? " counts" : `${weaponRollScope(m)} count`} as ${unmod}${jstr(m.result)}`;
 }
 
 function abilityGrant(m: Record<string, unknown>, subj: string): string {
@@ -164,7 +181,8 @@ function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, c
 
 const ASPECTS: Record<string, string> = {
   uses: "number of uses", range: "range", targets: "number of targets", recipients: "recipients", selections: "number of selections",
-  concurrent: "number that can apply at once", duration: "duration", "start-round": "first battle round", threshold: "threshold", options: "options",
+  concurrent: "number that can apply at once", duration: "duration", "start-round": "first battle round", "end-round": "last battle round",
+  threshold: "threshold", options: "options",
 };
 
 /** The ability an ability-modifier changes: a named one, the one a trigger used, or those reaching an audience. */
@@ -200,7 +218,17 @@ function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inl
   }
   if (recipients) s += `; it can also affect ${recipients}`;
   if (option) s += `; add ${option}`;
-  return s + cap;
+  return s + cap + abilityLimits(m);
+}
+
+/** The limits on a changed allowance: once per battle round, never in the same phase, outside the shared limit. */
+function abilityLimits(m: Record<string, unknown>): string {
+  const parts: string[] = [];
+  const per = m.cap_per as { count?: unknown; period?: unknown } | undefined;
+  if (per != null) parts.push(`but it can be used at most ${Number(per.count) === 1 ? "once" : `${jstr(per.count)} times`} per ${dekebab(jstr(per.period))}`);
+  if (m.not_same != null) parts.push(`but not in the same ${jstr(m.not_same)} as the use that triggered this`);
+  if (m.consumes_shared_use === false) parts.push("and this use does not count toward that ability's limit for other units");
+  return parts.length ? `, ${parts.join(", ")}` : "";
 }
 
 const ACTIVITIES: Record<string, string> = {
@@ -244,6 +272,8 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
   }
   if (m.as_if != null) s += AS_IF[jstr(m.as_if)] ?? ` as if ${jstr(m.as_if)}`;
   if (m.next === true) s += `, and must be the next unit selected to ${act}`;
+  if (m.counts_as_move != null) s += `; if ${it} ${it === "they" ? "do" : "does"}, ${it} ${it === "they" ? "count" : "counts"} as having made ${movedPhrase(m.counts_as_move)} this turn`;
+  if (m.consumes_shared_use === false) s += "; this use does not count toward that Stratagem's once-per-phase limit for other units";
   return s;
 }
 
@@ -263,7 +293,15 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
       : hasWeapon(m) ? ` with ${weaponNoun(m)}` : TARGET_KINDS[jstr(m.kind)] ?? "";
   const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
   const unless = m.only_if_none != null ? `, unless there is no other eligible ${effectSubject(m.only_if_none, ctx).replace(/^all /, "").replace(/ units\b/, " unit")}` : "";
-  return `${who} ${verb} ${whom}${kind}${range}${unless}`;
+  if (m.may === "redirect") {
+    const to = effectSubject(m.to, ctx);
+    const what = m.kind === "stratagem" ? "Stratagems" : m.kind === "shoot" ? "ranged attacks" : m.kind === "fight" ? "melee attacks" : "attacks";
+    // One unit is targeted at a time: "that target a friendly ANATHEMA PSYKANA unit".
+    const one = whom.startsWith("all ") || isPlural(whom) ? `a ${whom.replace(/^all /, "").replace(/ units\b/, " unit").replace(/ models\b/, " model")}`.replace(/^a ([aeiou])/i, "an $1") : whom;
+    return `${what}${m.by != null ? ` made by ${who}` : ""} that target ${one} must target ${to} instead${m.if_eligible === true ? `, if ${to} is an eligible target` : ""}`;
+  }
+  const except = m.except === "core-stratagems" ? " (Core Stratagems can still target it)" : "";
+  return `${who} ${verb} ${whom}${kind}${range}${unless}${except}`;
 }
 
 function countsAs(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -280,6 +318,10 @@ const CORE_RULES: Record<string, [string, string]> = {
   "fire-overwatch": ["can fire Overwatch", "cannot fire Overwatch"],
   "desperate-escape": ["must take Desperate Escape tests", "is not affected by Desperate Escape tests"],
   "attacking-ends-hidden": ["stops being hidden when it attacks", "does not stop being hidden when it attacks"],
+  "engaged-shooting-hit-penalty": ["suffers the -1 to Hit for shooting while within Engagement Range", "does not suffer the -1 to Hit for shooting while within Engagement Range"],
+  "charge-bonus": ["receives the Charge bonus", "does not receive the Charge bonus"],
+  hidden: ["can become hidden", "cannot become hidden"],
+  "orders-end-on-battle-shock": ["loses its Orders when it becomes Battle-shocked", "keeps its Orders when it becomes Battle-shocked"],
 };
 
 function ruleState(m: Record<string, unknown>, subj: string): string {
@@ -291,10 +333,24 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   if (m.rule_kind === "core-rule" && core) {
     const phrase = granted ? core[0] : core[1];
     if (phrase.startsWith("cannot ")) return `${noneOf(subj)} ${phrase}`;
-    return `${subj} ${phrase.replace(/^(has|is|stops|does) /, (w) => `${v(subj, w.trim())} `)}`;
+    return `${subj} ${phrase.replace(/^(has|is|stops|does|suffers|receives|loses|keeps) /, (w) => `${v(subj, w.trim())} `)}`;
   }
   const noun = m.rule_kind === "keyword" ? "keyword" : m.rule_kind === "core-rule" ? "rule" : "ability";
   return granted ? `${subj} ${v(subj, "gains")} the ${titleCase(rule)} ${noun}` : `${subj} ${v(subj, "loses")} the ${titleCase(rule)} ${noun}`;
+}
+
+function abilityActivate(m: Record<string, unknown>, subj: string): string {
+  const label = abilityLabel(m.ability);
+  const consumed = m.ignore_consumed === true ? ", even if it has already been selected this battle" : "";
+  const sel = m.select as { by?: unknown } | undefined;
+  if (sel != null) {
+    const how = sel.by === "roll" ? `make a new ${label} roll and activate one result it allows` : `select one option of ${label}`;
+    return `${how} for ${subj}, in addition to any already active${consumed}`;
+  }
+  const override = m.override as { amount?: unknown } | undefined;
+  const instead = override != null ? `, using ${diceCase(override.amount)} in place of its usual amount` : "";
+  if (m.option == null) return `${subj} ${v(subj, "resolves")} the ${label} ability now${instead}`;
+  return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${m.exclusive === true ? " (and no other option is)" : ""}${consumed}`;
 }
 
 /** One single effect as a lowercase-initial clause. */
@@ -316,15 +372,11 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
       return `${subj} ${v(subj, "gains")} ${count} ${weaponLabel(m.weapon_id)} weapon${count === 1 ? "" : "s"}`;
     }
     case "ability-modifier": return abilityModifier(m, subj, ctx, inline);
-    case "ability-activate": {
-      const label = abilityLabel(m.ability);
-      if (m.option == null) return `${subj} ${v(subj, "resolves")} the ${label} ability now`;
-      return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${m.exclusive === true ? " (and no other option is)" : ""}`;
-    }
+    case "ability-activate": return abilityActivate(m, subj);
     case "permission": return permission(m, subj, ctx);
     case "targeting": return targeting(m, subj, ctx);
     case "counts-as": return countsAs(m, subj, ctx);
     case "rule-state": return ruleState(m, subj);
-    default: return describeBoardLeaf(e, m, subj, ctx, inline);
+    default: return describeShapeLeaf(e, m, subj, ctx) ?? describeBoardLeaf(e, m, subj, ctx, inline);
   }
 }

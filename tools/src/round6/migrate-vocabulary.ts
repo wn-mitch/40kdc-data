@@ -15,6 +15,9 @@ import { buildReferenceVocabularies } from "../audit-dangling-refs.js";
 import { formatCompact } from "../compact-json.js";
 import { createValidator } from "../schema-loader.js";
 import { keywordIndex } from "../round5c/core-keywords.js";
+import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
+import { loadRepoProse, type RepoProse } from "../mfm/record-prose.js";
+import { storeSource } from "../mfm/store-source.js";
 import { applyReplacements, type Replacement } from "./json-spans.js";
 import { LEGACY_TYPES, migrateSimple, type KeywordSets, type Place, type Node, type Outcome } from "./vocab-conditions.js";
 import { migrateTrigger } from "./vocab-triggers.js";
@@ -33,7 +36,7 @@ const NEW_TYPES = new Set(
 );
 const NEW_EVENTS = new Set((loadJson<Node>(path.join(SCHEMAS, "$defs/common.schema.json")) as { $defs: { "game-event": { enum: string[] } } }).$defs["game-event"].enum);
 /** Types whose legacy and new forms share a name; the rules still normalise their parameters. */
-const SHARED = new Set(["phase-is", "player-turn-is", "battle-round", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "terrain-area-control"]);
+const SHARED = new Set(["phase-is", "player-turn-is", "battle-round", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain"]);
 
 const NEW_SINGLE = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/single-effect")!;
 const CONTAINERS = new Set(["aura", "conditional", "sequence", "choice", "select-units", "for-each-unit", "dice-gated", "dice-table", "dice-pool-allocation",
@@ -72,6 +75,7 @@ class Migrator {
   constructor(
     private sets: KeywordSets,
     private overrides: Record<string, unknown>,
+    /** Rule text keyed by `<faction>/<ability_id>` ({@link dumpRuleText}). */
     private ruleText: ReadonlyMap<string, string> = new Map(),
   ) {}
 
@@ -240,6 +244,7 @@ class Migrator {
 
   file(abs: string, write: boolean): void {
     const rel = path.relative(REPO, abs);
+    const faction = factionOfDataFile(rel);
     const text = fs.readFileSync(abs, "utf8");
     const data = JSON.parse(text) as unknown;
     const reps: Replacement[] = [];
@@ -249,7 +254,7 @@ class Migrator {
       const r = rec as Node;
       const id = String(r?.ability_id ?? r?.id ?? r?.source_id ?? i);
       const scope = (r?.scope ?? {}) as Node;
-      this.effectCtx = { scopeRange: scope.range as string | undefined, rangeInches: scope.range_inches as number | undefined, abilityType: r?.ability_type as string | undefined, ruleText: this.ruleText.get(id) };
+      this.effectCtx = { scopeRange: scope.range as string | undefined, rangeInches: scope.range_inches as number | undefined, abilityType: r?.ability_type as string | undefined, ruleText: faction ? this.ruleText.get(`${faction}/${id}`) : undefined };
       this.walk(rec, Array.isArray(data) ? [i] : [], rel, id, reps);
     });
     if (!reps.length) return;
@@ -263,16 +268,19 @@ class Migrator {
   }
 }
 
-/** Rule text by ability id from the sibling raw-text store (never written anywhere). */
-function storeText(): Map<string, string> {
+/** The faction dir of a `data/{core,enrichment}/<faction>/…` file; undefined for any other file. */
+export function factionOfDataFile(rel: string): string | undefined {
+  return /^data\/(?:core|enrichment)\/([^/]+)\//.exec(rel.split(path.sep).join("/"))?.[1];
+}
+
+/** Rule text by `<faction>/<ability_id>` from the private MFM dump (never written anywhere); empty without the dump. */
+export function dumpRuleText(repo: RepoProse | null = fs.existsSync(DEFAULT_DUMP_PATH) ? loadRepoProse() : null): Map<string, string> {
   const out = new Map<string, string>();
-  const store = path.join(REPO, "..", "40kdc-abilities");
-  if (!fs.existsSync(store)) return out;
-  for (const f of fs.readdirSync(store)) {
-    if (!f.endsWith(".json") || f === "index.json") continue;
-    for (const e of loadJson<Node[]>(path.join(store, f))) {
-      const text = typeof e.raw_text === "string" ? e.raw_text : ["when", "target", "effect", "restrictions"].map((k) => e[k] ?? "").join(" ");
-      if (!out.has(String(e.ability_id))) out.set(String(e.ability_id), text);
+  if (!repo) return out;
+  for (const [faction, byId] of Object.entries(repo.index())) {
+    for (const [id, entry] of Object.entries(byId)) {
+      const text = storeSource(entry as unknown as Record<string, unknown>);
+      if (text) out.set(`${faction}/${id}`, text);
     }
   }
   return out;
@@ -299,7 +307,7 @@ async function main(): Promise<void> {
   const overridesPath = path.join(path.dirname(new URL(import.meta.url).pathname), "vocab-overrides.json");
   const overrides = fs.existsSync(overridesPath) ? loadJson<Record<string, unknown>>(overridesPath) : {};
   const sets = await keywordSets();
-  const text = storeText();
+  const text = dumpRuleText();
   const m = new Migrator(sets, overrides, text);
   const files = dataFiles(roots.length ? roots : ["data", "tools/test/fixtures"]);
   // A dry pass first: --write only proceeds when nothing needs review.

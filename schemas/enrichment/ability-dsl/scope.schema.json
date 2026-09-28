@@ -26,9 +26,14 @@
         "one-use",
         "permanent",
         "attack-sequence",
-        "resolution"
+        "resolution",
+        "until-next-shooting-phase",
+        "until-end-of-your-next-turn",
+        "until-end-of-opponent-next-turn",
+        "until-this-unit-has-shot",
+        "control-lost"
       ],
-      "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
+      "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it."
     }
   }
 }

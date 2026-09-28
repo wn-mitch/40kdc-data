@@ -398,7 +398,8 @@ function migrateTyped(t: string, p: Node, sets: KeywordSets): Outcome {
     case "terrain-area-control":
       if (p.area === "flow-of-magic" && only("area", "relation"))
         return { node: pred("in-region", { region: { rule_region: { region_id: "flow-of-magic", owner_faction: "thousand-sons" } }, ...(p.relation === "wholly-within" ? { wholly: true } : {}) }) };
-      return only("footprint_ref", "min_models") ? { node: pred(t, p) } : { review: "terrain-area params" };
+      // The terrain-area-control predicate is retired: no rule controls a terrain area.
+      return { review: "terrain-area control has no current predicate" };
     case "within-range-of-objective": {
       const s = sub();
       if (s === null || !only("subject", "objective_role", "controlled", "controlled_by", "objective")) return { review: "objective range params" };

@@ -107,7 +107,7 @@ export type EffectTranslation = {
 export type TranslationPerspective = "attacker" | "target";
 
 /** Targets that resolve to the buffed unit itself. */
-const SELF_TARGETS = new Set(["this-unit", "this-model", "selected-unit", "recipient"]);
+const SELF_TARGETS = new Set(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"]);
 
 /**
  * The subset of {@link SELF_TARGETS} that names a single *model* — the ability's
@@ -199,6 +199,13 @@ function walk(
     out.unsupported.push({ reason: FIDELITY_BINDING_REASON, effectFragment: currentNode });
     return;
   }
+  // A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
+  // applying the printed value would over- or under-state it.
+  const unsized = unsizedValueReason(currentNode);
+  if (unsized != null) {
+    out.unsupported.push({ reason: unsized, effectFragment: currentNode });
+    return;
+  }
   // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
   // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
   // modifies the buffed unit's own attacks.
@@ -266,6 +273,23 @@ function walk(
       return;
     case "dice-pool-allocation":
       enumerateDicePool(currentNode, source, opts, out);
+      return;
+    case "roll":
+      // A pool roll whose dice are allocated to named options (Blessings of Khorne) is the same
+      // lever set dice-pool-allocation produced; any other bound roll only scopes its nested effect.
+      if (!enumerateRollAllocation(currentNode, source, opts, out)) walk(currentNode.effect, source, opts, out);
+      return;
+    case "select-objective":
+      out.unsupported.push({ reason: "select-objective: the bound objective marker is not resolved by the buff engine", effectFragment: currentNode });
+      return;
+    case "characteristic-resolution":
+      out.unsupported.push({ reason: "characteristic-resolution: which models' characteristic applies depends on the unit's model mix; not resolved by the buff engine", effectFragment: currentNode });
+      return;
+    case "borrow-weapons":
+      out.unsupported.push({ reason: "borrow-weapons: the passengers' weapons are not added to the Transport's profile by the buff engine", effectFragment: currentNode });
+      return;
+    case "select-weapon":
+      out.unsupported.push({ reason: "select-weapon: a bound weapon is not resolved by the buff engine", effectFragment: currentNode });
       return;
     case "select-units":
       walk(currentNode.effect, source, opts, out);
@@ -435,7 +459,7 @@ function translateReroll(
     return;
   }
   out.unsupported.push({
-    reason: `re-roll on "${String(roll)}" (subset "${String(subset)}") is outside the damage path`,
+    reason: `re-roll on "${rollLabel(roll)}" (subset "${String(subset)}") is outside the damage path`,
     effectFragment: node,
   });
 }
@@ -507,7 +531,7 @@ function translateRollModifier(
       return;
     default:
       out.unsupported.push({
-        reason: `roll-modifier on "${String(roll)}" is outside the damage path`,
+        reason: `roll-modifier on "${rollLabel(roll)}" is outside the damage path`,
         effectFragment: node,
       });
   }
@@ -776,7 +800,7 @@ function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplica
  * stays faithful for other consumers; the optimizer just doesn't assume it.
  * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate.
  */
-const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_filter", "model_filter", "model_scope"];
+const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
 function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
   return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
 }
@@ -1072,6 +1096,39 @@ function enumerateDicePool(
       group: { id: opts.abilityId, maxActivations },
     });
   }
+}
+
+/**
+ * A `roll` whose nested effect is a choice of dice gates on that roll (`from` + `requirement`): the
+ * general encoding of a dice-pool allocation. Emits the same levers `enumerateDicePool` does (ids
+ * `<ability>#<option name>`, one group capped by the choice's max_choices). Returns false when the
+ * roll is not such an allocation.
+ */
+function enumerateRollAllocation(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): boolean {
+  const choice = node.effect;
+  if (!isObject(choice) || choice.type !== "choice" || !Array.isArray(choice.options)) return false;
+  const gates = choice.options.map((opt) => {
+    const part = isObject(opt) && opt.type === "ability-part" ? opt : undefined;
+    const gate = part ? part.effect : opt;
+    return isObject(gate) && gate.type === "dice-gated" && gate.requirement != null && isObject(gate.from) && gate.from.roll_var === node.roll_var
+      ? { name: part && typeof part.name === "string" ? part.name : undefined, effect: gate.on_success }
+      : undefined;
+  });
+  if (gates.some((g) => g == null)) return false;
+  const maxActivations = typeof choice.max_choices === "number" ? choice.max_choices : 1;
+  for (const gate of gates) {
+    const buffs: Buff[] = [];
+    collectGatedBuffs(gate!.effect, source, opts, {}, buffs);
+    if (buffs.length === 0) continue;
+    const name = gate!.name ?? labelForBuffs(buffs);
+    out.activatable.push({ id: `${opts.abilityId}#${name}`, label: name, buffs, group: { id: opts.abilityId, maxActivations } });
+  }
+  return true;
 }
 
 /** Emit one opt-in lever per buff-bearing named option (stance-select / issue-orders). */
@@ -1410,7 +1467,7 @@ function keywordLabel(ref: WeaponKeywordRef): string {
 
 /** The buffed unit: the ability's own unit (or model), or the unit an aura is applied to. */
 function isBuffedUnit(subject: unknown): boolean {
-  return subject == null || subject === "this-unit" || subject === "this-model" || subject === "recipient";
+  return subject == null || subject === "this-unit" || subject === "ability-unit" || subject === "this-model" || subject === "recipient";
 }
 
 /** The one keyword a `has-keyword` names, else undefined. */
@@ -1475,6 +1532,22 @@ function evaluateCondition(
       const any = Array.isArray(params.any_of) ? params.any_of : [];
       if (![...all, ...any].every((k) => typeof k === "string")) return "unknown";
       return all.every((k) => have.includes(String(k).toLowerCase())) && (any.length === 0 || any.some((k) => have.includes(String(k).toLowerCase())));
+    }
+    case "army-faction": {
+      const faction = (condition.parameters as Record<string, unknown> | undefined)?.faction;
+      if (typeof faction !== "string" || ctx.armyFaction === undefined) return "unknown";
+      return ctx.armyFaction === faction;
+    }
+    case "battle-size": {
+      const size = (condition.parameters as Record<string, unknown> | undefined)?.size;
+      if (typeof size !== "string" || ctx.battleSize === undefined) return "unknown";
+      return ctx.battleSize === size;
+    }
+    case "guided": {
+      // Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
+      const subject = (condition.parameters as Record<string, unknown> | undefined)?.subject;
+      if ((subject != null && !isBuffedUnit(subject)) || ctx.attackerGuided === undefined) return "unknown";
+      return ctx.attackerGuided;
     }
     case "attachment": {
       // True whenever the buffed unit is a combined ("attached") unit. We do not thread
@@ -1626,6 +1699,30 @@ function toKebabCase(s: string): string {
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** A roll kind for a diagnostic: "hit", or the ability whose dice it is. */
+function rollLabel(roll: unknown): string {
+  return isObject(roll) && typeof roll.of_ability === "string" ? `${roll.of_ability} roll` : String(roll);
+}
+
+/** Numeric modifier fields whose size a buff reads. */
+const SIZED_FIELDS = ["value", "count", "amount"];
+
+/**
+ * Why a leaf's size cannot be read here, or undefined: a `scaling` block (the size depends on models
+ * or wounds on the board) or a value bound to the battle size, a roll or a count.
+ */
+function unsizedValueReason(node: Record<string, unknown>): string | undefined {
+  if (!isObject(node.modifier) || typeof node.type !== "string") return undefined;
+  if (isObject(node.scaling)) return `${node.type}: the value scales with ${String(node.scaling.of)}; not resolved by the buff engine`;
+  for (const field of SIZED_FIELDS) {
+    const v = node.modifier[field];
+    if (!isObject(v)) continue;
+    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}` : "the battle size";
+    return `${node.type}: its ${field} is set by ${what}; not resolved by the buff engine`;
+  }
+  return undefined;
 }
 
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";

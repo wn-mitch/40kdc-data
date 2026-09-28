@@ -396,8 +396,7 @@
           "$ref": "#/$defs/keyword-list"
         },
         "designated": {
-          "type": "string",
-          "minLength": 1,
+          "$ref": "#/$defs/designation-id",
           "description": "The unit carries this designation (a tag an effect applied)."
         },
         "state": {
@@ -426,13 +425,58 @@
             },
             "of": {
               "$ref": "#/$defs/unit-ref"
+            },
+            "wholly": {
+              "const": true
             }
           },
-          "description": "Only units within this range of `of` (default the unit with the ability): aura recipients."
+          "description": "Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients."
         },
         "excluding": {
           "$ref": "#/$defs/unit-ref",
           "description": "Not this unit (\"another friendly unit\")."
+        },
+        "designated_by": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "The designation was applied by this unit (their Spotted unit). Requires `designated`."
+        },
+        "not_designated": {
+          "$ref": "#/$defs/designation-id",
+          "description": "The unit does not carry this designation."
+        },
+        "embarked_in": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Units embarked within this Transport."
+        },
+        "member_of": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Models (level: model) or units that are part of this unit, attached units included."
+        },
+        "engaged_with": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Units within Engagement Range of at least one unit matching this filter."
+        },
+        "not_engaged_with": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Units within Engagement Range of no unit matching this filter."
+        },
+        "has_ability": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Units with every listed ability."
+        },
+        "lacks_ability": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Units with none of the listed abilities."
         }
       }
     },
@@ -451,9 +495,11 @@
             "event-object",
             "stratagem-target",
             "selected-unit",
-            "recipient"
+            "recipient",
+            "bearer-transport",
+            "ability-unit"
           ],
-          "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to."
+          "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability, even inside a selection's eligibility, where this-unit names the candidate being checked."
         },
         {
           "$ref": "#/$defs/unit-filter"
@@ -485,6 +531,19 @@
             }
           },
           "description": "A unit an earlier selection step bound."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stratagem_target"
+          ],
+          "properties": {
+            "stratagem_target": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "description": "One named target of a Stratagem with several targets (its target_restrictions list names each one)."
         }
       ]
     },
@@ -574,12 +633,16 @@
           "$ref": "#/$defs/owner"
         },
         "designated": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/designation-id"
         },
         "name": {
           "$ref": "#/$defs/entity-id",
           "description": "A mission-specific named objective."
+        },
+        "selection_var": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The objective marker a select-objective step bound."
         }
       }
     },
@@ -617,8 +680,7 @@
               "additionalProperties": false,
               "properties": {
                 "designated": {
-                  "type": "string",
-                  "minLength": 1
+                  "$ref": "#/$defs/designation-id"
                 },
                 "footprint": {
                   "type": "string",
@@ -716,18 +778,7 @@
           }
         },
         "mode": {
-          "enum": [
-            "ordered-retreat",
-            "desperate-escape",
-            "ongoing",
-            "engaging",
-            "objective",
-            "rapid",
-            "tactical",
-            "combat",
-            "emergency",
-            "assault"
-          ],
+          "$ref": "#/$defs/move-mode",
           "description": "A move type's named mode (a Fall Back's desperate escape, a combat disembark)."
         },
         "roll": {
@@ -782,15 +833,15 @@
         },
         "step": {
           "enum": [
-            "battle-shock"
+            "battle-shock",
+            "reinforcements"
           ]
         },
         "state": {
           "$ref": "#/$defs/unit-state"
         },
         "tag": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/designation-id"
         },
         "pool": {
           "type": "string",
@@ -799,24 +850,52 @@
         "marker": {
           "type": "string",
           "minLength": 1
+        },
+        "ability_keyword": {
+          "type": "string",
+          "minLength": 1,
+          "description": "used: any ability whose name carries this keyword in brackets (BONDSMAN for every '(Bondsman)' ability), instead of one `id`."
+        },
+        "same_rule_as": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_var"
+          ],
+          "properties": {
+            "event_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "used: the same ability or Stratagem the event a trigger bound (binds_event_variable) used."
         }
       }
     },
     "roll-kind": {
-      "enum": [
-        "hit",
-        "wound",
-        "save",
-        "damage",
-        "charge",
-        "advance",
-        "battle-shock",
-        "leadership",
-        "hazard",
-        "psychic",
-        "desperate-escape",
-        "dark-pact",
-        "blessings-of-khorne"
+      "oneOf": [
+        {
+          "enum": [
+            "hit",
+            "wound",
+            "save",
+            "damage",
+            "charge",
+            "advance",
+            "battle-shock",
+            "leadership",
+            "hazard",
+            "psychic",
+            "desperate-escape",
+            "dark-pact",
+            "blessings-of-khorne",
+            "manoeuvre",
+            "channelling"
+          ]
+        },
+        {
+          "$ref": "#/$defs/ability-roll"
+        }
       ]
     },
     "roll-outcome": {
@@ -825,6 +904,235 @@
         "failure",
         "critical"
       ]
+    },
+    "battle-size-value": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+      "properties": {
+        "incursion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strike-force": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "onslaught": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "incursion",
+        "strike-force",
+        "onslaught"
+      ]
+    },
+    "scaling-source": {
+      "type": "string",
+      "enum": [
+        "enemy-models-in-range",
+        "friendly-models-in-range",
+        "models-in-bearer-unit",
+        "models-in-or-embarked-in-bearer",
+        "models-embarked-in-bearer",
+        "embarked-models-oc",
+        "models-equipped-with",
+        "enemy-units-in-range",
+        "wounds-lost",
+        "battle-round"
+      ],
+      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number."
+    },
+    "roll-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roll_var"
+      ],
+      "description": "The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.",
+      "properties": {
+        "roll_var": {
+          "type": "string",
+          "minLength": 1
+        },
+        "successes_on": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 6
+        }
+      }
+    },
+    "count-of": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count_of"
+      ],
+      "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).",
+      "properties": {
+        "count_of": {
+          "$ref": "#/$defs/scaling-source"
+        },
+        "keyword": {
+          "$ref": "#/$defs/keyword"
+        },
+        "wargear": {
+          "$ref": "#/$defs/entity-id"
+        },
+        "within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "quantity": {
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string",
+          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
+        },
+        {
+          "$ref": "#/$defs/battle-size-value"
+        },
+        {
+          "$ref": "#/$defs/roll-reference"
+        },
+        {
+          "$ref": "#/$defs/count-of"
+        }
+      ]
+    },
+    "move-mode": {
+      "enum": [
+        "ordered-retreat",
+        "desperate-escape",
+        "ongoing",
+        "engaging",
+        "objective",
+        "rapid",
+        "tactical",
+        "combat",
+        "emergency",
+        "assault"
+      ],
+      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation."
+    },
+    "ability-roll": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of_ability"
+      ],
+      "properties": {
+        "of_ability": {
+          "$ref": "#/$defs/entity-id"
+        }
+      },
+      "description": "The dice a named ability rolls (Reanimation Protocols' roll), not every roll the unit makes."
+    },
+    "place-ref": {
+      "description": "Something a distance is measured to: a unit, an objective marker, a named marker, a battlefield edge or the centre of the battlefield.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/unit-ref"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objective"
+          ],
+          "properties": {
+            "objective": {
+              "$ref": "#/$defs/objective-filter"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "marker"
+          ],
+          "properties": {
+            "marker": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "enum": [
+            "battlefield-edge",
+            "battlefield-centre"
+          ]
+        }
+      ]
+    },
+    "placement-near": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of",
+        "range"
+      ],
+      "description": "Set up within `range` of `of` (wholly within, if set).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/place-ref"
+        },
+        "range": {
+          "$ref": "#/$defs/range-ref"
+        },
+        "wholly": {
+          "const": true
+        }
+      }
+    },
+    "placement-away": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of",
+        "range"
+      ],
+      "description": "Set up more than `range` away from `of` (enemy models: {owner: enemy}).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/place-ref"
+        },
+        "range": {
+          "$ref": "#/$defs/range-ref"
+        }
+      }
+    },
+    "placement-region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "region"
+      ],
+      "description": "Set up inside a region (wholly inside, if set).",
+      "properties": {
+        "region": {
+          "$ref": "#/$defs/region-ref"
+        },
+        "wholly": {
+          "const": true
+        }
+      }
+    },
+    "designation-id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them."
     },
     "game-version-ref": {
       "title": "Game Version Reference",
@@ -2208,6 +2516,68 @@
       ],
       "additionalProperties": false
     },
+    "stratagem-target-restriction": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}."
+        },
+        "required_keywords": {
+          "$ref": "#/$defs/keyword-list",
+          "description": "AND set: the target must carry every keyword listed here."
+        },
+        "required_keywords_any": {
+          "$ref": "#/$defs/keyword-list",
+          "description": "OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json."
+        },
+        "excluded_keywords": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "count": {
+          "enum": [
+            "one",
+            "one-or-more",
+            "up-to"
+          ],
+          "description": "How many targets are selected: one, one or more, or up to `count_max`."
+        },
+        "count_max": {
+          "type": "integer",
+          "minimum": 2,
+          "description": "Upper bound when `count` is up-to."
+        },
+        "side": {
+          "enum": [
+            "your-army",
+            "enemy"
+          ],
+          "description": "Whose units can be selected."
+        },
+        "selects": {
+          "enum": [
+            "unit",
+            "model"
+          ],
+          "description": "Whether the target is a unit or a single model."
+        },
+        "bound_to": {
+          "enum": [
+            "triggering-unit",
+            "attacked-unit"
+          ],
+          "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked."
+        },
+        "eligibility": {
+          "$ref": "#/$defs/condition",
+          "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit."
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
     "stratagem": {
       "title": "Stratagem",
       "description": "A CP-costed ability usable during specific game phases.",
@@ -2276,62 +2646,24 @@
         "target_restrictions": {
           "oneOf": [
             {
-              "type": "object",
-              "properties": {
-                "required_keywords": {
-                  "$ref": "#/$defs/keyword-list",
-                  "description": "AND set: the target must carry every keyword listed here."
-                },
-                "required_keywords_any": {
-                  "$ref": "#/$defs/keyword-list",
-                  "description": "OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json."
-                },
-                "excluded_keywords": {
-                  "$ref": "#/$defs/keyword-list"
-                },
-                "count": {
-                  "enum": [
-                    "one",
-                    "one-or-more",
-                    "up-to"
-                  ],
-                  "description": "How many targets are selected: one, one or more, or up to `count_max`."
-                },
-                "count_max": {
-                  "type": "integer",
-                  "minimum": 2,
-                  "description": "Upper bound when `count` is up-to."
-                },
-                "side": {
-                  "enum": [
-                    "your-army",
-                    "enemy"
-                  ],
-                  "description": "Whose units can be selected."
-                },
-                "selects": {
-                  "enum": [
-                    "unit",
-                    "model"
-                  ],
-                  "description": "Whether the target is a unit or a single model."
-                },
-                "bound_to": {
-                  "enum": [
-                    "triggering-unit",
-                    "attacked-unit"
-                  ],
-                  "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked."
-                },
-                "eligibility": {
-                  "$ref": "#/$defs/condition",
-                  "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit."
-                },
-                "notes": {
-                  "type": "string"
-                }
+              "$ref": "#/$defs/stratagem-target-restriction"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/stratagem-target-restriction"
+                  },
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  }
+                ]
               },
-              "additionalProperties": false
+              "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}."
             },
             {
               "type": "null"
@@ -4047,7 +4379,22 @@
       ]
     },
     "ability-usage": {
-      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
+      "description": "How often the ability may be used: one limit, or several that all apply (once per battle per model AND one model per battle round).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ability-usage-limit"
+        },
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/ability-usage-limit"
+          }
+        }
+      ]
+    },
+    "ability-usage-limit": {
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
       "type": "object",
       "properties": {
         "frequency": {
@@ -5051,39 +5398,7 @@
                   "$ref": "#/$defs/unit-ref"
                 },
                 "of": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/$defs/unit-ref"
-                    },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "objective": {
-                          "$ref": "#/$defs/objective-filter"
-                        }
-                      },
-                      "required": [
-                        "objective"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "marker": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      },
-                      "required": [
-                        "marker"
-                      ]
-                    },
-                    {
-                      "const": "battlefield-edge"
-                    }
-                  ]
+                  "$ref": "#/$defs/place-ref"
                 },
                 "range": {
                   "$ref": "#/$defs/range-ref"
@@ -5498,8 +5813,7 @@
                   ]
                 },
                 "tag": {
-                  "type": "string",
-                  "minLength": 1
+                  "$ref": "#/$defs/designation-id"
                 },
                 "count_min": {
                   "type": "integer",
@@ -5508,6 +5822,10 @@
                 "count_max": {
                   "type": "integer",
                   "minimum": 0
+                },
+                "by": {
+                  "$ref": "#/$defs/unit-ref",
+                  "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer)."
                 }
               },
               "required": [
@@ -5723,32 +6041,115 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "title": "terrain-area-control condition",
-          "description": "[board] Mission: you control this terrain area with at least min_models models.",
+          "title": "battle-size condition",
+          "description": "[clock] The battle is being played at this battle size.",
           "required": [
             "type",
             "parameters"
           ],
           "properties": {
             "type": {
-              "const": "terrain-area-control"
+              "const": "battle-size"
             },
             "parameters": {
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "footprint_ref": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "min_models": {
-                  "type": "integer",
-                  "minimum": 0
+                "size": {
+                  "enum": [
+                    "incursion",
+                    "strike-force",
+                    "onslaught"
+                  ]
                 }
               },
               "required": [
-                "footprint_ref"
+                "size"
               ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "army-faction condition",
+          "description": "[army] Your Army Faction is this faction.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-faction"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "faction": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "faction"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "moved-over condition",
+          "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "moved-over"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "by": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "window": {
+                  "$ref": "#/$defs/history-window"
+                }
+              },
+              "required": [
+                "by"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "guided condition",
+          "description": "[designation] The subject (default this unit) is Guided: it has For the Greater Good, is not an Observer, and is targeting one or more Spotted units.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "guided"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                }
+              }
             }
           }
         }
@@ -5930,27 +6331,25 @@
         },
         {
           "$ref": "#/$defs/no-effect-effect"
+        },
+        {
+          "$ref": "#/$defs/roll-effect"
+        },
+        {
+          "$ref": "#/$defs/select-objective-effect"
         }
       ]
     },
     "scaling": {
       "type": "object",
-      "description": "Scales the effect's numeric `modifier.value`: it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6\\\"' → modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within_inches: 6 }.",
+      "description": "Scales a numeric modifier field (`field`, default `value`): it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6\"' -> modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within_inches: 6 }.",
       "properties": {
         "per": {
           "type": "integer",
           "minimum": 1
         },
         "of": {
-          "type": "string",
-          "enum": [
-            "enemy-models-in-range",
-            "friendly-models-in-range",
-            "models-in-bearer-unit",
-            "models-in-or-embarked-in-bearer",
-            "enemy-units-in-range",
-            "wounds-lost"
-          ]
+          "$ref": "#/$defs/scaling-source"
         },
         "within_inches": {
           "type": "number"
@@ -5965,6 +6364,26 @@
         },
         "max_value": {
           "type": "integer"
+        },
+        "field": {
+          "type": "string",
+          "enum": [
+            "value",
+            "count",
+            "amount",
+            "distance",
+            "modifier",
+            "max_models"
+          ],
+          "description": "The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty."
+        },
+        "keyword": {
+          "$ref": "#/$defs/keyword",
+          "description": "Only models with this keyword are counted."
+        },
+        "wargear": {
+          "$ref": "#/$defs/entity-id",
+          "description": "models-equipped-with: the wargear counted."
         }
       },
       "required": [
@@ -5986,7 +6405,11 @@
         "overwatch-against-bearer",
         "desperate-escape",
         "attacking-ends-hidden",
-        "take-to-the-skies"
+        "take-to-the-skies",
+        "engaged-shooting-hit-penalty",
+        "charge-bonus",
+        "hidden",
+        "orders-end-on-battle-shock"
       ]
     },
     "dice-requirement": {
@@ -6077,7 +6500,8 @@
                     "AP",
                     "D",
                     "Range",
-                    "detection-range"
+                    "detection-range",
+                    "psyker-level"
                   ]
                 },
                 "operation": {
@@ -6092,16 +6516,7 @@
                   ]
                 },
                 "value": {
-                  "oneOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                    }
-                  ]
+                  "$ref": "#/$defs/quantity"
                 },
                 "weapon_type": {
                   "enum": [
@@ -6116,6 +6531,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
                 "incoming": {
                   "const": true
@@ -6181,7 +6634,8 @@
                       "AP",
                       "D",
                       "Range",
-                      "detection-range"
+                      "detection-range",
+                      "psyker-level"
                     ]
                   },
                   "minItems": 1,
@@ -6190,27 +6644,36 @@
                 "rolls": {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "hit",
-                      "wound",
-                      "save",
-                      "damage",
-                      "charge",
-                      "advance",
-                      "battle-shock",
-                      "leadership",
-                      "hazard",
-                      "psychic",
-                      "desperate-escape",
-                      "deadly-demise",
-                      "attacks",
-                      "normal-move",
-                      "surge",
-                      "dark-pact",
-                      "blessings-of-khorne",
-                      "resource-die",
-                      "any",
-                      "all"
+                    "oneOf": [
+                      {
+                        "enum": [
+                          "hit",
+                          "wound",
+                          "save",
+                          "damage",
+                          "charge",
+                          "advance",
+                          "battle-shock",
+                          "leadership",
+                          "hazard",
+                          "psychic",
+                          "desperate-escape",
+                          "deadly-demise",
+                          "attacks",
+                          "normal-move",
+                          "surge",
+                          "dark-pact",
+                          "blessings-of-khorne",
+                          "resource-die",
+                          "manoeuvre",
+                          "channelling",
+                          "any",
+                          "all"
+                        ]
+                      },
+                      {
+                        "$ref": "#/$defs/ability-roll"
+                      }
                     ]
                   },
                   "minItems": 1,
@@ -6235,6 +6698,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
                 "incoming": {
                   "const": true
@@ -6271,27 +6772,36 @@
               "additionalProperties": false,
               "properties": {
                 "roll": {
-                  "enum": [
-                    "hit",
-                    "wound",
-                    "save",
-                    "damage",
-                    "charge",
-                    "advance",
-                    "battle-shock",
-                    "leadership",
-                    "hazard",
-                    "psychic",
-                    "desperate-escape",
-                    "deadly-demise",
-                    "attacks",
-                    "normal-move",
-                    "surge",
-                    "dark-pact",
-                    "blessings-of-khorne",
-                    "resource-die",
-                    "any",
-                    "all"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "hit",
+                        "wound",
+                        "save",
+                        "damage",
+                        "charge",
+                        "advance",
+                        "battle-shock",
+                        "leadership",
+                        "hazard",
+                        "psychic",
+                        "desperate-escape",
+                        "deadly-demise",
+                        "attacks",
+                        "normal-move",
+                        "surge",
+                        "dark-pact",
+                        "blessings-of-khorne",
+                        "resource-die",
+                        "manoeuvre",
+                        "channelling",
+                        "any",
+                        "all"
+                      ]
+                    },
+                    {
+                      "$ref": "#/$defs/ability-roll"
+                    }
                   ]
                 },
                 "operation": {
@@ -6301,16 +6811,7 @@
                   ]
                 },
                 "value": {
-                  "oneOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                    }
-                  ]
+                  "$ref": "#/$defs/quantity"
                 },
                 "cap": {
                   "type": "integer",
@@ -6333,6 +6834,44 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
                 "incoming": {
                   "const": true
                 }
@@ -6351,7 +6890,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "re-roll effect",
-          "description": "[roll] Re-roll a roll: only 1s, every failure, or any result; count caps how many.",
+          "description": "[roll] Re-roll a roll: only 1s, every failure, or any result; count caps how many. mandatory: the rule re-rolls (it does not only permit one).",
           "required": [
             "type",
             "target",
@@ -6369,27 +6908,36 @@
               "additionalProperties": false,
               "properties": {
                 "roll": {
-                  "enum": [
-                    "hit",
-                    "wound",
-                    "save",
-                    "damage",
-                    "charge",
-                    "advance",
-                    "battle-shock",
-                    "leadership",
-                    "hazard",
-                    "psychic",
-                    "desperate-escape",
-                    "deadly-demise",
-                    "attacks",
-                    "normal-move",
-                    "surge",
-                    "dark-pact",
-                    "blessings-of-khorne",
-                    "resource-die",
-                    "any",
-                    "all"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "hit",
+                        "wound",
+                        "save",
+                        "damage",
+                        "charge",
+                        "advance",
+                        "battle-shock",
+                        "leadership",
+                        "hazard",
+                        "psychic",
+                        "desperate-escape",
+                        "deadly-demise",
+                        "attacks",
+                        "normal-move",
+                        "surge",
+                        "dark-pact",
+                        "blessings-of-khorne",
+                        "resource-die",
+                        "manoeuvre",
+                        "channelling",
+                        "any",
+                        "all"
+                      ]
+                    },
+                    {
+                      "$ref": "#/$defs/ability-roll"
+                    }
                   ]
                 },
                 "subset": {
@@ -6402,12 +6950,32 @@
                   "const": "any-result"
                 },
                 "count": {
-                  "type": "integer",
-                  "minimum": 1
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|[1-9]\\d*)$"
+                    },
+                    {
+                      "$ref": "#/$defs/battle-size-value"
+                    },
+                    {
+                      "$ref": "#/$defs/roll-reference"
+                    },
+                    {
+                      "$ref": "#/$defs/count-of"
+                    }
+                  ]
                 },
                 "pool": {
                   "type": "string",
                   "minLength": 1
+                },
+                "mandatory": {
+                  "const": true
                 },
                 "weapon_type": {
                   "enum": [
@@ -6422,6 +6990,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 },
                 "incoming": {
                   "const": true
@@ -6452,7 +7058,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "roll-result effect",
-          "description": "[roll] Fix a roll's result (pass, fail or a value), make it succeed only on an unmodified N+, or make it critical on N+ or on any success.",
+          "description": "[roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success.",
           "required": [
             "type",
             "target",
@@ -6470,27 +7076,36 @@
               "additionalProperties": false,
               "properties": {
                 "roll": {
-                  "enum": [
-                    "hit",
-                    "wound",
-                    "save",
-                    "damage",
-                    "charge",
-                    "advance",
-                    "battle-shock",
-                    "leadership",
-                    "hazard",
-                    "psychic",
-                    "desperate-escape",
-                    "deadly-demise",
-                    "attacks",
-                    "normal-move",
-                    "surge",
-                    "dark-pact",
-                    "blessings-of-khorne",
-                    "resource-die",
-                    "any",
-                    "all"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "hit",
+                        "wound",
+                        "save",
+                        "damage",
+                        "charge",
+                        "advance",
+                        "battle-shock",
+                        "leadership",
+                        "hazard",
+                        "psychic",
+                        "desperate-escape",
+                        "deadly-demise",
+                        "attacks",
+                        "normal-move",
+                        "surge",
+                        "dark-pact",
+                        "blessings-of-khorne",
+                        "resource-die",
+                        "manoeuvre",
+                        "channelling",
+                        "any",
+                        "all"
+                      ]
+                    },
+                    {
+                      "$ref": "#/$defs/ability-roll"
+                    }
                   ]
                 },
                 "result": {
@@ -6507,6 +7122,15 @@
                       "maximum": 12
                     }
                   ]
+                },
+                "unmodified": {
+                  "const": true
+                },
+                "fails_on": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5,
+                  "description": "An unmodified result of N or less always fails; higher results use the normal success rule."
                 },
                 "critical_on": {
                   "oneOf": [
@@ -6540,6 +7164,44 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
                 "incoming": {
                   "const": true
                 }
@@ -6561,6 +7223,11 @@
                 {
                   "required": [
                     "succeeds_on"
+                  ]
+                },
+                {
+                  "required": [
+                    "fails_on"
                   ]
                 }
               ]
@@ -6717,6 +7384,44 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
                 "if_present": {
                   "const": "increment"
                 },
@@ -6849,6 +7554,7 @@
                     "concurrent",
                     "duration",
                     "start-round",
+                    "end-round",
                     "threshold",
                     "options"
                   ]
@@ -6894,6 +7600,39 @@
                     "name",
                     "effect"
                   ]
+                },
+                "cap_per": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "period": {
+                      "enum": [
+                        "phase",
+                        "turn",
+                        "battle-round"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "period"
+                  ],
+                  "description": "The changed allowance still applies at most count times per period (two uses, but only one per battle round)."
+                },
+                "not_same": {
+                  "enum": [
+                    "phase",
+                    "turn"
+                  ],
+                  "description": "The extra use cannot be made in the same phase (turn) as the use that triggered it."
+                },
+                "consumes_shared_use": {
+                  "const": false,
+                  "description": "This unit's use does not count toward the shared (once per phase per army) limit for other units."
                 }
               },
               "required": [
@@ -6911,7 +7650,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-activate effect",
-          "description": "[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option).",
+          "description": "[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
           "required": [
             "type",
             "target",
@@ -6937,6 +7676,36 @@
                 },
                 "exclusive": {
                   "const": true
+                },
+                "select": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "by": {
+                      "enum": [
+                        "roll",
+                        "player"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "by"
+                  ]
+                },
+                "ignore_consumed": {
+                  "const": true
+                },
+                "override": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "amount": {
+                      "$ref": "#/$defs/quantity"
+                    }
+                  },
+                  "required": [
+                    "amount"
+                  ]
                 }
               },
               "required": [
@@ -7042,6 +7811,28 @@
                 },
                 "stratagem": {
                   "$ref": "#/$defs/entity-id"
+                },
+                "counts_as_move": {
+                  "enum": [
+                    "normal",
+                    "advance",
+                    "fall-back",
+                    "charge",
+                    "pile-in",
+                    "consolidation",
+                    "surge",
+                    "scout",
+                    "ingress",
+                    "disembark",
+                    "embark",
+                    "pulse-jet",
+                    "remain-stationary"
+                  ],
+                  "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move)."
+                },
+                "consumes_shared_use": {
+                  "const": false,
+                  "description": "This use of the Stratagem does not count toward its once-per-phase limit for other units."
                 }
               },
               "required": [
@@ -7082,7 +7873,8 @@
                   "enum": [
                     "target",
                     "cannot-target",
-                    "must-target"
+                    "must-target",
+                    "redirect"
                   ]
                 },
                 "target": {
@@ -7114,6 +7906,18 @@
                 "only_if_none": {
                   "$ref": "#/$defs/unit-filter"
                 },
+                "to": {
+                  "$ref": "#/$defs/unit-ref",
+                  "description": "redirect: attacks (or Stratagems) that target `target` must target this unit instead."
+                },
+                "if_eligible": {
+                  "const": true,
+                  "description": "redirect: only if `to` is an eligible target."
+                },
+                "except": {
+                  "const": "core-stratagems",
+                  "description": "cannot-target with Stratagems: Core Stratagems can still target it."
+                },
                 "weapon_type": {
                   "enum": [
                     "melee",
@@ -7127,6 +7931,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "required": [
@@ -7260,16 +8102,7 @@
               "additionalProperties": false,
               "properties": {
                 "count": {
-                  "oneOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                    }
-                  ]
+                  "$ref": "#/$defs/quantity"
                 },
                 "per": {
                   "enum": [
@@ -7374,6 +8207,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "required": [
@@ -7468,6 +8339,44 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "weapon_ref": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "weapon_var"
+                      ],
+                      "properties": {
+                        "weapon_var": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "selected_by"
+                      ],
+                      "properties": {
+                        "selected_by": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "ability"
+                          ],
+                          "properties": {
+                            "ability": {
+                              "$ref": "#/$defs/entity-id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "required": [
@@ -7503,16 +8412,7 @@
                 "amount": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "const": "full"
@@ -7539,7 +8439,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "return-models effect",
-          "description": "[models] Return destroyed models to the target unit.",
+          "description": "[models] Return destroyed models to the target unit. bodyguard_only: only Bodyguard models; exclude_model_keyword: models with these keywords do not return; detach: the returned model is set up as its own unit (leaving the attached unit) with Starting Strength starting_strength.",
           "required": [
             "type",
             "target",
@@ -7559,16 +8459,7 @@
                 "count": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "const": "all"
@@ -7578,16 +8469,7 @@
                 "wounds_remaining": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "const": "full"
@@ -7595,11 +8477,42 @@
                   ]
                 },
                 "placement": {
-                  "enum": [
-                    "closest-to-destruction",
-                    "coherency",
-                    "unengaged",
-                    "wholly-within"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "closest-to-destruction",
+                        "closest-to-original",
+                        "coherency",
+                        "unengaged",
+                        "wholly-within",
+                        "within",
+                        "strategic-reserves",
+                        "anywhere",
+                        "connected-sections",
+                        "deployment-zone",
+                        "on-terrain"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "closest-to-destruction",
+                          "closest-to-original",
+                          "coherency",
+                          "unengaged",
+                          "wholly-within",
+                          "within",
+                          "strategic-reserves",
+                          "anywhere",
+                          "connected-sections",
+                          "deployment-zone",
+                          "on-terrain"
+                        ]
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
                   ]
                 },
                 "range": {
@@ -7608,6 +8521,36 @@
                 "model_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "exclude_model_keyword": {
+                  "$ref": "#/$defs/keyword-list"
+                },
+                "bodyguard_only": {
+                  "const": true
+                },
+                "detach": {
+                  "const": true
+                },
+                "starting_strength": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "near": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-near"
+                  },
+                  "minItems": 1
+                },
+                "away_from": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-away"
+                  },
+                  "minItems": 1
+                },
+                "in_region": {
+                  "$ref": "#/$defs/placement-region"
                 }
               },
               "required": [
@@ -7643,16 +8586,7 @@
                 "count": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "const": "all"
@@ -7786,6 +8720,16 @@
                       ]
                     }
                   ]
+                },
+                "bind_as": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 2,
+                  "uniqueItems": true,
+                  "description": "Names each resulting unit, in model_counts order, for later {selection_var} references."
                 }
               },
               "oneOf": [
@@ -7810,7 +8754,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "add-unit effect",
-          "description": "[models] Add a unit to your army: a copy of a destroyed unit, or a named datasheet.",
+          "description": "[models] Add a unit to your army: a copy of a destroyed unit, or a named datasheet, with model_count models and Starting Strength starting_strength; join: the new models join that unit instead of forming a new one.",
           "required": [
             "type",
             "target",
@@ -7834,19 +8778,116 @@
                   "$ref": "#/$defs/entity-id"
                 },
                 "count": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|[1-9]\\d*)$"
+                    },
+                    {
+                      "$ref": "#/$defs/battle-size-value"
+                    },
+                    {
+                      "$ref": "#/$defs/roll-reference"
+                    },
+                    {
+                      "$ref": "#/$defs/count-of"
+                    }
+                  ]
+                },
+                "model_count": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|[1-9]\\d*)$"
+                    },
+                    {
+                      "$ref": "#/$defs/battle-size-value"
+                    },
+                    {
+                      "$ref": "#/$defs/roll-reference"
+                    },
+                    {
+                      "$ref": "#/$defs/count-of"
+                    }
+                  ]
+                },
+                "starting_strength": {
                   "type": "integer",
                   "minimum": 1
                 },
+                "join": {
+                  "$ref": "#/$defs/unit-ref"
+                },
                 "placement": {
-                  "enum": [
-                    "closest-to-destruction",
-                    "wholly-within",
-                    "strategic-reserves",
-                    "anywhere"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "closest-to-destruction",
+                        "closest-to-original",
+                        "coherency",
+                        "unengaged",
+                        "wholly-within",
+                        "within",
+                        "strategic-reserves",
+                        "anywhere",
+                        "connected-sections",
+                        "deployment-zone",
+                        "on-terrain"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "closest-to-destruction",
+                          "closest-to-original",
+                          "coherency",
+                          "unengaged",
+                          "wholly-within",
+                          "within",
+                          "strategic-reserves",
+                          "anywhere",
+                          "connected-sections",
+                          "deployment-zone",
+                          "on-terrain"
+                        ]
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
                   ]
                 },
                 "range": {
                   "$ref": "#/$defs/range-ref"
+                },
+                "allow_engagement_with": {
+                  "$ref": "#/$defs/unit-ref",
+                  "description": "The new unit can be set up within Engagement Range of this unit only."
+                },
+                "near": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-near"
+                  },
+                  "minItems": 1
+                },
+                "away_from": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-away"
+                  },
+                  "minItems": 1
+                },
+                "in_region": {
+                  "$ref": "#/$defs/placement-region"
                 }
               },
               "anyOf": [
@@ -7939,25 +8980,88 @@
                   ]
                 },
                 "distance": {
-                  "oneOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                    }
-                  ]
+                  "$ref": "#/$defs/quantity"
                 },
                 "passthrough": {
                   "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1
-                  },
                   "minItems": 1,
-                  "uniqueItems": true
+                  "uniqueItems": true,
+                  "items": {
+                    "oneOf": [
+                      {
+                        "enum": [
+                          "all-terrain",
+                          "models",
+                          "non-titanic-models",
+                          "terrain-le-4",
+                          "tall-terrain",
+                          "friendly-vehicles",
+                          "friendly-monsters",
+                          "terrain",
+                          "models-excluding-monster-vehicle",
+                          "models-excluding-titanic",
+                          "enemy-models-excluding-monster-vehicle",
+                          "enemy-models"
+                        ],
+                        "description": "Retired free tokens; the record repair moves each onto the typed item."
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "kind"
+                        ],
+                        "description": "models: models (of `owner`, with every `all_of` keyword, excluding models with any `excluding` keyword); terrain: terrain features (of `height`).",
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "models",
+                              "terrain"
+                            ]
+                          },
+                          "owner": {
+                            "$ref": "#/$defs/owner"
+                          },
+                          "all_of": {
+                            "$ref": "#/$defs/keyword-list"
+                          },
+                          "excluding": {
+                            "$ref": "#/$defs/keyword-list"
+                          },
+                          "height": {
+                            "enum": [
+                              "up-to-4",
+                              "over-4"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "mode": {
+                  "$ref": "#/$defs/move-mode"
+                },
+                "allow_engagement": {
+                  "const": true
+                },
+                "counts_as_move": {
+                  "enum": [
+                    "normal",
+                    "advance",
+                    "fall-back",
+                    "charge",
+                    "pile-in",
+                    "consolidation",
+                    "surge",
+                    "scout",
+                    "ingress",
+                    "disembark",
+                    "embark",
+                    "pulse-jet",
+                    "remain-stationary"
+                  ],
+                  "description": "The move counts as this kind of move for rules that check what the unit did this turn."
                 },
                 "ends_within": {
                   "type": "object",
@@ -7967,7 +9071,7 @@
                       "$ref": "#/$defs/range-ref"
                     },
                     "of": {
-                      "$ref": "#/$defs/unit-ref"
+                      "$ref": "#/$defs/place-ref"
                     },
                     "wholly": {
                       "const": true
@@ -8034,12 +9138,60 @@
                 },
                 "passthrough": {
                   "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1
-                  },
                   "minItems": 1,
-                  "uniqueItems": true
+                  "uniqueItems": true,
+                  "items": {
+                    "oneOf": [
+                      {
+                        "enum": [
+                          "all-terrain",
+                          "models",
+                          "non-titanic-models",
+                          "terrain-le-4",
+                          "tall-terrain",
+                          "friendly-vehicles",
+                          "friendly-monsters",
+                          "terrain",
+                          "models-excluding-monster-vehicle",
+                          "models-excluding-titanic",
+                          "enemy-models-excluding-monster-vehicle",
+                          "enemy-models"
+                        ],
+                        "description": "Retired free tokens; the record repair moves each onto the typed item."
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "kind"
+                        ],
+                        "description": "models: models (of `owner`, with every `all_of` keyword, excluding models with any `excluding` keyword); terrain: terrain features (of `height`).",
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "models",
+                              "terrain"
+                            ]
+                          },
+                          "owner": {
+                            "$ref": "#/$defs/owner"
+                          },
+                          "all_of": {
+                            "$ref": "#/$defs/keyword-list"
+                          },
+                          "excluding": {
+                            "$ref": "#/$defs/keyword-list"
+                          },
+                          "height": {
+                            "enum": [
+                              "up-to-4",
+                              "over-4"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
                 },
                 "ignore_vertical": {
                   "const": true
@@ -8077,7 +9229,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead.",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).",
           "required": [
             "type",
             "target",
@@ -8156,12 +9308,42 @@
                   ]
                 },
                 "placement": {
-                  "enum": [
-                    "closest-to-original",
-                    "connected-sections",
-                    "anywhere",
-                    "deployment-zone",
-                    "on-terrain"
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "closest-to-destruction",
+                        "closest-to-original",
+                        "coherency",
+                        "unengaged",
+                        "wholly-within",
+                        "within",
+                        "strategic-reserves",
+                        "anywhere",
+                        "connected-sections",
+                        "deployment-zone",
+                        "on-terrain"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "closest-to-destruction",
+                          "closest-to-original",
+                          "coherency",
+                          "unengaged",
+                          "wholly-within",
+                          "within",
+                          "strategic-reserves",
+                          "anywhere",
+                          "connected-sections",
+                          "deployment-zone",
+                          "on-terrain"
+                        ]
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
                   ]
                 },
                 "sections": {
@@ -8170,6 +9352,56 @@
                 },
                 "ignore_limits": {
                   "const": true
+                },
+                "mode": {
+                  "$ref": "#/$defs/move-mode"
+                },
+                "allow_engagement": {
+                  "const": true
+                },
+                "mandatory": {
+                  "const": true
+                },
+                "counts_as_move": {
+                  "enum": [
+                    "normal",
+                    "advance",
+                    "fall-back",
+                    "charge",
+                    "pile-in",
+                    "consolidation",
+                    "surge",
+                    "scout",
+                    "ingress",
+                    "disembark",
+                    "embark",
+                    "pulse-jet",
+                    "remain-stationary"
+                  ],
+                  "description": "Being set up this way counts as having made this move this turn."
+                },
+                "arrives": {
+                  "const": "next-movement-phase"
+                },
+                "allow_first_round": {
+                  "const": true
+                },
+                "near": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-near"
+                  },
+                  "minItems": 1
+                },
+                "away_from": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/placement-away"
+                  },
+                  "minItems": 1
+                },
+                "in_region": {
+                  "$ref": "#/$defs/placement-region"
                 }
               },
               "required": [
@@ -8627,16 +9859,7 @@
                 "amount": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "enum": [
@@ -8665,7 +9888,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "resource-spend effect",
-          "description": "[resource] Spend from a resource pool.",
+          "description": "[resource] Spend from a resource pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.",
           "required": [
             "type",
             "target",
@@ -8689,16 +9912,7 @@
                 "amount": {
                   "oneOf": [
                     {
-                      "oneOf": [
-                        {
-                          "type": "integer",
-                          "minimum": 0
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                        }
-                      ]
+                      "$ref": "#/$defs/quantity"
                     },
                     {
                       "enum": [
@@ -8711,12 +9925,26 @@
                 "label": {
                   "type": "string",
                   "minLength": 1
+                },
+                "face": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 6
+                },
+                "requirement": {
+                  "$ref": "#/$defs/dice-requirement-spec"
                 }
               },
               "required": [
                 "pool",
                 "amount"
-              ]
+              ],
+              "not": {
+                "required": [
+                  "face",
+                  "requirement"
+                ]
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
@@ -8770,16 +9998,7 @@
                   ]
                 },
                 "count": {
-                  "oneOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
-                    }
-                  ]
+                  "$ref": "#/$defs/quantity"
                 },
                 "count_per_pool": {
                   "type": "string",
@@ -8791,27 +10010,36 @@
                 "rolls": {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "hit",
-                      "wound",
-                      "save",
-                      "damage",
-                      "charge",
-                      "advance",
-                      "battle-shock",
-                      "leadership",
-                      "hazard",
-                      "psychic",
-                      "desperate-escape",
-                      "deadly-demise",
-                      "attacks",
-                      "normal-move",
-                      "surge",
-                      "dark-pact",
-                      "blessings-of-khorne",
-                      "resource-die",
-                      "any",
-                      "all"
+                    "oneOf": [
+                      {
+                        "enum": [
+                          "hit",
+                          "wound",
+                          "save",
+                          "damage",
+                          "charge",
+                          "advance",
+                          "battle-shock",
+                          "leadership",
+                          "hazard",
+                          "psychic",
+                          "desperate-escape",
+                          "deadly-demise",
+                          "attacks",
+                          "normal-move",
+                          "surge",
+                          "dark-pact",
+                          "blessings-of-khorne",
+                          "resource-die",
+                          "manoeuvre",
+                          "channelling",
+                          "any",
+                          "all"
+                        ]
+                      },
+                      {
+                        "$ref": "#/$defs/ability-roll"
+                      }
                     ]
                   },
                   "minItems": 1
@@ -8906,17 +10134,28 @@
                   ]
                 },
                 "tag": {
-                  "type": "string",
-                  "minLength": 1
+                  "$ref": "#/$defs/designation-id"
                 },
                 "clear": {
                   "const": true
                 },
+                "by": {
+                  "$ref": "#/$defs/unit-ref",
+                  "description": "The unit that applies it, when it matters whose designation it is (their Spotted unit)."
+                },
                 "clears_on": {
-                  "enum": [
-                    "turn-rollover",
-                    "phase-end",
-                    "never"
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/scope-duration"
+                    },
+                    {
+                      "enum": [
+                        "turn-rollover",
+                        "phase-end",
+                        "never"
+                      ],
+                      "description": "Retired spellings of turn, phase and battle; the record repair moves them onto the shared expiry."
+                    }
                   ]
                 }
               },
@@ -8959,15 +10198,58 @@
                     "enhancement-slot",
                     "attachment",
                     "composition",
-                    "faction-forbidden"
+                    "faction-forbidden",
+                    "single-chapter",
+                    "detachment-forbidden",
+                    "detachment-tag-exclusive"
                   ]
                 },
                 "with": {
                   "$ref": "#/$defs/unit-filter"
                 },
                 "max": {
-                  "type": "integer",
-                  "minimum": 0
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "#/$defs/battle-size-value"
+                    }
+                  ]
+                },
+                "measure": {
+                  "enum": [
+                    "units",
+                    "models",
+                    "points"
+                  ],
+                  "description": "What max counts (default units)."
+                },
+                "per": {
+                  "$ref": "#/$defs/unit-filter",
+                  "description": "composition: max applies once per unit matching this filter (one per INQUISITOR)."
+                },
+                "exempt_from": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "retinue-limit"
+                    ]
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "attach_as": {
+                  "$ref": "#/$defs/unit-filter",
+                  "description": "attachment: a Leader that can join a unit matching this filter can join this unit."
+                },
+                "detachment": {
+                  "$ref": "#/$defs/entity-id"
+                },
+                "tag": {
+                  "type": "string",
+                  "minLength": 1
                 },
                 "led_by": {
                   "type": "string",
@@ -8986,6 +10268,257 @@
               },
               "required": [
                 "rule"
+              ]
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "test-exemption effect",
+          "description": "[test] The target does not need to take this test again within the window (no further Battle-shock tests this phase).",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "test-exemption"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "test": {
+                  "enum": [
+                    "battle-shock",
+                    "leadership",
+                    "desperate-escape"
+                  ]
+                },
+                "window": {
+                  "enum": [
+                    "phase",
+                    "turn",
+                    "battle-round"
+                  ]
+                }
+              },
+              "required": [
+                "test",
+                "window"
+              ]
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "datasheet-swap effect",
+          "description": "[identity] The target unit uses another datasheet from now on (its profile, keywords and abilities), keeping its wounds and position.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "datasheet-swap"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "datasheet": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "datasheet"
+              ]
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "characteristic-resolution effect",
+          "description": "[characteristic] How a characteristic that differs between the target's models is resolved: the value most models have (ties: the higher or lower), or the highest or lowest. applies_to: only for that purpose.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "characteristic-resolution"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "stat": {
+                  "enum": [
+                    "M",
+                    "T",
+                    "Sv",
+                    "W",
+                    "Ld",
+                    "OC",
+                    "A",
+                    "WS",
+                    "BS",
+                    "S",
+                    "AP",
+                    "D",
+                    "Range",
+                    "detection-range",
+                    "psyker-level"
+                  ]
+                },
+                "rule": {
+                  "enum": [
+                    "majority",
+                    "highest",
+                    "lowest"
+                  ]
+                },
+                "tie": {
+                  "enum": [
+                    "highest",
+                    "lowest"
+                  ]
+                },
+                "applies_to": {
+                  "enum": [
+                    "wound-roll",
+                    "all"
+                  ]
+                },
+                "incoming": {
+                  "const": true
+                }
+              },
+              "required": [
+                "stat",
+                "rule"
+              ]
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "borrow-weapons effect",
+          "description": "[ability] The target (a Transport) uses one ranged weapon from each of up to max_models models embarked within it (Firing Deck); those models cannot shoot.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "borrow-weapons"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "max_models": {
+                  "$ref": "#/$defs/quantity"
+                },
+                "weapon_type": {
+                  "enum": [
+                    "melee",
+                    "ranged"
+                  ]
+                },
+                "exclude_weapon_keyword": {
+                  "$ref": "#/$defs/keyword-list"
+                },
+                "until": {
+                  "$ref": "#/$defs/scope-duration"
+                }
+              },
+              "required": [
+                "max_models"
+              ]
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "select-weapon effect",
+          "description": "[ability] Pick one of the target's weapons (count of them) and bind it; weapon-qualified effects refer to it as weapon_ref {weapon_var}.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "select-weapon"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "weapon_type": {
+                  "enum": [
+                    "melee",
+                    "ranged"
+                  ]
+                },
+                "weapon_keyword": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "bind_as": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "bind_as"
               ]
             },
             "scaling": {
@@ -9230,17 +10763,265 @@
           "additionalProperties": false,
           "description": "Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not."
         },
-        "roll_var": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds this D6 result for an immediate nested consumer; a consumer refers to it only as {roll_var: ID}."
+        "from": {
+          "$ref": "#/$defs/roll-reference",
+          "description": "Gate the dice of a roll an enclosing `roll` step bound instead of rolling new dice."
+        },
+        "requirement": {
+          "$ref": "#/$defs/dice-requirement-spec",
+          "description": "With `from`: succeeds when the bound roll's unused dice form this pair, triple or run; those dice are then used up."
+        },
+        "kind": {
+          "$ref": "#/$defs/roll-kind",
+          "description": "Which roll this is (a Psychic test), so modifiers and re-rolls to that roll apply."
         }
       },
       "required": [
-        "type",
-        "dice",
-        "threshold"
-      ]
+        "type"
+      ],
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "dice"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "threshold"
+              ],
+              "not": {
+                "required": [
+                  "requirement"
+                ]
+              }
+            },
+            {
+              "required": [
+                "requirement"
+              ],
+              "not": {
+                "required": [
+                  "threshold"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "dice"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "threshold"
+              ],
+              "not": {
+                "required": [
+                  "requirement"
+                ]
+              }
+            },
+            {
+              "required": [
+                "requirement"
+              ],
+              "not": {
+                "required": [
+                  "threshold"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "dice"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "threshold"
+              ],
+              "not": {
+                "required": [
+                  "requirement"
+                ]
+              }
+            },
+            {
+              "required": [
+                "requirement"
+              ],
+              "not": {
+                "required": [
+                  "threshold"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "dice"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "threshold"
+              ],
+              "not": {
+                "required": [
+                  "requirement"
+                ]
+              }
+            },
+            {
+              "required": [
+                "requirement"
+              ],
+              "not": {
+                "required": [
+                  "threshold"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "dice"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "required": [
+                "threshold"
+              ],
+              "not": {
+                "required": [
+                  "requirement"
+                ]
+              }
+            },
+            {
+              "required": [
+                "requirement"
+              ],
+              "not": {
+                "required": [
+                  "threshold"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "additionalProperties": false
     },
     "dice-table-effect": {
       "type": "object",
@@ -9393,8 +11174,18 @@
               "minimum": 1
             },
             "max_count": {
-              "type": "integer",
-              "minimum": 1
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/battle-size-value"
+                },
+                {
+                  "$ref": "#/$defs/count-of"
+                }
+              ]
             },
             "keywords": {
               "type": "array",
@@ -9509,6 +11300,10 @@
             "bind_as": {
               "type": "string",
               "minLength": 1
+            },
+            "wholly": {
+              "const": true,
+              "description": "Each selected unit must be wholly within within_inches / range_inches."
             }
           },
           "required": [
@@ -9739,6 +11534,11 @@
             },
             "recipient_filter": {
               "$ref": "#/$defs/keyword-filter"
+            },
+            "range_cap": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "The aura range, extensions included, never exceeds this."
             }
           }
         }
@@ -9910,14 +11710,7 @@
           ]
         },
         "duration": {
-          "type": "string",
-          "enum": [
-            "phase",
-            "turn",
-            "battle-round",
-            "battle",
-            "until-next-command-phase"
-          ]
+          "$ref": "#/$defs/scope-duration"
         }
       },
       "required": [
@@ -10160,30 +11953,6 @@
           ]
         }
       ]
-    },
-    "resource-gain-battle-size-counts": {
-      "type": "object",
-      "description": "Token/resource count keyed by the three supported battle sizes. The renderer intentionally refers players to the accompanying table rather than spelling these values out.",
-      "properties": {
-        "incursion": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "strike-force": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "onslaught": {
-          "type": "integer",
-          "minimum": 0
-        }
-      },
-      "required": [
-        "incursion",
-        "strike-force",
-        "onslaught"
-      ],
-      "additionalProperties": false
     },
     "named-region-state-effect": {
       "type": "object",
@@ -11163,14 +12932,7 @@
           ]
         },
         "duration": {
-          "type": "string",
-          "enum": [
-            "phase",
-            "turn",
-            "battle-round",
-            "battle",
-            "until-next-command-phase"
-          ]
+          "$ref": "#/$defs/scope-duration"
         },
         "lifecycle": {
           "type": "object",
@@ -11258,8 +13020,16 @@
       "additionalProperties": false,
       "properties": {
         "count": {
-          "type": "integer",
-          "const": 1
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "const": "each"
+            }
+          ],
+          "description": "How many objectives are selected; each: resolve the effect once per matching objective."
         },
         "range_inches": {
           "type": "number",
@@ -11326,12 +13096,25 @@
         "bind_as": {
           "type": "string",
           "minLength": 1
+        },
+        "range": {
+          "$ref": "#/$defs/range-ref",
+          "description": "Distance from origin to the objective (objective-control: within range of it)."
+        },
+        "filter": {
+          "$ref": "#/$defs/objective-filter"
         }
       },
       "required": [
         "count",
         "bind_as"
-      ]
+      ],
+      "not": {
+        "required": [
+          "range",
+          "range_inches"
+        ]
+      }
     },
     "paired-unit-selector": {
       "type": "object",
@@ -11401,19 +13184,6 @@
         }
       ]
     },
-    "roll-reference": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "roll_var": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "required": [
-        "roll_var"
-      ]
-    },
     "miracle-die-reference": {
       "type": "object",
       "additionalProperties": false,
@@ -11425,6 +13195,61 @@
       },
       "required": [
         "die_var"
+      ]
+    },
+    "roll-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Roll dice once and bind the result as roll_var: numeric fields inside accept {roll_var} (the total, or the count of dice at successes_on+), and dice-gated steps with `from` gate its dice. extra_dice_pool adds one die per die held in that pool, so the die count varies.",
+      "properties": {
+        "type": {
+          "const": "roll"
+        },
+        "dice": {
+          "type": "string",
+          "pattern": "^\\d*D(3|6)(\\+\\d+)?$"
+        },
+        "extra_dice_pool": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "$ref": "#/$defs/roll-kind"
+        },
+        "roll_var": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "dice",
+        "roll_var",
+        "effect"
+      ]
+    },
+    "select-objective-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of).",
+      "properties": {
+        "type": {
+          "const": "select-objective"
+        },
+        "selector": {
+          "$ref": "#/$defs/objective-selector"
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
       ]
     },
     "effect": {
@@ -11445,9 +13270,14 @@
         "one-use",
         "permanent",
         "attack-sequence",
-        "resolution"
+        "resolution",
+        "until-next-shooting-phase",
+        "until-end-of-your-next-turn",
+        "until-end-of-opponent-next-turn",
+        "until-this-unit-has-shot",
+        "control-lost"
       ],
-      "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
+      "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it."
     },
     "scope": {
       "title": "Ability Scope",

@@ -1,5 +1,5 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { dekebab, designationPhrase, moveKinds, objectivePhrase, pastOf, subjectOf, str, titleCase, unitRefPhrase, windowPhrase, withWindow, type P } from "./condition-refs.js";
+import { dekebab, designationPhrase, moveKinds, objectivePhrase, pastOf, rollWord, subjectOf, str, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow, type P } from "./condition-refs.js";
 
 export function describeHappened(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
@@ -35,11 +35,13 @@ export function describeHappened(p: P, negated: boolean): string {
       const weapon = f.weapon_name ? ` by ${weaponName}${keyword ? ` (with ${keyword})` : ""}` : keyword ? ` made with a ${keyword} weapon` : "";
       const by = f.by && typeof f.by === "object" && "event_var" in (f.by as P) ? " from the triggering unit" : f.by != null ? ` from ${unitRefPhrase(f.by)}` : "";
       const when = p.window === "event" ? " during its just-finished shooting sequence" : ` ${windowPhrase(p.window)}`;
+      // Who made the attacks, when it is not the unit being checked ("hit by an attack made by this unit").
+      const attacker = p.subject != null && p.subject !== "this-unit" ? ` made by ${unitRefPhrase(p.subject)}` : "";
       if (f.roll === "hit" && f.result === "success") {
         const hits = n > 1 ? `${n}+ ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
-        return `${neg}${target} was hit by ${hits}${weapon}${by}${when}`;
+        return `${neg}${target} was hit by ${hits}${attacker}${weapon}${by}${when}`;
       }
-      return `${neg}a ${str(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}`.trimEnd();
+      return `${neg}a ${rollWord(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}`.trimEnd();
     }
     case "damage-allocated": {
       const obj = unitRefPhrase(p.object, "the unit");
@@ -72,6 +74,8 @@ export function describeHappened(p: P, negated: boolean): string {
         else if (o && typeof o === "object" && (o as P).owner === "enemy") s += " on an enemy unit";
         return withWindow(s, p.window);
       }
+      const which = usedAbilityPhrase(f);
+      if (which != null) return `${neg}${withWindow(`${who} used ${which}`, p.window)}`;
       return `${neg}${withWindow(`${who} used ${f.id != null ? `the ${titleCase(str(f.id))} ` : "a "}${dekebab(str(f.kind ?? "ability"))}`, p.window)}`;
     }
     case "objective-gained":

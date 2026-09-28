@@ -382,7 +382,22 @@
       ]
     },
     "ability-usage": {
-      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
+      "description": "How often the ability may be used: one limit, or several that all apply (once per battle per model AND one model per battle round).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ability-usage-limit"
+        },
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/ability-usage-limit"
+          }
+        }
+      ]
+    },
+    "ability-usage-limit": {
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
       "type": "object",
       "properties": {
         "frequency": {

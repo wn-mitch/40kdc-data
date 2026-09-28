@@ -3,6 +3,8 @@
  * designations, history windows and move kinds. ASCII-only; pinned across the ports.
  */
 
+import { designationLabel } from "./designations.js";
+
 /** A condition node's parameters. */
 export type P = Record<string, unknown>;
 
@@ -61,6 +63,8 @@ const ROLE_PHRASES: Record<string, string> = {
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
   recipient: "the unit",
+  "bearer-transport": "the Transport this unit is embarked within",
+  "ability-unit": "this unit",
 };
 
 /** A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit". */
@@ -72,11 +76,18 @@ export function unitFilterPhrase(f: P): string {
   s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
-  if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}`;
+  if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => titleCase(str(a))))} ability`;
+  if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => titleCase(str(a))))} ability`;
+  if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
+  if (f.member_of != null) s += ` in ${unitRefPhrase(f.member_of)}`;
+  if (f.engaged_with != null) s += ` within Engagement Range of ${unitFilterPhrase(f.engaged_with as P)}`;
+  if (f.not_engaged_with != null) s += ` not within Engagement Range of any ${unitFilterPhrase(f.not_engaged_with as P).replace(/^an? /, "")}`;
+  if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}${f.designated_by != null ? ` by ${unitRefPhrase(f.designated_by)}` : ""}`;
+  if (f.not_designated != null) s += ` that is not ${designationPhrase(str(f.not_designated))}`;
   if (f.state != null) s += ` that is ${statePhrase(str(f.state))}`;
   if (f.visible === true) s += " that is visible to it";
   const within = f.within as P | undefined;
-  if (within != null) s += ` within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
+  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
   if (f.excluding != null) s += ` other than ${f.excluding === "this-unit" ? "this unit" : unitRefPhrase(f.excluding)}`;
   return s;
 }
@@ -89,6 +100,7 @@ export function unitRefPhrase(ref: unknown, fallback = "the unit"): string {
     const r = ref as P;
     if (typeof r.event_var === "string") return "that unit";
     if (typeof r.selection_var === "string") return `the bound ${str(r.selection_var).replace(/_/g, " ")}`;
+    if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target)} target`;
     return unitFilterPhrase(r);
   }
   return fallback;
@@ -141,8 +153,10 @@ export function statePhrase(state: string, negated = false): string {
   return STATE_PHRASES[state] ?? dekebab(state);
 }
 
-/** A designation: GW-printed tags stay as printed, internal state names are spelled out. */
-export function designationPhrase(tag: string): string {
+/** A designation: a registered id prints the rules' term, legacy upper-case tags stay as printed, internal ones are spelled out. */
+export function designationPhrase(tag: string, plural = false): string {
+  const label = designationLabel(tag, plural);
+  if (label != null) return label;
   return tag === tag.toUpperCase() ? tag : `tagged ${dekebab(tag)}`;
 }
 
@@ -166,4 +180,17 @@ const MOVE_NAMES: Record<string, string> = {
 };
 export function moveKinds(types: unknown): string {
   return orList((Array.isArray(types) ? types : []).map((t) => MOVE_NAMES[str(t)] ?? dekebab(str(t))));
+}
+
+/** A roll kind as words: "hit", or the dice a named ability rolls ("Reanimation Protocols"). */
+export function rollWord(roll: unknown): string {
+  if (roll != null && typeof roll === "object" && (roll as P).of_ability != null) return titleCase(str((roll as P).of_ability));
+  return dekebab(str(roll));
+}
+
+/** Which ability a `used` filter names: one id, every ability with a bracketed keyword, or the same one as a bound use. */
+export function usedAbilityPhrase(f: P): string | undefined {
+  if (f.ability_keyword != null) return `a ${titleCase(str(f.ability_keyword).toLowerCase())} ability`;
+  if (f.same_rule_as != null) return `that same ${f.kind === "stratagem" ? "Stratagem" : "ability"}`;
+  return undefined;
 }

@@ -4,6 +4,7 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
+import { rollWord, usedAbilityPhrase } from "./condition-refs.js";
 
 type P = Record<string, unknown>;
 
@@ -97,15 +98,16 @@ const ROLL_NOUN: Record<string, string> = {
   hit: "Hit roll", wound: "Wound roll", save: "saving throw", damage: "Damage roll", charge: "Charge roll",
   advance: "Advance roll", "battle-shock": "Battle-shock test", leadership: "Leadership test", hazard: "Hazard roll",
   psychic: "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
-  "blessings-of-khorne": "Blessings of Khorne roll",
+  "blessings-of-khorne": "Blessings of Khorne roll", manoeuvre: "Agile Manoeuvre roll", channelling: "Channel the Warp roll",
 };
 const TEST_ROLLS = new Set(["battle-shock", "leadership", "desperate-escape"]);
 
 const ATTACK_MODELS: Record<string, string> = { "this-model": "this model", "this-unit": "a model in this unit", "model-in-this-unit": "a model in this unit" };
 
 function rollClause(t: AbilityTrigger, f: P): string {
-  const roll = str(f.roll);
-  const noun = ROLL_NOUN[roll] ?? `${dekebab(roll)} roll`;
+  // An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
+  const roll = typeof f.roll === "object" && f.roll != null ? "" : str(f.roll);
+  const noun = ROLL_NOUN[roll] ?? `${rollWord(f.roll)} roll`;
   const subject = t.subject;
   const anyone = typeof subject === "object" && subject !== null && (subject as P).owner === "any" && Object.keys(subject).length === 1;
   if (t.event === "before-roll") {
@@ -213,6 +215,8 @@ function eventPhrase(t: AbilityTrigger): string {
       return `when ${objectPhrase(obj)} is destroyed`;
     }
     case "used": {
+      const which = usedAbilityPhrase(f);
+      if (which != null) return `each time ${who} uses ${which}`;
       if (f.kind === "stratagem") return "each time you use a Stratagem";
       if (f.kind === "ability" && f.id != null) return `when you use ${titleCase(str(f.id))}`;
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;

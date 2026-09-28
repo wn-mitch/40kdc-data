@@ -19,8 +19,11 @@ import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadi
 import { describeTiming, eventClause } from "./timing.js";
 import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
 import { describeLeaf, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import { expiryTrail } from "./expiry.js";
+import { rollHead, selectObjectiveBlock, selectObjectiveInline } from "./effect-bind.js";
 import {
-  bracketKeyword, capitalize, diceCase, formatComparison, jstr, orList, resourceNoun, rollName, signed, testName, type Ctx,
+  bracketKeyword, capitalize, diceCase, formatComparison, jstr, orList, quantityPhrase, requirementPhrase, resourceNoun, rollKindNoun, rollName, scaleSource,
+  signed, testName, type Ctx,
 } from "./effect-words.js";
 export type { Ctx };
 export { describeTrigger };
@@ -72,9 +75,12 @@ export interface Effect {
   max_choices?: number;
   cost?: Effect;
   trigger?: AbilityTriggerSpec;
-  usage?: AbilityUsage;
+  usage?: AbilityUsage | AbilityUsage[];
   dice?: string;
   roll_var?: string;
+  extra_dice_pool?: string;
+  from?: { roll_var: string; successes_on?: number };
+  requirement?: unknown;
   threshold?: number | string;
   comparison?: string;
   optional?: boolean;
@@ -90,7 +96,8 @@ export interface Effect {
   selector?: {
     count?: number;
     min_count?: number;
-    max_count?: number;
+    max_count?: number | Record<string, unknown>;
+    wholly?: boolean;
     keywords?: string[];
     model_names?: string[];
     excluded_keywords?: string[];
@@ -231,6 +238,8 @@ export interface AbilityLike {
 }
 
 const CONTAINER_TYPES = new Set([
+  "roll",
+  "select-objective",
   "sequence",
   "rules-bundle",
   "ability-part",
@@ -258,11 +267,16 @@ function selectUnitsSubject(sel: Record<string, unknown> = {}): string {
   );
   const bounded = sel.min_count != null && exactCount == null;
   const count = exactCount ?? sel.max_count;
+  // A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units (Incursion/…)".
+  const cap = typeof count === "object" && count != null ? (count as Record<string, unknown>) : undefined;
   const single = Number(count) === 1;
   const nounBase = sel.target_kind === "model" ? "model" : "unit";
   const noun = single ? nounBase : `${nounBase}s`;
-  const quantity =
-    exactCount != null
+  const capPhrase = cap ? quantityPhrase(cap) : "";
+  const sized = cap != null && cap.count_of == null;
+  const quantity = cap != null
+    ? sized ? `up to ${capPhrase.replace(/ \(.*\)$/, "")}` : "any number of"
+    : exactCount != null
       ? single ? "one" : jstr(count)
       : bounded
         ? `from ${jstr(sel.min_count)} through ${jstr(sel.max_count)}`
@@ -270,11 +284,12 @@ function selectUnitsSubject(sel: Record<string, unknown> = {}): string {
   const boundOrigin = sel.within_inches_from
     ? ` of ${selectionRefName(sel.within_inches_from, "the bound source unit")}`
     : "";
+  const wholly = sel.wholly === true ? " wholly" : "";
   const within =
     sel.within_inches != null
-      ? ` within ${jstr(sel.within_inches)}"${boundOrigin}`
+      ? `${wholly} within ${jstr(sel.within_inches)}"${boundOrigin}`
       : sel.range_inches != null
-        ? ` within ${jstr(sel.range_inches)}"${boundOrigin || ` of ${referenceOrigin(sel.reference)}`}`
+        ? `${wholly} within ${jstr(sel.range_inches)}"${boundOrigin || ` of ${referenceOrigin(sel.reference)}`}`
         : "";
   const visible = sel.visible_to
     ? ` visible to ${selectionRefName(sel.visible_to, "the bound source unit")}`
@@ -284,7 +299,9 @@ function selectUnitsSubject(sel: Record<string, unknown> = {}): string {
     typeof sel.eligibility === "object" && sel.eligibility != null
       ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}`
       : "";
-  return `${quantity} ${jstr(sel.owner)}${kw ? ` ${kw}` : ""} ${noun}${selectionModelFilters(sel)}${inclusive}${within}${visible}${eligibility}`;
+  const capTail = cap == null ? "" : sized ? ` (${capPhrase.replace(/^.*\((.*)\)$/, "$1")})` : ` (at most ${capPhrase})`;
+  const nounFor = cap != null ? `${nounBase}s` : noun;
+  return `${quantity} ${jstr(sel.owner)}${kw ? ` ${kw}` : ""} ${nounFor}${capTail}${selectionModelFilters(sel)}${inclusive}${within}${visible}${eligibility}`;
 }
 
 function selectionModelFilters(sel: Record<string, unknown>): string {
@@ -311,6 +328,8 @@ function selectUnitsEngagement(sel: Record<string, unknown> = {}): string {
 }
 
 function selectUnitsPlural(sel: Record<string, unknown> = {}): boolean {
+  // A cap set by the battle size or a count can select more than one.
+  if (sel.count == null && typeof sel.max_count === "object" && sel.max_count != null) return true;
   return Number(sel.count ?? sel.max_count) > 1;
 }
 
@@ -515,32 +534,8 @@ function persistentDesignationReplacement(e: Effect): string {
  * the effect ("…, until the end of the phase, …"). `permanent` adds nothing.
  */
 export function durationClauses(duration: string | undefined): { lead: string; trail: string } {
-  switch (duration) {
-    case "attack-sequence":
-      return { lead: "", trail: "until that unit finishes resolving its attacks" };
-    case "resolution":
-      return { lead: "", trail: "when resolving this use" };
-    case "phase":
-      return { lead: "", trail: "until the end of the phase" };
-    case "turn":
-      return { lead: "", trail: "until the end of the turn" };
-    case "battle":
-      return { lead: "", trail: "for the rest of the battle" };
-    case "battle-round":
-      return { lead: "", trail: "until the end of the battle round" };
-    case "until-next-command-phase":
-      return { lead: "", trail: "until the start of your next Command phase" };
-    case "until-next-movement-phase":
-      return { lead: "", trail: "until the start of your next Movement phase" };
-    case "until-next-battle-round":
-      return { lead: "", trail: "until the start of the next battle round" };
-    case "until-start-next-turn":
-      return { lead: "", trail: "until the start of your next turn" };
-    case "one-use":
-      return { lead: "once per battle", trail: "" };
-    default: // permanent / absent
-      return { lead: "", trail: "" };
-  }
+  if (duration === "one-use") return { lead: "once per battle", trail: "" };
+  return { lead: "", trail: expiryTrail(duration) };
 }
 
 /** `excludes_keyword`/`requires_keyword` → the eligible-unit noun phrase for a menu action ("one friendly non-TITANIC unit" / "a friendly VEHICLE unit"). Absent eligibility keywords fall back to the plain subject. */
@@ -632,7 +627,9 @@ function sharedUsageClause(su: Effect["shared_usage"]): string {
 }
 
 /** Usage limit → front-of-sentence lead clause ("once per turn", "twice per battle per unit"). */
-function usageClause(u: AbilityUsage): string {
+function usageClause(u: AbilityUsage | AbilityUsage[]): string {
+  // Several limits that all apply: "once per battle per model and once per battle round per army".
+  if (Array.isArray(u)) return u.map((x) => usageClause(x)).join(" and ");
   const n = Number(u.count ?? 1);
   let base: string;
   switch (u.frequency) {
@@ -669,21 +666,13 @@ function usageClause(u: AbilityUsage): string {
 /** "against a unit that is not a Monster or Vehicle" from a run of excluded target keywords. */
 /** Capitalize the first character and lowercase the rest (`MONSTER` -> `Monster`). */
 
-/** Humanized noun for a scaling `of` dimension (`enemy-models-in-range` → `enemy models`). */
-const SCALE_OF: Record<string, string> = {
-  "enemy-models-in-range": "enemy models",
-  "friendly-models-in-range": "friendly models",
-  "models-in-bearer-unit": "models in this unit",
-  "models-in-or-embarked-in-bearer": "models in or embarked within this model",
-  "enemy-units-in-range": "enemy units",
-  "wounds-lost": "wounds lost",
-};
-
 /** A `scaling` block → trailing clause ("for every 5 enemy models within 6\""). */
 function scalingClause(s: NonNullable<Effect["scaling"]>): string {
-  const ofText = SCALE_OF[jstr(s.of)] ?? dekebab(jstr(s.of));
-  let c = `for every ${jstr(s.per)} ${ofText}`;
-  if (s.within_inches != null) c += ` within ${jstr(s.within_inches)}"`;
+  if (s.of === "battle-round") return `multiplied by the battle round number${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
+  // A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
+  if (s.of === "embarked-models-oc") return `for every ${Number(s.per) === 1 ? "point" : `${jstr(s.per)} points`} of ${scaleSource(s as Record<string, unknown>)}${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
+  let c = `for every ${jstr(s.per)} ${scaleSource(s as Record<string, unknown>)}`;
+  if (s.within_inches != null && !c.endsWith(`within ${jstr(s.within_inches)}"`)) c += ` within ${jstr(s.within_inches)}"`;
   if (s.round === "up") c += " (rounding up)";
   if (s.max_value != null) c += ` (to a maximum of ${jstr(s.max_value)})`;
   return c;
@@ -716,7 +705,7 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
   if (m.range_bonus != null) {
     const named = m.of != null ? `${titleCase(jstr(m.of))} ` : "";
-    return `the range of this model's ${named}abilities is increased by ${jstr(m.range_bonus)}"`;
+    return `the range of this model's ${named}abilities is increased by ${jstr(m.range_bonus)}"${m.range_cap != null ? ` (to a maximum of ${jstr(m.range_cap)}")` : ""}`;
   }
   const range = m.range;
   const rangeText = Array.isArray(range)
@@ -724,12 +713,13 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
     : range != null
       ? `${jstr(range)}"`
       : "range";
+  const capped = m.range_cap != null ? ` (to a maximum of ${jstr(m.range_cap)}", extensions included)` : "";
   const who = e.target === "friendly-within-aura" ? "a friendly unit" : "an enemy unit";
   const eligibleWho = auraEligibleSubject(who, m.eligible);
   const recipient = m.recipient_filter != null ? keywordFilterClause(m.recipient_filter, eligibleWho) : eligibleWho;
   const emitter = m.emitter_filter != null ? keywordFilterClause(m.emitter_filter, "this model") : "this model";
   const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
-  return `while ${recipient} is within ${rangeText} of ${emitter}, ${effectText}`;
+  return `while ${recipient} is within ${rangeText}${capped} of ${emitter}, ${effectText}`;
 }
 
 /**
@@ -752,11 +742,7 @@ export function describeEffectInline(e: Effect, ctx: Ctx = {}): string {
  * the pre-`any_of` phrasing (no leading article) so existing goldens don't move.
  */
 function describeRequirement(req: unknown): string {
-  const one = (r: { type?: unknown; min_value?: unknown } | undefined) =>
-    `${jstr(r?.type)} of ${jstr(r?.min_value)}+`;
-  const anyOf = (req as { any_of?: unknown } | undefined)?.any_of;
-  if (Array.isArray(anyOf)) return anyOf.map(one).join(" or ");
-  return one(req as { type?: unknown; min_value?: unknown } | undefined);
+  return requirementPhrase(req);
 }
 
 function diceTableResultLabel(results: unknown): string {
@@ -818,14 +804,13 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       const prompt = choicePrompt(e);
       return `${prompt}: ${(e.options ?? []).map((o) => describeEffectInline(o, ctx)).join(" / ")}`;
     }
-    case "dice-gated": {
+    case "dice-gated":
       if (e.test) return leadershipTest(e, ctx);
-      const comp = formatComparison(e.comparison ?? "gte", e.threshold);
-      const success = e.on_success ? describeEffectInline(e.on_success, ctx) : "nothing happens";
-      const fail = e.on_fail ? `; otherwise, ${describeEffectInline(e.on_fail, ctx)}` : "";
-      const binding = e.roll_var ? ` (binding the result as ${dekebab(e.roll_var.replace(/_/g, "-"))})` : "";
-      return `roll one ${diceCase(e.dice)}${binding}: on ${comp}, ${success}${fail}`;
-    }
+      return diceGate(e, ctx);
+    case "roll":
+      return `${rollHead(e as Record<string, unknown>)}; then ${describeEffectInline(e.effect ?? {}, ctx)}`;
+    case "select-objective":
+      return selectObjectiveInline(e as Record<string, unknown>, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     case "dice-table":
       return diceTableInline(e, ctx);
     case "dice-pool-allocation": {
@@ -895,6 +880,24 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       if (LEAF_TYPES.has(e.type ?? "")) return describeLeaf(e as Leaf, ctx, (x, c) => describeEffectInline(x as Effect, c));
       return `[${e.type ?? "unknown"}]`;
   }
+}
+
+/**
+ * A dice gate: roll new dice ("roll one D6: on a 4+, …"), or test the dice of a bound roll against a threshold
+ * or a pair/triple requirement ("if that roll's dice include a pair of 3+ (those dice are used), …").
+ */
+function diceGate(e: Effect, ctx: Ctx): string {
+  const success = e.on_success ? describeEffectInline(e.on_success, ctx) : "nothing happens";
+  const fail = e.on_fail ? `; otherwise, ${describeEffectInline(e.on_fail, ctx)}` : "";
+  if (e.from != null) {
+    if (e.requirement != null) return `using a ${describeRequirement(e.requirement)} from that roll's unused dice, ${success}${fail}`;
+    return `if ${quantityPhrase(e.from as Record<string, unknown>)} is ${formatComparison(e.comparison ?? "gte", e.threshold)}, ${success}${fail}`;
+  }
+  const comp = formatComparison(e.comparison ?? "gte", e.threshold);
+  const kind = e.kind != null ? ` (${rollKindNoun(e.kind)})` : "";
+  // "roll one D6", but "roll 2D6": a dice expression with its own count takes no article.
+  const dice = diceCase(e.dice);
+  return `roll ${/^\d/.test(dice) ? "" : "one "}${dice}${kind}: on ${comp}, ${success}${fail}`;
 }
 
 /** "select one", "select two", "select up to two" — how many menu options are picked. */
@@ -1137,11 +1140,18 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     }
     case "dice-gated": {
       if (e.test) return `${indent}${arrow}${capitalize(leadershipTest(e, ctx))}.`;
-      const comp = formatComparison(e.comparison ?? "gte", e.threshold);
-      const success = e.on_success ? describeEffectInline(e.on_success, ctx) : "nothing happens";
-      const fail = e.on_fail ? `; otherwise, ${describeEffectInline(e.on_fail, ctx)}` : "";
-      const binding = e.roll_var ? ` (binding the result as ${dekebab(e.roll_var.replace(/_/g, "-"))})` : "";
-      return `${indent}${arrow}Roll one ${diceCase(e.dice)}${binding}: on ${comp}, ${success}${fail}.`;
+      return `${indent}${arrow}${capitalize(diceGate(e, ctx))}.`;
+    }
+    case "roll": {
+      const inner = e.effect ?? {};
+      const head = `${indent}${arrow}${capitalize(rollHead(e as Record<string, unknown>))}`;
+      if (CONTAINER_TYPES.has(inner.type ?? "")) return `${head}, then:\n` + describeEffect(inner, depth + 1, ctx);
+      return `${head}; then ${describeEffectInline(inner, ctx)}.`;
+    }
+    case "select-objective": {
+      const inner = e.effect ?? {};
+      const nested = CONTAINER_TYPES.has(inner.type ?? "") ? describeEffect(inner, depth + 1, ctx) : null;
+      return selectObjectiveBlock(e as Record<string, unknown>, indent, arrow, nested, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     }
     case "dice-table": {
       const lines = [`${indent}${arrow}Roll one ${diceCase(e.dice)}:`];
@@ -1331,13 +1341,13 @@ function conditionWithinRange(c?: Condition): number | undefined {
 function renderTopLevel(
   e: Effect,
   scope?: AbilityScope,
-  usage?: AbilityUsage | null,
+  usage?: AbilityUsage | AbilityUsage[] | null,
   trigger?: AbilityTriggerSpec | null,
 ): string {
   const ctx: Ctx = {};
   const { lead: durLead, trail } = durationClauses(scope?.duration);
   // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
-  const lead = usage && usage.frequency != null ? usageClause(usage) : durLead;
+  const lead = usage && (Array.isArray(usage) || usage.frequency != null) ? usageClause(usage) : durLead;
 
   // A reactive trigger (or several — the ability fires on any) opens the
   // sentence ("Each time …"). B2: when a trigger's proximity just restates a

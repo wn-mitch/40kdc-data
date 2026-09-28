@@ -346,7 +346,9 @@ export function triggerGated(behavior: unknown, trigger: unknown, effect: unknow
  * when no trigger already gates the effect. A stratagem is already opt-in as a stratagem.
  */
 export function usageGated(abilityType: unknown, usage: unknown, effect: unknown): unknown {
-  const frequency = usage !== null && typeof usage === "object" ? (usage as { frequency?: unknown }).frequency : undefined;
+  // Several limits that all apply are still one player-chosen use; the first limit names the lever.
+  const limit = Array.isArray(usage) ? usage[0] : usage;
+  const frequency = limit !== null && typeof limit === "object" ? (limit as { frequency?: unknown }).frequency : undefined;
   if (effect == null || typeof frequency !== "string" || abilityType === "stratagem") return effect;
   return { type: "conditional", condition: { type: "timing-is", parameters: { timing: frequency } }, effect };
 }

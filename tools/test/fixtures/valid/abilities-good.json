@@ -1,14 +1,14 @@
 [
   {
-    "ability_id": "cond-terrain-area-control",
-    "name": "Terrain Area Control condition",
+    "ability_id": "cond-army-faction",
+    "name": "Army Faction condition",
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "terrain-area-control",
-        "parameters": { "footprint_ref": "ruins-central", "min_models": 3 }
+        "type": "army-faction",
+        "parameters": { "faction": "necrons" }
       },
       "effect": {"type":"stat-modifier","target":"this-unit","modifier":{"stat":"OC","operation":"add","value":1}}
     },

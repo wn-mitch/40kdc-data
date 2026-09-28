@@ -5,6 +5,7 @@
  */
 
 import { andList, designationPhrase, dekebab, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
 
@@ -34,9 +35,65 @@ export function capitalize(s: string): string {
   return s.length === 0 ? s : s[0]!.toUpperCase() + s.slice(1);
 }
 
-/** Dice tokens print with a capital `D` (`d3` → `D3`, `2d6` → `2D6`). */
+/** Dice tokens print with a capital `D` (`d3` → `D3`, `2d6` → `2D6`); a bound or counted quantity prints its phrase. */
 export function diceCase(v: unknown): string {
+  if (v != null && typeof v === "object" && !Array.isArray(v)) return quantityPhrase(v as P);
   return jstr(v).replace(/d/gi, "D");
+}
+
+const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
+
+/** What a count-of / scaling source counts, as a noun phrase. */
+export const SCALE_OF: Record<string, string> = {
+  "enemy-models-in-range": "enemy models",
+  "friendly-models-in-range": "friendly models",
+  "models-in-bearer-unit": "models in this unit",
+  "models-in-or-embarked-in-bearer": "models in or embarked within this model",
+  "models-embarked-in-bearer": "models embarked within this model",
+  "embarked-models-oc": "Objective Control of the models embarked within this model",
+  "models-equipped-with": "models in this unit equipped with",
+  "enemy-units-in-range": "enemy units",
+  "wounds-lost": "wounds lost",
+  "battle-round": "battle round",
+};
+
+/** A count source with its keyword / wargear qualifier: "models in this unit with the SPYDER keyword". */
+export function scaleSource(q: P): string {
+  const of = jstr(q.count_of ?? q.of);
+  let s = SCALE_OF[of] ?? dekebab(of);
+  if (of === "models-equipped-with") s += ` ${titleCase(jstr(q.wargear))}`;
+  if (q.keyword != null) s = s.replace(/^models\b/, `${jstr(q.keyword)} models`);
+  if (q.within_inches != null) s += ` within ${jstr(q.within_inches)}"`;
+  return s;
+}
+
+/**
+ * A non-literal quantity as a noun phrase: one value per battle size, a bound roll's result, or a count.
+ * Literal numbers and dice go through {@link diceCase}.
+ */
+export function quantityPhrase(q: P): string {
+  if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
+  if (typeof q.roll_var === "string") return q.successes_on != null ? `the number of those dice that rolled a ${jstr(q.successes_on)}+` : "the result of that roll";
+  if (q.count_of === "battle-round") return "the battle round number";
+  if (q.count_of === "embarked-models-oc") return `the total ${scaleSource(q)}`;
+  if (q.count_of != null) return `the number of ${scaleSource(q)}`;
+  return "?";
+}
+
+/** Whether a quantity is a literal number or dice expression (it reads "D3 mortal wounds", not "a number of"). */
+export function isLiteral(q: unknown): boolean {
+  return q == null || typeof q !== "object";
+}
+
+/** "D3 mortal wounds", or "a number of mortal wounds equal to the result of that roll". */
+export function amountOf(q: unknown, one: string, many: string): string {
+  if (isLiteral(q)) {
+    const n = diceCase(q);
+    return `${n} ${n === "1" ? one : many}`;
+  }
+  const p = q as P;
+  if (BATTLE_SIZES.every((k) => p[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(p[k])).join("/")} ${many} (Incursion/Strike Force/Onslaught)`;
+  return `a number of ${many} equal to ${quantityPhrase(p)}`;
 }
 
 /**
@@ -68,7 +125,7 @@ export function isPlural(subj: string): boolean {
 const PLURAL_VERBS: Record<string, string> = {
   has: "have", is: "are", gets: "get", gains: "gain", suffers: "suffer", retains: "retain", makes: "make",
   passes: "pass", fails: "fail", treats: "treat", regains: "regain", counts: "count", ignores: "ignore", loses: "lose",
-  scores: "score", takes: "take", resolves: "resolve", does: "do", controls: "control",
+  scores: "score", takes: "take", resolves: "resolve", does: "do", controls: "control", receives: "receive", keeps: "keep",
 };
 /** Subject-verb agreement: the plural form of a present-tense verb when the subject is plural. */
 export function v(subj: string, singular: string): string {
@@ -123,8 +180,11 @@ const ROLL_NAMES: Record<string, string> = {
   hit: "Hit", wound: "Wound", charge: "Charge", damage: "Damage", advance: "Advance", save: "saving throw",
   leadership: "Leadership", "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape", "normal-move": "Normal move",
   "deadly-demise": "Deadly Demise", "dark-pact": "Dark Pact", "blessings-of-khorne": "Blessings of Khorne", "resource-die": "pool die",
+  manoeuvre: "Agile Manoeuvre", channelling: "Channel the Warp",
 };
 export function rollName(roll: unknown): string {
+  // The dice a named ability rolls: "Reanimation Protocols".
+  if (roll != null && typeof roll === "object" && (roll as P).of_ability != null) return abilityLabel((roll as P).of_ability);
   const r = jstr(roll);
   return ROLL_NAMES[r] ?? titleCase(r);
 }
@@ -194,12 +254,19 @@ export function weaponNoun(m: Record<string, unknown>): string {
   // A name that already carries the noun ("hellforged weapons") must not read "weapons weapons".
   const raw = m.weapon_name ? jstr(m.weapon_name).replace(/\s+weapons?$/i, "") : "";
   const named = /^[a-z0-9]+(-[a-z0-9]+)+$/.test(raw) ? titleCase(raw) : raw;
+  const ref = m.weapon_ref as P | undefined;
+  if (ref != null) {
+    // A bound weapon ("the selected weapon") or the weapons picked for a named ability.
+    const sel = ref.selected_by as P | undefined;
+    if (sel != null) return `the ${kind}weapons selected for ${abilityLabel(sel.ability)}${keyword}`;
+    return `the selected ${kind}weapon${keyword}`;
+  }
   return `${kind}${named ? `${named} ` : ""}weapons${keyword}`;
 }
 
 /** Whether a modifier carries a weapon filter. */
 export function hasWeapon(m: Record<string, unknown>): boolean {
-  return m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null;
+  return m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null || m.weapon_ref != null;
 }
 
 /** " with melee weapons" for a roll scoped to a weapon filter, else "". */
@@ -214,6 +281,8 @@ const ROLE_SUBJECTS: Record<string, string> = {
   "event-subject": "the triggering unit",
   "event-object": "that unit",
   "stratagem-target": "that unit",
+  "bearer-transport": "the Transport this unit is embarked within",
+  "ability-unit": "this unit",
 };
 
 /** A unit filter as the plural subject of an effect: `friendly INFANTRY units within 6"`. */
@@ -225,13 +294,40 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
   const within = f.within as P | undefined;
-  if (within != null) s += ` within ${rangePhrase(within.range)}${within.of != null ? ` of ${effectSubject(within.of, ctx)}` : ""}`;
+  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${effectSubject(within.of, ctx)}` : ""}`;
+  s += filterRelations(f, ctx);
   if (f.visible === true) s += " that are visible";
-  if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated))}`;
+  if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
+  if (f.not_designated != null) s += ` that are not ${designationPhrase(jstr(f.not_designated), true)}`;
   if (f.state != null) s += ` that are ${statePhrase(jstr(f.state))}`;
   if (f.excluding != null) s += ` other than ${effectSubject(f.excluding, ctx)}`;
-  const bounded = within != null || f.visible === true || f.designated != null || f.state != null;
+  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null ||
+    f.embarked_in != null || f.member_of != null || f.engaged_with != null || f.not_engaged_with != null;
   return bounded ? s : `all ${s}`;
+}
+
+/** A unit filter's relations to other units and abilities: " embarked within this model", " with the Deep Strike ability". */
+function filterRelations(f: P, ctx: Ctx): string {
+  let s = "";
+  if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map(abilityLabel))} ability`;
+  if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map(abilityLabel))} ability`;
+  if (f.embarked_in != null) s += ` embarked within ${effectSubject(f.embarked_in, ctx)}`;
+  if (f.member_of != null) s += ` in ${effectSubject(f.member_of, ctx)}`;
+  // "any other friendly unit": a filter excluding the unit with the ability reads "other".
+  const engagedWith = (g: unknown): string => {
+    const x = { ...(g as P) };
+    const other = x.excluding === "this-unit" || x.excluding === "this-model";
+    if (other) delete x.excluding;
+    const phrase = filterSubject(x, ctx).replace(/^all /, "").replace(/ units\b/, " unit").replace(/ models\b/, " model");
+    return other ? `other ${phrase}` : phrase;
+  };
+  if (f.engaged_with != null) s += ` within Engagement Range of ${articled(engagedWith(f.engaged_with)).replace(/^an? other /, "another ")}`;
+  if (f.not_engaged_with != null) s += ` that are not within Engagement Range of any ${engagedWith(f.not_engaged_with)}`;
+  return s;
+}
+
+function articled(s: string): string {
+  return `${/^[aeiou]/i.test(s) ? "an" : "a"} ${s}`;
 }
 
 /** An effect target (a unit-ref) as the effect's subject. */
@@ -244,6 +340,7 @@ export function effectSubject(target: unknown, ctx: Ctx = {}): string {
   const r = target as P;
   if (typeof r.event_var === "string") return "that unit";
   if (typeof r.selection_var === "string") return `the bound ${jstr(r.selection_var).replace(/_/g, " ")}`;
+  if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target)} target`;
   return filterSubject(r, ctx);
 }
 
@@ -267,7 +364,32 @@ export function regionPhrase(r: P): string {
   return where;
 }
 
-/** A tag an effect applies: GW-printed tags stay as printed, internal ones read "marked as …". */
+/** A tag an effect applies: a registered id prints the rules' term, a legacy upper-case tag stays as printed, others read "marked as …". */
 export function designationFor(tag: string): string {
+  const label = designationLabel(tag);
+  if (label != null) return label;
   return tag === tag.toUpperCase() ? tag : `marked as ${dekebab(tag)}`;
+}
+
+const MOVED: Record<string, string> = {
+  normal: "a Normal move", advance: "an Advance move", "fall-back": "a Fall Back move", charge: "a Charge move", "remain-stationary": "no move (it Remained Stationary)",
+};
+/** "a Normal move" — the move a counts_as_move names. */
+export function movedPhrase(move: unknown): string {
+  return MOVED[jstr(move)] ?? `${/^[aeiou]/i.test(jstr(move)) ? "an" : "a"} ${titleCase(jstr(move))} move`;
+}
+
+/** A dice requirement: "pair of 4+", or alternatives "pair of 6+ or triple of 3+". */
+export function requirementPhrase(req: unknown): string {
+  const one = (r: { type?: unknown; min_value?: unknown } | undefined) => `${jstr(r?.type)} of ${jstr(r?.min_value)}+`;
+  const anyOf = (req as { any_of?: unknown } | undefined)?.any_of;
+  if (Array.isArray(anyOf)) return anyOf.map(one).join(" or ");
+  return one(req as { type?: unknown; min_value?: unknown } | undefined);
+}
+
+const TEST_KINDS = new Set(["psychic", "battle-shock", "leadership", "desperate-escape", "hazard"]);
+/** "a Psychic test", "a Blessings of Khorne roll" — what kind of roll a gate or a roll step is. */
+export function rollKindNoun(kind: unknown): string {
+  const name = rollName(kind);
+  return `${/^[aeiou]/i.test(name) ? "an" : "a"} ${name} ${typeof kind === "string" && TEST_KINDS.has(kind) ? "test" : "roll"}`;
 }

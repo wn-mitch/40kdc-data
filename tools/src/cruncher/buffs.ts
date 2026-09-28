@@ -164,6 +164,15 @@ export type EngineContext = {
    * SPA surfaces a diagnostic (mirrors how `timing` undefined behaves).
    */
   attackerAttached?: boolean;
+  /** The army's Army Faction id. Drives the `army-faction` condition; undefined leaves it "unknown". */
+  armyFaction?: string;
+  /** The battle size being played. Drives the `battle-size` condition; undefined leaves it "unknown". */
+  battleSize?: "incursion" | "strike-force" | "onslaught";
+  /**
+   * The attacking unit is Guided (For the Greater Good: not an Observer, targeting a Spotted unit).
+   * Drives the `guided` condition; undefined leaves it "unknown".
+   */
+  attackerGuided?: boolean;
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */

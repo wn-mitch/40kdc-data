@@ -19,7 +19,7 @@ export interface Condition {
 }
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
-import { andList, dekebab, designationPhrase, objectivePhrase, ord, orList, rangePhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, type P } from "./condition-refs.js";
+import { andList, dekebab, designationPhrase, objectivePhrase, ord, orList, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase, type P } from "./condition-refs.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
 
@@ -34,7 +34,7 @@ function keywordList(p: P): string {
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
   "strength", "model-count", "wounds", "loadout", "attachment", "has-ability", "controls", "resource", "attack-compare",
-  "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "terrain-area-control",
+  "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
 ]);
 
 /** "X is Y" → "X is not Y", "X has Y" → "X does not have Y", "you control" → "you do not control"; else a leading "not". */
@@ -151,12 +151,13 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (range === "half-weapon" || range === "weapon")
         return `${p.subject === "defender" ? "the target" : subjectOf(p)} is ${negated ? "not " : ""}within ${rangePhrase(range)}`;
       if (of && typeof of === "object" && (of as P).objective) {
+        if (((of as P).objective as P).selection_var != null) return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
         const obj = objectivePhrase((of as P).objective as P, false, "objective marker");
         return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
       }
       if (of && typeof of === "object" && (of as P).owner === "enemy" && p.subject == null)
         return negated ? `no ${unitFilterPhrase(of as P).replace(/^an? /, "")} is within ${rangePhrase(range)}` : `${unitFilterPhrase(of as P)} is within ${rangePhrase(range)}`;
-      const target = of === "battlefield-edge" ? "a battlefield edge" : of && typeof of === "object" && (of as P).marker ? `${/^[aeiou]/i.test(str((of as P).marker)) ? "an" : "a"} ${dekebab(str((of as P).marker))} marker` : unitRefPhrase(of);
+      const target = of === "battlefield-edge" ? "a battlefield edge" : of === "battlefield-centre" ? "the centre of the battlefield" : of && typeof of === "object" && (of as P).marker ? `${/^[aeiou]/i.test(str((of as P).marker)) ? "an" : "a"} ${dekebab(str((of as P).marker))} marker` : unitRefPhrase(of);
       const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
       const at = p.at === "phase-start" ? " at the start of the phase" : "";
       return `${who} ${p.at === "phase-start" ? "was" : "is"} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)} of ${target}${at}`;
@@ -207,7 +208,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${neg}${side(p.left as P)} is ${dekebab(str(p.comparison))} ${side(p.right as P)}`;
     }
     case "roll-result":
-      return `${neg}the triggering ${dekebab(str(p.roll))} roll ${p.result === "success" ? "succeeded" : `was a ${str(p.result)}`}`;
+      return `${neg}the triggering ${rollWord(p.roll)} roll ${p.result === "success" ? "succeeded" : `was a ${str(p.result)}`}`;
     case "visible": {
       const who = p.subject === "defender" ? "the target" : subjectOf(p);
       const to = p.to == null || p.to === "attacker" ? "the attacking model" : unitRefPhrase(p.to);
@@ -222,7 +223,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
         if (p.count_max != null) out += ` (at most ${str(p.count_max)})`;
         return out;
       }
-      return `${subjectOf(p)} is ${negated ? "not " : ""}${designationPhrase(str(p.tag))}`;
+      const by = p.by != null ? ` by ${unitRefPhrase(p.by, "this unit").replace(/^the unit$/, "this unit")}` : "";
+      return `${subjectOf(p)} is ${negated ? "not " : ""}${designationPhrase(str(p.tag))}${by}`;
     }
     case "resource": {
       if (p.below_max === true) {
@@ -261,8 +263,17 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const terrain = p.tag != null ? `${dekebab(str(p.tag))} terrain` : "a terrain area";
       return `${neg}${str(p.count_min ?? 1)}+ enemy units destroyed ${where} ${terrain}`;
     }
-    case "terrain-area-control":
-      return `${neg}you control a terrain area with ${str(p.min_models ?? 1)}+ models`;
+    case "battle-size":
+      return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
+    case "army-faction":
+      return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
+    case "moved-over": {
+      const who = subjectOf(p, "the unit");
+      const window = p.window == null || p.window === "event" ? "during that move" : windowPhrase(p.window);
+      return `${who} ${negated ? "was not" : "was"} moved over by ${unitRefPhrase(p.by, "this model")} ${window}`;
+    }
+    case "guided":
+      return `${subjectOf(p, "the unit")} is ${negated ? "not " : ""}${designationPhrase("guided")}`;
     default:
       return `${neg}${dekebab(c.type ?? "unknown")}`;
   }

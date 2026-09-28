@@ -8,9 +8,11 @@ import { conditionLeadIn } from "./condition-leadin.js";
 import { objectivePhrase, type P } from "./condition-refs.js";
 import type { Inline, Leaf } from "./effect-leaf.js";
 import {
-  andList, dekebab, designationFor, noneOf, diceCase, effectSubject, formatComparison, jstr, ofOrPossessive, pronoun, rangePhrase,
-  regionPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
+  amountOf, andList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
+  rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
 } from "./effect-words.js";
+import { expiryTrail } from "./expiry.js";
+import { placePhrase, placementLimits, placementPhrase } from "./effect-placement.js";
 
 function wounds(n: string, noun = "mortal wound"): string {
   return n === "1" ? noun : `${noun}s`;
@@ -18,6 +20,7 @@ function wounds(n: string, noun = "mortal wound"): string {
 
 function mortalWounds(m: Record<string, unknown>, subj: string): string {
   const count = diceCase(m.count);
+  const suffered = isLiteral(m.count) ? `${count} ${wounds(count)}` : amountOf(m.count, "mortal wound", "mortal wounds");
   const psychic = m.psychic === true ? " (Psychic Attack)" : "";
   // A range the target filter already states is not repeated ("enemy units within 9\" within 9\"").
   const range = m.range != null && !subj.includes(` within ${rangePhrase(m.range)}`) ? ` within ${rangePhrase(m.range)}` : "";
@@ -26,36 +29,27 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   if (roll != null) {
     const each = roll.per_model === "target" ? " for each model in the target unit" : roll.per_model === "this" ? " for each model in this unit" : "";
     const dice = each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
-    return `roll ${dice}${each}: for each ${jstr(roll.threshold)}+, ${who} ${v(who, "suffers")} ${count} ${wounds(count)}${psychic}`;
+    return `roll ${dice}${each}: for each ${jstr(roll.threshold)}+, ${who} ${v(who, "suffers")} ${suffered}${psychic}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
-  return `${who} ${v(who, "suffers")} ${count} ${wounds(count)}${per}${psychic}`;
+  return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}`;
 }
 
 const FNP_AGAINST: Record<string, string> = {
   mortal: " against mortal wounds", psychic: " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
 };
 
-const PLACEMENT: Record<string, string> = {
-  "closest-to-destruction": " as close as possible to where it was destroyed",
-  coherency: " in Unit Coherency",
-  unengaged: " not within Engagement Range of any enemy units",
-  "strategic-reserves": " in Strategic Reserves",
-  anywhere: " anywhere on the battlefield",
-};
-
-function placement(m: Record<string, unknown>): string {
-  if (m.placement === "wholly-within") return ` wholly within ${rangePhrase(m.range)} of this model`;
-  return m.placement != null ? PLACEMENT[jstr(m.placement)] ?? ` ${dekebab(jstr(m.placement))}` : "";
-}
-
-function returnModels(e: Leaf, m: Record<string, unknown>, subj: string): string {
-  const w = m.wounds_remaining == null || m.wounds_remaining === "full" ? "its full wounds" : `${diceCase(m.wounds_remaining)} ${wounds(diceCase(m.wounds_remaining), "wound")}`;
-  if (e.target === "this-model") return `${subj} is set up again${placement(m)} with ${w} remaining`;
-  const count = m.count === "all" ? "all" : diceCase(m.count);
-  const kind = m.model_keyword != null ? `destroyed ${jstr(m.model_keyword)} model` : "destroyed model";
-  const noun = count === "1" ? kind : `${kind}s`;
-  return `return ${count} ${noun} to ${subj}${placement(m)}, each with ${w} remaining`;
+function returnModels(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+  const w = m.wounds_remaining == null || m.wounds_remaining === "full" ? "its full wounds"
+    : isLiteral(m.wounds_remaining) ? `${diceCase(m.wounds_remaining)} ${wounds(diceCase(m.wounds_remaining), "wound")}` : amountOf(m.wounds_remaining, "wound", "wounds");
+  const where = `${placementPhrase(m)}${placementLimits(m, ctx)}`;
+  const detach = m.detach === true ? `, as a separate unit${m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : ""} (it is no longer part of its attached unit)` : "";
+  if (e.target === "this-model") return `${subj} is set up again${where} with ${w} remaining${detach}`;
+  const kw = m.model_keyword != null ? `${jstr(m.model_keyword)} ` : m.bodyguard_only === true ? "Bodyguard " : "";
+  const kind = `destroyed ${kw}model`;
+  const what = m.count === "all" ? `all ${kind}s` : amountOf(m.count, kind, `${kind}s`);
+  const excl = Array.isArray(m.exclude_model_keyword) ? ` (excluding ${andList((m.exclude_model_keyword as unknown[]).map(jstr))} models)` : "";
+  return `return ${what}${excl} to ${subj}${where}, each with ${w} remaining${detach}`;
 }
 
 function destroyModels(m: Record<string, unknown>, subj: string): string {
@@ -88,11 +82,18 @@ function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx)
 }
 
 function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
-  const n = Number(m.count ?? 1);
+  const where = `${placementPhrase(m)}${placementLimits(m, ctx)}`;
+  const engage = m.allow_engagement_with != null ? `; it can be set up within Engagement Range of ${effectSubject(m.allow_engagement_with, ctx)}` : "";
+  const models = m.model_count != null ? ` containing ${amountOf(m.model_count, "model", "models")}` : "";
+  const strength = m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : "";
+  // New models that join an existing unit rather than forming their own.
+  if (m.join != null) return `add ${amountOf(m.model_count ?? m.count ?? 1, `${titleCase(jstr(m.datasheet))} model`, `${titleCase(jstr(m.datasheet))} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
+  const literal = isLiteral(m.count);
+  const n = literal ? Number(m.count ?? 1) : NaN;
   const what = m.copy_of != null
-    ? `${n === 1 ? "a new unit" : `${n} new units`} identical to ${effectSubject(m.copy_of, ctx)}`
-    : `${n === 1 ? "a" : jstr(n)} ${titleCase(jstr(m.datasheet))} unit${n === 1 ? "" : "s"}`;
-  return `add ${what} to your army${placement(m)}`;
+    ? `${n === 1 ? "a new unit" : literal ? `${n} new units` : amountOf(m.count, "new unit", "new units")} identical to ${effectSubject(m.copy_of, ctx)}`
+    : n === 1 ? `a ${titleCase(jstr(m.datasheet))} unit` : literal ? `${jstr(n)} ${titleCase(jstr(m.datasheet))} units` : amountOf(m.count, `${titleCase(jstr(m.datasheet))} unit`, `${titleCase(jstr(m.datasheet))} units`);
+  return `add ${what}${models}${strength} to your army${where}${engage}`;
 }
 
 const MOVE_VERBS: Record<string, string> = {
@@ -109,17 +110,42 @@ const PASSTHROUGH: Record<string, string> = {
   "terrain-le-4": 'terrain features 4" or lower', "tall-terrain": 'terrain features over 4"', "all-terrain": "terrain features",
   "enemy-models": "enemy models",
 };
-const passthrough = (p: unknown): string => andList((p as unknown[]).map((x) => PASSTHROUGH[jstr(x)] ?? dekebab(jstr(x))));
+const passthrough = (p: unknown): string => andList((p as unknown[]).map((x) => (typeof x === "object" && x != null ? passItem(x as P) : PASSTHROUGH[jstr(x)] ?? dekebab(jstr(x)))));
+
+/** A typed pass-through item: "models (excluding MONSTER and VEHICLE models)", "terrain features 4\" or lower". */
+function passItem(x: P): string {
+  if (x.kind === "terrain") return x.height === "up-to-4" ? 'terrain features 4" or lower' : x.height === "over-4" ? 'terrain features over 4"' : "terrain features";
+  const owner = x.owner === "friendly" ? "friendly " : x.owner === "enemy" ? "enemy " : "";
+  const all = Array.isArray(x.all_of) ? `${(x.all_of as unknown[]).map((k) => titleCase(jstr(k).toLowerCase())).join(" ")} ` : "";
+  const excl = Array.isArray(x.excluding) ? ` (excluding ${andList((x.excluding as unknown[]).map(jstr))} models)` : "";
+  return `${owner}${all}models${excl}`;
+}
 
 function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const verb = MOVE_VERBS[jstr(m.move_type)] ?? `make a ${dekebab(jstr(m.move_type))} move`;
   const upTo = m.distance != null ? (verb.startsWith("make ") ? ` of up to ${diceCase(m.distance)}"` : ` up to ${diceCase(m.distance)}"`) : "";
-  let s = `${subj} can ${verb}${upTo}`;
+  let s = `${subj} can ${verb}${upTo}${modeClause(m)}`;
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
   const ends = m.ends_within as P | undefined;
-  if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${ends.of != null ? effectSubject(ends.of, ctx) : "this model"}`;
+  if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
+  if (m.allow_engagement === true) s += "; it can end that move within Engagement Range of enemy units";
+  if (m.counts_as_move != null) s += `; that move counts as ${movedPhrase(m.counts_as_move)}`;
   if (m.keeps_eligible === true) s += "; doing so does not change what it is eligible to do this turn";
   return s;
+}
+
+/** A unit-ref keeps its effect-subject phrase; markers, objectives and edges read as places. */
+function endsOf(of: unknown, ctx: Ctx): string {
+  if (of == null) return "this model";
+  const place = typeof of === "string" ? of.startsWith("battlefield-") : typeof of === "object" && ((of as P).marker != null || (of as P).objective != null);
+  return place ? placePhrase(of, ctx) : effectSubject(of, ctx);
+}
+
+/** " using the Rapid Disembarkation rules", " using the Desperate Escape rules". */
+function modeClause(m: Record<string, unknown>): string {
+  if (m.mode == null) return "";
+  const mode = titleCase(jstr(m.mode));
+  return ` using the ${m.move_type === "disembark" || m.from === "transport" ? `${mode} Disembarkation` : mode} rules`;
 }
 
 function moveModifier(m: Record<string, unknown>, subj: string): string {
@@ -140,28 +166,27 @@ function moveModifier(m: Record<string, unknown>, subj: string): string {
 }
 
 const ORD = ["", "first", "second", "third", "fourth", "fifth"];
-const SET_UP_PLACEMENT: Record<string, string> = {
-  "closest-to-original": " as close as possible to its original position", "connected-sections": " with its sections touching",
-  anywhere: " anywhere on the battlefield", "deployment-zone": " wholly within your deployment zone", "on-terrain": " on top of a terrain feature",
-};
-
 function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const who = m.subject === "models-on-this-model" ? "the models on this model" : m.subject != null ? effectSubject(m.subject, ctx) : subj;
   const limits = m.ignore_limits === true ? ", ignoring any limits on units in Strategic Reserves" : "";
-  if (m.to === "strategic-reserves") return `${m.allow === false ? noneOf(who) : who} ${m.allow === false ? "cannot" : "can"} be placed into Strategic Reserves${limits}`;
+  const can = m.allow === false ? "cannot" : m.mandatory === true ? "must" : "can";
+  if (m.to === "strategic-reserves") return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}`;
   const from = m.from === "strategic-reserves" ? " from Strategic Reserves" : m.from === "transport" ? " from its Transport" : "";
-  const can = m.allow === false ? "cannot" : "can";
   const whoCan = m.allow === false ? noneOf(who) : who;
   let s = m.from === "battlefield" ? `${whoCan} ${can} be removed from the battlefield and set up again` : `${whoCan} ${can} be set up on the battlefield${from}`;
   if (m.via === "deep-strike") s += " using the Deep Strike rules";
+  s += modeClause(m);
   if (Array.isArray(m.turns)) s += ` in the Reinforcements step of your ${(m.turns as number[]).map((t) => ORD[t] ?? `${t}th`).join(", ").replace(/, ([^,]*)$/, " or $1")} Movement phase`;
+  if (m.arrives === "next-movement-phase") s += ` in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? " (even in the first battle round)" : ""}`;
   if (m.sections != null) s += ` as ${jstr(m.sections)} separate sections`;
-  if (m.placement != null) s += SET_UP_PLACEMENT[jstr(m.placement)] ?? ` ${dekebab(jstr(m.placement))}`;
+  s += placementPhrase(m) + placementLimits(m, ctx);
   if (m.within_edge != null) s += ` wholly within ${jstr(m.within_edge)}" of a battlefield edge`;
   if (m.min_enemy_distance != null) s += ` more than ${jstr(m.min_enemy_distance)}" away from all enemy models`;
   const md = m.min_distance_from as P | undefined;
   if (md != null) s += ` ${m.allow === false ? "within" : "more than"} ${rangePhrase(md.range)}${m.allow === false ? " of" : " away from"} ${md.of != null ? effectSubject(md.of, ctx) : "this model"}`;
   if (m.round_offset != null) s += `, treating the battle round as ${Math.abs(Number(m.round_offset))} ${Number(m.round_offset) < 0 ? "lower" : "higher"} than it is`;
+  if (m.allow_engagement === true) s += "; it can be set up within Engagement Range of enemy units";
+  if (m.counts_as_move != null) s += `; it counts as having made ${movedPhrase(m.counts_as_move)} this turn`;
   return s + limits;
 }
 
@@ -210,6 +235,7 @@ function resourceDie(m: Record<string, unknown>): string {
     const die = m.value === "rolled" ? "one rolled D6" : `one die showing ${shown}`;
     return `add ${die} to your ${pool} for each ${per} you have${m.consumes_pool === true ? `, after which all your ${per} are lost` : ""}`;
   }
+  if (m.count != null && !isLiteral(m.count)) return `add ${amountOf(m.count, m.value === "rolled" ? "rolled D6" : "die", m.value === "rolled" ? "rolled D6" : "dice")} to your ${pool}`;
   const cnt = m.count != null ? diceCase(m.count) : "1";
   if (m.value === "rolled") return `add ${cnt === "1" ? "a rolled D6" : `${cnt} rolled D6`} to your ${pool}`;
   return `add ${cnt === "1" ? "a die" : `${cnt} dice`} showing ${shown} to your ${pool}`;
@@ -219,12 +245,16 @@ function designate(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const s = m.subject as P | string | undefined;
   const what =
     s == null ? subj
-      : typeof s === "object" && s.objective != null ? `the ${objectivePhrase(s.objective as P)}`
+      : typeof s === "object" && s.objective != null
+        ? (s.objective as P).selection_var != null ? "that objective marker" : `the ${objectivePhrase(s.objective as P)}`
         : typeof s === "object" && s.terrain_area != null ? regionPhrase({ terrain_area: s.terrain_area })
           : effectSubject(s, ctx);
   const tag = designationFor(jstr(m.tag));
-  const until = m.clears_on === "turn-rollover" ? " until the end of the turn" : m.clears_on === "phase-end" ? " until the end of the phase" : "";
-  return m.clear === true ? `${what} ${v(what, "is")} no longer ${tag}` : `${what} ${v(what, "is")} ${tag}${until}`;
+  const legacy = m.clears_on === "turn-rollover" ? " until the end of the turn" : m.clears_on === "phase-end" ? " until the end of the phase" : "";
+  const trail = expiryTrail(m.clears_on);
+  const until = legacy || (trail && m.clears_on !== "battle" ? ` ${trail}` : "");
+  const by = m.by != null ? ` by ${effectSubject(m.by, ctx)}` : "";
+  return m.clear === true ? `${what} ${v(what, "is")} no longer ${tag}` : `${what} ${v(what, "is")} ${tag}${by}${until}`;
 }
 
 function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -237,13 +267,29 @@ function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     case "enhancement-slot":
       return `each ${withF?.replace(/ units\b/, " unit") ?? "such unit"} can be given ${m.max != null ? `up to ${jstr(m.max)} ` : ""}${m.enhancement_kind != null ? `${titleCase(jstr(m.enhancement_kind))} ` : ""}Enhancement${m.max === 1 ? "" : "s"}`;
     case "faction-forbidden": return `you cannot select ${titleCase(jstr(m.faction))} as your Army Faction`;
+    case "single-chapter": return "your army can include units from only one Chapter";
+    case "detachment-forbidden": return `you cannot select the ${titleCase(jstr(m.detachment))} Detachment`;
+    case "detachment-tag-exclusive": return `you cannot select this Detachment together with another ${titleCase(jstr(m.tag))} Detachment`;
     case "attachment":
       if (m.mandatory === true) return `${subj} must be attached to a Leader, or it counts as destroyed`;
+      if (m.attach_as != null) return `a Leader that can be attached to ${effectSubject(m.attach_as, ctx).replace(/^all /, "")} can also be attached to ${subj}`;
       return `at the start of the Declare Battle Formations step, ${subj} can join one friendly unit${m.led_by != null ? ` led by a ${titleCase(jstr(m.led_by))} model` : ""}, becoming part of that Bodyguard unit`;
-    default:
-      if (m.max != null) return `your army can include at most ${jstr(m.max)} ${withF ?? "such units"}`;
-      return `your army cannot include ${withF ?? "such units"}`;
+    default: return composition(m, withF, ctx);
   }
+}
+
+/** A composition limit: at most N units / models / points of X, per matching unit, outside the Retinue limit. */
+function composition(m: Record<string, unknown>, withF: string | null, ctx: Ctx): string {
+  const what = withF ?? "such units";
+  const exempt = Array.isArray(m.exempt_from) ? "; they do not count toward the Retinue limit" : "";
+  if (m.max == null) return `your army cannot include ${what}${exempt}`;
+  const measure = m.measure === "points" ? "points of" : m.measure === "models" ? "models from" : "";
+  const max = isLiteral(m.max) ? jstr(m.max) : diceCase(m.max);
+  // "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
+  const one = isLiteral(m.max) && Number(m.max) === 1 && !measure;
+  const counted = one ? what.replace(/ units\b/, " unit") : what;
+  const per = m.per != null ? ` for each ${effectSubject(m.per, ctx).replace(/^all /, "").replace(/ units\b/, " unit")} in your army` : "";
+  return `your army can include at most ${max} ${measure ? `${measure} ` : ""}${counted}${per}${exempt}`;
 }
 
 /** How models count against a Transport's capacity. */
@@ -311,10 +357,11 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "heal": {
       const who = m.per === "model" ? `each model in ${subj}` : subj;
       if (m.amount === "full") return `${who} ${v(who, "regains")} all ${pronoun(who)} lost wounds`;
+      if (!isLiteral(m.amount)) return `${who} ${v(who, "regains")} up to ${amountOf(m.amount, "lost wound", "lost wounds")}`;
       const amount = diceCase(m.amount);
       return `${who} ${v(who, "regains")} up to ${amount} lost ${amount === "1" ? "wound" : "wounds"}`;
     }
-    case "return-models": return returnModels(e, m, subj);
+    case "return-models": return returnModels(e, m, subj, ctx);
     case "destroy-models": return destroyModels(m, subj);
     case "act-on-death": return actOnDeath(e, m, subj, ctx);
     case "split-unit": {
@@ -339,12 +386,17 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     }
     case "cost-modifier": return costModifier(m, subj);
     case "resource-gain": {
+      if (m.amount != null && typeof m.amount === "object") return `you gain ${amountOf(m.amount, resourceNoun(m.pool, m.label, 1), resourceNoun(m.pool, m.label, 2))}`;
       const amount = m.amount === "variable" ? "a number of" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       return `you gain ${amount} ${resourceNoun(m.pool, m.label, m.amount)}`;
     }
     case "resource-spend": {
       const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : diceCase(m.amount);
-      return `spend ${amount} ${resourceNoun(m.pool, m.label, m.amount === "all" ? 2 : m.amount)}`;
+      const showing = m.face != null ? ` showing a ${jstr(m.face)}` : m.requirement != null ? ` forming a ${requirementPhrase(m.requirement)}` : "";
+      let noun = resourceNoun(m.pool, m.label, m.amount === "all" ? 2 : m.amount);
+      // A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming a triple of 6+".
+      if (showing && !/\b(die|dice)$/.test(noun)) noun += Number(jstr(m.amount)) === 1 ? " die" : " dice";
+      return `spend ${amount} ${noun}${showing}`;
     }
     case "resource-die": return resourceDie(m);
     case "objective-sticky":
