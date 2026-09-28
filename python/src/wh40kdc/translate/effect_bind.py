@@ -15,6 +15,7 @@ from typing import Any
 from wh40kdc.translate.condition_refs import _objective_phrase
 from wh40kdc.translate.effect_quantity import roll_kind_noun
 from wh40kdc.translate.effect_words import (
+    ability_label,
     capitalize,
     dice_case,
     jstr,
@@ -77,7 +78,7 @@ def objective_selector_phrase(sel: dict[str, Any]) -> str:
     if req is not None:
         r = _obj(req)
         who = "an enemy" if r.get("owner") == "enemy" else "a friendly"
-        ability = title_case(jstr(r.get("requires_ability")))
+        ability = ability_label(r.get("requires_ability"))
         s += f" with {who} unit with the {ability} ability within range of it"
     return s
 

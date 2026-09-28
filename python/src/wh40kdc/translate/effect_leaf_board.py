@@ -32,6 +32,7 @@ from wh40kdc.translate.effect_words import (
     dice_case,
     effect_subject,
     format_comparison,
+    is_rating_ref,
     jstr,
     none_of,
     num,
@@ -600,10 +601,11 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "damage-reduction":
         return _damage_reduction(m, subj)
     if t == "feel-no-pain":
-        return (
-            f"{subj} {v(subj, 'has')} the Feel No Pain {jstr(m.get('threshold'))}+ ability"
-            f"{_FNP_AGAINST.get(jstr(m.get('against')), '')}"
-        )
+        rated = is_rating_ref(m.get("threshold"))
+        threshold = "X" if rated else jstr(m.get("threshold"))
+        against = _FNP_AGAINST.get(jstr(m.get("against")), "")
+        tail = ", X being its rating" if rated else ""
+        return f"{subj} {v(subj, 'has')} the Feel No Pain {threshold}+ ability{against}{tail}"
     if t == "invulnerable-save":
         vs = (
             f" against {jstr(m['weapon_type'])} attacks" if m.get("weapon_type") is not None else ""

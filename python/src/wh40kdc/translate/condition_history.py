@@ -22,6 +22,7 @@ from wh40kdc.translate.condition_refs import (
     _window_phrase,
     _with_window,
     dekebab,
+    id_label,
     move_kinds,
     roll_word,
     title_case,
@@ -165,7 +166,7 @@ def _describe_happened(p: P, negated: bool) -> str:
         which = used_ability_phrase(f)
         if which is not None:
             return f"{neg}{_with_window(f'{who} used {which}', window)}"
-        what = f"the {title_case(_str(f['id']))} " if f.get("id") is not None else "a "
+        what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
         kind = f.get("kind") if f.get("kind") is not None else "ability"
         return f"{neg}{_with_window(f'{who} used {what}{dekebab(_str(kind))}', window)}"
     if event == "objective-gained":

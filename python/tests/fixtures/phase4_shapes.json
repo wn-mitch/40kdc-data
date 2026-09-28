@@ -683,7 +683,7 @@
      "target": "this-unit",
      "modifier": {
       "roll": {
-       "of_ability": "reanimation-protocols"
+       "of_ability": "reanimation-protocols-necrons"
       },
       "operation": "add",
       "value": 1
@@ -963,7 +963,7 @@
      "type": "ability-modifier",
      "target": "this-unit",
      "modifier": {
-      "ability": "killing-blow",
+      "ability": "killing-blow-tau-empire",
       "aspect": "end-round",
       "operation": "set",
       "value": 4
@@ -1054,7 +1054,7 @@
      "type": "ability-activate",
      "target": "this-unit",
      "modifier": {
-      "ability": "reanimation-protocols",
+      "ability": "reanimation-protocols-necrons",
       "override": {
        "amount": "D6"
       }
@@ -2608,7 +2608,7 @@
     "target": "this-unit",
     "modifier": {
      "roll": {
-      "of_ability": "reanimation-protocols"
+      "of_ability": "reanimation-protocols-necrons"
      },
      "operation": "add",
      "value": 1
@@ -2628,13 +2628,13 @@
    "applied": [],
    "unsupported": [
     {
-     "reason": "roll-modifier on \"reanimation-protocols roll\" is outside the damage path",
+     "reason": "roll-modifier on \"reanimation-protocols-necrons roll\" is outside the damage path",
      "effectFragment": {
       "type": "roll-modifier",
       "target": "this-unit",
       "modifier": {
        "roll": {
-        "of_ability": "reanimation-protocols"
+        "of_ability": "reanimation-protocols-necrons"
        },
        "operation": "add",
        "value": 1
@@ -2863,7 +2863,7 @@
        "Lethal Hits"
       ],
       "weapon_ref": {
-       "selection_var": "possessed-blade"
+       "weapon_var": "possessed-blade"
       }
      }
     },
@@ -7172,6 +7172,568 @@
    "modifier": {
     "amount": 1
    }
+  }
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "feel-no-pain",
+     "target": "this-unit",
+     "modifier": {
+      "threshold": {
+       "rating": true
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit has the Feel No Pain X+ ability, X being its rating."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "feel-no-pain",
+     "target": {
+      "owner": "friendly",
+      "all_of": [
+       "INFANTRY"
+      ]
+     },
+     "modifier": {
+      "threshold": {
+       "rating": true
+      },
+      "against": "mortal"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "All friendly INFANTRY units have the Feel No Pain X+ ability against mortal wounds, X being its rating."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "ability-grant",
+     "target": "this-unit",
+     "modifier": {
+      "ability": "scouts",
+      "value": {
+       "rating": true
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit gains the Scouts X\" ability, X being its rating."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "ability-grant",
+     "target": "this-model",
+     "modifier": {
+      "ability": "firing-deck",
+      "value": {
+       "rating": true
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "This model gains the Firing Deck X ability, X being its rating."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "mortal-wounds",
+     "target": {
+      "owner": "enemy",
+      "within": {
+       "range": {
+        "inches": 6
+       }
+      }
+     },
+     "modifier": {
+      "count": {
+       "rating": true
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "Enemy units within 6\" suffer a number of mortal wounds equal to its rating."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "rule-state",
+     "target": "this-unit",
+     "modifier": {
+      "direction": "granted",
+      "rule_kind": "faction-rule",
+      "rule": "blessings-of-khorne-world-eaters"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit gains Blessings of Khorne."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "rule-state",
+     "target": "this-unit",
+     "modifier": {
+      "direction": "suppressed",
+      "rule_kind": "ability",
+      "rule": "oath-of-moment-adeptus-astartes"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit loses the Oath of Moment ability."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "rule-state",
+     "target": "this-unit",
+     "modifier": {
+      "direction": "suppressed",
+      "rule_kind": "keyword",
+      "rule": "oath-of-moment-adeptus-astartes"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit loses the Oath of Moment Adeptus Astartes keyword."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "cost-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "of": "stratagem",
+      "id": "armour-of-contempt-adeptus-astartes",
+      "operation": "decrease",
+      "amount": 1
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The Armour of Contempt Stratagem costs 1CP less."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "permission",
+     "target": "this-unit",
+     "modifier": {
+      "activity": "use-stratagem",
+      "stratagem": "fire-overwatch",
+      "allow": false
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit cannot be targeted with the Fire Overwatch Stratagem."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "targeting",
+     "target": "this-unit",
+     "modifier": {
+      "by": {
+       "owner": "enemy"
+      },
+      "may": "cannot-target",
+      "target": "this-unit",
+      "kind": "stratagem",
+      "stratagem": "heroic-intervention-world-eaters"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "Enemy units cannot target the unit with the Heroic Intervention Stratagem."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": {
+       "of_ability": "reanimation-protocols-necrons"
+      },
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit gets +1 to Reanimation Protocols rolls."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "feel-no-pain",
+     "target": {
+      "owner": "friendly",
+      "has_ability": [
+       "lone-operative-adeptus-astartes"
+      ]
+     },
+     "modifier": {
+      "threshold": 5
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "All friendly units with the Lone Operative ability have the Feel No Pain 5+ ability."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "select-objective",
+     "selector": {
+      "count": 1,
+      "bind_as": "o",
+      "requires_unit": {
+       "owner": "enemy",
+       "requires_ability": "infiltrators-orks"
+      }
+     },
+     "effect": {
+      "type": "no-effect"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "Select one objective marker with an enemy unit with the Infiltrators ability within range of it: nothing happens."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "conditional",
+     "condition": {
+      "type": "rule-active",
+      "parameters": {
+       "rule": "waaagh-orks"
+      }
+     },
+     "effect": {
+      "type": "cp-gain",
+      "target": "this-unit",
+      "modifier": {
+       "amount": 1
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "While the Waaagh is active, you gain 1CP."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "conditional",
+     "condition": {
+      "type": "has-ability",
+      "parameters": {
+       "ability": "lord-of-the-death-guard"
+      }
+     },
+     "effect": {
+      "type": "cp-gain",
+      "target": "this-unit",
+      "modifier": {
+       "amount": 1
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "If the unit has the Lord of the Death Guard ability, you gain 1CP."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "conditional",
+     "condition": {
+      "type": "happened",
+      "parameters": {
+       "event": "used",
+       "filter": {
+        "kind": "stratagem",
+        "id": "grenade-adeptus-astartes"
+       },
+       "window": "turn"
+      }
+     },
+     "effect": {
+      "type": "cp-gain",
+      "target": "this-unit",
+      "modifier": {
+       "amount": 1
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "If the unit used the Grenade stratagem this turn, you gain 1CP."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "conditional",
+     "condition": {
+      "type": "within",
+      "parameters": {
+       "range": {
+        "aura_of": "nurgles-gift-death-guard"
+       }
+      }
+     },
+     "effect": {
+      "type": "cp-gain",
+      "target": "this-unit",
+      "modifier": {
+       "amount": 1
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "While the unit is within Contagion Range of the unit, you gain 1CP."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "conditional",
+     "condition": {
+      "type": "within",
+      "parameters": {
+       "range": {
+        "aura_of": "vile-contagion-death-guard"
+       }
+      }
+     },
+     "effect": {
+      "type": "cp-gain",
+      "target": "this-unit",
+      "modifier": {
+       "amount": 1
+      }
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "While the unit is within the Vile Contagion range of the unit, you gain 1CP."
+ },
+ {
+  "fn": "describeCondition",
+  "args": [
+   {
+    "type": "rule-active",
+    "parameters": {
+     "rule": "acts-of-faith-adepta-sororitas"
+    }
+   }
+  ],
+  "out": "the Acts of Faith is active"
+ },
+ {
+  "fn": "describeCondition",
+  "args": [
+   {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "rule-active",
+      "parameters": {
+       "rule": "orks"
+      }
+     }
+    ]
+   }
+  ],
+  "out": "the Orks is not active"
+ },
+ {
+  "fn": "effectToBuffs",
+  "args": [
+   {
+    "type": "feel-no-pain",
+    "target": "this-unit",
+    "modifier": {
+     "threshold": {
+      "rating": true
+     }
+    }
+   },
+   {
+    "kind": "ability",
+    "abilityId": "feel-no-pain",
+    "abilityKind": "unit"
+   },
+   {
+    "phase": "shooting"
+   },
+   "target"
+  ],
+  "out": {
+   "applied": [],
+   "unsupported": [
+    {
+     "reason": "feel-no-pain: threshold not numeric",
+     "effectFragment": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+       "threshold": {
+        "rating": true
+       }
+      }
+     }
+    }
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "args": [
+   {
+    "type": "feel-no-pain",
+    "target": "this-unit",
+    "modifier": {
+     "threshold": 5
+    }
+   },
+   {
+    "kind": "ability",
+    "abilityId": "feel-no-pain",
+    "abilityKind": "unit"
+   },
+   {
+    "phase": "shooting"
+   },
+   "target"
+  ],
+  "out": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "feel-no-pain",
+      "abilityKind": "unit"
+     },
+     "contribution": {
+      "type": "feel-no-pain",
+      "threshold": 5
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
   }
  }
 ]

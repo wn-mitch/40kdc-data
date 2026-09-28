@@ -15,11 +15,18 @@ import pytest
 from wh40kdc.data.collection import Collection
 
 
-def test_deduplicates_abilities_by_faction_and_id(dataset: Any) -> None:
-    keys = [f"{a.raw.get('faction_id') or ''}::{a.id}" for a in dataset.abilities.all]
-    assert len(set(keys)) == len(keys)
-    idols = [a for a in dataset.abilities.all if a.id == "idol-of-blessed-blood"]
-    assert len(idols) == 2, "both factions' idol-of-blessed-blood copies survive dedupe"
+def test_keeps_every_ability_record_under_a_unique_id(dataset: Any) -> None:
+    # Ids are unique across factions and every faction record names its faction, so no
+    # record is dropped as a duplicate and each id carries its faction suffix.
+    ids = [a.id for a in dataset.abilities.all]
+    assert len(set(ids)) == len(ids)
+    from wh40kdc.data.bundle import raw_data
+
+    assert len(ids) == len(raw_data()["abilities"])
+    for a in dataset.abilities.all:
+        faction = a.raw.get("faction_id")
+        if faction:
+            assert a.id == faction or a.id.endswith(f"-{faction}"), a.id
 
 
 def test_by_external_ref_returns_every_exact_match() -> None:
@@ -52,16 +59,19 @@ def test_by_external_ref_returns_every_exact_match() -> None:
     assert collection.by_external_ref("source", "Shared") == []
 
 
-def test_resolves_shared_ability_id_to_units_own_factions_copy(dataset: Any) -> None:
-    # `idol-of-blessed-blood` is authored in both world-eaters and
-    # chaos-space-marines (shared Khorne Lord of Skulls datasheet); each
-    # faction's unit must see its own faction's copy.
-    for faction in ("world-eaters", "chaos-space-marines"):
-        unit = dataset.units.get_in_faction("khorne-lord-of-skulls", faction)
-        assert unit is not None
-        idol = next((a for a in unit.abilities if a.id == "idol-of-blessed-blood"), None)
-        assert idol is not None, f"idol-of-blessed-blood on {faction} lord of skulls"
-        assert idol.raw.get("faction_id") == faction
+def test_shared_datasheet_copies_get_only_what_their_own_datasheet_prints(dataset: Any) -> None:
+    # The World Eaters Lord of Skulls prints the Idol of Blessed Blood; the CSM one does not.
+    we = dataset.units.get_in_faction("khorne-lord-of-skulls", "world-eaters")
+    csm = dataset.units.get_in_faction("khorne-lord-of-skulls", "chaos-space-marines")
+    assert we is not None and csm is not None
+    assert "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters" in [
+        a.id for a in we.abilities
+    ]
+    assert not any(a.id.startswith("idol-of-blessed-blood") for a in csm.abilities)
+    # Both print Deadly Demise at the same rating, read from the unit's ability_ids entry.
+    assert we.rating_of("deadly-demise") == "D6+2"
+    assert csm.rating_of("deadly-demise") == "D6+2"
+    assert we.rating_of("not-an-ability") is None
 
 
 def test_core_pool_abilities_resolve_via_fallback(dataset: Any) -> None:
@@ -102,10 +112,14 @@ def test_get_raises_for_shared_weapon_id_without_faction(dataset: Any) -> None:
     assert dataset.weapons.get_any("lascannon") is not None
 
 
-def test_get_raises_for_shared_ability_id_without_faction(dataset: Any) -> None:
-    with pytest.raises(LookupError, match="Ambiguous ability lookup"):
-        dataset.abilities.get("idol-of-blessed-blood")
-    assert dataset.abilities.get_any("idol-of-blessed-blood") is not None
+def test_ability_get_is_exact_and_old_bare_ids_miss(dataset: Any) -> None:
+    idol = dataset.abilities.get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")
+    assert idol is not None and idol.raw.get("faction_id") == "world-eaters"
+    # The pre-mirror bare ids carry no alias: a stale reference misses rather than guessing.
+    assert dataset.abilities.get("idol-of-blessed-blood") is None
+    assert dataset.abilities.get("berzerker-frenzy") is None
+    assert dataset.abilities.get("deadly-demise-d3") is None
+    assert dataset.abilities.get("berzerker-frenzy-world-eaters") is not None
 
 
 # ---------------------------------------------------------------------------
@@ -140,13 +154,13 @@ def test_leader_personal_invuln_does_not_buff_the_bodyguard_unit(dataset: Any) -
         },
         {"phase": "shooting"},
     )
-    assert _invulns(attached, "shadowfield") == []
+    assert _invulns(attached, "shadowfield-drukhari") == []
 
     # The Archon crunched as itself still keeps it (source kind "unit").
     own = dataset.defensive_buffs_for(
         {"unitId": "archon", "factionId": "drukhari"}, {"phase": "shooting"}
     )
-    assert [b["contribution"] for b in _invulns(own, "shadowfield")] == [
+    assert [b["contribution"] for b in _invulns(own, "shadowfield-drukhari")] == [
         {"type": "invulnerable-save", "threshold": 4}
     ]
 
@@ -162,7 +176,7 @@ def test_unit_scoped_leader_rule_still_buffs_the_attached_unit(dataset: Any) -> 
         },
         {"phase": "fight"},
     )
-    buffs = _invulns(attached, "mental-fortress-psychic")
+    buffs = _invulns(attached, "mental-fortress-adeptus-astartes")
     assert len(buffs) == 1
     assert buffs[0]["source"]["abilityKind"] == "attached"
     assert buffs[0]["source"]["sourceUnitId"] == "librarian"
@@ -171,12 +185,12 @@ def test_unit_scoped_leader_rule_still_buffs_the_attached_unit(dataset: Any) -> 
 def test_dropped_model_scoped_effect_is_reported_as_unsupported(dataset: Any) -> None:
     from wh40kdc.cruncher import effect_to_buffs
 
-    ability = dataset.abilities.get_any("shadowfield")
+    ability = dataset.abilities.get_any("shadowfield-drukhari")
     translated = effect_to_buffs(
         ability.raw.get("effect"),
         {
             "kind": "ability",
-            "abilityId": "shadowfield",
+            "abilityId": "shadowfield-drukhari",
             "abilityKind": "attached",
             "sourceUnitId": "archon",
         },
@@ -205,12 +219,12 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
         },
         {"phase": "command"},
     )
-    assert keywords_from(led, "psychic-gifts") == []
+    assert keywords_from(led, "psychic-gifts-agents-of-the-imperium") == []
     alone = dataset.buffs_for(
         {"unitId": "inquisitor", "factionId": "agents-of-the-imperium"},
         {"phase": "command"},
     )
-    assert keywords_from(alone, "psychic-gifts") == ["psyker"]
+    assert keywords_from(alone, "psychic-gifts-agents-of-the-imperium") == ["psyker"]
 
     # Surgical Precision is unit-scoped, so an attached Apothecary Biologis
     # still grants [LETHAL HITS] to the squad it joined.
@@ -222,7 +236,7 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
         },
         {"phase": "shooting"},
     )
-    assert keywords_from(aggressors, "surgical-precision") == ["lethal-hits"]
+    assert keywords_from(aggressors, "surgical-precision-adeptus-astartes") == ["lethal-hits"]
 
 
 def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:

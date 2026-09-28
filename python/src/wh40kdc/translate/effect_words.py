@@ -19,6 +19,7 @@ from wh40kdc.translate.condition_refs import (
     _designation_phrase,
     _state_phrase,
     dekebab,
+    id_label,
     range_phrase,
     title_case,
 )
@@ -33,6 +34,12 @@ __all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case"]
 # ``selectedUnit`` / ``selectedModel`` (inside a selection), ``unitSubject`` (explicit
 # beneficiary binding inside a designated attack), ``auraRecipient`` (inside an aura).
 Ctx = dict[str, Any]
+
+
+def is_rating_ref(v: Any) -> bool:
+    """``{rating: true}``: the rating the unit's datasheet prints for this rule
+    (substituted when a unit is known)."""
+    return isinstance(v, dict) and v.get("rating") is True
 
 
 def jstr(v: Any) -> str:
@@ -300,12 +307,16 @@ def pronoun(subj: str) -> str:
     return "their" if is_plural(subj) else "its"
 
 
-_ABILITY_LABELS = {"nurgle-s-gift-aura": "Nurgle's Gift (Aura)", "fights-first": "Fights First"}
+_ABILITY_LABELS = {
+    "nurgles-gift-death-guard": "Nurgle's Gift (Aura)",
+    "fights-first": "Fights First",
+}
 
 
 def ability_label(id: Any) -> str:
-    """The display label for an ability id: a curated override, else Title Case."""
-    return _ABILITY_LABELS.get(jstr(id), title_case(jstr(id)))
+    """The display name for an ability or Stratagem id: a curated override, else its name
+    part in Title Case."""
+    return _ABILITY_LABELS.get(jstr(id), id_label(jstr(id)))
 
 
 _WEAPON_LABELS = {"imperiums-sword": "Imperium's Sword"}

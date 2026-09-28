@@ -14,6 +14,7 @@ from wh40kdc.translate.effect_leaf_shapes import redirect_targeting
 from wh40kdc.translate.effect_quantity import moved_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     effect_subject,
     has_weapon,
     is_plural,
@@ -21,7 +22,6 @@ from wh40kdc.translate.effect_words import (
     none_of,
     or_list,
     range_phrase,
-    title_case,
     v,
     weapon_noun,
 )
@@ -74,7 +74,7 @@ def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     it = "they" if subj.startswith("all ") or re.search(r" units\b", subj) else "it"
     activity = m.get("activity")
     if activity == "use-stratagem" and m.get("stratagem") is not None:
-        act = f"be targeted with the {title_case(jstr(m['stratagem']))} Stratagem"
+        act = f"be targeted with the {ability_label(m['stratagem'])} Stratagem"
     else:
         act = _ACTIVITIES.get(jstr(activity), jstr(activity))
     into = ""
@@ -157,7 +157,7 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         else "can target"
     )
     if m.get("kind") == "stratagem" and m.get("stratagem") is not None:
-        kind = f" with the {title_case(jstr(m['stratagem']))} Stratagem"
+        kind = f" with the {ability_label(m['stratagem'])} Stratagem"
     elif has_weapon(m):
         kind = f" with {weapon_noun(m)}"
     else:

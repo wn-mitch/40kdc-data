@@ -12,6 +12,7 @@ from typing import Any
 from wh40kdc.translate.effect_quantity import amount_of, is_literal, requirement_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     dice_case,
     effect_subject,
     jstr,
@@ -44,7 +45,7 @@ def cost_modifier(m: dict[str, Any], subj: str) -> str:
         return f"that use of the {noun} costs {jstr(m.get('amount'))}CP"
     named = m.get("id") is not None
     which = (
-        f"the {title_case(jstr(m['id']))} {noun}"
+        f"the {ability_label(m['id'])} {noun}"
         if named
         else ("abilities" if noun == "ability" else f"{noun}s")
     )

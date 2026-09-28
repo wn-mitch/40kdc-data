@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Any, TypedDict
 
+from wh40kdc.data.ability_refs import unit_ability_ids
 from wh40kdc.data.bundle import RawData, empty_raw_data, raw_data
 from wh40kdc.data.collection import Collection, id_collection
 from wh40kdc.data.entities import (
@@ -130,22 +131,13 @@ class Dataset:
             id_aliases=embedded_registry_aliases(),
             wrap=lambda f: FactionView(f, self),
         )
-        # An ability_id is shared across factions (each faction's enrichment
-        # authors its own copy of e.g. "deadly-demise-d3", and the copies
-        # legitimately diverge); dedupe on (faction_id, id) so every faction's
-        # copy is retained and a unit resolves its own faction's ability — the
-        # same scheme as weapons (issue #59). `faction_id` is stamped at bundle
-        # time from the enrichment directory; only the shared `_core` pool
-        # stays faction-less, reachable through the first-wins fallback.
+        # Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+        # so a plain get() is exact. An old bare faction id resolves to nothing.
         self.abilities: Collection[dict[str, Any], AbilityView] = Collection(
             raw["abilities"],
             id_of=lambda a: a["ability_id"],
-            dedupe_key_of=lambda a: f"{a.get('faction_id') or ''}::{a['ability_id']}",
             name_of=lambda a: a.get("name"),
             faction_of=lambda a: a.get("faction_id"),
-            # Per-faction copies diverge (DSL fidelity, unit_ids) — same guard
-            # as weapons.
-            guard_unscoped=True,
             entity_label="ability",
             wrap=lambda a: AbilityView(a, self),
         )
@@ -530,7 +522,9 @@ class Dataset:
 
         for entry in self.eligible_abilities(input, ctx["phase"]):
             source = _buff_source_from_eligible(entry)
-            translation = entry["ability"].describe_buffs(source, ctx, "attacker")
+            translation = entry["ability"].describe_buffs(
+                source, ctx, "attacker", entry.get("rating")
+            )
             # Stratagems cost CP — opt-in, not on by default.
             is_stratagem = entry["source"]["kind"] == "detachment-stratagem"
 
@@ -615,7 +609,7 @@ class Dataset:
             ):
                 continue
             source = _buff_source_from_eligible(entry)
-            out.extend(entry["ability"].get_buffs(source, ctx, perspective))
+            out.extend(entry["ability"].get_buffs(source, ctx, perspective, entry.get("rating")))
 
         return out
 
@@ -627,7 +621,7 @@ class Dataset:
                 if phase not in existing:
                     existing.append(phase)
         for unit in raw["units"]:
-            for ability_id in unit.get("ability_ids") or []:
+            for ability_id in unit_ability_ids(unit.get("ability_ids")):
                 self._units_by_ability.setdefault(ability_id, []).append(unit)
             for weapon_id in unit.get("weapon_ids") or []:
                 self._units_by_weapon.setdefault(weapon_id, []).append(unit)

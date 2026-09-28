@@ -19,6 +19,7 @@ import re
 from functools import cache, lru_cache
 from typing import Any
 
+from wh40kdc.data.ability_refs import unit_ability_ids
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.loadout import check_unit_legality, complete_loadout, group_loadout
 from wh40kdc.data.normalize import normalize_name, strip_leading_the
@@ -222,10 +223,8 @@ def _resolve_unit_ability_id(ds: Dataset, hit: Any, raw_name: str) -> str | None
     if hit is None:
         return None
     targets = _lookup_name_keys(raw_name)
-    for ability_id in hit.raw.get("ability_ids") or []:
-        ability = ds.abilities.get_in_faction(
-            ability_id, hit.raw.get("faction_id", "")
-        ) or ds.abilities.get_any(ability_id)
+    for ability_id in unit_ability_ids(hit.raw.get("ability_ids")):
+        ability = ds.abilities.get_any(ability_id)
         if ability and any(
             normalize_name(name) in targets for name in _source_name_variants(ability.name)
         ):

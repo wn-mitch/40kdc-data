@@ -14,6 +14,7 @@ from typing import Any
 import pytest
 
 from wh40kdc.cruncher import effect_to_buffs
+from wh40kdc.data.ability_refs import with_rating
 
 from ..conftest import CORPUS
 
@@ -43,7 +44,9 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
         ability = dataset.abilities.get_any(c["abilityId"])
         assert ability is not None, f"unknown ability {c['abilityId']}"
         perspective = c.get("perspective", "attacker")
-        result = effect_to_buffs(ability.raw.get("effect"), c["source"], c["context"], perspective)
+        # A rated rule reads the unit's printed rating; the case supplies it.
+        effect = with_rating(ability.raw.get("effect"), c.get("rating"))
+        result = effect_to_buffs(effect, c["source"], c["context"], perspective)
         applied_contribs = [b["contribution"] for b in result["applied"]]
         assert applied_contribs == c["expected"]["applied"], f"{c['abilityId']} ({perspective})"
         reasons = [u["reason"] for u in result["unsupported"]]

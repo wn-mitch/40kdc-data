@@ -37,6 +37,7 @@ from wh40kdc.translate.condition_refs import (
     _truthy,
     _window_phrase,
     dekebab,
+    id_label,
     move_kinds,
     range_phrase,
     roll_word,
@@ -193,7 +194,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             where = "the battle round"
         return f"{neg}during {where}"
     if ctype == "rule-active":
-        return f"the {title_case(_str(p.get('rule')))} is {nt}active"
+        return f"the {id_label(p.get('rule'))} is {nt}active"
     if ctype == "has-keyword":
         who = "the target" if p.get("subject") == "defender" else _subject_of(p)
         return f"{who} {'does not have' if negated else 'has'} {_keyword_list(p)}"
@@ -209,7 +210,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         profile = title_case(_str(p.get("profile")))
         return f"{_subject_of(p, 'the model')} is {nt}the {profile} model"
     if ctype == "has-ability":
-        return f"{neg}{_subject_of(p)} has the {title_case(_str(p.get('ability')))} ability"
+        return f"{neg}{_subject_of(p)} has the {id_label(p.get('ability'))} ability"
     if ctype == "attachment":
         w = _obj(p.get("with"))
         kw = (

@@ -248,9 +248,6 @@ class CountOf(TypedDict):
     within_inches: NotRequired[float]
 
 
-Quantity: TypeAlias = int | str | BattleSizeValue | RollReference | CountOf
-
-
 MoveMode: TypeAlias = Literal[
     "ordered-retreat",
     "desperate-escape",
@@ -274,6 +271,10 @@ class PlaceRef2(TypedDict):
 
 
 DesignationId: TypeAlias = str
+
+
+class UnitRating(TypedDict):
+    rating: Literal[True]
 
 
 class GameVersionRef(TypedDict):
@@ -731,6 +732,18 @@ class ModelCount(TypedDict):
     max: int
 
 
+class AbilityIds(TypedDict):
+    id: EntityId
+    value: StatValue
+    wargear: NotRequired[EntityId]
+
+
+class AbilityIds1(TypedDict):
+    id: EntityId
+    value: NotRequired[StatValue]
+    wargear: EntityId
+
+
 class WargearBudget(TypedDict):
     items: list[EntityId]
     count: int
@@ -768,7 +781,7 @@ class Unit(TypedDict):
     base_size_mm: NotRequired[BaseSize | None]
     model_count: NotRequired[ModelCount]
     weapon_ids: NotRequired[list[EntityId]]
-    ability_ids: NotRequired[list[EntityId]]
+    ability_ids: NotRequired[list[EntityId | AbilityIds | AbilityIds1]]
     wargear_budgets: NotRequired[list[WargearBudget]]
     transport_capacity: NotRequired[TransportCapacity | None]
     game_version: GameVersionRef
@@ -1130,35 +1143,6 @@ class WeaponRef1(TypedDict):
     selected_by: SelectedBy
 
 
-class Modifier(TypedDict):
-    stat: Literal[
-        "M",
-        "T",
-        "Sv",
-        "W",
-        "Ld",
-        "OC",
-        "A",
-        "WS",
-        "BS",
-        "S",
-        "AP",
-        "D",
-        "Range",
-        "detection-range",
-        "psyker-level",
-    ]
-    operation: Literal["add", "subtract", "set", "improve", "worsen", "multiply", "halve"]
-    value: NotRequired[Quantity]
-    weapon_type: NotRequired[Literal["melee", "ranged"]]
-    weapon_name: NotRequired[str]
-    weapon_keyword: NotRequired[str]
-    weapon_ref: NotRequired[WeaponRef | WeaponRef1]
-    incoming: NotRequired[Literal[True]]
-    minimum: NotRequired[float]
-    maximum: NotRequired[float]
-
-
 class WeaponRef2(TypedDict):
     weapon_var: str
 
@@ -1233,45 +1217,6 @@ class WeaponRef4(TypedDict):
 
 class WeaponRef5(TypedDict):
     selected_by: SelectedBy
-
-
-class Modifier2(TypedDict):
-    roll: (
-        Literal[
-            "hit",
-            "wound",
-            "save",
-            "damage",
-            "charge",
-            "advance",
-            "battle-shock",
-            "leadership",
-            "hazard",
-            "psychic",
-            "desperate-escape",
-            "deadly-demise",
-            "attacks",
-            "normal-move",
-            "surge",
-            "dark-pact",
-            "blessings-of-khorne",
-            "resource-die",
-            "manoeuvre",
-            "channelling",
-            "any",
-            "all",
-        ]
-        | AbilityRoll
-    )
-    operation: Literal["add", "subtract"]
-    value: NotRequired[Quantity]
-    cap: NotRequired[int]
-    value_from: NotRequired[Literal["previous-roll"]]
-    weapon_type: NotRequired[Literal["melee", "ranged"]]
-    weapon_name: NotRequired[str]
-    weapon_keyword: NotRequired[str]
-    weapon_ref: NotRequired[WeaponRef4 | WeaponRef5]
-    incoming: NotRequired[Literal[True]]
 
 
 class WeaponRef6(TypedDict):
@@ -1564,7 +1509,7 @@ class Modifier8(TypedDict):
 
 class Modifier9(TypedDict):
     ability: EntityId
-    value: NotRequired[float]
+    value: NotRequired[float | UnitRating]
     rules_bundle: NotRequired[Literal[True]]
 
 
@@ -1616,19 +1561,6 @@ class Select(TypedDict):
     by: Literal["roll", "player"]
 
 
-class Override(TypedDict):
-    amount: Quantity
-
-
-class Modifier14(TypedDict):
-    ability: EntityId
-    option: NotRequired[str]
-    exclusive: NotRequired[Literal[True]]
-    select: NotRequired[Select]
-    ignore_consumed: NotRequired[Literal[True]]
-    override: NotRequired[Override]
-
-
 class WeaponRef20(TypedDict):
     weapon_var: str
 
@@ -1649,14 +1581,6 @@ class Roll(TypedDict):
     per_model: NotRequired[Literal["target", "this"]]
 
 
-class Modifier20(TypedDict):
-    count: Quantity
-    per: NotRequired[Literal["model", "success"]]
-    roll: NotRequired[Roll]
-    range: NotRequired[RangeRef]
-    psychic: NotRequired[Literal[True]]
-
-
 class WeaponRef22(TypedDict):
     weapon_var: str
 
@@ -1674,7 +1598,7 @@ class Modifier21(TypedDict):
 
 
 class Modifier22(TypedDict):
-    threshold: int
+    threshold: int | UnitRating
     against: NotRequired[Literal["all", "mortal", "psychic", "psychic-and-mortal"]]
 
 
@@ -1692,19 +1616,6 @@ class Modifier23(TypedDict):
     weapon_name: NotRequired[str]
     weapon_keyword: NotRequired[str]
     weapon_ref: NotRequired[WeaponRef24 | WeaponRef25]
-
-
-class Modifier24(TypedDict):
-    amount: Quantity | Literal["full"]
-    per: NotRequired[Literal["model", "unit"]]
-
-
-class Modifier26(TypedDict):
-    count: Quantity | Literal["all"]
-    model_keyword: NotRequired[str]
-    remove_from_play: NotRequired[Literal[True]]
-    ignore_death_triggers: NotRequired[Literal[True]]
-    exclude_leader: NotRequired[Literal[True]]
 
 
 ModelCount1: TypeAlias = int
@@ -1829,58 +1740,6 @@ class Modifier45(TypedDict):
     amount: NotRequired[int]
     applies_to: NotRequired[
         Literal["targeting-this-unit", "used-by-this-unit", "the-triggering-use", "any"]
-    ]
-
-
-class Modifier46(TypedDict):
-    pool: str
-    amount: Quantity | Literal["variable", "any"]
-    label: NotRequired[str]
-
-
-class Modifier47(TypedDict):
-    pool: str
-    amount: Quantity | Literal["all", "one-or-more"]
-    label: NotRequired[str]
-    face: NotRequired[int]
-    requirement: NotRequired[DiceRequirementSpec]
-
-
-class Modifier48(TypedDict):
-    pool: str
-    operation: Literal["add", "substitute"]
-    value: NotRequired[int | Literal["rolled", "highest"]]
-    count: NotRequired[Quantity]
-    count_per_pool: NotRequired[str]
-    consumes_pool: NotRequired[Literal[True]]
-    rolls: NotRequired[
-        list[
-            Literal[
-                "hit",
-                "wound",
-                "save",
-                "damage",
-                "charge",
-                "advance",
-                "battle-shock",
-                "leadership",
-                "hazard",
-                "psychic",
-                "desperate-escape",
-                "deadly-demise",
-                "attacks",
-                "normal-move",
-                "surge",
-                "dark-pact",
-                "blessings-of-khorne",
-                "resource-die",
-                "manoeuvre",
-                "channelling",
-                "any",
-                "all",
-            ]
-            | AbilityRoll
-        ]
     ]
 
 
@@ -2321,6 +2180,9 @@ RollKind: TypeAlias = (
 )
 
 
+Quantity: TypeAlias = int | str | BattleSizeValue | RollReference | CountOf | UnitRating
+
+
 class PlaceRef1(TypedDict):
     objective: ObjectiveFilter
 
@@ -2365,6 +2227,108 @@ class EventTarget1(TypedDict):
     objective: ObjectiveFilter
 
 
+class Modifier(TypedDict):
+    stat: Literal[
+        "M",
+        "T",
+        "Sv",
+        "W",
+        "Ld",
+        "OC",
+        "A",
+        "WS",
+        "BS",
+        "S",
+        "AP",
+        "D",
+        "Range",
+        "detection-range",
+        "psyker-level",
+    ]
+    operation: Literal["add", "subtract", "set", "improve", "worsen", "multiply", "halve"]
+    value: NotRequired[Quantity]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    weapon_ref: NotRequired[WeaponRef | WeaponRef1]
+    incoming: NotRequired[Literal[True]]
+    minimum: NotRequired[float]
+    maximum: NotRequired[float]
+
+
+class Modifier2(TypedDict):
+    roll: (
+        Literal[
+            "hit",
+            "wound",
+            "save",
+            "damage",
+            "charge",
+            "advance",
+            "battle-shock",
+            "leadership",
+            "hazard",
+            "psychic",
+            "desperate-escape",
+            "deadly-demise",
+            "attacks",
+            "normal-move",
+            "surge",
+            "dark-pact",
+            "blessings-of-khorne",
+            "resource-die",
+            "manoeuvre",
+            "channelling",
+            "any",
+            "all",
+        ]
+        | AbilityRoll
+    )
+    operation: Literal["add", "subtract"]
+    value: NotRequired[Quantity]
+    cap: NotRequired[int]
+    value_from: NotRequired[Literal["previous-roll"]]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    weapon_ref: NotRequired[WeaponRef4 | WeaponRef5]
+    incoming: NotRequired[Literal[True]]
+
+
+class Override(TypedDict):
+    amount: Quantity
+
+
+class Modifier14(TypedDict):
+    ability: EntityId
+    option: NotRequired[str]
+    exclusive: NotRequired[Literal[True]]
+    select: NotRequired[Select]
+    ignore_consumed: NotRequired[Literal[True]]
+    override: NotRequired[Override]
+
+
+class Modifier20(TypedDict):
+    count: Quantity
+    per: NotRequired[Literal["model", "success"]]
+    roll: NotRequired[Roll]
+    range: NotRequired[RangeRef]
+    psychic: NotRequired[Literal[True]]
+
+
+class Modifier24(TypedDict):
+    amount: Quantity | Literal["full"]
+    per: NotRequired[Literal["model", "unit"]]
+
+
+class Modifier26(TypedDict):
+    count: Quantity | Literal["all"]
+    model_keyword: NotRequired[str]
+    remove_from_play: NotRequired[Literal[True]]
+    ignore_death_triggers: NotRequired[Literal[True]]
+    exclude_leader: NotRequired[Literal[True]]
+
+
 class Modifier37(TypedDict):
     occupancy_kind: Literal["grouped-models"]
     subject_kind: TransportOccupancySubjectKind
@@ -2399,6 +2363,58 @@ class Modifier40(TypedDict):
     transport_eligibility: NotRequired[TransportEligibility]
     equivalent_model_keyword: NotRequired[str]
     equivalent_model_count: int
+
+
+class Modifier46(TypedDict):
+    pool: str
+    amount: Quantity | Literal["variable", "any"]
+    label: NotRequired[str]
+
+
+class Modifier47(TypedDict):
+    pool: str
+    amount: Quantity | Literal["all", "one-or-more"]
+    label: NotRequired[str]
+    face: NotRequired[int]
+    requirement: NotRequired[DiceRequirementSpec]
+
+
+class Modifier48(TypedDict):
+    pool: str
+    operation: Literal["add", "substitute"]
+    value: NotRequired[int | Literal["rolled", "highest"]]
+    count: NotRequired[Quantity]
+    count_per_pool: NotRequired[str]
+    consumes_pool: NotRequired[Literal[True]]
+    rolls: NotRequired[
+        list[
+            Literal[
+                "hit",
+                "wound",
+                "save",
+                "damage",
+                "charge",
+                "advance",
+                "battle-shock",
+                "leadership",
+                "hazard",
+                "psychic",
+                "desperate-escape",
+                "deadly-demise",
+                "attacks",
+                "normal-move",
+                "surge",
+                "dark-pact",
+                "blessings-of-khorne",
+                "resource-die",
+                "manoeuvre",
+                "channelling",
+                "any",
+                "all",
+            ]
+            | AbilityRoll
+        ]
+    ]
 
 
 class Replace(TypedDict):

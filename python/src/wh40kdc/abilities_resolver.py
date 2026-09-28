@@ -107,15 +107,10 @@ def resolve_eligible_abilities(
                 if not strat_phases or phase not in strat_phases:
                     continue
                 ability_id = stratagem.get("ability_id")
-                # Stratagem ability ids are detachment-qualified but the
-                # ability copies are still replicated per faction (SM
-                # chapters) — prefer the resolving faction's copy, falling
-                # back for shared pools.
+                # Ability ids are unique: one record per stratagem, wherever its
+                # detachment is replicated.
                 strat_ability = (
-                    dataset.abilities.get_in_faction(ability_id, faction_id or "")
-                    or dataset.abilities.get_any(ability_id)
-                    if ability_id is not None
-                    else None
+                    dataset.abilities.get(ability_id) if ability_id is not None else None
                 )
                 if strat_ability is None:
                     continue
@@ -141,6 +136,7 @@ def resolve_eligible_abilities(
                 "ability": ability,
                 "source": {"kind": "unit", "unitId": input["unitId"]},
                 "phases": intersect(ability.phases),
+                **_rated(unit.rating_of(ability.id)),
             }
         )
 
@@ -158,6 +154,7 @@ def resolve_eligible_abilities(
                     "ability": ability,
                     "source": {"kind": "attached", "unitId": member_id},
                     "phases": intersect(ability.phases),
+                    **_rated(member.rating_of(ability.id)),
                 }
             )
 
@@ -176,10 +173,16 @@ def resolve_eligible_abilities(
                     "ability": ability,
                     "source": {"kind": "support", "sourceUnitId": support_id},
                     "phases": intersect(ability.phases),
+                    **_rated(supporter.rating_of(ability.id)),
                 }
             )
 
     return out
+
+
+def _rated(rating: Any) -> dict[str, Any]:
+    """``{"rating": r}`` for a rated rule the owning unit prints, else nothing."""
+    return {} if rating is None else {"rating": rating}
 
 
 def _is_aura_scope(range_: Any) -> bool:

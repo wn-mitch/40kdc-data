@@ -19,6 +19,8 @@ import math
 from collections.abc import Iterator
 from typing import Any
 
+from wh40kdc.data.ability_refs import printed_wargear_ids
+
 WargearOption = dict[str, Any]
 Unit = dict[str, Any]
 # A unit-composition model row, as far as loadout maths cares: ``min``, ``max``,
@@ -610,7 +612,9 @@ def _options_with_printed_unit_abilities(
             "replacement": [id_],
             "model_constraint": {"max_count": counts[id_]},
         }
-        for id_ in (unit.get("ability_ids") or [])
+        # A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids)
+        # is stock equipment even when no option reaches it.
+        for id_ in printed_wargear_ids(unit.get("ability_ids"))
         if counts.get(id_, 0) > 0 and id_ not in reachable
     ]
     return list(options) if not additions else [*options, *additions]

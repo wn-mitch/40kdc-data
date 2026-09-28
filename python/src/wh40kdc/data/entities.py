@@ -13,6 +13,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from wh40kdc.data.ability_refs import (
+    ability_ref_id,
+    ability_ref_value,
+    unit_ability_ids,
+    with_rating,
+)
+
 if TYPE_CHECKING:
     from wh40kdc.data.dataset import Dataset
 
@@ -103,18 +110,20 @@ class UnitView:
 
     @property
     def abilities(self) -> list[AbilityView]:
-        """Abilities referenced by ``ability_ids``, resolved within the unit's
-        own faction first — an ability_id shared across factions has
-        per-faction copies that diverge. The fallback catches the faction-less
-        ``_core`` pool. Unresolved ids are skipped."""
-        faction_id = self.raw.get("faction_id", "")
+        """Abilities referenced by ``ability_ids``; unresolved ids are skipped. Ability ids
+        are unique, so a chapter unit's supplement ability resolves like any other."""
         return _resolve_all(
-            self.raw.get("ability_ids"),
-            lambda id_: (
-                self._ds.abilities.get_in_faction(id_, faction_id)
-                or self._ds.abilities.get_any(id_)
-            ),
+            unit_ability_ids(self.raw.get("ability_ids")),
+            lambda id_: self._ds.abilities.get(id_),
         )
+
+    def rating_of(self, ability_id: str) -> str | int | float | None:
+        """The rating this unit's datasheet prints for a rated rule (the D3 of Deadly
+        Demise D3), if any."""
+        for ref in self.raw.get("ability_ids") or []:
+            if ability_ref_id(ref) == ability_id:
+                return ability_ref_value(ref)
+        return None
 
     @property
     def wargear_options(self) -> list[dict[str, Any]]:
@@ -264,12 +273,7 @@ class AbilityView:
             and isinstance(ability_id, str)
             and ability_id not in seen
         ):
-            faction_id = self.raw.get("faction_id")
-            target = (
-                self._ds.abilities.get_in_faction(ability_id, faction_id)
-                if isinstance(faction_id, str)
-                else None
-            ) or self._ds.abilities.get_any(ability_id)
+            target = self._ds.abilities.get(ability_id)
             target_effect = target.raw.get("effect") if target is not None else None
             if isinstance(target_effect, dict) and target_effect.get("type") == "rules-bundle":
                 return self._resolve_rules_bundles(target_effect, seen | frozenset([ability_id]))
@@ -288,6 +292,7 @@ class AbilityView:
         source: dict[str, Any],
         context: dict[str, Any] | None = None,
         perspective: str = "attacker",
+        rating: str | int | float | None = None,
     ) -> list[dict[str, Any]]:
         """Buff stack this ability contributes against ``context``.
 
@@ -295,19 +300,22 @@ class AbilityView:
         auto-apply are dropped here; call :meth:`describe_buffs` if you also
         want the diagnostics.
         """
-        return self.describe_buffs(source, context, perspective)["applied"]
+        return self.describe_buffs(source, context, perspective, rating)["applied"]
 
     def describe_buffs(
         self,
         source: dict[str, Any],
         context: dict[str, Any] | None = None,
         perspective: str = "attacker",
+        rating: str | int | float | None = None,
     ) -> dict[str, Any]:
-        """Full DSL→Buff translation, including the ``unsupported`` list."""
+        """Full DSL→Buff translation, including the ``unsupported`` list. ``rating`` is
+        the rating the owning unit prints for a rated rule (``{rating: true}``)."""
         from wh40kdc.cruncher.from_dsl import effect_to_buffs
 
         ctx = context if context is not None else {"phase": "shooting"}
-        resolved = self._resolve_rules_bundles(self.raw.get("effect"))
+        # A rated rule ({rating: true}) reads the rating the owning unit prints.
+        resolved = with_rating(self._resolve_rules_bundles(self.raw.get("effect")), rating)
         moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
         translated = effect_to_buffs(
             moment

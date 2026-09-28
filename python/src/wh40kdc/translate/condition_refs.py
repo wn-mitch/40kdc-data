@@ -46,6 +46,66 @@ def title_case(s: str) -> str:
     return " ".join(out)
 
 
+#: Faction dir slugs an ability or Stratagem id ends with (``<name>-<faction>``), longest
+#: first. The suffix is identity, not name, so it never reaches the English.
+_FACTION_SUFFIXES: tuple[str, ...] = (
+    "agents-of-the-imperium",
+    "chaos-space-marines",
+    "adeptus-mechanicus",
+    "leagues-of-votann",
+    "emperors-children",
+    "genestealer-cults",
+    "adepta-sororitas",
+    "imperial-knights",
+    "adeptus-custodes",
+    "adeptus-astartes",
+    "astra-militarum",
+    "black-templars",
+    "imperial-fists",
+    "crimson-fists",
+    "chaos-knights",
+    "thousand-sons",
+    "chaos-daemons",
+    "blood-angels",
+    "ultramarines",
+    "space-wolves",
+    "grey-knights",
+    "world-eaters",
+    "white-scars",
+    "raven-guard",
+    "dark-angels",
+    "salamanders",
+    "death-guard",
+    "iron-hands",
+    "tau-empire",
+    "deathwatch",
+    "drukhari",
+    "tyranids",
+    "aeldari",
+    "necrons",
+    "orks",
+)
+
+
+def without_faction_suffix(id_: str) -> str:
+    """An ability or Stratagem id without its faction suffix
+    (``acts-of-faith-adepta-sororitas`` → ``acts-of-faith``)."""
+    for f in _FACTION_SUFFIXES:
+        if id_.endswith(f"-{f}") and len(id_) > len(f) + 1:
+            return id_[: -len(f) - 1]
+    return id_
+
+
+#: Ids whose name itself ends with the faction (the suffix was never added).
+_WHOLE_NAMES: dict[str, str] = {"lord-of-the-death-guard": "Lord of the Death Guard"}
+
+
+def id_label(id_: Any) -> str:
+    """An ability or Stratagem id as a name: its name part in Title Case."""
+    s = _str(id_)
+    return _WHOLE_NAMES.get(s, title_case(without_faction_suffix(s)))
+
+
 def _str(v: Any) -> str:
     """TS ``str``: null/undefined → "?", else JS ``String(v)``."""
     if v is None:
@@ -166,9 +226,9 @@ def unit_filter_phrase(f: Any) -> str:
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
     if isinstance(f.get("has_ability"), list):
-        s += f" with the {_and_list([title_case(_str(a)) for a in f['has_ability']])} ability"
+        s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):
-        s += f" without the {_or_list([title_case(_str(a)) for a in f['lacks_ability']])} ability"
+        s += f" without the {_or_list([id_label(a) for a in f['lacks_ability']])} ability"
     if f.get("embarked_in") is not None:
         s += f" embarked within {unit_ref_phrase(f['embarked_in'])}"
     if f.get("member_of") is not None:
@@ -226,7 +286,7 @@ def _subject_of(p: P, fallback: str = "the unit") -> str:
     return unit_ref_phrase(p.get("subject"), fallback)
 
 
-_AURA_RANGES: dict[str, str] = {"nurgle-s-gift-aura": "Contagion Range"}
+_AURA_RANGES: dict[str, str] = {"nurgles-gift-death-guard": "Contagion Range"}
 
 _RANGE_WORDS: dict[str, str] = {
     "engagement": "Engagement Range",
@@ -249,7 +309,7 @@ def range_phrase(r: Any) -> str:
         return f'{_str(o["inches"])}"'
     if o.get("aura_of") is not None:
         aura = _str(o["aura_of"])
-        return _AURA_RANGES.get(aura, f"the {title_case(aura)} range")
+        return _AURA_RANGES.get(aura, f"the {id_label(aura)} range")
     return '?"'
 
 
@@ -378,7 +438,7 @@ def _cap_word(s: str) -> str:
 def roll_word(roll: Any) -> str:
     """A roll kind as words: "hit", or the dice a named ability rolls ("Reanimation Protocols")."""
     if isinstance(roll, dict) and roll.get("of_ability") is not None:
-        return title_case(_str(roll["of_ability"]))
+        return id_label(roll["of_ability"])
     return dekebab(_str(roll))
 
 

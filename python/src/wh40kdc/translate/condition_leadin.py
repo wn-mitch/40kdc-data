@@ -21,6 +21,7 @@ from wh40kdc.translate.condition_refs import (
     _str,
     _truthy,
     _window_phrase,
+    id_label,
     title_case,
 )
 
@@ -129,7 +130,7 @@ def condition_lead_in(c: Condition) -> str:
             flags=re.ASCII,
         )
     if ctype == "rule-active":
-        return f"while the {title_case(_str(p.get('rule')))} is active"
+        return f"while the {id_label(p.get('rule'))} is active"
     if ctype == "has-keyword":
         if p.get("chosen_by") is not None:
             return f"if {_describe_predicate(c, False)}"

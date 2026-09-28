@@ -10,7 +10,14 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from wh40kdc.translate.effect_words import dekebab, dice_case, jstr, roll_name, title_case
+from wh40kdc.translate.effect_words import (
+    dekebab,
+    dice_case,
+    is_rating_ref,
+    jstr,
+    roll_name,
+    title_case,
+)
 
 _BATTLE_SIZES = ("incursion", "strike-force", "onslaught")
 
@@ -49,6 +56,8 @@ def _battle_sized(q: dict[str, Any]) -> bool:
 def quantity_phrase(q: dict[str, Any]) -> str:
     """A non-literal quantity as a noun phrase: one value per battle size, a bound roll's
     result, or a count. Literal numbers and dice go through ``dice_case``."""
+    if is_rating_ref(q):
+        return "its rating"
     if _battle_sized(q):
         values = "/".join(jstr(q[k]) for k in _BATTLE_SIZES)
         return f"{values} (Incursion/Strike Force/Onslaught)"

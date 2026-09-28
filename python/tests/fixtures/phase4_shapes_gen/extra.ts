@@ -157,3 +157,34 @@
   usageGated("stratagem", [{ frequency: "once-per-turn" }, { frequency: "once-per-battle" }], L("cp-gain", { amount: 1 }));
   usageGated("unit", [], L("cp-gain", { amount: 1 }));
 }
+// ---- rated rules ({rating: true}) and faction-suffixed ids (mirror follow-up) ----
+{
+  const L = leaf;
+  const fnp = L("feel-no-pain", { threshold: { rating: true } });
+  for (const e of [
+    fnp,
+    L("feel-no-pain", { threshold: { rating: true }, against: "mortal" }, { owner: "friendly", all_of: ["INFANTRY"] }),
+    L("ability-grant", { ability: "scouts", value: { rating: true } }),
+    L("ability-grant", { ability: "firing-deck", value: { rating: true } }, "this-model"),
+    L("mortal-wounds", { count: { rating: true } }, { owner: "enemy", within: { range: { inches: 6 } } }),
+    L("rule-state", { direction: "granted", rule_kind: "faction-rule", rule: "blessings-of-khorne-world-eaters" }),
+    L("rule-state", { direction: "suppressed", rule_kind: "ability", rule: "oath-of-moment-adeptus-astartes" }),
+    L("rule-state", { direction: "suppressed", rule_kind: "keyword", rule: "oath-of-moment-adeptus-astartes" }),
+    L("cost-modifier", { of: "stratagem", id: "armour-of-contempt-adeptus-astartes", operation: "decrease", amount: 1 }),
+    L("permission", { activity: "use-stratagem", stratagem: "fire-overwatch", allow: false }),
+    L("targeting", { by: { owner: "enemy" }, may: "cannot-target", target: "this-unit", kind: "stratagem", stratagem: "heroic-intervention-world-eaters" }),
+    L("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }),
+    L("feel-no-pain", { threshold: 5 }, { owner: "friendly", has_ability: ["lone-operative-adeptus-astartes"] }),
+    { type: "select-objective", selector: { count: 1, bind_as: "o", requires_unit: { owner: "enemy", requires_ability: "infiltrators-orks" } }, effect: { type: "no-effect" } },
+    { type: "conditional", condition: { type: "rule-active", parameters: { rule: "waaagh-orks" } }, effect: L("cp-gain", { amount: 1 }) },
+    { type: "conditional", condition: { type: "has-ability", parameters: { ability: "lord-of-the-death-guard" } }, effect: L("cp-gain", { amount: 1 }) },
+    { type: "conditional", condition: { type: "happened", parameters: { event: "used", filter: { kind: "stratagem", id: "grenade-adeptus-astartes" }, window: "turn" } }, effect: L("cp-gain", { amount: 1 }) },
+    { type: "conditional", condition: { type: "within", parameters: { range: { aura_of: "nurgles-gift-death-guard" } } }, effect: L("cp-gain", { amount: 1 }) },
+    { type: "conditional", condition: { type: "within", parameters: { range: { aura_of: "vile-contagion-death-guard" } } }, effect: L("cp-gain", { amount: 1 }) },
+  ]) render(e);
+  describeCondition({ type: "rule-active", parameters: { rule: "acts-of-faith-adepta-sororitas" } } as never);
+  describeCondition({ operator: "not", operands: [{ type: "rule-active", parameters: { rule: "orks" } }] } as never);
+  const def = (e: unknown) => effectToBuffs(e, { kind: "ability", abilityId: "feel-no-pain", abilityKind: "unit" }, { phase: "shooting" } as never, "target");
+  def(fnp);
+  def({ ...fnp, modifier: { threshold: 5 } });
+}

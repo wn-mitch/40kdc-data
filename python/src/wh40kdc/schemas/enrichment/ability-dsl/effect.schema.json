@@ -1069,7 +1069,14 @@
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                 },
                 "value": {
-                  "type": "number"
+                  "oneOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/unit-rating"
+                    }
+                  ]
                 },
                 "rules_bundle": {
                   "const": true
@@ -2179,9 +2186,16 @@
               "additionalProperties": false,
               "properties": {
                 "threshold": {
-                  "type": "integer",
-                  "minimum": 2,
-                  "maximum": 6
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 6
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/unit-rating"
+                    }
+                  ]
                 },
                 "against": {
                   "enum": [

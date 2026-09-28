@@ -30,6 +30,7 @@ from wh40kdc.translate.effect_words import (
     has_weapon,
     is_num,
     is_plural,
+    is_rating_ref,
     jstr,
     none_of,
     num,
@@ -318,9 +319,12 @@ def _ability_grant(m: dict[str, Any], subj: str) -> str:
     if m.get("ability") == "benefit-of-cover":
         return f"{subj} {v(subj, 'has')} the Benefit of Cover"
     inch = '"' if m.get("ability") in ("scouts", "deep-strike") else ""
-    value = f" {jstr(m['value'])}{inch}" if m.get("value") is not None else ""
+    rated = is_rating_ref(m.get("value"))
+    shown = "X" if rated else jstr(m.get("value"))
+    value = f" {shown}{inch}" if m.get("value") is not None else ""
     noun = "rules" if m.get("rules_bundle") is True else "ability"
-    return f"{subj} {v(subj, 'gains')} the {ability_label(m.get('ability'))}{value} {noun}"
+    tail = ", X being its rating" if rated else ""
+    return f"{subj} {v(subj, 'gains')} the {ability_label(m.get('ability'))}{value} {noun}{tail}"
 
 
 def _keyword_grant(m: dict[str, Any], subj: str) -> str:
@@ -475,9 +479,9 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
     rule = jstr(m.get("rule"))
     if m.get("rule_kind") == "faction-rule":
         return (
-            f"{subj} {v(subj, 'gains')} {title_case(rule)}"
+            f"{subj} {v(subj, 'gains')} {ability_label(rule)}"
             if granted
-            else f"{subj} cannot use {title_case(rule)}"
+            else f"{subj} cannot use {ability_label(rule)}"
         )
     if rule == "overwatch-against-bearer":
         return f"your opponent {'can' if granted else 'cannot'} target {subj} with Overwatch"
@@ -498,7 +502,8 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
     kind = m.get("rule_kind")
     noun = "keyword" if kind == "keyword" else "rule" if kind == "core-rule" else "ability"
     verb = "gains" if granted else "loses"
-    return f"{subj} {v(subj, verb)} the {title_case(rule)} {noun}"
+    label = ability_label(rule) if kind == "ability" else title_case(rule)
+    return f"{subj} {v(subj, verb)} the {label} {noun}"
 
 
 def _weapon_grant(m: dict[str, Any], subj: str) -> str:
