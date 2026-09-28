@@ -134,6 +134,17 @@ var rolePhrases = map[string]string{
 	"stratagem-target":   "the Stratagem's target",
 	"selected-unit":      "the selected unit",
 	"recipient":          "the unit",
+	"bearer-transport":   "the Transport this unit is embarked within",
+	"ability-unit":       "this unit",
+}
+
+// titleCaseList maps a JSON array of ids through titleCase.
+func titleCaseList(v any) []string {
+	l := cstrList(v)
+	for i, x := range l {
+		l[i] = titleCase(x)
+	}
+	return l
 }
 
 // unitFilterPhrase renders a unit filter as a noun phrase: "a friendly ADEPTUS
@@ -167,8 +178,32 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["none_of"]) {
 		s += " (excluding " + orList(cstrList(f["none_of"])) + " " + noun + "s)"
 	}
+	if isList(f["has_ability"]) {
+		s += " with the " + andList(titleCaseList(f["has_ability"])) + " ability"
+	}
+	if isList(f["lacks_ability"]) {
+		s += " without the " + orList(titleCaseList(f["lacks_ability"])) + " ability"
+	}
+	if f["embarked_in"] != nil {
+		s += " embarked within " + unitRefPhrase(f["embarked_in"], "the unit")
+	}
+	if f["member_of"] != nil {
+		s += " in " + unitRefPhrase(f["member_of"], "the unit")
+	}
+	if f["engaged_with"] != nil {
+		s += " within Engagement Range of " + unitFilterPhrase(mapOr(f["engaged_with"]))
+	}
+	if f["not_engaged_with"] != nil {
+		s += " not within Engagement Range of any " + replaceFirst(leadingArticleRe, unitFilterPhrase(mapOr(f["not_engaged_with"])), "")
+	}
 	if f["designated"] != nil {
-		s += " that is " + designationPhrase(cstr(f["designated"]))
+		s += " that is " + designationPhrase(cstr(f["designated"]), false)
+		if f["designated_by"] != nil {
+			s += " by " + unitRefPhrase(f["designated_by"], "the unit")
+		}
+	}
+	if f["not_designated"] != nil {
+		s += " that is not " + designationPhrase(cstr(f["not_designated"]), false)
 	}
 	if f["state"] != nil {
 		s += " that is " + statePhrase(cstr(f["state"]), false)
@@ -177,7 +212,11 @@ func unitFilterPhrase(f map[string]any) string {
 		s += " that is visible to it"
 	}
 	if within, ok := asMap(f["within"]); ok && within != nil {
-		s += " within " + rangePhrase(within["range"])
+		s += " "
+		if within["wholly"] == true {
+			s += "wholly "
+		}
+		s += "within " + rangePhrase(within["range"])
 		if within["of"] != nil {
 			s += " of " + unitRefPhrase(within["of"], "the unit")
 		}
@@ -208,6 +247,9 @@ func unitRefPhrase(ref any, fallback string) string {
 		}
 		if sv, ok := r["selection_var"].(string); ok {
 			return "the bound " + strings.ReplaceAll(sv, "_", " ")
+		}
+		if st, ok := r["stratagem_target"].(string); ok {
+			return "the " + dekebab(strings.TrimPrefix(st, "the-")) + " target"
 		}
 		return unitFilterPhrase(r)
 	case []any:
@@ -319,8 +361,12 @@ func statePhrase(state string, negated bool) string {
 	return positive
 }
 
-// designationPhrase keeps GW-printed tags as printed and spells out internal state names.
-func designationPhrase(tag string) string {
+// designationPhrase prints a registered id's rules term, keeps legacy
+// upper-case tags as printed and spells out internal ones.
+func designationPhrase(tag string, plural bool) string {
+	if label, ok := designationTerm(tag, plural); ok {
+		return label
+	}
 	if tag == strings.ToUpper(tag) {
 		return tag
 	}

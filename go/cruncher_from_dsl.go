@@ -14,7 +14,7 @@ import (
 // conformance/abilities-resolver/from-dsl.json / defensive-from-dsl.json.
 
 var selfTargets = map[string]bool{
-	"this-unit": true, "this-model": true, "selected-unit": true, "recipient": true,
+	"this-unit": true, "ability-unit": true, "this-model": true, "selected-unit": true, "recipient": true,
 }
 
 // modelTargets is the subset of selfTargets naming a single *model* (the bearer)
@@ -100,6 +100,12 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
 		return
 	}
+	// A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
+	// applying the printed value would over- or under-state it.
+	if reason := unsizedValueReason(n); reason != "" {
+		out.unsupported = append(out.unsupported, unsup(reason, n))
+		return
+	}
 	// An `incoming` change modifies attacks made against its target. On the buffed unit it is the
 	// attacker's side of those attacks, which the `target: "attacker"` form already models; it never
 	// modifies the buffed unit's own attacks.
@@ -163,6 +169,20 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		out.unsupported = append(out.unsupported, unsup(stochasticDiceGatedReason, n))
 	case "dice-pool-allocation":
 		enumerateDicePool(n, source, opts, out)
+	case "roll":
+		// A pool roll whose dice are allocated to named options (Blessings of Khorne) is the same
+		// lever set dice-pool-allocation produced; any other bound roll only scopes its nested effect.
+		if !enumerateRollAllocation(n, source, opts, out) {
+			dslWalk(n["effect"], source, opts, out)
+		}
+	case "select-objective":
+		out.unsupported = append(out.unsupported, unsup("select-objective: the bound objective marker is not resolved by the buff engine", n))
+	case "characteristic-resolution":
+		out.unsupported = append(out.unsupported, unsup("characteristic-resolution: which models' characteristic applies depends on the unit's model mix; not resolved by the buff engine", n))
+	case "borrow-weapons":
+		out.unsupported = append(out.unsupported, unsup("borrow-weapons: the passengers' weapons are not added to the Transport's profile by the buff engine", n))
+	case "select-weapon":
+		out.unsupported = append(out.unsupported, unsup("select-weapon: a bound weapon is not resolved by the buff engine", n))
 	case "select-units":
 		// Targeting wrapper — the selected units receive the nested effect.
 		dslWalk(n["effect"], source, opts, out)
@@ -776,7 +796,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}})
 		return
 	}
-	out.unsupported = append(out.unsupported, unsup("re-roll on \""+jsStr(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
+	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
 }
 
 func translateRollModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -818,7 +838,7 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 	}
 	ct := rollToContribType(roll)
 	if ct == "" {
-		out.unsupported = append(out.unsupported, unsup("roll-modifier on \""+jsStr(modifier["roll"])+"\" is outside the damage path", node))
+		out.unsupported = append(out.unsupported, unsup("roll-modifier on \""+rollLabel(modifier["roll"])+"\" is outside the damage path", node))
 		return
 	}
 	out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}})
@@ -1025,7 +1045,7 @@ func attackTypeApplicability(modifier map[string]any) map[string]any {
 }
 
 var unhonorableNarrowingKeys = []string{
-	"weapon_name", "weapon_profile", "weapon_keyword", "weapon_filter",
+	"weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter",
 	"model_filter", "model_scope",
 }
 
@@ -1403,7 +1423,7 @@ func keywordLabel(ref map[string]any) string {
 // isBuffedUnit reports the buffed unit: the ability's own unit (or model), or
 // the unit an aura is applied to.
 func isBuffedUnit(subject any) bool {
-	return subject == nil || subject == "this-unit" || subject == "this-model" || subject == "recipient"
+	return subject == nil || subject == "this-unit" || subject == "ability-unit" || subject == "this-model" || subject == "recipient"
 }
 
 // singleKeyword returns the one keyword a `has-keyword` names.
@@ -1516,6 +1536,24 @@ func evaluateCondition(condition, ctx map[string]any) any {
 			}
 		}
 		return false
+	case "army-faction":
+		faction, ok := params["faction"].(string)
+		if !ok || ctx["armyFaction"] == nil {
+			return nil
+		}
+		return ctx["armyFaction"] == faction
+	case "battle-size":
+		size, ok := params["size"].(string)
+		if !ok || ctx["battleSize"] == nil {
+			return nil
+		}
+		return ctx["battleSize"] == size
+	case "guided":
+		// Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
+		if (params["subject"] != nil && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
+			return nil
+		}
+		return ctx["attackerGuided"] == true
 	case "attachment":
 		// True whenever the buffed unit is a combined ("attached") unit. We do not thread
 		// per-member leader identity, and a Leader keyword filter is not checked: "attachment

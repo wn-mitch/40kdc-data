@@ -42,7 +42,7 @@ var verbNegated = map[string]bool{
 	"strength": true, "model-count": true, "wounds": true, "loadout": true, "attachment": true, "has-ability": true,
 	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
-	"terrain-area-control": true,
+	"army-faction": true, "battle-size": true,
 }
 
 var negatePrefixes = [][2]string{
@@ -397,7 +397,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["result"] == "success" {
 			result = "succeeded"
 		}
-		return neg + "the triggering " + dekebab(cstr(p["roll"])) + " roll " + result
+		return neg + "the triggering " + rollWord(p["roll"]) + " roll " + result
 	case "visible":
 		who := subjectOf(p, "the unit")
 		if p["subject"] == "defender" {
@@ -431,7 +431,15 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			return out
 		}
-		return subjectOf(p, "the unit") + " is " + neg + designationPhrase(cstr(p["tag"]))
+		by := ""
+		if p["by"] != nil {
+			by = unitRefPhrase(p["by"], "this unit")
+			if by == "the unit" {
+				by = "this unit"
+			}
+			by = " by " + by
+		}
+		return subjectOf(p, "the unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
 	case "resource":
 		if p["below_max"] == true {
 			source := mapOr(p["source_ability"])["ability_id"]
@@ -505,12 +513,22 @@ func describePredicate(c map[string]any, negated bool) string {
 			terrain = dekebab(cstr(p["tag"])) + " terrain"
 		}
 		return neg + countMinOr1(p) + "+ enemy units destroyed " + where + " " + terrain
-	case "terrain-area-control":
-		n := "1"
-		if p["min_models"] != nil {
-			n = cstr(p["min_models"])
+	case "battle-size":
+		return "the battle size is " + neg + titleCase(cstr(p["size"]))
+	case "army-faction":
+		return "your Army Faction is " + neg + strings.ToUpper(strings.ReplaceAll(cstr(p["faction"]), "-", " "))
+	case "moved-over":
+		window := windowPhrase(p["window"])
+		if p["window"] == nil || p["window"] == "event" {
+			window = "during that move"
 		}
-		return neg + "you control a terrain area with " + n + "+ models"
+		was := "was"
+		if negated {
+			was = "was not"
+		}
+		return subjectOf(p, "the unit") + " " + was + " moved over by " + unitRefPhrase(p["by"], "this model") + " " + window
+	case "guided":
+		return subjectOf(p, "the unit") + " is " + neg + designationPhrase("guided", false)
 	}
 	t := "unknown"
 	if c["type"] != nil {
@@ -545,6 +563,9 @@ func describeWithin(p map[string]any, neg string) string {
 	}
 	ofMap, ofIsMap := asMap(of)
 	if ofIsMap && jsTruthy(ofMap["objective"]) {
+		if mapOr(ofMap["objective"])["selection_var"] != nil {
+			return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of that objective marker"
+		}
 		obj := objectivePhrase(mapOr(ofMap["objective"]), false, "objective marker")
 		return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of " + article(obj) + " " + obj
 	}
@@ -558,6 +579,8 @@ func describeWithin(p map[string]any, neg string) string {
 	switch {
 	case of == "battlefield-edge":
 		target = "a battlefield edge"
+	case of == "battlefield-centre":
+		target = "the centre of the battlefield"
 	case ofIsMap && jsTruthy(ofMap["marker"]):
 		marker := cstr(ofMap["marker"])
 		target = article(marker) + " " + dekebab(marker) + " marker"

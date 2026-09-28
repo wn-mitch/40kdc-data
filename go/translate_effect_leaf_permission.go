@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 // Single effects on the permission axis: what the target is eligible to do
 // and whom it can target. Mirror of the permission half of
@@ -99,6 +102,16 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["next"] == true {
 		s += ", and must be the next unit selected to " + act
 	}
+	if m["counts_as_move"] != nil {
+		does, counts := "does", "counts"
+		if it == "they" {
+			does, counts = "do", "count"
+		}
+		s += "; if " + it + " " + does + ", " + it + " " + counts + " as having made " + movedPhrase(m["counts_as_move"]) + " this turn"
+	}
+	if m["consumes_shared_use"] == false {
+		s += "; this use does not count toward that Stratagem's once-per-phase limit for other units"
+	}
 	return s
 }
 
@@ -155,5 +168,44 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 		other := leadingAllRe.ReplaceAllString(effectSubject(m["only_if_none"], ctx), "")
 		unless = ", unless there is no other eligible " + replaceFirst(unitsWordRe, other, " unit")
 	}
-	return who + " " + verb + " " + whom + kind + rng + unless
+	if m["may"] == "redirect" {
+		return redirectPhrase(m, who, whom, ctx)
+	}
+	except := ""
+	if m["except"] == "core-stratagems" {
+		except = " (Core Stratagems can still target it)"
+	}
+	return who + " " + verb + " " + whom + kind + rng + unless + except
+}
+
+var leadingAVowelRe = regexp.MustCompile(`(?i)^a ([aeiou])`)
+
+// redirectPhrase renders a targeting redirect: "Attacks made by the triggering
+// unit that target a friendly X unit must target the unit instead".
+func redirectPhrase(m map[string]any, who, whom string, ctx effCtx) string {
+	to := effectSubject(m["to"], ctx)
+	what := "attacks"
+	switch m["kind"] {
+	case "stratagem":
+		what = "Stratagems"
+	case "shoot":
+		what = "ranged attacks"
+	case "fight":
+		what = "melee attacks"
+	}
+	// One unit is targeted at a time: "that target a friendly ANATHEMA PSYKANA unit".
+	one := whom
+	if strings.HasPrefix(whom, "all ") || isPlural(whom) {
+		single := replaceFirst(modelsWordFirstRe, replaceFirst(unitsWordFirstRe, strings.TrimPrefix(whom, "all "), " unit"), " model")
+		one = leadingAVowelRe.ReplaceAllString("a "+single, "an $1")
+	}
+	by := ""
+	if m["by"] != nil {
+		by = " made by " + who
+	}
+	eligible := ""
+	if m["if_eligible"] == true {
+		eligible = ", if " + to + " is an eligible target"
+	}
+	return what + by + " that target " + one + " must target " + to + " instead" + eligible
 }

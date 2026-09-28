@@ -142,7 +142,16 @@ func resourceActionMenuBlock(e map[string]any, indent, arrow string, ctx effCtx)
 }
 
 // usageClause renders a usage limit as a front-of-sentence lead ("once per turn").
-func usageClause(u map[string]any) string {
+func usageClause(usage any) string {
+	// Several limits that all apply: "once per battle per model and once per battle round per army".
+	if l, ok := asList(usage); ok {
+		parts := make([]string, len(l))
+		for i, x := range l {
+			parts[i] = usageClause(x)
+		}
+		return strings.Join(parts, " and ")
+	}
+	u := mapOr(usage)
 	c := u["count"]
 	if c == nil {
 		c = 1.0
@@ -210,8 +219,8 @@ func partHead(e map[string]any) string {
 		cost = "by paying this cost (" + describeEffectInline(mapOr(e["cost"]), effCtx{}) + ")"
 	}
 	usage := ""
-	if u, ok := asMap(e["usage"]); ok && u != nil {
-		usage = usageClause(u)
+	if isObject(e["usage"]) {
+		usage = usageClause(e["usage"])
 	}
 	_, trail := durationClauses(e["duration"])
 	return joinNonEmpty([]string{strings.Join(moments, " or "), usage, named, cost, trail}, ", ")
@@ -277,8 +286,7 @@ func describeAbility(a map[string]any) string {
 	core := ""
 	if e, ok := asMap(a["effect"]); ok && e != nil {
 		scope, _ := asMap(a["scope"])
-		usage, _ := asMap(a["usage"])
-		core = renderTopLevel(e, scope, usage, a["trigger"])
+		core = renderTopLevel(e, scope, a["usage"], a["trigger"])
 	}
 	applies, _ := asMap(a["applies_to"])
 	return joinNonEmpty([]string{core, describeAppliesTo(applies)}, "\n")
@@ -294,7 +302,7 @@ func conditionWithinRange(c map[string]any) (float64, bool) {
 	return f, ok
 }
 
-func renderTopLevel(e, scope, usage map[string]any, trigger any) string {
+func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	ctx := effCtx{}
 	var scopeDuration any
 	if scope != nil {
@@ -302,7 +310,8 @@ func renderTopLevel(e, scope, usage map[string]any, trigger any) string {
 	}
 	durLead, trail := durationClauses(scopeDuration)
 	lead := durLead
-	if usage != nil && usage["frequency"] != nil {
+	// An explicit usage limit (or a list of them) supersedes the duration's coarse "once per battle" lead.
+	if isList(usage) || mapOr(usage)["frequency"] != nil {
 		lead = usageClause(usage)
 	}
 	var condRange float64

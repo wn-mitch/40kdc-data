@@ -13,7 +13,7 @@ import (
 // tools/src/translate/effect.ts.
 
 var containerTypes = map[string]bool{
-	"sequence": true, "rules-bundle": true, "ability-part": true, "choice": true, "dice-gated": true, "dice-table": true,
+	"roll": true, "select-objective": true, "sequence": true, "rules-bundle": true, "ability-part": true, "choice": true, "dice-gated": true, "dice-table": true,
 	"dice-pool-allocation": true, "select-units": true, "for-each-unit": true, "designate-target": true,
 	"persistent-designation": true, "stance-select": true, "risk-reward": true, "issue-orders": true, "resource-action-menu": true,
 }
@@ -27,59 +27,37 @@ func ejstrType(e map[string]any) string {
 // durationClauses maps a duration to its woven clauses: `lead` sits at the
 // front of the sentence, `trail` after the trigger/condition.
 func durationClauses(duration any) (string, string) {
-	switch duration {
-	case "attack-sequence":
-		return "", "until that unit finishes resolving its attacks"
-	case "resolution":
-		return "", "when resolving this use"
-	case "phase":
-		return "", "until the end of the phase"
-	case "turn":
-		return "", "until the end of the turn"
-	case "battle":
-		return "", "for the rest of the battle"
-	case "battle-round":
-		return "", "until the end of the battle round"
-	case "until-next-command-phase":
-		return "", "until the start of your next Command phase"
-	case "until-next-movement-phase":
-		return "", "until the start of your next Movement phase"
-	case "until-next-battle-round":
-		return "", "until the start of the next battle round"
-	case "until-start-next-turn":
-		return "", "until the start of your next turn"
-	case "one-use":
+	if duration == "one-use" {
 		return "once per battle", ""
 	}
-	return "", ""
-}
-
-var scaleOf = map[string]string{
-	"enemy-models-in-range":           "enemy models",
-	"friendly-models-in-range":        "friendly models",
-	"models-in-bearer-unit":           "models in this unit",
-	"models-in-or-embarked-in-bearer": "models in or embarked within this model",
-	"enemy-units-in-range":            "enemy units",
-	"wounds-lost":                     "wounds lost",
+	return "", expiryTrail(duration)
 }
 
 // scalingClause renders a scaling block as a trailing clause ("for every 5 enemy models within 6\"").
 func scalingClause(s map[string]any) string {
-	ofText, ok := scaleOf[ejstr(s["of"])]
-	if !ok {
-		ofText = dekebab(ejstr(s["of"]))
+	maxTail := ""
+	if s["max_value"] != nil {
+		maxTail = " (to a maximum of " + ejstr(s["max_value"]) + ")"
 	}
-	c := "for every " + ejstr(s["per"]) + " " + ofText
-	if s["within_inches"] != nil {
+	if s["of"] == "battle-round" {
+		return "multiplied by the battle round number" + maxTail
+	}
+	// A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
+	if s["of"] == "embarked-models-oc" {
+		per := ejstr(s["per"]) + " points"
+		if jsNumber(s["per"]) == 1 {
+			per = "point"
+		}
+		return "for every " + per + " of " + scaleSource(s) + maxTail
+	}
+	c := "for every " + ejstr(s["per"]) + " " + scaleSource(s)
+	if s["within_inches"] != nil && !strings.HasSuffix(c, "within "+ejstr(s["within_inches"])+"\"") {
 		c += " within " + ejstr(s["within_inches"]) + "\""
 	}
 	if s["round"] == "up" {
 		c += " (rounding up)"
 	}
-	if s["max_value"] != nil {
-		c += " (to a maximum of " + ejstr(s["max_value"]) + ")"
-	}
-	return c
+	return c + maxTail
 }
 
 func auraEligibleSubject(who string, eligible any) string {
@@ -125,7 +103,11 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 		if m["of"] != nil {
 			named = titleCase(ejstr(m["of"])) + " "
 		}
-		return "the range of this model's " + named + "abilities is increased by " + ejstr(m["range_bonus"]) + "\""
+		capped := ""
+		if m["range_cap"] != nil {
+			capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\")"
+		}
+		return "the range of this model's " + named + "abilities is increased by " + ejstr(m["range_bonus"]) + "\"" + capped
 	}
 	rangeText := "range"
 	if l, ok := asList(m["range"]); ok {
@@ -156,7 +138,11 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 		inner.auraRecipient = true
 		effectText = describeEffectInline(mapOr(m["effect"]), inner)
 	}
-	return "while " + recipient + " is within " + rangeText + " of " + emitter + ", " + effectText
+	capped := ""
+	if m["range_cap"] != nil {
+		capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\", extensions included)"
+	}
+	return "while " + recipient + " is within " + rangeText + capped + " of " + emitter + ", " + effectText
 }
 
 // describeEffectInline renders a single-clause translation (lowercase-initial,
@@ -176,20 +162,7 @@ func describeEffectInline(e map[string]any, ctx effCtx) string {
 }
 
 // describeRequirement renders a dice-pool option requirement ("pair of 4+", or alternatives joined by " or ").
-func describeRequirement(req any) string {
-	one := func(r any) string {
-		rm := mapOr(r)
-		return ejstr(rm["type"]) + " of " + ejstr(rm["min_value"]) + "+"
-	}
-	if anyOf, ok := asList(mapOr(req)["any_of"]); ok {
-		parts := make([]string, len(anyOf))
-		for i, r := range anyOf {
-			parts[i] = one(r)
-		}
-		return strings.Join(parts, " or ")
-	}
-	return one(req)
-}
+func describeRequirement(req any) string { return requirementPhrase(req) }
 
 func diceTableResultLabel(results any) string {
 	l, ok := asList(results)
@@ -256,11 +229,10 @@ func dicePoolLabel(e map[string]any) string {
 	return "your dice pool"
 }
 
-func diceGatedBody(e map[string]any, ctx effCtx) string {
-	comp := "gte"
-	if jsTruthy(e["comparison"]) {
-		comp = ejstr(e["comparison"])
-	}
+// diceGate renders a dice gate: roll new dice ("roll one D6: on a 4+, ..."), or
+// test the dice of a bound roll against a threshold or a pair/triple
+// requirement ("using a pair of 3+ from that roll's unused dice, ...").
+func diceGate(e map[string]any, ctx effCtx) string {
 	success := "nothing happens"
 	if jsTruthy(e["on_success"]) {
 		success = describeEffectInline(mapOr(e["on_success"]), ctx)
@@ -269,11 +241,27 @@ func diceGatedBody(e map[string]any, ctx effCtx) string {
 	if jsTruthy(e["on_fail"]) {
 		fail = "; otherwise, " + describeEffectInline(mapOr(e["on_fail"]), ctx)
 	}
-	binding := ""
-	if rv, ok := e["roll_var"].(string); ok && rv != "" {
-		binding = " (binding the result as " + dekebab(strings.ReplaceAll(rv, "_", "-")) + ")"
+	comp := "gte"
+	if e["comparison"] != nil {
+		comp = ejstr(e["comparison"])
 	}
-	return "one " + diceCase(e["dice"]) + binding + ": on " + formatComparison(comp, e["threshold"]) + ", " + success + fail
+	if e["from"] != nil {
+		if e["requirement"] != nil {
+			return "using a " + describeRequirement(e["requirement"]) + " from that roll's unused dice, " + success + fail
+		}
+		return "if " + quantityPhrase(mapOr(e["from"])) + " is " + formatComparison(comp, e["threshold"]) + ", " + success + fail
+	}
+	kind := ""
+	if e["kind"] != nil {
+		kind = " (" + rollKindNoun(e["kind"]) + ")"
+	}
+	// "roll one D6", but "roll 2D6": a dice expression with its own count takes no article.
+	dice := diceCase(e["dice"])
+	one := "one "
+	if dice != "" && dice[0] >= '0' && dice[0] <= '9' {
+		one = ""
+	}
+	return "roll " + one + dice + kind + ": on " + formatComparison(comp, e["threshold"]) + ", " + success + fail
 }
 
 func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
@@ -313,7 +301,11 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if jsTruthy(e["test"]) {
 			return leadershipTest(e, ctx)
 		}
-		return "roll " + diceGatedBody(e, ctx)
+		return diceGate(e, ctx)
+	case "roll":
+		return rollHead(e) + "; then " + describeEffectInline(mapOr(e["effect"]), ctx)
+	case "select-objective":
+		return selectObjectiveInline(e, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "dice-table":
 		return diceTableInline(e, ctx)
 	case "dice-pool-allocation":
@@ -522,7 +514,22 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if jsTruthy(e["test"]) {
 			return indent + arrow + capitalize(leadershipTest(e, ctx)) + "."
 		}
-		return indent + arrow + "Roll " + diceGatedBody(e, ctx) + "."
+		return indent + arrow + capitalize(diceGate(e, ctx)) + "."
+	case "roll":
+		inner := mapOr(e["effect"])
+		head := indent + arrow + capitalize(rollHead(e))
+		if containerTypes[ejstrType(inner)] {
+			return head + ", then:\n" + describeEffect(inner, depth+1, ctx)
+		}
+		return head + "; then " + describeEffectInline(inner, ctx) + "."
+	case "select-objective":
+		inner := mapOr(e["effect"])
+		nested := ""
+		hasNested := containerTypes[ejstrType(inner)]
+		if hasNested {
+			nested = describeEffect(inner, depth+1, ctx)
+		}
+		return selectObjectiveBlock(e, indent, arrow, nested, hasNested, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "dice-table":
 		lines := []string{indent + arrow + "Roll one " + diceCase(e["dice"]) + ":"}
 		for _, o := range getList(e, "outcomes") {

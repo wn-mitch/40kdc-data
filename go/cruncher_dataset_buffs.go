@@ -90,6 +90,13 @@ func triggerGated(behavior any, trigger any, effect any) any {
 // lever (<ability>@<frequency>). Called only when no trigger already gates the
 // effect. A stratagem is already opt-in.
 func usageGated(abilityType any, usage any, effect any) any {
+	// Several limits that all apply are still one player-chosen use; the first limit names the lever.
+	if l, ok := asList(usage); ok {
+		usage = nil
+		if len(l) > 0 {
+			usage = l[0]
+		}
+	}
 	u, ok := asMap(usage)
 	if effect == nil || !ok || u == nil || abilityType == "stratagem" {
 		return effect

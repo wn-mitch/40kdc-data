@@ -26,16 +26,29 @@ func selectUnitsSubject(sel map[string]any) string {
 	if exactCount != nil {
 		count = exactCount
 	}
+	// A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units (Incursion/...)".
+	capMap, isCap := count.(map[string]any)
 	single := jsNumber(count) == 1
-	noun := "unit"
+	nounBase := "unit"
 	if sel["target_kind"] == "model" {
-		noun = "model"
+		nounBase = "model"
 	}
+	noun := nounBase
 	if !single {
 		noun += "s"
 	}
+	capPhrase, sized := "", false
+	if isCap {
+		capPhrase = quantityPhrase(capMap)
+		sized = capMap["count_of"] == nil
+	}
 	quantity := "up to " + ejstr(count)
-	if exactCount != nil {
+	if isCap {
+		quantity = "any number of"
+		if sized {
+			quantity = "up to " + capParenTailRe.ReplaceAllString(capPhrase, "")
+		}
+	} else if exactCount != nil {
 		quantity = ejstr(count)
 		if single {
 			quantity = "one"
@@ -47,15 +60,19 @@ func selectUnitsSubject(sel map[string]any) string {
 	if jsTruthy(sel["within_inches_from"]) {
 		boundOrigin = " of " + selectionRefName(sel["within_inches_from"], "the bound source unit")
 	}
+	wholly := ""
+	if sel["wholly"] == true {
+		wholly = " wholly"
+	}
 	within := ""
 	if sel["within_inches"] != nil {
-		within = " within " + ejstr(sel["within_inches"]) + "\"" + boundOrigin
+		within = wholly + " within " + ejstr(sel["within_inches"]) + "\"" + boundOrigin
 	} else if sel["range_inches"] != nil {
 		origin := boundOrigin
 		if origin == "" {
 			origin = " of " + referenceOrigin(sel["reference"])
 		}
-		within = " within " + ejstr(sel["range_inches"]) + "\"" + origin
+		within = wholly + " within " + ejstr(sel["range_inches"]) + "\"" + origin
 	}
 	visible := ""
 	if jsTruthy(sel["visible_to"]) {
@@ -74,7 +91,15 @@ func selectUnitsSubject(sel map[string]any) string {
 	if kw != "" {
 		kw = " " + kw
 	}
-	return quantity + " " + ejstr(sel["owner"]) + kw + " " + noun + selectionModelFilters(sel) + inclusive + within + visible + eligibility
+	capTail := ""
+	if isCap {
+		noun = nounBase + "s"
+		capTail = " (at most " + capPhrase + ")"
+		if sized {
+			capTail = " (" + capParenInnerRe.ReplaceAllString(capPhrase, "$1") + ")"
+		}
+	}
+	return quantity + " " + ejstr(sel["owner"]) + kw + " " + noun + capTail + selectionModelFilters(sel) + inclusive + within + visible + eligibility
 }
 
 func selectionModelFilters(sel map[string]any) string {
@@ -120,7 +145,16 @@ func selectUnitsEngagement(sel map[string]any) string {
 	return strings.Join(parts, " ")
 }
 
+var (
+	capParenTailRe  = regexp.MustCompile(` \(.*\)$`)
+	capParenInnerRe = regexp.MustCompile(`^.*\((.*)\)$`)
+)
+
 func selectUnitsPlural(sel map[string]any) bool {
+	// A cap set by the battle size or a count can select more than one.
+	if _, ok := sel["max_count"].(map[string]any); ok && sel["count"] == nil {
+		return true
+	}
 	count := sel["count"]
 	if count == nil {
 		count = sel["max_count"]

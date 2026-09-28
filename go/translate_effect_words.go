@@ -149,8 +149,14 @@ func orList(items []string) string {
 
 var dRe = regexp.MustCompile(`[dD]`)
 
-// diceCase prints dice tokens with a capital D (d3 -> D3, 2d6 -> 2D6).
-func diceCase(v any) string { return dRe.ReplaceAllString(ejstr(v), "D") }
+// diceCase prints dice tokens with a capital D (d3 -> D3, 2d6 -> 2D6); a bound
+// or counted quantity prints its phrase.
+func diceCase(v any) string {
+	if q, ok := v.(map[string]any); ok {
+		return quantityPhrase(q)
+	}
+	return dRe.ReplaceAllString(ejstr(v), "D")
+}
 
 var antiRe = regexp.MustCompile(`(?i)^anti[\s-]+(.*)$`)
 var antiRatedRe = regexp.MustCompile(`(?i)^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$`)
@@ -190,6 +196,7 @@ var pluralVerbs = map[string]string{
 	"has": "have", "is": "are", "gets": "get", "gains": "gain", "suffers": "suffer", "retains": "retain", "makes": "make",
 	"passes": "pass", "fails": "fail", "treats": "treat", "regains": "regain", "counts": "count", "ignores": "ignore", "loses": "lose",
 	"scores": "score", "takes": "take", "resolves": "resolve", "does": "do", "controls": "control",
+	"receives": "receive", "keeps": "keep",
 }
 
 // ev is subject-verb agreement: the plural form of a present-tense verb when the subject is plural.
@@ -275,9 +282,14 @@ var rollNames = map[string]string{
 	"hit": "Hit", "wound": "Wound", "charge": "Charge", "damage": "Damage", "advance": "Advance", "save": "saving throw",
 	"leadership": "Leadership", "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape", "normal-move": "Normal move",
 	"deadly-demise": "Deadly Demise", "dark-pact": "Dark Pact", "blessings-of-khorne": "Blessings of Khorne", "resource-die": "pool die",
+	"manoeuvre": "Agile Manoeuvre", "channelling": "Channel the Warp",
 }
 
 func rollName(roll any) string {
+	// The dice a named ability rolls: "Reanimation Protocols".
+	if r, ok := roll.(map[string]any); ok && r["of_ability"] != nil {
+		return abilityLabel(r["of_ability"])
+	}
 	r := ejstr(roll)
 	if n, ok := rollNames[r]; ok {
 		return n
@@ -393,6 +405,13 @@ func weaponNoun(m map[string]any) string {
 	if kebabSlugRe.MatchString(raw) {
 		named = titleCase(raw)
 	}
+	if ref, ok := asMap(m["weapon_ref"]); ok && ref != nil {
+		// A bound weapon ("the selected weapon") or the weapons picked for a named ability.
+		if sel, ok := asMap(ref["selected_by"]); ok && sel != nil {
+			return "the " + kind + "weapons selected for " + abilityLabel(sel["ability"]) + keyword
+		}
+		return "the selected " + kind + "weapon" + keyword
+	}
 	if named != "" {
 		named += " "
 	}
@@ -401,7 +420,7 @@ func weaponNoun(m map[string]any) string {
 
 // hasWeapon reports whether a modifier carries a weapon filter.
 func hasWeapon(m map[string]any) bool {
-	return m["weapon_type"] != nil || m["weapon_name"] != nil || m["weapon_keyword"] != nil
+	return m["weapon_type"] != nil || m["weapon_name"] != nil || m["weapon_keyword"] != nil || m["weapon_ref"] != nil
 }
 
 // weaponRollScope is " with melee weapons" for a roll scoped to a weapon filter, else "".
@@ -419,6 +438,8 @@ var roleSubjects = map[string]string{
 	"event-subject":      "the triggering unit",
 	"event-object":       "that unit",
 	"stratagem-target":   "that unit",
+	"bearer-transport":   "the Transport this unit is embarked within",
+	"ability-unit":       "this unit",
 }
 
 // filterSubject renders a unit filter as the plural subject of an effect
@@ -448,18 +469,29 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	}
 	within, hasWithin := asMap(f["within"])
 	if hasWithin && within != nil {
-		s += " within " + rangePhrase(within["range"])
+		s += " "
+		if within["wholly"] == true {
+			s += "wholly "
+		}
+		s += "within " + rangePhrase(within["range"])
 		if within["of"] != nil {
 			s += " of " + effectSubject(within["of"], ctx)
 		}
 	} else {
 		hasWithin = false
 	}
+	s += filterRelations(f, ctx)
 	if f["visible"] == true {
 		s += " that are visible"
 	}
 	if f["designated"] != nil {
-		s += " that are " + designationPhrase(ejstr(f["designated"]))
+		s += " that are " + designationPhrase(ejstr(f["designated"]), true)
+		if f["designated_by"] != nil {
+			s += " by " + effectSubject(f["designated_by"], ctx)
+		}
+	}
+	if f["not_designated"] != nil {
+		s += " that are not " + designationPhrase(ejstr(f["not_designated"]), true)
 	}
 	if f["state"] != nil {
 		s += " that are " + statePhrase(ejstr(f["state"]), false)
@@ -467,7 +499,8 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["excluding"] != nil {
 		s += " other than " + effectSubject(f["excluding"], ctx)
 	}
-	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["state"] != nil
+	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil ||
+		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
 	if bounded {
 		return s
 	}
@@ -518,6 +551,9 @@ func effectSubject(target any, ctx effCtx) string {
 	if sv, ok := r["selection_var"].(string); ok {
 		return "the bound " + strings.ReplaceAll(sv, "_", " ")
 	}
+	if st, ok := r["stratagem_target"].(string); ok {
+		return "the " + dekebab(strings.TrimPrefix(st, "the-")) + " target"
+	}
 	return filterSubject(r, ctx)
 }
 
@@ -566,6 +602,9 @@ func regionPhrase(r map[string]any) string {
 // designationFor renders a tag an effect applies: GW-printed tags stay as
 // printed, internal ones read "marked as ...".
 func designationFor(tag string) string {
+	if label, ok := designationTerm(tag, false); ok {
+		return label
+	}
 	if tag == strings.ToUpper(tag) {
 		return tag
 	}

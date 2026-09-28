@@ -153,13 +153,18 @@ func describeHappened(p map[string]any, negated bool) string {
 			default:
 				hits = "a " + atk + "attack"
 			}
-			return neg + target + " was hit by " + hits + weapon + by + when
+			// Who made the attacks, when it is not the unit being checked ("hit by an attack made by this unit").
+			attacker := ""
+			if p["subject"] != nil && p["subject"] != "this-unit" {
+				attacker = " made by " + unitRefPhrase(p["subject"], "the unit")
+			}
+			return neg + target + " was hit by " + hits + attacker + weapon + by + when
 		}
 		result := "was made "
 		if jsTruthy(f["result"]) {
 			result = "was a " + cstr(f["result"]) + " "
 		}
-		return trimEnd(neg + "a " + cstr(f["roll"]) + " roll " + result + windowPhrase(p["window"]))
+		return trimEnd(neg + "a " + rollWord(f["roll"]) + " roll " + result + windowPhrase(p["window"]))
 	case "damage-allocated":
 		obj := unitRefPhrase(p["object"], "the unit")
 		atk := ""
@@ -207,7 +212,7 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		tagged := ""
 		if obj["designated"] != nil {
-			tagged = " " + designationPhrase(cstr(obj["designated"]))
+			tagged = " " + designationPhrase(cstr(obj["designated"]), false)
 		}
 		return neg + withWindow(nStr+"+ "+owner+kws+noun+"s"+tagged+" destroyed", p["window"])
 	case "used":
@@ -232,6 +237,9 @@ func describeHappened(p map[string]any, negated bool) string {
 			}
 			return withWindow(s, p["window"])
 		}
+		if which := usedAbilityPhrase(f); which != "" {
+			return neg + withWindow(who+" used "+which, p["window"])
+		}
 		what := "a "
 		if f["id"] != nil {
 			what = "the " + titleCase(cstr(f["id"])) + " "
@@ -244,7 +252,7 @@ func describeHappened(p map[string]any, negated bool) string {
 	case "objective-gained":
 		return trimEnd(neg + "you newly control " + nStr + "+ objectives " + windowPhrase(p["window"]))
 	case "designation-changed":
-		return neg + withWindow(nStr+"+ "+unitRefPhrase(p["object"], "units")+" became "+designationPhrase(cstr(f["tag"])), p["window"])
+		return neg + withWindow(nStr+"+ "+unitRefPhrase(p["object"], "units")+" became "+designationPhrase(cstr(f["tag"]), false), p["window"])
 	}
 	return neg + withWindow(dekebab(event)+" happened", p["window"])
 }

@@ -21,7 +21,8 @@ func init() {
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
-		"objective-sticky", "designate", "army-rule",
+		"objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
+		"select-weapon",
 	} {
 		leafTypes[t] = true
 	}
@@ -180,7 +181,17 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		failed = "failed "
 	}
 	var which string
-	if cnt, ok := m["count"].(float64); ok {
+	if isObject(m["count"]) {
+		// A counted allowance ("one for each model equipped with ...") reads as a number of rolls.
+		fn := noun
+		switch m["subset"] {
+		case "all-failures":
+			fn = "failed " + noun
+		case "ones":
+			fn = noun + " of 1"
+		}
+		which = "a number of " + fn + "s equal to " + diceCase(m["count"])
+	} else if cnt, ok := m["count"].(float64); ok {
 		qty, plural := "up to "+numStr(cnt), "s"
 		if cnt == 1 {
 			qty, plural = "one", ""
@@ -207,8 +218,12 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if m["pool"] != nil {
 		pool = " by spending a die from your " + titleCase(ejstr(m["pool"]))
 	}
+	can := "can"
+	if m["mandatory"] == true {
+		can = "must"
+	}
 	if m["incoming"] == true {
-		return incomingLead(m, subj) + "the attacking player can re-roll " + which + pool
+		return incomingLead(m, subj) + "the attacking player " + can + " re-roll " + which + pool
 	}
 	// "you can re-roll ..." names whose roll it is unless that is the ability's own unit.
 	t := e["target"]
@@ -226,7 +241,7 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		}
 		owner = " for " + attacks + holder
 	}
-	return "you can re-roll " + which + owner + weaponRollScope(m) + pool
+	return "you " + can + " re-roll " + which + owner + weaponRollScope(m) + pool
 }
 
 func rollResultLeaf(m map[string]any, subj string) string {
@@ -252,6 +267,17 @@ func rollResultLeaf(m map[string]any, subj string) string {
 		}
 		return subj + " " + ev(subj, "scores") + " " + crit + "s on " + roll + " rolls of " + ejstr(m["critical_on"]) + "+" + weaponRollScope(m)
 	}
+	if m["fails_on"] != nil {
+		n := jsNumber(m["fails_on"])
+		rng := "1-" + numStr(n)
+		if n == 1 {
+			rng = "1"
+		}
+		if lead != "" {
+			return lead + "an unmodified " + roll + " roll of " + rng + " for that attack always fails"
+		}
+		return ofOrPossessive(subj, roll+" rolls") + weaponRollScope(m) + " always fail on an unmodified " + rng
+	}
 	if m["succeeds_on"] != nil {
 		if lead != "" {
 			return lead + "the " + roll + " roll for that attack succeeds only on an unmodified " + ejstr(m["succeeds_on"]) + "+"
@@ -276,7 +302,7 @@ func rollResultLeaf(m map[string]any, subj string) string {
 		case "fail":
 			return lead + whose + " automatically fails"
 		}
-		return lead + whose + " counts as " + ejstr(m["result"])
+		return lead + whose + " counts as " + unmodifiedWord(m) + ejstr(m["result"])
 	}
 	whose := ofOrPossessive(subj, roll+" rolls")
 	switch m["result"] {
@@ -285,7 +311,14 @@ func rollResultLeaf(m map[string]any, subj string) string {
 	case "fail":
 		return whose + weaponRollScope(m) + " automatically fail"
 	}
-	return whose + weaponRollScope(m) + " count as " + ejstr(m["result"])
+	return whose + weaponRollScope(m) + " count as " + unmodifiedWord(m) + ejstr(m["result"])
+}
+
+func unmodifiedWord(m map[string]any) string {
+	if m["unmodified"] == true {
+		return "an unmodified "
+	}
+	return ""
 }
 
 func abilityGrantLeaf(m map[string]any, subj string) string {
@@ -342,14 +375,20 @@ func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string
 		return incomingLead(m, subj) + "the attacking weapon has " + kws + increment
 	}
 	if hasWeapon(m) {
-		return weaponNoun(m) + " equipped by " + weaponHolder(e["target"], ctx) + " gain " + kws + increment
+		noun := weaponNoun(m)
+		gain := "gains"
+		if weaponsWordRe.MatchString(noun) {
+			gain = "gain"
+		}
+		return noun + " equipped by " + weaponHolder(e["target"], ctx) + " " + gain + " " + kws + increment
 	}
 	return ofOrPossessive(subj, "weapons") + " gain " + kws + increment
 }
 
 var abilityAspects = map[string]string{
 	"uses": "number of uses", "range": "range", "targets": "number of targets", "recipients": "recipients", "selections": "number of selections",
-	"concurrent": "number that can apply at once", "duration": "duration", "start-round": "first battle round", "threshold": "threshold", "options": "options",
+	"concurrent": "number that can apply at once", "duration": "duration", "start-round": "first battle round", "end-round": "last battle round",
+	"threshold": "threshold", "options": "options",
 }
 
 var leadingAllRe = regexp.MustCompile(`^all `)
@@ -427,7 +466,30 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if option != "" {
 		s += "; add " + option
 	}
-	return s + cap
+	return s + cap + abilityLimits(m)
+}
+
+// abilityLimits renders the limits on a changed allowance: once per battle
+// round, never in the same phase, outside the shared limit.
+func abilityLimits(m map[string]any) string {
+	var parts []string
+	if per, ok := asMap(m["cap_per"]); ok && per != nil {
+		times := ejstr(per["count"]) + " times"
+		if jsNumber(per["count"]) == 1 {
+			times = "once"
+		}
+		parts = append(parts, "but it can be used at most "+times+" per "+dekebab(ejstr(per["period"])))
+	}
+	if m["not_same"] != nil {
+		parts = append(parts, "but not in the same "+ejstr(m["not_same"])+" as the use that triggered this")
+	}
+	if m["consumes_shared_use"] == false {
+		parts = append(parts, "and this use does not count toward that ability's limit for other units")
+	}
+	if len(parts) == 0 {
+		return ""
+	}
+	return ", " + strings.Join(parts, ", ")
 }
 
 func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
@@ -441,6 +503,9 @@ func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	return subj + " " + ev(subj, "counts") + " as being within " + rangePhrase(m["within"]) + " of " + of
 }
 
+var weaponsWordRe = regexp.MustCompile(`weapons\b`)
+var itsWordRe = regexp.MustCompile(`\bits\b`)
+
 var coreRules = map[string][2]string{
 	"benefit-of-cover":      {"has the Benefit of Cover", "cannot benefit from Cover"},
 	"charge":                {"can charge", "cannot charge"},
@@ -450,9 +515,14 @@ var coreRules = map[string][2]string{
 	"fire-overwatch":        {"can fire Overwatch", "cannot fire Overwatch"},
 	"desperate-escape":      {"must take Desperate Escape tests", "is not affected by Desperate Escape tests"},
 	"attacking-ends-hidden": {"stops being hidden when it attacks", "does not stop being hidden when it attacks"},
+	"engaged-shooting-hit-penalty": {"suffers the -1 to Hit for shooting while within Engagement Range",
+		"does not suffer the -1 to Hit for shooting while within Engagement Range"},
+	"charge-bonus":               {"receives the Charge bonus", "does not receive the Charge bonus"},
+	"hidden":                     {"can become hidden", "cannot become hidden"},
+	"orders-end-on-battle-shock": {"loses its Orders when it becomes Battle-shocked", "keeps its Orders when it becomes Battle-shocked"},
 }
 
-var coreRuleVerbRe = regexp.MustCompile(`^(has|is|stops|does) `)
+var coreRuleVerbRe = regexp.MustCompile(`^(has|is|stops|does|suffers|receives|loses|keeps) `)
 
 func ruleStateLeaf(m map[string]any, subj string) string {
 	granted := m["direction"] == "granted"
@@ -479,6 +549,9 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 			return noneOf(subj) + " " + phrase
 		}
 		phrase = coreRuleVerbRe.ReplaceAllStringFunc(phrase, func(w string) string { return ev(subj, strings.TrimSpace(w)) + " " })
+		if isPlural(subj) {
+			phrase = itsWordRe.ReplaceAllString(phrase, "their")
+		}
 		return subj + " " + phrase
 	}
 	noun := "ability"
@@ -534,15 +607,7 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "ability-modifier":
 		return abilityModifierLeaf(m, subj, ctx)
 	case "ability-activate":
-		label := abilityLabel(m["ability"])
-		if m["option"] == nil {
-			return subj + " " + ev(subj, "resolves") + " the " + label + " ability now"
-		}
-		excl := ""
-		if m["exclusive"] == true {
-			excl = " (and no other option is)"
-		}
-		return "the " + titleCase(ejstr(m["option"])) + " option of " + label + " is active for " + subj + excl
+		return abilityActivateLeaf(m, subj)
 	case "permission":
 		return permissionLeaf(m, subj, ctx)
 	case "targeting":
@@ -551,6 +616,9 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":
 		return ruleStateLeaf(m, subj)
+	}
+	if s, ok := describeShapeLeaf(e, m, subj, ctx); ok {
+		return s
 	}
 	return describeBoardLeaf(e, m, subj, ctx)
 }

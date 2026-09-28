@@ -332,6 +332,10 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 			for _, sub := range oneOf {
 				v.check(sub, instance, path, base, out)
 			}
+		} else if validCount > 1 {
+			// More than one branch matching fails oneOf (AJV and jsonschema report only the
+			// oneOf error, which maps to no code but makes the instance invalid).
+			*out = append(*out, violation{path, "oneOf"})
 		}
 	}
 	if not, ok := schema["not"]; ok && v.valid(not, instance, base) {

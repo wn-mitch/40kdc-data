@@ -19,6 +19,10 @@ func woundsNoun(n, noun string) string {
 
 func mortalWoundsLeaf(m map[string]any, subj string) string {
 	count := diceCase(m["count"])
+	suffered := count + " " + woundsNoun(count, "mortal wound")
+	if !isLiteral(m["count"]) {
+		suffered = amountOf(m["count"], "mortal wound", "mortal wounds")
+	}
 	psychic := ""
 	if m["psychic"] == true {
 		psychic = " (Psychic Attack)"
@@ -41,7 +45,7 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		if each != "" {
 			dice = "one " + dice
 		}
-		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + count + " " + woundsNoun(count, "mortal wound") + psychic
+		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + suffered + psychic
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -51,56 +55,11 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		}
 		per = " for each model in " + them
 	}
-	return who + " " + ev(who, "suffers") + " " + count + " " + woundsNoun(count, "mortal wound") + per + psychic
+	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic
 }
 
 var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
-}
-
-var boardPlacement = map[string]string{
-	"closest-to-destruction": " as close as possible to where it was destroyed",
-	"coherency":              " in Unit Coherency",
-	"unengaged":              " not within Engagement Range of any enemy units",
-	"strategic-reserves":     " in Strategic Reserves",
-	"anywhere":               " anywhere on the battlefield",
-}
-
-func placementClause(m map[string]any) string {
-	if m["placement"] == "wholly-within" {
-		return " wholly within " + rangePhrase(m["range"]) + " of this model"
-	}
-	if m["placement"] == nil {
-		return ""
-	}
-	if p, ok := boardPlacement[ejstr(m["placement"])]; ok {
-		return p
-	}
-	return " " + dekebab(ejstr(m["placement"]))
-}
-
-func returnModelsLeaf(e, m map[string]any, subj string) string {
-	w := "its full wounds"
-	if m["wounds_remaining"] != nil && m["wounds_remaining"] != "full" {
-		n := diceCase(m["wounds_remaining"])
-		w = n + " " + woundsNoun(n, "wound")
-	}
-	if e["target"] == "this-model" {
-		return subj + " is set up again" + placementClause(m) + " with " + w + " remaining"
-	}
-	count := diceCase(m["count"])
-	if m["count"] == "all" {
-		count = "all"
-	}
-	kind := "destroyed model"
-	if m["model_keyword"] != nil {
-		kind = "destroyed " + ejstr(m["model_keyword"]) + " model"
-	}
-	noun := kind + "s"
-	if count == "1" {
-		noun = kind
-	}
-	return "return " + count + " " + noun + " to " + subj + placementClause(m) + ", each with " + w + " remaining"
 }
 
 func destroyModelsLeaf(m map[string]any, subj string) string {
@@ -199,32 +158,6 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	return "each time " + model + " is destroyed, it can " + act + " before being removed from play"
 }
 
-func addUnitLeaf(m map[string]any, ctx effCtx) string {
-	c := m["count"]
-	if c == nil {
-		c = 1.0
-	}
-	n := jsNumber(c)
-	var what string
-	if m["copy_of"] != nil {
-		units := numStr(n) + " new units"
-		if n == 1 {
-			units = "a new unit"
-		}
-		what = units + " identical to " + effectSubject(m["copy_of"], ctx)
-	} else {
-		article, plural := numStr(n), "s"
-		if math.IsNaN(n) {
-			article = "NaN"
-		}
-		if n == 1 {
-			article, plural = "a", ""
-		}
-		what = article + " " + titleCase(ejstr(m["datasheet"])) + " unit" + plural
-	}
-	return "add " + what + " to your army" + placementClause(m)
-}
-
 var moveVerbs = map[string]string{
 	"normal": "make a Normal move", "advance": "Advance", "fall-back": "Fall Back", "charge": "declare a charge", "pile-in": "Pile In",
 	"consolidation": "Consolidate", "surge": "make a Surge move", "scout": "make a Scout move", "ingress": "make an Ingress move",
@@ -244,7 +177,9 @@ func passthroughList(p any) string {
 	l, _ := asList(p)
 	parts := make([]string, len(l))
 	for i, x := range l {
-		if n, ok := passthroughNames[ejstr(x)]; ok {
+		if item, ok := x.(map[string]any); ok {
+			parts[i] = passItem(item)
+		} else if n, ok := passthroughNames[ejstr(x)]; ok {
 			parts[i] = n
 		} else {
 			parts[i] = dekebab(ejstr(x))
@@ -266,7 +201,7 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 			upTo = " up to " + diceCase(m["distance"]) + "\""
 		}
 	}
-	s := subj + " can " + verb + upTo
+	s := subj + " can " + verb + upTo + moveModeClause(m)
 	if _, ok := asList(m["passthrough"]); ok {
 		s += ", moving over " + passthroughList(m["passthrough"]) + " as though they were not there"
 	}
@@ -275,11 +210,13 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 		if ends["wholly"] == true {
 			wholly = "wholly "
 		}
-		of := "this model"
-		if ends["of"] != nil {
-			of = effectSubject(ends["of"], ctx)
-		}
-		s += ", ending that move " + wholly + "within " + rangePhrase(ends["range"]) + " of " + of
+		s += ", ending that move " + wholly + "within " + rangePhrase(ends["range"]) + " of " + endsOf(ends["of"], ctx)
+	}
+	if m["allow_engagement"] == true {
+		s += "; it can end that move within Engagement Range of enemy units"
+	}
+	if m["counts_as_move"] != nil {
+		s += "; that move counts as " + movedPhrase(m["counts_as_move"])
 	}
 	if m["keeps_eligible"] == true {
 		s += "; doing so does not change what it is eligible to do this turn"
@@ -340,10 +277,6 @@ func moveModifierLeaf(m map[string]any, subj string) string {
 }
 
 var setUpOrdinals = []string{"", "first", "second", "third", "fourth", "fifth"}
-var setUpPlacement = map[string]string{
-	"closest-to-original": " as close as possible to its original position", "connected-sections": " with its sections touching",
-	"anywhere": " anywhere on the battlefield", "deployment-zone": " wholly within your deployment zone", "on-terrain": " on top of a terrain feature",
-}
 var trailingMarkerRe = regexp.MustCompile(`(?i) marker$`)
 var leadingVowelRe = regexp.MustCompile(`(?i)^[aeiou]`)
 var lastCommaRe = regexp.MustCompile(`, ([^,]*)$`)
@@ -362,6 +295,8 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	can, whoCan := "can", who
 	if m["allow"] == false {
 		can, whoCan = "cannot", noneOf(who)
+	} else if m["mandatory"] == true {
+		can = "must"
 	}
 	if m["to"] == "strategic-reserves" {
 		return whoCan + " " + can + " be placed into Strategic Reserves" + limits
@@ -382,6 +317,7 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["via"] == "deep-strike" {
 		s += " using the Deep Strike rules"
 	}
+	s += moveModeClause(m)
 	if turns, ok := asList(m["turns"]); ok {
 		parts := make([]string, len(turns))
 		for i, t := range turns {
@@ -394,16 +330,16 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		s += " in the Reinforcements step of your " + lastCommaRe.ReplaceAllString(strings.Join(parts, ", "), " or $1") + " Movement phase"
 	}
+	if m["arrives"] == "next-movement-phase" {
+		s += " in the Reinforcements step of your next Movement phase"
+		if m["allow_first_round"] == true {
+			s += " (even in the first battle round)"
+		}
+	}
 	if m["sections"] != nil {
 		s += " as " + ejstr(m["sections"]) + " separate sections"
 	}
-	if m["placement"] != nil {
-		if p, ok := setUpPlacement[ejstr(m["placement"])]; ok {
-			s += p
-		} else {
-			s += " " + dekebab(ejstr(m["placement"]))
-		}
-	}
+	s += placementPhrase(m) + placementLimits(m, ctx)
 	if m["within_edge"] != nil {
 		s += " wholly within " + ejstr(m["within_edge"]) + "\" of a battlefield edge"
 	}
@@ -428,6 +364,12 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 			dir = "lower"
 		}
 		s += ", treating the battle round as " + numStr(math.Abs(n)) + " " + dir + " than it is"
+	}
+	if m["allow_engagement"] == true {
+		s += "; it can be set up within Engagement Range of enemy units"
+	}
+	if m["counts_as_move"] != nil {
+		s += "; it counts as having made " + movedPhrase(m["counts_as_move"]) + " this turn"
 	}
 	return s + limits
 }
@@ -492,10 +434,13 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		if m["amount"] == "full" {
 			return who + " " + ev(who, "regains") + " all " + pronoun(who) + " lost wounds"
 		}
+		if !isLiteral(m["amount"]) {
+			return who + " " + ev(who, "regains") + " up to " + amountOf(m["amount"], "lost wound", "lost wounds")
+		}
 		amount := diceCase(m["amount"])
 		return who + " " + ev(who, "regains") + " up to " + amount + " lost " + woundsNoun(amount, "wound")
 	case "return-models":
-		return returnModelsLeaf(e, m, subj)
+		return returnModelsLeaf(e, m, subj, ctx)
 	case "destroy-models":
 		return destroyModelsLeaf(m, subj)
 	case "act-on-death":
@@ -539,6 +484,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
 	case "resource-gain":
+		if _, ok := m["amount"].(map[string]any); ok {
+			return "you gain " + amountOf(m["amount"], resourceNoun(m["pool"], m["label"], 1.0), resourceNoun(m["pool"], m["label"], 2.0))
+		}
 		amount := diceCase(m["amount"])
 		switch m["amount"] {
 		case "variable":
@@ -556,7 +504,22 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		case "one-or-more":
 			amount = "one or more"
 		}
-		return "spend " + amount + " " + resourceNoun(m["pool"], m["label"], count)
+		showing := ""
+		if m["face"] != nil {
+			showing = " showing a " + ejstr(m["face"])
+		} else if m["requirement"] != nil {
+			showing = " forming a " + requirementPhrase(m["requirement"])
+		}
+		noun := resourceNoun(m["pool"], m["label"], count)
+		// A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming a triple of 6+".
+		if showing != "" && !dieDiceSuffixRe.MatchString(noun) {
+			if jsNumber(ejstr(m["amount"])) == 1 {
+				noun += " die"
+			} else {
+				noun += " dice"
+			}
+		}
+		return "spend " + amount + " " + noun + showing
 	case "resource-die":
 		return resourceDieLeaf(m)
 	case "objective-sticky":

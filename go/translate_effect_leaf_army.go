@@ -134,6 +134,12 @@ func resourceDieLeaf(m map[string]any) string {
 		}
 		return "add " + die + " to your " + pool + " for each " + per + " you have" + lost
 	}
+	if m["count"] != nil && !isLiteral(m["count"]) {
+		if m["value"] == "rolled" {
+			return "add " + amountOf(m["count"], "rolled D6", "rolled D6") + " to your " + pool
+		}
+		return "add " + amountOf(m["count"], "die", "dice") + " to your " + pool
+	}
 	cnt := "1"
 	if m["count"] != nil {
 		cnt = diceCase(m["count"])
@@ -156,6 +162,9 @@ func designateLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if s := m["subject"]; s != nil {
 		if so, ok := asMap(s); ok && so != nil && so["objective"] != nil {
 			what = "the " + objectivePhrase(mapOr(so["objective"]), false, "objective")
+			if mapOr(so["objective"])["selection_var"] != nil {
+				what = "that objective marker"
+			}
 		} else if ok && so != nil && so["terrain_area"] != nil {
 			what = regionPhrase(map[string]any{"terrain_area": so["terrain_area"]})
 		} else {
@@ -169,11 +178,19 @@ func designateLeaf(m map[string]any, subj string, ctx effCtx) string {
 		until = " until the end of the turn"
 	case "phase-end":
 		until = " until the end of the phase"
+	default:
+		if trail := expiryTrail(m["clears_on"]); trail != "" && m["clears_on"] != "battle" {
+			until = " " + trail
+		}
 	}
 	if m["clear"] == true {
 		return what + " " + ev(what, "is") + " no longer " + tag
 	}
-	return what + " " + ev(what, "is") + " " + tag + until
+	by := ""
+	if m["by"] != nil {
+		by = " by " + effectSubject(m["by"], ctx)
+	}
+	return what + " " + ev(what, "is") + " " + tag + by + until
 }
 
 func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
@@ -210,9 +227,18 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
 		return "each " + each + " can be given " + max + kind + "Enhancement" + plural
 	case "faction-forbidden":
 		return "you cannot select " + titleCase(ejstr(m["faction"])) + " as your Army Faction"
+	case "single-chapter":
+		return "your army can include units from only one Chapter"
+	case "detachment-forbidden":
+		return "you cannot select the " + titleCase(ejstr(m["detachment"])) + " Detachment"
+	case "detachment-tag-exclusive":
+		return "you cannot select this Detachment together with another " + titleCase(ejstr(m["tag"])) + " Detachment"
 	case "attachment":
 		if m["mandatory"] == true {
 			return subj + " must be attached to a Leader, or it counts as destroyed"
+		}
+		if m["attach_as"] != nil {
+			return "a Leader that can be attached to " + leadingAllRe.ReplaceAllString(effectSubject(m["attach_as"], ctx), "") + " can also be attached to " + subj
 		}
 		led := ""
 		if m["led_by"] != nil {
@@ -224,10 +250,41 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if hasWith {
 		such = withF
 	}
-	if m["max"] != nil {
-		return "your army can include at most " + ejstr(m["max"]) + " " + such
+	return compositionLimit(m, such, ctx)
+}
+
+// compositionLimit renders a composition limit: at most N units / models /
+// points of X, per matching unit, outside the Retinue limit.
+func compositionLimit(m map[string]any, what string, ctx effCtx) string {
+	exempt := ""
+	if isList(m["exempt_from"]) {
+		exempt = "; they do not count toward the Retinue limit"
 	}
-	return "your army cannot include " + such
+	if m["max"] == nil {
+		return "your army cannot include " + what + exempt
+	}
+	measure := ""
+	switch m["measure"] {
+	case "points":
+		measure = "points of "
+	case "models":
+		measure = "models from "
+	}
+	literal := isLiteral(m["max"])
+	max := diceCase(m["max"])
+	if literal {
+		max = ejstr(m["max"])
+	}
+	// "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
+	counted := what
+	if literal && jsNumber(m["max"]) == 1 && measure == "" {
+		counted = replaceFirst(unitsWordRe, what, " unit")
+	}
+	per := ""
+	if m["per"] != nil {
+		per = " for each " + replaceFirst(unitsWordRe, leadingAllRe.ReplaceAllString(effectSubject(m["per"], ctx), ""), " unit") + " in your army"
+	}
+	return "your army can include at most " + max + " " + measure + counted + per + exempt
 }
 
 var unitsWordBoundaryRe = regexp.MustCompile(`\bunits\b`)

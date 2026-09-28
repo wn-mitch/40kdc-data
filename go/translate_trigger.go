@@ -121,7 +121,7 @@ var rollNouns = map[string]string{
 	"hit": "Hit roll", "wound": "Wound roll", "save": "saving throw", "damage": "Damage roll", "charge": "Charge roll",
 	"advance": "Advance roll", "battle-shock": "Battle-shock test", "leadership": "Leadership test", "hazard": "Hazard roll",
 	"psychic": "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
-	"blessings-of-khorne": "Blessings of Khorne roll",
+	"blessings-of-khorne": "Blessings of Khorne roll", "manoeuvre": "Agile Manoeuvre roll", "channelling": "Channel the Warp roll",
 }
 
 var testRolls = map[string]bool{"battle-shock": true, "leadership": true, "desperate-escape": true}
@@ -140,10 +140,14 @@ func isObject(v any) bool {
 }
 
 func rollClause(t, f map[string]any) string {
-	roll := cstr(f["roll"])
+	// An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
+	roll := ""
+	if !isObject(f["roll"]) {
+		roll = cstr(f["roll"])
+	}
 	noun, ok := rollNouns[roll]
 	if !ok {
-		noun = dekebab(roll) + " roll"
+		noun = rollWord(f["roll"]) + " roll"
 	}
 	subject := t["subject"]
 	sm, isMap := asMap(subject)
@@ -358,6 +362,9 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "when " + triggerObjectPhrase(object) + " is destroyed"
 	case "used":
+		if which := usedAbilityPhrase(f); which != "" {
+			return "each time " + who + " uses " + which
+		}
 		switch {
 		case f["kind"] == "stratagem":
 			return "each time you use a Stratagem"
