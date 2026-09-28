@@ -253,7 +253,7 @@ class AbilityView:
             return effect
 
         modifier = effect.get("modifier")
-        ability_id = modifier.get("ability_id") if isinstance(modifier, dict) else None
+        ability_id = modifier.get("ability") if isinstance(modifier, dict) else None
         if (
             effect.get("type") == "ability-grant"
             and isinstance(modifier, dict)
@@ -314,13 +314,13 @@ class AbilityView:
             ctx,
             perspective,
         )
-        # A range-scoped ability (DSL scope.range_inches, e.g. a "within 18\""
-        # reroll) gates on distance to the target. Stamp it here, not in the
-        # effect translator, so the effect-translation corpus (bare effects) is
-        # unaffected; the gate is permissive until a caller sets distanceInches.
-        scope = self.raw.get("scope") or {}
-        rng = scope.get("range_inches")
-        if not isinstance(rng, (int, float)) or isinstance(rng, bool):
+        # An aura (an effect whose target filter reaches units `within` N", e.g. a
+        # "within 18\"" reroll) gates on distance to the target. Stamp it here, not
+        # in the effect translator, so the effect-translation corpus (bare effects)
+        # is unaffected; the gate is permissive until a caller sets distanceInches.
+        # Only a single inch range gates.
+        rng = aura_inches(resolved)
+        if rng is None:
             return translated
 
         def gate(b: dict[str, Any]) -> dict[str, Any]:
@@ -500,3 +500,33 @@ class FactionView:
                 seen.add(weapon.id)
                 out.append(weapon)
         return out
+
+
+def aura_inches(effect: Any) -> float | int | None:
+    """The one inch range every aura-filtered effect target in ``effect`` reaches,
+    if there is exactly one (``target.within.range.inches``)."""
+    found: list[float | int] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                walk(item)
+            return
+        if not isinstance(node, dict):
+            return
+        target = node.get("target")
+        if isinstance(node.get("type"), str) and isinstance(target, dict):
+            within = target.get("within")
+            rng = within.get("range") if isinstance(within, dict) else None
+            inches = rng.get("inches") if isinstance(rng, dict) else None
+            if (
+                isinstance(inches, (int, float))
+                and not isinstance(inches, bool)
+                and inches not in found
+            ):
+                found.append(inches)
+        for value in node.values():
+            walk(value)
+
+    walk(effect)
+    return found[0] if len(found) == 1 else None

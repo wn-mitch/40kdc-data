@@ -63,8 +63,8 @@ function writeEntries(file: string, entries: Array<Record<string, unknown>>): vo
 }
 
 const STAT_MECHANICS = {
-  effect: { type: "stat-modifier", target: "self", modifier: { stat: "M", operation: "add", value: 1 } },
-  scope: { range: "unit", duration: "permanent" },
+  effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "add", value: 1 } },
+  scope: { duration: "permanent" },
   behavior: "passive",
   trigger: null,
   usage: null,
@@ -98,7 +98,9 @@ function buildFixture(): Fixture {
   const originalEntries = entriesAt(abilitiesFile);
   const fixtureEntries = structuredClone(originalEntries);
   const selected = fixtureEntries.find((entry) => entry.ability_id === selectedAbilityId)!;
-  selected.effect = { type: "stat-modifier", target: "self", modifier: {} };
+  // A valid effect the compiled entry replaces; the rest of the dataset must still validate
+  // when only another entry is published.
+  selected.effect = { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "add", value: 2 } };
   selected.behavior = "reactive";
   selected.community_notes = "metadata-must-survive";
   writeEntries(abilitiesFile, fixtureEntries);
@@ -179,7 +181,7 @@ describe("Round 5C explicit publication", () => {
         ability_id: selectedAbilityId,
         behavior: "passive",
         community_notes: "metadata-must-survive",
-        effect: { type: "stat-modifier", target: "self", modifier: { stat: "M", operation: "add", value: 1 } },
+        effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "add", value: 1 } },
         source_digest: sourceDigest(privateSourceText),
       });
       expect(untouchedAfter).toEqual(untouchedBefore);

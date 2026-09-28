@@ -84,6 +84,22 @@ func describeHappened(p map[string]any, negated bool) string {
 			verb = "shoot or fight"
 		}
 		return withWindow(who+" "+has+" been selected to "+verb, p["window"])
+	case "set-up":
+		was := "was"
+		if negated {
+			was = "was not"
+		}
+		return withWindow(who+" "+was+" set up", p["window"])
+	case "targets-selected":
+		has := "has"
+		if negated {
+			has = "has not"
+		}
+		what := "targets"
+		if p["object"] != nil {
+			what = unitRefPhrase(p["object"], "the unit") + " as a target"
+		}
+		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":
 		return withWindow(who+" "+didNot("disembark")+" from a Transport", p["window"])
 	case "after-roll":
@@ -102,7 +118,11 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		weapon := ""
 		if jsTruthy(f["weapon_name"]) {
-			weapon = " by " + cstr(f["weapon_name"])
+			weaponName := cstr(f["weapon_name"])
+			if kebabSlugRe.MatchString(weaponName) {
+				weaponName = titleCase(weaponName)
+			}
+			weapon = " by " + weaponName
 			if keyword != "" {
 				weapon += " (with " + keyword + ")"
 			}

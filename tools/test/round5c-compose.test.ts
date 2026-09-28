@@ -60,7 +60,7 @@ describe("Round 5C composition rules", () => {
         { type: "attack-is", parameters: { attack_type: "ranged" } },
         { operator: "not", operands: [{ type: "strength", parameters: { subject: "defender", below: "half" } }] },
       ] },
-      effect: { type: "roll-modifier", target: "self", modifier: { roll: "hit", operation: "add", value: 1 } },
+      effect: { type: "roll-modifier", target: "this-model", modifier: { roll: "hit", operation: "add", value: 1 } },
     });
     expect(result.signature).toBe("EVENT(attack:makes) · CONDITION(unit-state) · EFFECT(roll-modifier)");
   });
@@ -75,8 +75,8 @@ describe("Round 5C composition rules", () => {
       ["if the foe is halved", "CONDITION", "unit-state", state(["below-half-strength"])],
     ]);
     expect(result.mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "starting" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
-      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "half" } }, effect: { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } } },
+      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "starting" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
+      { type: "conditional", condition: { type: "strength", parameters: { subject: "defender", below: "half" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } } },
     ] });
     expect(result.signature).toBe("EVENT(attack:makes) · EFFECT(roll-modifier) · CONDITION(unit-state) | EFFECT(roll-modifier) · CONDITION(unit-state)");
 
@@ -123,7 +123,7 @@ describe("Round 5C composition rules", () => {
       ["this unit has a 5+ ward", "EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
     ]);
     expect(result.mechanics.effect).toMatchObject({ type: "conditional", effect: { type: "sequence", steps: [
-      { type: "roll-modifier", target: "attacker" }, { type: "invulnerable-save", target: "unit" },
+      { type: "roll-modifier", target: "attacker" }, { type: "invulnerable-save", target: "this-unit" },
     ] } });
     expect(result.signature).toBe("EVENT(attack:targeted) · EFFECT(roll-modifier) | EFFECT(invulnerable-save)");
   });
@@ -134,7 +134,7 @@ describe("Round 5C composition rules", () => {
       ["worsen its piercing by one", "EFFECT", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ]).mechanics.effect as Record<string, unknown>;
     expect(worsen("targeted")).toMatchObject({ effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen" } } });
-    expect(worsen("makes")).toMatchObject({ effect: { type: "stat-modifier", target: "unit" } });
+    expect(worsen("makes")).toMatchObject({ effect: { type: "stat-modifier", target: "this-unit" } });
   });
 
   it("replaces a re-roll when the unit charged, keeping the melee limit on both", () => {
@@ -150,8 +150,8 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.effect).toEqual({
       type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "melee" } },
       effect: { type: "sequence", steps: [
-        { type: "conditional", condition: { operator: "not", operands: [charged] }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
-        { type: "conditional", condition: charged, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+        { type: "conditional", condition: { operator: "not", operands: [charged] }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } },
+        { type: "conditional", condition: charged, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } } },
       ] },
     });
   });
@@ -167,11 +167,13 @@ describe("Round 5C composition rules", () => {
       ["on a 6", "CONDITION", "roll-result", { from: 6, to: 6 }],
       ["that unit takes D3+3 wounds", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "D3+3" }],
     ]);
-    expect(result.mechanics.effect).toEqual({ type: "dice-table", dice: "D6", outcomes: [
+    // "Pick one enemy unit" is the selection "that unit" names.
+    expect(result.mechanics.effect).toEqual({ type: "select-units", selector: { owner: "enemy", count: 1 }, effect: { type: "dice-table", dice: "D6", outcomes: [
       { results: [1], effect: { type: "no-effect" } },
-      { results: [2, 3, 4, 5], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3" } } },
-      { results: [6], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3+3" } } },
-    ] });
+      { results: [2, 3, 4, 5], effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: "D3" } } },
+      { results: [6], effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: "D3+3" } } },
+    ] } });
+    expect(result.rendered).toMatch(/Select one enemy unit/u);
     expect(result.mechanics.trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
 
@@ -181,7 +183,7 @@ describe("Round 5C composition rules", () => {
       ["on a 4+", "CONDITION", "roll-result", { from: 4, to: 6 }],
       ["this unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
     ]);
-    expect(result.mechanics.effect).toEqual({ type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_success: { type: "mortal-wounds", target: "unit", modifier: { count: 1 } }, on_fail: null });
+    expect(result.mechanics.effect).toEqual({ type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
   });
 
   it("folds a per-model roll and a has-not-fought condition into fighting on death", () => {
@@ -193,8 +195,8 @@ describe("Round 5C composition rules", () => {
       ["On a 2+", "CONDITION", "roll-result", { from: 2, to: 6 }],
       ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { timing: "after-the-attacking-unit-finishes" }],
     ]);
-    expect(result.mechanics.effect).toEqual({ type: "fight-on-death", target: "destroyed-model", modifier: {
-      resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights",
+    expect(result.mechanics.effect).toEqual({ type: "act-on-death", target: "event-object", modifier: {
+      act: "fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights",
       gate: { dice: "D6", threshold: 2, comparison: "gte" }, eligibility: { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } }] },
     } });
   });
@@ -206,11 +208,20 @@ describe("Round 5C composition rules", () => {
       ["until the end of the phase", "DURATION", "duration", { endpoint: "end-of-phase" }],
       ["add six to its Move", "EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 6, weapon_type: "all" }],
     ]);
-    expect(result.mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "ability-grant", target: "unit", modifier: { grant_type: "no-advance-roll" } },
-      { type: "stat-modifier", target: "unit", modifier: { stat: "M", operation: "add", value: 6 } },
-    ] });
-    expect(result.mechanics.scope).toEqual({ range: "unit", duration: "phase" });
+    // A fixed-6 Advance is "add 6\" to Move instead of rolling"; a separate +6 Move would count it twice.
+    expect(result.mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-6" } });
+    expect(result.mechanics.scope).toEqual({ duration: "phase" });
+    expect(failures("Skip the dash roll for it; instead, add three to its Move.", [
+      ["Skip the dash roll for it", "EFFECT", "no-advance-roll", { subject: "this-unit" }],
+      ["instead", "COMBINATOR", "instead", {}],
+      ["add three to its Move", "EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 3, weapon_type: "all" }],
+    ])[0]).toMatch(/must add 6 to Move/u);
+  });
+
+  it("refuses an effect on \"that unit\" when nothing selects it", () => {
+    expect(failures("That unit takes 1 wound.", [
+      ["That unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }],
+    ])).toEqual(["An effect names \"that unit\", but no select-unit leaf says which unit."]);
   });
 
   it("refuses bands it cannot place", () => {
@@ -236,8 +247,8 @@ describe("Round 5C composition rules", () => {
     ]);
     const weak = { type: "strength", parameters: { subject: "defender", below: "starting" } };
     expect(rerolls.mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "conditional", condition: { operator: "not", operands: [weak] }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
-      { type: "conditional", condition: weak, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+      { type: "conditional", condition: { operator: "not", operands: [weak] }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } },
+      { type: "conditional", condition: weak, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } } },
     ] });
 
     // "+1 (or +2 instead if …)": adding both would count the bonus twice.
@@ -286,7 +297,7 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.effect).toEqual({
       type: "designate-target", designation: "selected-unit",
       select: { scope: "enemy-unit", count: 1, within_inches: 12 },
-      applies: { to: "attackers-of-target", effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+      applies: { to: "attackers-of-target", effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } } },
     });
     expect(failures("Whenever this model attacks that unit, re-roll the hit.", [
       ["Whenever this model attacks", "EVENT", "attack", attack("makes", "this-model", "any")],

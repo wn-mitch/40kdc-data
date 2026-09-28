@@ -33,7 +33,7 @@ test('Ability DSL import maps Feel No Pain as an origin-bound non-authoritative 
   const feelNoPain = claims.claims.find(claim => claim.mechanic_facets?.predicate === 'mechanic.effect.feel-no-pain')
   assert.ok(feelNoPain)
   assert.equal(feelNoPain.lifecycle_state, 'proposed')
-  assert.equal(feelNoPain.mechanic_facets.affected_entity, 'unit')
+  assert.equal(feelNoPain.mechanic_facets.affected_entity, 'this-unit')
   assert.equal(feelNoPain.mechanic_facets.threshold, 6)
   assert.deepEqual(feelNoPain.memberships, [{ claim_set_id: first.claim_set_id, member_state: 'candidate' }])
   assert.deepEqual(feelNoPain.evidence, [])

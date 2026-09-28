@@ -13,7 +13,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "invulnerable-save",
-          target: "self",
+          target: "this-model",
           modifier: { invuln_sv: 4 },
         },
         community_notes: STALE_FLAG,
@@ -30,7 +30,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "damage-reduction",
-          target: "self",
+          target: "this-model",
           modifier: { reduction: "half" },
         },
         community_notes: STALE_FLAG,
@@ -49,8 +49,8 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "ability-grant",
-          target: "unit",
-          modifier: { grant_type: "label", value: "stealth" },
+          target: "this-unit",
+          modifier: { ability: "stealth" },
         },
         community_notes: STALE_FLAG,
       },
@@ -66,7 +66,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "invulnerable-save",
-          target: "self",
+          target: "this-model",
           modifier: { invuln_sv: 4 },
         },
         community_notes: "some authored note about this ability",
@@ -83,7 +83,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "damage-reduction",
-          target: "unit",
+          target: "this-unit",
           modifier: { reduction: 1 },
         },
         community_notes: STALE_FLAG,
@@ -104,7 +104,7 @@ describe("scrubDefensiveFlags", () => {
           condition: { type: "phase-is", parameters: { phase: "fight" } },
           effect: {
             type: "damage-reduction",
-            target: "unit",
+            target: "this-unit",
             modifier: { reduction: 1 },
           },
         },
@@ -135,8 +135,8 @@ describe("producesDefensiveBuff", () => {
         ability_type: "unit",
         effect: {
           type: "feel-no-pain",
-          target: "unit",
-          modifier: { threshold: 5, scope: "mortal" },
+          target: "this-unit",
+          modifier: { threshold: 5, against: "mortal" },
         },
       }),
     ).toBe(true);
@@ -149,7 +149,7 @@ describe("producesDefensiveBuff", () => {
         ability_type: "unit",
         effect: {
           type: "stat-modifier",
-          target: "self",
+          target: "this-model",
           modifier: { stat: "A", operation: "add", value: 1 },
         },
       }),

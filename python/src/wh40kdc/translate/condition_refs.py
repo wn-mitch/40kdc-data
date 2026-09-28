@@ -7,6 +7,7 @@ corpus. Python mirror of ``tools/src/translate/condition-refs.ts``.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 Condition = dict[str, Any]
@@ -154,7 +155,8 @@ def unit_filter_phrase(f: Any) -> str:
     all_ = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
     noun = "model" if f.get("level") == "model" else "unit"
     s = f"{owner}{all_}{noun}"
-    s = f"{_article(s)} {s}"
+    article = "an" if re.match(r"(?:[aeio]|u(?!ni))", s, re.IGNORECASE) else "a"
+    s = f"{article} {s}"
     if isinstance(f.get("any_of"), list):
         s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
@@ -165,6 +167,14 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" that is {_state_phrase(_str(f['state']))}"
     if f.get("visible") is True:
         s += " that is visible to it"
+    within = f.get("within")
+    if within is not None:
+        w = _obj(within)
+        of = f" of {unit_ref_phrase(w['of'])}" if w.get("of") is not None else ""
+        s += f" within {range_phrase(w.get('range'))}{of}"
+    if f.get("excluding") is not None:
+        excl = f["excluding"]
+        s += f" other than {'this unit' if excl == 'this-unit' else unit_ref_phrase(excl)}"
     return s
 
 
@@ -245,7 +255,6 @@ _STATE_PHRASES: dict[str, str] = {
     "battle-shocked": "Battle-shocked",
     "embarked": "embarked",
     "in-strategic-reserves": "in Strategic Reserves",
-    "in-reserves": "in Reserves",
     "on-battlefield": "on the battlefield",
     "hidden": "hidden",
     "fights-first": "a Fights First unit",

@@ -127,14 +127,14 @@ test('more than twenty valid candidates fails instead of truncating', () => {
 })
 
 test('whole-graph ranking advances repeated primitives then certified-precedent compounds', () => {
-  const sustained = { type: 'keyword-grant', target: 'unit', modifier: { keyword: 'Sustained Hits 1' } }
-  const ward = { type: 'invulnerable-save', target: 'unit', modifier: { invuln_sv: 5 } }
+  const sustained = { type: 'weapon-ability-grant', target: 'this-unit', modifier: { abilities: ['Sustained Hits 1'] } }
+  const ward = { type: 'invulnerable-save', target: 'this-unit', modifier: { invuln_sv: 5 } }
   const candidates = [
     { faction_id: 'fixture-a', ability_id: 'sustained-certified', effect: sustained },
     { faction_id: 'fixture-b', ability_id: 'sustained-open', effect: sustained },
     { faction_id: 'fixture-c', ability_id: 'ward-certified', effect: ward },
     { faction_id: 'fixture-d', ability_id: 'compound-open', effect: { type: 'sequence', steps: [sustained, ward] } },
-    { faction_id: 'fixture-e', ability_id: 'resistant-open', effect: { type: 'schema-resistant', target: 'unit' }, schema_resistant: true },
+    { faction_id: 'fixture-e', ability_id: 'resistant-open', effect: { type: 'schema-resistant', target: 'this-unit' }, schema_resistant: true },
   ]
   const ranked = rankMechanicCandidates(candidates, {
     certified_abilities: ['fixture-a/sustained-certified', 'fixture-c/ward-certified'],
@@ -153,9 +153,9 @@ test('whole-graph ranking advances repeated primitives then certified-precedent 
 
 test('active c005-shaped claims and source-unavailable candidates never enter the worklist', () => {
   const candidates = [
-    { faction_id: 'aeldari', ability_id: 'far-reaching-doom', effect: { type: 'damage-reduction', target: 'unit', modifier: { amount: 1 } } },
-    { faction_id: 'fixture', ability_id: 'source-missing', effect: { type: 'invulnerable-save', target: 'unit', modifier: { invuln_sv: 5 } } },
-    { faction_id: 'fixture', ability_id: 'eligible', effect: { type: 'invulnerable-save', target: 'unit', modifier: { invuln_sv: 5 } } },
+    { faction_id: 'aeldari', ability_id: 'far-reaching-doom', effect: { type: 'damage-reduction', target: 'this-unit', modifier: { reduction: 1 } } },
+    { faction_id: 'fixture', ability_id: 'source-missing', effect: { type: 'invulnerable-save', target: 'this-unit', modifier: { invuln_sv: 5 } } },
+    { faction_id: 'fixture', ability_id: 'eligible', effect: { type: 'invulnerable-save', target: 'this-unit', modifier: { invuln_sv: 5 } } },
   ]
   const ranked = rankMechanicCandidates(candidates, {
     active_claims: ['aeldari/far-reaching-doom'],

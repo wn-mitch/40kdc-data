@@ -65,7 +65,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
   const p = c.parameters ?? {};
   switch (c.type) {
     case "phase-is":
-      return str(p.phase) === "command" ? `${neg}during the Command phase` : `${neg}during the ${str(p.phase)} phase`;
+      return str(p.phase) === "command" ? `${neg}during the Command phase` : `${neg}during the ${titleCase(str(p.phase))} phase`;
     case "player-turn-is":
       return `${neg}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "the opponent's" : "either player's"} turn`;
     case "battle-round": {
@@ -87,7 +87,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "owned-by":
       return `${subjectOf(p)} is ${negated ? "not " : ""}${p.owner === "enemy" ? "an enemy unit" : "friendly"}`;
     case "same-unit":
-      return `${subjectOf(p)} is ${negated ? "not " : ""}the same unit as ${unitRefPhrase(p.as)}`;
+      return `${subjectOf(p)} is ${negated ? "not " : ""}the same unit as ${p.as === "this-unit" ? "this unit" : unitRefPhrase(p.as)}`;
     case "model-profile":
       return `${subjectOf(p, "the model")} is ${negated ? "not " : ""}the ${titleCase(str(p.profile))} model`;
     case "has-ability":
@@ -279,6 +279,8 @@ export function describeCondition(c: Condition): string {
   if (c.operator === "not" && c.operands) {
     const only = c.operands[0];
     if (c.operands.length === 1 && only && !only.operator) return describePredicate(only, true);
+    // not(not(X)) reads as X, never "not (… is not …)".
+    if (c.operands.length === 1 && only?.operator === "not" && only.operands?.length === 1) return describeCondition(only.operands[0]!);
     return `not (${c.operands.map(describeCondition).join(", ")})`;
   }
   return describePredicate(c, false);

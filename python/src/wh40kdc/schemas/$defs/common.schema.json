@@ -369,7 +369,6 @@
         "battle-shocked",
         "embarked",
         "in-strategic-reserves",
-        "in-reserves",
         "on-battlefield",
         "hidden",
         "fights-first",
@@ -413,6 +412,26 @@
         "visible": {
           "const": true,
           "description": "Only units visible to the subject of the enclosing predicate."
+        },
+        "within": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "range"
+          ],
+          "properties": {
+            "range": {
+              "$ref": "#/$defs/range-ref"
+            },
+            "of": {
+              "$ref": "#/$defs/unit-ref"
+            }
+          },
+          "description": "Only units within this range of `of` (default the unit with the ability): aura recipients."
+        },
+        "excluding": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Not this unit (\"another friendly unit\")."
         }
       }
     },
@@ -494,7 +513,7 @@
             "detection",
             "objective-control"
           ],
-          "description": "engagement: Engagement Range. aura: this ability's own aura range. weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective."
+          "description": "engagement: Engagement Range. aura: the aura range of the unit the distance is measured from (its aura abilities' own ranges). weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective."
         },
         {
           "type": "object",
@@ -718,7 +737,6 @@
         },
         "from": {
           "enum": [
-            "reserves",
             "strategic-reserves",
             "deep-strike",
             "cult-ambush",

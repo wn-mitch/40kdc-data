@@ -25,6 +25,17 @@ pub(crate) fn past_of(verb: &str) -> String {
     }
 }
 
+/// `/^[a-z0-9]+(-[a-z0-9]+)+$/.test(s)`: an id slug rather than a printed name.
+fn is_kebab_slug(s: &str) -> bool {
+    let parts: Vec<&str> = s.split('-').collect();
+    parts.len() > 1
+        && parts.iter().all(|p| {
+            !p.is_empty()
+                && p.chars()
+                    .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
+        })
+}
+
 pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
     let did_not = |verb: &str| -> String {
         if negated {
@@ -74,6 +85,23 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             };
             with_window(&format!("{who} {has} been selected to {what}"), window)
         }
+        "set-up" => with_window(
+            &format!("{who} {} set up", if negated { "was not" } else { "was" }),
+            window,
+        ),
+        "targets-selected" => {
+            let what = match nn(p, "object") {
+                Some(o) => format!("{} as a target", unit_ref_phrase(Some(o), "the unit")),
+                None => "targets".to_string(),
+            };
+            with_window(
+                &format!(
+                    "{who} {} selected {what}",
+                    if negated { "has not" } else { "has" }
+                ),
+                window,
+            )
+        }
         "disembarked" => with_window(
             &format!("{who} {} from a Transport", did_not("disembark")),
             window,
@@ -101,7 +129,13 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 } else {
                     format!(" (with {keyword})")
                 };
-                format!(" by {}{with}", st(f.get("weapon_name")))
+                let name = st(f.get("weapon_name"));
+                let name = if is_kebab_slug(&name) {
+                    title_case(&name)
+                } else {
+                    name
+                };
+                format!(" by {name}{with}")
             } else if !keyword.is_empty() {
                 format!(" made with a {keyword} weapon")
             } else {

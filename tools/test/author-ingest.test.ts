@@ -14,6 +14,7 @@ import {
   type SnapshotManifest,
 } from "../src/author-ingest.js";
 import { reconcileFaction } from "../src/author-reconcile.js";
+import { createValidator } from "../src/schema-loader.js";
 
 const rec = (over: Partial<IngestRecord> & { name: string }): IngestRecord => ({
   faction: "orks",
@@ -42,7 +43,12 @@ describe("ingestFaction", () => {
     const stub = r.abilities.find((a) => a.ability_id === "waaagh-energy");
     expect(stub).toBeDefined();
     expect(stub.unit_ids).toEqual(["weirdboy"]);
-    expect(stub.effect).toEqual({ type: "stat-modifier", target: "unit", modifier: {} });
+    expect(stub.effect).toEqual({ type: "no-effect" });
+    expect(stub.stub).toBe(true);
+    expect(stub.scope).toEqual({ duration: "permanent" });
+    // The seeded stub is valid data, so a faction with unauthored stubs still validates.
+    const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json")!;
+    expect(validate(stub), JSON.stringify(validate.errors)).toBe(true);
 
     const input = r.authorInput.find((e) => e.ability_id === "waaagh-energy")!;
     expect(input.resolved).toBe(true);
@@ -72,6 +78,8 @@ describe("ingestFaction", () => {
     const ds = r.abilities.filter((a) => a.ability_id === "deep-strike");
     expect(ds).toHaveLength(1);
     expect(ds[0].unit_ids).toEqual(["trygon", "mucolid-spores"]);
+    // Merging into a seeded stub is not a merge into authored work.
+    expect(r.mergedIntoAuthored).toEqual([]);
   });
 
   it("leaves a record with empty raw_text unresolved (seeded, skipped by propose)", () => {
@@ -114,18 +122,18 @@ describe("ingestFaction", () => {
         ability_id: "deep-strike",
         name: "Deep Strike",
         ability_type: "core",
-        effect: { type: "deep-strike", target: "unit", modifier: {} },
-        scope: { range: "unit", duration: "permanent" },
+        effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } },
+        scope: { duration: "permanent" },
         unit_ids: ["curated-unit"],
         game_version: { edition: "11th", dataslate: "x" },
       },
     ];
-    // deep-strike's effect is a PARAMETERLESS leaf → not an empty-modifier stub.
+    // An authored ability-grant carries its modifier → not an empty-modifier stub.
     const r = ingestFaction("orks", [rec({ name: "Deep Strike", unit_ids: ["trygon"] })], existing, []);
     expect(r.mergedIntoAuthored).toContainEqual({ ability_id: "deep-strike", unit_id: "trygon" });
     const ds = r.abilities.find((a) => a.ability_id === "deep-strike")!;
     expect(ds.unit_ids).toEqual(["curated-unit", "trygon"]); // additive
-    expect(ds.effect.type).toBe("deep-strike"); // untouched
+    expect(ds.effect).toEqual(existing[0].effect); // untouched
   });
 
   it("fills missing detachment ownership without replacing authored mechanics", () => {
@@ -134,8 +142,8 @@ describe("ingestFaction", () => {
         ability_id: "try-dat-button-dread-mob",
         name: "Try Dat Button!",
         ability_type: "detachment",
-        effect: { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } },
-        scope: { range: "unit", duration: "phase" },
+        effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+        scope: { duration: "phase" },
         unit_ids: [],
         game_version: { edition: "11th", dataslate: "codex-orks" },
       },

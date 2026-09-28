@@ -51,11 +51,16 @@ def describe_selection_eligibility(c: Condition) -> str:
         parts = [_candidate_clause(o) for o in flat(c)]
         if all(part is not None for part in parts):
             return " and ".join(part for part in parts if part is not None)
+    if c.get("operator") == "or" and operands is not None:
+        alts = [_candidate_clause(o) for o in operands]
+        if all(part is not None for part in alts):
+            return " or ".join(part for part in alts if part is not None)
     clause = _candidate_clause(c)
     return clause if clause is not None else f"if {describe_condition(c)}"
 
 
 _CANDIDATE_PREFIXES = (
+    ("the unit is not the same unit as ", "other than "),
     ("the unit does not have ", "without "),
     ("the unit has not ", "that has not "),
     ("the unit has ", "with "),
@@ -299,8 +304,13 @@ def _join_lead_ins(operands: list[Condition]) -> str:
         i += 1
     acc = ""
     for part in parts:
+        # A second keyword gate on the same target narrows it:
+        # "against ORKS targets that are also VEHICLE".
+        target = re.match(r"^against (.+) targets$", part)
         if acc == "":
             acc = part
+        elif target and acc.endswith(" targets") and re.search(r"(^|, )against ", acc):
+            acc = f"{acc} that are also {target.group(1)}"
         elif part.startswith("against ") or part.startswith("(excluding "):
             acc = f"{acc} {part}"
         else:

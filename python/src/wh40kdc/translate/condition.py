@@ -162,7 +162,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         phase = _str(p.get("phase"))
         if phase == "command":
             return f"{neg}during the Command phase"
-        return f"{neg}during the {phase} phase"
+        return f"{neg}during the {title_case(phase)} phase"
     if ctype == "player-turn-is":
         turn = p.get("turn")
         whose = (
@@ -198,7 +198,10 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         side = "an enemy unit" if p.get("owner") == "enemy" else "friendly"
         return f"{_subject_of(p)} is {nt}{side}"
     if ctype == "same-unit":
-        return f"{_subject_of(p)} is {nt}the same unit as {unit_ref_phrase(p.get('as'))}"
+        return (
+            f"{_subject_of(p)} is {nt}the same unit as "
+            f"{'this unit' if p.get('as') == 'this-unit' else unit_ref_phrase(p.get('as'))}"
+        )
     if ctype == "model-profile":
         profile = title_case(_str(p.get("profile")))
         return f"{_subject_of(p, 'the model')} is {nt}the {profile} model"
@@ -507,5 +510,14 @@ def describe_condition(c: Condition) -> str:
             and not _truthy(operands[0].get("operator"))
         ):
             return _describe_predicate(operands[0], True)
+        # not(not(X)) reads as X, never "not (… is not …)".
+        only = operands[0] if len(operands) == 1 and isinstance(operands[0], dict) else None
+        if (
+            only is not None
+            and only.get("operator") == "not"
+            and isinstance(only.get("operands"), list)
+            and len(only["operands"]) == 1
+        ):
+            return describe_condition(only["operands"][0])
         return f"not ({', '.join(describe_condition(o) for o in operands)})"
     return _describe_predicate(c, False)

@@ -10,7 +10,7 @@ import {
 const WRAPPER_CHILDREN = Object.freeze({
   sequence: [{ path: ['steps'], role: 'members', ordered: true, array: true }],
   'rules-bundle': [{ path: ['steps'], role: 'members', ordered: true, array: true }],
-  'named-effect': [{ path: ['effect'], role: 'members' }],
+  'ability-part': [{ path: ['effect'], role: 'members' }, { path: ['trigger'], role: 'trigger', trigger: true }, { path: ['cost'], role: 'cost' }],
   choice: [{ path: ['options'], role: 'members', array: true }],
   'dice-gated': [{ path: ['on_success'], role: 'on-success' }, { path: ['on_fail'], role: 'on-failure' }],
   'dice-table': [{ path: ['outcomes'], child: ['effect'], role: 'members', array: true }],
@@ -18,7 +18,6 @@ const WRAPPER_CHILDREN = Object.freeze({
   'dice-pool-allocation': [{ path: ['options'], child: ['effect'], role: 'members', array: true }],
   'select-units': [{ path: ['effect'], role: 'members' }, { path: ['selector', 'eligibility'], role: 'condition', condition: true }],
   'for-each-unit': [{ path: ['effect'], role: 'members' }],
-  'movement-modifier': [{ path: ['modifier', 'condition'], role: 'condition', condition: true }, { path: ['after_move'], role: 'after-move' }],
   aura: [{ path: ['modifier', 'effect'], role: 'members' }],
   'leader-model-ability-grant': [{ path: ['grant', 'effect'], role: 'members' }],
   'designate-target': [{ path: ['applies', 'effect'], role: 'members' }, { path: ['select', 'eligibility'], role: 'condition', condition: true }],
@@ -60,13 +59,13 @@ function leafCandidate(node, pointer, context) {
   if (node.target !== undefined) { args.push(argument('affected-entity', node.target)); omitted.add('target') }
   const threshold = node.type === 'feel-no-pain' ? node.modifier?.threshold : node.threshold
   if (threshold !== undefined) args.push(argument('threshold', threshold))
-  if (node.type === 'feel-no-pain' && node.modifier?.scope !== undefined) args.push(argument('scope', node.modifier.scope))
+  if (node.type === 'feel-no-pain' && node.modifier?.against !== undefined) args.push(argument('scope', node.modifier.against))
   const parameters = residualParameters(node, omitted)
   if (parameters !== null) {
     const cleaned = structuredClone(parameters)
     if (node.type === 'feel-no-pain' && cleaned.modifier) {
       delete cleaned.modifier.threshold
-      delete cleaned.modifier.scope
+      delete cleaned.modifier.against
       if (Object.keys(cleaned.modifier).length === 0) delete cleaned.modifier
     }
     if (Object.keys(cleaned).length) args.push(argument('parameters', cleaned))
@@ -92,8 +91,7 @@ function mapCondition(node, pointer, context, out) {
       return null
     }
     const args = node.parameters === undefined ? [] : [argument('parameters', node.parameters)]
-    const qualifiers = node.negated ? [{ kind: 'condition.negated', value: true }] : []
-    const assertion = makeAssertion(claimValue(`mechanic.condition.${node.type}`, args, qualifiers), pointer, context)
+    const assertion = makeAssertion(claimValue(`mechanic.condition.${node.type}`, args), pointer, context)
     out.assertions.push(assertion)
     return assertion.semantic_key
   }
@@ -224,6 +222,16 @@ function mapEffect(node, pointer, context, out) {
       }).filter(Boolean)
       if (!spec.ordered) members.sort()
       args.push(argument(spec.role, members))
+    } else if (spec.trigger && value !== undefined && value !== null) {
+      const triggers = Array.isArray(value) ? value : [value]
+      const keys = triggers.map((trigger, index) => {
+        const triggerPointer = Array.isArray(value) ? pointerJoin(pointer, ...spec.path, index) : pointerJoin(pointer, ...spec.path)
+        const assertion = triggerCandidate(trigger, triggerPointer, context)
+        out.assertions.push(assertion)
+        if (trigger.condition) mapCondition(trigger.condition, pointerJoin(triggerPointer, 'condition'), context, out)
+        return assertion.semantic_key
+      })
+      args.push(argument(spec.role, Array.isArray(value) ? keys.sort() : keys[0]))
     } else if (value !== undefined && value !== null) {
       const childPointer = pointerJoin(pointer, ...spec.path)
       const key = spec.condition ? mapCondition(value, childPointer, context, out) : mapEffect(value, childPointer, context, out)
@@ -306,11 +314,6 @@ export function mapAbilityDslToCandidates({ faction_id, ability, origin_id, regi
     const pointer = Array.isArray(ability.trigger) ? pointerJoin(ability_pointer, 'trigger', index) : pointerJoin(ability_pointer, 'trigger')
     out.assertions.push(triggerCandidate(trigger, pointer, context))
     if (trigger.condition) mapCondition(trigger.condition, pointerJoin(pointer, 'condition'), context, out)
-  }
-  if (ability.scope?.range !== undefined) {
-    const args = [argument('range', ability.scope.range)]
-    if (ability.scope.range_inches !== undefined) args.push(argument('parameters', { range_inches: ability.scope.range_inches }))
-    out.assertions.push(makeAssertion(claimValue('mechanic.scope.range', args), pointerJoin(ability_pointer, 'scope', 'range'), context))
   }
   out.assertions.push(...deriveTimingCandidates({ ability, origin_id, registry, ability_pointer }))
   if (ability.usage !== undefined) {

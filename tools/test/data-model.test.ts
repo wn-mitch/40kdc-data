@@ -451,17 +451,17 @@ describe("AbilityView reusable rules bundles", () => {
             steps: [
               {
                 type: "re-roll",
-                target: "unit",
+                target: "this-unit",
                 modifier: { roll: "hit", subset: "ones" },
               },
               {
                 type: "re-roll",
-                target: "unit",
+                target: "this-unit",
                 modifier: { roll: "wound", subset: "ones" },
               },
             ],
           },
-          scope: { range: "unit", duration: "permanent" },
+          scope: { duration: "permanent" },
         } as never,
         {
           ability_id: "bundle-grant",
@@ -471,10 +471,10 @@ describe("AbilityView reusable rules bundles", () => {
           game_version: { edition: "11th", dataslate: "test" },
           effect: {
             type: "ability-grant",
-            target: "unit",
-            modifier: { ability_id: "shared-rules", rules_bundle: true },
+            target: "this-unit",
+            modifier: { ability: "shared-rules", rules_bundle: true },
           },
-          scope: { range: "unit", duration: "permanent" },
+          scope: { duration: "permanent" },
         } as never,
         {
           ability_id: "cycle-a",
@@ -487,12 +487,12 @@ describe("AbilityView reusable rules bundles", () => {
             steps: [
               {
                 type: "ability-grant",
-                target: "unit",
-                modifier: { ability_id: "cycle-b", rules_bundle: true },
+                target: "this-unit",
+                modifier: { ability: "cycle-b", rules_bundle: true },
               },
             ],
           },
-          scope: { range: "unit", duration: "permanent" },
+          scope: { duration: "permanent" },
         } as never,
         {
           ability_id: "cycle-b",
@@ -505,8 +505,8 @@ describe("AbilityView reusable rules bundles", () => {
             steps: [
               {
                 type: "ability-grant",
-                target: "unit",
-                modifier: { ability_id: "cycle-a", rules_bundle: true },
+                target: "this-unit",
+                modifier: { ability: "cycle-a", rules_bundle: true },
               },
             ],
           },

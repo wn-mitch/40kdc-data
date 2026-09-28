@@ -4,7 +4,7 @@
 use serde_json::Value;
 
 use crate::translate::condition::{
-    and_list, article, cap_word, is, move_kinds, nn, obj, or_list, st, strs, truthy,
+    and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list, st, strs, truthy,
     unit_filter_phrase, P,
 };
 use crate::translate::dekebab;
@@ -140,7 +140,7 @@ pub(crate) fn roll_clause(t: &P, f: &P) -> String {
     let subject = t.get("subject");
     let anyone = subject
         .and_then(Value::as_object)
-        .is_some_and(|s| is(s, "owner", "any") && s.len() == 1);
+        .is_some_and(|s| is(s, "owner", "any") && key_count(s) == 1);
     if is(t, "event", "before-roll") {
         let test = matches!(
             roll.as_str(),
@@ -304,34 +304,29 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 String::new()
             };
             let enemy = is_object(subject);
+            // Another unit's move is a reaction window: "each time an enemy unit ends a move".
             if enemy && kinds == "Fall Back" && nn(t, "object").is_none() {
-                return format!("{who} Falls Back");
+                return format!("each time {who} Falls Back");
             }
             let tail = if nn(t, "object").is_some() {
                 format!(" from {}", object_phrase(object))
             } else {
                 String::new()
             };
-            if enemy {
-                let k = if kinds.is_empty() {
-                    "a".to_string()
-                } else {
-                    format!("a {kinds}")
-                };
-                format!("{who} ends {k} move{tail}")
+            let k = if kinds.is_empty() {
+                "a".to_string()
             } else {
-                let k = if kinds.is_empty() {
-                    "a".to_string()
-                } else {
-                    format!("{} {kinds}", article(&kinds))
-                };
+                format!("{} {kinds}", article(&kinds))
+            };
+            if enemy {
+                format!("each time {who} ends {k} move{tail}")
+            } else {
                 format!("when {who} ends {k} move{tail}")
             }
         }
         "set-up" => {
             let from = match st(f.get("from")).as_str() {
                 "deep-strike" => "is set up by Deep Strike",
-                "reserves" => "arrives from Reserves",
                 "strategic-reserves" => "arrives from Strategic Reserves",
                 "cult-ambush" => "is set up using Cult Ambush",
                 "transport" => "is set up from a Transport",
@@ -377,7 +372,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 return format!("when the unit is destroyed{melee}");
             }
             if let Some(o) = object.and_then(Value::as_object) {
-                if nn(o, "designated").is_some() && o.len() == 1 {
+                if nn(o, "designated").is_some() && key_count(o) == 1 {
                     return "each time your quarry is destroyed".to_string();
                 }
             }
@@ -401,7 +396,11 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if is(t, "object", "this-model") {
                 return "when this model is destroyed".to_string();
             }
-            if is(t, "object", "model-in-this-unit") || nn(t, "object").is_none() {
+            // A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
+            if is(t, "object", "model-in-this-unit")
+                || is(t, "object", "this-unit")
+                || nn(t, "object").is_none()
+            {
                 return "when a model in the unit is destroyed".to_string();
             }
             format!("when {} is destroyed", object_phrase(object))

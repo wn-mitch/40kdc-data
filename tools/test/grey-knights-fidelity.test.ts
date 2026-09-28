@@ -32,27 +32,27 @@ const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichme
 const contracts: Record<string, string[]> = {
   "dauntless-champions": ["selected to fight", "PALADIN SQUAD", "S is less than", "Wound", "melee"],
   "attuned-onslaught-psychic": ["Charge move", "PALADIN SQUAD model", "in this model's unit", "Damage", "melee", "end of the turn"],
-  "blessing-of-the-omnissiah": ["Command phase", "GREY KNIGHTS VEHICLE model", "3 inches", "D3 lost wounds", "+1 to Hit", "per turn across your army", "next Command phase"],
-  "guardians-of-the-machine": ["enemy unit ends a Charge", '6"', "Engagement Range", "friendly GREY KNIGHTS VEHICLE unit", "Heroic Intervention", "1 less CP", "different unit", "later in this phase"],
+  "blessing-of-the-omnissiah": ["Command phase", "GREY KNIGHTS VEHICLE model", '3"', "D3 lost wounds", "+1 to Hit", "per turn across your army", "next Command phase"],
+  "guardians-of-the-machine": ["enemy unit ends a Charge", '6"', "Engagement Range", "friendly GREY KNIGHTS VEHICLE unit", "Heroic Intervention", "1CP less", "other than the unit", "already been targeted with that Stratagem this phase"],
   "techmarine": ['3"', "friendly", "GREY KNIGHTS VEHICLE unit", "this model gains the Lone Operative"],
   "force-edge-psychic": ["not a MONSTER or VEHICLE", "melee weapons", "Armour Penetration"],
   "champion-of-the-order-of-purifiers-psychic": ["leading a unit", "Purifying Flame weapons", "Attacks"],
   "might-of-titan-psychic": ["start of the Fight phase", "once per battle per model", "Add 3 to the Attacks", "Add 3 to the Strength", "melee weapons equipped by this model", "end of the phase"],
-  "warrior-strategist": ["unit is targeted with a Stratagem", "once per battle round per army", "reduce", "that use", "1CP", "before paying"],
+  "warrior-strategist": ["unit is targeted with a Stratagem", "once per battle round per army", "reduce", "that use", "1CP", "to a minimum of 0CP"],
   "surge-of-wrath-psychic": ["MONSTER or VEHICLE targets", "Hit roll", "Wound roll", "Damage roll", "this model", "melee"],
   "sanctuary-psychic": ["unit gains the Stealth", "attacking unit", "-1 to Hit", "melee"],
   "hammer-aflame-psychic": ["selected to fight", "enemy unit", "Engagement Range of this model's unit", "On 1: Nothing", "On 2-3", "On 4-5", "On 6", "D3+3"],
-  "personal-teleporters": ["resolves its attacks", "shooting phase", "your turn", "the unit is unengaged", "ingress move", 'Normal move of up to 6"', "if it does", "cannot charge", "end of the turn"],
-  "indomitable-spirit-psychic": ["This model", "shoot and declare a charge", "Fell Back", "[ASSAULT]", "declare a charge in a turn in which it Advanced"],
+  "personal-teleporters": ["resolves its attacks", "Shooting phase", "your turn", "the unit is unengaged", "ingress move", 'Normal move of up to 6"', "cannot declare a charge", "end of the turn"],
+  "indomitable-spirit-psychic": ["This model", "eligible to shoot in a turn in which it Fell Back", "declare a charge in a turn in which it Fell Back", "[ASSAULT]", "declare a charge in a turn in which it Advanced"],
   "righteous-persecution": ["during your Shooting phase", "just-finished shooting sequence", "MONSTER", "VEHICLE", "pinned", "Subtract 2", "Move", "-2 to Charge", "start of your next turn"],
   "sanctity-of-purpose": ["Unless the target unit", "objective marker", "re-roll a Wound roll of 1", "you can re-roll the Wound roll"],
   "sanctifying-ritual-psychic": ["end of your Command phase", "objective marker you control", "Level of Control", "greater than yours"],
   "guidance-of-the-ancients-psychic": ["during your Shooting phase", "just-finished shooting sequence", "friendly GREY KNIGHTS model", "+1 to Hit", "end of the phase"],
-  "litanies-of-sanctity": ["start of each phase", "once per battle per model", "GREY KNIGHTS unit", "12 inches", "that is Battle-shocked", "no longer Battle-shocked"],
+  "litanies-of-sanctity": ["start of each phase", "once per battle per model", "GREY KNIGHTS unit", '12"', "that is Battle-shocked", "no longer Battle-shocked"],
   "channelled-force": ["friendly unit is selected to fight", "GREY KNIGHTS", "Leadership test", "current Leadership or higher", "if passed", "select one", "melee weapons with [PSYCHIC]", "[SUSTAINED HITS 1]", "[LETHAL HITS]", "end of the phase"],
   "hallowed-ground": ["deployment zone is always", "start of each phase", "at least half", "opponent's deployment zone", 'within 6"', "PURIFIER SQUAD units", "continuously", "ranged attacks and the target is visible to the attacking model", "GREY KNIGHTS", "Hit rolls of 1", '"PURIFIER SQUAD" or', "wholly within", "instead"],
   "fury-of-titan": ["friendly unit is set up by Deep Strike", "end of the turn", "Hit roll of 1", "Wound roll of 1"],
-  "searing-soulflame": ["enemy unit is selected", "Righteous Persecution", "friendly PURGATION SQUAD unit", "must make a Battle-shock", "-1"],
+  "searing-soulflame": ["enemy unit is selected", "Righteous Persecution", "friendly PURGATION SQUAD unit", "must take a Battle-shock test", "-1"],
 };
 function nodes(value: Json): Json[] {
   if (!value || typeof value !== "object") return [];
@@ -123,32 +123,34 @@ describe("Grey Knights fidelity worklist", () => {
     const e = ability("attuned-onslaught-psychic").effect;
     expect(e.type).toBe("for-each-unit");
     expect(e.selector).toMatchObject({ target_kind: "model", member_of: "bearer-unit", keywords: ["PALADIN SQUAD"], owner: "friendly" });
-    expect(e.effect).toMatchObject({ target: "unit", modifier: { stat: "D", value: 1, weapon_type: "melee" } });
+    expect(e.effect).toMatchObject({ target: "selected-unit", modifier: { stat: "D", value: 1, weapon_type: "melee" } });
     expect(ability("attuned-onslaught-psychic").trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
   it("Might modifies both of this MODEL's melee characteristics and consumes model usage", () => {
     const a = ability("might-of-titan-psychic");
-    expect(a.effect.steps.map((e: Json) => [e.target, e.modifier.stat, e.modifier.value, e.modifier.weapon_type])).toEqual([["self", "A", 3, "melee"], ["self", "S", 3, "melee"]]);
+    expect(a.effect.steps.map((e: Json) => [e.target, e.modifier.stat, e.modifier.value, e.modifier.weapon_type])).toEqual([["this-model", "A", 3, "melee"], ["this-model", "S", 3, "melee"]]);
     expect(a.usage).toEqual({ frequency: "n-per-battle", count: 1, per: "model" });
     expect(a.trigger.optional).toBe(true);
   });
   it("repair selection shares a per-target counter across bearers and binds BOTH effects", () => {
     const e = ability("blessing-of-the-omnissiah").effect.effect;
     expect(e.selector).toMatchObject({ max_count: 1, target_kind: "model", range_inches: 3, keywords: ["GREY KNIGHTS", "VEHICLE"], selection_limit: { count: 1, period: "turn" } });
-    expect(e.effect.steps.map((s: Json) => s.type)).toEqual(["heal-wounds", "roll-modifier"]);
-    expect(e.effect.steps.every((s: Json) => s.target === "unit")).toBe(true);
+    expect(e.effect.steps.map((s: Json) => s.type)).toEqual(["heal", "roll-modifier"]);
+    expect(e.effect.steps.every((s: Json) => s.target === "selected-unit")).toBe(true);
   });
   it("cost reductions and both repeated-use directions are explicit permissions", () => {
     const a = ability("warrior-strategist");
     expect(a.usage).toEqual({ frequency: "once-per-battle-round", per: "army" });
-    expect(a.effect.modifier).toMatchObject({ operation: "decrease", amount: 1, applies_to: "triggering-stratagem-use" });
-    expect(modifiers("guardians-of-the-machine", "stratagem-cost-modifier")[0]).toMatchObject({ operation: "decrease", amount: 1, stratagem: "heroic-intervention" });
-    expect(modifiers("guardians-of-the-machine", "stratagem-targeting-permission")).toEqual(expect.arrayContaining([
-      expect.objectContaining({ exception: "already-targeted-different-unit-this-phase", stratagem: "heroic-intervention" }),
-      expect.objectContaining({ exception: "does-not-prevent-targeting-different-unit-this-phase", stratagem: "heroic-intervention" }),
-    ]));
+    expect(a.effect).toMatchObject({ type: "cost-modifier", modifier: { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" } });
+    expect(modifiers("guardians-of-the-machine", "cost-modifier")[0]).toMatchObject({ of: "stratagem", operation: "decrease", amount: 1, id: "heroic-intervention" });
+    // Both directions: this unit again, and a different friendly unit, each named to Heroic Intervention.
+    const steps = ability("guardians-of-the-machine").effect.steps.filter((s: Json) => s.type === "permission");
+    expect(steps.map((s: Json) => s.target)).toEqual(["this-unit", { owner: "friendly", excluding: "this-unit" }]);
+    for (const step of steps) {
+      expect(step.modifier).toMatchObject({ activity: "use-stratagem", allow: true, despite: ["stratagem-used-this-phase"], stratagem: "heroic-intervention" });
+    }
     expect(JSON.stringify(ability("guardians-of-the-machine"))).not.toContain("overwatch");
-    expect(JSON.stringify([a, ability("guardians-of-the-machine")])).not.toContain("cp-refund");
+    expect(JSON.stringify([a, ability("guardians-of-the-machine")])).not.toMatch(/cp-refund|stratagem-cost-modifier/);
   });
   it("Grand Master and Dreadknight both really reference Warrior Strategist", () => {
     for (const id of ["grand-master", "grand-master-in-nemesis-dreadknight"]) {
@@ -162,7 +164,7 @@ describe("Grey Knights fidelity worklist", () => {
   it("Sanctuary is not accidentally conditional on leading, or a generic ranged modifier", () => {
     const a = ability("sanctuary-psychic");
     expect(nodes(a.effect).some((n) => n.type === "attachment")).toBe(false);
-    expect(modifiers("sanctuary-psychic", "ability-grant")[0].grant_type).toBe("stealth");
+    expect(modifiers("sanctuary-psychic", "ability-grant")[0].ability).toBe("stealth");
     expect(modifiers("sanctuary-psychic", "roll-modifier")[0].weapon_type).toBe("melee");
   });
   it("Hammer covers every face once, without a second gate or fabricated zero damage", () => {
@@ -181,9 +183,11 @@ describe("Grey Knights fidelity worklist", () => {
   });
   it("a declined teleport move does NOT prohibit charging", () => {
     const a = ability("personal-teleporters");
-    expect(a.effect.type).toBe("movement-modifier");
-    expect(a.effect.after_move).toMatchObject({ type: "attack-restriction", target: "unit", modifier: { restriction: "no-charge" } });
-    expect(a.effect.steps).toBeUndefined();
+    const noCharge = (n: Json) => n.type === "permission" && n.modifier?.activity === "declare-charge" && n.modifier?.allow === false;
+    expect(nodes(a.effect).some((n) => n.type === "move" && n.modifier?.move_type === "normal")).toBe(true);
+    // The prohibition applies only once the unit has made the teleport move: it must sit under a condition,
+    // never as a bare sibling of the optional move.
+    expect(nodes(a.effect).some((n) => n.type === "conditional" && nodes(n.effect).some(noCharge))).toBe(true);
     expect(a.trigger.optional).toBe(true);
     expect(a.scope.duration).toBe("turn");
   });
@@ -192,7 +196,12 @@ describe("Grey Knights fidelity worklist", () => {
     expect(e).toMatchObject({ type: "dice-gated", dice: "2D6", threshold: "leadership", comparison: "gte", test: { kind: "leadership", subject: "unit" } });
     expect(e.on_success.type).toBe("choice");
     expect(e.on_success.options).toHaveLength(2);
-    for (const option of e.on_success.options) expect(option).toMatchObject({ target: "unit", modifier: { weapon_type: "melee", weapon_keyword: "Psychic" } });
+    // The weapons belong to the unit selected to fight: the trigger's subject, or this unit when the trigger is this unit's own.
+    const subject = ability("channelled-force").trigger.subject;
+    const own = subject == null || subject === "this-unit";
+    for (const option of e.on_success.options) {
+      expect(option).toMatchObject({ type: "weapon-ability-grant", target: own ? "this-unit" : "event-subject", modifier: { weapon_type: "melee", weapon_keyword: "Psychic" } });
+    }
   });
   it("full rerolls are any-result, and the objective upgrade is mutually exclusive", () => {
     for (const m of modifiers("surge-of-wrath-psychic", "re-roll")) {
@@ -202,8 +211,8 @@ describe("Grey Knights fidelity worklist", () => {
     const e = ability("sanctity-of-purpose").effect;
     expect(e.steps).toHaveLength(2);
     expect(e.steps[0].condition).toEqual({ operator: "not", operands: [e.steps[1].condition] });
-    expect(e.steps[1].condition.negated ?? false).toBe(false);
-    expect(e.steps[0].effect.modifier.optional).toBe(false);
+    expect(e.steps[1].condition.operator).toBeUndefined();
+    expect(e.steps[0].effect.modifier).toEqual({ roll: "wound", subset: "ones" });
     expect(e.steps[1].effect.modifier.result_scope).toBe("any-result");
   });
   it("post-shooting selections bind the just-finished attack sequence, not earlier hits", () => {
@@ -219,7 +228,7 @@ describe("Grey Knights fidelity worklist", () => {
   it("the pinning reaction distinguishes the selecting Purgation unit from its target", () => {
     const a = ability("searing-soulflame");
     expect(a.trigger).toMatchObject({ event: "targets-selected", filter: { kind: "ability" }, subject: { owner: "enemy" }, source_ability: { ability_id: "righteous-persecution", owner: "friendly", keywords: ["PURGATION SQUAD"] } });
-    expect(a.effect).toMatchObject({ type: "battle-shock-test", target: "target", modifier: { roll_modifier: -1 } });
+    expect(a.effect).toMatchObject({ type: "test", target: "event-object", modifier: { test: "battle-shock", modifier: -1 } });
     expect(units.find((u) => u.id === "purgation-squad").ability_ids).toContain("righteous-persecution");
   });
   it("regional production is continuous/snapshotted as appropriate, independent of attack gates", () => {
@@ -259,7 +268,7 @@ describe("new fidelity grammar rejects misleading alternatives", () => {
     invalid("channelled-force", (a) => { a.effect.comparison = "lte"; });
   });
   it("rejects reduction without an amount", () => invalid("warrior-strategist", (a) => { delete a.effect.modifier.amount; }));
-  it("rejects a generic repeated-Stratagem permission without its named restriction", () => invalid("guardians-of-the-machine", (a) => { delete a.effect.steps[1].modifier.stratagem; }));
+  it("rejects a generic repeated-Stratagem permission without its named restriction", () => invalid("guardians-of-the-machine", (a) => { delete a.effect.steps[2].modifier.stratagem; }));
   it("rejects an unbound source-ability selection event", () => invalid("searing-soulflame", (a) => { delete a.trigger.source_ability; }));
   it("rejects a source-ability filter on an unrelated event", () => invalid("searing-soulflame", (a) => { a.trigger.event = "selected"; a.trigger.filter = { to: "fight" }; }));
   it("rejects invented keys inside the closed source-ability filter", () => invalid("searing-soulflame", (a) => { a.trigger.source_ability.pinned = true; }));

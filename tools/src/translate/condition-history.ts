@@ -20,6 +20,10 @@ export function describeHappened(p: P, negated: boolean): string {
       if (to === "fight") return withWindow(`${who} ${negated ? "has not" : "has"} fought`, p.window);
       return withWindow(`${who} ${negated ? "has not" : "has"} been selected to ${to === "attack" ? "shoot or fight" : dekebab(to)}`, p.window);
     }
+    case "set-up":
+      return withWindow(`${who} ${negated ? "was not" : "was"} set up`, p.window);
+    case "targets-selected":
+      return withWindow(`${who} ${negated ? "has not" : "has"} selected ${p.object != null ? `${unitRefPhrase(p.object)} as a target` : "targets"}`, p.window);
     case "disembarked":
       return withWindow(`${who} ${didNot("disembark")} from a Transport`, p.window);
     case "after-roll": {
@@ -27,7 +31,8 @@ export function describeHappened(p: P, negated: boolean): string {
       const target = obj === "the target unit" ? "the target" : obj;
       const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
       const keyword = f.weapon_keyword ? `[${dekebab(str(f.weapon_keyword)).toUpperCase()}]` : "";
-      const weapon = f.weapon_name ? ` by ${str(f.weapon_name)}${keyword ? ` (with ${keyword})` : ""}` : keyword ? ` made with a ${keyword} weapon` : "";
+      const weaponName = /^[a-z0-9]+(-[a-z0-9]+)+$/.test(str(f.weapon_name)) ? titleCase(str(f.weapon_name)) : str(f.weapon_name);
+      const weapon = f.weapon_name ? ` by ${weaponName}${keyword ? ` (with ${keyword})` : ""}` : keyword ? ` made with a ${keyword} weapon` : "";
       const by = f.by && typeof f.by === "object" && "event_var" in (f.by as P) ? " from the triggering unit" : f.by != null ? ` from ${unitRefPhrase(f.by)}` : "";
       const when = p.window === "event" ? " during its just-finished shooting sequence" : ` ${windowPhrase(p.window)}`;
       if (f.roll === "hit" && f.result === "success") {

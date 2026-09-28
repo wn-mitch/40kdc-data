@@ -1,7 +1,8 @@
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -16,6 +17,7 @@ import { refreshSources } from "../src/round5c/source.js";
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 const REVIEWER = "fixture-reviewer";
+const CORE_CATALOG = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/core/unit-keywords.json");
 
 // Fabricated stratagem, unit and wording only.
 const WHEN = "Your Shooting phase.";
@@ -38,6 +40,8 @@ beforeEach(() => {
   const data = join(root, "data");
   mkdirSync(join(data, "core", "fixture"), { recursive: true });
   mkdirSync(join(data, "enrichment", "fixture"), { recursive: true });
+  // The core-ability catalog the published ability-grant (Fights First) must resolve against.
+  copyFileSync(CORE_CATALOG, join(data, "core", "unit-keywords.json"));
   const gameVersion = { edition: "10th", dataslate: "fixture" };
   writeFileSync(join(data, "core", "fixture", "units.json"), `${JSON.stringify([{
     id: "warden-squad", name: "Warden Squad", faction_id: "fixture", role: "battleline",
@@ -52,7 +56,7 @@ beforeEach(() => {
   }], null, 2)}\n`);
   writeFileSync(join(data, "enrichment", "fixture", "abilities.json"), `${JSON.stringify([{
     ability_id: "hold-fast", name: "Hold Fast", authored_by: "fixture", game_version: gameVersion, ability_type: "stratagem",
-    effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } }, scope: { range: "unit", duration: "phase" }, behavior: "activated",
+    effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } }, scope: { duration: "phase" }, behavior: "activated",
   }], null, 2)}\n`);
   process.env.ROUND5C_DATA_ROOT = data;
   process.env.RAW_TEXT_STORE = store;

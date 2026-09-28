@@ -109,7 +109,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if cstr(p["phase"]) == "command" {
 			return neg + "during the Command phase"
 		}
-		return neg + "during the " + cstr(p["phase"]) + " phase"
+		return neg + "during the " + titleCase(cstr(p["phase"])) + " phase"
 	case "player-turn-is":
 		whose := "either player's"
 		switch p["turn"] {
@@ -164,7 +164,11 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return subjectOf(p, "the unit") + " is " + neg + side
 	case "same-unit":
-		return subjectOf(p, "the unit") + " is " + neg + "the same unit as " + unitRefPhrase(p["as"], "the unit")
+		as := unitRefPhrase(p["as"], "the unit")
+		if p["as"] == "this-unit" {
+			as = "this unit"
+		}
+		return subjectOf(p, "the unit") + " is " + neg + "the same unit as " + as
 	case "model-profile":
 		return subjectOf(p, "the model") + " is " + neg + "the " + titleCase(cstr(p["profile"])) + " model"
 	case "has-ability":

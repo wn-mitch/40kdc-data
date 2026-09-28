@@ -63,6 +63,13 @@ _TIMING_ONLY_PHRASES: dict[str, str] = {
         'each time you spend 1 Pain token to Empower a friendly unit within 9" of this unit'
     ),
     "enemy-unit-fails-battle-shock": "each time an enemy unit fails a Battle-shock test",
+    "start-of-your-shooting-phase": "at the start of your Shooting phase",
+    "your-shooting-phase": "in your Shooting phase",
+    "after-friendly-war-dog-within-9-shoots": 'after a friendly WAR DOG unit within 9" shoots',
+    "after-destroying-asuryani-psyker": (
+        "after an enemy unit destroys a friendly ASURYANI PSYKER model"
+    ),
+    "after-this-unit-resolves-shooting-attacks": "after this unit resolves its ranged attacks",
 }
 
 
@@ -149,6 +156,9 @@ _EVENT_PHRASES: dict[str, str] = {
     "surge-move": "when the unit makes a Surge move",
     "army-selection": "when you select this model to include in your army",
     "start-of-command-phase": "at the start of the Command phase",
+    "start-of-opponent-command-phase": "at the start of your opponent's Command phase",
+    "start-of-first-battle-round": "at the start of the first battle round",
+    "command-phase": "in the Command phase",
     "declare-battle-formations": "when declaring Battle Formations",
     "post-deployment": "after deployment",
     "unit-set-up": "when the unit is set up",

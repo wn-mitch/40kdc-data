@@ -1,7 +1,7 @@
 /**
- * Seed empty-modifier ability stubs for units that have *zero* enrichment
+ * Seed ability stubs (`stub: true`, effect `no-effect`) for units that have *zero* enrichment
  * abilities (#NN). The DSL authoring pipeline (`author-input` → `author-batch`)
- * only fleshes stubs that already exist — it iterates `hasEmptyModifier`
+ * only fleshes stubs that already exist — it iterates `isStubEntry`
  * entries and never invents new ones. So a unit with `ability_ids: []` is
  * invisible to it: no stub, nothing to flesh, stays a bare statline forever.
  *
@@ -11,13 +11,13 @@
  *   core unit.name → archive Datasheet (name + faction code) → datasheet_id
  *     → every ability on that datasheet (Datasheets_abilities)
  *
- * — and writes one empty-modifier stub per resolved ability into
+ * — and writes one stub (`stub: true`) per resolved ability into
  * `data/enrichment/<faction>/abilities.json`. The stubs then flow through the
  * normal `author-input → author-batch propose/apply` workflow like any other.
  *
  * IP posture: the archive's rule `description` is GW text and is **never**
  * written to the repo. Only the ability *name* (a factual label, as the
- * existing dataset already stores) and an empty-modifier placeholder effect are
+ * existing dataset already stores) and a `no-effect` placeholder effect are
  * emitted; the real mechanic is authored downstream by the classify step, which
  * reads the description transiently and emits structured DSL (no prose).
  *
@@ -40,7 +40,7 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadArchive, type ArchiveIndex, type SourceRule } from "./author-input.js";
-import { hasEmptyModifier } from "./audit-coverage.js";
+import { STUB_EFFECT, isStubEntry } from "./audit-coverage.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -63,8 +63,9 @@ export interface SeededAbility {
   authored_by: string;
   game_version: { edition: string; dataslate: string };
   version: string;
-  effect: { type: "stat-modifier"; target: "unit"; modifier: Record<string, never> };
-  scope: { range: "unit"; duration: "permanent" };
+  stub: true;
+  effect: { type: "no-effect" };
+  scope: { duration: "permanent" };
   unit_ids: string[];
   ability_type: "unit";
   behavior: "passive";
@@ -93,8 +94,9 @@ function newStub(abilityId: string, name: string, unitId: string): SeededAbility
     authored_by: STUB_AUTHORED_BY,
     game_version: { ...STUB_GAME_VERSION },
     version: STUB_VERSION,
-    effect: { type: "stat-modifier", target: "unit", modifier: {} },
-    scope: { range: "unit", duration: "permanent" },
+    stub: true,
+    effect: { ...STUB_EFFECT },
+    scope: { duration: "permanent" },
     unit_ids: [unitId],
     ability_type: "unit",
     behavior: "passive",
@@ -174,7 +176,7 @@ export function seedFaction(
         const before = existingEntry.unit_ids.includes(unit.id);
         addUnit(existingEntry, unit.id);
         // Flag merges into authored entries (not stubs) for review.
-        if (!before && !hasEmptyModifier(existingEntry.effect)) {
+        if (!before && !isStubEntry(existingEntry)) {
           result.mergedIntoAuthored.push({ ability_id: id, unit_id: unit.id });
         }
         continue;

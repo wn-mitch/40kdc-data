@@ -94,8 +94,8 @@ Implementation details belong only in the probe/render/compiler evidence and
   `reword-describer`.
 - Implementation is all-four-ports-plus-goldens in one change; a TS-only edit is
   a parity break, never ship it.
-- Check the RESOLVED history: shapes like `fight-eligibility-extension`,
-  pool-add-die `value:"rolled"`, and FNP psychic scopes already shipped — a
+- Check the RESOLVED history: shapes like extended fight eligibility,
+  resource-die `value:"rolled"`, and FNP `against: psychic` already shipped — a
   correct warpsmith greps before proposing, and answers "already covered" when
   it is.
 

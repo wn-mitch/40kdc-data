@@ -120,9 +120,13 @@ regen commands below are the manual equivalents:
 **Condition and trigger vocabulary.** Conditions are predicates on named axes (`has-keyword`,
 `unit-state`, `happened`, `within`, …) whose `subject` is a unit-ref; negation is only the `not`
 operator; triggers are event families (`selected`, `move-ended`, `targets-selected`, …) with
-`subject`/`object`/`filter`. The schema (`condition.schema.json`, `common.schema.json`) is the
-catalog. Data authored in the pre-round-6 vocabulary (`unit-has-keyword`, `timing-is`,
-`enemy-unit-targets-bearer`, `negated: true`) fails validation: run `npm run vocab:migrate --
+`subject`/`object`/`filter`. Single effects are closed variants `{type, target, modifier}` whose
+`target` is the same unit-ref (an aura's range is the target filter's `within`, not `scope`), and
+`ability-grant` names only a core ability (`data/core/unit-keywords.json`) or an ability record.
+The schema (`condition.schema.json`, `effect.schema.json`, `common.schema.json`) is the catalog.
+Data authored in the pre-round-6 vocabulary (`unit-has-keyword`, `timing-is`,
+`enemy-unit-targets-bearer`, `negated: true`, `movement-modifier`, `grant_type`, `target: "self"`,
+`scope.range`) fails validation: run `npm run vocab:migrate --
 <paths>` (dry run; `--write` applies, `--review <file>` lists what it can't place) and resolve any
 reviews in `tools/src/round6/vocab-overrides.json`.
 

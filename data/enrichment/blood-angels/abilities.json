@@ -16,15 +16,22 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "targeting-permission",
-      "target": "unit",
+      "type": "targeting",
+      "target": {
+        "owner": "enemy",
+        "level": "model",
+        "within": {
+          "range": "engagement",
+          "of": "stratagem-target"
+        }
+      },
       "modifier": {
-        "gate": "within-range",
-        "attack_type": "any"
+        "may": "must-target",
+        "target": "stratagem-target",
+        "kind": "fight"
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "Jump Pack unit: enemy models within Engagement Range of it must select it as the target of all their attacks this phase"
@@ -57,7 +64,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -66,7 +73,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -99,7 +105,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -108,7 +114,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -136,19 +141,25 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "ranged",
-                "keywords": [
+                "abilities": [
                   "Assault"
-                ]
+                ],
+                "weapon_type": "ranged"
               }
             },
             {
-              "type": "fallback-and-act",
-              "target": "unit",
-              "modifier": {}
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
+              }
             }
           ]
         },
@@ -156,17 +167,25 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "ability-grant",
-              "target": "unit",
+              "type": "permission",
+              "target": "this-unit",
               "modifier": {
-                "grant_type": "charge-after-advance"
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
               }
             },
             {
-              "type": "ability-grant",
-              "target": "unit",
+              "type": "permission",
+              "target": "this-unit",
               "modifier": {
-                "grant_type": "charge-after-fall-back"
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
               }
             }
           ]
@@ -174,7 +193,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after a Jump Pack unit Advances or Falls Back"
@@ -196,14 +214,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "deep-strike",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "range": 6
+        "to": "battlefield",
+        "via": "deep-strike",
+        "min_enemy_distance": 6
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Jump Pack unit arriving via Deep Strike may set up more than 6\" from enemy models instead of 9\"; it cannot declare a charge this turn"
@@ -228,13 +247,13 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         },
         {
@@ -248,20 +267,19 @@
             }
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "melee",
-              "keywords": [
+              "abilities": [
                 "Lance"
-              ]
+              ],
+              "weapon_type": "melee"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Target must not have been selected to fight this phase"
@@ -293,16 +311,21 @@
       }
     },
     "effect": {
-      "type": "targeting-permission",
-      "target": "unit",
+      "type": "targeting",
+      "target": {
+        "owner": "enemy"
+      },
       "modifier": {
-        "gate": "within-range",
-        "range": 18,
-        "attack_type": "ranged"
+        "may": "cannot-target",
+        "target": "this-unit",
+        "kind": "shoot",
+        "range": {
+          "inches": 18
+        },
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Character unit targeted by the attacking unit: it can only be targeted by ranged attacks from models within 18\""
@@ -324,14 +347,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "unit-keyword-grant",
-      "target": "unit",
+      "type": "keyword-grant",
+      "target": "this-unit",
       "modifier": {
-        "keyword": "CHARACTER"
+        "keywords": [
+          "CHARACTER"
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "until-next-command-phase"
     },
     "community_notes": "One non-Character model in an Infantry unit gains the Character keyword, letting the unit interact with the Legacy of the Angel detachment rule"
@@ -353,18 +377,17 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "melee",
-        "keywords": [
+        "abilities": [
           "Lethal Hits",
           "Precision"
-        ]
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Jump Pack unit not yet selected to fight this phase"
@@ -386,17 +409,16 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "ranged",
-        "keywords": [
+        "abilities": [
           "Sustained Hits 1"
-        ]
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Target must not have been selected to shoot this phase"
@@ -439,7 +461,7 @@
           "steps": [
             {
               "type": "re-roll",
-              "target": "bearer",
+              "target": "this-model",
               "modifier": {
                 "roll": "hit",
                 "result_scope": "any-result"
@@ -447,7 +469,7 @@
             },
             {
               "type": "re-roll",
-              "target": "bearer",
+              "target": "this-model",
               "modifier": {
                 "roll": "wound",
                 "result_scope": "any-result"
@@ -458,7 +480,6 @@
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "Used as a friendly unit is destroyed: for the rest of the battle, friendly Sanguinary Guard units re-roll Hit and Wound rolls against the enemy unit that destroyed it"
@@ -480,15 +501,13 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "community_notes": "Jump Pack unit at the end of the opponent's Fight phase; cannot target a unit in Engagement Range unless it is The Sanguinor"
@@ -514,15 +533,16 @@
       "object": "this-unit"
     },
     "effect": {
-      "type": "objective-tag",
-      "target": "unit",
+      "type": "designate",
+      "target": "this-unit",
       "modifier": {
-        "tag": "secured",
-        "source": "destroying-unit"
+        "subject": {
+          "objective": {}
+        },
+        "tag": "secured"
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "Used as a Blood Angels unit is destroyed within range of objective markers you controlled at the end of the previous phase: one of those markers remains under your control until the opponent's Level of Control exceeds yours at the end of a phase"
@@ -555,7 +575,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -564,7 +584,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -597,7 +616,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -606,7 +625,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -644,12 +662,13 @@
       }
     },
     "effect": {
-      "type": "fight-on-death",
-      "target": "unit",
-      "modifier": {}
+      "type": "act-on-death",
+      "target": "this-unit",
+      "modifier": {
+        "act": "fight"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company unit targeted by the attacking unit; only models that have not yet fought this phase fight on death, after the attacking unit finishes its attacks"
@@ -692,14 +711,15 @@
       "threshold": 4,
       "comparison": "gte",
       "on_success": {
-        "type": "fight-on-death",
-        "target": "unit",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company unit; roll per destroyed model that has not yet fought, adding 1 within 12\" of a friendly Chaplain; on a 4+ the model fights after the attacking unit finishes, then is removed"
@@ -724,8 +744,8 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "move",
+          "target": "this-unit",
           "modifier": {
             "move_type": "pile-in",
             "distance": "D3+3"
@@ -759,19 +779,17 @@
             ]
           },
           "effect": {
-            "type": "movement-modifier",
-            "target": "unit",
+            "type": "move",
+            "target": "this-unit",
             "modifier": {
               "move_type": "pile-in",
-              "distance": 6,
-              "replaces_default": true
+              "distance": 6
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company unit, just before it Piles In; the move must end in Unit Coherency and within Engagement Range of enemy units"
@@ -797,15 +815,16 @@
       "object": "this-unit"
     },
     "effect": {
-      "type": "objective-tag",
-      "target": "unit",
+      "type": "designate",
+      "target": "this-unit",
       "modifier": {
-        "tag": "secured",
-        "source": "destroying-unit"
+        "subject": {
+          "objective": {}
+        },
+        "tag": "secured"
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "Used as a Death Company unit is destroyed within range of an objective marker you controlled: that marker remains under your control until the opponent's Level of Control exceeds yours at the end of a phase"
@@ -838,13 +857,12 @@
     },
     "effect": {
       "type": "feel-no-pain",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "threshold": 5
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company unit targeted by the attacking unit"
@@ -885,49 +903,53 @@
         "options": [
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "attack_type": "melee"
+              "weapon_type": "melee"
             }
           },
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "AP",
-              "operation": "add",
-              "value": -1,
-              "attack_type": "melee"
+              "operation": "improve",
+              "value": 1,
+              "weapon_type": "melee"
             }
           },
           {
             "type": "sequence",
             "steps": [
               {
-                "type": "set-battle-shock",
-                "target": "unit"
-              },
-              {
-                "type": "stat-modifier",
-                "target": "unit",
+                "type": "state-change",
+                "target": "this-unit",
                 "modifier": {
-                  "stat": "S",
-                  "operation": "add",
-                  "value": 1,
-                  "attack_type": "melee"
+                  "state": "battle-shocked",
+                  "set": true
                 }
               },
               {
                 "type": "stat-modifier",
-                "target": "unit",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "melee"
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-unit",
                 "modifier": {
                   "stat": "AP",
-                  "operation": "add",
-                  "value": -1,
-                  "attack_type": "melee"
+                  "operation": "improve",
+                  "value": 1,
+                  "weapon_type": "melee"
                 }
               }
             ]
@@ -936,7 +958,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Unit that made a Charge move this turn: choose +1 Strength or improved AP for melee weapons \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
@@ -962,32 +983,32 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
-            "attack_type": "melee"
+            "operation": "improve",
+            "value": 1,
+            "weapon_type": "melee"
           }
         },
         {
@@ -1012,20 +1033,19 @@
             ]
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "melee",
-              "keywords": [
+              "abilities": [
                 "Hazardous"
-              ]
+              ],
+              "weapon_type": "melee"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company unit below Starting Strength, not yet selected to fight this phase"
@@ -1051,44 +1071,56 @@
       "choice_label": "Red Wrath",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Assault"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-advance"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
           }
         },
         {
           "type": "sequence",
           "steps": [
             {
-              "type": "set-battle-shock",
-              "target": "unit"
-            },
-            {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "state-change",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "ranged",
-                "keywords": [
-                  "Assault"
-                ]
+                "state": "battle-shocked",
+                "set": true
               }
             },
             {
-              "type": "ability-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "grant_type": "charge-after-advance"
+                "abilities": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
               }
             }
           ]
@@ -1096,7 +1128,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after the unit Advances: choose to shoot or charge this turn — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
@@ -1121,10 +1152,14 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-advance"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
           }
         },
         {
@@ -1155,20 +1190,19 @@
             ]
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Assault"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after a Death Company unit Advances"
@@ -1194,44 +1228,56 @@
       "choice_label": "Aggressive Onslaught",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Assault"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-advance"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
           }
         },
         {
           "type": "sequence",
           "steps": [
             {
-              "type": "set-battle-shock",
-              "target": "unit"
-            },
-            {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "state-change",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "ranged",
-                "keywords": [
-                  "Assault"
-                ]
+                "state": "battle-shocked",
+                "set": true
               }
             },
             {
-              "type": "ability-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "grant_type": "charge-after-advance"
+                "abilities": [
+                  "Assault"
+                ],
+                "weapon_type": "ranged"
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
               }
             }
           ]
@@ -1239,7 +1285,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after the unit Advances: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
@@ -1266,14 +1311,13 @@
     },
     "effect": {
       "type": "feel-no-pain",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "threshold": 5,
-        "scope": "mortal"
+        "against": "mortal"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used just after a mortal wound is allocated to the unit"
@@ -1298,15 +1342,15 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "target",
+          "type": "test",
+          "target": "stratagem-target",
           "modifier": {
-            "grant_type": "battle-shock-test"
+            "test": "battle-shock"
           }
         },
         {
           "type": "roll-modifier",
-          "target": "target",
+          "target": "stratagem-target",
           "modifier": {
             "roll": "battle-shock",
             "operation": "subtract",
@@ -1316,7 +1360,6 @@
       ]
     },
     "scope": {
-      "range": "aura-custom",
       "duration": "phase"
     },
     "community_notes": "One enemy unit within 3\" of the Sanguinary Spearhead Sanguinary Guard unit makes a Battle-shock roll at -1"
@@ -1349,13 +1392,12 @@
     },
     "effect": {
       "type": "invulnerable-save",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "invuln_sv": 5
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Character unit targeted by an enemy unit's ranged attacks"
@@ -1387,16 +1429,15 @@
       }
     },
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Stealth"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Sanguinary Guard unit targeted by an enemy unit's ranged attacks"
@@ -1454,7 +1495,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Sanguinary Spearhead unit within 3\" of the centre of the battlefield targeted by the attacking unit"
@@ -1494,7 +1534,7 @@
         "relation": "attacks-selected-unit",
         "effect": {
           "type": "roll-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "roll": "wound",
             "operation": "add",
@@ -1504,7 +1544,6 @@
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "Used when a friendly Death Company unit is destroyed by an enemy unit: that enemy unit is hated for the rest of the battle \u2014 friendly Death Company attacks against it get +1 to Wound rolls"
@@ -1537,15 +1576,14 @@
       }
     },
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "reactive",
+        "move_type": "normal",
         "distance": "D3+3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Sanguinary Guard unit left unengaged after an enemy unit it was engaged with ends a Fall Back move"
@@ -1581,7 +1619,7 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "target",
+        "target": "stratagem-target",
         "modifier": {
           "count": 1
         }
@@ -1589,7 +1627,6 @@
       "on_fail": null
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "Used when a Sanguinary Guard unit ends a Charge move: roll one D6 per model engaged with one selected enemy unit; each 3+ inflicts 1 mortal wound"
@@ -1615,19 +1652,19 @@
       "choice_label": "Weapon ability",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
             ]
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1"
             ]
           }
@@ -1635,7 +1672,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used when a Character unit is selected to shoot or fight"
@@ -1657,16 +1693,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Mobile"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Death Company Dreadnought unit selected to make a Normal, Advance or Charge move gains Mobile for that move"
@@ -1697,15 +1732,14 @@
       }
     },
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
         "move_type": "surge",
         "distance": "D6"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Unengaged Death Company unit that was targeted by the enemy unit that just shot"
@@ -1731,41 +1765,45 @@
       "choice_label": "Red Rampage",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Lance"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         },
         {
           "type": "sequence",
           "steps": [
             {
-              "type": "set-battle-shock",
-              "target": "unit"
+              "type": "state-change",
+              "target": "this-unit",
+              "modifier": {
+                "state": "battle-shocked",
+                "set": true
+              }
             },
             {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "melee",
-                "keywords": [
+                "abilities": [
                   "Lance",
                   "Lethal Hits"
-                ]
+                ],
+                "weapon_type": "melee"
               }
             }
           ]
@@ -1773,7 +1811,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Choose Lance or Lethal Hits — or give in to the Red Thirst (unit becomes Battle-shocked) to take both. Target must not have been selected to fight this phase"
@@ -1799,34 +1836,58 @@
       "choice_label": "Relentless Assault",
       "options": [
         {
-          "type": "fallback-and-act",
-          "target": "unit",
-          "modifier": {}
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-fall-back"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
           }
         },
         {
           "type": "sequence",
           "steps": [
             {
-              "type": "set-battle-shock",
-              "target": "unit"
-            },
-            {
-              "type": "fallback-and-act",
-              "target": "unit",
-              "modifier": {}
-            },
-            {
-              "type": "ability-grant",
-              "target": "unit",
+              "type": "state-change",
+              "target": "this-unit",
               "modifier": {
-                "grant_type": "charge-after-fall-back"
+                "state": "battle-shocked",
+                "set": true
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
               }
             }
           ]
@@ -1834,7 +1895,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after the unit Falls Back: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
@@ -1872,49 +1932,53 @@
       "options": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "sequence",
           "steps": [
             {
-              "type": "set-battle-shock",
-              "target": "unit"
-            },
-            {
-              "type": "stat-modifier",
-              "target": "unit",
+              "type": "state-change",
+              "target": "this-unit",
               "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "attack_type": "melee"
+                "state": "battle-shocked",
+                "set": true
               }
             },
             {
               "type": "stat-modifier",
-              "target": "unit",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapon_type": "melee"
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
               "modifier": {
                 "stat": "A",
                 "operation": "add",
                 "value": 1,
-                "attack_type": "melee"
+                "weapon_type": "melee"
               }
             }
           ]
@@ -1922,7 +1986,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Unit just charged by an enemy unit: choose +1 Strength or +1 Attacks for melee weapons \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
@@ -1959,7 +2022,12 @@
       "steps": [
         {
           "type": "rule-state",
-          "target": "enemy-within-aura",
+          "target": {
+            "owner": "enemy",
+            "within": {
+              "range": "engagement"
+            }
+          },
           "modifier": {
             "direction": "granted",
             "rule_kind": "core-rule",
@@ -1977,7 +2045,12 @@
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "enemy-within-aura",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": "engagement"
+              }
+            },
             "modifier": {
               "roll": "desperate-escape",
               "operation": "subtract",
@@ -1988,7 +2061,6 @@
       ]
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "An enemy unit falling back while engaged with the Sanguinary Spearhead unit must use the desperate escape mode, at -1 to those hazard rolls if it is Battle-shocked"
@@ -2025,7 +2097,12 @@
       "steps": [
         {
           "type": "rule-state",
-          "target": "enemy-within-aura",
+          "target": {
+            "owner": "enemy",
+            "within": {
+              "range": "engagement"
+            }
+          },
           "modifier": {
             "direction": "granted",
             "rule_kind": "core-rule",
@@ -2043,7 +2120,12 @@
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "enemy-within-aura",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": "engagement"
+              }
+            },
             "modifier": {
               "roll": "desperate-escape",
               "operation": "subtract",
@@ -2054,7 +2136,6 @@
       ]
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "An enemy unit falling back while engaged with the Character unit must use the desperate escape mode, at -1 to those hazard rolls if it is Battle-shocked"
@@ -2089,15 +2170,18 @@
         }
       },
       "effect": {
-        "type": "fight-eligibility-extension",
-        "target": "bearer",
+        "type": "permission",
+        "target": "this-model",
         "modifier": {
-          "range": 1
+          "activity": "fight",
+          "allow": true,
+          "despite": [
+            "fought-this-phase"
+          ]
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -2129,16 +2213,17 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "resurrection",
-        "target": "bearer",
+        "type": "return-models",
+        "target": "this-model",
         "modifier": {
-          "wounds": 3
+          "count": 1,
+          "wounds_remaining": 3,
+          "placement": "closest-to-destruction"
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "self",
       "duration": "one-use"
     },
     "applies_to": {
@@ -2187,7 +2272,7 @@
         "comparison": "gte",
         "on_success": {
           "type": "mortal-wounds",
-          "target": "target",
+          "target": "defender",
           "modifier": {
             "count": 1
           }
@@ -2196,7 +2281,6 @@
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "applies_to": {
@@ -2241,7 +2325,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "all-friendly",
+        "target": {
+          "owner": "friendly"
+        },
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -2250,7 +2336,6 @@
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "until-start-next-turn"
     },
     "applies_to": {
@@ -2281,16 +2366,16 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1
+            "operation": "improve",
+            "value": 1
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "Sv",
             "operation": "set",
@@ -2300,7 +2385,6 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2344,15 +2428,19 @@
         ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "enemy-within-aura",
+        "type": "test",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": "engagement"
+          }
+        },
         "modifier": {
-          "grant_type": "battle-shock-test"
+          "test": "battle-shock"
         }
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2380,19 +2468,17 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "bearer",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "weapon_type": "melee",
-        "anti_keyword": "Chaos",
-        "anti_threshold": 5,
-        "keywords": [
+        "abilities": [
+          "Anti-Chaos 5+",
           "Lance"
-        ]
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2432,15 +2518,14 @@
       }
     },
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "reactive",
+        "move_type": "normal",
         "distance": 6
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -2468,15 +2553,14 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "scout",
-        "distance": 6
+        "ability": "scouts",
+        "value": 6
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2508,7 +2592,7 @@
     },
     "effect": {
       "type": "rule-state",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "direction": "granted",
         "rule_kind": "keyword",
@@ -2516,7 +2600,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "until-next-command-phase"
     },
     "applies_to": {
@@ -2544,7 +2627,7 @@
     "behavior": "passive",
     "effect": {
       "type": "rule-state",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "direction": "suppressed",
         "rule_kind": "core-rule",
@@ -2552,7 +2635,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2585,16 +2667,17 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "resurrection",
-        "target": "bearer",
+        "type": "return-models",
+        "target": "this-model",
         "modifier": {
-          "wounds": 3
+          "count": 1,
+          "wounds_remaining": 3,
+          "placement": "closest-to-destruction"
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "self",
       "duration": "one-use"
     },
     "applies_to": {
@@ -2624,16 +2707,26 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "move_type": "scout",
-            "distance": 6
+            "ability": "scouts",
+            "value": 6
           }
         },
         {
           "type": "re-roll",
-          "target": "friendly-within-aura",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              }
+            }
+          },
           "modifier": {
             "roll": "battle-shock",
             "result_scope": "any-result"
@@ -2642,7 +2735,6 @@
       ]
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2674,11 +2766,13 @@
       "per": "model"
     },
     "effect": {
-      "type": "fight-first",
-      "target": "unit"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -2716,7 +2810,14 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "friendly-within-aura",
+        "target": {
+          "owner": "friendly",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "stat": "S",
           "operation": "add",
@@ -2725,7 +2826,6 @@
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2764,18 +2864,17 @@
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "bearer",
+        "type": "weapon-ability-grant",
+        "target": "this-model",
         "modifier": {
-          "weapon_type": "melee",
-          "keywords": [
+          "abilities": [
             "Sustained Hits 2"
-          ]
+          ],
+          "weapon_type": "melee"
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2805,29 +2904,28 @@
       "choice_label": "Weapon ability",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         }
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -2861,16 +2959,15 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "bearer",
+      "target": "this-model",
       "modifier": {
         "stat": "D",
         "operation": "add",
         "value": 1,
-        "attack_type": "melee"
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -2901,18 +2998,18 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "bearer",
+          "type": "weapon-ability-grant",
+          "target": "this-model",
           "modifier": {
-            "weapon_keyword": "Psychic",
-            "keywords": [
+            "abilities": [
               "Anti INFANTRY 5+"
-            ]
+            ],
+            "weapon_keyword": "Psychic"
           }
         },
         {
           "type": "re-roll",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "roll": "damage",
             "result_scope": "any-result",
@@ -2922,7 +3019,6 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2950,15 +3046,15 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "detection-range-modifier",
-      "target": "unit",
+      "type": "stat-modifier",
+      "target": "this-unit",
       "modifier": {
-        "operation": "add",
-        "value": -3
+        "stat": "detection-range",
+        "operation": "subtract",
+        "value": 3
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
@@ -2984,14 +3080,17 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "cp-refund",
-      "target": "unit",
+      "type": "cost-modifier",
+      "target": "this-unit",
       "modifier": {
-        "stratagem": "heroic-intervention"
+        "of": "stratagem",
+        "id": "heroic-intervention",
+        "operation": "set",
+        "amount": 0,
+        "applies_to": "targeting-this-unit"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
@@ -3023,11 +3122,13 @@
       "per": "model"
     },
     "effect": {
-      "type": "fight-first",
-      "target": "unit"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -3059,17 +3160,16 @@
       "per": "model"
     },
     "effect": {
-      "type": "keyword-grant",
-      "target": "bearer",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "weapon_type": "melee",
-        "keywords": [
+        "abilities": [
           "Sustained Hits 3"
-        ]
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -3117,7 +3217,12 @@
         "steps": [
           {
             "type": "rule-state",
-            "target": "enemy-within-aura",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": "engagement"
+              }
+            },
             "modifier": {
               "direction": "granted",
               "rule_kind": "core-rule",
@@ -3135,7 +3240,12 @@
             },
             "effect": {
               "type": "roll-modifier",
-              "target": "enemy-within-aura",
+              "target": {
+                "owner": "enemy",
+                "within": {
+                  "range": "engagement"
+                }
+              },
               "modifier": {
                 "roll": "desperate-escape",
                 "operation": "subtract",
@@ -3147,7 +3257,6 @@
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "permanent"
     },
     "applies_to": {
@@ -3178,15 +3287,14 @@
       "per": "model"
     },
     "effect": {
-      "type": "auto-result",
-      "target": "bearer",
+      "type": "roll-result",
+      "target": "this-model",
       "modifier": {
         "roll": "hit",
         "result": 6
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -3217,28 +3325,27 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 2,
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
-            "attack_type": "melee"
+            "operation": "improve",
+            "value": 1,
+            "weapon_type": "melee"
           }
         }
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
@@ -3264,15 +3371,14 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
         "move_type": "pile-in",
         "distance": "D3+3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
@@ -3300,16 +3406,15 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "bearer",
+      "target": "this-model",
       "modifier": {
         "stat": "A",
         "operation": "add",
         "value": 2,
-        "attack_type": "melee"
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {

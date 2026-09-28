@@ -198,7 +198,7 @@ describe("collectDanglingAbilityReferences", () => {
                   { operator: "not", operands: [keywordCondition(undefined, "DEEP")] },
                 ],
               },
-              effect: { type: "cp-refund", modifier: { stratagem: "not-a-stratagem" } },
+              effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "not-a-stratagem", operation: "set", amount: 0 } },
             },
           ],
         },
@@ -208,7 +208,7 @@ describe("collectDanglingAbilityReferences", () => {
     expect(findings.map((finding) => finding.path)).toEqual([
       "/0/effect/steps/0/condition/operands/0/parameters/all_of/0",
       "/0/effect/steps/0/condition/operands/1/operands/0/parameters/all_of/0",
-      "/0/effect/steps/0/effect/modifier/stratagem",
+      "/0/effect/steps/0/effect/modifier/id",
       "/0/trigger/condition/parameters/all_of/0",
     ]);
     expect(findings.map((finding) => finding.value)).toEqual([
@@ -317,17 +317,16 @@ describe("collectDanglingAbilityReferences", () => {
 
   it("compares stratagem ids exactly while keyword matching normalizes", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "exact", effect: { type: "cp-refund", modifier: { stratagem: "counter-offensive" } } },
-      { ability_id: "wrong-case", effect: { type: "cp-refund", modifier: { stratagem: "Counter-Offensive" } } },
-      {
-        ability_id: "cost-modifier",
-        effect: { type: "stratagem-cost-modifier", modifier: { stratagem: "counter offensive" } },
-      },
+      { ability_id: "exact", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "counter-offensive", operation: "set", amount: 0 } } },
+      { ability_id: "wrong-case", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "Counter-Offensive", operation: "set", amount: 0 } } },
+      { ability_id: "permission", effect: { type: "permission", modifier: { activity: "use-stratagem", allow: true, stratagem: "counter offensive" } } },
+      // A manoeuvre's cost names no Stratagem, so its id is not audited as one.
+      { ability_id: "manoeuvre", effect: { type: "cost-modifier", modifier: { of: "manoeuvre", id: "not-a-stratagem", operation: "decrease", amount: 1 } } },
     ]);
     const findings = await collectDanglingAbilityReferences(root);
     expect(findings.map((finding) => [finding.ability_id, finding.reference_type, finding.value])).toEqual([
-      ["cost-modifier", "stratagem-cost-modifier", "counter offensive"],
-      ["wrong-case", "cp-refund", "Counter-Offensive"],
+      ["permission", "permission", "counter offensive"],
+      ["wrong-case", "cost-modifier", "Counter-Offensive"],
     ]);
     expect(findings.every((finding) => finding.kind === "stratagem")).toBe(true);
   });
@@ -397,7 +396,7 @@ describe("runDanglingRefsAudit", () => {
       { ability_id: "dangling-keyword", effect: keywordGate("defender", "A") },
       {
         ability_id: "dangling-stratagem",
-        effect: { type: "cp-refund", modifier: { stratagem: "fire-overwatch-or-heroic" } },
+        effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "fire-overwatch-or-heroic", operation: "set", amount: 0 } },
       },
     ]);
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -408,7 +407,7 @@ describe("runDanglingRefsAudit", () => {
       '  dangling-keyword /0/effect/condition/parameters/all_of/0 keyword (has-keyword) → "A"',
     );
     expect(output).toContain(
-      '  dangling-stratagem /1/effect/modifier/stratagem stratagem (cp-refund) → "fire-overwatch-or-heroic"',
+      '  dangling-stratagem /1/effect/modifier/id stratagem (cost-modifier) → "fire-overwatch-or-heroic"',
     );
     expect(output).toContain("2 dangling ability reference(s): 1 keyword, 1 stratagem.");
     expect(process.exitCode).toBe(1);
@@ -428,7 +427,7 @@ describe("formatDanglingRefs", () => {
       },
       {
         kind: "stratagem",
-        reference_type: "stratagem-cost-modifier",
+        reference_type: "cost-modifier",
         source_file: "enrichment/beta/abilities.json",
         ability_id: "two",
         path: "/3/effect/modifier/stratagem",
@@ -464,7 +463,10 @@ describe("production dangling-reference disputes", () => {
     expect(
       [...new Set(keywordFindings.map((finding) => finding.ability_id))].sort(),
     ).toEqual([]);
-    expect(stratagemFindings).toHaveLength(15);
+    // The legacy `fire-overwatch-or-heroic` cp-refund operand is now a choice of two
+    // cost-modifiers naming the real `fire-overwatch` / `heroic-intervention` Stratagems.
+    // None may come back, and no ability may keep the stale dispute mark.
+    expect(stratagemFindings.map((finding) => `${finding.source_file}:${finding.ability_id}`)).toEqual([]);
 
     for (const finding of confirmed) {
       const abilities = JSON.parse(

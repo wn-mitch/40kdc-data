@@ -12,8 +12,8 @@ const ORIGINAL = {
   game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
   unit_ids: ["test-unit"],
   ability_type: "unit",
-  effect: { type: "stat-modifier", target: "self", modifier: {} },
-  scope: { range: "self", duration: "phase" },
+  effect: { type: "stat-modifier", target: "this-model", modifier: {} },
+  scope: { duration: "phase" },
   community_notes: "stub",
 };
 
@@ -52,45 +52,65 @@ describe("conditionNode", () => {
 describe("assembleEffect", () => {
   it("builds an unconditional leaf when condition_kind is none", () => {
     const { effect, scope } = assembleEffect({
-      effect_type: "roll-modifier", target: "unit", modifier: { operation: "add", roll: "hit", value: 1 },
-      attack_type: "any", condition_kind: "none", scope_range: "unit", scope_duration: "phase",
+      effect_type: "roll-modifier", target: "this-unit", modifier: { operation: "add", roll: "hit", value: 1 },
+      attack_type: "any", condition_kind: "none", scope_duration: "phase",
     });
-    expect(effect).toEqual({ type: "roll-modifier", target: "unit", modifier: { operation: "add", roll: "hit", value: 1 } });
-    expect(scope).toEqual({ range: "unit", duration: "phase" });
+    expect(effect).toEqual({ type: "roll-modifier", target: "this-unit", modifier: { operation: "add", roll: "hit", value: 1 } });
+    // An aura's range lives in the target filter, so scope carries only the duration.
+    expect(scope).toEqual({ duration: "phase" });
+  });
+
+  it("passes a filter target through verbatim (an aura's range stays in within)", () => {
+    const target = { owner: "friendly", all_of: ["INFANTRY"], within: { range: { inches: 6 } } };
+    const { effect } = assembleEffect({
+      effect_type: "stat-modifier", target, modifier: { stat: "OC", operation: "add", value: 1 },
+      attack_type: "any", condition_kind: "none", scope_duration: "turn",
+    });
+    expect(effect.target).toEqual(target);
   });
 
   it("wraps in a conditional when a condition is set", () => {
     const { effect } = assembleEffect({
-      effect_type: "re-roll", target: "unit", modifier: { roll: "wound", subset: "all-failures" },
-      attack_type: "any", condition_kind: "vs-keyword", condition_param: "VEHICLE", scope_range: "unit", scope_duration: "phase",
+      effect_type: "re-roll", target: "this-unit", modifier: { roll: "wound", subset: "all-failures" },
+      attack_type: "any", condition_kind: "vs-keyword", condition_param: "VEHICLE", scope_duration: "phase",
     });
     expect(effect.type).toBe("conditional");
     expect(effect.condition).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } });
     expect(effect.effect.type).toBe("re-roll");
   });
 
-  it("injects attack_type into the modifier for combat effects only", () => {
-    const melee = assembleEffect({ effect_type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1 }, attack_type: "melee", condition_kind: "none", scope_range: "unit", scope_duration: "phase" });
-    expect(melee.effect.modifier.attack_type).toBe("melee");
-    // ability-grant is not a combat effect — no attack_type injection
-    const grant = assembleEffect({ effect_type: "ability-grant", target: "unit", modifier: { ability_id: "x" }, attack_type: "melee", condition_kind: "none", scope_range: "unit", scope_duration: "permanent" });
-    expect(grant.effect.modifier.attack_type).toBeUndefined();
+  it("injects attack_type into the modifier as weapon_type for weapon-narrowable effects only", () => {
+    const form = (effect_type: string, modifier: Record<string, unknown>) =>
+      ({ effect_type, target: "this-unit", modifier, attack_type: "melee", condition_kind: "none", scope_duration: "phase" });
+    const melee = assembleEffect(form("stat-modifier", { stat: "A", operation: "add", value: 1 }));
+    expect(melee.effect.modifier).toEqual({ stat: "A", operation: "add", value: 1, weapon_type: "melee" });
+    // The closed modifiers have no attack_type key; the legacy spelling must not leak.
+    expect(melee.effect.modifier.attack_type).toBeUndefined();
+    for (const t of ["roll-modifier", "re-roll", "roll-result", "weapon-ability-grant"]) {
+      expect(assembleEffect(form(t, {})).effect.modifier.weapon_type, t).toBe("melee");
+    }
+    // ability-grant has no weapon filter — no injection
+    const grant = assembleEffect({ ...form("ability-grant", { ability: "x" }), scope_duration: "permanent" });
+    expect(grant.effect.modifier).toEqual({ ability: "x" });
   });
 
   it("forces an empty modifier for parameterless flag effects", () => {
-    const { effect } = assembleEffect({ effect_type: "deep-strike", target: "unit", modifier: { junk: 1 }, attack_type: "any", condition_kind: "none", scope_range: "unit", scope_duration: "permanent" });
-    expect(effect.modifier).toEqual({});
+    for (const effect_type of ["end-attack-sequence", "objective-sticky"]) {
+      const { effect } = assembleEffect({ effect_type, target: "this-unit", modifier: { junk: 1 }, attack_type: "melee", condition_kind: "none", scope_duration: "permanent" });
+      expect(effect.modifier, effect_type).toEqual({});
+    }
   });
 });
 
 describe("buildEntry", () => {
   it("preserves the original metadata and replaces effect/scope/notes", () => {
-    const original = { ability_id: "x", name: "X", authored_by: "40kdc-community", game_version: { edition: "11th", dataslate: "pre-launch-provisional" }, unit_ids: ["u"], ability_type: "unit", effect: { type: "stat-modifier", target: "unit", modifier: {} }, community_notes: "stub" };
-    const entry = buildEntry(original, { effect_type: "feel-no-pain", target: "unit", modifier: { threshold: 5 }, attack_type: "any", condition_kind: "none", scope_range: "unit", scope_duration: "phase" });
+    const original = { ability_id: "x", name: "X", authored_by: "40kdc-community", game_version: { edition: "11th", dataslate: "pre-launch-provisional" }, unit_ids: ["u"], ability_type: "unit", effect: { type: "stat-modifier", target: "this-unit", modifier: {} }, community_notes: "stub" };
+    const entry = buildEntry(original, { effect_type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 }, attack_type: "any", condition_kind: "none", scope_duration: "phase" });
     expect(entry.ability_id).toBe("x");
     expect(entry.authored_by).toBe("40kdc-community");
     expect(entry.unit_ids).toEqual(["u"]);
-    expect(entry.effect).toEqual({ type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } });
+    expect(entry.effect).toEqual({ type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } });
+    expect(entry.scope).toEqual({ duration: "phase" });
     expect(entry.community_notes).toBe("community-authored from 10e source (provisional 11e); see #21");
   });
 
@@ -98,15 +118,14 @@ describe("buildEntry", () => {
     const original = {
       ability_id: "x",
       game_version: { edition: "11th", dataslate: "codex-fixture" },
-      effect: { type: "deep-strike", target: "unit", modifier: {} },
+      effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } },
     };
     const entry = buildEntry(original, {
-      effect_type: "deep-strike",
-      target: "unit",
-      modifier: {},
+      effect_type: "ability-grant",
+      target: "this-unit",
+      modifier: { ability: "deep-strike" },
       attack_type: "any",
       condition_kind: "none",
-      scope_range: "unit",
       scope_duration: "permanent",
     });
     expect(entry.community_notes).toBe("community-authored from 11e source");
@@ -117,11 +136,11 @@ describe("buildRepairedEntry", () => {
   const nested = {
     type: "conditional",
     condition: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] },
-    effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
+    effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
   };
 
   it("grafts a pre-formed nested effect tree verbatim and preserves metadata", () => {
-    const entry = buildRepairedEntry(ORIGINAL, nested, { range: "self", duration: "phase" }, "passive");
+    const entry = buildRepairedEntry(ORIGINAL, nested, { duration: "phase" }, "passive");
     expect(entry.ability_id).toBe("test-ability");
     expect(entry.authored_by).toBe("40kdc-community");
     expect(entry.unit_ids).toEqual(["test-unit"]);
@@ -130,9 +149,15 @@ describe("buildRepairedEntry", () => {
     expect(entry.community_notes).not.toBe("stub");
   });
 
+  it("drops the stub marker once an authored effect replaces the placeholder", () => {
+    const stub = { ...ORIGINAL, stub: true, effect: { type: "no-effect" } };
+    expect(buildRepairedEntry(stub, nested, { duration: "phase" }, "passive")).not.toHaveProperty("stub");
+    expect(buildEntry(stub, { effect_type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 }, attack_type: "any", condition_kind: "none", scope_duration: "phase" })).not.toHaveProperty("stub");
+  });
+
   it("only sets behavior when it is a valid enum value", () => {
-    expect(buildRepairedEntry(ORIGINAL, nested, { range: "self", duration: "phase" }, "made-up").behavior).toBeUndefined();
-    expect(buildRepairedEntry(ORIGINAL, nested, { range: "self", duration: "phase" }, undefined).behavior).toBeUndefined();
+    expect(buildRepairedEntry(ORIGINAL, nested, { duration: "phase" }, "made-up").behavior).toBeUndefined();
+    expect(buildRepairedEntry(ORIGINAL, nested, { duration: "phase" }, undefined).behavior).toBeUndefined();
   });
 
   it("grafts and removes ability-level repair fields explicitly", () => {
@@ -144,7 +169,7 @@ describe("buildRepairedEntry", () => {
     const entry = buildRepairedEntry(
       original,
       nested,
-      { range: "self", duration: "phase" },
+      { duration: "phase" },
       "reactive",
       {
         trigger: { event: "selected", filter: { to: "shoot" } },
@@ -166,8 +191,8 @@ describe("buildRepairedEntry → AJV gate", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "conditional",
       condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } }] },
-      effect: { type: "ability-grant", target: "self", modifier: { ability_id: "temple-relics" } },
-    }, { range: "self", duration: "turn" }, "passive");
+      effect: { type: "ability-grant", target: "this-model", modifier: { ability: "temple-relics" } },
+    }, { duration: "turn" }, "passive");
     expect(validate(entry)).toBe(true);
   });
 
@@ -175,26 +200,58 @@ describe("buildRepairedEntry → AJV gate", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "conditional",
       condition: { type: "when-the-stars-align" },
-      effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
-    }, { range: "self", duration: "phase" });
+      effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
+    }, { duration: "phase" });
     expect(validate(entry)).toBe(false);
   });
   it("rejects rerolls carrying both result-selection forms", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "re-roll",
-      target: "self",
+      target: "this-model",
       modifier: { roll: "advance", subset: "all-failures", result_scope: "any-result" },
-    }, { range: "self", duration: "phase" });
+    }, { duration: "phase" });
     expect(validate(entry)).toBe(false);
+  });
+
+  // Every single effect's modifier is closed, so the schema gate — not the lint — is what
+  // stops an invented or legacy modifier key from reaching the cruncher.
+  const leaf = (effect: Record<string, unknown>): boolean => validate(buildRepairedEntry(ORIGINAL, effect, { duration: "phase" }));
+
+  it("requires exactly one re-roll result selection, spelled canonically", () => {
+    expect(leaf({ type: "re-roll", target: "this-model", modifier: { roll: "advance", result_scope: "any-result" } })).toBe(true);
+    expect(leaf({ type: "re-roll", target: "this-model", modifier: { roll: "hit", subset: "ones" } })).toBe(true);
+    expect(leaf({ type: "re-roll", target: "this-model", modifier: { roll: "advance", result_scope: "all-results" } })).toBe(false);
+    expect(leaf({ type: "re-roll", target: "this-model", modifier: { roll: "advance" } })).toBe(false);
+    // The obsolete max_rerolls spelling of count
+    expect(leaf({ type: "re-roll", target: "this-model", modifier: { roll: "hit", result_scope: "any-result", max_rerolls: 1 } })).toBe(false);
+  });
+
+  it("rejects invented modifier keys on cruncher-interpreted leaves (the silent-over-apply trap)", () => {
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 2 } })).toBe(true);
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 2, model_filter: "not-character" } })).toBe(false);
+  });
+
+  it("rejects out-of-vocabulary stat, weapon_type, and the legacy attack_type key", () => {
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "Move", operation: "subtract", value: 2 } })).toBe(false);
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "arco-flail" } })).toBe(false);
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, attack_type: "melee" } })).toBe(false);
+  });
+
+  it("rejects legacy effect targets and a legacy type", () => {
+    for (const target of ["self", "bearer", "unit", "friendly-within-aura"]) {
+      expect(leaf({ type: "stat-modifier", target, modifier: { stat: "A", operation: "add", value: 1 } }), target).toBe(false);
+    }
+    expect(leaf({ type: "fight-first", target: "this-unit" })).toBe(false);
+    expect(leaf({ type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } })).toBe(true);
   });
 
   it("accepts positive reroll counts and rejects non-positive or fractional counts", () => {
     for (const [count, valid] of [[1, true], [0, false], [-1, false], [1.5, false]] as const) {
       const entry = buildRepairedEntry(ORIGINAL, {
         type: "re-roll",
-        target: "self",
+        target: "this-model",
         modifier: { roll: "hit", result_scope: "any-result", count },
-      }, { range: "self", duration: "phase" });
+      }, { duration: "phase" });
       expect(validate(entry), `count=${count}`).toBe(valid);
     }
   });
@@ -207,18 +264,20 @@ describe("lintCanonical", () => {
       type: "conditional",
       condition: { type: "has-keyword", parameters: { all_of: ["WAR DOG"] } },
       effect: { type: "sequence", steps: [
-        { type: "stat-modifier", target: "unit", modifier: { stat: "T", operation: "add", value: 1 } },
-        { type: "keyword-grant", target: "unit", modifier: { keywords: ["Lethal Hits"], weapon_type: "melee" } },
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } },
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
       ] },
     };
     expect(lintCanonical(eff)).toEqual({ canonical: true, issues: [] });
   });
 
-  it("rejects non-canonical leaves beneath every nested wrapper shape", () => {
+  it("rejects non-canonical conditions beneath every nested wrapper shape", () => {
+    // A condition param placed beside `parameters` is invisible to AJV and to the cruncher;
+    // the lint must find it however deeply a wrapper nests it.
     const invalidLeaf = {
-      type: "stat-modifier",
-      target: "unit",
-      modifier: { stat: "A", operation: "add", value: 1, model_filter: "not-character" },
+      type: "conditional",
+      condition: { type: "has-keyword", all_of: ["INFANTRY"] },
+      effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } },
     };
     const wrappers = [
       { name: "aura", effect: { type: "aura", modifier: { effect: invalidLeaf } } },
@@ -227,11 +286,13 @@ describe("lintCanonical", () => {
       { name: "resource action", effect: { type: "resource-action-menu", actions: [{ effect: invalidLeaf }] } },
       { name: "region default", effect: { type: "named-region-state", modifier: { consumer: { default_branch: { effect: invalidLeaf } } } } },
       { name: "region qualified", effect: { type: "named-region-state", modifier: { consumer: { qualified_branch: { effect: invalidLeaf } } } } },
+      { name: "region qualified condition", effect: { type: "named-region-state", modifier: { consumer: { qualified_condition: invalidLeaf.condition } } } },
+      { name: "select-units eligibility", effect: { type: "select-units", selector: { owner: "friendly", count: 1, eligibility: invalidLeaf.condition }, effect: invalidLeaf.effect } },
     ];
     for (const wrapper of wrappers) {
       const result = lintCanonical(wrapper.effect);
       expect(result.canonical, wrapper.name).toBe(false);
-      expect(result.issues.join(), wrapper.name).toContain("model_filter");
+      expect(result.issues.join(), wrapper.name).toContain('"all_of" must live under "parameters"');
     }
   });
 
@@ -247,49 +308,14 @@ describe("lintCanonical", () => {
     expect(result.issues.join()).toContain("parameters");
   });
 
-  it("accepts any-result rerolls and rejects ambiguous or unknown result scopes", () => {
-    expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "any-result" } }).canonical).toBe(true);
-    expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "all-results" } }).canonical).toBe(false);
-    expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance" } }).canonical).toBe(false);
-    expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance", subset: "all-failures", result_scope: "any-result" } }).canonical).toBe(false);
-  });
-
-  it("accepts count and rejects the obsolete max_rerolls spelling", () => {
-    expect(lintCanonical({
-      type: "re-roll",
-      target: "self",
-      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
-    }).canonical).toBe(true);
-    expect(lintCanonical({
-      type: "re-roll",
-      target: "self",
-      modifier: { roll: "hit", result_scope: "any-result", max_rerolls: 1 },
-    }).canonical).toBe(false);
-  });
-
-  it("rejects invented modifier keys on cruncher-interpreted leaves (the silent-over-apply trap)", () => {
-    const r = lintCanonical({ type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 2, model_filter: "not-character" } });
-    expect(r.canonical).toBe(false);
-    expect(r.issues.join()).toContain("model_filter");
-  });
-
-  it("rejects out-of-vocabulary stat / attack_type", () => {
-    expect(lintCanonical({ type: "stat-modifier", target: "self", modifier: { stat: "Move", operation: "subtract", value: 2 } }).canonical).toBe(false);
-    expect(lintCanonical({ type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1, attack_type: "arco-flail" } }).canonical).toBe(false);
-  });
-
-  it("stays permissive on non-interpreted leaf types (ability-grant keys are a consistency nit, not corruption)", () => {
-    expect(lintCanonical({ type: "ability-grant", target: "self", modifier: { ability: "observer-unit", bypass_restrictions: ["advanced-this-turn"] } }).canonical).toBe(true);
-  });
-
   it("rejects condition params placed top-level instead of under `parameters` (cruncher can't read them)", () => {
-    const bad = lintCanonical({ type: "conditional", condition: { type: "has-keyword", all_of: ["TECH-PRIEST"] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const bad = lintCanonical({ type: "conditional", condition: { type: "has-keyword", all_of: ["TECH-PRIEST"] }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);
     expect(bad.issues.join()).toContain("parameters");
-    const good = lintCanonical({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const good = lintCanonical({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(good.canonical).toBe(true);
     // Negation is the `not` operator, never a flag beside `parameters`.
-    const flagged = lintCanonical({ type: "conditional", condition: { type: "has-keyword", negated: true, parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const flagged = lintCanonical({ type: "conditional", condition: { type: "has-keyword", negated: true, parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(flagged.issues.join()).toContain("operator");
   });
 
@@ -297,7 +323,7 @@ describe("lintCanonical", () => {
     const effect = (phase: string) => ({
       type: "conditional",
       condition: { type: "phase-is", parameters: { phase } },
-      effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
+      effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
     });
     expect(lintCanonical(effect("command")).canonical).toBe(true);
     const bad = lintCanonical(effect("Shooting"));
@@ -309,7 +335,7 @@ describe("lintCanonical", () => {
     const effect = (turn: unknown) => ({
       type: "conditional",
       condition: { type: "player-turn-is", parameters: { turn } },
-      effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
+      effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
     });
     expect(lintCanonical(effect("your-turn")).canonical).toBe(true);
     // The legacy spellings the data used to mix are no longer accepted.
@@ -323,7 +349,7 @@ describe("lintCanonical", () => {
     const effect = (list: "all_of" | "any_of", keywords: string[]) => ({
       type: "conditional",
       condition: { type: "has-keyword", parameters: { subject: "defender", [list]: keywords } },
-      effect: { type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } },
+      effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
     });
     expect(lintCanonical(effect("all_of", ["VEHICLE"])).canonical).toBe(true);
     expect(lintCanonical(effect("any_of", ["MONSTER", "VEHICLE"])).canonical).toBe(true);
@@ -337,7 +363,7 @@ describe("lintCanonical", () => {
   });
 
   it("recurses compound-condition operands for stray top-level params", () => {
-    const bad = lintCanonical({ type: "conditional", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "happened", event: "destroyed", object: { owner: "friendly" }, window: "turn" }] }, effect: { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } } });
+    const bad = lintCanonical({ type: "conditional", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "happened", event: "destroyed", object: { owner: "friendly" }, window: "turn" }] }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);
   });
 });
@@ -398,12 +424,17 @@ describe("canReplaceEffect", () => {
     verdict: { faithful: true, severity: "ok", issue: "" },
   };
   const gateOptions = { minConfidence: "medium" as const, includeComplex: false };
-  it("fills a structural stub by default but protects an authored effect", () => {
-    expect(canReplaceEffect(proposal, { type: "stat-modifier", modifier: {} }, { ...gateOptions, reauthor: false })).toBe(true);
-    expect(canReplaceEffect(proposal, { type: "stat-modifier", modifier: { stat: "A", operation: "add", value: 1 } }, { ...gateOptions, reauthor: false })).toBe(false);
+  const authored = { effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } } };
+  it("fills a stub by default but protects an authored effect", () => {
+    expect(canReplaceEffect(proposal, { stub: true, effect: { type: "no-effect" } }, { ...gateOptions, reauthor: false })).toBe(true);
+    // Older data's empty-modifier placeholder is still a stub.
+    expect(canReplaceEffect(proposal, { effect: { type: "stat-modifier", modifier: {} } }, { ...gateOptions, reauthor: false })).toBe(true);
+    expect(canReplaceEffect(proposal, authored, { ...gateOptions, reauthor: false })).toBe(false);
+    // An authored no-effect (an army-selection rule, say) is not a stub.
+    expect(canReplaceEffect(proposal, { effect: { type: "no-effect" } }, { ...gateOptions, reauthor: false })).toBe(false);
   });
 
   it("replaces an authored effect only when --reauthor is explicit", () => {
-    expect(canReplaceEffect(proposal, { type: "stat-modifier", modifier: { stat: "A", operation: "add", value: 1 } }, { ...gateOptions, reauthor: true })).toBe(true);
+    expect(canReplaceEffect(proposal, authored, { ...gateOptions, reauthor: true })).toBe(true);
   });
 });

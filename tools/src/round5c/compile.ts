@@ -24,9 +24,10 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  *   and damage modifiers onto the attacker.
  * - Instead. An `instead` combinator makes its clause's effect replace the nearest earlier effect
  *   of the same family: the earlier one applies only when the clause's condition does not.
+ *   After a no-advance-roll, "instead, add 6\" to Move" is what that fragment already means.
  * - Selected unit. Effects gated by "the target is the selected unit" go inside one
- *   designate-target for the ability's select-unit leaf. Without that gate, the selection only
- *   names "that unit" for effects such as mortal wounds.
+ *   designate-target for the ability's select-unit leaf. Without that gate, the selection is a
+ *   select-units around the effects, which name the selected unit ("that unit" suffers mortal wounds).
  * - Rolls. Result bands gate their clause's effects and become dice-gated or dice-table; fighting
  *   on death takes its band and conditions as its own per-model gate (compile-dice.ts).
  * - Stratagem TARGET. The target leaves and every condition in the TARGET fragment compile to
@@ -171,6 +172,13 @@ const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggerin
 /** Effects that forbid something; an "instead" after one says what happens in its place. */
 const PROHIBITIONS = new Set(["no-advance-roll"]);
 
+/** "Add 6 to Move": what a no-advance-roll's `advance: fixed-6` does in place of the roll. */
+function isAdvanceInPlace(node: Node): boolean {
+  const modifier = node.modifier as Node | undefined;
+  return node.type === "stat-modifier" && node.target !== "attacker" && modifier?.stat === "M" && modifier.operation === "add"
+    && Number(modifier.value) === 6 && modifier.weapon_type === undefined;
+}
+
 type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -266,7 +274,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
     const node = attempt(() => effect(leaf, {
       attached,
-      attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "self" : "unit") : null,
+      attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "this-model" : "this-unit") : null,
       incoming: attack?.parameters.direction === "targeted",
     }));
     if (!node) return;
@@ -288,10 +296,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     }
     const replacement = own[0]!;
     const replaced = planned.filter((item) => item.index < replacement.index && item.leaf.family_id === replacement.leaf.family_id && !item.replaces).at(-1);
-    // "Do not make an Advance roll; instead, add 6\"": after a prohibition, "instead" says what
-    // happens in its place, so the two effects simply both apply.
+    // "Do not make an Advance roll; instead, add 6\" to its Move": the no-advance-roll fragment
+    // already says what happens in its place, so the clause's effect folds into it. Anything
+    // else in its place has no DSL fragment.
     const previous = planned.filter((item) => item.index < replacement.index).at(-1);
-    if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) continue;
+    if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) {
+      if (isAdvanceInPlace(replacement.node)) planned.splice(planned.indexOf(replacement), 1);
+      else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6 to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
+      continue;
+    }
     if (!replaced) {
       errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
       continue;
@@ -330,6 +343,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // mortal wounds, say); with it, every effect must be limited to those attacks.
   if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
+  if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
   const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;
@@ -343,6 +357,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
+  else if (selections.length === 1) body = selectUnit(selections[0]!, body);
   if (!body) return { ok: false, signature, errors };
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
@@ -381,7 +396,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     ...(target ? { core: { target_restrictions: target } } : {}),
     mechanics: {
       effect: gated(global, body),
-      scope: { range: "unit", duration: scopeDuration },
+      scope: { duration: scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use.
       behavior: triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive",
@@ -416,6 +431,28 @@ function targetRestrictions(parts: readonly CompileLeaf[], eligibility: readonly
   const condition = allOf([...eligibility]);
   if (condition) restrictions.eligibility = condition;
   return restrictions;
+}
+
+/** Whether an effect (or one nested in it) applies to the selected unit. */
+function namesSelected(node: unknown): boolean {
+  if (Array.isArray(node)) return node.some(namesSelected);
+  if (node === null || typeof node !== "object") return false;
+  const record = node as Node;
+  return record.target === "selected-unit" || Object.values(record).some(namesSelected);
+}
+
+/** A selection that only names "that unit" (it suffers mortal wounds, say): select-units around the effects. */
+function selectUnit(selection: CompileLeaf, body: Node): Node {
+  return {
+    type: "select-units",
+    selector: {
+      owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
+      count: 1,
+      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
+      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
+    },
+    effect: body,
+  };
 }
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */

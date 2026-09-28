@@ -23,7 +23,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -107,7 +107,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -185,13 +185,14 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
+If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -274,7 +275,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
@@ -284,7 +285,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

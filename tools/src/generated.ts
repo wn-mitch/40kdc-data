@@ -200,11 +200,24 @@ export type UnitState =
   | "battle-shocked"
   | "embarked"
   | "in-strategic-reserves"
-  | "in-reserves"
   | "on-battlefield"
   | "hidden"
   | "fights-first"
   | "benefit-of-cover";
+/**
+ * One reference for every distance.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "range-ref".
+ */
+export type RangeRef =
+  | {
+      inches: number;
+    }
+  | ("engagement" | "aura" | "weapon" | "half-weapon" | "detection" | "objective-control")
+  | {
+      aura_of: EntityId;
+    };
 /**
  * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
  *
@@ -230,20 +243,6 @@ export type UnitRef =
     }
   | {
       selection_var: string;
-    };
-/**
- * One reference for every distance.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "range-ref".
- */
-export type RangeRef =
-  | {
-      inches: number;
-    }
-  | ("engagement" | "aura" | "weapon" | "half-weapon" | "detection" | "objective-control")
-  | {
-      aura_of: EntityId;
     };
 /**
  * How far back a history condition looks. event: during the triggering event (this attack, this move).
@@ -458,7 +457,6 @@ export type AbilityEffect =
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
-  | NamedEffect
   | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
@@ -466,122 +464,64 @@ export type AbilityEffect =
   | DicePoolAllocationEffect
   | SelectUnitsEffect
   | ForEachUnitEffect
-  | MovementModifierEffect
   | AuraEffect
   | DesignateTargetEffect
   | RiskRewardEffect
   | IssueOrdersEffect
   | ResourceActionMenuEffect
+  | NamedRegionStateEffect
   | LeaderModelAbilityGrantEffect
   | PersistentDesignationEffect
-  | NoEffectEffect
-  | SelectObjectiveEffect
-  | ForEachObjectiveEffect
-  | PairedDesignationEffect
-  | MiracleDieOperationEffect
-  | FormationAttachmentGrantEffect
-  | AttachmentEligibilityInheritEffect;
+  | NoEffectEffect;
 /**
+ * One effect: a type, the unit-ref it applies to (`target`), and that effect's closed `modifier`.
+ *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "single-effect".
  */
-export type SingleEffect = {
-  [k: string]: unknown;
-} & {
-  type:
-    | "ability-grant"
-    | "attack-restriction"
-    | "auto-result"
-    | "battle-shock-test"
-    | "bs-modifier"
-    | "charge-roll-modifier"
-    | "cp-gain"
-    | "cp-on-destroy"
-    | "cp-refund"
-    | "damage-reduction"
-    | "deep-strike"
-    | "disembark"
-    | "disembark-after-move"
-    | "engagement-passthrough"
-    | "fallback-and-act"
-    | "feel-no-pain"
-    | "fight-eligibility-extension"
-    | "fight-first"
-    | "fight-last"
-    | "fight-on-death"
-    | "firing-deck"
-    | "flyover"
-    | "heal-wounds"
-    | "hazard-rolls"
-    | "invulnerable-save"
-    | "keyword-grant"
-    | "leadership-modifier"
-    | "model-destruction"
-    | "modifier-immunity"
-    | "mortal-wounds"
-    | "detection-range-modifier"
-    | "named-region-state"
-    | "objective-control-modifier"
-    | "objective-tag"
-    | "pool-add-die"
-    | "re-roll"
-    | "recovery-pool"
-    | "remove-battle-shock"
-    | "set-battle-shock"
-    | "replace-roll-from-pool"
-    | "resource-clear"
-    | "resource-gain"
-    | "resource-spend"
-    | "resurrection"
-    | "roll-modifier"
-    | "rule-state"
-    | "shoot-on-death"
-    | "stat-modifier"
-    | "stratagem-cost-modifier"
-    | "stratagem-targeting-permission"
-    | "strategic-reserves-arrival"
-    | "targeting-permission"
-    | "tracking-token"
-    | "transport-capacity-conversion"
-    | "terrain-area-tag"
-    | "unit-attachment"
-    | "unit-keyword"
-    | "unit-keyword-grant"
-    | "unit-tag"
-    | "ward"
-    | "unit-division"
-    | "desperate-escape"
-    | "reactive-charge"
-    | "ability-usage-limit"
-    | "deadly-demise-threshold"
-    | "embark"
-    | "eligibility-override"
-    | "weapon-grant"
-    | "mirror-triggering-choice"
-    | "persistent-battlefield-marker-state"
-    | "named-objective-state";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "selected-models-unit"
-    | "attacker"
-    | "defender"
-    | "target"
-    | "targets-of-selected-unit-attacks"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy"
-    | "destroyed-model"
-    | "triggering-unit";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  scaling?: Scaling;
-  [k: string]: unknown;
-};
+export type SingleEffect =
+  | StatModifierEffect
+  | IgnoreModifiersEffect
+  | RollModifierEffect
+  | ReRollEffect
+  | RollResultEffect
+  | EndAttackSequenceEffect
+  | AbilityGrantEffect
+  | KeywordGrantEffect
+  | WeaponAbilityGrantEffect
+  | WeaponGrantEffect
+  | AbilityModifierEffect
+  | AbilityActivateEffect
+  | PermissionEffect
+  | TargetingEffect
+  | CountsAsEffect
+  | RuleStateEffect
+  | MortalWoundsEffect
+  | DamageReductionEffect
+  | FeelNoPainEffect
+  | InvulnerableSaveEffect
+  | HealEffect
+  | ReturnModelsEffect
+  | DestroyModelsEffect
+  | ActOnDeathEffect
+  | SplitUnitEffect
+  | AddUnitEffect
+  | DestructionRuleEffect
+  | MoveEffect
+  | MoveModifierEffect
+  | SetUpEffect
+  | MarkerEffect
+  | TransportCapacityEffect
+  | TestEffect
+  | StateChangeEffect
+  | CpGainEffect
+  | CostModifierEffect
+  | ResourceGainEffect
+  | ResourceSpendEffect
+  | ResourceDieEffect
+  | ObjectiveStickyEffect
+  | DesignateEffect
+  | ArmyRuleEffect;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect-node".
@@ -593,7 +533,6 @@ export type EffectNode =
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
-  | NamedEffect
   | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
@@ -601,21 +540,15 @@ export type EffectNode =
   | DicePoolAllocationEffect
   | SelectUnitsEffect
   | ForEachUnitEffect
-  | MovementModifierEffect
   | AuraEffect
   | DesignateTargetEffect
   | RiskRewardEffect
   | IssueOrdersEffect
   | ResourceActionMenuEffect
+  | NamedRegionStateEffect
   | LeaderModelAbilityGrantEffect
   | PersistentDesignationEffect
-  | NoEffectEffect
-  | SelectObjectiveEffect
-  | ForEachObjectiveEffect
-  | PairedDesignationEffect
-  | MiracleDieOperationEffect
-  | FormationAttachmentGrantEffect
-  | AttachmentEligibilityInheritEffect;
+  | NoEffectEffect;
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -642,28 +575,29 @@ export type AbilityDSLCondition3 = SimpleCondition | CompoundCondition;
  */
 export type EventOrSelectionReference = EventBoundReference | SelectionReference;
 /**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "paired-unit-selector".
+ * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type PairedUnitSelector = {
-  owner: "friendly" | "enemy";
-  count?: 1;
-  selection_mode?: "any-number";
-  requires_ability?: string;
-  visible_to?: SelectionReference;
-  selection_limit?: {
-    count: number;
-    period: "turn" | "phase" | "battle-round" | "battle";
-  };
-  bind_as: string;
-} & PairedUnitSelector1;
-export type PairedUnitSelector1 = {
+export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "transport-occupancy-subject-kind".
+ */
+export type TransportOccupancySubjectKind = "unit-models" | "single-model";
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "transport-eligibility".
+ */
+export type TransportEligibility = {
+  requires_capacity_keyword?: string;
+  embark_as_keyword?: string;
+} & TransportEligibility1;
+export type TransportEligibility1 = {
   [k: string]: unknown;
 };
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
@@ -675,7 +609,7 @@ export type KeywordList7 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
 /**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
@@ -695,7 +629,6 @@ export type AbilityEffect1 =
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
-  | NamedEffect
   | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
@@ -703,21 +636,15 @@ export type AbilityEffect1 =
   | DicePoolAllocationEffect
   | SelectUnitsEffect
   | ForEachUnitEffect
-  | MovementModifierEffect
   | AuraEffect
   | DesignateTargetEffect
   | RiskRewardEffect
   | IssueOrdersEffect
   | ResourceActionMenuEffect
+  | NamedRegionStateEffect
   | LeaderModelAbilityGrantEffect
   | PersistentDesignationEffect
-  | NoEffectEffect
-  | SelectObjectiveEffect
-  | ForEachObjectiveEffect
-  | PairedDesignationEffect
-  | MiracleDieOperationEffect
-  | FormationAttachmentGrantEffect
-  | AttachmentEligibilityInheritEffect;
+  | NoEffectEffect;
 /**
  * Game modes this unit is legal or authored for; absent implies matched-play.
  *
@@ -788,7 +715,7 @@ export type ScopeDuration =
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -801,23 +728,16 @@ export type RuleStateCoreRuleSlug =
   | "charge"
   | "fire-overwatch"
   | "overwatch-against-bearer"
-  | "desperate-escape";
+  | "desperate-escape"
+  | "attacking-ends-hidden"
+  | "take-to-the-skies";
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "transport-occupancy-subject-kind".
+ * via the `definition` "paired-unit-selector".
  */
-export type TransportOccupancySubjectKind = "unit-models" | "single-model";
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "transport-eligibility".
- */
-export type TransportEligibility = {
+export type PairedUnitSelector = {
   [k: string]: unknown;
 };
-/**
- * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
- */
-export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -829,7 +749,6 @@ export type AbilityEffect2 =
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
-  | NamedEffect
   | AbilityPart
   | DiceGatedEffect
   | DiceTableEffect
@@ -837,21 +756,15 @@ export type AbilityEffect2 =
   | DicePoolAllocationEffect
   | SelectUnitsEffect
   | ForEachUnitEffect
-  | MovementModifierEffect
   | AuraEffect
   | DesignateTargetEffect
   | RiskRewardEffect
   | IssueOrdersEffect
   | ResourceActionMenuEffect
+  | NamedRegionStateEffect
   | LeaderModelAbilityGrantEffect
   | PersistentDesignationEffect
-  | NoEffectEffect
-  | SelectObjectiveEffect
-  | ForEachObjectiveEffect
-  | PairedDesignationEffect
-  | MiracleDieOperationEffect
-  | FormationAttachmentGrantEffect
-  | AttachmentEligibilityInheritEffect;
+  | NoEffectEffect;
 
 /**
  * Auto-generated by tools/src/bundle-schemas.ts. Single self-contained schema for Rust codegen — do not edit by hand.
@@ -945,6 +858,36 @@ export interface UnitFilter {
    * Only units visible to the subject of the enclosing predicate.
    */
   visible?: true;
+  /**
+   * Only units within this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: UnitRef;
+  };
+  /**
+   * Not this unit ("another friendly unit").
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      };
 }
 /**
  * Which objectives. Every listed property must hold.
@@ -1046,7 +989,7 @@ export interface EventFilter {
     | "assault";
   roll?: RollKind;
   result?: RollOutcome;
-  from?: "reserves" | "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
+  from?: "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
   through?: "terrain" | "tall-terrain";
   attack_type?: "ranged" | "melee" | "psychic" | "mortal";
   weapon_name?: string;
@@ -1699,7 +1642,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition4;
+      restrictions?: AbilityDSLCondition5;
     },
     ...{
       /**
@@ -1733,7 +1676,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition4;
+      restrictions?: AbilityDSLCondition5;
     }[]
   ];
   /**
@@ -2239,6 +2182,25 @@ export interface TerrainAreaControlCondition {
   };
 }
 /**
+ * [characteristic] Change a characteristic of the target's models or their weapons. incoming: the change applies to attacks made against the target.
+ */
+export interface StatModifierEffect {
+  type: "stat-modifier";
+  target: UnitRef;
+  modifier: {
+    stat: "M" | "T" | "Sv" | "W" | "Ld" | "OC" | "A" | "WS" | "BS" | "S" | "AP" | "D" | "Range" | "detection-range";
+    operation: "add" | "subtract" | "set" | "improve" | "worsen" | "multiply" | "halve";
+    value?: number | string;
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+    incoming?: true;
+    minimum?: number;
+    maximum?: number;
+  };
+  scaling?: Scaling;
+}
+/**
  * Scales the effect's numeric `modifier.value`: it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6\"' → modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within_inches: 6 }.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -2256,6 +2218,244 @@ export interface Scaling {
   within_inches?: number;
   round?: "down" | "up";
   max_value?: number;
+}
+/**
+ * [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
+ */
+export interface IgnoreModifiersEffect {
+  type: "ignore-modifiers";
+  target: UnitRef;
+  modifier: {
+    what: "characteristics" | "rolls";
+    /**
+     * @minItems 1
+     */
+    stats?: [
+      "M" | "T" | "Sv" | "W" | "Ld" | "OC" | "A" | "WS" | "BS" | "S" | "AP" | "D" | "Range" | "detection-range",
+      ...("M" | "T" | "Sv" | "W" | "Ld" | "OC" | "A" | "WS" | "BS" | "S" | "AP" | "D" | "Range" | "detection-range")[]
+    ];
+    /**
+     * @minItems 1
+     */
+    rolls?: [
+      (
+        | "hit"
+        | "wound"
+        | "save"
+        | "damage"
+        | "charge"
+        | "advance"
+        | "battle-shock"
+        | "leadership"
+        | "hazard"
+        | "psychic"
+        | "desperate-escape"
+        | "deadly-demise"
+        | "attacks"
+        | "normal-move"
+        | "surge"
+        | "dark-pact"
+        | "blessings-of-khorne"
+        | "resource-die"
+        | "any"
+        | "all"
+      ),
+      ...(
+        | "hit"
+        | "wound"
+        | "save"
+        | "damage"
+        | "charge"
+        | "advance"
+        | "battle-shock"
+        | "leadership"
+        | "hazard"
+        | "psychic"
+        | "desperate-escape"
+        | "deadly-demise"
+        | "attacks"
+        | "normal-move"
+        | "surge"
+        | "dark-pact"
+        | "blessings-of-khorne"
+        | "resource-die"
+        | "any"
+        | "all"
+      )[]
+    ];
+    only?: "worsening" | "improving";
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+    incoming?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.
+ */
+export interface RollModifierEffect {
+  type: "roll-modifier";
+  target: UnitRef;
+  modifier: {
+    roll:
+      | "hit"
+      | "wound"
+      | "save"
+      | "damage"
+      | "charge"
+      | "advance"
+      | "battle-shock"
+      | "leadership"
+      | "hazard"
+      | "psychic"
+      | "desperate-escape"
+      | "deadly-demise"
+      | "attacks"
+      | "normal-move"
+      | "surge"
+      | "dark-pact"
+      | "blessings-of-khorne"
+      | "resource-die"
+      | "any"
+      | "all";
+    operation: "add" | "subtract";
+    value?: number | string;
+    cap?: number;
+    value_from?: "previous-roll";
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+    incoming?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [roll] Re-roll a roll: only 1s, every failure, or any result; count caps how many.
+ */
+export interface ReRollEffect {
+  type: "re-roll";
+  target: UnitRef;
+  modifier: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [roll] Fix a roll's result (pass, fail or a value), make it succeed only on an unmodified N+, or make it critical on N+ or on any success.
+ */
+export interface RollResultEffect {
+  type: "roll-result";
+  target: UnitRef;
+  modifier: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [roll] The attack sequence ends for that attack.
+ */
+export interface EndAttackSequenceEffect {
+  type: "end-attack-sequence";
+  target: UnitRef;
+  modifier?: {};
+  scaling?: Scaling;
+}
+/**
+ * [ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6", Firing Deck 2).
+ */
+export interface AbilityGrantEffect {
+  type: "ability-grant";
+  target: UnitRef;
+  modifier: {
+    ability: EntityId;
+    value?: number;
+    rules_bundle?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [ability] Give the target unit keywords, optionally replacing others.
+ */
+export interface KeywordGrantEffect {
+  type: "keyword-grant";
+  target: UnitRef;
+  modifier: {
+    keywords: KeywordList;
+    replaces?: KeywordList;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [ability] Give the target's weapons weapon abilities. if_present: increment raises an ability the weapon already has by the granted rating.
+ */
+export interface WeaponAbilityGrantEffect {
+  type: "weapon-ability-grant";
+  target: UnitRef;
+  modifier: {
+    /**
+     * @minItems 1
+     */
+    abilities: [string, ...string[]];
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+    if_present?: "increment";
+    incoming?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [ability] Equip the target with a weapon.
+ */
+export interface WeaponGrantEffect {
+  type: "weapon-grant";
+  target: UnitRef;
+  modifier: {
+    weapon_id: EntityId;
+    count?: number;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.
+ */
+export interface AbilityModifierEffect {
+  type: "ability-modifier";
+  target: UnitRef;
+  modifier: {
+    ability:
+      | EntityId
+      | {
+          affecting: UnitFilter;
+        }
+      | {
+          event: "used";
+        }
+      | {
+          keyword: string;
+        };
+    aspect:
+      | "uses"
+      | "range"
+      | "targets"
+      | "recipients"
+      | "selections"
+      | "concurrent"
+      | "duration"
+      | "start-round"
+      | "threshold"
+      | "options";
+    operation: "add" | "subtract" | "set" | "lift-limit";
+    value?: number | string;
+    cap?: number;
+    recipients?: UnitFilter;
+    add_option?: {
+      name: string;
+      effect: EffectNode;
+    };
+  };
+  scaling?: Scaling;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -2283,6 +2483,14 @@ export interface StanceSelectEffect {
       effect: EffectNode;
     }[]
   ];
+  /**
+   * Fewest options picked at once; defaults to one.
+   */
+  min_choices?: number;
+  /**
+   * Most options picked at once; defaults to one.
+   */
+  max_choices?: number;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -2333,7 +2541,7 @@ export interface SequenceEffect {
   [k: string]: unknown;
 }
 /**
- * A reusable named ability's complete effect bundle. Other abilities grant it through an ability-grant effect whose modifier.ability_id names the containing ability.
+ * A reusable named ability's complete effect bundle. Other abilities grant it through an ability-grant effect whose modifier.ability names the containing ability.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rules-bundle-effect".
@@ -2344,77 +2552,6 @@ export interface RulesBundleEffect {
    * @minItems 1
    */
   steps: [EffectNode, ...EffectNode[]];
-}
-/**
- * Deprecated: use `ability-part`, which is the same node with an optional name. A named sub-ability embedded in a larger rules bundle.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-effect".
- */
-export interface NamedEffect {
-  type: "named-effect";
-  name: string;
-  kind?: "psychic";
-  level?: number;
-  effect: EffectNode;
-  /**
-   * Whether the controlling player may decline to use this named sub-ability.
-   */
-  optional?: boolean;
-  /**
-   * A prerequisite cost: the nested effect is granted only after this complete cost is paid. An optional named effect may be declined without paying it.
-   */
-  cost?:
-    | SingleEffect
-    | StanceSelectEffect
-    | StanceSelectionCapacityEffect
-    | ChoiceEffect
-    | SequenceEffect
-    | RulesBundleEffect
-    | NamedEffect
-    | AbilityPart
-    | DiceGatedEffect
-    | DiceTableEffect
-    | ConditionalEffect
-    | DicePoolAllocationEffect
-    | SelectUnitsEffect
-    | ForEachUnitEffect
-    | MovementModifierEffect
-    | AuraEffect
-    | DesignateTargetEffect
-    | RiskRewardEffect
-    | IssueOrdersEffect
-    | ResourceActionMenuEffect
-    | LeaderModelAbilityGrantEffect
-    | PersistentDesignationEffect
-    | NoEffectEffect
-    | SelectObjectiveEffect
-    | ForEachObjectiveEffect
-    | PairedDesignationEffect
-    | MiracleDieOperationEffect
-    | FormationAttachmentGrantEffect
-    | AttachmentEligibilityInheritEffect;
-  /**
-   * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
-   */
-  duration?:
-    | "phase"
-    | "turn"
-    | "battle-round"
-    | "battle"
-    | "until-next-command-phase"
-    | "until-next-movement-phase"
-    | "until-next-battle-round"
-    | "until-start-next-turn"
-    | "one-use"
-    | "permanent"
-    | "attack-sequence"
-    | "resolution";
-  /**
-   * Reactive event for this sub-ability. When nested inside an activated effect, the subscription exists only for the enclosing effect duration.
-   */
-  trigger?: Trigger | [Trigger, ...Trigger[]];
-  usage?: AbilityUsage1;
 }
 /**
  * One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).
@@ -2445,7 +2582,6 @@ export interface AbilityPart {
     | ChoiceEffect
     | SequenceEffect
     | RulesBundleEffect
-    | NamedEffect
     | AbilityPart
     | DiceGatedEffect
     | DiceTableEffect
@@ -2453,21 +2589,15 @@ export interface AbilityPart {
     | DicePoolAllocationEffect
     | SelectUnitsEffect
     | ForEachUnitEffect
-    | MovementModifierEffect
     | AuraEffect
     | DesignateTargetEffect
     | RiskRewardEffect
     | IssueOrdersEffect
     | ResourceActionMenuEffect
+    | NamedRegionStateEffect
     | LeaderModelAbilityGrantEffect
     | PersistentDesignationEffect
-    | NoEffectEffect
-    | SelectObjectiveEffect
-    | ForEachObjectiveEffect
-    | PairedDesignationEffect
-    | MiracleDieOperationEffect
-    | FormationAttachmentGrantEffect
-    | AttachmentEligibilityInheritEffect;
+    | NoEffectEffect;
   /**
    * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
    */
@@ -2547,6 +2677,14 @@ export interface DiceTableEffect {
    * One closed die whose faces are covered exactly once by outcomes.
    */
   dice: "D3" | "D6";
+  /**
+   * Roll this many dice and resolve each one on the table.
+   */
+  count?: number;
+  /**
+   * Each outcome applies at most once; a repeated result is re-rolled.
+   */
+  distinct?: true;
   /**
    * @minItems 2
    */
@@ -2697,96 +2835,6 @@ export interface ForEachUnitEffect {
  */
 export interface SelectionReference {
   selection_var: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "movement-modifier-effect".
- */
-export interface MovementModifierEffect {
-  type: "movement-modifier";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "target"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier: {
-    move_type?:
-      | "normal"
-      | "advance"
-      | "pile-in"
-      | "consolidation"
-      | "reactive"
-      | "surge"
-      | "redeploy"
-      | "scout"
-      | "infiltrate"
-      | "shoot-and-scoot"
-      | "ingress";
-    distance?: number | string;
-    passthrough?: (
-      | "non-titanic-models"
-      | "friendly-vehicles"
-      | "friendly-monsters"
-      | "terrain-le-4"
-      | "tall-terrain"
-      | "all-terrain"
-    )[];
-    vertical_limit?: number;
-    ignore_vertical?: boolean;
-    replaces_default?: boolean;
-    to_reserves?: boolean;
-    applies_to_moves?: ("normal" | "advance" | "fall-back" | "charge")[];
-    name?: string;
-    excludes_keyword?: string;
-    max_units?: number;
-    marker?: {
-      affected?: string;
-      unit_filter?: string;
-      location?: string;
-      max_units?: number;
-    };
-    condition?: AbilityDSLCondition2;
-  };
-  /**
-   * Resolve this effect only after the target actually completes the granted move (including a legal zero-distance move). Declining to make the move does not resolve this effect. Uses the enclosing duration for lasting follow-up effects.
-   */
-  after_move?:
-    | SingleEffect
-    | StanceSelectEffect
-    | StanceSelectionCapacityEffect
-    | ChoiceEffect
-    | SequenceEffect
-    | RulesBundleEffect
-    | NamedEffect
-    | AbilityPart
-    | DiceGatedEffect
-    | DiceTableEffect
-    | ConditionalEffect
-    | DicePoolAllocationEffect
-    | SelectUnitsEffect
-    | ForEachUnitEffect
-    | MovementModifierEffect
-    | AuraEffect
-    | DesignateTargetEffect
-    | RiskRewardEffect
-    | IssueOrdersEffect
-    | ResourceActionMenuEffect
-    | LeaderModelAbilityGrantEffect
-    | PersistentDesignationEffect
-    | NoEffectEffect
-    | SelectObjectiveEffect
-    | ForEachObjectiveEffect
-    | PairedDesignationEffect
-    | MiracleDieOperationEffect
-    | FormationAttachmentGrantEffect
-    | AttachmentEligibilityInheritEffect;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -3054,6 +3102,168 @@ export interface ResourceActionMenuTrigger {
   };
 }
 /**
+ * A named battlefield region: who produces it, what it does to units inside it, and when.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-state-effect".
+ */
+export interface NamedRegionStateEffect {
+  type: "named-region-state";
+  target?: UnitRef;
+  modifier: NamedRegionState;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-state".
+ */
+export interface NamedRegionState {
+  region_ref: NamedRegionRef;
+  producer: NamedRegionProducer;
+  consumer: NamedRegionConsumer;
+  branch_precedence: "qualified-replaces-default";
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-ref".
+ */
+export interface NamedRegionRef {
+  region_id: string;
+  owner_faction: string;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-producer".
+ */
+export interface NamedRegionProducer {
+  region_ref: NamedRegionRef;
+  mode: "complete" | "extension";
+  parent_ref: NamedRegionRef | null;
+  baseline: NamedRegionBaseline[];
+  phase_extensions: NamedRegionPhaseExtension[];
+  additive_extensions: {
+    kind: string;
+    source_gate: NamedRegionSourceGate;
+    radius_inches?: number;
+    activation?: {
+      event: "continuous";
+    };
+    [k: string]: unknown;
+  }[];
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-baseline".
+ */
+export interface NamedRegionBaseline {
+  kind: "fixed-zone";
+  zone: "own-deployment-zone";
+  activation: {
+    event: "always-active";
+  };
+  expiry: {
+    event: "never";
+  };
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-phase-extension".
+ */
+export interface NamedRegionPhaseExtension {
+  kind: "objective-majority-zone";
+  zone: "no-mans-land" | "opponent-deployment-zone";
+  control_gate: {
+    marker_scope: "markers-in-zone";
+    controlled_by: "owner-army";
+    threshold: {
+      comparison: "at-least";
+      fraction: 0.5;
+    };
+  };
+  activation: {
+    event: "phase-start";
+    evaluation: "snapshot-once";
+    canonical_condition_ids: ["controls"];
+  };
+  expiry: {
+    event: "phase-end";
+  };
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-source-gate".
+ */
+export interface NamedRegionSourceGate {
+  gate_ref: string;
+  owner: string;
+  unit_predicate: {
+    faction: string;
+    /**
+     * @minItems 1
+     */
+    keywords: [string, ...string[]];
+  };
+  range_to_marker_inches?: number;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-consumer".
+ */
+export interface NamedRegionConsumer {
+  state_ref: NamedRegionRef;
+  beneficiary_gate: {
+    owner: string;
+    faction?: string;
+    operator: "and" | "or";
+    /**
+     * @minItems 1
+     */
+    keywords: [string, ...string[]];
+    [k: string]: unknown;
+  };
+  membership: NamedRegionMembership;
+  qualified_condition: AbilityDSLCondition2;
+  default_branch: NamedRegionBranch;
+  qualified_branch: NamedRegionBranch;
+  attack_condition?: AbilityDSLCondition4;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-membership".
+ */
+export interface NamedRegionMembership {
+  unit_scope: "model" | "whole-unit";
+  relation: string;
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-branch".
+ */
+export interface NamedRegionBranch {
+  source: NamedRegionBranchActor;
+  beneficiary: NamedRegionBranchActor;
+  target: UnitRef;
+  timing: NamedRegionBranchTiming;
+  duration: string;
+  effect: EffectNode;
+  optional: boolean;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-branch-actor".
+ */
+export interface NamedRegionBranchActor {
+  role: string;
+  gate_ref: string;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-region-branch-timing".
+ */
+export interface NamedRegionBranchTiming {
+  event: string;
+}
+/**
  * Resolve the attached qualifying leader model and dispatch a targetless effect to that model while it leads the bearer unit.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -3126,7 +3336,6 @@ export interface PersistentDesignationEffect {
       | ChoiceEffect
       | SequenceEffect
       | RulesBundleEffect
-      | NamedEffect
       | AbilityPart
       | DiceGatedEffect
       | DiceTableEffect
@@ -3134,21 +3343,15 @@ export interface PersistentDesignationEffect {
       | DicePoolAllocationEffect
       | SelectUnitsEffect
       | ForEachUnitEffect
-      | MovementModifierEffect
       | AuraEffect
       | DesignateTargetEffect
       | RiskRewardEffect
       | IssueOrdersEffect
       | ResourceActionMenuEffect
+      | NamedRegionStateEffect
       | LeaderModelAbilityGrantEffect
       | PersistentDesignationEffect
-      | NoEffectEffect
-      | SelectObjectiveEffect
-      | ForEachObjectiveEffect
-      | PairedDesignationEffect
-      | MiracleDieOperationEffect
-      | FormationAttachmentGrantEffect
-      | AttachmentEligibilityInheritEffect;
+      | NoEffectEffect;
     reference?: SelectionReference;
   };
   duration: "phase" | "turn" | "battle-round" | "battle" | "until-next-command-phase";
@@ -3170,147 +3373,6 @@ export interface PersistentDesignationEffect {
  */
 export interface NoEffectEffect {
   type: "no-effect";
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "select-objective-effect".
- */
-export interface SelectObjectiveEffect {
-  type: "select-objective";
-  selector: ObjectiveSelector;
-  effect: EffectNode;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "objective-selector".
- */
-export interface ObjectiveSelector {
-  count: 1;
-  range_inches?: number;
-  origin?: "bearer" | "bearer-unit";
-  controlled_by?: "your-army" | "opponent";
-  requires_unit?: {
-    owner: "friendly" | "enemy";
-    requires_ability: string;
-    relation: "within-range";
-  };
-  selection_limit?: {
-    count: number;
-    period: "turn" | "phase" | "battle-round" | "battle";
-  };
-  bind_as: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "for-each-objective-effect".
- */
-export interface ForEachObjectiveEffect {
-  type: "for-each-objective";
-  selector: ObjectiveSelector;
-  effect: EffectNode;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "paired-designation-effect".
- */
-export interface PairedDesignationEffect {
-  type: "paired-designation";
-  duration: "phase";
-  observer: {
-    role: "observer";
-    selector: PairedUnitSelector & {
-      owner?: "friendly";
-      selection_mode: "any-number";
-      [k: string]: unknown;
-    };
-  };
-  spotted: {
-    role: "spotted";
-    selector: PairedUnitSelector & {
-      owner?: "enemy";
-      count: 1;
-      [k: string]: unknown;
-    };
-  };
-  guided: {
-    role: "guided";
-    owner: "friendly";
-    requires_ability: string;
-    excludes: SelectionReference;
-    while_attacking: SelectionReference;
-  };
-  observer_eligibility: AbilityDSLCondition2;
-  effects: EffectNode;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "miracle-die-operation-effect".
- */
-export interface MiracleDieOperationEffect {
-  type: "miracle-die-operation";
-  target: "self";
-  modifier: {
-    operation:
-      | "reroll-generated-result"
-      | "set-generated-value-without-roll"
-      | "set-used-value"
-      | "reroll-retained-and-return";
-    die?: MiracleDieReference;
-    value?: number;
-    pool_id: "miracle-dice-pool";
-    resource_label: "Miracle dice";
-    stage?: "before-pool-add" | "before-act-of-faith-resolution";
-    selection?: {
-      count:
-        | 1
-        | {
-            minimum: 1;
-            maximum: 1 | 3;
-          };
-      from: "dice-used-in-triggering-act-of-faith" | "retained-pool-dice";
-      policy: "controller-chooses";
-    };
-    optional?: boolean;
-  };
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "miracle-die-reference".
- */
-export interface MiracleDieReference {
-  die_var: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "formation-attachment-grant-effect".
- */
-export interface FormationAttachmentGrantEffect {
-  type: "formation-attachment-grant";
-  source: "self" | "bearer-unit";
-  beneficiary: "self" | "attached-leader-model";
-  formation_event: "declare-battle-formations";
-  attachment: {
-    leader_id?: EntityId;
-    bodyguard_id: EntityId;
-  };
-  grant: {
-    recipient: "beneficiary";
-    effect: BeneficiaryBoundEffectNode;
-  };
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "attachment-eligibility-inherit-effect".
- */
-export interface AttachmentEligibilityInheritEffect {
-  type: "attachment-eligibility-inherit";
-  target: "self";
-  modifier: {
-    leader_id: EntityId;
-    required_leader_ability: "Leader";
-    from_bodyguard_id: EntityId;
-    to_bodyguard_id: EntityId;
-  };
 }
 /**
  * A single reactive trigger: an event family (`event`), who acted (`subject`, default this-unit; clock events have none), what the action was aimed at (`object`), which one (`filter`: the move, roll, Stratagem or ability), a spatial gate (`proximity`), an extra gate (`condition`, where phase and turn go), `optional` for 'you can' reactions, a CP `cost`, and the `window` a granted reaction stays open.
@@ -3360,7 +3422,7 @@ export interface Trigger {
   };
 }
 /**
- * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
+ * How often this part may be used, when the limit is the part's and not the whole ability's.
  */
 export interface AbilityUsage {
   frequency:
@@ -3376,23 +3438,654 @@ export interface AbilityUsage {
   per?: "army" | "unit" | "model";
 }
 /**
- * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "ability-usage".
+ * [ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option).
  */
-export interface AbilityUsage1 {
-  frequency:
-    | "once-per-turn"
-    | "once-per-phase"
-    | "once-per-battle-round"
-    | "once-per-command-phase"
-    | "once-per-opponent-turn"
-    | "n-per-battle"
-    | "first-this-battle"
-    | "first-time-this-phase";
-  count?: number;
-  per?: "army" | "unit" | "model";
+export interface AbilityActivateEffect {
+  type: "ability-activate";
+  target: UnitRef;
+  modifier: {
+    ability: EntityId;
+    option?: string;
+    exclusive?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
+ */
+export interface PermissionEffect {
+  type: "permission";
+  target: UnitRef;
+  modifier: {
+    activity:
+      | "shoot"
+      | "declare-charge"
+      | "fight"
+      | "start-action"
+      | "embark"
+      | "disembark"
+      | "fall-back"
+      | "advance"
+      | "use-stratagem"
+      | "issue-order"
+      | "attempt-ritual"
+      | "use-enhancement"
+      | "move"
+      | "observe";
+    allow: boolean;
+    /**
+     * @minItems 1
+     */
+    after?: [
+      "advance" | "fall-back" | "disembark" | "normal-move" | "charge" | "remain-stationary" | "set-up",
+      ...("advance" | "fall-back" | "disembark" | "normal-move" | "charge" | "remain-stationary" | "set-up")[]
+    ];
+    /**
+     * @minItems 1
+     */
+    despite?: [
+      (
+        | "engaged"
+        | "battle-shocked"
+        | "shot-this-phase"
+        | "fought-this-phase"
+        | "disembarked-this-turn"
+        | "stratagem-used-this-phase"
+        | "performing-action"
+        | "advanced"
+        | "fell-back"
+      ),
+      ...(
+        | "engaged"
+        | "battle-shocked"
+        | "shot-this-phase"
+        | "fought-this-phase"
+        | "disembarked-this-turn"
+        | "stratagem-used-this-phase"
+        | "performing-action"
+        | "advanced"
+        | "fell-back"
+      )[]
+    ];
+    into?: UnitRef;
+    as_if?: "shooting-phase" | "snap-shooting" | "fight-phase";
+    next?: true;
+    reach?: number;
+    stratagem?: EntityId;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [permission] Who may, may not or must target whom, under which limit.
+ */
+export interface TargetingEffect {
+  type: "targeting";
+  target: UnitRef;
+  modifier: {
+    by?: UnitRef;
+    may: "target" | "cannot-target" | "must-target";
+    target?: UnitRef | "every-eligible";
+    range?: RangeRef;
+    kind?: "attack" | "shoot" | "fight" | "charge" | "stratagem" | "ability";
+    stratagem?: EntityId;
+    only_if_none?: UnitFilter;
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [permission] The target counts as being within a range of something, or inside a region.
+ */
+export interface CountsAsEffect {
+  type: "counts-as";
+  target: UnitRef;
+  modifier: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [permission] Switch a named rule on or off for the target.
+ */
+export interface RuleStateEffect {
+  type: "rule-state";
+  target: UnitRef;
+  modifier: {
+    direction: "granted" | "suppressed";
+    rule_kind: "core-rule" | "keyword" | "ability" | "faction-rule";
+    rule: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [protection] The target suffers mortal wounds: a count, or a count per success on a roll per model.
+ */
+export interface MortalWoundsEffect {
+  type: "mortal-wounds";
+  target: UnitRef;
+  modifier: {
+    count: number | string;
+    per?: "model" | "success";
+    roll?: {
+      dice: number | string;
+      threshold: number;
+      per_model?: "target" | "this";
+    };
+    range?: RangeRef;
+    psychic?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [protection] Reduce the Damage of attacks allocated to the target.
+ */
+export interface DamageReductionEffect {
+  type: "damage-reduction";
+  target: UnitRef;
+  modifier: {
+    reduction: number | ("half" | "to-zero");
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [protection] The target has a Feel No Pain save.
+ */
+export interface FeelNoPainEffect {
+  type: "feel-no-pain";
+  target: UnitRef;
+  modifier: {
+    threshold: number;
+    against?: "all" | "mortal" | "psychic" | "psychic-and-mortal";
+  };
+  scaling?: Scaling;
+}
+/**
+ * [protection] The target has an invulnerable save of at least this.
+ */
+export interface InvulnerableSaveEffect {
+  type: "invulnerable-save";
+  target: UnitRef;
+  modifier: {
+    invuln_sv: number;
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] Models in the target regain lost wounds.
+ */
+export interface HealEffect {
+  type: "heal";
+  target: UnitRef;
+  modifier: {
+    amount: (number | string) | "full";
+    per?: "model" | "unit";
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] Return destroyed models to the target unit.
+ */
+export interface ReturnModelsEffect {
+  type: "return-models";
+  target: UnitRef;
+  modifier: {
+    count: (number | string) | "all";
+    wounds_remaining?: (number | string) | "full";
+    placement?: "closest-to-destruction" | "coherency" | "unengaged" | "wholly-within";
+    range?: RangeRef;
+    model_keyword?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] Destroy models in the target.
+ */
+export interface DestroyModelsEffect {
+  type: "destroy-models";
+  target: UnitRef;
+  modifier: {
+    count: (number | string) | "all";
+    model_keyword?: string;
+    remove_from_play?: true;
+    ignore_death_triggers?: true;
+    exclude_leader?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] A destroyed model can fight or shoot before it is removed.
+ */
+export interface ActOnDeathEffect {
+  type: "act-on-death";
+  target: UnitRef;
+  modifier: {
+    act: "fight" | "shoot";
+    resolution?: string;
+    removal?: string;
+    gate?: {
+      [k: string]: unknown;
+    };
+    eligibility?: AbilityDSLCondition2;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.
+ */
+export interface SplitUnitEffect {
+  type: "split-unit";
+  target: UnitRef;
+  modifier: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] Add a unit to your army: a copy of a destroyed unit, or a named datasheet.
+ */
+export interface AddUnitEffect {
+  type: "add-unit";
+  target: UnitRef;
+  modifier: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [models] The target unit counts as destroyed only once another model or unit is also destroyed.
+ */
+export interface DestructionRuleEffect {
+  type: "destruction-rule";
+  target: UnitRef;
+  modifier: {
+    also: UnitRef;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [move] The target makes a move now. A surge move carries its core limit (21.02).
+ */
+export interface MoveEffect {
+  type: "move";
+  target: UnitRef;
+  modifier: {
+    move_type:
+      | "normal"
+      | "advance"
+      | "fall-back"
+      | "charge"
+      | "pile-in"
+      | "consolidation"
+      | "surge"
+      | "scout"
+      | "ingress"
+      | "disembark"
+      | "embark"
+      | "pulse-jet";
+    distance?: number | string;
+    /**
+     * @minItems 1
+     */
+    passthrough?: [string, ...string[]];
+    ends_within?: {
+      range: RangeRef;
+      of?: UnitRef;
+      wholly?: true;
+    };
+    keeps_eligible?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [move] Change how the target's moves work.
+ */
+export interface MoveModifierEffect {
+  type: "move-modifier";
+  target: UnitRef;
+  modifier: {
+    /**
+     * @minItems 1
+     */
+    applies_to_moves?: [
+      (
+        | "normal"
+        | "advance"
+        | "fall-back"
+        | "charge"
+        | "pile-in"
+        | "consolidation"
+        | "surge"
+        | "scout"
+        | "ingress"
+        | "disembark"
+        | "embark"
+        | "pulse-jet"
+      ),
+      ...(
+        | "normal"
+        | "advance"
+        | "fall-back"
+        | "charge"
+        | "pile-in"
+        | "consolidation"
+        | "surge"
+        | "scout"
+        | "ingress"
+        | "disembark"
+        | "embark"
+        | "pulse-jet"
+      )[]
+    ];
+    /**
+     * @minItems 1
+     */
+    passthrough?: [string, ...string[]];
+    ignore_vertical?: true;
+    no_end_in_engagement?: true;
+    distance_bonus?: number | string;
+    advance?: "fixed-6";
+    end_on_terrain?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead.
+ */
+export interface SetUpEffect {
+  type: "set-up";
+  target: UnitRef;
+  modifier: {
+    allow?: boolean;
+    to: "battlefield" | "strategic-reserves";
+    from?: "strategic-reserves" | "transport" | "battlefield";
+    via?: "deep-strike";
+    subject?: UnitRef | "models-on-this-model";
+    min_enemy_distance?: number;
+    within_edge?: number;
+    /**
+     * @minItems 1
+     */
+    turns?: [number, ...number[]];
+    round_offset?: number;
+    min_distance_from?: {
+      of?: UnitRef;
+      range: RangeRef;
+    };
+    placement?: "closest-to-original" | "connected-sections" | "anywhere" | "deployment-zone" | "on-terrain";
+    sections?: number;
+    ignore_limits?: true;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [placement] Place or relocate a marker.
+ */
+export interface MarkerEffect {
+  type: "marker";
+  target: UnitRef;
+  modifier: {
+    label: string;
+    operation?: "place" | "relocate";
+    placement?: string;
+    distance?: number;
+    consume?: "on-use" | "never";
+  };
+  scaling?: Scaling;
+}
+/**
+ * [placement] How models count against a Transport's capacity: grouped models, fixed spaces per model, an equivalent model, or the Transport's own capacity with per-model spaces.
+ */
+export interface TransportCapacityEffect {
+  type: "transport-capacity";
+  target: UnitRef;
+  modifier:
+    | {
+        occupancy_kind: "grouped-models";
+        subject_kind: TransportOccupancySubjectKind;
+        model_keyword?: string;
+        transport_eligibility?: TransportEligibility;
+        models_per_group: number;
+        spaces_per_group: number;
+        rounding: "up" | "down";
+      }
+    | {
+        occupancy_kind: "fixed-model-spaces";
+        subject_kind: TransportOccupancySubjectKind;
+        model_keyword?: string;
+        transport_eligibility?: TransportEligibility;
+        spaces_per_model: number;
+      }
+    | {
+        [k: string]: unknown;
+      }
+    | {
+        capacity: number;
+        eligible?: UnitFilter;
+        /**
+         * @minItems 1
+         */
+        space_per_model?: [
+          {
+            all_of?: KeywordList;
+            any_of?: KeywordList;
+            slots: number;
+          },
+          ...{
+            all_of?: KeywordList;
+            any_of?: KeywordList;
+            slots: number;
+          }[]
+        ];
+      };
+  scaling?: Scaling;
+}
+/**
+ * [test] Force the target to take a test (count or per: several rolls).
+ */
+export interface TestEffect {
+  type: "test";
+  target: UnitRef;
+  modifier: {
+    test: "battle-shock" | "leadership" | "hazard" | "desperate-escape";
+    modifier?: number;
+    count?: number;
+    per?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [test] Set or clear a state on the target.
+ */
+export interface StateChangeEffect {
+  type: "state-change";
+  target: UnitRef;
+  modifier: {
+    state: "battle-shocked";
+    set: boolean;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [resource] Gain (or lose) CP.
+ */
+export interface CpGainEffect {
+  type: "cp-gain";
+  target: UnitRef;
+  modifier: {
+    amount: number;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [resource] Change what a Stratagem, manoeuvre or ability costs.
+ */
+export interface CostModifierEffect {
+  type: "cost-modifier";
+  target: UnitRef;
+  modifier: {
+    of: "stratagem" | "manoeuvre" | "ability";
+    id?: EntityId;
+    operation: "increase" | "decrease" | "set" | "multiply" | "waive";
+    amount?: number;
+    applies_to?: "targeting-this-unit" | "used-by-this-unit" | "the-triggering-use" | "any";
+  };
+  scaling?: Scaling;
+}
+/**
+ * [resource] Add to a resource pool.
+ */
+export interface ResourceGainEffect {
+  type: "resource-gain";
+  target: UnitRef;
+  modifier: {
+    pool: string;
+    amount: (number | string) | ("variable" | "any");
+    label?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [resource] Spend from a resource pool.
+ */
+export interface ResourceSpendEffect {
+  type: "resource-spend";
+  target: UnitRef;
+  modifier: {
+    pool: string;
+    amount: (number | string) | ("all" | "one-or-more");
+    label?: string;
+  };
+  scaling?: Scaling;
+}
+/**
+ * [resource] Add a die to a pool, or substitute a pooled die for a roll.
+ */
+export interface ResourceDieEffect {
+  type: "resource-die";
+  target: UnitRef;
+  modifier: {
+    pool: string;
+    operation: "add" | "substitute";
+    value?: number | ("rolled" | "highest");
+    count?: number | string;
+    count_per_pool?: string;
+    consumes_pool?: true;
+    /**
+     * @minItems 1
+     */
+    rolls?: [
+      (
+        | "hit"
+        | "wound"
+        | "save"
+        | "damage"
+        | "charge"
+        | "advance"
+        | "battle-shock"
+        | "leadership"
+        | "hazard"
+        | "psychic"
+        | "desperate-escape"
+        | "deadly-demise"
+        | "attacks"
+        | "normal-move"
+        | "surge"
+        | "dark-pact"
+        | "blessings-of-khorne"
+        | "resource-die"
+        | "any"
+        | "all"
+      ),
+      ...(
+        | "hit"
+        | "wound"
+        | "save"
+        | "damage"
+        | "charge"
+        | "advance"
+        | "battle-shock"
+        | "leadership"
+        | "hazard"
+        | "psychic"
+        | "desperate-escape"
+        | "deadly-demise"
+        | "attacks"
+        | "normal-move"
+        | "surge"
+        | "dark-pact"
+        | "blessings-of-khorne"
+        | "resource-die"
+        | "any"
+        | "all"
+      )[]
+    ];
+  };
+  scaling?: Scaling;
+}
+/**
+ * [designation] An objective the target controls stays under your control until the opponent's control is greater at the end of a phase.
+ */
+export interface ObjectiveStickyEffect {
+  type: "objective-sticky";
+  target: UnitRef;
+  modifier?: {};
+  scaling?: Scaling;
+}
+/**
+ * [designation] Tag a unit, objective or terrain area (or clear the tag).
+ */
+export interface DesignateEffect {
+  type: "designate";
+  target: UnitRef;
+  modifier: {
+    subject?:
+      | UnitRef
+      | {
+          objective: ObjectiveFilter;
+        }
+      | {
+          terrain_area: {
+            [k: string]: unknown;
+          };
+        };
+    tag: string;
+    clear?: true;
+    clears_on?: "turn-rollover" | "phase-end" | "never";
+  };
+  scaling?: Scaling;
+}
+/**
+ * [army] A rule that applies when mustering the army.
+ */
+export interface ArmyRuleEffect {
+  type: "army-rule";
+  target: UnitRef;
+  modifier: {
+    rule:
+      | "warlord-required"
+      | "warlord-forbidden"
+      | "unique"
+      | "enhancement-forbidden"
+      | "enhancement-slot"
+      | "attachment"
+      | "composition"
+      | "faction-forbidden";
+    with?: UnitFilter;
+    max?: number;
+    led_by?: string;
+    mandatory?: true;
+    faction?: EntityId;
+    enhancement_kind?: string;
+  };
+  scaling?: Scaling;
 }
 /**
  * A CP-costed ability usable during specific game phases.
@@ -3444,7 +4137,7 @@ export interface Stratagem {
      * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
      */
     bound_to?: "triggering-unit" | "attacked-unit";
-    eligibility?: AbilityDSLCondition5;
+    eligibility?: AbilityDSLCondition6;
     notes?: string;
   } | null;
   ability_id?: EntityId | null;
@@ -4396,6 +5089,25 @@ export interface Weapon {
   game_modes?: GameModes7;
 }
 /**
+ * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ability-usage".
+ */
+export interface AbilityUsage1 {
+  frequency:
+    | "once-per-turn"
+    | "once-per-phase"
+    | "once-per-battle-round"
+    | "once-per-command-phase"
+    | "once-per-opponent-turn"
+    | "n-per-battle"
+    | "first-this-battle"
+    | "first-time-this-phase";
+  count?: number;
+  per?: "army" | "unit" | "model";
+}
+/**
  * Community-authored structured representation of what a game ability does. NOT GW text.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4411,6 +5123,10 @@ export interface AbilityDSLEntry {
    */
   source_digest?: string;
   version?: DataslateVersion;
+  /**
+   * A seeded placeholder awaiting authoring: its effect is not the ability's mechanics. Removed when an authored effect replaces it.
+   */
+  stub?: true;
   supersedes?: DataslateVersion | null;
   unit_ids?: EntityId[];
   /**
@@ -4452,20 +5168,7 @@ export interface AbilityDSLEntry {
  * via the `definition` "scope".
  */
 export interface AbilityScope {
-  range:
-    | "self"
-    | "unit"
-    | "attached"
-    | "aura-6"
-    | "aura-9"
-    | "aura-12"
-    | "aura-custom"
-    | "engagement-range"
-    | "any-visible"
-    | "any-on-battlefield"
-    | "terrain-within-range";
   duration: ScopeDuration;
-  range_inches?: number;
   [k: string]: unknown;
 }
 /**
@@ -4527,158 +5230,6 @@ export interface Trigger1 {
   };
 }
 /**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-ref".
- */
-export interface NamedRegionRef {
-  region_id: string;
-  owner_faction: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-source-gate".
- */
-export interface NamedRegionSourceGate {
-  gate_ref: string;
-  owner: string;
-  unit_predicate: {
-    faction: string;
-    /**
-     * @minItems 1
-     */
-    keywords: [string, ...string[]];
-  };
-  range_to_marker_inches?: number;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-membership".
- */
-export interface NamedRegionMembership {
-  unit_scope: "model" | "whole-unit";
-  relation: string;
-  [k: string]: unknown;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-branch-actor".
- */
-export interface NamedRegionBranchActor {
-  role: string;
-  gate_ref: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-branch-timing".
- */
-export interface NamedRegionBranchTiming {
-  event: string;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-branch".
- */
-export interface NamedRegionBranch {
-  source: NamedRegionBranchActor;
-  beneficiary: NamedRegionBranchActor;
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "target"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  timing: NamedRegionBranchTiming;
-  duration: string;
-  effect: EffectNode;
-  optional: boolean;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-baseline".
- */
-export interface NamedRegionBaseline {
-  kind: "fixed-zone";
-  zone: "own-deployment-zone";
-  activation: {
-    event: "always-active";
-  };
-  expiry: {
-    event: "never";
-  };
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-phase-extension".
- */
-export interface NamedRegionPhaseExtension {
-  kind: "objective-majority-zone";
-  zone: "no-mans-land" | "opponent-deployment-zone";
-  control_gate: {
-    marker_scope: "markers-in-zone";
-    controlled_by: "owner-army";
-    threshold: {
-      comparison: "at-least";
-      fraction: 0.5;
-    };
-  };
-  activation: {
-    event: "phase-start";
-    evaluation: "snapshot-once";
-    canonical_condition_ids: ["controls"];
-  };
-  expiry: {
-    event: "phase-end";
-  };
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-producer".
- */
-export interface NamedRegionProducer {
-  region_ref: NamedRegionRef;
-  mode: "complete" | "extension";
-  parent_ref: NamedRegionRef | null;
-  baseline: NamedRegionBaseline[];
-  phase_extensions: NamedRegionPhaseExtension[];
-  additive_extensions: {
-    kind: string;
-    source_gate: NamedRegionSourceGate;
-    radius_inches?: number;
-    activation?: {
-      event: "continuous";
-    };
-    [k: string]: unknown;
-  }[];
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-consumer".
- */
-export interface NamedRegionConsumer {
-  state_ref: NamedRegionRef;
-  beneficiary_gate: {
-    owner: string;
-    faction?: string;
-    operator: "and" | "or";
-    /**
-     * @minItems 1
-     */
-    keywords: [string, ...string[]];
-    [k: string]: unknown;
-  };
-  membership: NamedRegionMembership;
-  qualified_condition: AbilityDSLCondition2;
-  default_branch: NamedRegionBranch;
-  qualified_branch: NamedRegionBranch;
-  attack_condition?: AbilityDSLCondition7;
-}
-/**
  * A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4725,13 +5276,23 @@ export interface PersistentBattlefieldMarkerState {
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "named-region-state".
+ * via the `definition` "objective-selector".
  */
-export interface NamedRegionState {
-  region_ref: NamedRegionRef;
-  producer: NamedRegionProducer;
-  consumer: NamedRegionConsumer;
-  branch_precedence: "qualified-replaces-default";
+export interface ObjectiveSelector {
+  count: 1;
+  range_inches?: number;
+  origin?: "bearer" | "bearer-unit";
+  controlled_by?: "your-army" | "opponent";
+  requires_unit?: {
+    owner: "friendly" | "enemy";
+    requires_ability: string;
+    relation: "within-range";
+  };
+  selection_limit?: {
+    count: number;
+    period: "turn" | "phase" | "battle-round" | "battle";
+  };
+  bind_as: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4739,6 +5300,13 @@ export interface NamedRegionState {
  */
 export interface RollReference {
   roll_var: string;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "miracle-die-reference".
+ */
+export interface MiracleDieReference {
+  die_var: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

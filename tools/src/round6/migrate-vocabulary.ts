@@ -13,10 +13,12 @@ import * as path from "path";
 
 import { buildReferenceVocabularies } from "../audit-dangling-refs.js";
 import { formatCompact } from "../compact-json.js";
+import { createValidator } from "../schema-loader.js";
 import { keywordIndex } from "../round5c/core-keywords.js";
 import { applyReplacements, type Replacement } from "./json-spans.js";
 import { LEGACY_TYPES, migrateSimple, type KeywordSets, type Place, type Node, type Outcome } from "./vocab-conditions.js";
 import { migrateTrigger } from "./vocab-triggers.js";
+import { LEGACY_ONLY_TYPES, LEGACY_TARGETS, migrateEffect, migrateMovement, targetRef, type EffectContext } from "./vocab-effects.js";
 
 const REPO = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../../..");
 const SCHEMAS = path.join(REPO, "schemas");
@@ -33,10 +35,14 @@ const NEW_EVENTS = new Set((loadJson<Node>(path.join(SCHEMAS, "$defs/common.sche
 /** Types whose legacy and new forms share a name; the rules still normalise their parameters. */
 const SHARED = new Set(["phase-is", "player-turn-is", "battle-round", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "terrain-area-control"]);
 
+const NEW_SINGLE = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/single-effect")!;
+const CONTAINERS = new Set(["aura", "conditional", "sequence", "choice", "select-units", "for-each-unit", "dice-gated", "dice-table", "dice-pool-allocation",
+  "rules-bundle", "ability-part", "stance-select", "stance-selection-capacity", "resource-action-menu", "named-region-state", "named-objective-state",
+  "designate-target", "persistent-designation", "issue-orders", "risk-reward", "no-effect", "leader-model-ability-grant"]);
 const CONDITION_SLOTS = new Set(["condition", "eligibility", "qualified_condition", "requires", "attack_condition", "observer_eligibility", "units", "completes", "restrictions", "when"]);
 const TRIGGER_SLOTS = new Set(["trigger", "when"]);
 
-export type Review = { file: string; record: string; pointer: string; reason: string; node: unknown };
+export type Review = { file: string; record: string; pointer: string; reason: string; node: unknown; target?: unknown; ability_type?: string; within?: string };
 
 async function keywordSets(): Promise<KeywordSets> {
   const unit = keywordIndex(path.join(REPO, "data"));
@@ -61,10 +67,38 @@ class Migrator {
   changed = 0;
   /** Path segments before the record (1 for an array file's index, 0 for a root object). */
   private base = 1;
+  /** The ability being walked: its scope and rule text feed effect targets. */
+  private effectCtx: EffectContext & { ruleText?: string } = {};
   constructor(
     private sets: KeywordSets,
     private overrides: Record<string, unknown>,
+    private ruleText: ReadonlyMap<string, string> = new Map(),
   ) {}
+
+  /** A single legacy effect node: a legacy-only type, or a shared type with a legacy target. */
+  private isLegacyEffect(v: Node): boolean {
+    const t = String(v.type);
+    // A node the new vocabulary already accepts is not legacy.
+    if (NEW_SINGLE(v)) return false;
+    if (t === "movement-modifier") return true;
+    // Containers keep their shape in this pass; only single effects move.
+    if (!("target" in v) || CONTAINERS.has(t)) return false;
+    if (LEGACY_ONLY_TYPES.has(t)) return true;
+    if (typeof v.target === "string" && LEGACY_TARGETS.has(v.target)) return true;
+    // attacker / defender are spelled the same in both vocabularies; legacy modifier keys tell them apart.
+    const m = (v.modifier ?? {}) as Node;
+    return ["attack_type", "grant_type", "ability_id", "keyword", "scope", "pool_id", "resource", "count"].some((k) => k in m) && t !== "mortal-wounds";
+  }
+
+  effect(v: Node, file: string, record: string, pointer: string): Outcome {
+    const override = this.overrides[this.key(file, record, pointer)];
+    if (override !== undefined) return { node: override as Node };
+    let r = v.type === "movement-modifier" ? migrateMovement(v, this.effectCtx) : migrateEffect(v, this.effectCtx);
+    // A rule's output must be a valid effect: a single effect with a legacy value goes to review.
+    if (!("review" in r) && "target" in r.node && !CONTAINERS.has(String(r.node.type)) && !NEW_SINGLE(r.node)) r = { review: `invalid ${String(r.node.type)} output` };
+    if ("review" in r) this.reviews.push({ file, record, pointer, reason: r.review, node: v, target: targetRef(v.target, this.effectCtx), ability_type: this.effectCtx.abilityType, within: this.effectCtx.within });
+    return r;
+  }
 
   private key(file: string, record: string, pointer: string): string {
     return `${file}#${record}#${pointer}`;
@@ -122,16 +156,31 @@ class Migrator {
   /** Walk a record; collect replacements for every migrated slot. */
   walk(v: unknown, at: Array<string | number>, file: string, record: string, out: Replacement[]): void {
     if (Array.isArray(v)) {
-      v.forEach((x, i) => this.walk(x, [...at, i], file, record, out));
+      v.forEach((x, i) => {
+        const p = [...at, i];
+        // A step or option is an effect slot of its own.
+        if (x && typeof x === "object" && !Array.isArray(x) && typeof (x as Node).type === "string" && this.isLegacyEffect(x as Node)) {
+          const pointer = p.slice(this.base).join("/");
+          const whole = this.overrides[this.key(file, record, pointer)];
+          const r = whole !== undefined ? { node: whole as Node } : this.effect(x as Node, file, record, pointer);
+          if (!("review" in r)) {
+            if (JSON.stringify(r.node) !== JSON.stringify(x)) out.push({ path: p, value: r.node });
+            return;
+          }
+        }
+        this.walk(x, p, file, record, out);
+      });
       return;
     }
     if (typeof v !== "object" || v === null) return;
     const outer = this.place;
+    const outerWithin = this.effectCtx.within;
     const selecting = ["select-units", "for-each-unit", "designate-target"].includes(String((v as Node).type));
     for (const [k, child] of Object.entries(v as Node)) {
       const p = [...at, k];
       const pointer = p.slice(this.base).join("/");
       this.place = k === "eligibility" || k === "observer_eligibility" ? "eligibility" : selecting && k === "effect" ? "selection" : outer;
+      this.effectCtx.within = selecting && k === "effect" ? "selection" : (v as Node).type === "aura" && k === "modifier" ? "aura" : outerWithin;
       // A hand override at any pointer replaces the whole value (a stale conditional's own effect).
       const whole = this.overrides[this.key(file, record, pointer)];
       if (whole !== undefined && !CONDITION_SLOTS.has(k) && !TRIGGER_SLOTS.has(k)) {
@@ -155,6 +204,18 @@ class Migrator {
         if (ok && JSON.stringify(value) !== JSON.stringify(child)) out.push({ path: p, value });
         continue;
       }
+      if (k === "scope" && child && typeof child === "object" && !Array.isArray(child) && ("range" in (child as Node) || "range_inches" in (child as Node))) {
+        const { range: _r, range_inches: _ri, ...rest } = child as Node;
+        out.push({ path: p, value: rest });
+        continue;
+      }
+      if (child && typeof child === "object" && !Array.isArray(child) && typeof (child as Node).type === "string" && !CONDITION_SLOTS.has(k) && this.isLegacyEffect(child as Node)) {
+        const r = this.effect(child as Node, file, record, pointer);
+        if (!("review" in r)) {
+          if (JSON.stringify(r.node) !== JSON.stringify(child)) out.push({ path: p, value: r.node });
+          continue;
+        }
+      }
       if (CONDITION_SLOTS.has(k) && Array.isArray(child) && child.length > 0 && child.every(isCondition) && !child.every(isTrigger)) {
         const done: Node[] = [];
         let ok = true;
@@ -174,6 +235,7 @@ class Migrator {
       this.walk(child, p, file, record, out);
     }
     this.place = outer;
+    this.effectCtx.within = outerWithin;
   }
 
   file(abs: string, write: boolean): void {
@@ -186,6 +248,8 @@ class Migrator {
     records.forEach((rec, i) => {
       const r = rec as Node;
       const id = String(r?.ability_id ?? r?.id ?? r?.source_id ?? i);
+      const scope = (r?.scope ?? {}) as Node;
+      this.effectCtx = { scopeRange: scope.range as string | undefined, rangeInches: scope.range_inches as number | undefined, abilityType: r?.ability_type as string | undefined, ruleText: this.ruleText.get(id) };
       this.walk(rec, Array.isArray(data) ? [i] : [], rel, id, reps);
     });
     if (!reps.length) return;
@@ -197,6 +261,21 @@ class Migrator {
     this.changed += reps.length;
     if (write) fs.writeFileSync(abs, next);
   }
+}
+
+/** Rule text by ability id from the sibling raw-text store (never written anywhere). */
+function storeText(): Map<string, string> {
+  const out = new Map<string, string>();
+  const store = path.join(REPO, "..", "40kdc-abilities");
+  if (!fs.existsSync(store)) return out;
+  for (const f of fs.readdirSync(store)) {
+    if (!f.endsWith(".json") || f === "index.json") continue;
+    for (const e of loadJson<Node[]>(path.join(store, f))) {
+      const text = typeof e.raw_text === "string" ? e.raw_text : ["when", "target", "effect", "restrictions"].map((k) => e[k] ?? "").join(" ");
+      if (!out.has(String(e.ability_id))) out.set(String(e.ability_id), text);
+    }
+  }
+  return out;
 }
 
 function dataFiles(roots: string[]): string[] {
@@ -220,7 +299,8 @@ async function main(): Promise<void> {
   const overridesPath = path.join(path.dirname(new URL(import.meta.url).pathname), "vocab-overrides.json");
   const overrides = fs.existsSync(overridesPath) ? loadJson<Record<string, unknown>>(overridesPath) : {};
   const sets = await keywordSets();
-  const m = new Migrator(sets, overrides);
+  const text = storeText();
+  const m = new Migrator(sets, overrides, text);
   const files = dataFiles(roots.length ? roots : ["data", "tools/test/fixtures"]);
   // A dry pass first: --write only proceeds when nothing needs review.
   for (const f of files) m.file(f, false);
@@ -234,7 +314,7 @@ async function main(): Promise<void> {
       console.error("Refusing --write while nodes need review; add them to vocab-overrides.json.");
       process.exit(1);
     }
-    const w = new Migrator(sets, overrides);
+    const w = new Migrator(sets, overrides, text);
     for (const f of files) w.file(f, true);
     console.log(`Wrote ${w.changed} slot(s).`);
   }

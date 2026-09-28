@@ -17,7 +17,7 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "target",
+      "target": "stratagem-target",
       "modifier": {
         "stat": "M",
         "operation": "subtract",
@@ -25,7 +25,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "until-start-next-turn"
     },
     "community_notes": "Used after a Hellblaster Squad has shot: one enemy unit hit by its plasma ranged attacks is seared - it has -2\" Move until the start of your next turn"
@@ -48,7 +47,7 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "S",
         "operation": "add",
@@ -58,7 +57,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Applies to the unit's [HAZARDOUS] plasma ranged attacks only"
@@ -81,16 +79,15 @@
     "behavior": "activated",
     "effect": {
       "type": "roll-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "hit",
+        "weapon_type": "ranged",
         "operation": "add",
-        "value": 1,
-        "weapon_type": "ranged"
+        "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Applies to the unit's plasma ranged attacks only"
@@ -112,15 +109,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
+      "type": "stat-modifier",
+      "target": "this-unit",
       "modifier": {
+        "stat": "OC",
         "operation": "add",
         "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used in the Command phase on one Vengeful Brethren unit"
@@ -154,7 +151,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -163,7 +160,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used when a Vengeful Brethren unit within range of an objective is selected to attack in your Shooting phase or the Fight phase"
@@ -200,14 +196,15 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "fight-on-death",
-        "target": "unit",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Bladeguard Veteran Squad targeted in the Fight phase before it has fought: each destroyed model stays on a 2+ and is removed once the unit has fought or at the end of the phase, whichever comes first"
@@ -240,13 +237,12 @@
     },
     "effect": {
       "type": "ability-grant",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "stealth"
+        "ability": "stealth"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used when an enemy unit targets a Ravenwing Fly unit in the opponent's Shooting phase"
@@ -268,15 +264,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "detection-range-modifier",
-      "target": "target",
+      "type": "stat-modifier",
+      "target": "stratagem-target",
       "modifier": {
+        "stat": "detection-range",
         "operation": "add",
         "value": 3
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "phase"
     },
     "community_notes": "Used after a Ravenwing Fly unit has shot: visible enemy units within 6\" of it have +3\" detection range"
@@ -307,15 +303,14 @@
       }
     },
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "reactive",
+        "move_type": "normal",
         "distance": "D3+3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Usable on an unengaged Ravenwing Fly unit that the enemy unit targeted"
@@ -346,7 +341,7 @@
     },
     "effect": {
       "type": "roll-modifier",
-      "target": "target",
+      "target": "stratagem-target",
       "modifier": {
         "roll": "hit",
         "operation": "subtract",
@@ -354,7 +349,6 @@
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "turn"
     },
     "community_notes": "Select one engaged enemy unit (excluding Monsters and Vehicles); the -1 to hit applies only if that unit fails a leadership roll"
@@ -376,16 +370,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Precision"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used when a Chaplain unit is selected to attack in your Shooting phase or the Fight phase"
@@ -413,15 +406,14 @@
       }
     },
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "reactive",
+        "move_type": "normal",
         "distance": "D3+3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used when an enemy unit that was engaged with an unengaged Chaplain unit ends a fall-back move"
@@ -454,7 +446,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -463,7 +455,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -504,7 +495,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used on a Ravenwing unit targeted in the opponent's Shooting phase"
@@ -526,14 +516,10 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Used in the Command phase on a Ravenwing Mounted unit within range of an objective you control: that objective stays yours until your opponent out-controls it at the end of a phase"
@@ -575,14 +561,13 @@
       }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "place-into-strategic-reserves"
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Fight phase, one unengaged Ravenwing unit is removed from the battlefield and placed into Strategic Reserves"
@@ -604,14 +589,17 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "charge-after-advance"
+        "activity": "declare-charge",
+        "allow": true,
+        "after": [
+          "advance"
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used when a unit ends an advance move: that advance does not prevent it from declaring a charge"
@@ -633,17 +621,16 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "melee",
-        "keywords": [
+        "abilities": [
           "Lance"
-        ]
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     }
   },
@@ -684,14 +671,13 @@
       }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "reactive-charge"
+        "move_type": "charge"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Charge phase, one Deathwing Infantry or Deathwing Walker unit within 6\" of enemy units resolves a charge against them; no Charge bonus this turn"
@@ -763,7 +749,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "The -1 to hit applies while the attacker is engaged with your Ravenwing units, the -1 to wound (against higher-Strength attacks) while it is engaged with your Deathwing units; cannot be combined with Armour of Contempt in the same phase"
@@ -796,7 +781,7 @@
         "to": "attackers-of-target",
         "effect": {
           "type": "roll-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "operation": "add",
@@ -807,7 +792,6 @@
       "duration": "phase"
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used after a Ravenwing unit selects its shooting targets: one targeted enemy unit within 12\" is illuminated - friendly Deathwing units add 1 to wound rolls against it this phase"
@@ -840,7 +824,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -849,7 +833,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -871,21 +854,20 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move-modifier",
+      "target": "this-unit",
       "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ],
         "applies_to_moves": [
           "normal",
           "advance",
           "charge"
+        ],
+        "passthrough": [
+          "all-terrain"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "One Ravenwing unit: models can move horizontally through terrain features during Normal, Advance and Charge moves this phase"
@@ -910,12 +892,13 @@
       "frequency": "once-per-battle-round"
     },
     "effect": {
-      "type": "battle-shock-test",
-      "target": "target",
-      "modifier": {}
+      "type": "test",
+      "target": "stratagem-target",
+      "modifier": {
+        "test": "battle-shock"
+      }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "Select one enemy unit engaged with your unit: it takes a Battle-shock test, at -1 if your unit is Deathwing or Ravenwing"
@@ -957,7 +940,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after an enemy unit ends a Charge move, on one of your units within Engagement Range of it"
@@ -990,7 +972,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -999,7 +981,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -1030,14 +1011,15 @@
       }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "shoot-as-if-shooting-phase"
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "shooting-phase"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used on a unit that lost models to the attacking unit's shooting: it shoots back, targeting only that enemy unit (if eligible)"
@@ -1062,17 +1044,17 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
             ]
           }
         },
         {
-          "type": "roll-modifier",
-          "target": "unit",
+          "type": "roll-result",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "critical_on": 5
@@ -1081,7 +1063,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "The 5+ Critical Hits apply only while one or more friendly Adeptus Astartes units are Battle-shocked"
@@ -1103,19 +1084,18 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "ranged",
-        "keywords": [
+        "abilities": [
           "Assault",
           "Heavy",
           "Ignores Cover"
-        ]
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     }
   },
@@ -1139,21 +1119,30 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "fallback-and-act",
-          "target": "unit",
-          "modifier": {}
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-fall-back"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used just after the unit Falls Back"
@@ -1195,14 +1184,13 @@
       }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "reactive-charge"
+        "move_type": "charge"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Charge phase, one unit within 3\" of enemy units (6\" for Deathwing) resolves a charge against them; no Charge bonus this turn"
@@ -1227,26 +1215,29 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Assault"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-advance"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "A Ravenwing unit is additionally eligible to shoot and charge in a turn in which it Fell Back"
@@ -1279,7 +1270,7 @@
         "to": "attackers-of-target",
         "effect": {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "subset": "all-failures"
@@ -1289,7 +1280,6 @@
       "duration": "until-next-command-phase"
     },
     "scope": {
-      "range": "unit",
       "duration": "until-next-command-phase"
     },
     "community_notes": "Used just after your Oath of Moment target is destroyed: one enemy unit within 12\" of and visible to your Character becomes your Oath of Moment target"
@@ -1312,7 +1302,7 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "S",
         "operation": "add",
@@ -1321,7 +1311,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Infantry or Mounted unit not yet selected to shoot this phase"
@@ -1354,7 +1343,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -1363,7 +1352,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -1388,9 +1376,10 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "objective-control-modifier",
-          "target": "unit",
+          "type": "stat-modifier",
+          "target": "this-unit",
           "modifier": {
+            "stat": "OC",
             "operation": "add",
             "value": 1
           }
@@ -1414,7 +1403,7 @@
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -1425,7 +1414,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Used in the Command phase on an engaged unit; the +1 OC lasts until your next Command phase, the +1 to hit until the end of the turn"
@@ -1451,7 +1439,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "subset": "ones"
@@ -1470,7 +1458,7 @@
           },
           "effect": {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "all-failures"
@@ -1480,7 +1468,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Deathwing Infantry unit not yet selected to fight; the full wound re-rolls apply while it is within range of your Vowed objective marker"
@@ -1513,7 +1500,7 @@
     },
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
         "operation": "add",
@@ -1522,7 +1509,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
@@ -1559,14 +1545,15 @@
       "threshold": 4,
       "comparison": "gte",
       "on_success": {
-        "type": "fight-on-death",
-        "target": "unit",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Deathwing unit targeted in the Fight phase: roll per destroyed model that has not fought, adding 1 if the unit is within range of your Vowed objective marker; on a 4+ the model fights after the attacking unit finishes, then is removed"
@@ -1624,7 +1611,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Deathwing Infantry unit targeted in the opponent's Shooting phase"
@@ -1660,7 +1646,7 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "target",
+        "target": "stratagem-target",
         "modifier": {
           "count": 1
         }
@@ -1668,7 +1654,6 @@
       "on_fail": null
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "community_notes": "Deathwing Infantry unit after a Charge move: select one engaged enemy unit and roll one D6 per model, adding 1 if that enemy unit is within range of your Vowed objective marker - each 4+ inflicts 1 mortal wound (max 3)"
@@ -1690,14 +1675,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "deep-strike",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "min_distance": 6
+        "to": "battlefield",
+        "via": "deep-strike",
+        "min_enemy_distance": 6
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "A Deathwing unit arriving by Deep Strike can be set up anywhere more than 6\" horizontally from enemy models; it is then not eligible to declare a charge this turn"
@@ -1722,13 +1708,13 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "melee",
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
-            ]
+            ],
+            "weapon_type": "melee"
           }
         },
         {
@@ -1743,19 +1729,18 @@
             }
           },
           "effect": {
-            "type": "roll-modifier",
-            "target": "unit",
+            "type": "roll-result",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "critical_on": 5,
-              "weapon_type": "melee"
+              "weapon_type": "melee",
+              "critical_on": 5
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Deathwing model only; the 5+ Critical Hits apply while the bearer is within range of your Vowed objective marker"
@@ -1783,7 +1768,7 @@
       "comparison": "gte",
       "on_success": {
         "type": "cp-gain",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "amount": 1
         }
@@ -1791,7 +1776,6 @@
       "on_fail": null
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Deathwing model only. Roll each time you target the bearer's unit with a Stratagem, adding 1 if the bearer is within range of your Vowed objective marker"
@@ -1816,16 +1800,16 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "move",
+          "target": "this-unit",
           "modifier": {
             "move_type": "pile-in",
             "distance": 6
           }
         },
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "move",
+          "target": "this-unit",
           "modifier": {
             "move_type": "consolidation",
             "distance": 6
@@ -1834,7 +1818,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Deathwing model only. Models in the bearer's unit move an additional 3\" (6\" total) when they Pile In or Consolidate"
@@ -1856,14 +1839,21 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "reinforcements-first-three-movement-phases"
+        "to": "battlefield",
+        "from": "strategic-reserves",
+        "via": "deep-strike",
+        "turns": [
+          1,
+          2,
+          3
+        ],
+        "ignore_limits": true
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Deathwing model with Deep Strike only: the bearer's unit can arrive in the Reinforcements step of your first, second or third Movement phase regardless of mission rules"
@@ -1889,19 +1879,19 @@
       "choice_label": "Weapon ability",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
             ]
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1"
             ]
           }
@@ -1909,7 +1899,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Vengeful Brethren Gravis Captain only; chosen when the unit is selected to attack"
@@ -1935,17 +1924,17 @@
       "per": "army"
     },
     "effect": {
-      "type": "stratagem-cost-modifier",
-      "target": "unit",
+      "type": "cost-modifier",
+      "target": "this-unit",
       "modifier": {
-        "operation": "set-to",
-        "set_to": 1,
-        "stratagem": "heroic-intervention",
-        "applies_to": "stratagems-targeting-bearer"
+        "of": "stratagem",
+        "operation": "set",
+        "amount": 1,
+        "applies_to": "targeting-this-unit",
+        "id": "heroic-intervention"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Upgrade: Vengeful Brethren Bladeguard Veteran Squad only. Targeting this unit with Heroic Intervention costs 1 less CP (once per battle round)"
@@ -1971,7 +1960,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "advance",
             "result_scope": "any-result"
@@ -1979,7 +1968,7 @@
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "charge",
             "result_scope": "any-result"
@@ -1988,7 +1977,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only"
@@ -2013,23 +2001,25 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "set-up",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "reserves-limit-exempt"
+            "to": "strategic-reserves",
+            "ignore_limits": true
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "set-up",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "treat-battle-round-one-higher-for-reserves"
+            "to": "battlefield",
+            "from": "strategic-reserves",
+            "round_offset": 1
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only; applies when the bearer's unit starts the battle in Strategic Reserves"
@@ -2051,17 +2041,16 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "melee",
-        "keywords": [
+        "abilities": [
           "Precision"
-        ]
+        ],
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only; the bearer's melee weapons"
@@ -2083,15 +2072,14 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "scout",
-        "distance": 9
+        "ability": "scouts",
+        "value": 9
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only; models in the bearer's unit have Scouts 9\""
@@ -2113,14 +2101,13 @@
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "place-into-strategic-reserves"
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "community_notes": "Deathwing model only. Once per battle, at the end of the opponent's turn, if the bearer's unit is unengaged it can be removed and placed into Strategic Reserves"
@@ -2145,20 +2132,30 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "fallback-and-act",
-          "target": "unit",
-          "modifier": {}
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "charge-after-fall-back"
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
           }
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "desperate-escape",
             "result_scope": "any-result"
@@ -2167,7 +2164,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only"
@@ -2190,7 +2186,7 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "D",
         "operation": "add",
@@ -2199,7 +2195,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "The bearer's melee weapons only"
@@ -2234,16 +2229,16 @@
         ]
       },
       "effect": {
-        "type": "objective-control-modifier",
-        "target": "unit",
+        "type": "stat-modifier",
+        "target": "this-unit",
         "modifier": {
+          "stat": "OC",
           "operation": "add",
           "value": 1
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Captain, Chaplain or Lieutenant model only; applies to models in the bearer's unit"
@@ -2269,7 +2264,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "A",
             "operation": "add",
@@ -2279,7 +2274,7 @@
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -2289,7 +2284,7 @@
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "D",
             "operation": "add",
@@ -2300,7 +2295,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "The bearer's melee weapons; while the bearer is Battle-shocked the bonuses become +2 instead"
@@ -2334,7 +2328,7 @@
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -2363,7 +2357,7 @@
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "operation": "add",
@@ -2374,7 +2368,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "While the bearer is leading a unit"
@@ -2400,7 +2393,7 @@
       "steps": [
         {
           "type": "feel-no-pain",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "threshold": 6
           }
@@ -2415,7 +2408,7 @@
           },
           "effect": {
             "type": "feel-no-pain",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "threshold": 4
             }
@@ -2424,7 +2417,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ancient model only; applies to models in the unit the bearer is leading (4+ replaces 6+ while Battle-shocked)"
@@ -2456,18 +2448,56 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "resurrection",
-        "target": "unit",
-        "modifier": {
-          "placement": "closest-to-destruction",
-          "wounds_remaining": 3,
-          "timing": "end-of-phase"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "unit-state",
+                  "parameters": {
+                    "subject": "this-model",
+                    "state": "battle-shocked"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "return-models",
+              "target": "this-model",
+              "modifier": {
+                "count": 1,
+                "wounds_remaining": 3,
+                "placement": "closest-to-destruction"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-state",
+              "parameters": {
+                "subject": "this-model",
+                "state": "battle-shocked"
+              }
+            },
+            "effect": {
+              "type": "return-models",
+              "target": "this-model",
+              "modifier": {
+                "count": 1,
+                "wounds_remaining": "full",
+                "placement": "closest-to-destruction"
+              }
+            }
+          }
+        ]
       },
       "on_fail": null
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "community_notes": "Rolled when the bearer is destroyed; it returns unengaged with 3 wounds (full wounds if it was Battle-shocked when destroyed), unattached and with a starting strength of 1"
@@ -2493,7 +2523,17 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              }
+            }
+          },
           "modifier": {
             "roll": "battle-shock",
             "result_scope": "any-result"
@@ -2501,7 +2541,17 @@
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              }
+            }
+          },
           "modifier": {
             "roll": "leadership",
             "result_scope": "any-result"
@@ -2510,7 +2560,6 @@
       ]
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "community_notes": "Friendly Adeptus Astartes units within 6\" of the bearer re-roll Battle-shock and Leadership tests"
@@ -2536,7 +2585,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -2546,17 +2595,17 @@
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
+            "operation": "improve",
+            "value": 1,
             "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "D",
             "operation": "add",
@@ -2567,7 +2616,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "The bearer's melee weapons only"
@@ -2589,14 +2637,21 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "reinforcements-first-three-movement-phases"
+        "to": "battlefield",
+        "from": "strategic-reserves",
+        "via": "deep-strike",
+        "turns": [
+          1,
+          2,
+          3
+        ],
+        "ignore_limits": true
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Deathwing model with Deep Strike only: the bearer's unit can arrive in the Reinforcements step of your first, second or third Movement phase regardless of mission rules"
@@ -2622,7 +2677,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "advance",
             "result_scope": "any-result"
@@ -2630,7 +2685,7 @@
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "charge",
             "result_scope": "any-result"
@@ -2639,7 +2694,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Ravenwing model only"
@@ -2662,7 +2716,7 @@
     "behavior": "passive",
     "effect": {
       "type": "roll-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "charge",
         "operation": "add",
@@ -2670,7 +2724,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Chaplain model only"
@@ -2692,17 +2745,16 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "ranged",
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
-        ]
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Chaplain model only"
@@ -2724,14 +2776,13 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "perform-ingress-move"
+        "move_type": "ingress"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Upgrade: Ravenwing Fly unit only. In your first Movement phase this unit can make an ingress move"
@@ -2757,7 +2808,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "attacks",
             "result_scope": "any-result"
@@ -2765,16 +2816,15 @@
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
-            "roll": "hazardous",
+            "roll": "hazard",
             "result_scope": "any-result"
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Upgrade: Land Speeder Vengeance unit only. Re-roll rolls that determine a weapon's number of Attacks, and Hazard rolls"
@@ -2797,16 +2847,15 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
-        "stat": "range",
+        "stat": "Range",
         "operation": "add",
         "value": 6,
         "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Upgrade: this unit's plasma ranged attacks only"
@@ -2828,17 +2877,24 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1,
-        "context": "snap shooting"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "shooting_type": "snap"
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "succeeds_on": 5,
+          "weapon_type": "ranged"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "Upgrade: Hellblaster Squad only. Snap shooting attacks hit on unmodified hit rolls of 5+"

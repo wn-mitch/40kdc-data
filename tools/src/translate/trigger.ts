@@ -173,13 +173,15 @@ function eventPhrase(t: AbilityTrigger): string {
       if (f.through === "terrain") return `when ${who} moves through terrain`;
       const kinds = Array.isArray(f.move_types) ? moveKinds(f.move_types) : "";
       const enemy = typeof t.subject === "object";
-      if (enemy && kinds === "Fall Back" && t.object == null) return `${who} Falls Back`;
+      // Another unit's move is a reaction window: "each time an enemy unit ends a move".
+      if (enemy && kinds === "Fall Back" && t.object == null) return `each time ${who} Falls Back`;
       const tail = t.object != null ? ` from ${objectPhrase(t.object)}` : "";
-      return enemy ? `${who} ends ${kinds ? `a ${kinds}` : "a"} move${tail}` : `when ${who} ends ${kinds ? `${/^[aeiou]/i.test(kinds) ? "an" : "a"} ${kinds}` : "a"} move${tail}`;
+      const move = `${kinds ? `${/^[aeiou]/i.test(kinds) ? "an" : "a"} ${kinds}` : "a"} move${tail}`;
+      return enemy ? `each time ${who} ends ${move}` : `when ${who} ends ${move}`;
     }
     case "set-up": {
       const from: Record<string, string> = {
-        "deep-strike": "is set up by Deep Strike", reserves: "arrives from Reserves", "strategic-reserves": "arrives from Strategic Reserves",
+        "deep-strike": "is set up by Deep Strike", "strategic-reserves": "arrives from Strategic Reserves",
         "cult-ambush": "is set up using Cult Ambush", transport: "is set up from a Transport",
       };
       return `when ${who} ${from[str(f.from)] ?? "is set up"}`;
@@ -206,7 +208,8 @@ function eventPhrase(t: AbilityTrigger): string {
       if (f.first === true) return "the first time a model in the unit is destroyed";
       const obj = t.object;
       if (obj === "this-model") return "when this model is destroyed";
-      if (obj === "model-in-this-unit" || obj == null) return "when a model in the unit is destroyed";
+      // A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
+      if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return "when a model in the unit is destroyed";
       return `when ${objectPhrase(obj)} is destroyed`;
     }
     case "used": {

@@ -27,7 +27,7 @@
             </profile>
             <profile name="High Marshal" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, the target suffers d3 mortal wounds.</characteristic>
+                <characteristic name="Description">During the Fight phase, the target suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">

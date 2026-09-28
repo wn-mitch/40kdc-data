@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { Dataset, emptyRawData } from "../src/data/index.js";
 
 // Fabricated abilities: the same five are pinned in the Python and Go data-model tests.
-const reroll = { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } };
+const reroll = { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } };
 function dataset() {
   const raw = emptyRawData();
   raw.abilities = [

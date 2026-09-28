@@ -16,6 +16,8 @@ use schemars::schema::RootSchema;
 use serde_json::Value;
 use typify::{TypeSpace, TypeSpaceSettings};
 
+mod dispatch;
+
 fn main() -> Result<()> {
     match std::env::args().nth(1).as_deref() {
         Some("codegen") => codegen(),
@@ -70,17 +72,17 @@ fn tag_effect_variants(schema: &mut serde_json::Value) {
     }
 }
 
-/// Give each `simple-condition` predicate's `parameters` its own named definition.
-/// typify turns the predicate `oneOf` (each member keyed by a `type` const) into a
-/// `type`-tagged enum, but names every member's inline `parameters` object
-/// `SimpleConditionParameters` and keeps only the first, so every predicate but
-/// `phase-is` would fail to deserialize. Moving each `parameters` object to
-/// `$defs/<type>-condition-parameters` (and referencing it) gives every predicate
-/// its own parameter type. Only codegen's input changes; the schema does not.
-fn hoist_condition_parameters(schema: &mut serde_json::Value) {
+/// Give each member of a `type`-keyed `oneOf` its own named definition for one
+/// inline object property. typify turns such a `oneOf` into a `type`-tagged enum
+/// but names every member's inline `<property>` object after the enum (for example
+/// `SimpleConditionParameters`, `SingleEffectModifier`) and keeps only the first, so
+/// every member but the first would fail to deserialize. Moving each object to
+/// `$defs/<type>-<suffix>` (and referencing it) gives every member its own type.
+/// Only codegen's input changes; the schema does not.
+fn hoist_member_objects(schema: &mut serde_json::Value, def: &str, property: &str, suffix: &str) {
     let mut hoisted: Vec<(String, serde_json::Value)> = Vec::new();
     if let Some(members) = schema
-        .pointer_mut("/$defs/simple-condition/oneOf")
+        .pointer_mut(&format!("/$defs/{def}/oneOf"))
         .and_then(|members| members.as_array_mut())
     {
         for member in members {
@@ -91,10 +93,10 @@ fn hoist_condition_parameters(schema: &mut serde_json::Value) {
             else {
                 continue;
             };
-            let Some(parameters) = member.pointer_mut("/properties/parameters") else {
+            let Some(object) = member.pointer_mut(&format!("/properties/{property}")) else {
                 continue;
             };
-            if parameters.get("$ref").is_some() {
+            if object.get("$ref").is_some() {
                 continue;
             }
             // An `anyOf` of bare `required` lists means "at least one of these
@@ -102,7 +104,7 @@ fn hoist_condition_parameters(schema: &mut serde_json::Value) {
             // that key, rejecting valid data that sets several (`lost` and
             // `remaining_max`). Dropping it keeps every key optional; the
             // validator still enforces the constraint from the real schema.
-            if let Some(obj) = parameters.as_object_mut() {
+            if let Some(obj) = object.as_object_mut() {
                 let presence_only =
                     obj.get("anyOf")
                         .and_then(|any| any.as_array())
@@ -116,9 +118,9 @@ fn hoist_condition_parameters(schema: &mut serde_json::Value) {
                     obj.remove("anyOf");
                 }
             }
-            let name = format!("{constant}-condition-parameters");
+            let name = format!("{constant}-{suffix}");
             let body = std::mem::replace(
-                parameters,
+                object,
                 serde_json::json!({ "$ref": format!("#/$defs/{name}") }),
             );
             hoisted.push((name, body));
@@ -140,8 +142,15 @@ fn codegen() -> Result<()> {
         .with_context(|| format!("reading {}", schema_path.display()))?;
     let mut raw: serde_json::Value = serde_json::from_str(&content)
         .with_context(|| format!("parsing {} as JSON", schema_path.display()))?;
+    let dispatch_schema = raw.clone();
     tag_effect_variants(&mut raw);
-    hoist_condition_parameters(&mut raw);
+    hoist_member_objects(
+        &mut raw,
+        "simple-condition",
+        "parameters",
+        "condition-parameters",
+    );
+    hoist_member_objects(&mut raw, "single-effect", "modifier", "effect-modifier");
     let schema: RootSchema = serde_json::from_value(raw)
         .with_context(|| format!("parsing {} as a JSON Schema", schema_path.display()))?;
 
@@ -156,8 +165,9 @@ fn codegen() -> Result<()> {
         .context("typify failed to ingest the bundled schema")?;
 
     let tokens = type_space.to_stream();
-    let file = syn::parse2::<syn::File>(tokens)
+    let mut file = syn::parse2::<syn::File>(tokens)
         .context("generated token stream did not parse as a Rust file")?;
+    dispatch::install(&mut file, &dispatch_schema)?;
     let formatted = prettyplease::unparse(&file);
 
     // The `mod generated` declaration in lib.rs carries `#[rustfmt::skip]`, so

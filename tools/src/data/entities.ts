@@ -24,7 +24,7 @@ import {
   type TranslationPerspective,
 } from "../cruncher/from-dsl.js";
 import type { Dataset } from "./dataset.js";
-import { describeAbility, type AbilityAppliesTo } from "../translate/effect.js";
+import { describeAbility, type AbilityAppliesTo, type AbilityLike } from "../translate/effect.js";
 import { unitMatchesAppliesTo } from "../scope.js";
 
 /** A unit, linked to its faction, weapons, and abilities. */
@@ -159,7 +159,8 @@ export class AbilityView {
    * displayable stand-in.
    */
   describe(): string {
-    return describeAbility(this.raw);
+    // The describer reads the effect tree structurally; typed modifiers (a named region's) carry no index signature.
+    return describeAbility(this.raw as unknown as AbilityLike);
   }
 
   /** Game phases this ability acts in, unioned across its phase-mappings. */
@@ -241,7 +242,7 @@ export class AbilityView {
     const node = effect as Record<string, unknown>;
     if (node.type === "ability-grant" && node.modifier !== null && typeof node.modifier === "object") {
       const modifier = node.modifier as Record<string, unknown>;
-      const abilityId = modifier.ability_id;
+      const abilityId = modifier.ability;
       if (modifier.rules_bundle === true && typeof abilityId === "string" && !seen.has(abilityId)) {
         const factionId = this.raw.faction_id;
         const target =
@@ -290,12 +291,12 @@ export class AbilityView {
       ctx,
       perspective,
     );
-    // A range-scoped ability (DSL `scope.range_inches`, e.g. a "within 18\""
-    // reroll) gates on distance to the target. Stamp it here rather than in the
-    // effect translator so the `effect-translation` corpus (bare effects) is
-    // unaffected; the gate is permissive until a caller sets `distanceInches`.
-    const range = (this.raw.scope as { range_inches?: number } | undefined)?.range_inches;
-    if (typeof range !== "number") return translated;
+    // An aura (an effect whose target filter reaches units `within` N", e.g. a "within 18\""
+    // reroll) gates on distance to the target. Stamp it here rather than in the effect
+    // translator so the `effect-translation` corpus (bare effects) is unaffected; the gate is
+    // permissive until a caller sets `distanceInches`. Only a single inch range gates.
+    const range = auraInches(resolved);
+    if (range === undefined) return translated;
     const gate = (b: Buff): Buff => ({
       ...b,
       applicableWhen: { ...b.applicableWhen, maxRangeInches: range },
@@ -306,6 +307,21 @@ export class AbilityView {
       activatable: translated.activatable.map((a) => ({ ...a, buffs: a.buffs.map(gate) })),
     };
   }
+}
+
+/** The one inch range every aura-filtered effect target in `effect` reaches, if there is exactly one. */
+export function auraInches(effect: unknown): number | undefined {
+  const found = new Set<number>();
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (node === null || typeof node !== "object") return;
+    const rec = node as Record<string, unknown>;
+    const target = rec.target as { within?: { range?: { inches?: unknown } } } | undefined;
+    if (typeof rec.type === "string" && target && typeof target === "object" && typeof target.within?.range?.inches === "number") found.add(target.within.range.inches);
+    Object.values(rec).forEach(walk);
+  };
+  walk(effect);
+  return found.size === 1 ? [...found][0] : undefined;
 }
 
 /**

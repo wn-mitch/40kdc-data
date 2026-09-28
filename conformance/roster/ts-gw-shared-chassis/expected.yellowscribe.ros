@@ -17,7 +17,8 @@
             </profile>
             <profile name="Assault Vehicle" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Units can disembark from this model after it has Advanced; such units count as having made a Normal move, but cannot declare a charge this turn.</characteristic>
+                <characteristic name="Description">This model is eligible to disembark in a turn in which it Advanced.
+-&gt; When a friendly unit disembarks from a Transport: if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
             <profile name="Fire Support" typeName="Abilities">
@@ -27,12 +28,12 @@
             </profile>
             <profile name="Firing Deck 2" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck ability (2).</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck 2 ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Meet Any Challenge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">An enemy unit ends a move, you may use this ability, the unit can make a Reactive move.</characteristic>
+                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, while the triggering unit is within 8" of this model, friendly units that are embarked are eligible to disembark.</characteristic>
               </characteristics>
             </profile>
             <profile name="Self Repair" typeName="Abilities">
@@ -50,7 +51,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -115,13 +116,13 @@
             </profile>
             <profile name="Assault Ramp" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Units can disembark from this model after it has made a Normal move, and are still eligible to declare a charge this turn.</characteristic>
+                <characteristic name="Description">-&gt; When a friendly unit disembarks from a Transport: if this model made a Normal move this turn, the triggering unit is eligible to declare a charge in a turn in which it disembarked.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D6" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

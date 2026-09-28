@@ -17,7 +17,12 @@
 import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
 import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadin.js";
 import { describeTiming, eventClause } from "./timing.js";
-import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
+import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
+import { describeLeaf, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import {
+  bracketKeyword, capitalize, diceCase, formatComparison, jstr, orList, resourceNoun, rollName, signed, testName, type Ctx,
+} from "./effect-words.js";
+export type { Ctx };
 export { describeTrigger };
 
 /** Independent all-required/none-excluded keyword predicate for aura roles. */
@@ -49,7 +54,8 @@ export interface Effect {
   name?: string;
   kind?: string;
   level?: number;
-  target?: string;
+  /** A single effect's unit-ref (or an aura's legacy within-aura target). */
+  target?: unknown;
   modifier?: Record<string, unknown> | AuraModifier;
   condition?: Condition;
   effect?: Effect;
@@ -224,30 +230,9 @@ export interface AbilityLike {
   applies_to?: AbilityAppliesTo | null;
 }
 
-/** Rendering context threaded down from the ability (scope info the leaf needs). */
-interface Ctx {
-  /** Aura/blast radius in inches, for `*-within-aura` targets and within-range effects. */
-  rangeInches?: number;
-  /** True when the ability scope is `engagement-range`, so within-aura subjects read "within Engagement Range". */
-  engagementRange?: boolean;
-  /**
-   * The raw scope range slug, for the non-radius scopes (`any-visible`,
-   * `any-on-battlefield`) whose within-aura subjects have a real extent the
-   * generic " nearby" fallback would drop.
-   */
-  scopeRange?: string;
-  /** A `select-units` wrapper makes nested `target: unit` refer to its selection. */
-  selectedUnit?: boolean;
-  /** A model-targeting `select-units` wrapper makes nested `target: unit` refer to its selected model. */
-  selectedModel?: boolean;
-  /** Explicit beneficiary binding inside a designated attack. */
-  unitSubject?: string;
-}
-
 const CONTAINER_TYPES = new Set([
   "sequence",
   "rules-bundle",
-  "named-effect",
   "ability-part",
   "choice",
   "dice-gated",
@@ -261,9 +246,6 @@ const CONTAINER_TYPES = new Set([
   "risk-reward",
   "issue-orders",
   "resource-action-menu",
-  "select-objective",
-  "for-each-objective",
-  "paired-designation",
 ]);
 
 /** "one enemy Vehicle unit within 12\"" — the `select-units` selector phrase. */
@@ -292,7 +274,7 @@ function selectUnitsSubject(sel: Record<string, unknown> = {}): string {
     sel.within_inches != null
       ? ` within ${jstr(sel.within_inches)}"${boundOrigin}`
       : sel.range_inches != null
-        ? ` within ${jstr(sel.range_inches)} inches${boundOrigin || ` of ${referenceOrigin(sel.reference)}`}`
+        ? ` within ${jstr(sel.range_inches)}"${boundOrigin || ` of ${referenceOrigin(sel.reference)}`}`
         : "";
   const visible = sel.visible_to
     ? ` visible to ${selectionRefName(sel.visible_to, "the bound source unit")}`
@@ -368,7 +350,7 @@ function leaderModelAbilityGrantClause(e: Effect, ctx: Ctx): string {
   const unitKeywords = (e.attached_unit_filter ?? []).map(bracketKeyword).join(" and ");
   const source = `the bearer unit${unitKeywords ? ` with ${unitKeywords}` : ""}`;
   const nested = e.grant?.effect ?? {};
-  const rendered = describeEffectInline({ ...nested, target: "self" }, ctx).replace(
+  const rendered = describeEffectInline({ ...nested, target: "this-model" }, ctx).replace(
     /^this model\b/,
     "that leader model",
   );
@@ -408,53 +390,6 @@ function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
   return `${jstr(sel.owner)} ${keywords}${noun}${selectionModelFilters(sel)}${sel.member_of === "bearer-unit" ? " in this model's unit" : ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
 }
 
-/** JS-template stringification (numbers print without trailing `.0`). */
-function jstr(v: unknown): string {
-  if (v == null) return "?";
-  if (Array.isArray(v)) return v.map(jstr).join(", ");
-  return String(v);
-}
-
-/** Uppercase the first character (idempotent; leaves the rest untouched). */
-function capitalize(s: string): string {
-  return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1);
-}
-
-
-/**
- * Curated display labels for granted-ability ids whose Title-Cased slug reads
- * wrong. The slug encodes the mechanic (`charge-after-advance`); the label is
- * the published name players know (`Advance & Charge`). Applied only to the
- * ability-grant describer — keyed on the resolved grant (`grant_type ??
- * ability_id`); ids absent here fall back to {@link titleCase}.
- */
-const ABILITY_GRANT_LABELS: Record<string, string> = {
-  "charge-after-advance": "Advance & Charge",
-  "charge-after-fallback": "Fall Back & Charge",
-  "charge-after-disembark": "Charge After Disembarking",
-  "nurgle-s-gift-aura": "Nurgle's Gift (Aura)",
-};
-
-/** The display label for a granted ability id: a curated override, else Title Case. */
-function grantLabel(id: string): string {
-  return ABILITY_GRANT_LABELS[id] ?? titleCase(id);
-}
-
-/**
- * Curated display names for weapons referenced by `weapon-grant`. The describer
- * has no dataset access in any port, so a granted weapon's printed name (with
- * its spacing and apostrophes) cannot be read from the weapon record; ids with
- * no entry fall back to Title Case, exactly as granted-ability ids do.
- */
-const WEAPON_LABELS: Record<string, string> = {
-  "imperiums-sword": "Imperium's Sword",
-};
-
-/** The display name for a granted weapon id: a curated override, else Title Case. */
-function weaponLabel(id: string): string {
-  return WEAPON_LABELS[id] ?? titleCase(id);
-}
-
 /**
  * "(your Suppressed target)" — a designate-target mark's parenthetical. A
  * designation slug that already ends in "target" keeps its own noun
@@ -490,7 +425,7 @@ function designationTargetSubjectBase(sel: DesignationSelection): string {
   const origin = sel.within_inches_from
     ? ` of ${selectionRefName(sel.within_inches_from, "the bound source unit")}`
     : sel.reference ? ` of ${reference}` : "";
-  const within = sel.within_inches != null ? ` within ${jstr(sel.within_inches)} inches${origin}` : "";
+  const within = sel.within_inches != null ? ` within ${jstr(sel.within_inches)}"${origin}` : "";
   const visible = sel.visible_to
     ? ` visible to ${selectionRefName(sel.visible_to, "the bound source unit")}`
     : sel.visibility_required ? ` visible to ${reference}` : "";
@@ -514,44 +449,6 @@ function designationAttackerPhrase(applies: Effect["applies"], block = false): s
 }
 
 
-function transportCapacityConversion(m: Record<string, unknown>): string {
-  const keyword = m.model_keyword != null ? titleCase(jstr(m.model_keyword)) : "";
-  const singleModel = m.subject_kind === "single-model";
-  const model = keyword ? `${singleModel ? "this " : ""}${keyword} model` : singleModel ? "this model" : "model in this unit";
-  const eachModel = singleModel ? model : `each ${model}`;
-  const eligibility = m.transport_eligibility as Record<string, unknown> | undefined;
-  const qualification =
-    eligibility?.requires_capacity_keyword != null
-      ? ` in a Transport able to carry ${titleCase(jstr(eligibility.requires_capacity_keyword))} models`
-      : eligibility?.embark_as_keyword != null
-        ? ` when embarking as ${titleCase(jstr(eligibility.embark_as_keyword))}`
-        : "";
-
-  if (m.occupancy_kind === "fixed-model-spaces") {
-    const spaces = Number(m.spaces_per_model);
-    return `for Transport capacity${qualification}, ${eachModel} occupies ${spaces} model space${spaces === 1 ? "" : "s"}`;
-  }
-  if (m.occupancy_kind === "equivalent-model") {
-    const equivalent =
-      m.equivalent_model_keyword != null
-        ? `${titleCase(jstr(m.equivalent_model_keyword))} model`
-        : "model";
-    const count = Number(m.equivalent_model_count ?? 1);
-    return `for Transport capacity${qualification}, ${eachModel} counts as ${count} ${equivalent}${count === 1 ? "" : "s"}`;
-  }
-
-  const models = Number(m.models_per_group);
-  const spaces = Number(m.spaces_per_group);
-  const groupModel = keyword ? `${keyword} model` : "model in this unit";
-  const groupModels = keyword ? `${keyword} models` : "models in this unit";
-  const subject = singleModel
-    ? model
-    : models === 1
-      ? `each ${groupModel}`
-      : `each group of ${models} ${groupModels}`;
-  const spaceNoun = spaces === 1 ? "model space" : "model spaces";
-  return `for Transport capacity${qualification}, ${subject} occupies ${spaces} ${spaceNoun}, rounding ${jstr(m.rounding)}`;
-}
 function persistentDesignationName(designation: unknown, scope: unknown): string {
   const label = titleCase(jstr(designation));
   if (scope === "objective-marker")
@@ -611,251 +508,6 @@ function persistentDesignationReplacement(e: Effect): string {
   return `when ${previous} is destroyed, ${replacement?.optional ? "you may" : "you must"} select one new enemy unit${label} to replace this bearer unit's existing designation${selectionBinding(select)}. Its existing effects apply to the new target without changing the designation's battle-end expiry${embarked}`;
 }
 
-
-/**
- * A GW weapon keyword token → bracketed caps (`lethal-hits` → `[LETHAL HITS]`).
- * Anti-X keywords keep their hyphen and normalize the threshold to `N+`
- * (`anti-titanic-3plus` / `anti-monster 4+` → `[ANTI-TITANIC 3+]` / `[ANTI-MONSTER 4+]`).
- */
-function bracketKeyword(k: unknown): string {
-  const raw = jstr(k).trim();
-  const anti = /^anti[\s-]+(.*)$/i.exec(raw);
-  if (anti) {
-    const m = /^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$/i.exec(anti[1]);
-    if (m) return `[ANTI-${dekebab(m[1]).trim().toUpperCase()} ${m[2]}+]`;
-    return `[ANTI-${dekebab(anti[1]).trim().toUpperCase()}]`;
-  }
-  return `[${dekebab(raw).toUpperCase()}]`;
-}
-
-/** Dice tokens print with a capital `D` (`d3` → `D3`, `2d6` → `2D6`). */
-function diceCase(v: unknown): string {
-  return jstr(v).replace(/d/gi, "D");
-}
-
-/** A leadership/escape test token → GW name (`battle-shock` → `Battle-shock`). */
-const TEST_NAMES: Record<string, string> = {
-  "battle-shock": "Battle-shock",
-  "desperate-escape": "Desperate Escape",
-};
-function testName(test: unknown): string {
-  const t = jstr(test);
-  return TEST_NAMES[t] ?? titleCase(t);
-}
-
-/** Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `all friendly units`). */
-function isPlural(subj: string): boolean {
-  return / units\b/.test(subj) || /^all /.test(subj) || /^(enemy|friendly) units/.test(subj) || /^targets /.test(subj);
-}
-
-/** Subject-verb agreement: pick the plural form of a present-tense verb when the subject is plural. */
-const PLURAL_VERBS: Record<string, string> = {
-  has: "have",
-  is: "are",
-  gets: "get",
-  gains: "gain",
-  suffers: "suffer",
-  retains: "retain",
-  makes: "make",
-  passes: "pass",
-  fails: "fail",
-  treats: "treat",
-};
-function v(subj: string, singular: string): string {
-  if (!isPlural(subj)) return singular;
-  return PLURAL_VERBS[singular] ?? singular.replace(/s$/, "");
-}
-
-/** Full characteristic name for a stat token (`Sv` → `Save`). */
-const STAT_NAMES: Record<string, string> = {
-  M: "Move",
-  T: "Toughness",
-  Sv: "Save",
-  W: "Wounds",
-  A: "Attacks",
-  Ld: "Leadership",
-  OC: "Objective Control",
-  S: "Strength",
-  WS: "Weapon Skill",
-  BS: "Ballistic Skill",
-  AP: "Armour Penetration",
-  D: "Damage",
-  Range: "Range",
-};
-
-function statName(stat: unknown): string {
-  const s = jstr(stat);
-  return STAT_NAMES[s] ?? titleCase(s);
-}
-
-/** Resource-pool token → display name (`cp` → `CP`, otherwise Title Case). */
-function poolName(pool: unknown): string {
-  const p = jstr(pool);
-  return p.toLowerCase() === "cp" ? "CP" : titleCase(p);
-}
-
-/**
- * Player-facing noun for a `resource-gain`/`resource-spend`/`resource-clear`
- * modifier's pool, or a menu action's `cost`. `resource_label` (a singular
- * noun, e.g. "Battle Focus token") is an author-provided override that
- * pluralizes by count and NEVER leaks the internal `pool_id`; absent, falls
- * back to the established `poolName` title-casing (backward compatible with
- * every pre-existing resource node).
- */
-function resourceNoun(m: { pool_id?: unknown; resource?: unknown; resource_label?: unknown }, count?: unknown): string {
-  const label = typeof m.resource_label === "string" && m.resource_label.length > 0 ? m.resource_label : null;
-  if (!label) return poolName(m.pool_id ?? m.resource);
-  const n = count != null ? Number(jstr(count)) : NaN;
-  return n === 1 ? label : `${label}s`;
-}
-
-/** Roll noun for a roll token (`hit` → `Hit`, `attacks-characteristic` → `Attacks characteristic`). */
-// Narrowed feel-no-pain scopes -> trailing qualifier. Absent/`all` renders bare.
-const FNP_SCOPES: Record<string, string> = {
-  mortal: " against mortal wounds",
-  psychic: " against Psychic Attacks",
-  "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
-};
-
-const ROLL_NAMES: Record<string, string> = {
-  hit: "Hit",
-  wound: "Wound",
-  charge: "Charge",
-  damage: "Damage",
-  advance: "Advance",
-  save: "Saving throw",
-  leadership: "Leadership",
-};
-
-function rollName(roll: unknown): string {
-  const r = jstr(roll);
-  return ROLL_NAMES[r] ?? titleCase(r);
-}
-
-/** `+1` / `-1` from an operation + value (a negative value flips the sign, so never `+-1`). */
-function signed(operation: unknown, value: unknown): string {
-  const positive = operation === "add" || operation === "improve";
-  let sign = positive ? 1 : -1;
-  const n = Number(value);
-  if (!Number.isNaN(n) && n < 0) {
-    sign = -sign;
-    value = Math.abs(n);
-  }
-  return `${sign > 0 ? "+" : "-"}${jstr(value)}`;
-}
-
-/**
- * Dice-pool success phrase → "4+", "6", "3 or less", etc. (for the per-die
- * threshold in a `mortal-wounds` dice pool — "for each 4+, …"). Unlike
- * {@link formatComparison} this carries no leading "a", because it follows
- * "for each".
- */
-function poolThreshold(comp: string, threshold: unknown): string {
-  const th = jstr(threshold);
-  switch (comp) {
-    case "lte":
-      return `${th} or less`;
-    case "gt":
-      return `more than ${th}`;
-    case "lt":
-      return `less than ${th}`;
-    case "eq":
-      return th;
-    default: // gte
-      return `${th}+`;
-  }
-}
-
-/** Dice comparison → "a 4+", "a 3 or less", etc. (for dice-gated thresholds). */
-function formatComparison(comp: string, threshold: unknown): string {
-  const th = jstr(threshold);
-  switch (comp) {
-    case "gte":
-      return `a ${th}+`;
-    case "lte":
-      return `a ${th} or less`;
-    case "gt":
-      return `greater than ${th}`;
-    case "lt":
-      return `less than ${th}`;
-    case "eq":
-      return `exactly ${th}`;
-    default:
-      return `a ${th}+`;
-  }
-}
-
-/**
- * Humanized subject for an effect `target`. Aura targets resolve their radius
- * from the ability scope (threaded via {@link Ctx}); everything else is a fixed
- * noun phrase in GW datasheet voice.
- */
-function subject(target: string | undefined, ctx: Ctx): string {
-  const within =
-    ctx.rangeInches != null
-      ? ` within ${jstr(ctx.rangeInches)}"`
-      : ctx.engagementRange
-        ? " within Engagement Range"
-        : ctx.scopeRange === "any-visible"
-          ? " that are visible"
-          : ctx.scopeRange === "any-on-battlefield"
-            ? " anywhere on the battlefield"
-            : " nearby";
-  switch (target) {
-    case "self":
-      return "this model";
-    case "bearer":
-      return "the bearer";
-    case "unit":
-      return ctx.unitSubject ?? (ctx.selectedModel ? "that model" : ctx.selectedUnit ? "that unit" : "the unit");
-    case "attached-unit":
-      return "the unit this model leads";
-    case "selected-models-unit":
-      return "that model's unit";
-    case "destroyed-model":
-      return "the destroyed model";
-    case "triggering-unit":
-      return "the triggering unit";
-    case "target":
-      return "the target";
-    case "attacker":
-      return ctx.unitSubject ?? "the attacking unit";
-    case "defender":
-      // The defending unit in an attack is the enemy from the bearer's view.
-      return "the target";
-    case "targets-of-selected-unit-attacks":
-      return ctx.selectedModel ? "targets of that model's attacks" : "targets of that unit's attacks";
-    case "all-friendly":
-      return "all friendly units";
-    case "all-enemy":
-      return "all enemy units";
-    case "friendly-within-aura":
-      return `friendly units${within}`;
-    case "enemy-within-aura":
-      return `enemy units${within}`;
-    default:
-      return "the unit";
-  }
-}
-
-/** Possessive form of a subject noun phrase (`the unit` → `the unit's`). */
-function possessive(s: string): string {
-  return s.endsWith("s") ? `${s}'` : `${s}'s`;
-}
-
-/**
- * `<subj>'s <rest>` for a simple subject; `the <rest> of <subj>` when the subject
- * is a clause (an aura target ending in an inch mark), where a trailing possessive
- * reads as garbage (`friendly units within 6"'s weapons`).
- */
-function ofOrPossessive(subj: string, rest: string): string {
-  return subj.endsWith('"') ? `the ${rest} of ${subj}` : `${possessive(subj)} ${rest}`;
-}
-
-/** Possessive pronoun agreeing with the subject (`its` / `their`). */
-function pronoun(subj: string): string {
-  return isPlural(subj) ? "their" : "its";
-}
 
 /**
  * Duration → woven clause. `lead` sits at the very front of the sentence
@@ -930,7 +582,7 @@ function describeMenuAction(a: MenuAction, ctx: Ctx): string {
   const triggers = normalizeTriggers(a.when);
   const trig = triggers.map(describeTrigger).filter((s) => s.length > 0).join(" or ");
   const cost = a.cost ?? {};
-  const costPhrase = `spend ${jstr(cost.amount)} ${resourceNoun(cost, cost.amount)}`;
+  const costPhrase = `spend ${jstr(cost.amount)} ${resourceNoun(cost.pool_id, cost.resource_label, cost.amount)}`;
   const effClause = describeEffectInline(a.effect ?? {}, ctx);
   const durClause = menuActionDurationClause(a.duration);
   const usageNote = a.usage?.repeatable_if_different_unit
@@ -1016,9 +668,6 @@ function usageClause(u: AbilityUsage): string {
 
 /** "against a unit that is not a Monster or Vehicle" from a run of excluded target keywords. */
 /** Capitalize the first character and lowercase the rest (`MONSTER` -> `Monster`). */
-function capWord(s: string): string {
-  return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1).toLowerCase();
-}
 
 /** Humanized noun for a scaling `of` dimension (`enemy-models-in-range` → `enemy models`). */
 const SCALE_OF: Record<string, string> = {
@@ -1038,124 +687,6 @@ function scalingClause(s: NonNullable<Effect["scaling"]>): string {
   if (s.round === "up") c += " (rounding up)";
   if (s.max_value != null) c += ` (to a maximum of ${jstr(s.max_value)})`;
   return c;
-}
-
-/** Movement-modifier passthrough enum → human phrase. */
-const PASSTHROUGH_PHRASE: Record<string, string> = {
-  "non-titanic-models": "non-Titanic models",
-  "friendly-vehicles": "friendly Vehicle models",
-  "friendly-monsters": "friendly Monster models",
-  "terrain-le-4": 'terrain features 4" or lower',
-  "tall-terrain": 'terrain features over 4"',
-  "all-terrain": "terrain features",
-};
-
-/** Move-kind token → display noun (for `applies_to_moves`). */
-const MOVE_NOUN: Record<string, string> = {
-  normal: "Normal",
-  advance: "Advance",
-  "fall-back": "Fall Back",
-  charge: "Charge",
-};
-
-/** Oxford-free conjunction list ("a", "a and b", "a, b and c"). */
-function andList(items: string[]): string {
-  if (items.length <= 1) return items[0] ?? "";
-  if (items.length === 2) return `${items[0]} and ${items[1]}`;
-  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
-}
-
-function orList(items: string[]): string {
-  if (items.length <= 1) return items[0] ?? "";
-  if (items.length === 2) return `${items[0]} or ${items[1]}`;
-  return `${items.slice(0, -1).join(", ")} or ${items[items.length - 1]}`;
-}
-
-/** Trailing inches clause for a movement distance (int or dice string); "" when absent/zero. */
-function inchClause(dist: unknown): string {
-  if (dist == null) return "";
-  const s = diceCase(jstr(dist));
-  return s === "0" ? "" : ` ${s}"`;
-}
-
-/** Closed movement-modifier `modifier` → one lowercase-initial clause. */
-function movementClause(m: Record<string, unknown>, subj: string): string {
-  const kind = m.move_type as string | undefined;
-  const dist = m.distance;
-  const inches = inchClause(dist);
-  const ofUpTo = inches ? ` of up to${inches}` : "";
-  const moveKinds = Array.isArray(m.applies_to_moves)
-    ? andList((m.applies_to_moves as string[]).map((x) => MOVE_NOUN[x] ?? dekebab(x)))
-    : null;
-
-  // Pure traversal capability (no move kind): passthrough / vertical / ignore-vertical.
-  if (kind == null) {
-    const parts: string[] = [];
-    if (Array.isArray(m.passthrough) && m.passthrough.length) {
-      parts.push((m.passthrough as string[]).map((p) => PASSTHROUGH_PHRASE[p] ?? dekebab(p)).join(" and "));
-    }
-    let clause: string;
-    if (parts.length) {
-      const over = m.vertical_limit != null ? ` (up to ${jstr(m.vertical_limit)}" high)` : "";
-      clause = `${subj} can move over ${parts.join(" and ")}${over} as though they were not there`;
-    } else if (m.ignore_vertical) {
-      clause = `${subj} ignores vertical distances when it moves`;
-    } else {
-      clause = `${subj} ${v(subj, "has")} a movement capability`;
-    }
-    if (m.excludes_keyword != null) clause += ` (excluding ${titleCase(jstr(m.excludes_keyword))} models)`;
-    if (moveKinds) clause += `, during its ${moveKinds} moves`;
-    return clause;
-  }
-
-  switch (kind) {
-    case "scout":
-      return `before the first battle round, ${subj} can make a Scout move${ofUpTo}`;
-    case "infiltrate":
-      return `${subj} ${v(subj, "has")} the Infiltrators ability`;
-    case "advance":
-      return `add ${diceCase(jstr(dist))} to ${ofOrPossessive(subj, "Advance rolls")}`;
-    case "pile-in":
-      return `${subj} can Pile In up to${inches || ' 3"'}`;
-    case "consolidation":
-      return `${subj} can Consolidate up to${inches || ' 3"'}`;
-    case "surge":
-      return `${subj} can make a Surge move${ofUpTo}`;
-    case "ingress":
-      return `${subj} can make an Ingress move${ofUpTo}`;
-    case "shoot-and-scoot":
-      return inches
-        ? `${subj} can shoot and then make a Normal move${ofUpTo}`
-        : `${subj} can Shoot and Scoot`;
-    case "reactive": {
-      const label = m.name != null ? ` (${jstr(m.name)})` : "";
-      return `${subj} can make a Reactive move${ofUpTo}${label}`;
-    }
-    case "redeploy": {
-      if (m.marker != null) {
-        const mk = m.marker as Record<string, unknown>;
-        if (mk.location != null) {
-          const who = mk.unit_filter != null ? `${jstr(mk.unit_filter)} units` : "units";
-          return `${who} can be set up on ${jstr(mk.location)}`;
-        }
-        const what = mk.affected != null ? jstr(mk.affected) : "markers";
-        return `${what} can be repositioned${inches}`;
-      }
-      if (m.to_reserves) {
-        const n = m.max_units != null ? `up to ${jstr(m.max_units)} units` : subj;
-        return `${n} can be placed into Strategic Reserves`;
-      }
-      return `${subj} can be redeployed${inches}`;
-    }
-    case "normal":
-    default: {
-      const n = Number(dist);
-      if (!Number.isNaN(n) && n < 0)
-        return `${ofOrPossessive(subj, "Move characteristic")} is reduced by ${Math.abs(n)}"`;
-      if (moveKinds) return `add${inches} to ${ofOrPossessive(subj, `${moveKinds} moves`)}`;
-      return `${subj} can make a Normal move${ofUpTo}`;
-    }
-  }
 }
 
 function auraEligibleSubject(who: string, eligible: unknown): string {
@@ -1192,25 +723,13 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
     ? `${(range as number[]).map((r) => `${r}"`).join("/")} (by battle round)`
     : range != null
       ? `${jstr(range)}"`
-      : null;
-  const who = e.target === "friendly-within-aura" ? "each friendly unit" : "each enemy unit";
+      : "range";
+  const who = e.target === "friendly-within-aura" ? "a friendly unit" : "an enemy unit";
   const eligibleWho = auraEligibleSubject(who, m.eligible);
   const recipient = m.recipient_filter != null ? keywordFilterClause(m.recipient_filter, eligibleWho) : eligibleWho;
-  const within = rangeText != null ? `${recipient} within ${rangeText}` : recipient;
-  const filtered = m.emitter_filter != null || m.recipient_filter != null;
-  const effectText =
-    m.effect != null
-      ? filtered
-        ? `, and each such unit ${describeEffectInline(m.effect as Effect, { ...ctx, selectedUnit: true }).replace(/^the unit\b\s*/, "")}`
-        : ` ${describeEffectInline(m.effect as Effect, m.eligible != null ? { ...ctx, selectedUnit: true } : { ...ctx })}`
-      : filtered
-        ? ", and each such unit is affected"
-        : " is affected";
-  if (m.emitter_filter != null) {
-    const emitter = keywordFilterClause(m.emitter_filter, "this model");
-    return `${emitter} projects an aura to ${within}${effectText}`;
-  }
-  return `${within}${effectText}`;
+  const emitter = m.emitter_filter != null ? keywordFilterClause(m.emitter_filter, "this model") : "this model";
+  const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
+  return `while ${recipient} is within ${rangeText} of ${emitter}, ${effectText}`;
 }
 
 /**
@@ -1222,36 +741,6 @@ export function describeEffectInline(e: Effect, ctx: Ctx = {}): string {
   if (e.type === "movement-modifier" && e.after_move) base += `; if it does, ${describeEffectInline(e.after_move, ctx)}`;
   if (e.type === "mortal-wounds" && e.modifier?.in_addition_to_normal_damage === true) base += ", in addition to normal damage";
   return e.scaling ? `${base} ${scalingClause(e.scaling)}` : base;
-}
-
-/** Resurrection `placement` modifier → a "where it is set up" clause. */
-function resurrectionPlacement(placement: unknown): string {
-  if (placement == null) return "";
-  switch (jstr(placement)) {
-    case "deep-strike":
-      return "using its Deep Strike ability";
-    case "battlefield-edge":
-      return "at a battlefield edge";
-    case "closest-to-destruction":
-      return "as close as possible to where it was destroyed";
-    case "unengaged":
-      return "not within Engagement Range of any enemy units";
-    default:
-      return `via ${dekebab(jstr(placement))}`;
-  }
-}
-
-/** Resurrection `timing` modifier → a "when it is set up" clause. */
-function resurrectionTiming(timing: unknown): string {
-  if (timing == null) return "";
-  switch (jstr(timing)) {
-    case "next-movement-phase":
-      return "in your next Movement phase";
-    case "end-of-phase":
-      return "at the end of the phase";
-    default:
-      return dekebab(jstr(timing));
-  }
 }
 
 /** The leaf/container switch; {@link describeEffectInline} wraps it to append scaling. */
@@ -1286,56 +775,6 @@ function diceTableInline(e: Effect, ctx: Ctx): string {
   return `roll one ${diceCase(e.dice)}: ${outcomes.join("; ")}`;
 }
 
-/** `engaged` → `being within Engagement Range` — the leading clause of an eligibility waiver. */
-function ignoredRestrictionPhrase(id: string): string {
-  return (
-    {
-      engaged: "being within Engagement Range",
-      "battle-shocked": "Battle-shocked",
-      "performing-action": "starting an Action",
-      advanced: "having Advanced",
-      "fell-back": "having Fallen Back",
-    }[id] ?? dekebab(id)
-  );
-}
-
-/** `start-action` → `start an Action` — what the unit becomes eligible to do. */
-function eligibleActivityPhrase(id: string): string {
-  return (
-    {
-      "start-action": "start an Action",
-      shoot: "shoot",
-      charge: "declare a charge",
-      fight: "fight",
-      move: "move",
-      advance: "Advance",
-      "fall-back": "Fall Back",
-      consolidate: "Consolidate",
-    }[id] ?? dekebab(id)
-  );
-}
-
-/** Sentence list for a `persistent-battlefield-marker-state` marker: placement first, then lifecycle. */
-function markerClauses(m: Record<string, unknown>): string[] {
-  const label = jstr(m.marker_label);
-  const where =
-    {
-      bearer: "beside this model",
-      "bearer-unit": "beside this model's unit",
-      battlefield: "anywhere on the battlefield",
-    }[jstr(m.placement)] ?? dekebab(jstr(m.placement));
-  const clauses = [`place a ${label} marker ${where}`];
-  if (m.setup_within_inches != null) {
-    const kws = Array.isArray(m.setup_keywords) ? m.setup_keywords.map((k) => titleCase(jstr(k))) : [];
-    const who = kws.length ? `${kws.join(" ")} units` : "units";
-    clauses.push(`${who} may be set up within ${jstr(m.setup_within_inches)}" of this marker`);
-  }
-  if (m.consume === "on-use") clauses.push("using the marker consumes it");
-  if (m.removed_by_enemy_within_inches != null)
-    clauses.push(`remove the marker if an enemy unit comes within ${jstr(m.removed_by_enemy_within_inches)}" of it`);
-  return clauses;
-}
-
 /**
  * A roll-with-rider `sequence`: `[dice-gated rider, unconditional primary]`. The
  * rider fires on the roll; the primary always resolves. The leading "Regardless
@@ -1355,613 +794,14 @@ function rollWithRider(steps: Effect[], ctx: Ctx): string | null {
 
 function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
   const m = e.modifier ?? {};
-  const subj = subject(e.target, ctx);
 
   switch (e.type) {
-    case "unit-division": {
-      const counts = Array.isArray(m.resulting_model_counts) ? m.resulting_model_counts.map(jstr) : [];
-      return `divide ${subj} into ${counts.length} separate units containing ${andList(counts)} models, respectively`;
-    }
-    case "stat-modifier": {
-      if (m.stat != null && (m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null)) {
-        const equipment = `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`;
-        if (m.operation === "set") return `set the ${statName(m.stat)} characteristic of ${equipment} to ${jstr(m.value)}`;
-        if (m.operation === "improve" || m.operation === "worsen") return `${jstr(m.operation)} the ${statName(m.stat)} characteristic of ${equipment} by ${jstr(m.value)}`;
-        if (!Number.isFinite(Number(m.value))) {
-          const subtract = m.operation === "subtract" || m.operation === "worsen";
-          return `${subtract ? "subtract" : "add"} ${jstr(m.value)} ${subtract ? "from" : "to"} the ${statName(m.stat)} characteristic of ${equipment}`;
-        }
-        const amount = Number(m.value) * (m.operation === "subtract" || m.operation === "worsen" ? -1 : 1);
-        return `${amount < 0 ? "subtract" : "add"} ${jstr(Math.abs(amount))} ${amount < 0 ? "from" : "to"} the ${statName(m.stat)} characteristic of ${equipment}`;
-      }
-      const scope = m.attack_type ? ` (${jstr(m.attack_type)})` : "";
-      if (m.stat == null) return `modify ${ofOrPossessive(subj, "characteristics")}${scope}`;
-      if (m.operation === "set")
-        return `modify ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)} to ${jstr(m.value)}${scope}`;
-      if (m.operation === "improve" || m.operation === "worsen")
-        return `${jstr(m.operation)} ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)} by ${jstr(m.value)}${scope}`;
-      let val = m.value;
-      let verb = m.operation === "subtract" || m.operation === "worsen" ? "subtract" : "add";
-      const n = Number(val); // a negative value flips the verb so we never say "add -1"
-      if (!Number.isNaN(n) && n < 0) {
-        verb = verb === "add" ? "subtract" : "add";
-        val = Math.abs(n);
-      }
-      const prep = verb === "add" ? "to" : "from";
-      return `${verb} ${jstr(val)} ${prep} ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)}${scope}`;
-    }
-    case "detection-range-modifier":
-      return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to detection range`;
-    case "roll-modifier": {
-      const roll = m.roll ?? m.test;
-      const ctxNote = (m.context ? ` (${jstr(m.context)})` : "") + weaponRollScope(m);
-      if (m.critical_on != null) {
-        const crit = roll === "wound" ? "Critical Wounds" : "Critical Hits";
-        return `${subj} ${v(subj, "scores")} ${crit} on ${rollName(roll)} rolls of ${jstr(m.critical_on)}+`;
-      }
-      if (m.operation === "set")
-        return `${subj} can change ${rollName(roll)} rolls to a ${jstr(m.value)}`;
-      if (m.value == null) return `${dekebab(jstr(m.operation))} ${ofOrPossessive(subj, `${rollName(roll)} rolls`)}${ctxNote}`;
-      return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to ${rollName(roll)} rolls${ctxNote}`;
-    }
-    case "re-roll": {
-      const rn = jstr(m.roll);
-      // Count-capped re-roll: up to `count` qualifying rolls within the
-      // ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
-      const cnt = typeof m.count === "number" ? m.count : undefined;
-      const which =
-        cnt != null
-          ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${m.subset === "all-failures" ? "failed " : ""}${rn === "any" ? "roll" : `${rollName(m.roll)} roll`}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : ""}`
-          : rn === "any"
-            ? m.subset === "ones"
-              ? "any roll of 1"
-              : "any roll"
-            : m.subset === "ones"
-              ? `a ${rollName(m.roll)} roll of 1`
-              : m.subset === "all-failures"
-                ? `a failed ${rollName(m.roll)} roll`
-                : `the ${rollName(m.roll)} roll`;
-      const permission = m.optional === false ? "re-roll" : "you can re-roll";
-      const owner = e.target === "self" || e.target === "bearer" || ctx.selectedModel ? ` for ${["hit", "wound", "damage"].includes(jstr(m.roll)) ? "attacks made by " : ""}${weaponHolder(e.target, ctx)}` : "";
-      return `${permission} ${which}${owner}${weaponRollScope(m)}`;
-    }
-    case "mortal-wounds": {
-      const range = m.range ?? m.range_inches ?? ctx.rangeInches;
-      // `target` is the unit selected earlier ("select one enemy unit … that unit suffers"),
-      // distinct from `defender`, the target of an attack.
-      const subjMW =
-        e.target === "enemy-within-aura" && range != null
-          ? `each enemy unit within ${jstr(range)}"`
-          : e.target === "target"
-            ? "that unit"
-            : subj;
-      const verb = subjMW.startsWith("each ") ? "suffers" : v(subjMW, "suffers");
-      // Dice-pool form (e.g. "roll six D6: for each 4+, that unit suffers 1
-      // mortal wound"): N dice rolled, each success worth `mortal_per_success`
-      // mortal wounds. Distinct from a flat count — the amount IS the pool.
-      if (m.mortal_per_success != null) {
-        const per = jstr(m.mortal_per_success);
-        const perNoun = per === "1" ? "mortal wound" : "mortal wounds";
-        const hit = poolThreshold(jstr(m.comparison ?? "gte"), m.threshold);
-        // Per-model pool: one die per model in this/the target unit (e.g.
-        // "roll one D6 for each model in this unit: for each 4+, …").
-        if (m.per_model != null) {
-          const where =
-            m.model_relation === "engaged-with-target"
-              ? "this unit that is within Engagement Range of the target unit"
-              : m.per_model === "target"
-                ? "the target unit"
-                : "this unit";
-          return `roll one ${diceCase(m.dice)} for each model in ${where}: for each ${hit}, ${subjMW} ${verb} ${per} ${perNoun}`;
-        }
-        return `roll ${diceCase(m.dice)}: for each ${hit}, ${subjMW} ${verb} ${per} ${perNoun}`;
-      }
-      // Escalating table ("on a 2-3, 1 mortal wound; on a 4-5, D3 ..."): the
-      // roll decides the amount, so render the rows, not "a number of".
-      const table = (m.amount_table ?? m.table) as { roll?: unknown; amount?: unknown }[] | undefined;
-      if (Array.isArray(table) && table.length) {
-        const rows = table
-          .map((r, i) => {
-            const amt = diceCase(r.amount);
-            const noun = amt === "1" ? "mortal wound" : "mortal wounds";
-            return i === 0
-              ? `on a ${jstr(r.roll)}, ${subjMW} ${verb} ${amt} ${noun}`
-              : `on a ${jstr(r.roll)}, ${amt} ${noun}`;
-          })
-          .join("; ");
-        return `roll one ${diceCase(m.dice ?? "D6")}: ${rows}`;
-      }
-      const a =
-        m.count != null
-          ? jstr(m.count)
-          : m.amount != null
-            ? jstr(m.amount)
-            : m.dice != null
-              ? diceCase(m.dice)
-              : null;
-      const bindCountAs = m.bind_count_as != null ? jstr(m.bind_count_as) : null;
-      const boundAmount = a != null ? diceCase(a) : "?";
-      if (bindCountAs != null)
-        return `roll one ${boundAmount}: ${subjMW} ${verb} that many mortal wounds`;
-      // Deadly-Demise-style triggers carry no count here — the amount is the
-      // model's Deadly Demise rating, so describe the trigger instead of "?".
-      if (a == null && m.trigger != null)
-        return `when this model is destroyed, ${subjMW} ${verb} mortal wounds (${titleCase(jstr(m.trigger))})`;
-      const amt = a ?? "?";
-      const noun = amt === "1" ? "mortal wound" : "mortal wounds";
-      return `${subjMW} ${verb} ${amt} ${noun}`;
-    }
-    case "recovery-pool": {
-      if (e.target === "all-friendly" && m.per_target_unit === true)
-        return `roll ${diceCase(m.dice)} recovery points independently for each friendly unit, first using them to regain lost wounds on wounded models and then using any remaining points to return destroyed models to the unit with 1 wound remaining, stopping when the unit is at full strength and all its models have their full wounds; any unallocated points are lost`;
-      return `roll ${diceCase(m.dice)} recovery points for ${subj}, first using them to regain lost wounds on wounded models and then using any remaining points to return destroyed models to the unit with 1 wound remaining, stopping when the unit is at full strength and all its models have their full wounds; any unallocated points are lost`;
-    }
-    case "feel-no-pain": {
-      const vs = FNP_SCOPES[jstr(m.scope)] ?? "";
-      return `${subj} ${v(subj, "has")} the Feel No Pain ${jstr(m.threshold)}+ ability${vs}`;
-    }
-    case "ward":
-      return `${subj} ${v(subj, "has")} the Ward ${jstr(m.threshold ?? m.value)}+ ability`;
-    case "invulnerable-save":
-      return `${subj} ${v(subj, "has")} a ${jstr(m.invuln_sv ?? m.value ?? m.threshold)}+ invulnerable save`;
-    case "keyword-grant": {
-      let kw: string;
-      if (m.anti_keyword != null) {
-        kw = `[ANTI-${dekebab(jstr(m.anti_keyword)).toUpperCase()} ${jstr(m.anti_threshold ?? "?")}+]`;
-      } else if (Array.isArray(m.keywords)) {
-        kw = m.keywords.map(bracketKeyword).join(" and ");
-      } else if (m.value != null) {
-        // Rated keyword carried structurally (Sustained Hits N / Rapid Fire N / Melta N).
-        kw = `[${dekebab(jstr(m.keyword ?? "keywords")).toUpperCase()} ${jstr(m.value)}]`;
-      } else {
-        kw = bracketKeyword(m.keyword ?? "keywords");
-      }
-      if (m.attack_recipient === "bearer")
-        return `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)} gain ${kw} when they target this unit`;
-      if (m.weapon_name != null || m.weapon_type != null || m.weapon_keyword != null)
-        return `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)} gain ${kw}`;
-      return `${ofOrPossessive(subj, "weapons")} gain ${kw}`;
-    }
-    case "ability-usage-limit":
-      return `${subj} can use the ${grantLabel(jstr(m.ability_id))} ability at most ${jstr(m.max_uses)} times per ${dekebab(jstr(m.period))}, replacing its usual usage limit`;
-    case "deadly-demise-threshold":
-      return `${subj}'s existing Deadly Demise ability triggers on a roll of ${jstr(m.threshold)}+ instead of its usual threshold`;
-    case "ability-grant": {
-      const grant = m.grant_type ?? m.ability_id;
-      // Reserves-arrival grant slugs read as full clauses in GW voice — the
-      // generic "gains the X ability" form would bury the mechanic in a name.
-      switch (jstr(grant)) {
-        case "shoot-after-advance": return `${subj} is eligible to shoot in a turn in which it Advanced`;
-        case "charge-after-advance": return `${subj} is eligible to declare a charge in a turn in which it Advanced`;
-        case "charge-after-fall-back": return `${subj} is eligible to declare a charge in a turn in which it Fell Back`;
-        case "no-advance-roll": return `${subj} does not make an Advance roll`;
-        case "must-start-in-reserves":
-          return `${subj} must start the battle in Reserves`;
-        case "reinforcement-any-of-turns-1-to-3":
-          return `${subj} can be set up in the Reinforcements step of your first, second or third Movement phase, regardless of any mission rules`;
-        case "reserves-limit-exempt":
-          return `${subj} ${v(subj, "is")} not counted towards any limits on the number of units that can start the battle in Reserves`;
-        case "reserves-limit-exempt-with-cargo":
-          return `neither ${subj} nor any units embarked within it are counted towards any limits on the number of units that can start the battle in Reserves`;
-        case "may-start-in-reserves":
-          return `${subj} can start the battle in Reserves`;
-        case "battle-round-plus-one-for-arrival":
-          return `${subj} ${v(subj, "treats")} the current battle round number as being one higher than it actually is when arriving from Reserves`;
-        case "flavor-text":
-          return "this ability is a descriptive note (no additional rules effect)";
-        case "crew-tokens": {
-          const n = jstr(m.count ?? 1);
-          const token = m.token_name != null ? `${jstr(m.token_name)} tokens` : "Crew tokens";
-          return `place ${n} ${token} next to ${subj} when ${pronoun(subj)=== "their" ? "they are" : "it is"} first set up, removing one each time ${subj} ${v(subj, "loses")} a wound (the model itself represents ${pronoun(subj)} final wound)`;
-        }
-      }
-      const cap = m.capacity != null ? ` (${jstr(m.capacity)})` : "";
-      // A grant's `timing` modifier scopes when the granted ability applies.
-      const when = m.timing != null ? `${describeTiming(jstr(m.timing))}, ` : "";
-      if (grant != null && m.enabled === false) return `${subj} cannot use the ${grantLabel(jstr(grant))} ability`;
-      return grant != null
-        ? `${when}${subj} ${v(subj, "gains")} the ${grantLabel(jstr(grant))} ability${cap}`
-        : `${when}${subj} ${v(subj, "gains")} an ability${cap}`;
-    }
-    case "movement-modifier":
-      return movementClause(m, subj);
-    case "aura":
-      return auraClause(e, m, ctx);
-    case "damage-reduction": {
-      const r = jstr(m.reduction ?? m.amount ?? m.value);
-      const how =
-        r === "half"
-          ? "halve the Damage of that attack"
-          : r === "to-zero"
-            ? "reduce the Damage of that attack to 0"
-            : `reduce the Damage of that attack by ${r}`;
-      return `each time an attack targets ${subj}, ${how}`;
-    }
-    case "resurrection": {
-      const count = m.count != null ? diceCase(m.count) : "1";
-      // `type: "wounds"` is a heal (regained wounds), not a revive.
-      if (m.type === "wounds" || m.wounds != null) {
-        const healed = m.count_from != null ? "that many" : m.wounds != null ? diceCase(m.wounds) : count;
-        const noun = healed === "1" ? "lost wound" : "lost wounds";
-        return `${subj} ${v(subj, "regains")} up to ${healed} ${noun}`;
-      }
-      const wounds = m.wounds_remaining ?? "full";
-      const place = resurrectionPlacement(m.placement);
-      const when = resurrectionTiming(m.timing);
-      const tail = [place, when].filter((s) => s.length > 0).join(" ");
-      const tailClause = tail ? ` ${tail}` : "";
-      // A self/bearer resurrection reads as the model returning, not "returning a model to itself".
-      if (e.target === "self" || e.target === "bearer") {
-        return `${subj} ${v(subj, "is")} set up again${tailClause} with ${jstr(wounds)} wounds remaining`;
-      }
-      const noun = count === "1" ? "destroyed model" : "destroyed models";
-      const excluded = Array.isArray(m.exclude_keywords) && m.exclude_keywords.length ? ` (excluding ${orList(m.exclude_keywords.map(jstr))} models)` : "";
-      return `return ${m.up_to === true ? "up to " : ""}${count} ${noun}${excluded} to ${subj} with ${jstr(wounds)} wounds${tailClause}`;
-    }
-    case "heal-wounds": {
-      const amount = diceCase(m.amount ?? m.value ?? "1");
-      const noun = amount === "1" ? "lost wound" : "lost wounds";
-      return `${subj} ${v(subj, "regains")} up to ${amount} ${noun}`;
-    }
-    case "model-destruction": {
-      const count = m.count != null ? diceCase(m.count) : "1";
-      const role = m.model_role != null ? `${dekebab(jstr(m.model_role))} ` : "";
-      const kind = `${role}${m.model_keyword != null ? `${titleCase(jstr(m.model_keyword))} ` : ""}model`;
-      const noun = count === "1" ? kind : `${kind}s`;
-      return `destroy ${count} ${noun} in ${subj}`;
-    }
     case "named-region-state":
       return describeNamedRegionState(m, ctx);
-    case "rule-state":
-      return describeRuleState(m, subj);
-    case "cp-gain":
-      return `you gain ${jstr(m.amount ?? 1)}CP`;
-    case "cp-on-destroy": {
-      const kw = m.enemy_keyword != null ? `${jstr(m.enemy_keyword)} model` : "enemy model";
-      const who = subj === "this model" ? "this model's unit" : subj;
-      return `each time ${who} destroys a ${kw}, you gain ${jstr(m.amount ?? 1)}CP`;
-    }
-    case "battle-shock-test":
-      if (m.dice != null)
-        return `${subj} ${v(subj, "takes")} Battle-shock tests on ${diceCase(m.dice)} instead of 2D6`;
-      if (m.operation != null && m.value != null)
-        return `${subj} must make a Battle-shock roll with ${signed(jstr(m.operation), m.value)}`;
-      if (m.roll_modifier != null)
-        return `${subj} must make a Battle-shock roll with ${signed("add", m.roll_modifier)}`;
-      return `${subj} must make a Battle-shock roll`;
-    case "set-battle-shock":
-      return `${subj} ${v(subj, "is")} Battle-shocked`;
-    case "flyover": {
-      const hit = poolThreshold(jstr(m.comparison ?? "gte"), m.threshold);
-      const per = jstr(m.mortal_wounds ?? 1);
-      const perNoun = per === "1" ? "mortal wound" : "mortal wounds";
-      return `each time this model ends a Normal move, select one enemy unit it moved over and roll ${diceCase(m.dice)}: for each ${hit}, that unit suffers ${per} ${perNoun}`;
-    }
-    case "hazard-rolls": {
-      const count = jstr(m.additional_per_engaged_unit);
-      const keyword = titleCase(jstr(m.engaged_keyword));
-      const penalty =
-        m.roll_modifier_if_battle_shocked != null
-          ? `, with ${signed("add", m.roll_modifier_if_battle_shocked)} to those rolls while ${subj} ${v(subj, "is")} Battle-shocked`
-          : "";
-      return `${subj} ${v(subj, "makes")} ${count} additional Hazard rolls for each ${keyword} unit ${pronoun(subj)} ${v(subj, "is")} engaged with${penalty}`;
-    }
-    case "cp-refund": {
-      const strat = m.stratagem != null ? `the ${titleCase(jstr(m.stratagem))} Stratagem` : "one Stratagem";
-      return `you can use ${strat} on ${subj} for 0CP`;
-    }
-    case "modifier-immunity": {
-      const scope = jstr(m.scope);
-      if (scope === "enemy-stratagems") return `${subj} cannot be affected by enemy Stratagems`;
-      if (scope === "enemy-abilities") return `${subj} cannot be affected by enemy abilities`;
-      if (scope === "attack-rolls-and-ballistic-skill") {
-        const names: Record<string, string> = { "ballistic-skill": "Ballistic Skill", "hit-roll": "Hit rolls", "wound-roll": "Wound rolls" };
-        const ignored = Array.isArray(m.ignores) ? m.ignores.map((x) => names[jstr(x)] ?? jstr(x)) : [];
-        return `${ofOrPossessive(subj, "ranged attacks")} can ignore modifiers to ${andList(ignored)}`;
-      }
-      const exc =
-        Array.isArray(m.exclude) && m.exclude.length
-          ? ` (except ${(m.exclude as unknown[]).map((s) => statName(jstr(s))).join(" and ")})`
-          : "";
-      return `${subj} ${v(subj, "ignores")} any modifiers to ${pronoun(subj)} characteristics${exc}`;
-    }
-    case "no-effect": return "nothing happens";
-    case "stratagem-cost-modifier": {
-      if (m.applies_to === "triggering-stratagem-use" && m.operation === "decrease")
-        return `reduce the CP cost of that use of the Stratagem by ${jstr(m.amount)}CP (to a minimum of 0CP), before paying its cost`;
-      const which = m.stratagem != null ? `the ${titleCase(jstr(m.stratagem))} Stratagem` : "Stratagems";
-      const whose = m.applies_to === "stratagems-used-by-bearer" ? `used by ${subj}` : `that ${m.stratagem ? "targets" : "target"} ${subj}`;
-      const verb = m.stratagem != null ? "costs" : "cost";
-      const val = m.operation === "set-to" ? `${jstr(m.set_to)}CP` : `${jstr(m.amount ?? 1)} ${m.operation === "decrease" ? "less" : "more"} CP`;
-      return `${which} ${whose} ${verb} ${val}`;
-    }
-    case "targeting-permission": {
-      const at = m.attack_type === "ranged" ? "ranged attacks" : "attacks";
-      const r = m.range != null ? `${jstr(m.range)}"` : "?";
-      let gate: string;
-      switch (jstr(m.gate)) {
-        case "within-range":
-          gate = `the attacking unit is within ${r}`;
-          break;
-        case "closest-eligible":
-          gate = "it is the closest eligible target";
-          break;
-        case "closest-or-within-range":
-          gate = `it is the closest eligible target or the attacking unit is within ${r}`;
-          break;
-        default:
-          gate = dekebab(jstr(m.gate));
-      }
-      return `${subj} can only be selected as the target of ${at} if ${gate}`;
-    }
-    case "stratagem-targeting-permission":
-      if (m.exception === "already-targeted-different-unit-this-phase")
-        return `${subj} can be targeted with the ${titleCase(jstr(m.stratagem))} Stratagem even if a different unit has already been targeted with that Stratagem this phase`;
-      if (m.exception === "does-not-prevent-targeting-different-unit-this-phase")
-        return `after ${subj} is targeted with the ${titleCase(jstr(m.stratagem))} Stratagem, a different unit can still be targeted with that Stratagem later in this phase`;
-      return `${subj} can be targeted with Stratagems even while Battle-shocked`;
-    case "resource-gain": {
-      if (m.count_mode === "by-battle-size" || m.count_by_battle_size != null)
-        return `you gain ${resourceNoun(m)} based on the current battle size (see the accompanying table)`;
-      return `you gain ${jstr(m.amount ?? m.value)} ${resourceNoun(m, m.amount ?? m.value)}`;
-    }
-    case "resource-spend": {
-      const selectedPoolDie = (m.selection as Record<string, unknown> | undefined)?.from === "retained-pool-dice";
-      const base = selectedPoolDie
-        ? `discard ${jstr(m.amount ?? m.value)} ${resourceNoun(m, m.amount ?? m.value)} from your ${poolName(m.pool_id)}`
-        : `spend ${jstr(m.amount ?? m.value)} ${resourceNoun(m, m.amount ?? m.value)}`;
-      const cap = m.cap as Record<string, unknown> | undefined;
-      if (cap != null && cap.count != null && cap.per != null)
-        return `${base} (no more than ${jstr(cap.count)} per ${jstr(cap.per)})`;
-      return base;
-    }
-    case "resource-clear": {
-      const scope = m.scope === "all" ? "all" : "all unspent";
-      return `${scope} ${resourceNoun(m, 2)} are lost`;
-    }
-    case "pool-add-die": {
-      const pool = poolName(m.pool_id);
-      const rolled = m.value === "rolled";
-      const boundRoll = rollReference(m.value);
-      if (m.count_per_pool != null) {
-        // One die per point currently in the counting pool (Icon of Khorne).
-        const per = poolName(m.count_per_pool);
-        const perPlural = per.endsWith("s") ? per : `${per}s`;
-        const shown = m.value === "highest" ? "the highest result" : jstr(m.value);
-        const die = rolled ? "one rolled D6" : `one die showing ${shown}`;
-        const tail = m.consumes_pool ? `, after which all your ${perPlural} are lost` : "";
-        return `add ${die} to your ${pool} for each ${per} you have${tail}`;
-      }
-      const cnt = m.count != null ? diceCase(m.count) : "1";
-      if (boundRoll) return `add one die showing the result bound as ${dekebab(boundRoll.replace(/_/g, "-"))} to your ${pool}`;
-      if (rolled) {
-        const dice = cnt === "1" ? "a rolled D6" : `${cnt} rolled D6`;
-        return `add ${dice} to your ${pool}`;
-      }
-      const val = m.value === "highest" ? "the highest result" : jstr(m.value);
-      const dice = cnt === "1" ? "a die" : `${cnt} dice`;
-      return `add ${dice} showing ${val} to your ${pool}`;
-    }
-    case "miracle-die-operation":
-      return miracleDieOperationClause(m);
-    case "formation-attachment-grant":
-      return formationAttachmentGrantClause(e, ctx);
-    case "attachment-eligibility-inherit":
-      return attachmentEligibilityInheritClause(m);
-    case "replace-roll-from-pool": {
-      const rolls = Array.isArray(m.rolls) ? (m.rolls as unknown[]).map((r) => dekebab(jstr(r))) : [];
-      return `discard a die from your ${poolName(m.pool_id)} and substitute its value for a ${orList(rolls)} roll`;
-    }
-    case "leadership-modifier": {
-      const test = m.test != null ? `${testName(m.test)} test` : null;
-      if (test != null && m.operation == null) return `${subj} must take a ${test}`;
-      if (test != null && m.operation === "re-roll") return `${subj} can re-roll ${testName(m.test)} tests`;
-      if (test != null && m.operation === "set" && m.test === "battle-shock")
-        return `${subj} ${v(subj, "is")} Battle-shocked`;
-      if (test != null && m.value != null)
-        return `${m.operation === "add" ? "add" : "subtract"} ${jstr(m.value)} ${m.operation === "add" ? "to" : "from"} the ${testName(m.test)} test of ${subj}`;
-      if (m.operation != null && m.value != null)
-        return `${m.operation === "add" || m.operation === "improve" ? "add" : "subtract"} ${jstr(m.value)} ${m.operation === "add" || m.operation === "improve" ? "to" : "from"} the Leadership characteristic of ${subj}`;
-      return `modify ${ofOrPossessive(subj, "Leadership characteristic")}`;
-    }
-    case "tracking-token": {
-      const token = `${titleCase(jstr(m.token))} token`;
-      if (m.count_per_model != null) {
-        const model = m.model_keyword != null ? `${titleCase(jstr(m.model_keyword))} model` : "model";
-        const finalWound = m.model_represents_final_wound ? `; each ${model} represents its final wound` : "";
-        return `place ${jstr(m.count_per_model)} ${token}s next to each ${model} in ${subj}; remove one whenever that model loses a wound${finalWound}`;
-      }
-      const count = m.count ?? 1;
-      const noun = Number(count) === 1 ? token : `${token}s`;
-      const placement = m.placement === "next-to-target" ? ` next to ${subj}` : "";
-      return `place ${Number(count) === 1 ? "one" : jstr(count)} ${noun}${placement} as a reminder`;
-    }
-    case "fight-first":
-      return `${subj} ${v(subj, "has")} the Fights First ability`;
-    case "fight-last":
-      return `${subj} ${v(subj, "has")} the Fights Last ability`;
-    case "fight-on-death": {
-      const gate = m.gate as
-        | { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] }
-        | undefined;
-      if (gate) {
-        const modelPhrase =
-          e.target === "destroyed-model"
-            ? "a model in this unit"
-            : subj === "this model"
-              ? "this model"
-              : `a model in ${subj}`;
-        const elig = m.eligibility as Condition | undefined;
-        const before =
-          elig && foughtThisPhase(elig)
-            ? ` before ${foughtThisPhase(elig) === "this-model" ? "this model" : "this unit"} has fought this phase`
-            : elig
-              ? ` ${conditionLeadIn(elig)}`
-              : "";
-        const adds = (gate.modifiers ?? [])
-          .map((gm) => `, adding ${jstr(gm.value)} ${conditionLeadIn(gm.condition ?? {})}`)
-          .join("");
-        const on = formatComparison(jstr(gate.comparison ?? "gte"), gate.threshold);
-        const removal =
-          m.removal === "after-destroyed-model-fights"
-            ? ". Remove it after it has fought"
-            : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
-        return `each time ${modelPhrase} is destroyed${before}, roll one ${diceCase(jstr(gate.dice))}${adds}. On ${on}, leave that model on the battlefield${removal}`;
-      }
-      if (m.resolution === "when-unit-fights")
-        return `do not remove ${subj} yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
-      if (m.resolution === "after-attacking-unit-finishes")
-        return `do not remove ${subj} yet; after the attacking unit has finished making its attacks, it can fight; then remove it`;
-      return subj === "this model"
-        ? `each time this model is destroyed, it can fight before being removed from play`
-        : `each time a model in ${subj} is destroyed, it can fight before being removed from play`;
-    }
-    case "shoot-on-death":
-      return subj === "this model"
-        ? `each time this model is destroyed, it can shoot before being removed from play`
-        : `each time a model in ${subj} is destroyed, it can shoot before being removed from play`;
-    case "unit-keyword": {
-      const name = titleCase(jstr(m.keyword_id));
-      const val = m.value != null ? ` ${jstr(m.value)}` : "";
-      return `${subj} has the ${name}${val} ability`;
-    }
-    case "unit-keyword-grant":
-      // Without a `to_keywords` filter the grant lands on the effect subject.
-      return m.to_keywords != null
-        ? `${jstr(m.to_keywords)} units gain the ${jstr(m.keyword)} keyword`
-        : `${subj} ${v(subj, "gains")} the ${jstr(m.keyword)} keyword`;
-    case "deep-strike":
-      return m.min_distance != null
-        ? `${subj} ${v(subj, "has")} the Deep Strike ability and can be set up more than ${jstr(m.min_distance)}" from enemy models`
-        : `${subj} has the Deep Strike ability`;
-    case "strategic-reserves-arrival":
-      return `${subj} can arrive from Strategic Reserves regardless of mission rules`;
-    case "remove-battle-shock":
-      return `${subj} ${v(subj, "is")} no longer Battle-shocked`;
-    case "auto-result": {
-      const r = m.result;
-      if (m.test != null) {
-        if (r === "pass") return `${subj} automatically ${v(subj, "passes")} ${testName(m.test)} tests`;
-        if (r === "fail") return `${subj} automatically ${v(subj, "fails")} ${testName(m.test)} tests`;
-        return `${subj} ${v(subj, "treats")} ${testName(m.test)} tests as ${jstr(r)}`;
-      }
-      const roll = rollName(m.roll);
-      if (r === "pass") return `${ofOrPossessive(subj, `${roll} rolls`)} automatically succeed`;
-      if (r === "fail") return `${ofOrPossessive(subj, `${roll} rolls`)} automatically fail`;
-      return `${ofOrPossessive(subj, `${roll} rolls`)} count as ${jstr(r)}`;
-    }
-    case "firing-deck":
-      return `${subj} ${v(subj, "has")} Firing Deck ${jstr(m.value)}`;
-    case "transport-capacity-conversion":
-      return transportCapacityConversion(m);
-    case "disembark-after-move": {
-      if (m.after == null) return `units can disembark from ${subj} after it has moved`;
-      const who =
-        m.requires_keyword != null
-          ? `units with the ${titleCase(jstr(m.requires_keyword))} ability`
-          : "units";
-      const when =
-        m.after === "advance"
-          ? "after it has Advanced"
-          : m.after === "deployment"
-            ? "after it has been set up on the battlefield"
-            : m.after === "before-move"
-              ? "before it moves"
-              : "after it has made a Normal move";
-      // `mandatory`: a Reserves-transport whose cargo MUST disembark on arrival.
-      const verb = m.mandatory ? "must immediately disembark" : "can disembark";
-      const away =
-        m.min_enemy_distance != null
-          ? `, and must be set up more than ${jstr(m.min_enemy_distance)}" away from all enemy models`
-          : "";
-      const counts = m.counts_as_normal_move ? "; such units count as having made a Normal move" : "";
-      // A deployment-step disembark has no meaningful charge window; only an
-      // explicit `can_charge` renders the charge tail there.
-      const charge = m.can_charge
-        ? ", and are still eligible to declare a charge this turn"
-        : m.after === "deployment" && m.can_charge == null
-          ? ""
-          : ", but cannot declare a charge this turn";
-      return `${who} ${verb} from ${subj} ${when}${away}${counts}${charge}`;
-    }
-    case "embark":
-      return `${subj} can embark within this Transport`;
-    case "disembark": {
-      if (Array.isArray(m.modes) && m.setup_distance != null) {
-        const modes = (m.modes as unknown[]).map((mode) => dekebab(jstr(mode))).join(" or ");
-        return `when a unit embarked within this model disembarks using ${modes} mode, its set-up distance is ${jstr(m.setup_distance)}"`;
-      }
-      const where = m.distance != null ? ` and be set up wholly within ${jstr(m.distance)}" of the transport` : "";
-      const eng = m.allow_engagement_range ? ", even within Engagement Range of enemy units" : "";
-      return `${subj} can disembark${where}${eng}`;
-    }
-    case "unit-attachment": {
-      if (m.mandatory) return `${subj} must be attached to a Leader, or it counts as destroyed`;
-      const led = m.led_by != null ? ` led by a ${titleCase(jstr(m.led_by))} model` : "";
-      return `at the start of the Declare Battle Formations step, ${subj} can join one friendly unit${led}, becoming part of that Bodyguard unit`;
-    }
-    case "fallback-and-act": {
-      const acts = m.can_charge === true ? "shoot and declare a charge" : "shoot";
-      return `${subj} ${v(subj, "is")} eligible to ${acts} in a turn in which ${isPlural(subj) ? "they" : "it"} Fell Back`;
-    }
-    case "fight-eligibility-extension": {
-      const r = jstr(m.range);
-      return (
-        `when determining which models in ${subj} are eligible to fight, ` +
-        `models within ${r}" of one or more enemy models are eligible ` +
-        `and can target enemy units within ${r}"`
-      );
-    }
-    case "engagement-passthrough": {
-      const base = m.no_end_in_engagement
-        ? `${subj} can move through enemy models, but cannot end that move within Engagement Range of any enemy unit`
-        : `${subj} can move through enemy models`;
-      const moveKinds = Array.isArray(m.applies_to_moves)
-        ? andList((m.applies_to_moves as string[]).map((x) => MOVE_NOUN[x] ?? dekebab(x)))
-        : null;
-      return moveKinds ? `${base}, during its ${moveKinds} moves` : base;
-    }
-    case "attack-restriction":
-      return describeAttackRestriction(m, subj);
-    case "objective-control-modifier": {
-      if (m.sticky && m.retake === "opponent-control-greater-at-phase-end")
-        return "that objective marker remains under your control until, at the end of a phase, your opponent's Level of Control over it is greater than yours";
-      if (m.sticky)
-        return `${subj} ${v(subj, "retains")} control of objective markers even after no models remain in range, until the enemy retakes them (sticky objectives)`;
-      if (m.operation === "halve") return `halve the Objective Control characteristic of ${subj}`;
-      // An absolute set (Black Rage's OC 0) mirrors stat-modifier's wording.
-      if (m.operation === "set")
-        return `modify ${ofOrPossessive(subj, "Objective Control characteristic")} to ${jstr(m.value)}`;
-      if (m.operation != null)
-        return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to ${pronoun(subj)} Objective Control characteristic`;
-      return `modify ${ofOrPossessive(subj, "Objective Control characteristic")}`;
-    }
-    case "bs-modifier":
-      if (m.operation === "improve") return `improve the Ballistic Skill of attacks made by ${weaponHolder(e.target, ctx)} by ${jstr(m.value)}`;
-      return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to Ballistic Skill`;
-    case "charge-roll-modifier":
-      return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to Charge rolls`;
-    case "desperate-escape": {
-      const penalty = m.roll_modifier_if_battle_shocked != null
-        ? `, with ${signed("add", m.roll_modifier_if_battle_shocked)} to each test while it is Battle-shocked`
-        : "";
-      return `every model in ${subj} must take a Desperate Escape test${penalty}`;
-    }
-    case "reactive-charge":
-      return `${subj} can resolve a charge; if its charge-roll result is greater than ${jstr(m.charge_roll_max_after_modifiers)} after modifiers, change it to ${jstr(m.charge_roll_max_after_modifiers)}`;
-    case "terrain-area-tag":
-      return m.tag != null
-        ? `the terrain area is marked as ${dekebab(jstr(m.tag))}`
-        : "the terrain area is marked";
-    case "objective-tag":
-      return m.tag != null
-        ? `the objective is marked as ${dekebab(jstr(m.tag))}`
-        : "the objective is marked";
-    case "unit-tag":
-      return m.tag != null
-        ? `${subj} ${v(subj, "is")} marked as ${dekebab(jstr(m.tag))}`
-        : `${subj} ${v(subj, "is")} marked`;
-
+    case "aura":
+      return auraClause(e, m, ctx);
+    case "no-effect":
+      return "nothing happens";
     // Container types — inline forms.
     case "conditional":
       if (e.effect?.type === "named-region-state")
@@ -1974,18 +814,6 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     }
     case "ability-part":
       return partInline(e, ctx);
-    case "named-effect": {
-      const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
-      if (e.cost || e.duration || e.trigger || e.usage) {
-        const lead = [normalizeTriggers(e.trigger).map(describeTrigger).join(" or "), e.usage ? usageClause(e.usage) : ""].filter(Boolean).join(", ");
-        const use = e.optional ? "you may use" : "use";
-        const cost = e.cost ? ` by paying this cost (${describeEffectInline(e.cost, ctx)})` : "";
-        const duration = durationClauses(e.duration).trail;
-        return `${lead ? `${lead}, ` : ""}${use} ${jstr(e.name)}${level}${cost}: ${duration ? `${duration}, ` : ""}${describeEffectInline(e.effect ?? {}, ctx)}`;
-      }
-      const prefix = e.optional ? "you can use " : "";
-      return `${prefix}${jstr(e.name)}${level}: ${describeEffectInline(e.effect ?? {}, ctx)}`;
-    }
     case "choice": {
       const prompt = choicePrompt(e);
       return `${prompt}: ${(e.options ?? []).map((o) => describeEffectInline(o, ctx)).join(" / ")}`;
@@ -2019,12 +847,6 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       const selectedCtx = selectedContext(ctx, e.selector ?? {});
       return `for each ${forEachUnitSubject(e.selector)}: ${describeEffectInline(e.effect ?? {}, selectedCtx)}`;
     }
-    case "select-objective":
-      return objectiveSelectionInline(e, ctx, false);
-    case "for-each-objective":
-      return objectiveSelectionInline(e, ctx, true);
-    case "paired-designation":
-      return pairedDesignationInline(e, ctx);
     case "designate-target": {
       const sel = (typeof e.select === "object" && e.select ? e.select : {}) as DesignationSelection;
       const desig = e.designation ? designationLabel(e.designation) : "";
@@ -2043,7 +865,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `${selectLead} one ${designationTargetSubject(sel)}${desig}; ${whenClause}, ${describeEffectInline(e.applies?.effect ?? {}, recipientCtx)}`;
     }
     case "stance-select":
-      return `select one: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+      return `${stancePick(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         stance_id?: unknown;
@@ -2059,36 +881,6 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
           : `one option of ${titleCase(jstr(m.stance_id))}`;
       return `you can select ${subject} ${times} per battle`;
     }
-    case "persistent-battlefield-marker-state":
-      return markerClauses(m).join("; ");
-    case "named-objective-state": {
-      const resolution = m.resolution ? describeEffectInline(m.resolution as Effect, ctx) : "nothing happens";
-      const clear =
-        m.clears === "after-resolving"
-          ? "; the mark is cleared once it resolves"
-          : m.clears === "end-of-turn"
-            ? "; the mark is cleared at the end of the turn"
-            : "";
-      return `the objective is marked as a ${jstr(m.state_label)} objective; ${resolution}${clear}`;
-    }
-    case "mirror-triggering-choice": {
-      const trail = m.duration != null ? ` ${durationClauses(jstr(m.duration)).trail}` : "";
-      return `${subj} receives the same ${jstr(m.choice_label)} the triggering unit selected with ${titleCase(jstr(m.source_ability_id))}${trail}`;
-    }
-    case "weapon-grant": {
-      const g = (e.modifier ?? {}) as { weapon_id?: unknown; count?: unknown };
-      const count = Number(g.count ?? 1) || 1;
-      const subject = e.target === "self" || e.target === "bearer" ? "this model" : "this unit";
-      return `${subject} gains ${jstr(count)} ${weaponLabel(jstr(g.weapon_id))} weapon${count === 1 ? "" : "s"}`;
-    }
-    case "eligibility-override": {
-      const waiver = (e.modifier ?? {}) as { activity?: unknown; ignored_restrictions?: unknown };
-      const restrictions = (Array.isArray(waiver.ignored_restrictions) ? waiver.ignored_restrictions : [])
-        .map((r) => ignoredRestrictionPhrase(jstr(r)))
-        .join(" or ");
-      const subject = e.target === "self" || e.target === "bearer" ? "this model" : "this unit";
-      return `${restrictions || "no listed restriction"} does not prevent ${subject} from being eligible to ${eligibleActivityPhrase(jstr(waiver.activity))}`;
-    }
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
@@ -2100,8 +892,18 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
 
 
     default:
+      if (LEAF_TYPES.has(e.type ?? "")) return describeLeaf(e as Leaf, ctx, (x, c) => describeEffectInline(x as Effect, c));
       return `[${e.type ?? "unknown"}]`;
   }
+}
+
+/** "select one", "select two", "select up to two" — how many menu options are picked. */
+function stancePick(e: Effect): string {
+  const min = e.min_choices ?? 1;
+  const max = e.max_choices ?? 1;
+  const n = (k: number): string => ["zero", "one", "two", "three", "four"][k] ?? String(k);
+  if (min === max) return `select ${n(max)}`;
+  return min <= 1 ? `select up to ${n(max)}` : `select from ${n(min)} to ${n(max)}`;
 }
 
 function choicePrompt(e: Effect): string {
@@ -2279,109 +1081,6 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
   return `${namedRegionPrefix(m)} When ${predicate}, ${qualifiedText}. Otherwise, ${defaultText}.`;
 }
 
-/** `not(happened selected-to-fight this phase)`: the subject that has not fought yet, else null. */
-function foughtThisPhase(c: Condition): string | null {
-  if (c.operator !== "not" || c.operands?.length !== 1) return null;
-  const p = c.operands[0]!.parameters ?? {};
-  const f = (p.filter ?? {}) as Record<string, unknown>;
-  if (c.operands[0]!.type !== "happened" || p.event !== "selected" || f.to !== "fight" || p.window !== "phase") return null;
-  return typeof p.subject === "string" ? p.subject : "this-unit";
-}
-
-/** Per-slug GW-prose for `attack-restriction` (reads `restriction` or `restriction_type`). */
-/**
- * `rule-state`: a named rule switched on/off for the subject. The `faction-rule`
- * + `suppressed` path reproduces the legacy `forgo-faction-rule` phrasing
- * verbatim (Angron "Reborn in Blood"); the core-rule slugs get natural
- * action/benefit phrasing; keyword/ability kinds fall back to a regular
- * gains/loses-the-X clause. Phrasing is pinned byte-for-byte across the four
- * language ports by the conformance corpus.
- */
-function describeRuleState(m: Record<string, unknown>, subj: string): string {
-  const dir = jstr(m.direction);
-  const kind = jstr(m.rule_kind);
-  const rule = jstr(m.rule);
-  const granted = dir === "granted";
-
-  // Faction-rule suppression keeps the original "forgo activating …" wording.
-  if (kind === "faction-rule" && !granted) {
-    const scope = m.scope != null ? ` this ${dekebab(jstr(m.scope))}` : "";
-    let cost = "";
-    const c = m.cost;
-    if (c != null && typeof c === "object" && (c as Record<string, unknown>).dice != null) {
-      const cc = c as Record<string, unknown>;
-      const from =
-        cc.from == null
-          ? ""
-          : jstr(cc.from) === rule
-            ? " from that roll"
-            : ` from the ${titleCase(jstr(cc.from))} roll`;
-      cost = `, using a ${dekebab(jstr(cc.dice))}${from}`;
-    }
-    return `forgo activating ${titleCase(rule)}${scope}${cost}`;
-  }
-  if (kind === "faction-rule") return `${subj} ${v(subj, "gains")} ${titleCase(rule)}`;
-
-  // Natural phrasing for the closed core-rule slug vocabulary.
-  switch (rule) {
-    case "benefit-of-cover":
-      return granted ? `${subj} ${v(subj, "has")} the Benefit of Cover` : `${subj} cannot benefit from Cover`;
-    case "charge":
-      return granted ? `${subj} can charge` : `${subj} cannot charge`;
-    case "advance":
-      return granted ? `${subj} can Advance` : `${subj} cannot Advance`;
-    case "fall-back":
-      return granted ? `${subj} can Fall Back` : `${subj} cannot Fall Back`;
-    case "ordered-retreat":
-      // GW frames this lever by its effect on Desperate Escape tests: suppressing
-      // Ordered Retreat forces the tests; granting it (e.g. while Battle-shocked)
-      // exempts the unit. Mirrors the `desperate-escape` slug wording.
-      return granted
-        ? `${subj} ${v(subj, "is")} not affected by Desperate Escape tests`
-        : `${subj} must take Desperate Escape tests`;
-    case "fire-overwatch":
-      return granted ? `${subj} can fire Overwatch` : `${subj} cannot fire Overwatch`;
-    case "overwatch-against-bearer":
-      return granted ? `your opponent can target ${subj} with Overwatch` : `your opponent cannot target ${subj} with Overwatch`;
-    case "desperate-escape":
-      return granted
-        ? `${subj} must take Desperate Escape tests`
-        : `${subj} ${v(subj, "is")} not affected by Desperate Escape tests`;
-  }
-
-  // Ability / keyword kinds (every core-rule slug is cased above): regular clause.
-  const noun = kind === "keyword" ? "keyword" : "ability";
-  return granted
-    ? `${subj} ${v(subj, "gains")} the ${titleCase(rule)} ${noun}`
-    : `${subj} ${v(subj, "loses")} the ${titleCase(rule)} ${noun}`;
-}
-
-function describeAttackRestriction(m: Record<string, unknown>, subj: string): string {
-  // Some entries express the restriction as a forbidden action (`attack_type: charge`).
-  if (m.restriction == null && m.restriction_type == null && m.attack_type != null)
-    return `${subj} cannot ${jstr(m.attack_type)}`;
-  const slug = jstr(m.restriction ?? m.restriction_type);
-  const range = m.range != null ? jstr(m.range) : null;
-  switch (slug) {
-    case "worsen-incoming-ap":
-      return `each time an attack targets ${subj}, worsen the Armour Penetration of that attack by ${jstr(m.value ?? 1)}`;
-    case "targeting-range-limit":
-      return `${subj} can only target enemy units within ${range ?? "?"}"`;
-    case "reinforcement-denial":
-      return `enemy units cannot be set up from Reserves within ${range ?? "?"}" of ${subj}`;
-    case "must-be-warlord":
-      return "this model must be your Warlord";
-    case "cannot-be-warlord":
-      return "this model cannot be your Warlord";
-    case "unique-unit-limit":
-      return "you can include only one of this unit in your army";
-    case "no-charge":
-      return `${subj} cannot charge`;
-    default:
-      return `${subj}: ${dekebab(slug)}${range != null ? ` (within ${range}")` : ""}`;
-  }
-}
-
 /**
  * What leads a part: its moment, its usage limit, its name when the rules give one, the choice to
  * use it and its cost ("at the end of your Movement phase, once per battle, you can").
@@ -2428,15 +1127,6 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const inner = e.effect ?? {};
       if (CONTAINER_TYPES.has(inner.type ?? "")) return `${indent}-> ${capitalize(partHead(e))}:\n` + describeEffect(inner, depth + 1, ctx);
       return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
-    }
-    case "named-effect": {
-      if (e.cost || e.duration || e.trigger || e.usage) return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
-      const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
-      const inner = e.effect ?? {};
-      const prefix = e.optional ? "You can use " : "";
-      if (CONTAINER_TYPES.has(inner.type ?? ""))
-        return `${indent}${prefix}${jstr(e.name)}${level}:\n` + describeEffect(inner, depth + 1, ctx);
-      return `${indent}${arrow}${prefix}${jstr(e.name)}${level}: ${capitalize(describeEffectInline(inner, ctx))}.`;
     }
     case "choice": {
       const prompt = choicePrompt(e);
@@ -2495,10 +1185,6 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     }
     case "leader-model-ability-grant":
       return `${indent}${arrow}${capitalize(leaderModelAbilityGrantClause(e, ctx))}.`;
-    case "formation-attachment-grant":
-      return `${indent}${arrow}${capitalize(formationAttachmentGrantClause(e, ctx))}.`;
-    case "attachment-eligibility-inherit":
-      return `${indent}${arrow}${capitalize(attachmentEligibilityInheritClause(e.modifier ?? {}))}.`;
     case "persistent-designation": {
       if (e.operation === "replace") return `${indent}${arrow}${capitalize(persistentDesignationReplacement(e))}.`;
       if (!persistentDesignationSupported(e))
@@ -2518,12 +1204,6 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
         return `${indent}${lead}:\n` + describeEffect(inner, depth + 1, selectedCtx);
       return `${indent}${lead}: ${capitalize(describeEffectInline(inner, selectedCtx))}.`;
     }
-    case "select-objective":
-      return `${indent}${arrow}${capitalize(objectiveSelectionInline(e, ctx, false))}.`;
-    case "for-each-objective":
-      return `${indent}${arrow}${capitalize(objectiveSelectionInline(e, ctx, true))}.`;
-    case "paired-designation":
-      return `${indent}${arrow}${capitalize(pairedDesignationInline(e, ctx))}.`;
     case "designate-target": {
       const sel = (typeof e.select === "object" && e.select ? e.select : {}) as DesignationSelection;
       const desig = e.designation ? designationLabel(e.designation) : "";
@@ -2552,7 +1232,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "stance-select": {
       const when = typeof e.select === "string" ? capitalize(eventClause(e.select)) : "At the start of your turn";
       const consum = e.mode === "consumable" ? " (each may be chosen once per battle)" : "";
-      const lines = [`${indent}${arrow}${when}, select one${consum}:`];
+      const lines = [`${indent}${arrow}${when}, ${stancePick(e)}${consum}:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
@@ -2641,21 +1321,6 @@ export function describeAbility(a: AbilityLike): string {
   return [core, applies].filter(Boolean).join("\n");
 }
 
-/** Assemble the top-level sentence/block, weaving trigger + usage + scope duration + range. */
-/**
- * Aura radius in inches: an explicit `range_inches` when present, else the
- * integer baked into a standard `aura-<n>` slug (`aura-6` -> 6), else undefined.
- * Per the scope schema, `aura-6/9/12` carry the radius in the slug and leave
- * `range_inches` null; only `aura-custom` sets `range_inches`. Non-aura ranges
- * (`unit`, `engagement-range`, ...) yield undefined, so the subject helper keeps
- * its `" nearby"` fallback for them.
- */
-function auraRadius(scope?: AbilityScope): number | undefined {
-  if (scope?.range_inches != null) return scope.range_inches;
-  const m = /^aura-(\d+)$/.exec(scope?.range ?? "");
-  return m ? Number(m[1]) : undefined;
-}
-
 /** The inch range of a top-level `within` condition, else undefined. */
 function conditionWithinRange(c?: Condition): number | undefined {
   if (c?.type !== "within") return undefined;
@@ -2669,11 +1334,7 @@ function renderTopLevel(
   usage?: AbilityUsage | null,
   trigger?: AbilityTriggerSpec | null,
 ): string {
-  const ctx: Ctx = {
-    rangeInches: auraRadius(scope),
-    engagementRange: scope?.range === "engagement-range",
-    scopeRange: scope?.range,
-  };
+  const ctx: Ctx = {};
   const { lead: durLead, trail } = durationClauses(scope?.duration);
   // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
   const lead = usage && usage.frequency != null ? usageClause(usage) : durLead;
@@ -2682,12 +1343,14 @@ function renderTopLevel(
   // sentence ("Each time …"). B2: when a trigger's proximity just restates a
   // within-range condition on the effect, render the range once (drop it here).
   const triggers = normalizeTriggers(trigger).filter((t) => t.event != null);
+  if (triggers.some((t) => t.event === "destroyed" || t.event === "model-destroyed")) ctx.destroyedTrigger = true;
   const condRange = conditionWithinRange(e.type === "conditional" ? e.condition : undefined);
   const trig = triggers
     .map((t) =>
       describeTrigger(condRange != null && (t.proximity?.range as { inches?: unknown } | undefined)?.inches === condRange ? { ...t, proximity: undefined } : t),
     )
-    .filter((s) => s.length > 0)
+    // Two triggers that read the same are one trigger in English ("when X or when X").
+    .filter((s, i, all) => s.length > 0 && all.indexOf(s) === i)
     .join(" or ");
 
   if (e.type === "conditional") {
@@ -2715,26 +1378,6 @@ function renderTopLevel(
   return assembleSentence([trig, lead, trail, describeEffectInline(e, ctx)]);
 }
 
-/** Weapon qualifiers are conjunctive, and the owner remains a model or a unit. */
-function weaponNoun(m: Record<string, unknown>): string {
-  const kind = m.weapon_type ? `${jstr(m.weapon_type)} ` : "";
-  const name = m.weapon_name ? `${jstr(m.weapon_name)} ` : "";
-  const keyword = m.weapon_keyword ? ` with [${jstr(m.weapon_keyword).toUpperCase()}]` : "";
-  return `${kind}${name}weapons${keyword}`;
-}
-function weaponHolder(target: string | undefined, ctx: Ctx): string {
-  if (target === "self") return "this model";
-  if (target === "bearer") return "the bearer";
-  if (ctx.unitSubject && (target === "unit" || target === "attacker")) return `models in ${ctx.unitSubject}`;
-  if (ctx.selectedModel) return "that model";
-  if (target === "unit" || target === "attached-unit") return ctx.selectedUnit ? "models in that unit" : "models in this unit";
-  return subject(target, ctx);
-}
-function weaponRollScope(m: Record<string, unknown>): string {
-  if (m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null) return ` with ${weaponNoun(m)}`;
-  if (m.attack_type != null && m.attack_type !== "any") return ` for ${jstr(m.attack_type)} attacks`;
-  return "";
-}
 function leadershipTest(e: Effect, ctx: Ctx): string {
   const who = e.test?.subject === "self" ? "this model" : e.test?.subject === "target" ? "the target unit" : "that unit";
   const kind = e.test?.kind === "battle-shock" ? "Battle-shock" : "Leadership";
@@ -2762,53 +1405,6 @@ function selectionBinding(sel: Record<string, unknown>): string {
     : "";
 }
 
-function objectiveSelectionInline(e: Effect, ctx: Ctx, each: boolean): string {
-  const sel = e.selector ?? {};
-  const range = sel.range_inches != null ? ` within ${jstr(sel.range_inches)} inches of ${sel.origin === "bearer-unit" ? "this model's unit" : "the bearer"}` : "";
-  const controlled = sel.controlled_by === "your-army" ? " you control" : sel.controlled_by === "opponent" ? " your opponent controls" : "";
-  const qualifier = sel.requires_unit as Record<string, unknown> | undefined;
-  const ability = qualifier ? ` with one or more ${jstr(qualifier.owner)} units with the ${titleCase(jstr(qualifier.requires_ability))} ability within range` : "";
-  const limit = sel.selection_limit as { count: number; period: string } | undefined;
-  const dedupe = limit ? `; ${selectionLimitPhrase(limit, "objective marker")}` : "";
-  const subject = `objective marker${controlled}${range}${ability}${selectionBinding(sel)}`;
-  return `${each ? "for each" : "select one"} ${subject}: ${describeEffectInline(e.effect ?? {}, ctx)}${dedupe}`;
-}
-
-function pairedSelectorSubject(sel: Record<string, unknown>, current?: { id: unknown; name: string }): string {
-  const quantity = sel.selection_mode === "any-number" ? "any number of" : "one";
-  const noun = sel.selection_mode === "any-number" ? "units" : "unit";
-  const ability = sel.requires_ability ? ` with the ${titleCase(jstr(sel.requires_ability))} ability` : "";
-  const reference = sel.visible_to;
-  const currentReference = current && reference && typeof reference === "object"
-    && "selection_var" in reference && reference.selection_var === current.id;
-  const visible = reference ? ` visible to ${currentReference ? current.name : selectionRefName(reference, "the selected source unit")}` : "";
-  return `${quantity} ${jstr(sel.owner)} ${noun}${ability}${visible}`;
-}
-
-function pairedDesignationInline(e: Effect, ctx: Ctx): string {
-  const node = e as Record<string, unknown>;
-  const observerRole = node.observer as Record<string, unknown>;
-  const spottedRole = node.spotted as Record<string, unknown>;
-  const observer = observerRole.selector as Record<string, unknown>;
-  const spotted = spottedRole.selector as Record<string, unknown>;
-  const guided = node.guided as Record<string, unknown>;
-  const observerName = titleCase(jstr(observerRole.role));
-  const spottedName = titleCase(jstr(spottedRole.role));
-  const guidedName = titleCase(jstr(guided.role));
-  const observerSet = selectionRefName({ selection_var: observer.bind_as }, `${observerName} units`);
-  const observerLimit = selectUnitsEngagement(observer);
-  const spottedLimit = selectUnitsEngagement(spotted);
-  const eligibility = describeCondition(node.observer_eligibility as Condition);
-  const exclusion = selectionRefName(guided.excludes, `${observerName} units`);
-  const target = selectionRefName(guided.while_attacking, `${spottedName} units`);
-  const effect = describeEffectInline(node.effects as Effect, { ...ctx, unitSubject: `the attacking ${guidedName} unit` });
-  const initial = `at the start of your Shooting phase, select ${pairedSelectorSubject(observer)} as ${observerName} units${selectionBinding(observer)}${observerLimit ? `. ${observerLimit}` : "."}`;
-  const currentObserver = { id: observer.bind_as, name: `that ${observerName} unit` };
-  const marking = `During your Shooting phase, for each ${observerName} unit in ${observerSet}, if ${eligibility}, select ${pairedSelectorSubject(spotted, currentObserver)} as that ${observerName} unit's ${spottedName} unit${selectionBinding(spotted)}${spottedLimit ? `. ${spottedLimit}` : "."}`;
-  const guidedUnits = `${capitalize(jstr(guided.owner))} units with the ${titleCase(jstr(guided.requires_ability))} ability, excluding all ${observerName} units in ${exclusion}, are ${guidedName} units while targeting one or more ${spottedName} units in ${target}.`;
-  return `${initial} ${marking} ${guidedUnits} Until the end of the phase, each time a model in a ${guidedName} unit attacks a ${spottedName} unit, using the ${observerName} that marked that target: ${effect}`;
-}
-
 function designatedAttackWhen(applies: Record<string, unknown>): string {
   const source = selectionRefName(applies.beneficiary, "the selected beneficiary unit");
   const target = selectionRefName(applies.reference, "the selected designated target");
@@ -2818,53 +1414,4 @@ function designatedAttackWhen(applies: Record<string, unknown>): string {
 function designatedRecipientContext(applies: Effect["applies"], ctx: Ctx): Ctx {
   if (applies?.to !== "bound-unit-attacks-reference") return ctx;
   return { ...ctx, unitSubject: selectionRefName(applies.beneficiary, "the selected beneficiary unit") };
-}
-
-function rollReference(value: unknown): string | undefined {
-  if (typeof value !== "object" || value === null || !("roll_var" in value)) return undefined;
-  const rollVar = value.roll_var;
-  return typeof rollVar === "string" ? rollVar : undefined;
-}
-
-function miracleDieReference(ref: unknown): string {
-  if (typeof ref !== "object" || ref === null || !("die_var" in ref) || typeof ref.die_var !== "string") {
-    throw new Error("A Miracle die reference requires a die_var binding");
-  }
-  const variable = ref.die_var;
-  return `the Miracle die bound as ${dekebab(variable.replace(/_/g, "-"))}`;
-}
-
-function miracleDieOperationClause(m: Record<string, unknown>): string {
-  const pool = poolName(m.pool_id);
-  switch (m.operation) {
-    case "reroll-generated-result":
-      return `you may re-roll the result of ${miracleDieReference(m.die)} before adding it to your ${pool}`;
-    case "reroll-retained-and-return": {
-      const selection = m.selection as Record<string, unknown>;
-      const count = selection.count;
-      const bounds = typeof count === "object" && count !== null ? count as { minimum: number; maximum: number } : undefined;
-      const single = count === 1 || bounds?.maximum === 1;
-      const amount = single ? "one Miracle die" : bounds?.minimum === 1 ? `up to ${bounds.maximum} Miracle dice` : `from ${bounds!.minimum} through ${bounds!.maximum} Miracle dice`;
-      return `you may select ${amount} from your ${pool}, re-roll ${single ? "it" : "them"}, and return ${single ? "that same die" : "those same dice"} to your ${pool} showing the new ${single ? "result" : "results"}`;
-    }
-    case "set-generated-value-without-roll":
-      return `do not roll to determine the value of ${miracleDieReference(m.die)}; it has a value of ${jstr(m.value)}`;
-    case "set-used-value":
-      return `change ${miracleDieReference(m.die)}, selected from the dice used in that Act of Faith, to a value of ${jstr(m.value)} before it is used`;
-    default:
-      throw new Error(`Unknown Miracle die operation: ${jstr(m.operation)}`);
-  }
-}
-
-function formationAttachmentGrantClause(e: Effect, ctx: Ctx): string {
-  const attachment = e.attachment ?? {};
-  const bodyguard = titleCase(jstr(attachment.bodyguard_id));
-  const leader = attachment.leader_id ? `a ${titleCase(attachment.leader_id)} leader model` : "this model";
-  const beneficiary = e.beneficiary === "attached-leader-model" ? "that leader model" : "this model";
-  const grant = describeEffectInline({ ...(e.grant?.effect ?? {}), target: "self" }, ctx).replace(/\bthis model\b/g, beneficiary);
-  return `if ${leader} was attached to ${bodyguard} when declaring Battle Formations, ${grant} for the battle`;
-}
-
-function attachmentEligibilityInheritClause(m: Record<string, unknown>): string {
-  return `a ${titleCase(jstr(m.leader_id))} model with the ${jstr(m.required_leader_ability)} ability that can be attached to a ${titleCase(jstr(m.from_bodyguard_id))} unit can be attached to a ${titleCase(jstr(m.to_bodyguard_id))} unit instead`;
 }

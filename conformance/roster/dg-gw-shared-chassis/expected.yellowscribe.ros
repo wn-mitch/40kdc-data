@@ -18,7 +18,7 @@
             <profile name="Deadly Demise 1" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain 5+" typeName="Abilities">
@@ -33,7 +33,7 @@
             </profile>
             <profile name="Mind-breaking Mutations (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Modify the unit's characteristics.</characteristic>
+                <characteristic name="Description">Subtract 1 from the Objective Control characteristic of enemy units (excluding VEHICLE units) within 3".</characteristic>
               </characteristics>
             </profile>
             <profile name="Regenerating Monstrosities" typeName="Abilities">
@@ -43,17 +43,17 @@
             </profile>
             <profile name="Scouts 6&quot;" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts 8&quot;" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 8".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts 8" ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scuttling Horrors" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">An enemy unit ends a move, you may use this ability, once per turn, the unit can make a Reactive move.</characteristic>
+                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, once per turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
               </characteristics>
             </profile>
             <profile name="To Slake its Rage" typeName="Abilities">
@@ -105,7 +105,8 @@
             </profile>
             <profile name="Assault Vehicle" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Units can disembark from this model after it has Advanced; such units count as having made a Normal move, but cannot declare a charge this turn.</characteristic>
+                <characteristic name="Description">This model is eligible to disembark in a turn in which it Advanced.
+-&gt; When a friendly unit disembarks from a Transport: if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
             <profile name="Fire Support" typeName="Abilities">
@@ -115,12 +116,12 @@
             </profile>
             <profile name="Firing Deck 2" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck ability (2).</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck 2 ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Meet Any Challenge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">An enemy unit ends a move, you may use this ability, the unit can make a Reactive move.</characteristic>
+                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, while the triggering unit is within 8" of this model, friendly units that are embarked are eligible to disembark.</characteristic>
               </characteristics>
             </profile>
             <profile name="Self Repair" typeName="Abilities">
@@ -138,7 +139,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

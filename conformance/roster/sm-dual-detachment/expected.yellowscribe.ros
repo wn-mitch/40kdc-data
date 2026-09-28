@@ -23,7 +23,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -111,7 +111,7 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

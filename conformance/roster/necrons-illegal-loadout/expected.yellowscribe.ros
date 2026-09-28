@@ -22,7 +22,7 @@
             </profile>
             <profile name="Implacable Resilience" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an attack targets the unit, reduce the Damage of that attack by 1.</characteristic>
+                <characteristic name="Description">Each time an attack is allocated to the unit, subtract 1 from the Damage characteristic of that attack.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -32,12 +32,12 @@
             </profile>
             <profile name="My Will Be Done" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, you can use one Stratagem on this model for 0CP.</characteristic>
+                <characteristic name="Description">Once per battle, you gain 1CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Resurrection Orb" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, while this model is leading a unit, return 1 destroyed model to the unit with full wounds.</characteristic>
+                <characteristic name="Description">Once per battle, while this model is leading a unit, the unit regains up to D6 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -99,7 +99,7 @@
             </profile>
             <profile name="Their Number is Legion" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Reanimation Protocols roll.</characteristic>
+                <characteristic name="Description">If the unit used the Reanimation Protocols ability, you can re-roll any roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

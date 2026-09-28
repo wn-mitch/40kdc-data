@@ -73,8 +73,8 @@ test('primary revisions reconcile imported Feel No Pain candidates without grant
       game_version: { edition: '11th', dataslate: 'test' },
       ability_type: 'datasheet',
       behavior: 'passive',
-      effect: { type: 'feel-no-pain', target: 'unit', modifier: { threshold: 6, scope: 'mortal-wounds' } },
-      scope: { range: 'unit', duration: 'permanent' },
+      effect: { type: 'feel-no-pain', target: 'this-unit', modifier: { threshold: 6, against: 'mortal' } },
+      scope: { duration: 'permanent' },
     },
   })
   const fnp = threshold => ({
@@ -83,8 +83,8 @@ test('primary revisions reconcile imported Feel No Pain candidates without grant
     value: {
       predicate: 'mechanic.effect.feel-no-pain',
       arguments: [
-        { role: 'affected-entity', value: 'unit' },
-        { role: 'scope', value: 'mortal-wounds' },
+        { role: 'affected-entity', value: 'this-unit' },
+        { role: 'scope', value: 'mortal' },
         { role: 'threshold', value: threshold },
       ],
       qualifiers: [],

@@ -105,7 +105,7 @@ describe("Round 5C restrictions", () => {
       ] },
     } });
     // The qualifiers say who can be picked, not when the effect applies.
-    expect(result.mechanics.effect).toEqual({ type: "fight-first", target: "unit", modifier: {} });
+    expect(result.mechanics.effect).toEqual({ type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } });
   });
 
   it("binds \"that X unit\" to the WHEN moment, narrowing the trigger to its keywords", () => {
@@ -131,7 +131,7 @@ describe("Round 5C restrictions", () => {
   });
 
   it("ends an effect at the start of your next turn or Command phase", () => {
-    expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-next-command-phase" });
-    expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-turn" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-start-next-turn" });
+    expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" })]).mechanics.scope).toEqual({ duration: "until-next-command-phase" });
+    expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-turn" })]).mechanics.scope).toEqual({ duration: "until-start-next-turn" });
   });
 });

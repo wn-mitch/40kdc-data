@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+import re
+
 from wh40kdc.translate.condition_refs import (
     _MOVE_VERBS,
     P,
@@ -51,6 +53,16 @@ def _describe_happened(p: P, negated: bool) -> str:
             return _with_window(f"{who} {has} fought", window)
         verb = "shoot or fight" if to == "attack" else dekebab(to)
         return _with_window(f"{who} {has} been selected to {verb}", window)
+    if event == "set-up":
+        return _with_window(f"{who} {'was not' if negated else 'was'} set up", window)
+    if event == "targets-selected":
+        has = "has not" if negated else "has"
+        what = (
+            f"{unit_ref_phrase(p['object'])} as a target"
+            if p.get("object") is not None
+            else "targets"
+        )
+        return _with_window(f"{who} {has} selected {what}", window)
     if event == "disembarked":
         return _with_window(f"{who} {did_not('disembark')} from a Transport", window)
     if event == "after-roll":
@@ -63,7 +75,13 @@ def _describe_happened(p: P, negated: bool) -> str:
             else ""
         )
         if _truthy(f.get("weapon_name")):
-            weapon = f" by {_str(f['weapon_name'])}" + (f" (with {keyword})" if keyword else "")
+            raw_name = _str(f["weapon_name"])
+            name = (
+                title_case(raw_name)
+                if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw_name)
+                else raw_name
+            )
+            weapon = f" by {name}" + (f" (with {keyword})" if keyword else "")
         elif keyword:
             weapon = f" made with a {keyword} weapon"
         else:

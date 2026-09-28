@@ -10,7 +10,7 @@
  * It takes a normalized **ingest manifest** (a JSON array; one record per
  * ability — see {@link IngestRecord}) and does three things, all *non-agentic*:
  *
- *   1. Seeds an empty-modifier stub into `data/enrichment/<faction>/abilities.json`
+ *   1. Seeds a stub (`stub: true`, effect `no-effect`) into `data/enrichment/<faction>/abilities.json`
  *      for any new ability (idempotent; additive `unit_ids` merge for known ids),
  *      so `author:propose`/`apply` have a live target to fill.
  *   2. Writes/merges `data/_audit/author-input/<faction>.json` in the exact
@@ -41,7 +41,7 @@ import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { kebab } from "./author-seed.js";
-import { hasEmptyModifier } from "./audit-coverage.js";
+import { STUB_EFFECT, isStubEntry } from "./audit-coverage.js";
 import type { AuthorInputEntry, SourceRule } from "./author-input.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -139,10 +139,11 @@ function newStub(rec: IngestRecord, abilityId: string): Json {
     authored_by: STUB_AUTHORED_BY,
     game_version: { ...(rec.game_version ?? STUB_GAME_VERSION) },
     version: STUB_VERSION,
-    // Empty-modifier placeholder — hasEmptyModifier() == true, so the pipeline
-    // treats it as a stub to fill. propose/apply overwrite effect+scope.
-    effect: { type: "stat-modifier", target: "unit", modifier: {} },
-    scope: { range: "unit", duration: "permanent" },
+    // Placeholder — isStubEntry() == true, so the pipeline treats it as a stub to
+    // fill. propose/apply overwrite effect+scope and drop `stub`.
+    stub: true,
+    effect: { ...STUB_EFFECT },
+    scope: { duration: "permanent" },
     unit_ids: [...(rec.unit_ids ?? [])],
     ability_type: abilityType,
     behavior,
@@ -190,7 +191,7 @@ export function ingestFaction(
         if (!entry.unit_ids.includes(u)) {
           entry.unit_ids.push(u);
           result.mergedUnits++;
-          if (!hasEmptyModifier(entry.effect)) result.mergedIntoAuthored.push({ ability_id: id, unit_id: u });
+          if (!isStubEntry(entry)) result.mergedIntoAuthored.push({ ability_id: id, unit_id: u });
         }
       }
     } else {

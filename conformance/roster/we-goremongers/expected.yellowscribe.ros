@@ -17,12 +17,12 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Loping Speed" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">An enemy unit ends a Normal, Advance or Fall Back move within 9" of this model, you may use this ability, once per turn, during the Movement phase, in the opponent's turn, unless an enemy unit is within Engagement Range, until the end of the phase, the unit can make a Normal move of up to D6".</characteristic>
+                <characteristic name="Description">Each time an enemy unit ends a Normal, Advance or Fall Back move within 9" of this model, you may use this ability, once per turn, during the Movement phase, in the opponent's turn, unless an enemy unit is within Engagement Range, until the end of the phase, the unit can make a Normal move of up to D6".</characteristic>
               </characteristics>
             </profile>
           </profiles>

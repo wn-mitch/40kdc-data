@@ -23,12 +23,12 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Surge of Wrath (Psychic)" typeName="Abilities">
@@ -41,7 +41,7 @@
             </profile>
             <profile name="Warrior Strategist" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.</characteristic>
+                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -100,32 +100,33 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Fights First" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Fights First ability.</characteristic>
+                <characteristic name="Description">The unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lone Operative" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model can only be selected as the target of ranged attacks if the attacking unit is within 12".</characteristic>
+                <characteristic name="Description">Enemy units cannot target this model with ranged weapons unless the attacking unit is within 12".</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Deceit (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Stratagems that target enemy units within 12" cost 1 more CP.</characteristic>
+                <characteristic name="Description">Stratagems that target enemy units within 12" cost 1CP more.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shadow Assignment" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can include only one of this unit in your army.</characteristic>
+                <characteristic name="Description">This model cannot be your Warlord.
+Your army can include only one of all friendly units.</characteristic>
               </characteristics>
             </profile>
           </profiles>

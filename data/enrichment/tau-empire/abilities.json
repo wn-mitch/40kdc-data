@@ -10,15 +10,14 @@
     "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "scout",
-        "distance": 7
+        "ability": "scouts",
+        "value": 7
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -41,11 +40,10 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "d3"
+        "count": "D3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -71,16 +69,24 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "enemy-within-aura",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "count": "3D6",
-          "range": 6
+          "range": {
+            "inches": 6
+          }
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -107,14 +113,13 @@
     "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
     "version": "2025-q3",
     "effect": {
-      "type": "unit-keyword",
-      "target": "self",
+      "type": "ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keyword_id": "hover"
+        "ability": "hover"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -143,7 +148,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures"
@@ -151,7 +156,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -171,16 +175,16 @@
     "source_digest": "6af1c590f90f9ff6241990686ca37f21ac41f030c6299b9914fdcbdf1eaa6620",
     "version": "2025-q3",
     "effect": {
-      "type": "resource-spend",
-      "target": "self",
+      "type": "cost-modifier",
+      "target": "this-model",
       "modifier": {
-        "resource": "cp",
+        "of": "stratagem",
         "operation": "multiply",
-        "value": 3
+        "amount": 3,
+        "applies_to": "targeting-this-unit"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -210,12 +214,13 @@
     "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
     "version": "2025-q3",
     "effect": {
-      "type": "deep-strike",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "deep-strike"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -247,7 +252,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -269,7 +274,7 @@
             },
             "effect": {
               "type": "re-roll",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "roll": "hit",
                 "subset": "all-failures"
@@ -280,7 +285,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -308,16 +312,17 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "ignore-modifiers",
+        "target": "this-unit",
         "modifier": {
-          "roll": "all",
-          "operation": "ignore-modifiers"
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -337,14 +342,14 @@
     "source_digest": "885484dece2e1b90a0c294e7fe43d8e42e4c5aa3de790374882d4288e43e351d",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "weapon-grant",
+      "target": "this-model",
       "modifier": {
-        "grant_type": "ranged-weapon"
+        "weapon_id": "twin-pulse-carbine",
+        "count": 1
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -368,28 +373,28 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "markerlight"
             ]
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "ability": "observer-unit",
-            "bypass_restrictions": [
-              "advanced-this-turn"
+            "activity": "observe",
+            "allow": true,
+            "after": [
+              "advance"
             ]
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -411,7 +416,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "stat": "W",
         "operation": "add",
@@ -419,7 +424,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -445,16 +449,24 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "enemy-within-aura",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
-          "count": "1",
-          "range": 6
+          "count": 1,
+          "range": {
+            "inches": 6
+          }
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -481,15 +493,14 @@
     "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "scout",
-        "distance": 9
+        "ability": "scouts",
+        "value": 9
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -509,14 +520,20 @@
     "source_digest": "6ae825514e2a677de0df30f0ae9038e3604a8bf997e322710406abfe9c741996",
     "version": "2025-q3",
     "effect": {
-      "type": "leadership-modifier",
-      "target": "enemy-within-aura",
+      "type": "test",
+      "target": {
+        "owner": "enemy",
+        "within": {
+          "range": {
+            "inches": 12
+          }
+        }
+      },
       "modifier": {
         "test": "battle-shock"
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -536,14 +553,13 @@
     "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
     "version": "2025-q3",
     "effect": {
-      "type": "unit-keyword",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keyword_id": "infiltrators"
+        "ability": "infiltrators"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -581,7 +597,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -631,7 +646,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -639,7 +654,7 @@
           },
           {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -649,7 +664,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -670,14 +684,16 @@
     "source_digest": "1a8c79f0b21f00a92f01de2ed1986619e1fe8468128fa71630e02ed6617bc869",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
+      "type": "cost-modifier",
+      "target": "this-model",
       "modifier": {
-        "type": "stratagem-for-0cp"
+        "of": "stratagem",
+        "operation": "set",
+        "amount": 0,
+        "applies_to": "targeting-this-unit"
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -703,16 +719,24 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "enemy-within-aura",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "count": "D3",
-          "range": 6
+          "range": {
+            "inches": 6
+          }
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -747,7 +771,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -770,19 +793,19 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
             ]
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Precision"
             ]
           }
@@ -790,7 +813,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -811,16 +833,15 @@
     "source_digest": "46eb6e2dd14c6206fbfdd32f4317949ebc1e562f2708d78f36f38ae358b3a029",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -840,16 +861,15 @@
     "source_digest": "8a246b07bbe24e755beec19fe7daf97c9fccaae40a1fb05c457a2ae285f28d83",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -878,7 +898,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "unit_ids": [
@@ -899,16 +918,16 @@
     "source_digest": "1aca15269a3756329fb08fa6fb08208cb2724cef6a01147e761661fc4a9df5d2",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "stat-modifier",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "weapon-range-increase",
-        "weapon": "pulse-carbine",
-        "value": 6
+        "stat": "Range",
+        "operation": "add",
+        "value": 6,
+        "weapon_name": "pulse-carbine"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -932,25 +951,23 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "bearer",
+          "type": "weapon-grant",
+          "target": "this-model",
           "modifier": {
-            "grant_type": "weapon-grant",
             "weapon_id": "drone-burst-cannon",
             "count": 1
           }
         },
         {
           "type": "ability-grant",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "infiltrators"
+            "ability": "infiltrators"
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -982,7 +999,7 @@
         "to": "target",
         "effect": {
           "type": "roll-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "operation": "subtract",
@@ -993,7 +1010,6 @@
       "duration": "until-next-command-phase"
     },
     "scope": {
-      "range": "any-visible",
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
@@ -1039,15 +1055,15 @@
         ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "self",
+        "type": "weapon-grant",
+        "target": "this-model",
         "modifier": {
-          "grant_type": "ranged-weapon"
+          "weapon_id": "support-turret",
+          "count": 1
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
@@ -1077,7 +1093,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -1086,7 +1102,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1106,15 +1121,14 @@
     "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "scout",
-        "distance": 8
+        "ability": "scouts",
+        "value": 8
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1157,19 +1171,19 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "keywords": [
+              "abilities": [
                 "Sustained Hits 1"
               ]
             }
           },
           {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "keywords": [
+              "abilities": [
                 "Ignores Cover"
               ]
             }
@@ -1178,7 +1192,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1199,14 +1212,20 @@
     "source_digest": "ab1597203373a1b78b4a9f696dc461968edc81ccf72707e6e44dac55daa82548",
     "version": "2025-q3",
     "effect": {
-      "type": "leadership-modifier",
-      "target": "enemy-within-aura",
+      "type": "test",
+      "target": {
+        "owner": "enemy",
+        "within": {
+          "range": {
+            "inches": 12
+          }
+        }
+      },
       "modifier": {
         "test": "battle-shock"
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "turn"
     },
     "unit_ids": [
@@ -1234,13 +1253,18 @@
         }
       },
       "effect": {
-        "type": "fallback-and-act",
-        "target": "unit",
-        "modifier": {}
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "shoot",
+          "allow": true,
+          "after": [
+            "fall-back"
+          ]
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1260,15 +1284,14 @@
     "source_digest": "de5df74fd940435a56094d752810df694bf28ea689449fe2b046910a38a6ba82",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "weapon-grant",
+      "target": "this-model",
       "modifier": {
-        "grant_type": "weapon",
-        "weapon": "twin-pulse-blaster"
+        "weapon_id": "twin-pulse-blaster",
+        "count": 1
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1298,16 +1321,15 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "stat": "AP",
-          "operation": "add",
-          "value": -1
+          "operation": "improve",
+          "value": 1
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1327,12 +1349,17 @@
     "source_digest": "996381ff6aab2a20abe738971a27cbeebbd6f1335c7a4c5383e05cd2e4da6677",
     "version": "2025-q3",
     "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1358,16 +1385,24 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "enemy-within-aura",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "count": "D6+2",
-          "range": 6
+          "range": {
+            "inches": 6
+          }
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1402,15 +1437,14 @@
         }
       },
       "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
+        "type": "test",
+        "target": "selected-unit",
         "modifier": {
           "test": "battle-shock"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1430,16 +1464,15 @@
     "source_digest": "d1769e938a0d3c53dc8ccc2f8e1d0a76b206c60536c6acb4a97f3e9ab40cffb1",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "self",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Transport"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1468,7 +1501,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures"
@@ -1476,7 +1509,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1496,8 +1528,8 @@
     "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "self",
+      "type": "move-modifier",
+      "target": "this-model",
       "modifier": {
         "passthrough": [
           "all-terrain"
@@ -1505,7 +1537,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1533,16 +1564,17 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "ignore-modifiers",
+        "target": "this-unit",
         "modifier": {
-          "roll": "all",
-          "operation": "ignore-modifiers"
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1571,7 +1603,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "all-failures"
@@ -1579,7 +1611,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1600,14 +1631,13 @@
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 11
+        "ability": "firing-deck",
+        "value": 11
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1645,7 +1675,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1675,14 +1704,13 @@
       },
       "effect": {
         "type": "ability-grant",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
-          "ability_id": "benefit-of-cover"
+          "ability": "benefit-of-cover"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1703,14 +1731,35 @@
     "source_digest": "0e4cd6ad1fcd7b61a3d4f62e2b353542884c8783a7b407ad625b6e768d475e07",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "charge-after-advance"
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "KROOT",
+              "INFANTRY"
+            ]
+          },
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "after": [
+            "advance"
+          ]
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "turn"
     },
     "unit_ids": [
@@ -1748,16 +1797,15 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
-          "operation": "set",
           "stat": "OC",
+          "operation": "set",
           "value": 1
         }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1779,13 +1827,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "leader"
+        "ability": "leader"
       }
     },
     "scope": {
-      "range": "attached",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1815,14 +1862,13 @@
       },
       "effect": {
         "type": "feel-no-pain",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "threshold": 5
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1843,13 +1889,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1870,7 +1915,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "stat": "M",
         "operation": "set",
@@ -1878,7 +1923,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1904,16 +1948,24 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "enemy-within-aura",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "count": "D6",
-          "range": 6
+          "range": {
+            "inches": 6
+          }
         }
       },
       "on_fail": null
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1940,12 +1992,17 @@
     "source_digest": "4944d7ed28aedbf4aeaa87b653d2545e0a9fe35cb679dbb16278964068e1192a",
     "version": "2025-q3",
     "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1973,17 +2030,16 @@
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Devastating Wounds"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -2011,16 +2067,17 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "ignore-modifiers",
+        "target": "this-unit",
         "modifier": {
-          "roll": "all",
-          "operation": "ignore-modifiers"
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2040,14 +2097,14 @@
     "source_digest": "885484dece2e1b90a0c294e7fe43d8e42e4c5aa3de790374882d4288e43e351d",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "weapon-grant",
+      "target": "this-model",
       "modifier": {
-        "grant_type": "ranged-weapon"
+        "weapon_id": "missile-pod",
+        "count": 1
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2070,15 +2127,30 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": "this-unit",
+              "range": {
+                "inches": 9
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -2087,7 +2159,6 @@
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2107,14 +2178,13 @@
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
+      "type": "cp-gain",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -2134,14 +2204,20 @@
     "source_digest": "33f620c09ed81643a54efcc0e91b545de201745b8e6708f1a9f7fc2631e8a9c9",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "army-rule",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "farsight-ethereal-mutual-exclusion"
+        "rule": "composition",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ETHEREAL"
+          ]
+        },
+        "max": 0
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2164,21 +2240,73 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "KROOT",
+                  "INFANTRY"
+                ],
+                "excluding": "this-unit",
+                "within": {
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              },
+              "window": "event"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "once-per-round-special"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "as_if": "shooting-phase"
+            }
+          },
+          {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "target": "event-subject",
+              "kind": "shoot"
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2201,16 +2329,21 @@
     "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
     "version": "2025-q3",
     "effect": {
-      "type": "targeting-permission",
-      "target": "self",
+      "type": "targeting",
+      "target": {
+        "owner": "enemy"
+      },
       "modifier": {
-        "attack_type": "ranged",
-        "gate": "within-range",
-        "range": 12
+        "may": "cannot-target",
+        "target": "this-model",
+        "kind": "shoot",
+        "range": {
+          "inches": 12
+        },
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2230,12 +2363,17 @@
     "source_digest": "4944d7ed28aedbf4aeaa87b653d2545e0a9fe35cb679dbb16278964068e1192a",
     "version": "2025-q3",
     "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2274,7 +2412,7 @@
           },
           "effect": {
             "type": "re-roll",
-            "target": "unit",
+            "target": "recipient",
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -2284,7 +2422,6 @@
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2313,7 +2450,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -2322,7 +2459,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2342,14 +2478,54 @@
     "source_digest": "910b1a948fc09dd14f7c11bcdba24c10e3926151dd310c9f9c48a75ccc2dcbf6",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "self",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "stratagem-target",
+              "of": "this-model",
+              "range": {
+                "inches": 6
+              }
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "subject": "stratagem-target",
+              "all_of": [
+                "T’AU EMPIRE"
+              ]
+            }
+          },
+          {
+            "type": "owned-by",
+            "parameters": {
+              "subject": "stratagem-target",
+              "owner": "friendly"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 5,
+        "comparison": "gte",
+        "on_success": {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        },
+        "on_fail": null
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2369,14 +2545,13 @@
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "attack-restriction",
-      "target": "self",
+      "type": "army-rule",
+      "target": "this-model",
       "modifier": {
-        "restriction": "must-be-warlord"
+        "rule": "warlord-required"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2397,13 +2572,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "damage-reduction",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "reduction": "to-zero"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2439,18 +2613,17 @@
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "self",
+        "type": "weapon-ability-grant",
+        "target": "this-model",
         "modifier": {
-          "weapon_type": "ranged",
-          "keywords": [
+          "abilities": [
             "Anti TITANIC 3PLUS"
-          ]
+          ],
+          "weapon_type": "ranged"
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -2494,7 +2667,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "all-failures"
@@ -2502,7 +2675,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2522,16 +2694,31 @@
     "source_digest": "9d926fe700d6966f8d66098962be654edd23f5af28e196578ece60002f0bc3ef",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "self",
-      "modifier": {
-        "roll": "hit",
-        "uses": 1,
-        "subset": "all-failures"
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1,
+            "weapon_type": "ranged"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-model",
+          "modifier": {
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1,
+            "weapon_type": "ranged"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2551,15 +2738,13 @@
     "source_digest": "049fa9c3c57649000c8638941682aaeb1212a73a3eaab6af82ff7fde7762ee76",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2579,16 +2764,15 @@
     "source_digest": "8667980c22b0c4865de40fa2864afb045167bfc04840eca5fb0323e64f474867",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -2618,7 +2802,7 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "stat": "M",
           "operation": "set",
@@ -2627,7 +2811,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2648,13 +2831,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "invuln_sv": 4
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2674,14 +2856,43 @@
     "source_digest": "b892de8c6925b17b5b5eaea0b909f37e8c1c4464251c8cf9f22e7e23621c1977",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "reactive"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "event-subject",
+              "of": "this-unit",
+              "range": {
+                "inches": 8
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D6"
+        }
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2711,14 +2922,79 @@
     "source_digest": "a30934b83b344af851eb4a977eafa29f6d91920177ead79a4109091408b9b5fe",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "flexible-strategic-reserves"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "choice",
+          "options": [
+            {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "battlefield",
+                "from": "battlefield",
+                "placement": "deployment-zone"
+              }
+            },
+            {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "from": "battlefield",
+                "ignore_limits": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "max_count": 1,
+            "owner": "friendly",
+            "keywords": [
+              "KROOT"
+            ],
+            "eligibility": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "recipient",
+                    "as": "this-unit"
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "set-up",
+                "target": "selected-unit",
+                "modifier": {
+                  "to": "battlefield",
+                  "from": "battlefield",
+                  "placement": "deployment-zone"
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "selected-unit",
+                "modifier": {
+                  "to": "strategic-reserves",
+                  "from": "battlefield",
+                  "ignore_limits": true
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -2740,14 +3016,13 @@
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 20
+        "ability": "firing-deck",
+        "value": 20
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2768,7 +3043,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "stat": "W",
         "operation": "set",
@@ -2776,7 +3051,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2797,14 +3071,13 @@
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "threshold": 4,
-        "scope": "mortal"
+        "against": "mortal"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2854,7 +3127,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2885,7 +3157,7 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "stat": "A",
           "operation": "add",
@@ -2894,7 +3166,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2922,17 +3193,27 @@
         }
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "set-on-crit-wound",
-          "value": -3
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "wound",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "set",
+            "value": 3,
+            "weapon_type": "ranged"
+          }
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2961,7 +3242,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -2970,7 +3251,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2990,16 +3270,56 @@
     "source_digest": "d2bfbac73dac869045afb0b3e7b9a78bac5e0b16c6754afcfd1c6504f386186a",
     "version": "2025-q3",
     "effect": {
-      "type": "disembark-after-move",
-      "target": "self",
-      "modifier": {
-        "after": "advance",
-        "can_charge": false,
-        "counts_as_normal_move": true
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "disembark",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "disembarked",
+            "subject": {
+              "owner": "friendly"
+            },
+            "object": "this-model"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "subject": "this-model",
+                "filter": {
+                  "move_types": [
+                    "advance"
+                  ]
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "event-subject",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3040,7 +3360,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -3049,7 +3369,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3079,21 +3398,29 @@
             "owner": "enemy"
           },
           "filter": {
-            "from": "reserves"
+            "from": "strategic-reserves"
           }
         }
       },
       "effect": {
-        "type": "attack-restriction",
-        "target": "enemy-within-aura",
+        "type": "set-up",
+        "target": {
+          "owner": "enemy"
+        },
         "modifier": {
-          "restriction": "prevent-reserve-setup",
-          "range": 12
+          "allow": false,
+          "to": "battlefield",
+          "from": "strategic-reserves",
+          "min_distance_from": {
+            "of": "this-model",
+            "range": {
+              "inches": 12
+            }
+          }
         }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "battle"
     },
     "unit_ids": [
@@ -3115,7 +3442,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "roll-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "hit",
         "operation": "add",
@@ -3123,7 +3450,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3151,15 +3477,18 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "self",
+        "type": "targeting",
+        "target": "this-model",
         "modifier": {
-          "grant_type": "multi-target-attack"
+          "by": "this-model",
+          "may": "must-target",
+          "target": "every-eligible",
+          "kind": "shoot",
+          "weapon_name": "drone defenders"
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -3207,7 +3536,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "all-failures"
@@ -3215,7 +3544,7 @@
           },
           {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "damage",
               "subset": "all-failures"
@@ -3225,7 +3554,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3256,7 +3584,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "all-failures"
@@ -3264,7 +3592,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3284,14 +3611,10 @@
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3311,14 +3634,14 @@
     "source_digest": "2f6b04c4aaed1d5833002c9bba8c382283fc8b941ac21f0f65448d47652c524f",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "army-rule",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "extra-leader-attachment"
+        "rule": "attachment",
+        "max": 2
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3339,14 +3662,13 @@
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
+      "type": "cp-gain",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -3366,14 +3688,32 @@
     "source_digest": "a93a6f632d712c8c99834fb9d219d77d7f1cea0d7811f385738fbd7e721794c5",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "once-per-battle-special"
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "KROOT"
+        ],
+        "within_inches": 12,
+        "reference": "bearer",
+        "eligibility": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "battle-shocked"
+          }
+        }
+      },
+      "effect": {
+        "type": "state-change",
+        "target": "selected-unit",
+        "modifier": {
+          "state": "battle-shocked",
+          "set": false
+        }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -3402,7 +3742,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "all-failures"
@@ -3410,7 +3750,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "unit_ids": [
@@ -3438,15 +3777,14 @@
         }
       },
       "effect": {
-        "type": "movement-modifier",
-        "target": "unit",
+        "type": "move",
+        "target": "this-unit",
         "modifier": {
-          "move_type": "shoot-and-scoot"
+          "move_type": "normal"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "unit_ids": [
@@ -3475,17 +3813,16 @@
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Sustained Hits 1"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3526,14 +3863,13 @@
       },
       "effect": {
         "type": "feel-no-pain",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "threshold": 6
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3562,7 +3898,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -3571,7 +3907,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "faction_id": "tau-empire",
@@ -3614,7 +3949,7 @@
         "steps": [
           {
             "type": "roll-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -3622,10 +3957,10 @@
             }
           },
           {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "keywords": [
+              "abilities": [
                 "Ignores Cover"
               ]
             }
@@ -3634,7 +3969,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "faction_id": "tau-empire",
@@ -3665,25 +3999,36 @@
         "steps": [
           {
             "type": "mortal-wounds",
-            "target": "enemy-within-aura",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
             "modifier": {
-              "count": "D6",
-              "bonus": 3
+              "count": "D6+3"
             }
           },
           {
             "type": "mortal-wounds",
-            "target": "friendly-within-aura",
+            "target": {
+              "owner": "friendly",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
             "modifier": {
-              "count": "D6",
-              "bonus": 3
+              "count": "D6+3"
             }
           }
         ]
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "phase"
     },
     "unit_ids": [
@@ -3732,7 +4077,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -3740,7 +4085,6 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -3761,23 +4105,55 @@
     "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "self",
-      "modifier": {
-        "passthrough": [
-          "terrain-le-4"
-        ],
-        "vertical_limit": 4,
-        "excludes_keyword": "TITANIC",
-        "applies_to_moves": [
-          "normal",
-          "advance",
-          "fall-back"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ],
+            "passthrough": [
+              "models-excluding-titanic",
+              "terrain"
+            ],
+            "no_end_in_engagement": true
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "subject": "this-model",
+              "filter": {
+                "through": "tall-terrain"
+              },
+              "window": "event"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 1,
+            "comparison": "eq",
+            "on_success": {
+              "type": "state-change",
+              "target": "this-unit",
+              "modifier": {
+                "state": "battle-shocked",
+                "set": true
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "self",
       "duration": "turn"
     },
     "unit_ids": [
@@ -3812,15 +4188,25 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "shoot-while-hidden"
+        "type": "conditional",
+        "condition": {
+          "type": "attack-is",
+          "parameters": {
+            "attack_type": "ranged"
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "attacking-ends-hidden"
+          }
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -3850,15 +4236,11 @@
         }
       },
       "effect": {
-        "type": "objective-control-modifier",
-        "target": "unit",
-        "modifier": {
-          "sticky": true
-        }
+        "type": "objective-sticky",
+        "target": "this-unit"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle-round"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -3888,15 +4270,18 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
+        "type": "permission",
+        "target": "this-unit",
         "modifier": {
-          "grant_type": "shoot-while-in-action"
+          "activity": "shoot",
+          "allow": true,
+          "despite": [
+            "performing-action"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -3938,7 +4323,7 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "stat": "Sv",
           "operation": "improve",
@@ -3947,7 +4332,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "[APPROX] When a hidden PATHFINDER TEAM or STEALTH BATTLESUITS unit is targeted in your opponent's Shooting phase, it gets +1 to its Save characteristic. The 'hidden' precondition is not gated here. Full rule in raw-text store."
@@ -3970,7 +4354,7 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "stat": "detection-range",
         "operation": "subtract",
@@ -3978,7 +4362,6 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4022,7 +4405,6 @@
       "duration": "phase"
     },
     "scope": {
-      "range": "any-visible",
       "duration": "phase"
     },
     "community_notes": "When the bearer's unit is selected to shoot, mark one enemy unit within 24\"; that enemy unit has +9\" detection range until this unit has shot."
@@ -4066,7 +4448,7 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "attack_type": "ranged"
+              "weapon_type": "ranged"
             }
           }
         },
@@ -4090,14 +4472,13 @@
               "stat": "AP",
               "operation": "add",
               "value": 1,
-              "attack_type": "ranged"
+              "weapon_type": "ranged"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4130,13 +4511,13 @@
             }
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Assault"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         },
@@ -4160,20 +4541,19 @@
             ]
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Lethal Hits"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle-round"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4236,7 +4616,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4270,9 +4649,9 @@
           },
           "effect": {
             "type": "invulnerable-save",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
-              "threshold": 6
+              "invuln_sv": 6
             }
           }
         },
@@ -4286,16 +4665,15 @@
           },
           "effect": {
             "type": "invulnerable-save",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
-              "threshold": 5
+              "invuln_sv": 5
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4320,14 +4698,13 @@
       "type": "stat-modifier",
       "target": "attacker",
       "modifier": {
-        "stat": "R",
+        "stat": "Range",
         "operation": "add",
         "value": 6,
-        "attack_type": "ranged"
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4361,13 +4738,13 @@
             }
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Sustained Hits 1"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         },
@@ -4408,18 +4785,23 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "bs-modifier",
-                "target": "self",
+                "type": "ignore-modifiers",
+                "target": "this-model",
                 "modifier": {
-                  "operation": "ignore-modifiers"
+                  "what": "characteristics",
+                  "stats": [
+                    "BS"
+                  ]
                 }
               },
               {
-                "type": "roll-modifier",
-                "target": "self",
+                "type": "ignore-modifiers",
+                "target": "this-model",
                 "modifier": {
-                  "roll": "hit",
-                  "operation": "ignore-modifiers"
+                  "what": "rolls",
+                  "rolls": [
+                    "hit"
+                  ]
                 }
               }
             ]
@@ -4428,7 +4810,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4464,10 +4845,54 @@
             }
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "unit",
-            "modifier": {
-              "grant_type": "harnessed-alien-instincts"
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "max_count": 1,
+                "owner": "enemy",
+                "range_inches": 12,
+                "visibility_required": true
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "designate",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "subject": "selected-unit",
+                      "tag": "prey-marked"
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "stat": "detection-range",
+                      "operation": "add",
+                      "value": 3
+                    }
+                  }
+                ]
+              }
             }
           }
         },
@@ -4508,17 +4933,30 @@
             ]
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "unit",
+            "type": "rule-state",
+            "target": {
+              "owner": "friendly",
+              "any_of": [
+                "KROOT",
+                "VESPID STINGWINGS"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-unit"
+              }
+            },
             "modifier": {
-              "grant_type": "localised-stealth-projectors"
+              "direction": "suppressed",
+              "rule_kind": "core-rule",
+              "rule": "attacking-ends-hidden"
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -4540,14 +4978,75 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "deadly-demise-choose-result"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "has-ability",
+            "parameters": {
+              "subject": "this-model",
+              "ability": "deadly-demise"
+            }
+          },
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "roll-result",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "deadly-demise",
+                  "result": 1
+                }
+              },
+              {
+                "type": "roll-result",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "deadly-demise",
+                  "result": 6
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "has-ability",
+                "parameters": {
+                  "subject": "this-model",
+                  "ability": "deadly-demise"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": {
+              "owner": "any",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "count": "D3",
+              "roll": {
+                "dice": "D6",
+                "threshold": 4
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -4578,26 +5077,28 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "enemy-within-aura",
+          "type": "test",
+          "target": "event-subject",
           "modifier": {
-            "grant_type": "battle-shock-test"
+            "test": "battle-shock"
           }
         },
         {
           "type": "mortal-wounds",
-          "target": "enemy-within-aura",
+          "target": "event-subject",
           "modifier": {
-            "dice": "D6-per-model",
-            "threshold": 6,
-            "comparison": "gte",
-            "mortal_per_success": 1
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 6,
+              "per_model": "target"
+            }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4626,13 +5127,12 @@
     "behavior": "reactive",
     "effect": {
       "type": "feel-no-pain",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "threshold": 6
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4659,17 +5159,16 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "ranged",
-        "keywords": [
+        "abilities": [
           "Sustained Hits 1"
-        ]
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4700,25 +5199,26 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "deep-strike",
-          "target": "unit",
+          "type": "set-up",
+          "target": "this-unit",
           "modifier": {
-            "min_distance": 6
+            "to": "battlefield",
+            "from": "strategic-reserves",
+            "via": "deep-strike",
+            "min_enemy_distance": 6
           }
         },
         {
-          "type": "rule-state",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "charge"
+            "activity": "declare-charge",
+            "allow": false
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -4749,25 +5249,23 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "move",
+          "target": "this-unit",
           "modifier": {
-            "move_type": "shoot-and-scoot"
+            "move_type": "normal"
           }
         },
         {
-          "type": "rule-state",
-          "target": "unit",
+          "type": "permission",
+          "target": "this-unit",
           "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "charge"
+            "activity": "declare-charge",
+            "allow": false
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -4796,14 +5294,13 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move-modifier",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "advance-6-instead-of-roll"
+        "advance": "fixed-6"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4840,7 +5337,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "result_scope": "any-result"
@@ -4848,7 +5345,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4877,13 +5373,12 @@
     "behavior": "reactive",
     "effect": {
       "type": "damage-reduction",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "reduction": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4910,15 +5405,14 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": -1
+        "operation": "improve",
+        "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -4955,7 +5449,7 @@
         "to": "attackers-of-target",
         "effect": {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result"
@@ -4965,7 +5459,6 @@
       "duration": "battle"
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "Used on a just-destroyed T'au Empire unit (excluding Kroot): for the rest of the battle, T'au Empire units (excluding Kroot) re-roll Hit rolls against the enemy unit that destroyed it."
@@ -5001,16 +5494,16 @@
           "steps": [
             {
               "type": "stat-modifier",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "stat": "M",
-                "operation": "add",
-                "value": -2
+                "operation": "subtract",
+                "value": 2
               }
             },
             {
               "type": "roll-modifier",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "roll": "advance",
                 "operation": "subtract",
@@ -5018,9 +5511,10 @@
               }
             },
             {
-              "type": "charge-roll-modifier",
-              "target": "unit",
+              "type": "roll-modifier",
+              "target": "this-unit",
               "modifier": {
+                "roll": "charge",
                 "operation": "subtract",
                 "value": 2
               }
@@ -5031,7 +5525,6 @@
       "duration": "turn"
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -5070,18 +5563,17 @@
         "to": "attackers-of-target",
         "effect": {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1
+            "operation": "improve",
+            "value": 1
           }
         }
       },
       "duration": "phase"
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5112,7 +5604,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "enemy-within-aura",
+          "target": "event-subject",
           "modifier": {
             "stat": "WS",
             "operation": "add",
@@ -5121,7 +5613,7 @@
         },
         {
           "type": "stat-modifier",
-          "target": "enemy-within-aura",
+          "target": "event-subject",
           "modifier": {
             "stat": "BS",
             "operation": "add",
@@ -5131,7 +5623,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5159,12 +5650,17 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -5190,15 +5686,21 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "attack-restriction",
-      "target": "unit",
+      "type": "targeting",
+      "target": {
+        "owner": "enemy"
+      },
       "modifier": {
-        "restriction": "targeting-range-limit",
-        "range": 18
+        "may": "cannot-target",
+        "target": "this-unit",
+        "kind": "shoot",
+        "range": {
+          "inches": 18
+        },
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5230,14 +5732,14 @@
       "per": "army"
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
+      "type": "add-unit",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "replace-destroyed-unit-in-reserves"
+        "copy_of": "this-unit",
+        "placement": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -5264,14 +5766,20 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "enemy-within-aura",
+      "type": "test",
+      "target": {
+        "owner": "enemy",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
       "modifier": {
-        "grant_type": "battle-shock-test"
+        "test": "battle-shock"
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "turn"
     },
     "applies_to": {
@@ -5303,7 +5811,7 @@
       "options": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -5316,7 +5824,7 @@
           "steps": [
             {
               "type": "stat-modifier",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "stat": "S",
                 "operation": "add",
@@ -5326,22 +5834,22 @@
             },
             {
               "type": "stat-modifier",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "stat": "AP",
-                "operation": "add",
-                "value": -1,
+                "operation": "improve",
+                "value": 1,
                 "weapon_type": "ranged"
               }
             },
             {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "ranged",
-                "keywords": [
+                "abilities": [
                   "Hazardous"
-                ]
+                ],
+                "weapon_type": "ranged"
               }
             }
           ]
@@ -5349,7 +5857,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5377,16 +5884,15 @@
     "behavior": "activated",
     "effect": {
       "type": "roll-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "wound",
+        "weapon_type": "ranged",
         "operation": "add",
-        "value": 1,
-        "attack_type": "ranged"
+        "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5413,14 +5919,32 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "embark-when-charged"
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "subject": "this-unit",
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "TRANSPORT"
+            ]
+          },
+          "range": {
+            "inches": 3
+          },
+          "models": "every"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "embark"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5461,11 +5985,11 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "BS",
-              "operation": "add",
-              "value": -1
+              "operation": "subtract",
+              "value": 1
             }
           },
           {
@@ -5479,13 +6003,13 @@
               }
             },
             "effect": {
-              "type": "keyword-grant",
-              "target": "unit",
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
               "modifier": {
-                "weapon_type": "ranged",
-                "keywords": [
+                "abilities": [
                   "Ignores Cover"
-                ]
+                ],
+                "weapon_type": "ranged"
               }
             }
           }
@@ -5493,7 +6017,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5523,16 +6046,17 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "enemy-within-aura",
+          "type": "test",
+          "target": "event-subject",
           "modifier": {
-            "grant_type": "battle-shock-test"
+            "test": "battle-shock"
           }
         },
         {
-          "type": "charge-roll-modifier",
-          "target": "enemy-within-aura",
+          "type": "roll-modifier",
+          "target": "event-subject",
           "modifier": {
+            "roll": "charge",
             "operation": "subtract",
             "value": 2
           }
@@ -5540,7 +6064,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5569,16 +6092,15 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": -1,
+        "operation": "improve",
+        "value": 1,
         "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5605,15 +6127,13 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5640,14 +6160,17 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "charge-after-advance"
+        "activity": "declare-charge",
+        "allow": true,
+        "after": [
+          "advance"
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "Kroot or Vespid Stingwings unit only; the Advance move does not prevent the unit from being eligible to declare a charge."
@@ -5670,15 +6193,14 @@
     "behavior": "activated",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": -1
+        "operation": "improve",
+        "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Kroot or Vespid Stingwings unit only; applies to the unit's attacks when selected to attack in the Shooting or Fight phase."
@@ -5700,17 +6222,16 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "weapon_type": "ranged",
-        "keywords": [
+        "abilities": [
           "Lethal Hits"
-        ]
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5737,14 +6258,10 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -5782,18 +6299,17 @@
         "to": "target",
         "effect": {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "M",
-            "operation": "add",
-            "value": -2
+            "operation": "subtract",
+            "value": 2
           }
         }
       },
       "duration": "turn"
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -5821,14 +6337,13 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "embark-after-fight"
+        "move_type": "embark"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
@@ -5862,14 +6377,13 @@
       "comparison": "gte",
       "on_success": {
         "type": "cp-gain",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "amount": 1
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -5897,15 +6411,13 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -5936,26 +6448,36 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "unit-keyword-grant",
-          "target": "bearer",
+          "type": "keyword-grant",
+          "target": "this-model",
           "modifier": {
-            "keyword": "GRENADES"
+            "keywords": [
+              "GRENADES"
+            ]
           }
         },
         {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "dice": "6D6",
-            "threshold": 4,
-            "comparison": "gte",
-            "mortal_per_success": 1
+          "type": "select-units",
+          "selector": {
+            "count": 1,
+            "owner": "enemy"
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1,
+              "per": "success",
+              "roll": {
+                "dice": 6,
+                "threshold": 4
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -5987,29 +6509,28 @@
       "choice_label": "Prototype Weapon System",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "bearer",
+          "type": "weapon-ability-grant",
+          "target": "this-model",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "bearer",
+          "type": "weapon-ability-grant",
+          "target": "this-model",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         }
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "applies_to": {
@@ -6037,14 +6558,26 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "killing-blow-extended-round-4"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "killing-blow",
+          "aspect": "duration",
+          "operation": "add",
+          "value": 1
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6078,13 +6611,20 @@
     "behavior": "activated",
     "effect": {
       "type": "ability-grant",
-      "target": "friendly-within-aura",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
       "modifier": {
-        "grant_type": "scouts-6"
+        "ability": "scouts",
+        "value": 6
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "battle"
     },
     "applies_to": {
@@ -6111,14 +6651,63 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "designated-objective-oc-bonus"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": "this-model",
+          "modifier": {
+            "subject": {
+              "objective": {}
+            },
+            "tag": "strategic-conqueror"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": "this-model",
+                  "state": "on-battlefield"
+                }
+              },
+              {
+                "type": "within",
+                "parameters": {
+                  "subject": "recipient",
+                  "of": {
+                    "objective": {
+                      "designated": "strategic-conqueror"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "T’AU EMPIRE"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
@@ -6145,14 +6734,52 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "guided-units-sustained-hits-1-vs-spotted"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "subject": "this-unit",
+              "filter": {
+                "to": "observe"
+              },
+              "window": "phase"
+            }
+          },
+          {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "SPOTTED"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": {
+          "owner": "friendly",
+          "designated": "GUIDED"
+        },
+        "modifier": {
+          "abilities": [
+            "Sustained Hits 1"
+          ],
+          "weapon_type": "ranged"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6188,26 +6815,35 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "weapon_type": "ranged",
-            "keywords": [
+            "abilities": [
               "Ignores Cover"
-            ]
+            ],
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "ability-grant",
-          "target": "self",
+          "type": "set-up",
+          "target": {
+            "owner": "enemy"
+          },
           "modifier": {
-            "grant_type": "deny-reinforcements-within-12"
+            "allow": false,
+            "to": "battlefield",
+            "from": "strategic-reserves",
+            "min_distance_from": {
+              "of": "this-model",
+              "range": {
+                "inches": 12
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6247,7 +6883,7 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "M",
               "operation": "add",
@@ -6255,20 +6891,19 @@
             }
           },
           {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Assault"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6295,17 +6930,16 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "bearer",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Precision",
           "Devastating Wounds"
         ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6342,17 +6976,16 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "roll-result",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
-          "critical_on": 5,
-          "attack_type": "melee"
+          "weapon_type": "melee",
+          "critical_on": 5
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6384,7 +7017,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -6394,17 +7027,17 @@
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
+            "operation": "improve",
+            "value": 1,
             "weapon_type": "ranged"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "D",
             "operation": "add",
@@ -6415,7 +7048,6 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6446,7 +7078,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -6456,17 +7088,17 @@
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
+            "operation": "improve",
+            "value": 1,
             "weapon_type": "ranged"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "D",
             "operation": "add",
@@ -6477,7 +7109,6 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6508,7 +7139,7 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -6518,7 +7149,7 @@
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "A",
             "operation": "add",
@@ -6528,17 +7159,17 @@
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
-            "value": -1,
+            "operation": "improve",
+            "value": 1,
             "weapon_type": "ranged"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "D",
             "operation": "add",
@@ -6549,7 +7180,6 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6576,14 +7206,26 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "patient-hunter-from-round-2"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "patient-hunter",
+          "aspect": "start-round",
+          "operation": "set",
+          "value": 2
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6617,16 +7259,15 @@
     "behavior": "passive",
     "effect": {
       "type": "roll-modifier",
-      "target": "bearer",
+      "target": "this-model",
       "modifier": {
         "roll": "hit",
+        "weapon_type": "ranged",
         "operation": "add",
-        "value": 1,
-        "attack_type": "ranged"
+        "value": 1
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6656,24 +7297,23 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "movement-modifier",
-          "target": "unit",
+          "type": "set-up",
+          "target": "this-unit",
           "modifier": {
-            "move_type": "redeploy",
-            "to_reserves": true
+            "to": "strategic-reserves"
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "set-up",
+          "target": "this-unit",
           "modifier": {
-            "grant_type": "reserves-limit-exempt"
+            "to": "strategic-reserves",
+            "ignore_limits": true
           }
         }
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
@@ -6700,14 +7340,52 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "guided-units-lethal-hits-vs-spotted"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "selected",
+              "subject": "this-unit",
+              "filter": {
+                "to": "observe"
+              },
+              "window": "phase"
+            }
+          },
+          {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "SPOTTED"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": {
+          "owner": "friendly",
+          "designated": "GUIDED"
+        },
+        "modifier": {
+          "abilities": [
+            "Lethal Hits"
+          ],
+          "weapon_type": "ranged"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6740,14 +7418,32 @@
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "all-friendly",
-      "modifier": {
-        "grant_type": "deep-strike-for-selected-kroot-units"
+      "type": "select-units",
+      "selector": {
+        "max_count": 3,
+        "owner": "friendly",
+        "keywords": [
+          "KROOT"
+        ],
+        "eligibility": {
+          "type": "has-keyword",
+          "parameters": {
+            "any_of": [
+              "CARNIVORES",
+              "FARSTALKERS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "deep-strike"
+        }
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
@@ -6779,16 +7475,26 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "friendly-within-aura",
+          "target": {
+            "owner": "friendly",
+            "within": {
+              "range": {"inches":12}
+            }
+          },
           "modifier": {
             "stat": "Ld",
-            "operation": "add",
-            "value": -1
+            "operation": "subtract",
+            "value": 1
           }
         },
         {
           "type": "stat-modifier",
-          "target": "friendly-within-aura",
+          "target": {
+            "owner": "friendly",
+            "within": {
+              "range": {"inches":12}
+            }
+          },
           "modifier": {
             "stat": "OC",
             "operation": "add",
@@ -6798,7 +7504,6 @@
       ]
     },
     "scope": {
-      "range": "aura-12",
       "duration": "until-next-command-phase"
     },
     "applies_to": {
@@ -6828,23 +7533,72 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "bearer",
-          "modifier": {
-            "grant_type": "suppress-shot-target-hit-penalty"
+          "type": "select-units",
+          "selector": {
+            "owner": "enemy",
+            "count": 1,
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "phase"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "subject": "selected-unit",
+                  "tag": "suppressed",
+                  "clears_on": "turn-rollover"
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "ingress-within-6"
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "battlefield",
+                "from": "strategic-reserves",
+                "min_enemy_distance": 6
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          ]
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
@@ -6872,14 +7626,31 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "grant_type": "disembarking-pulse-weapons-attack-bonus"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_name": "pulse blaster"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_name": "pulse carbine"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "applies_to": {
@@ -6906,7 +7677,7 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "stat": "W",
         "operation": "add",
@@ -6914,7 +7685,6 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     }
   },
@@ -6944,25 +7714,29 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "bs-modifier",
-            "target": "self",
+            "type": "ignore-modifiers",
+            "target": "this-model",
             "modifier": {
-              "operation": "ignore-modifiers"
+              "what": "characteristics",
+              "stats": [
+                "BS"
+              ]
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "self",
+            "type": "ignore-modifiers",
+            "target": "this-model",
             "modifier": {
-              "roll": "hit",
-              "operation": "ignore-modifiers"
+              "what": "rolls",
+              "rolls": [
+                "hit"
+              ]
             }
           }
         ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     }
   },
@@ -6994,7 +7768,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures",
@@ -7003,7 +7777,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     }
   },
@@ -7052,7 +7825,7 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
               "stat": "BS",
               "operation": "improve",
@@ -7061,20 +7834,19 @@
             }
           },
           {
-            "type": "keyword-grant",
-            "target": "self",
+            "type": "weapon-ability-grant",
+            "target": "this-model",
             "modifier": {
-              "weapon_type": "ranged",
-              "keywords": [
+              "abilities": [
                 "Ignores Cover"
-              ]
+              ],
+              "weapon_type": "ranged"
             }
           }
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     }
   }

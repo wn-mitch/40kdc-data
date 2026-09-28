@@ -45,7 +45,7 @@ const RESOURCE_POOLS: Record<string, string> = {
   "miracle-dice": "miracle-dice-pool", "fate-dice": "fate-dice-pool", "bloodshed-point": "bloodshed-point",
 };
 
-const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "unit", "this-model": "self", bearer: "bearer" };
+const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model", bearer: "this-model" };
 
 /** Marks as the designations an effect applies, uppercase as the rules print them. */
 const MARK_TAGS: Record<string, string> = {
@@ -62,7 +62,7 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "selected-to-move-this-phase": ["selected", { to: "move" }, "phase"],
 };
 
-const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "target", "this-unit": "unit", "this-model": "self" };
+const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model" };
 
 /** A unit-state leaf's states that are not core-rules unit states. */
 const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "starting", "below-half-strength": "half" };
@@ -182,8 +182,8 @@ const ATTACKER_ROLLS = new Set(["hit", "wound", "damage"]);
  * target this unit, where the attacker's rolls are modified.
  */
 export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: string | null; incoming: boolean }): Node {
-  const target = (subject: unknown) => context.attached ? "unit" : SUBJECT_TARGETS[String(subject)] ?? "unit";
-  const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "unit";
+  const target = (subject: unknown) => context.attached ? "this-unit" : SUBJECT_TARGETS[String(subject)] ?? "this-unit";
+  const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
     case "reroll": {
       const roll = closed(leaf, "roll");
@@ -199,38 +199,38 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       const value = closed(leaf, "value");
       if (typeof value !== "number") throw new CompileError("critical-hit-threshold needs a numeric threshold before it can compile.");
       const roll = leaf.parameters.roll === undefined ? "hit" : closed(leaf, "roll");
-      return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, critical_on: value } };
+      return { type: "roll-result", target: rollTarget(roll), modifier: { roll, critical_on: value } };
     }
     case "resource-action": {
       const resource = closed(leaf, "resource");
       const amount = closed(leaf, "amount");
       if (closed(leaf, "operation") !== "gain") throw new CompileError(`Only resource gains compile; ${String(leaf.parameters.operation)} has no DSL fragment yet.`);
-      if (resource === "command-point") return { type: "cp-gain", target: "self", modifier: { amount } };
+      if (resource === "command-point") return { type: "cp-gain", target: "this-model", modifier: { amount } };
       const pool = RESOURCE_POOLS[String(resource)];
       if (!pool) throw new CompileError(`Resource ${String(resource)} has no DSL pool yet.`);
-      return { type: "resource-gain", target: "self", modifier: { pool_id: pool, amount } };
+      return { type: "resource-gain", target: "this-model", modifier: { pool, amount } };
     }
     case "characteristic-set":
       return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: "set", value: closed(leaf, "value") } };
     case "weapon-ability-grant": {
       const weaponType = closed(leaf, "weapon_type");
       return {
-        type: "keyword-grant", target: target(leaf.parameters.subject),
-        modifier: { keywords: [closed(leaf, "keyword")], ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) },
+        type: "weapon-ability-grant", target: target(leaf.parameters.subject),
+        modifier: { abilities: [closed(leaf, "keyword")], ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) },
       };
     }
     case "feel-no-pain": {
       const against = closed(leaf, "against");
-      return { type: "feel-no-pain", target: target(leaf.parameters.subject), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { scope: against } : {}) } };
+      return { type: "feel-no-pain", target: target(leaf.parameters.subject), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { against } : {}) } };
     }
     case "invulnerable-save":
       return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
-      return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+      return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: "fights-first" } };
     case "sticky-objective":
-      return { type: "objective-control-modifier", target: "unit", modifier: { sticky: true, retake: "opponent-control-greater-at-phase-end" } };
+      return { type: "objective-sticky", target: "this-unit" };
     case "no-advance-roll":
-      return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { grant_type: "no-advance-roll" } };
+      return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
     case "mortal-wounds": {
       const count = String(closed(leaf, "count"));
       return { type: "mortal-wounds", target: MORTAL_TARGETS[String(closed(leaf, "recipient"))], modifier: { count: /^\d+$/u.test(count) ? Number(count) : count } };
@@ -238,40 +238,33 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     case "fight-on-death":
       // The schema pairs each resolution with its removal; a roll or eligibility is folded in by compile-dice.
       return closed(leaf, "timing") === "when-its-unit-fights"
-        ? { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
-        : { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
+        ? { type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
+        : { type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
     case "act-after-move": {
-      // The DSL's own forms. Shooting after Advancing is [ASSAULT] on every ranged weapon (as
-      // Devastator Doctrine is written); charging after Advancing is a grant; falling back is one
-      // effect that can add a charge.
+      // Shooting after Advancing is [ASSAULT] on every ranged weapon (as Devastator Doctrine is
+      // written); every other act is a permission after that move.
       const owner = target(leaf.parameters.subject);
       const acts = leaf.parameters.acts as string[];
       const steps: Record<string, unknown>[] = [];
       for (const move of leaf.parameters.moves as string[]) {
-        if (move === "advance") {
-          for (const act of acts) {
-            steps.push(act === "shoot"
-              ? { type: "keyword-grant", target: owner, modifier: { keywords: ["Assault"], weapon_type: "ranged" } }
-              : { type: "ability-grant", target: owner, modifier: { grant_type: `${act}-after-advance` } });
-          }
-        } else if (acts.includes("shoot")) {
-          steps.push({ type: "fallback-and-act", target: owner, modifier: acts.includes("charge") ? { can_charge: true } : {} });
-        } else {
-          steps.push({ type: "ability-grant", target: owner, modifier: { grant_type: "charge-after-fall-back" } });
+        for (const act of acts) {
+          steps.push(move === "advance" && act === "shoot"
+            ? { type: "weapon-ability-grant", target: owner, modifier: { abilities: ["Assault"], weapon_type: "ranged" } }
+            : { type: "permission", target: owner, modifier: { activity: act === "charge" ? "declare-charge" : act, allow: true, after: [move] } });
         }
       }
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
     }
     case "regain-wounds": {
       const amount = String(closed(leaf, "amount"));
-      return { type: "heal-wounds", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount } };
+      return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount } };
     }
     case "characteristic-modifier": {
       if (leaf.family_version < 2) {
         return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }
       // The attack being made belongs to whoever attacks: the attacker when it targets this unit.
-      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "unit") : target(leaf.parameters.subject);
+      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
       const weaponType = closed(leaf, "weapon_type");
       const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
         type: "stat-modifier", target: owner,

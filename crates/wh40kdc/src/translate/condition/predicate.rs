@@ -118,7 +118,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             if phase == "command" {
                 format!("{neg}during the Command phase")
             } else {
-                format!("{neg}during the {phase} phase")
+                format!("{neg}during the {} phase", title_case(&phase))
             }
         }
         "player-turn-is" => {
@@ -170,7 +170,11 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
         "same-unit" => format!(
             "{} is {not_}the same unit as {}",
             subject_of(p, "the unit"),
-            unit_ref_phrase(p.get("as"), "the unit")
+            if is(p, "as", "this-unit") {
+                "this unit".to_string()
+            } else {
+                unit_ref_phrase(p.get("as"), "the unit")
+            }
         ),
         "model-profile" => format!(
             "{} is {not_}the {} model",

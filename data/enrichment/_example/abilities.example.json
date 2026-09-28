@@ -10,11 +10,12 @@
     "behavior": "passive",
     "effect": {
       "type": "invulnerable-save",
-      "target": "unit",
-      "modifier": { "invuln_sv": 5 }
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     }
   },
@@ -58,13 +59,14 @@
         ]
       },
       "effect": {
-        "type": "fight-on-death",
-        "target": "self",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-model",
+        "modifier": {
+          "act": "fight"
+        }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "community_notes": "Triggers before the model is removed. Attacks are resolved with the destroyed model's profile."
@@ -109,20 +111,41 @@
         "options": [
           {
             "type": "stat-modifier",
-            "target": "friendly-within-aura",
-            "modifier": { "stat": "A", "operation": "add", "value": 1 }
+            "target": {
+              "owner": "friendly",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1
+            }
           },
           {
-            "type": "leadership-modifier",
-            "target": "enemy-within-aura",
-            "modifier": { "stat": "Ld", "operation": "add", "value": 1 }
+            "type": "stat-modifier",
+            "target": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "stat": "Ld",
+              "operation": "worsen",
+              "value": 1
+            }
           }
         ],
         "choice_label": "Choose one at the start of your Command phase"
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "turn"
     },
     "interactions": [

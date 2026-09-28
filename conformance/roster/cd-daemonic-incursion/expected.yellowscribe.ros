@@ -23,13 +23,13 @@
             <profile name="Deadly Demise D6" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deluge of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Subtract 2 from the Move characteristic of enemy units within 6".
-Enemy units within 6" get -1 to their Objective Control characteristic.</characteristic>
+Subtract 1 from the Objective Control characteristic of enemy units within 6".</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain 6+" typeName="Abilities">
@@ -39,17 +39,18 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" gain the Shadow of Chaos ability.</characteristic>
+                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" count as being within The Shadow of Chaos.</characteristic>
               </characteristics>
             </profile>
             <profile name="Virulent Blessing (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, add 1 to the unit's Damage characteristic.</characteristic>
+                <characteristic name="Description">During the Fight phase, until the end of the phase:
+  -&gt; Select up to 1 enemy unit within 24" of the bearer visible to the bearer: if the target unit is the same unit as the selected unit, add 1 to all friendly NURGLE LEGIONES DAEMONICA units' Damage characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -131,7 +132,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Daemon Lord of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against NURGLE targets against LEGIONES DAEMONICA targets, until the end of the battle round, add 1 to the Toughness characteristic of friendly units within 6".</characteristic>
+                <characteristic name="Description">Against NURGLE targets that are also LEGIONES DAEMONICA, until the end of the battle round, add 1 to the Toughness characteristic of friendly units within 6".</characteristic>
               </characteristics>
             </profile>
             <profile name="Nurgle’s Rot (Psychic)" typeName="Abilities">
@@ -141,7 +142,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain 6+" typeName="Abilities">
@@ -152,7 +153,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             <profile name="Deadly Demise D6" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -263,7 +264,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -317,12 +318,12 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Bane of Cowards" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Enemy units nearby cannot Fall Back.</characteristic>
+                <characteristic name="Description">Enemy units (excluding MONSTER or VEHICLE units) within Engagement Range cannot Fall Back.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -443,7 +444,7 @@ Enemy units within 6" get -1 to their Objective Control characteristic.</charact
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

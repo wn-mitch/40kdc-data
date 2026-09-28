@@ -50,6 +50,7 @@ interface AbilityEntry {
   ability_type?: string;
   community_notes?: string;
   effect?: unknown;
+  stub?: boolean;
 }
 
 export interface FactionCoverage {
@@ -62,9 +63,9 @@ export interface FactionCoverage {
   /** `community_notes` flags it an auto-generated stub / partial. */
   stub: number;
   /**
-   * Structurally a placeholder: the effect tree contains a modifier-bearing
-   * node with an empty `modifier: {}` (the original pass's untyped stub, e.g.
-   * `stat-modifier {}`). This — not `inert` — is the authoring worklist: an
+   * Structurally a placeholder ({@link isStubEntry}): the entry carries
+   * `stub: true`, or its effect tree contains a modifier-bearing node with an
+   * empty `modifier: {}` (older data's untyped stub, e.g. `stat-modifier {}`). This — not `inert` — is the authoring worklist: an
    * inert-but-correctly-typed ability (movement, objective control) is *done*;
    * an empty-modifier node is a gap regardless of who consumes it.
    */
@@ -179,18 +180,7 @@ function producesBuff(
  * modifier fields). Excluding them keeps the worklist from crying wolf on
  * legitimately-authored abilities like Deep Strike.
  */
-const PARAMETERLESS_EFFECTS = new Set([
-  "deep-strike",
-  "fallback-and-act",
-  "fight-first",
-  "fight-last",
-  "fight-on-death",
-  "model-destruction",
-  "shoot-on-death",
-  "engagement-passthrough",
-  "set-battle-shock",
-  "strategic-reserves-arrival",
-]);
+const PARAMETERLESS_EFFECTS = new Set(["end-attack-sequence", "objective-sticky"]);
 
 /**
  * True if any node in the effect tree is a *parameter-requiring* leaf left with
@@ -214,6 +204,18 @@ export function hasEmptyModifier(node: unknown): boolean {
     return true;
   }
   return Object.values(rec).some(hasEmptyModifier);
+}
+
+/** The placeholder effect a seeder writes; `stub: true` on the entry marks it as awaiting authoring. */
+export const STUB_EFFECT = { type: "no-effect" } as const;
+
+/**
+ * True if an ability entry is a placeholder awaiting authoring: it carries `stub: true`, or (older
+ * data) its effect has an empty-modifier leaf. An authored `no-effect` without `stub` is not one.
+ */
+export function isStubEntry(entry: { stub?: unknown; effect?: unknown } | null | undefined): boolean {
+  if (entry == null) return false;
+  return entry.stub === true || hasEmptyModifier(entry.effect);
 }
 
 /** Top-level effect type (the "shape") as authored today. */
@@ -264,7 +266,7 @@ export function computeCoverage(
       if (def) fc.defensive++;
       if (!off && !def) fc.inert++;
 
-      const isStub = hasEmptyModifier(a.effect);
+      const isStub = isStubEntry(a);
       if (isStub) fc.stubStructural++;
 
       worklist.push({

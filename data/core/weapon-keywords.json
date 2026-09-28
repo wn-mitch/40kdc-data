@@ -26,7 +26,7 @@
     "required_parameters": [],
     "effect": {
       "type": "re-roll",
-      "target": "self",
+      "target": "this-model",
       "modifier": { "roll": "wound", "subset": "all-failures" }
     },
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
@@ -47,7 +47,7 @@
       "condition": {"type":"happened","parameters":{"event":"move-ended","filter":{"move_types":["remain-stationary"]},"window":"turn"}},
       "effect": {
         "type": "roll-modifier",
-        "target": "self",
+        "target": "this-model",
         "modifier": { "roll": "hit", "operation": "add", "value": 1 }
       }
     },

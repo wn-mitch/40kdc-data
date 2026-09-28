@@ -188,7 +188,7 @@ func TestDefensiveFromDSLCorpus(t *testing.T) { runDSLCorpus(t, "defensive-from-
 func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
 	effect := map[string]any{
 		"type":   "re-roll",
-		"target": "unit",
+		"target": "this-unit",
 		"modifier": map[string]any{
 			"roll":         "hit",
 			"result_scope": "any-result",

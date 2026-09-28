@@ -654,7 +654,11 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // (e.g. negating an enemy's Lone Operative); a same-faction check would falsely
   // fail those cross-faction references. faction-rule slugs resolve against the
   // `faction_rule_ids` set declared on the factions.
-  const allAbilityIds = new Set<string>(coreAbilities);
+  // Core abilities (Deep Strike, Scouts, …) are catalog entries rather than ability records.
+  // A root without the catalog (a partial fixture tree) has no core abilities to resolve against.
+  const coreCatalogFile = resolve(root, "core/unit-keywords.json");
+  const coreCatalog = existsSync(coreCatalogFile) ? readArray<{ id: string }>(coreCatalogFile) : [];
+  const allAbilityIds = new Set<string>([...coreAbilities, ...coreCatalog.map((k) => k.id)]);
   const abilityIdsByFaction = new Map<string, Set<string>>();
   const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
   const abilityFiles = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
@@ -721,16 +725,15 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     }
   };
 
-  /** Collect entity-backed ability grants, including reusable rules bundles. */
-  const collectAbilityGrantRefs = (node: unknown, out: string[]): void => {
+  /** Collect every ability grant's named ability, and whether it grants a reusable rules bundle. */
+  const collectAbilityGrantRefs = (node: unknown, out: Array<{ abilityId: string; bundle: boolean }>): void => {
     if (Array.isArray(node)) {
       for (const value of node) collectAbilityGrantRefs(value, out);
     } else if (node !== null && typeof node === "object") {
       const effect = node as Record<string, unknown>;
       if (effect.type === "ability-grant" && effect.modifier !== null && typeof effect.modifier === "object") {
         const modifier = effect.modifier as Record<string, unknown>;
-        const abilityId = modifier.ability_id;
-        if (modifier.rules_bundle === true && typeof abilityId === "string") out.push(abilityId);
+        if (typeof modifier.ability === "string") out.push({ abilityId: modifier.ability, bundle: modifier.rules_bundle === true });
       }
       for (const value of Object.values(effect)) collectAbilityGrantRefs(value, out);
     }
@@ -754,7 +757,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       collectSourceAbilityRefs(a, sourceAbilityRefs);
       const refs: Array<{ kind: string; rule: string }> = [];
       collectRuleStateRefs(a.effect, refs);
-      const abilityGrantRefs: string[] = [];
+      const abilityGrantRefs: Array<{ abilityId: string; bundle: boolean }> = [];
       collectAbilityGrantRefs(a.effect, abilityGrantRefs);
       const diceTableErrors: string[] = [];
       collectDiceTableErrors(a.effect, diceTableErrors);
@@ -793,7 +796,15 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         });
       }
 
-      for (const abilityId of abilityGrantRefs) {
+      for (const { abilityId, bundle } of abilityGrantRefs) {
+        if (!bundle) {
+          // A plain grant names a core ability or any ability record.
+          if (!allAbilityIds.has(abilityId)) errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": ability-grant "${abilityId}" names neither a core ability nor an ability record`,
+          });
+          continue;
+        }
         const grantedAbility = factionAbilityRecords?.get(abilityId) ?? coreAbilityById.get(abilityId);
         if (!grantedAbility) {
           errs.push({

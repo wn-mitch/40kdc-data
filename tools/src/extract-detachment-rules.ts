@@ -23,6 +23,7 @@ import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { slug, titleCase } from "./pack-blocks.js";
 import { extractPackCards } from "./author-input-pack.js";
+import { STUB_EFFECT } from "./audit-coverage.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const REPO = resolve(__dirname, "../..");
@@ -81,8 +82,8 @@ for (const [detId, rules] of byDet) {
       enr.push({
         ability_id: id, name: r.name, authored_by: "40kdc-community", game_version: GV, version: "2025-q3",
         supersedes: null, unit_ids: [], faction_id: FACTION, detachment_id: detId, ability_type: "detachment",
-        behavior: "passive", effect: { type: "stat-modifier", target: "unit", modifier: {} },
-        scope: { range: "unit", duration: "permanent" },
+        behavior: "passive", stub: true, effect: { ...STUB_EFFECT },
+        scope: { duration: "permanent" },
         community_notes: "[APPROX] DSL stub — detachment rule; mechanics pending authoring. Full rule in raw-text store.",
       });
       enrIds.add(id); abil++;

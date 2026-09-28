@@ -202,7 +202,7 @@ var usedPhrases = map[string]string{
 }
 
 var setUpFromPhrases = map[string]string{
-	"deep-strike": "is set up by Deep Strike", "reserves": "arrives from Reserves", "strategic-reserves": "arrives from Strategic Reserves",
+	"deep-strike": "is set up by Deep Strike", "strategic-reserves": "arrives from Strategic Reserves",
 	"cult-ambush": "is set up using Cult Ambush", "transport": "is set up from a Transport",
 }
 
@@ -284,23 +284,20 @@ func triggerEventPhrase(t map[string]any) string {
 			kinds = moveKinds(f["move_types"])
 		}
 		enemy := isObject(t["subject"])
+		// Another unit's move is a reaction window: "each time an enemy unit ends a move".
 		if enemy && kinds == "Fall Back" && object == nil {
-			return who + " Falls Back"
+			return "each time " + who + " Falls Back"
 		}
 		tail := ""
 		if object != nil {
 			tail = " from " + triggerObjectPhrase(object)
 		}
-		if enemy {
-			a := "a"
-			if kinds != "" {
-				a = "a " + kinds
-			}
-			return who + " ends " + a + " move" + tail
-		}
 		a := "a"
 		if kinds != "" {
 			a = article(kinds) + " " + kinds
+		}
+		if enemy {
+			return "each time " + who + " ends " + a + " move" + tail
 		}
 		return "when " + who + " ends " + a + " move" + tail
 	case "set-up":

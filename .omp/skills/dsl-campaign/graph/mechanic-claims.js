@@ -10,9 +10,11 @@ export const MECHANIC_PROPOSITION_SCHEMA_ID = '40k.mechanic-claim'
 export const MECHANIC_PROPOSITION_SCHEMA_VERSION = '1'
 export const MECHANIC_TERMINAL_EFFECT_TYPES = Object.freeze([
   'no-effect',
-  'miracle-die-operation',
-  'attachment-eligibility-inherit',
   'stance-selection-capacity',
+])
+/** Effect-node variants with nested children that still claim as `mechanic.effect.*`, not as a composition. */
+export const MECHANIC_EFFECT_LEAF_WRAPPER_TYPES = Object.freeze([
+  'named-region-state',
 ])
 
 const IDENTIFIER = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$/
@@ -24,7 +26,7 @@ const ARGUMENT_ROLES = [
   'source-unit', 'target', 'trigger', 'threshold', 'scope', 'parameters', 'members',
   'condition', 'default-branch', 'qualified-branch', 'on-success', 'on-failure', 'operator',
   'frequency', 'count', 'per', 'required-keywords', 'excluded-keywords', 'optional', 'window',
-  'cost', 'lineage-root', 'after-move', 'attack-condition', 'source-ability', 'event-binding',
+  'cost', 'lineage-root', 'attack-condition', 'source-ability', 'event-binding',
 ]
 
 const QUALIFIER_KINDS = [
@@ -36,9 +38,9 @@ const QUALIFIER_KINDS = [
 export const MECHANIC_CHILD_DESCRIPTORS = Object.freeze([
   { container_type: 'sequence', path: 'steps/*', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'rules-bundle', path: 'steps/*', child_kind: 'effect', role: 'members', ordered: true },
-  { container_type: 'named-effect', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'ability-part', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'ability-part', path: 'trigger', child_kind: 'trigger', role: 'trigger', ordered: false },
+  { container_type: 'ability-part', path: 'cost', child_kind: 'effect', role: 'cost', ordered: true },
   { container_type: 'choice', path: 'options/*', child_kind: 'effect', role: 'members', ordered: false },
   { container_type: 'dice-gated', path: 'on_success', child_kind: 'effect', role: 'on-success', ordered: true },
   { container_type: 'dice-gated', path: 'on_fail', child_kind: 'effect', role: 'on-failure', ordered: true },
@@ -48,8 +50,6 @@ export const MECHANIC_CHILD_DESCRIPTORS = Object.freeze([
   { container_type: 'dice-pool-allocation', path: 'options/*/effect', child_kind: 'effect', role: 'members', ordered: false },
   { container_type: 'select-units', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'select-units', path: 'selector/eligibility', child_kind: 'condition', role: 'condition', ordered: true },
-  { container_type: 'movement-modifier', path: 'modifier/condition', child_kind: 'condition', role: 'condition', ordered: true },
-  { container_type: 'movement-modifier', path: 'after_move', child_kind: 'effect', role: 'after-move', ordered: true },
   { container_type: 'aura', path: 'modifier/effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'leader-model-ability-grant', path: 'grant/effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'designate-target', path: 'applies/effect', child_kind: 'effect', role: 'members', ordered: true },
@@ -107,17 +107,21 @@ export function buildMechanicRegistry({
   conditionSchema = loadSchema('condition'),
   scopeSchema = loadSchema('scope'),
 } = {}) {
-  const singleEffectTypes = effectSchema.$defs['single-effect'].properties.type.enum
+  const singleEffectTypes = effectSchema.$defs['single-effect'].oneOf.map(variant => variant.properties.type.const)
   const effectNodeDefs = effectSchema.$defs['effect-node'].oneOf.slice(1).map(entry => referencedDef(entry.$ref))
   const effectNodeTypes = effectNodeDefs.map(name => effectSchema.$defs[name].properties.type.const)
   const terminalEffectTypes = effectNodeTypes.filter(type => MECHANIC_TERMINAL_EFFECT_TYPES.includes(type))
   if (terminalEffectTypes.length !== MECHANIC_TERMINAL_EFFECT_TYPES.length) {
     throw new TypeError('declared terminal effect type is absent from the effect-node schema')
   }
-  const effectTypes = [...singleEffectTypes, ...terminalEffectTypes]
-  const wrapperTypes = effectNodeTypes.filter(type => !MECHANIC_TERMINAL_EFFECT_TYPES.includes(type))
+  const leafWrapperTypes = effectNodeTypes.filter(type => MECHANIC_EFFECT_LEAF_WRAPPER_TYPES.includes(type))
+  if (leafWrapperTypes.length !== MECHANIC_EFFECT_LEAF_WRAPPER_TYPES.length) {
+    throw new TypeError('declared leaf wrapper type is absent from the effect-node schema')
+  }
+  const effectTypes = [...singleEffectTypes, ...terminalEffectTypes, ...leafWrapperTypes]
+  const wrapperTypes = effectNodeTypes.filter(type => !MECHANIC_TERMINAL_EFFECT_TYPES.includes(type) && !leafWrapperTypes.includes(type))
   const conditionTypes = conditionSchema.$defs['simple-condition'].oneOf.map(variant => variant.properties.type.const)
-  assertChildDescriptors(wrapperTypes)
+  assertChildDescriptors([...wrapperTypes, ...leafWrapperTypes])
   const compoundTypes = [...new Set(conditionSchema.$defs['compound-condition'].oneOf.flatMap(variant => {
     const operator = variant.properties.operator
     return operator.enum ?? [operator.const]
@@ -127,7 +131,7 @@ export function buildMechanicRegistry({
     ...conditionTypes.map(type => `mechanic.condition.${type}`),
     ...wrapperTypes.map(type => `mechanic.composition.${type}`),
     ...compoundTypes.map(type => `mechanic.composition.${type}`),
-    'mechanic.trigger', 'mechanic.duration', 'mechanic.scope.range', 'mechanic.usage',
+    'mechanic.trigger', 'mechanic.duration', 'mechanic.usage',
     'mechanic.selection.applies-to', 'mechanic.selection.nearby-friendly',
     'mechanic.effect.characteristic-modifier', 'mechanic.precondition.no-advance',
     'mechanic.legacy.relational-assertion',

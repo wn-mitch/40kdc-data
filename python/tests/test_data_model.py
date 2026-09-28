@@ -240,12 +240,12 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "re-roll",
-                        "target": "unit",
+                        "target": "this-unit",
                         "modifier": {"roll": "hit", "subset": "ones"},
                     },
                     {
                         "type": "re-roll",
-                        "target": "unit",
+                        "target": "this-unit",
                         "modifier": {"roll": "wound", "subset": "ones"},
                     },
                 ],
@@ -257,8 +257,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
             "faction_id": "orks",
             "effect": {
                 "type": "ability-grant",
-                "target": "unit",
-                "modifier": {"ability_id": "shared-rules", "rules_bundle": True},
+                "target": "this-unit",
+                "modifier": {"ability": "shared-rules", "rules_bundle": True},
             },
         },
         {
@@ -270,8 +270,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "ability-grant",
-                        "target": "unit",
-                        "modifier": {"ability_id": "cycle-b", "rules_bundle": True},
+                        "target": "this-unit",
+                        "modifier": {"ability": "cycle-b", "rules_bundle": True},
                     }
                 ],
             },
@@ -285,8 +285,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "ability-grant",
-                        "target": "unit",
-                        "modifier": {"ability_id": "cycle-a", "rules_bundle": True},
+                        "target": "this-unit",
+                        "modifier": {"ability": "cycle-a", "rules_bundle": True},
                     }
                 ],
             },
@@ -347,7 +347,11 @@ def _gating_dataset() -> Any:
     from wh40kdc.data.bundle import empty_raw_data
     from wh40kdc.data.dataset import Dataset
 
-    reroll = {"type": "re-roll", "target": "unit", "modifier": {"roll": "hit", "subset": "ones"}}
+    reroll = {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {"roll": "hit", "subset": "ones"},
+    }
     base = {"faction_id": "orks", "effect": reroll}
     raw = empty_raw_data()
     raw["abilities"] = [

@@ -52,6 +52,12 @@ pub fn describe_condition_value(c: &Value) -> String {
             if ops.len() == 1 && ops[0].is_object() && !has_operator(&ops[0]) {
                 return describe_predicate(&ops[0], true);
             }
+            // not(not(X)) reads as X, never "not (… is not …)".
+            if ops.len() == 1 && operator(&ops[0]) == Some("not") {
+                if let Some([inner]) = operands(&ops[0]).map(Vec::as_slice) {
+                    return describe_condition_value(inner);
+                }
+            }
             format!(
                 "not ({})",
                 ops.iter()
@@ -102,6 +108,14 @@ pub fn describe_selection_eligibility_value(c: &Value) -> String {
                 .join(" and ");
         }
     }
+    if operator(c) == Some("or") {
+        if let Some(ops) = operands(c) {
+            let parts: Vec<Option<String>> = ops.iter().map(candidate_clause).collect();
+            if parts.iter().all(Option::is_some) {
+                return parts.into_iter().flatten().collect::<Vec<_>>().join(" or ");
+            }
+        }
+    }
     candidate_clause(c).unwrap_or_else(|| format!("if {}", describe_condition_value(c)))
 }
 
@@ -109,6 +123,7 @@ pub fn describe_selection_eligibility_value(c: &Value) -> String {
 fn candidate_clause(c: &Value) -> Option<String> {
     let phrase = describe_condition_value(c);
     for (from, to) in [
+        ("the unit is not the same unit as ", "other than "),
         ("the unit does not have ", "without "),
         ("the unit has not ", "that has not "),
         ("the unit has ", "with "),

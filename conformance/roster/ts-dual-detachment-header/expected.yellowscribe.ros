@@ -22,7 +22,7 @@
             </profile>
             <profile name="Glimpse of Eternity (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per turn, this model can change Any rolls to a 6.</characteristic>
+                <characteristic name="Description">Once per turn, this model's Any rolls count as 6.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">

@@ -37,7 +37,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -123,12 +123,12 @@
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Surge of Wrath (Psychic)" typeName="Abilities">
@@ -141,7 +141,7 @@
             </profile>
             <profile name="Warrior Strategist" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP), before paying its cost.</characteristic>
+                <characteristic name="Description">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, when resolving this use, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -220,13 +220,13 @@
             </profile>
             <profile name="Sanctity of Purpose" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless the target unit is within range of an objective marker, re-roll a Wound roll of 1.
+                <characteristic name="Description">Unless the target unit is within range of an objective marker, you can re-roll a Wound roll of 1.
 While the target unit is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

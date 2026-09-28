@@ -11,14 +11,17 @@
  * mortal wound triggers — as `unsupported` so the SPA can surface "this
  * ability has effects we can't auto-apply" rather than silently dropping them.
  *
- * The walker classifies an effect's `target` against the attacker
- * perspective: `self`, `bearer`, `unit`, `attached-unit`, `attacker`, and
- * `friendly-within-aura` are all treated as "applies to my unit". `defender`,
- * `enemy-within-aura`, and `all-enemy` are dropped without being marked
- * unsupported — those are defender-side mods and would surface from the
- * target's perspective (M3 work), not the attacker's.
+ * The walker classifies an effect's `target` unit-ref against the attacker
+ * perspective: `this-unit`, `this-model`, `selected-unit`, `recipient`,
+ * `attacker`, and a `{owner: "friendly"}` unit filter are all treated as
+ * "applies to my unit" (an `aura` container's `friendly-within-aura` likewise).
+ * `defender`, a `{owner: "enemy"}` filter, and `enemy-within-aura` are dropped
+ * without being marked unsupported — those are defender-side mods and surface
+ * from the target's perspective, not the attacker's. Any other binding
+ * (`event-subject`, `stratagem-target`, …) is not known to be the buffed unit
+ * and contributes nothing.
  *
- * The one exception is core rule 19.04: `self`/`bearer` name a single *model*,
+ * The one exception is core rule 19.04: `this-model` names a single *model*,
  * so when such an effect is pooled in from another member of a combined unit
  * (`source.abilityKind === "attached"`) it stays on that model and is reported
  * as `unsupported` rather than buffing the whole unit.
@@ -85,7 +88,7 @@ export type EffectTranslation = {
 /**
  * Whose perspective the translation runs from.
  *
- * - `"attacker"`: the buffed unit is *firing*. `target: "unit"/"self"` etc.
+ * - `"attacker"`: the buffed unit is *firing*. `target: "this-unit"/"this-model"` etc.
  *   become attacker-side mods (re-rolls, hit/wound mods, A/S shifts, granted
  *   keywords). `target: "defender"` is silently dropped — that's incoming
  *   penalty math relevant when the buffed unit is the *target*, surfaced via
@@ -97,21 +100,14 @@ export type EffectTranslation = {
  *   only mods (re-rolls, hit/wound mods, A/S shifts) drop silently because
  *   they describe what the buffed unit does when *attacking*.
  *
- * The bs-modifier effect (a -1 to incoming hit rolls, e.g. Benefit of Cover)
- * becomes a `hit-mod` buff under target perspective so it stacks correctly
- * with attacker-side modifiers in the resolver's ±1 cap.
+ * A Ballistic Skill stat-modifier on the attacker (a -1 to incoming hit rolls,
+ * e.g. Benefit of Cover) becomes a `hit-mod` buff under target perspective so
+ * it stacks correctly with attacker-side modifiers in the resolver's ±1 cap.
  */
 export type TranslationPerspective = "attacker" | "target";
 
 /** Targets that resolve to the buffed unit itself. */
-const SELF_TARGETS = new Set([
-  "self",
-  "bearer",
-  "unit",
-  "attached-unit",
-  "friendly-within-aura",
-  "all-friendly",
-]);
+const SELF_TARGETS = new Set(["this-unit", "this-model", "selected-unit", "recipient"]);
 
 /**
  * The subset of {@link SELF_TARGETS} that names a single *model* — the ability's
@@ -121,7 +117,7 @@ const SELF_TARGETS = new Set([
  * its bodyguard, or vice-versa), it is not a buff on the combined unit — see
  * {@link isModelScopedFromAttachedMember}.
  */
-const MODEL_TARGETS = new Set(["self", "bearer"]);
+const MODEL_TARGETS = new Set(["this-model"]);
 
 /** Diagnostic emitted for a model-scoped effect pooled in from an attached member. */
 const MODEL_SCOPED_REASON =
@@ -150,8 +146,8 @@ function isModelScopedFromAttachedMember(
 
 /** Aliases the DSL uses when a node specifically calls out "the attacker". */
 const ATTACKER_TARGET = "attacker";
-/** Aliases the DSL uses when a node specifically calls out "the defender". */
-const DEFENDER_TARGETS = new Set(["defender", "enemy-within-aura", "all-enemy"]);
+/** The unit-ref that names the other side of an attack from the attacker's view. */
+const DEFENDER_TARGETS = new Set(["defender"]);
 
 /**
  * Walk an ability DSL `effect` tree and produce the buff stack it contributes
@@ -203,6 +199,20 @@ function walk(
     out.unsupported.push({ reason: FIDELITY_BINDING_REASON, effectFragment: currentNode });
     return;
   }
+  // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
+  // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
+  // modifies the buffed unit's own attacks.
+  const incoming = isObject(currentNode.modifier) && currentNode.modifier.incoming === true && classifyTarget(currentNode) === "self";
+  if (incoming) {
+    if (opts.perspective === "attacker") return;
+    if (currentNode.type === "roll-modifier" || currentNode.type === "stat-modifier") {
+      const { incoming: _incoming, ...modifier } = currentNode.modifier as Record<string, unknown>;
+      walk({ ...currentNode, target: ATTACKER_TARGET, modifier }, source, opts, out);
+    } else {
+      out.unsupported.push({ reason: `${String(currentNode.type)}: an incoming change to attacks against the unit is not modelled`, effectFragment: currentNode });
+    }
+    return;
+  }
   const type = currentNode.type;
   switch (type) {
     case "re-roll":
@@ -217,11 +227,8 @@ function walk(
     case "feel-no-pain":
       translateFeelNoPain(currentNode, source, opts, out);
       return;
-    case "keyword-grant":
+    case "weapon-ability-grant":
       translateKeywordGrant(currentNode, source, opts, out);
-      return;
-    case "bs-modifier":
-      translateBsModifier(currentNode, source, opts, out);
       return;
     case "damage-reduction":
       translateDamageReduction(currentNode, source, opts, out);
@@ -238,9 +245,6 @@ function walk(
     case "rules-bundle":
     case "sequence":
       for (const step of (currentNode.steps as unknown[]) ?? []) walk(step, source, opts, out);
-      return;
-    case "named-effect":
-      translateNamedEffect(currentNode, source, opts, out);
       return;
     case "ability-part":
       // A part firing on its own moment is gated like a timing-is step; one with only a cost,
@@ -268,7 +272,10 @@ function walk(
       return;
     case "aura": {
       const modifier = isObject(currentNode.modifier) ? currentNode.modifier : undefined;
-      if (!appliesToBuffedUnit(currentNode, opts.perspective)) return;
+      // An aura's own target names the side it reaches, not a unit-ref: friendly recipients are the
+      // buffed side, enemy ones the other.
+      const side = currentNode.target === "friendly-within-aura" ? "self" : currentNode.target === "enemy-within-aura" ? "defender" : "unknown";
+      if (side === "unknown" || (side === "defender" && opts.perspective !== "target")) return;
       if (modifier?.recipient_filter !== undefined) {
         const keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
         const matches = evaluateKeywordFilter(modifier.recipient_filter, keywords);
@@ -352,6 +359,12 @@ function classifyTarget(
   node: Record<string, unknown>,
 ): "self" | "attacker" | "defender" | "unknown" {
   const target = node.target;
+  // A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
+  if (isObject(target) && !("event_var" in target) && !("selection_var" in target)) {
+    if (target.owner === "friendly") return "self";
+    if (target.owner === "enemy") return "defender";
+    return "unknown";
+  }
   if (typeof target !== "string") return "unknown";
   if (target === ATTACKER_TARGET) return "attacker";
   if (DEFENDER_TARGETS.has(target)) return "defender";
@@ -537,6 +550,15 @@ function translateStatModifier(
     return;
   }
 
+  // Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
+  // (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
+  if (stat === "BS") {
+    if (opts.perspective !== "target" || classifyTarget(node) !== "attacker") return;
+    const bs = signedValue(modifier);
+    if (bs !== null) out.applied.push({ source, contribution: { type: "hit-mod", value: bs } });
+    return;
+  }
+
   const value = signedValue(modifier);
   if (value === null) {
     out.unsupported.push({
@@ -659,30 +681,28 @@ function translateFeelNoPain(
     });
     return;
   }
-  // `modifier.scope` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
-  // (default "all"). Schema's `modifier` is `additionalProperties: true`, so
-  // any string lands here; we accept the documented values and route
-  // everything else to unsupported so a typo ("mortals", "mortal-wound")
+  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
+  // (default "all"). Anything else routes to unsupported so a malformed value
   // can't silently masquerade as an all-FNP. `psychic-and-mortal` folds into
   // the mortal stream (its mortal-wound coverage is exact; the psychic-attack
   // half is invisible to the buff layer); bare `psychic` has no stream to
   // attach to, so it stays unsupported rather than overstating defence.
-  const rawScope = modifier.scope;
+  const rawAgainst = modifier.against;
   let scope: "all" | "mortal" = "all";
-  if (rawScope !== undefined) {
-    if (rawScope === "all" || rawScope === "mortal") {
-      scope = rawScope;
-    } else if (rawScope === "psychic-and-mortal") {
+  if (rawAgainst !== undefined) {
+    if (rawAgainst === "all" || rawAgainst === "mortal") {
+      scope = rawAgainst;
+    } else if (rawAgainst === "psychic-and-mortal") {
       scope = "mortal";
-    } else if (rawScope === "psychic") {
+    } else if (rawAgainst === "psychic") {
       out.unsupported.push({
-        reason: 'feel-no-pain: scope "psychic" (psychic attacks are not tracked by the buff layer)',
+        reason: 'feel-no-pain: against "psychic" (psychic attacks are not tracked by the buff layer)',
         effectFragment: node,
       });
       return;
     } else {
       out.unsupported.push({
-        reason: `feel-no-pain: unrecognised scope "${String(rawScope)}" (expected "all" or "mortal")`,
+        reason: `feel-no-pain: unrecognised against "${String(rawAgainst)}" (expected "all" or "mortal")`,
         effectFragment: node,
       });
       return;
@@ -709,9 +729,7 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
-  // The DSL grants keywords in two shapes: a singular `keyword` string (often
-  // with a `weapon_type`) or a `keywords` array. Accept both.
-  const raws = keywordGrantList(modifier);
+  const raws = Array.isArray(modifier.abilities) ? modifier.abilities.filter((k): k is string => typeof k === "string") : [];
   if (raws.length === 0) return;
   // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only
   // keyword shouldn't fire in the shooting phase. Express it as a phase gate.
@@ -728,16 +746,6 @@ function translateKeywordGrant(
     const buff: Buff = { source, contribution: { type: "extra-keyword", keywordRef: ref } };
     out.applied.push(applicability ? { ...buff, applicableWhen: applicability } : buff);
   }
-}
-
-/** Normalise a keyword-grant modifier's singular `keyword` and/or `keywords` array. */
-function keywordGrantList(modifier: Record<string, unknown>): string[] {
-  const out: string[] = [];
-  if (typeof modifier.keyword === "string") out.push(modifier.keyword);
-  if (Array.isArray(modifier.keywords)) {
-    for (const k of modifier.keywords) if (typeof k === "string") out.push(k);
-  }
-  return out;
 }
 
 /** Map a keyword-grant's `weapon_type` to the phase its weapons fire in. */
@@ -846,26 +854,6 @@ function translateInvulnerableSave(
     return;
   }
   out.applied.push({ source, contribution: { type: "invulnerable-save", threshold } });
-}
-
-function translateBsModifier(
-  node: Record<string, unknown>,
-  source: BuffSource,
-  opts: WalkOpts,
-  out: EffectTranslation,
-): void {
-  // A bs-modifier on `target: "attacker"` is a defender-side rule: it
-  // penalises *incoming* hit rolls (e.g. Benefit of Cover). Translate it
-  // as a `hit-mod` buff under target perspective so the resolver's ±1 cap
-  // composes with attacker-side mods.
-  if (opts.perspective !== "target") return;
-  const cls = classifyTarget(node);
-  if (cls !== "attacker") return; // a bs-modifier on self wouldn't make sense.
-  const modifier = node.modifier;
-  if (!isObject(modifier)) return;
-  const value = signedValue(modifier);
-  if (value === null) return;
-  out.applied.push({ source, contribution: { type: "hit-mod", value } });
 }
 
 function translateNamedRegionState(
@@ -1231,11 +1219,6 @@ function collectGatedBuffs(
     case "sequence":
       for (const step of (node.steps as unknown[]) ?? []) {
         collectGatedBuffs(step, source, opts, applicability, outBuffs);
-      }
-      return;
-    case "named-effect":
-      if (node.optional !== true && node.cost == null && node.trigger == null && node.usage == null) {
-        collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
       }
       return;
     case "ability-part":
@@ -1663,7 +1646,7 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
       select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
       applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
       applies?.beneficiary != null || applies?.reference != null)) ||
-    ((node.type === "named-effect" || node.type === "ability-part") && hasUnresolvedTriggerBinding(node.trigger)) ||
+    (node.type === "ability-part" && hasUnresolvedTriggerBinding(node.trigger)) ||
     (node.type === "named-region-state" && consumer?.attack_condition != null)
   );
 }

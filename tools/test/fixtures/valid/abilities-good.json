@@ -10,9 +10,9 @@
         "type": "terrain-area-control",
         "parameters": { "footprint_ref": "ruins-central", "min_models": 3 }
       },
-      "effect": { "type": "objective-control-modifier", "target": "unit", "modifier": { "operation": "add", "value": 1 } }
+      "effect": {"type":"stat-modifier","target":"this-unit","modifier":{"stat":"OC","operation":"add","value":1}}
     },
-    "scope": { "range": "unit", "duration": "phase" }
+    "scope": {"duration":"phase"}
   },
   {
     "ability_id": "cond-engagement-state",
@@ -27,9 +27,9 @@
           "state": "engaged"
         }
       },
-      "effect": { "type": "fight-first", "target": "unit" }
+      "effect": {"type":"ability-grant","target":"this-unit","modifier":{"ability":"fights-first"}}
     },
-    "scope": { "range": "unit", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-territory-control",
@@ -46,9 +46,9 @@
           }
         }
       },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "battle-round" }
+    "scope": {"duration":"battle-round"}
   },
   {
     "ability_id": "cond-fights-first",
@@ -58,9 +58,9 @@
     "effect": {
       "type": "conditional",
       "condition": {"operator":"not","operands":[{"type":"unit-state","parameters":{"state":"fights-first"}}]},
-      "effect": { "type": "stat-modifier", "target": "unit", "modifier": { "stat": "A", "operation": "add", "value": 1 } }
+      "effect": {"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":1}}
     },
-    "scope": { "range": "unit", "duration": "phase" }
+    "scope": {"duration":"phase"}
   },
   {
     "ability_id": "cond-disposition-matches",
@@ -75,17 +75,17 @@
           "rule": "take-and-hold"
         }
       },
-      "effect": { "type": "ability-grant", "target": "all-friendly", "modifier": { "ability": "scout-6" } }
+      "effect": {"type":"ability-grant","target":{"owner":"friendly"},"modifier":{"ability":"scouts","value":6}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "battle" }
+    "scope": {"duration":"battle"}
   },
   {
     "ability_id": "effect-charge-roll-modifier",
     "name": "Charge Roll Modifier effect",
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
-    "effect": { "type": "charge-roll-modifier", "target": "unit", "modifier": { "operation": "add", "value": 1 } },
-    "scope": { "range": "unit", "duration": "phase" }
+    "effect": {"type":"roll-modifier","target":"this-unit","modifier":{"roll":"charge","operation":"add","value":1}},
+    "scope": {"duration":"phase"}
   },
   {
     "ability_id": "effect-terrain-area-tag",
@@ -93,27 +93,35 @@
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
-      "type": "terrain-area-tag",
-      "target": "self",
-      "modifier": { "footprint_ref": "ruins-central", "tag": "smoke-screen", "duration": "turn" }
+      "type": "designate",
+      "target": "this-model",
+      "modifier": {
+        "subject": {
+          "terrain_area": {
+            "footprint_ref": "ruins-central"
+          }
+        },
+        "tag": "smoke-screen",
+        "clears_on": "turn-rollover"
+      }
     },
-    "scope": { "range": "terrain-within-range", "duration": "turn", "range_inches": 6 }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "effect-bs-modifier-cover",
     "name": "BS Modifier effect (cover shape)",
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
-    "effect": { "type": "bs-modifier", "target": "attacker", "modifier": { "operation": "subtract", "value": 1 } },
-    "scope": { "range": "unit", "duration": "phase" }
+    "effect": {"type":"stat-modifier","target":"attacker","modifier":{"stat":"BS","operation":"subtract","value":1}},
+    "scope": {"duration":"phase"}
   },
   {
     "ability_id": "effect-engagement-passthrough",
     "name": "Engagement Passthrough effect",
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
-    "effect": { "type": "engagement-passthrough", "target": "unit" },
-    "scope": { "range": "unit", "duration": "phase" }
+    "effect": {"type":"move-modifier","target":"this-unit","modifier":{"passthrough":["models"]}},
+    "scope": {"duration":"phase"}
   },
   {
     "ability_id": "cond-action-completed",
@@ -139,9 +147,9 @@
           }
         }
       },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-objective-has-tag",
@@ -160,9 +168,9 @@
           "count_min": 3
         }
       },
-      "effect": { "type": "ability-grant", "target": "all-friendly", "modifier": { "ability": "fight-first" } }
+      "effect": {"type":"ability-grant","target":{"owner":"friendly"},"modifier":{"ability":"fights-first"}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-unit-has-tag",
@@ -182,9 +190,9 @@
           "window": "turn"
         }
       },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-terrain-has-tag",
@@ -229,9 +237,9 @@
           }
         ]
       },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-new-objective-controlled",
@@ -241,9 +249,9 @@
     "effect": {
       "type": "conditional",
       "condition": {"type":"happened","parameters":{"event":"objective-gained","window":"turn"}},
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-engagement-fronts",
@@ -253,9 +261,9 @@
     "effect": {
       "type": "conditional",
       "condition": { "type": "engagement-fronts", "parameters": { "count_min": 3 } },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "cond-destroyed-while-on-objective",
@@ -268,9 +276,9 @@
         "type": "destroyed-while-on-objective",
         "parameters": { "destroyer_on_objective": true, "count_min": 1 }
       },
-      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+      "effect": {"type":"cp-gain","target":"this-model","modifier":{"amount":1}}
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   },
   {
     "ability_id": "effect-objective-tag",
@@ -278,11 +286,17 @@
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
-      "type": "objective-tag",
-      "target": "self",
-      "modifier": { "tag": "consecrated", "source": "destroying-unit", "clears_on": "never" }
+      "type": "designate",
+      "target": "this-model",
+      "modifier": {
+        "subject": {
+          "objective": {}
+        },
+        "tag": "consecrated",
+        "clears_on": "never"
+      }
     },
-    "scope": { "range": "any-on-battlefield", "duration": "battle" }
+    "scope": {"duration":"battle"}
   },
   {
     "ability_id": "effect-unit-tag",
@@ -290,10 +304,14 @@
     "authored_by": "40kdc-community",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
     "effect": {
-      "type": "unit-tag",
-      "target": "unit",
-      "modifier": { "tag": "doomed", "source": "this-action", "clears_on": "turn-rollover" }
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "subject": "event-object",
+        "tag": "doomed",
+        "clears_on": "turn-rollover"
+      }
     },
-    "scope": { "range": "any-on-battlefield", "duration": "turn" }
+    "scope": {"duration":"turn"}
   }
 ]

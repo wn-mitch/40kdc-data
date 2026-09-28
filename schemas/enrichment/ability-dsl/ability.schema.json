@@ -25,6 +25,10 @@
     "version": {
       "$ref": "../../defs/common.schema.json#/$defs/dataslate-version"
     },
+    "stub": {
+      "const": true,
+      "description": "A seeded placeholder awaiting authoring: its effect is not the ability's mechanics. Removed when an authored effect replaces it."
+    },
     "supersedes": {
       "oneOf": [
         {

@@ -1,0 +1,18 @@
+[
+  {
+    "ability_id": "grants-core-ability",
+    "effect": { "type": "ability-grant", "target": "this-unit", "modifier": { "ability": "scouts", "value": 6 } }
+  },
+  {
+    "ability_id": "grants-foreign-record",
+    "effect": { "type": "ability-grant", "target": "this-unit", "modifier": { "ability": "foreign-ability" } }
+  },
+  {
+    "ability_id": "grants-unknown-ability",
+    "effect": {
+      "type": "conditional",
+      "condition": { "type": "phase-is", "parameters": { "phase": "fight" } },
+      "effect": { "type": "ability-grant", "target": "this-unit", "modifier": { "ability": "fights-first-typo" } }
+    }
+  }
+]

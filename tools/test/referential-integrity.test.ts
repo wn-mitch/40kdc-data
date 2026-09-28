@@ -92,6 +92,18 @@ describe("referential integrity", () => {
     );
   });
 
+  it("requires a plain ability-grant to name a core ability or an ability record", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-ability-grant"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+
+    // A core catalog entry and another faction's record both resolve; only the
+    // unknown name (nested under a conditional) is flagged.
+    expect(messages).toEqual([
+      'ability "grants-unknown-ability": ability-grant "fights-first-typo" names neither a core ability nor an ability record',
+    ]);
+    expect(result.passed).toBe(2);
+  });
+
   it("requires dice tables to cover each face exactly once", () => {
     const effect = {
       type: "dice-table",

@@ -25,6 +25,12 @@ pub(crate) fn obj(v: Option<&Value>) -> &P {
     v.and_then(Value::as_object).unwrap_or_else(|| empty())
 }
 
+/// TS `Object.keys(p).length`, not counting null fields: a typed round trip serializes an
+/// absent optional field as `null`, which the TS oracle never sees.
+pub(crate) fn key_count(p: &P) -> usize {
+    p.values().filter(|v| !v.is_null()).count()
+}
+
 /// TS `p.key === "s"`.
 pub(crate) fn is(p: &P, k: &str, s: &str) -> bool {
     p.get(k).and_then(Value::as_str) == Some(s)

@@ -14,14 +14,13 @@ import (
 // conformance/abilities-resolver/from-dsl.json / defensive-from-dsl.json.
 
 var selfTargets = map[string]bool{
-	"self": true, "bearer": true, "unit": true, "attached-unit": true,
-	"friendly-within-aura": true, "all-friendly": true,
+	"this-unit": true, "this-model": true, "selected-unit": true, "recipient": true,
 }
 
 // modelTargets is the subset of selfTargets naming a single *model* (the bearer)
 // rather than its unit. Core rule 19.04: a rule affecting one specified model
 // applies only to that model, even while it is part of an attached unit.
-var modelTargets = map[string]bool{"self": true, "bearer": true}
+var modelTargets = map[string]bool{"this-model": true}
 
 // modelScopedReason is the diagnostic for a model-scoped effect pooled in from an
 // attached member.
@@ -29,9 +28,7 @@ const modelScopedReason = "model-scoped effect from an attached model: applies t
 
 const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff"
 
-var defenderTargets = map[string]bool{
-	"defender": true, "enemy-within-aura": true, "all-enemy": true,
-}
+var defenderTargets = map[string]bool{"defender": true}
 
 type effectTranslation struct {
 	applied     []any
@@ -80,8 +77,16 @@ func isModelScopedFromAttachedMember(node map[string]any, source map[string]any)
 
 func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	n, ok := asMap(node)
-	if !ok {
+	if !ok || n == nil {
 		return
+	}
+	if _, has := n["target"]; opts.defaultTarget != "" && !has {
+		withTarget := make(map[string]any, len(n)+1)
+		for k, v := range n {
+			withTarget[k] = v
+		}
+		withTarget["target"] = opts.defaultTarget
+		n = withTarget
 	}
 	// Core rule 19.04 gate, applied before any leaf translation and under both
 	// perspectives. Safe at this level because no container node (sequence,
@@ -95,6 +100,32 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
 		return
 	}
+	// An `incoming` change modifies attacks made against its target. On the buffed unit it is the
+	// attacker's side of those attacks, which the `target: "attacker"` form already models; it never
+	// modifies the buffed unit's own attacks.
+	if m, ok := getMap(n, "modifier"); ok && m != nil && m["incoming"] == true && classifyTarget(n) == "self" {
+		if opts.perspective == "attacker" {
+			return
+		}
+		if n["type"] == "roll-modifier" || n["type"] == "stat-modifier" {
+			stripped := make(map[string]any, len(m))
+			for k, v := range m {
+				if k != "incoming" {
+					stripped[k] = v
+				}
+			}
+			redirected := make(map[string]any, len(n))
+			for k, v := range n {
+				redirected[k] = v
+			}
+			redirected["target"] = "attacker"
+			redirected["modifier"] = stripped
+			dslWalk(redirected, source, opts, out)
+		} else {
+			out.unsupported = append(out.unsupported, unsup(jsStr(n["type"])+": an incoming change to attacks against the unit is not modelled", n))
+		}
+		return
+	}
 	switch getStr(n, "type") {
 	case "re-roll":
 		translateReroll(n, source, opts, out)
@@ -104,10 +135,8 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		translateStatModifier(n, source, opts, out)
 	case "feel-no-pain":
 		translateFeelNoPain(n, source, opts, out)
-	case "keyword-grant":
+	case "weapon-ability-grant":
 		translateKeywordGrant(n, source, opts, out)
-	case "bs-modifier":
-		translateBsModifier(n, source, opts, out)
 	case "damage-reduction":
 		translateDamageReduction(n, source, opts, out)
 	case "invulnerable-save":
@@ -120,8 +149,6 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		for _, step := range getList(n, "steps") {
 			dslWalk(step, source, opts, out)
 		}
-	case "named-effect":
-		translateNamedEffect(n, source, opts, out)
 	case "ability-part":
 		// A part firing on its own moment is gated like a timing-is step; one with only a cost,
 		// a choice or a usage limit is an activation, as a named effect is.
@@ -140,7 +167,16 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		// Targeting wrapper — the selected units receive the nested effect.
 		dslWalk(n["effect"], source, opts, out)
 	case "aura":
-		if !appliesToBuffedUnit(n, opts.perspective) {
+		// An aura's own target names the side it reaches, not a unit-ref: friendly recipients are the
+		// buffed side, enemy ones the other.
+		side := "unknown"
+		switch n["target"] {
+		case "friendly-within-aura":
+			side = "self"
+		case "enemy-within-aura":
+			side = "defender"
+		}
+		if side == "unknown" || (side == "defender" && opts.perspective != "target") {
 			return
 		}
 		modifier, _ := getMap(n, "modifier")
@@ -578,11 +614,6 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 			collectGatedBuffs(step, source, opts, applicability, outBuffs)
 		}
 		return
-	case "named-effect":
-		if n["optional"] != true && n["cost"] == nil && n["trigger"] == nil && n["usage"] == nil {
-			collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
-		}
-		return
 	case "ability-part":
 		if n["trigger"] != nil || (n["optional"] != true && n["cost"] == nil && n["usage"] == nil) {
 			collectGatedBuffs(momentGate(n["trigger"], n["effect"]), source, opts, applicability, outBuffs)
@@ -603,6 +634,20 @@ func unsup(reason string, fragment any) map[string]any {
 }
 
 func classifyTarget(node map[string]any) string {
+	// A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
+	if f, isMap := asMap(node["target"]); isMap && f != nil {
+		_, ev := f["event_var"]
+		_, sv := f["selection_var"]
+		if !ev && !sv {
+			switch f["owner"] {
+			case "friendly":
+				return "self"
+			case "enemy":
+				return "defender"
+			}
+			return "unknown"
+		}
+	}
 	target, ok := node["target"].(string)
 	if !ok {
 		return "unknown"
@@ -635,6 +680,11 @@ func auraRecipientFilterMatches(value any, context map[string]any, perspective s
 	filter, ok := asMap(value)
 	if !ok || filter == nil {
 		return false, "aura recipient_filter is malformed"
+	}
+	for key := range filter {
+		if key != "required_keywords" && key != "excluded_keywords" {
+			return false, "aura recipient_filter has unrecognised keys"
+		}
 	}
 	requiredRaw, ok := asList(filter["required_keywords"])
 	if !ok || len(requiredRaw) == 0 {
@@ -801,6 +851,18 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 
+	// Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
+	// (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
+	if stat == "BS" {
+		if opts.perspective != "target" || classifyTarget(node) != "attacker" {
+			return
+		}
+		if bs, ok := signedValue(modifier); ok {
+			out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "hit-mod", "value": bs}})
+		}
+		return
+	}
+
 	value, ok := signedValue(modifier)
 	if !ok {
 		out.unsupported = append(out.unsupported, unsup("stat-modifier: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
@@ -874,18 +936,18 @@ func translateFeelNoPain(node, source map[string]any, opts dslOpts, out *effectT
 	// coverage is exact; the psychic-attack half is invisible to the buff
 	// layer); bare `psychic` has no stream to attach to, so it stays
 	// unsupported rather than overstating defence.
-	rawScope := modifier["scope"]
+	rawAgainst, present := modifier["against"]
 	scope := "all"
-	if rawScope != nil {
-		if rawScope == "all" || rawScope == "mortal" {
-			scope = rawScope.(string)
-		} else if rawScope == "psychic-and-mortal" {
+	if present {
+		if rawAgainst == "all" || rawAgainst == "mortal" {
+			scope = rawAgainst.(string)
+		} else if rawAgainst == "psychic-and-mortal" {
 			scope = "mortal"
-		} else if rawScope == "psychic" {
-			out.unsupported = append(out.unsupported, unsup("feel-no-pain: scope \"psychic\" (psychic attacks are not tracked by the buff layer)", node))
+		} else if rawAgainst == "psychic" {
+			out.unsupported = append(out.unsupported, unsup("feel-no-pain: against \"psychic\" (psychic attacks are not tracked by the buff layer)", node))
 			return
 		} else {
-			out.unsupported = append(out.unsupported, unsup("feel-no-pain: unrecognised scope \""+jsStr(rawScope)+"\" (expected \"all\" or \"mortal\")", node))
+			out.unsupported = append(out.unsupported, unsup("feel-no-pain: unrecognised against \""+jsStr(rawAgainst)+"\" (expected \"all\" or \"mortal\")", node))
 			return
 		}
 	}
@@ -928,10 +990,7 @@ func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effec
 
 func keywordGrantList(modifier map[string]any) []string {
 	var out []string
-	if k, ok := modifier["keyword"].(string); ok {
-		out = append(out, k)
-	}
-	if arr, ok := asList(modifier["keywords"]); ok {
+	if arr, ok := asList(modifier["abilities"]); ok {
 		for _, k := range arr {
 			if s, ok := k.(string); ok {
 				out = append(out, s)
@@ -1024,24 +1083,6 @@ func translateInvulnerableSave(node, source map[string]any, opts dslOpts, out *e
 		return
 	}
 	out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "invulnerable-save", "threshold": threshold}})
-}
-
-func translateBsModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	if opts.perspective != "target" {
-		return
-	}
-	if classifyTarget(node) != "attacker" {
-		return
-	}
-	modifier, ok := getMap(node, "modifier")
-	if !ok {
-		return
-	}
-	value, ok := signedValue(modifier)
-	if !ok {
-		return
-	}
-	out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "hit-mod", "value": value}})
 }
 
 func translateNamedRegionState(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -1655,7 +1696,7 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 		applies["attacker_unit_keywords"] != nil ||
 		applies["beneficiary"] != nil ||
 		applies["reference"] != nil)
-	triggerUnresolved := (n["type"] == "named-effect" || n["type"] == "ability-part") && hasUnresolvedTriggerBinding(n["trigger"])
+	triggerUnresolved := n["type"] == "ability-part" && hasUnresolvedTriggerBinding(n["trigger"])
 	return selectorUnresolved ||
 		designationUnresolved ||
 		triggerUnresolved ||

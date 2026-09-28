@@ -148,23 +148,11 @@ UnitState: TypeAlias = Literal[
     "battle-shocked",
     "embarked",
     "in-strategic-reserves",
-    "in-reserves",
     "on-battlefield",
     "hidden",
     "fights-first",
     "benefit-of-cover",
 ]
-
-
-class UnitFilter(TypedDict):
-    owner: NotRequired[Owner]
-    all_of: NotRequired[KeywordList]
-    any_of: NotRequired[KeywordList]
-    none_of: NotRequired[KeywordList]
-    designated: NotRequired[str]
-    state: NotRequired[UnitState]
-    level: NotRequired[Literal["unit", "model"]]
-    visible: NotRequired[Literal[True]]
 
 
 class UnitRef1(TypedDict):
@@ -173,25 +161,6 @@ class UnitRef1(TypedDict):
 
 class UnitRef2(TypedDict):
     selection_var: str
-
-
-UnitRef: TypeAlias = (
-    Literal[
-        "this-unit",
-        "this-model",
-        "model-in-this-unit",
-        "attacker",
-        "defender",
-        "event-subject",
-        "event-object",
-        "stratagem-target",
-        "selected-unit",
-        "recipient",
-    ]
-    | UnitFilter
-    | UnitRef1
-    | UnitRef2
-)
 
 
 class RangeRef1(TypedDict):
@@ -851,11 +820,6 @@ class Weapon(TypedDict):
     game_modes: NotRequired[GameModes]
 
 
-class Proximity(TypedDict):
-    of: NotRequired[UnitRef]
-    range: RangeRef
-
-
 class Cost(TypedDict):
     cp: NotRequired[int]
 
@@ -932,188 +896,9 @@ class SimpleCondition4(TypedDict):
     parameters: Parameters4
 
 
-class Parameters5(TypedDict):
-    subject: NotRequired[UnitRef]
-    all_of: KeywordList
-    any_of: NotRequired[KeywordList]
-    chosen_by: NotRequired[EntityId]
-
-
-class Parameters6(TypedDict):
-    subject: NotRequired[UnitRef]
-    all_of: NotRequired[KeywordList]
-    any_of: KeywordList
-    chosen_by: NotRequired[EntityId]
-
-
-class Parameters7(TypedDict):
-    subject: NotRequired[UnitRef]
-    all_of: NotRequired[KeywordList]
-    any_of: NotRequired[KeywordList]
-    chosen_by: EntityId
-
-
-class SimpleCondition5(TypedDict):
-    type: Literal["has-keyword"]
-    parameters: Parameters5 | Parameters6 | Parameters7
-
-
-class Parameters8(TypedDict):
-    subject: NotRequired[UnitRef]
-    owner: Literal["friendly", "enemy"]
-
-
-class SimpleCondition6(TypedDict):
-    type: Literal["owned-by"]
-    parameters: Parameters8
-
-
-class Parameters9(TypedDict):
-    subject: NotRequired[UnitRef]
-    ability: EntityId
-
-
-class SimpleCondition7(TypedDict):
-    type: Literal["has-ability"]
-    parameters: Parameters9
-
-
-Parameters10 = TypedDict(
-    "Parameters10",
-    {
-        "subject": NotRequired[UnitRef],
-        "as": UnitRef,
-    },
-)
-
-
-class SimpleCondition8(TypedDict):
-    type: Literal["same-unit"]
-    parameters: Parameters10
-
-
-Parameters11 = TypedDict(
-    "Parameters11",
-    {
-        "subject": NotRequired[UnitRef],
-        "role": Literal["leading", "led", "attached"],
-        "with": NotRequired[UnitFilter],
-    },
-)
-
-
-class SimpleCondition9(TypedDict):
-    type: Literal["attachment"]
-    parameters: Parameters11
-
-
-class Parameters12(TypedDict):
-    subject: NotRequired[UnitRef]
-    below: Literal["starting", "half"]
-
-
-class SimpleCondition10(TypedDict):
-    type: Literal["strength"]
-    parameters: Parameters12
-
-
-class Parameters13(TypedDict):
-    subject: NotRequired[UnitRef]
-    keyword: NotRequired[Keyword]
-    min: int
-    max: NotRequired[int]
-
-
-class Parameters14(TypedDict):
-    subject: NotRequired[UnitRef]
-    keyword: NotRequired[Keyword]
-    min: NotRequired[int]
-    max: int
-
-
-class SimpleCondition11(TypedDict):
-    type: Literal["model-count"]
-    parameters: Parameters13 | Parameters14
-
-
-class Parameters15(TypedDict):
-    subject: NotRequired[UnitRef]
-    profile: EntityId
-
-
-class SimpleCondition12(TypedDict):
-    type: Literal["model-profile"]
-    parameters: Parameters15
-
-
-class Parameters16(TypedDict):
-    subject: NotRequired[UnitRef]
-    lost: Literal[True]
-    remaining_max: NotRequired[int]
-    damaged: NotRequired[Literal[True]]
-
-
-class Parameters17(TypedDict):
-    subject: NotRequired[UnitRef]
-    lost: NotRequired[Literal[True]]
-    remaining_max: int
-    damaged: NotRequired[Literal[True]]
-
-
-class Parameters18(TypedDict):
-    subject: NotRequired[UnitRef]
-    lost: NotRequired[Literal[True]]
-    remaining_max: NotRequired[int]
-    damaged: Literal[True]
-
-
-class SimpleCondition13(TypedDict):
-    type: Literal["wounds"]
-    parameters: Parameters16 | Parameters17 | Parameters18
-
-
-class Parameters19(TypedDict):
-    subject: NotRequired[UnitRef]
-    model_keyword: NotRequired[Keyword]
-    uniform: Literal["ranged", "melee"]
-
-
-class SimpleCondition14(TypedDict):
-    type: Literal["loadout"]
-    parameters: Parameters19
-
-
-Parameters20 = TypedDict(
-    "Parameters20",
-    {
-        "subject": NotRequired[UnitRef],
-        "state": UnitState,
-        "with": NotRequired[UnitRef],
-        "at": NotRequired[Literal["now", "phase-start", "turn-start"]],
-    },
-)
-
-
-class SimpleCondition15(TypedDict):
-    type: Literal["unit-state"]
-    parameters: Parameters20
-
-
 class SourceAbility1(TypedDict):
     ability_id: EntityId
     owner: NotRequired[Literal["friendly", "enemy"]]
-
-
-class Parameters21(TypedDict):
-    subject: NotRequired[UnitRef]
-    to: Literal["shoot", "declare-charge", "fight", "start-action", "be-selected"]
-    source_ability: NotRequired[SourceAbility1]
-    at: NotRequired[Literal["now", "opponents-previous-turn-end"]]
-
-
-class SimpleCondition16(TypedDict):
-    type: Literal["eligible"]
-    parameters: Parameters21
 
 
 class Right1(TypedDict):
@@ -1130,45 +915,6 @@ class Of(TypedDict):
 
 class Of1(TypedDict):
     marker: str
-
-
-class Parameters24(TypedDict):
-    subject: NotRequired[UnitRef]
-    of: UnitRef | Of | Of1 | Literal["battlefield-edge"]
-    range: NotRequired[RangeRef]
-    wholly: NotRequired[Literal[True]]
-    models: NotRequired[Literal["any", "every"]]
-    at: NotRequired[Literal["now", "phase-start"]]
-    count_min: NotRequired[int]
-
-
-class SimpleCondition19(TypedDict):
-    type: Literal["within"]
-    parameters: Parameters24
-
-
-class Parameters25(TypedDict):
-    subject: NotRequired[UnitRef]
-    region: RegionRef
-    wholly: NotRequired[Literal[True]]
-    models: NotRequired[Literal["any", "every"]]
-
-
-class SimpleCondition20(TypedDict):
-    type: Literal["in-region"]
-    parameters: Parameters25
-
-
-class Parameters26(TypedDict):
-    subject: NotRequired[UnitRef]
-    among: Literal["eligible-targets"] | UnitFilter
-    to: NotRequired[UnitRef]
-    range: NotRequired[RangeRef]
-
-
-class SimpleCondition21(TypedDict):
-    type: Literal["closest"]
-    parameters: Parameters26
 
 
 class Parameters27(TypedDict):
@@ -1227,32 +973,8 @@ class SimpleCondition24(TypedDict):
     parameters: Parameters29
 
 
-class Parameters31(TypedDict):
-    subject: NotRequired[UnitRef]
-    to: NotRequired[UnitRef]
-    fully: NotRequired[Literal[True]]
-    blocked_by: NotRequired[UnitRef]
-
-
-class SimpleCondition26(TypedDict):
-    type: Literal["visible"]
-    parameters: NotRequired[Parameters31]
-
-
 class Subject(TypedDict):
     objective: ObjectiveFilter
-
-
-class Parameters32(TypedDict):
-    subject: NotRequired[UnitRef | Subject]
-    tag: str
-    count_min: NotRequired[int]
-    count_max: NotRequired[int]
-
-
-class SimpleCondition27(TypedDict):
-    type: Literal["designated"]
-    parameters: Parameters32
 
 
 class Parameters33(TypedDict):
@@ -1342,9 +1064,6 @@ class EventTarget2(TypedDict):
     terrain_area: TerrainArea1
 
 
-EventTarget: TypeAlias = UnitRef | EventTarget1 | EventTarget2
-
-
 class Scaling(TypedDict):
     per: int
     of: Literal[
@@ -1369,6 +1088,8 @@ RuleStateCoreRuleSlug: TypeAlias = Literal[
     "fire-overwatch",
     "overwatch-against-bearer",
     "desperate-escape",
+    "attacking-ends-hidden",
+    "take-to-the-skies",
 ]
 
 
@@ -1384,99 +1105,520 @@ class DiceRequirementSpec1(TypedDict):
 DiceRequirementSpec: TypeAlias = DiceRequirement | DiceRequirementSpec1
 
 
-class SingleEffect(TypedDict):
-    type: Literal[
-        "ability-grant",
-        "attack-restriction",
-        "auto-result",
-        "battle-shock-test",
-        "bs-modifier",
-        "charge-roll-modifier",
-        "cp-gain",
-        "cp-on-destroy",
-        "cp-refund",
-        "damage-reduction",
-        "deep-strike",
-        "disembark",
-        "disembark-after-move",
-        "engagement-passthrough",
-        "fallback-and-act",
-        "feel-no-pain",
-        "fight-eligibility-extension",
-        "fight-first",
-        "fight-last",
-        "fight-on-death",
-        "firing-deck",
-        "flyover",
-        "heal-wounds",
-        "hazard-rolls",
-        "invulnerable-save",
-        "keyword-grant",
-        "leadership-modifier",
-        "model-destruction",
-        "modifier-immunity",
-        "mortal-wounds",
-        "detection-range-modifier",
-        "named-region-state",
-        "objective-control-modifier",
-        "objective-tag",
-        "pool-add-die",
-        "re-roll",
-        "recovery-pool",
-        "remove-battle-shock",
-        "set-battle-shock",
-        "replace-roll-from-pool",
-        "resource-clear",
-        "resource-gain",
-        "resource-spend",
-        "resurrection",
-        "roll-modifier",
-        "rule-state",
-        "shoot-on-death",
-        "stat-modifier",
-        "stratagem-cost-modifier",
-        "stratagem-targeting-permission",
-        "strategic-reserves-arrival",
-        "targeting-permission",
-        "tracking-token",
-        "transport-capacity-conversion",
-        "terrain-area-tag",
-        "unit-attachment",
-        "unit-keyword",
-        "unit-keyword-grant",
-        "unit-tag",
-        "ward",
-        "unit-division",
+class Modifier(TypedDict):
+    stat: Literal[
+        "M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", "S", "AP", "D", "Range", "detection-range"
+    ]
+    operation: Literal["add", "subtract", "set", "improve", "worsen", "multiply", "halve"]
+    value: NotRequired[int | str]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+    minimum: NotRequired[float]
+    maximum: NotRequired[float]
+
+
+class Modifier1(TypedDict):
+    what: Literal["characteristics", "rolls"]
+    stats: NotRequired[
+        list[
+            Literal[
+                "M",
+                "T",
+                "Sv",
+                "W",
+                "Ld",
+                "OC",
+                "A",
+                "WS",
+                "BS",
+                "S",
+                "AP",
+                "D",
+                "Range",
+                "detection-range",
+            ]
+        ]
+    ]
+    rolls: NotRequired[
+        list[
+            Literal[
+                "hit",
+                "wound",
+                "save",
+                "damage",
+                "charge",
+                "advance",
+                "battle-shock",
+                "leadership",
+                "hazard",
+                "psychic",
+                "desperate-escape",
+                "deadly-demise",
+                "attacks",
+                "normal-move",
+                "surge",
+                "dark-pact",
+                "blessings-of-khorne",
+                "resource-die",
+                "any",
+                "all",
+            ]
+        ]
+    ]
+    only: NotRequired[Literal["worsening", "improving"]]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier2(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
         "desperate-escape",
-        "reactive-charge",
-        "ability-usage-limit",
-        "deadly-demise-threshold",
-        "embark",
-        "eligibility-override",
-        "weapon-grant",
-        "mirror-triggering-choice",
-        "persistent-battlefield-marker-state",
-        "named-objective-state",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
     ]
-    target: Literal[
-        "self",
-        "bearer",
-        "unit",
-        "attached-unit",
-        "selected-models-unit",
-        "attacker",
-        "defender",
-        "target",
-        "targets-of-selected-unit-attacks",
-        "friendly-within-aura",
-        "enemy-within-aura",
-        "all-friendly",
-        "all-enemy",
-        "destroyed-model",
-        "triggering-unit",
+    operation: Literal["add", "subtract"]
+    value: NotRequired[int | str]
+    cap: NotRequired[int]
+    value_from: NotRequired[Literal["previous-roll"]]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier3(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
     ]
-    modifier: NotRequired[dict[str, Any]]
-    scaling: NotRequired[Scaling]
+    subset: Literal["ones", "all-failures"]
+    result_scope: NotRequired[Literal["any-result"]]
+    count: NotRequired[int]
+    pool: NotRequired[str]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier4(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
+    ]
+    subset: NotRequired[Literal["ones", "all-failures"]]
+    result_scope: Literal["any-result"]
+    count: NotRequired[int]
+    pool: NotRequired[str]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier5(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
+    ]
+    result: Literal["pass", "fail"] | int
+    critical_on: NotRequired[int | Literal["success"]]
+    succeeds_on: NotRequired[int]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier6(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
+    ]
+    result: NotRequired[Literal["pass", "fail"] | int]
+    critical_on: int | Literal["success"]
+    succeeds_on: NotRequired[int]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier7(TypedDict):
+    roll: Literal[
+        "hit",
+        "wound",
+        "save",
+        "damage",
+        "charge",
+        "advance",
+        "battle-shock",
+        "leadership",
+        "hazard",
+        "psychic",
+        "desperate-escape",
+        "deadly-demise",
+        "attacks",
+        "normal-move",
+        "surge",
+        "dark-pact",
+        "blessings-of-khorne",
+        "resource-die",
+        "any",
+        "all",
+    ]
+    result: NotRequired[Literal["pass", "fail"] | int]
+    critical_on: NotRequired[int | Literal["success"]]
+    succeeds_on: int
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier8(TypedDict):
+    ability: EntityId
+    value: NotRequired[float]
+    rules_bundle: NotRequired[Literal[True]]
+
+
+class Modifier9(TypedDict):
+    keywords: KeywordList
+    replaces: NotRequired[KeywordList]
+
+
+Ability1: TypeAlias = str
+
+
+class Modifier10(TypedDict):
+    abilities: list[Ability1]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+    if_present: NotRequired[Literal["increment"]]
+    incoming: NotRequired[Literal[True]]
+
+
+class Modifier11(TypedDict):
+    weapon_id: EntityId
+    count: NotRequired[int]
+
+
+class Ability3(TypedDict):
+    event: Literal["used"]
+
+
+class Ability4(TypedDict):
+    keyword: str
+
+
+class Modifier13(TypedDict):
+    ability: EntityId
+    option: NotRequired[str]
+    exclusive: NotRequired[Literal[True]]
+
+
+class Modifier18(TypedDict):
+    direction: Literal["granted", "suppressed"]
+    rule_kind: Literal["core-rule", "keyword", "ability", "faction-rule"]
+    rule: str
+
+
+class Roll(TypedDict):
+    dice: int | str
+    threshold: int
+    per_model: NotRequired[Literal["target", "this"]]
+
+
+class Modifier19(TypedDict):
+    count: int | str
+    per: NotRequired[Literal["model", "success"]]
+    roll: NotRequired[Roll]
+    range: NotRequired[RangeRef]
+    psychic: NotRequired[Literal[True]]
+
+
+class Modifier20(TypedDict):
+    reduction: int | Literal["half", "to-zero"]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+
+
+class Modifier21(TypedDict):
+    threshold: int
+    against: NotRequired[Literal["all", "mortal", "psychic", "psychic-and-mortal"]]
+
+
+class Modifier22(TypedDict):
+    invuln_sv: int
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+
+
+class Modifier23(TypedDict):
+    amount: int | str | Literal["full"]
+    per: NotRequired[Literal["model", "unit"]]
+
+
+class Modifier24(TypedDict):
+    count: int | str | Literal["all"]
+    wounds_remaining: NotRequired[int | str | Literal["full"]]
+    placement: NotRequired[
+        Literal["closest-to-destruction", "coherency", "unengaged", "wholly-within"]
+    ]
+    range: NotRequired[RangeRef]
+    model_keyword: NotRequired[str]
+
+
+class Modifier25(TypedDict):
+    count: int | str | Literal["all"]
+    model_keyword: NotRequired[str]
+    remove_from_play: NotRequired[Literal[True]]
+    ignore_death_triggers: NotRequired[Literal[True]]
+    exclude_leader: NotRequired[Literal[True]]
+
+
+ModelCount1: TypeAlias = int
+
+
+ModelKeywordItem: TypeAlias = str
+
+
+class By(TypedDict):
+    model_keyword: list[ModelKeywordItem]
+
+
+class Modifier27(TypedDict):
+    model_counts: list[ModelCount1]
+    by: NotRequired[Literal["model"] | By]
+
+
+class By1(TypedDict):
+    model_keyword: list[ModelKeywordItem]
+
+
+class Modifier28(TypedDict):
+    model_counts: NotRequired[list[ModelCount1]]
+    by: Literal["model"] | By1
+
+
+PassthroughItem: TypeAlias = str
+
+
+class Modifier33(TypedDict):
+    applies_to_moves: NotRequired[
+        list[
+            Literal[
+                "normal",
+                "advance",
+                "fall-back",
+                "charge",
+                "pile-in",
+                "consolidation",
+                "surge",
+                "scout",
+                "ingress",
+                "disembark",
+                "embark",
+                "pulse-jet",
+            ]
+        ]
+    ]
+    passthrough: NotRequired[list[PassthroughItem]]
+    ignore_vertical: NotRequired[Literal[True]]
+    no_end_in_engagement: NotRequired[Literal[True]]
+    distance_bonus: NotRequired[int | str]
+    advance: NotRequired[Literal["fixed-6"]]
+    end_on_terrain: NotRequired[Literal[True]]
+
+
+Turn: TypeAlias = int
+
+
+class Modifier35(TypedDict):
+    label: str
+    operation: NotRequired[Literal["place", "relocate"]]
+    placement: NotRequired[str]
+    distance: NotRequired[float]
+    consume: NotRequired[Literal["on-use", "never"]]
+
+
+class SpacePerModelItem(TypedDict):
+    all_of: NotRequired[KeywordList]
+    any_of: NotRequired[KeywordList]
+    slots: int
+
+
+class Modifier41(TypedDict):
+    test: Literal["battle-shock", "leadership", "hazard", "desperate-escape"]
+    modifier: NotRequired[int]
+    count: NotRequired[int]
+    per: NotRequired[str]
+
+
+class Modifier42(TypedDict):
+    state: Literal["battle-shocked"]
+    set: bool
+
+
+class Modifier43(TypedDict):
+    amount: int
+
+
+class Modifier44(TypedDict):
+    of: Literal["stratagem", "manoeuvre", "ability"]
+    id: NotRequired[EntityId]
+    operation: Literal["increase", "decrease", "set", "multiply", "waive"]
+    amount: NotRequired[int]
+    applies_to: NotRequired[
+        Literal["targeting-this-unit", "used-by-this-unit", "the-triggering-use", "any"]
+    ]
+
+
+class Modifier45(TypedDict):
+    pool: str
+    amount: int | str | Literal["variable", "any"]
+    label: NotRequired[str]
+
+
+class Modifier46(TypedDict):
+    pool: str
+    amount: int | str | Literal["all", "one-or-more"]
+    label: NotRequired[str]
+
+
+class Modifier47(TypedDict):
+    pool: str
+    operation: Literal["add", "substitute"]
+    value: NotRequired[int | Literal["rolled", "highest"]]
+    count: NotRequired[int | str]
+    count_per_pool: NotRequired[str]
+    consumes_pool: NotRequired[Literal[True]]
+    rolls: NotRequired[
+        list[
+            Literal[
+                "hit",
+                "wound",
+                "save",
+                "damage",
+                "charge",
+                "advance",
+                "battle-shock",
+                "leadership",
+                "hazard",
+                "psychic",
+                "desperate-escape",
+                "deadly-demise",
+                "attacks",
+                "normal-move",
+                "surge",
+                "dark-pact",
+                "blessings-of-khorne",
+                "resource-die",
+                "any",
+                "all",
+            ]
+        ]
+    ]
+
+
+class Subject2(TypedDict):
+    terrain_area: dict[str, Any]
 
 
 Result: TypeAlias = int
@@ -1496,13 +1638,6 @@ ModelName: TypeAlias = str
 
 
 ExcludedKeyword: TypeAlias = str
-
-
-class Marker(TypedDict):
-    affected: NotRequired[str]
-    unit_filter: NotRequired[str]
-    location: NotRequired[str]
-    max_units: NotRequired[int]
 
 
 RangeItem: TypeAlias = int
@@ -1527,7 +1662,7 @@ AttackerKeyword: TypeAlias = str
 AttackerUnitKeyword: TypeAlias = str
 
 
-class Modifier3(TypedDict):
+class Modifier52(TypedDict):
     stance_id: EntityId
     additional_selections: int
     allocation: Literal["choose-one-option", "fixed-option"]
@@ -1537,7 +1672,7 @@ class Modifier3(TypedDict):
 class StanceSelectionCapacityEffect(TypedDict):
     type: Literal["stance-selection-capacity"]
     scope: NotRequired[Literal["army", "unit"]]
-    modifier: Modifier3
+    modifier: Modifier52
 
 
 class Eligible1(TypedDict):
@@ -1782,99 +1917,6 @@ class ObjectiveSelector(TypedDict):
     bind_as: str
 
 
-class Selector31(TypedDict):
-    owner: Literal["friendly", "enemy"]
-    count: Literal[1]
-    selection_mode: NotRequired[Literal["any-number"]]
-    requires_ability: NotRequired[str]
-    visible_to: NotRequired[SelectionReference]
-    selection_limit: NotRequired[SelectionLimit3]
-    bind_as: str
-
-
-class Selector32(TypedDict):
-    owner: Literal["friendly", "enemy"]
-    count: NotRequired[Literal[1]]
-    selection_mode: Literal["any-number"]
-    requires_ability: NotRequired[str]
-    visible_to: NotRequired[SelectionReference]
-    selection_limit: NotRequired[SelectionLimit3]
-    bind_as: str
-
-
-class Selector33(TypedDict):
-    owner: NotRequired[Literal["friendly"]]
-    selection_mode: Literal["any-number"]
-    requires_ability: Any
-
-
-class Selector34(Selector31, Selector33):
-    pass
-
-
-class Selector35(Selector32, Selector33):
-    pass
-
-
-Selector3: TypeAlias = Selector34 | Selector35
-
-
-class Observer(TypedDict):
-    role: Literal["observer"]
-    selector: Selector3
-
-
-class Selector41(TypedDict):
-    owner: Literal["friendly", "enemy"]
-    count: Literal[1]
-    selection_mode: NotRequired[Literal["any-number"]]
-    requires_ability: NotRequired[str]
-    visible_to: NotRequired[SelectionReference]
-    selection_limit: NotRequired[SelectionLimit3]
-    bind_as: str
-
-
-class Selector42(TypedDict):
-    owner: Literal["friendly", "enemy"]
-    count: NotRequired[Literal[1]]
-    selection_mode: Literal["any-number"]
-    requires_ability: NotRequired[str]
-    visible_to: NotRequired[SelectionReference]
-    selection_limit: NotRequired[SelectionLimit3]
-    bind_as: str
-
-
-class Selector43(TypedDict):
-    owner: NotRequired[Literal["enemy"]]
-    count: Literal[1]
-    visible_to: Any
-    selection_limit: Any
-
-
-class Selector44(Selector41, Selector43):
-    pass
-
-
-class Selector45(Selector42, Selector43):
-    pass
-
-
-Selector4: TypeAlias = Selector44 | Selector45
-
-
-class Spotted(TypedDict):
-    role: Literal["spotted"]
-    selector: Selector4
-
-
-class Guided(TypedDict):
-    role: Literal["guided"]
-    owner: Literal["friendly"]
-    requires_ability: str
-    excludes: SelectionReference
-    while_attacking: SelectionReference
-
-
 class PairedUnitSelector1(TypedDict):
     owner: Literal["friendly", "enemy"]
     count: Literal[1]
@@ -1906,70 +1948,6 @@ class MiracleDieReference(TypedDict):
     die_var: str
 
 
-class Count(TypedDict):
-    minimum: Literal[1]
-    maximum: Literal[1, 3]
-
-
-Selection = TypedDict(
-    "Selection",
-    {
-        "count": Literal[1] | Count,
-        "from": Literal["dice-used-in-triggering-act-of-faith", "retained-pool-dice"],
-        "policy": Literal["controller-chooses"],
-    },
-)
-
-
-class Modifier4(TypedDict):
-    operation: Literal[
-        "reroll-generated-result",
-        "set-generated-value-without-roll",
-        "set-used-value",
-        "reroll-retained-and-return",
-    ]
-    die: NotRequired[MiracleDieReference]
-    value: NotRequired[int]
-    pool_id: Literal["miracle-dice-pool"]
-    resource_label: Literal["Miracle dice"]
-    stage: NotRequired[Literal["before-pool-add", "before-act-of-faith-resolution"]]
-    selection: NotRequired[Selection]
-    optional: NotRequired[bool]
-
-
-class MiracleDieOperationEffect(TypedDict):
-    type: Literal["miracle-die-operation"]
-    target: Literal["self"]
-    modifier: Modifier4
-
-
-class Attachment(TypedDict):
-    leader_id: NotRequired[EntityId]
-    bodyguard_id: EntityId
-
-
-class FormationAttachmentGrantEffect(TypedDict):
-    type: Literal["formation-attachment-grant"]
-    source: Literal["self", "bearer-unit"]
-    beneficiary: Literal["self", "attached-leader-model"]
-    formation_event: Literal["declare-battle-formations"]
-    attachment: Attachment
-    grant: Grant
-
-
-class Modifier5(TypedDict):
-    leader_id: EntityId
-    required_leader_ability: Literal["Leader"]
-    from_bodyguard_id: EntityId
-    to_bodyguard_id: EntityId
-
-
-class AttachmentEligibilityInheritEffect(TypedDict):
-    type: Literal["attachment-eligibility-inherit"]
-    target: Literal["self"]
-    modifier: Modifier5
-
-
 ScopeDuration: TypeAlias = Literal[
     "phase",
     "turn",
@@ -1987,21 +1965,7 @@ ScopeDuration: TypeAlias = Literal[
 
 
 class Scope(TypedDict):
-    range: Literal[
-        "self",
-        "unit",
-        "attached",
-        "aura-6",
-        "aura-9",
-        "aura-12",
-        "aura-custom",
-        "engagement-range",
-        "any-visible",
-        "any-on-battlefield",
-        "terrain-within-range",
-    ]
     duration: ScopeDuration
-    range_inches: NotRequired[float]
 
 
 class InteractionFlag(TypedDict):
@@ -2023,6 +1987,102 @@ class PhaseMapping(TypedDict):
     phases: PhaseList
     game_version: GameVersionRef
     authored_by: NotRequired[ContributorRef]
+
+
+class Parameters30(TypedDict):
+    roll: RollKind
+    result: RollOutcome
+    source: NotRequired[EventBoundReference]
+
+
+class SimpleCondition25(TypedDict):
+    type: Literal["roll-result"]
+    parameters: Parameters30
+
+
+class Modifier36(TypedDict):
+    occupancy_kind: Literal["grouped-models"]
+    subject_kind: TransportOccupancySubjectKind
+    model_keyword: NotRequired[str]
+    transport_eligibility: NotRequired[TransportEligibility]
+    models_per_group: int
+    spaces_per_group: int
+    rounding: Literal["up", "down"]
+
+
+class Modifier37(TypedDict):
+    occupancy_kind: Literal["fixed-model-spaces"]
+    subject_kind: TransportOccupancySubjectKind
+    model_keyword: NotRequired[str]
+    transport_eligibility: NotRequired[TransportEligibility]
+    spaces_per_model: int
+
+
+class Modifier38(TypedDict):
+    occupancy_kind: Literal["equivalent-model"]
+    subject_kind: TransportOccupancySubjectKind
+    model_keyword: NotRequired[str]
+    transport_eligibility: NotRequired[TransportEligibility]
+    equivalent_model_keyword: str
+    equivalent_model_count: NotRequired[int]
+
+
+class Modifier39(TypedDict):
+    occupancy_kind: Literal["equivalent-model"]
+    subject_kind: TransportOccupancySubjectKind
+    model_keyword: NotRequired[str]
+    transport_eligibility: NotRequired[TransportEligibility]
+    equivalent_model_keyword: NotRequired[str]
+    equivalent_model_count: int
+
+
+class Replace(TypedDict):
+    event: Literal["on-unit-destroyed"]
+    reference: SelectionReference
+    optional: bool
+
+
+class Lifecycle(TypedDict):
+    replace: Replace
+    exclusivity: Literal["one-active-per-bearer-unit"]
+    expiry: Literal["battle-end"]
+
+
+class Within(TypedDict):
+    range: RangeRef
+    of: NotRequired[UnitRef]
+
+
+class UnitFilter(TypedDict):
+    owner: NotRequired[Owner]
+    all_of: NotRequired[KeywordList]
+    any_of: NotRequired[KeywordList]
+    none_of: NotRequired[KeywordList]
+    designated: NotRequired[str]
+    state: NotRequired[UnitState]
+    level: NotRequired[Literal["unit", "model"]]
+    visible: NotRequired[Literal[True]]
+    within: NotRequired[Within]
+    excluding: NotRequired[UnitRef]
+
+
+UnitRef: TypeAlias = (
+    Literal[
+        "this-unit",
+        "this-model",
+        "model-in-this-unit",
+        "attacker",
+        "defender",
+        "event-subject",
+        "event-object",
+        "stratagem-target",
+        "selected-unit",
+        "recipient",
+    ]
+    | UnitFilter
+    | UnitRef1
+    | UnitRef2
+)
 
 
 EventFilter = TypedDict(
@@ -2084,7 +2144,7 @@ EventFilter = TypedDict(
         "roll": NotRequired[RollKind],
         "result": NotRequired[RollOutcome],
         "from": NotRequired[
-            Literal["reserves", "strategic-reserves", "deep-strike", "cult-ambush", "transport"]
+            Literal["strategic-reserves", "deep-strike", "cult-ambush", "transport"]
         ],
         "through": NotRequired[Literal["terrain", "tall-terrain"]],
         "attack_type": NotRequired[Literal["ranged", "melee", "psychic", "mortal"]],
@@ -2100,109 +2160,6 @@ EventFilter = TypedDict(
         "marker": NotRequired[str],
     },
 )
-
-
-class Parameters22(TypedDict):
-    event: GameEvent
-    subject: NotRequired[UnitRef]
-    object: NotRequired[EventTarget]
-    filter: NotRequired[EventFilter]
-    window: HistoryWindow
-    count_min: NotRequired[int]
-    count_max: NotRequired[int]
-    proximity: NotRequired[Proximity]
-
-
-class SimpleCondition17(TypedDict):
-    type: Literal["happened"]
-    parameters: Parameters22
-
-
-class Left(TypedDict):
-    event: GameEvent
-    subject: NotRequired[UnitRef]
-    object: NotRequired[EventTarget]
-    filter: NotRequired[EventFilter]
-    window: HistoryWindow
-
-
-class Right(TypedDict):
-    event: GameEvent
-    subject: NotRequired[UnitRef]
-    object: NotRequired[EventTarget]
-    filter: NotRequired[EventFilter]
-    window: HistoryWindow
-
-
-class Parameters23(TypedDict):
-    left: Left
-    comparison: Literal["greater-than", "greater-or-equal"]
-    right: Right | Right1 | Right2
-
-
-class SimpleCondition18(TypedDict):
-    type: Literal["happened-compare"]
-    parameters: Parameters23
-
-
-class Parameters30(TypedDict):
-    roll: RollKind
-    result: RollOutcome
-    source: NotRequired[EventBoundReference]
-
-
-class SimpleCondition25(TypedDict):
-    type: Literal["roll-result"]
-    parameters: Parameters30
-
-
-SimpleCondition: TypeAlias = (
-    SimpleCondition1
-    | SimpleCondition2
-    | SimpleCondition3
-    | SimpleCondition4
-    | SimpleCondition5
-    | SimpleCondition6
-    | SimpleCondition7
-    | SimpleCondition8
-    | SimpleCondition9
-    | SimpleCondition10
-    | SimpleCondition11
-    | SimpleCondition12
-    | SimpleCondition13
-    | SimpleCondition14
-    | SimpleCondition15
-    | SimpleCondition16
-    | SimpleCondition17
-    | SimpleCondition18
-    | SimpleCondition19
-    | SimpleCondition20
-    | SimpleCondition21
-    | SimpleCondition22
-    | SimpleCondition23
-    | SimpleCondition24
-    | SimpleCondition25
-    | SimpleCondition26
-    | SimpleCondition27
-    | SimpleCondition28
-    | SimpleCondition29
-    | SimpleCondition30
-    | SimpleCondition31
-    | SimpleCondition32
-    | SimpleCondition33
-)
-
-
-class Replace(TypedDict):
-    event: Literal["on-unit-destroyed"]
-    reference: SelectionReference
-    optional: bool
-
-
-class Lifecycle(TypedDict):
-    replace: Replace
-    exclusivity: Literal["one-active-per-bearer-unit"]
-    expiry: Literal["battle-end"]
 
 
 class Action(TypedDict):
@@ -2303,6 +2260,11 @@ class WeaponKeyword(TypedDict):
     game_version: GameVersionRef
 
 
+class Proximity(TypedDict):
+    of: NotRequired[UnitRef]
+    range: RangeRef
+
+
 class Trigger(TypedDict):
     event: GameEvent
     subject: NotRequired[UnitRef]
@@ -2329,6 +2291,7 @@ class Ability(TypedDict):
     game_version: GameVersionRef
     source_digest: NotRequired[str]
     version: NotRequired[DataslateVersion]
+    stub: NotRequired[Literal[True]]
     supersedes: NotRequired[DataslateVersion | None]
     unit_ids: NotRequired[list[EntityId]]
     faction_id: NotRequired[EntityId | None]
@@ -2348,7 +2311,329 @@ class Ability(TypedDict):
     community_notes: NotRequired[str]
 
 
-ConditionNode: TypeAlias = Union[SimpleCondition, "CompoundCondition"]
+ConditionNode: TypeAlias = Union["SimpleCondition", "CompoundCondition"]
+
+
+class Parameters5(TypedDict):
+    subject: NotRequired[UnitRef]
+    all_of: KeywordList
+    any_of: NotRequired[KeywordList]
+    chosen_by: NotRequired[EntityId]
+
+
+class Parameters6(TypedDict):
+    subject: NotRequired[UnitRef]
+    all_of: NotRequired[KeywordList]
+    any_of: KeywordList
+    chosen_by: NotRequired[EntityId]
+
+
+class Parameters7(TypedDict):
+    subject: NotRequired[UnitRef]
+    all_of: NotRequired[KeywordList]
+    any_of: NotRequired[KeywordList]
+    chosen_by: EntityId
+
+
+class SimpleCondition5(TypedDict):
+    type: Literal["has-keyword"]
+    parameters: Parameters5 | Parameters6 | Parameters7
+
+
+class Parameters8(TypedDict):
+    subject: NotRequired[UnitRef]
+    owner: Literal["friendly", "enemy"]
+
+
+class SimpleCondition6(TypedDict):
+    type: Literal["owned-by"]
+    parameters: Parameters8
+
+
+class Parameters9(TypedDict):
+    subject: NotRequired[UnitRef]
+    ability: EntityId
+
+
+class SimpleCondition7(TypedDict):
+    type: Literal["has-ability"]
+    parameters: Parameters9
+
+
+Parameters10 = TypedDict(
+    "Parameters10",
+    {
+        "subject": NotRequired[UnitRef],
+        "as": UnitRef,
+    },
+)
+
+
+class SimpleCondition8(TypedDict):
+    type: Literal["same-unit"]
+    parameters: Parameters10
+
+
+Parameters11 = TypedDict(
+    "Parameters11",
+    {
+        "subject": NotRequired[UnitRef],
+        "role": Literal["leading", "led", "attached"],
+        "with": NotRequired[UnitFilter],
+    },
+)
+
+
+class SimpleCondition9(TypedDict):
+    type: Literal["attachment"]
+    parameters: Parameters11
+
+
+class Parameters12(TypedDict):
+    subject: NotRequired[UnitRef]
+    below: Literal["starting", "half"]
+
+
+class SimpleCondition10(TypedDict):
+    type: Literal["strength"]
+    parameters: Parameters12
+
+
+class Parameters13(TypedDict):
+    subject: NotRequired[UnitRef]
+    keyword: NotRequired[Keyword]
+    min: int
+    max: NotRequired[int]
+
+
+class Parameters14(TypedDict):
+    subject: NotRequired[UnitRef]
+    keyword: NotRequired[Keyword]
+    min: NotRequired[int]
+    max: int
+
+
+class SimpleCondition11(TypedDict):
+    type: Literal["model-count"]
+    parameters: Parameters13 | Parameters14
+
+
+class Parameters15(TypedDict):
+    subject: NotRequired[UnitRef]
+    profile: EntityId
+
+
+class SimpleCondition12(TypedDict):
+    type: Literal["model-profile"]
+    parameters: Parameters15
+
+
+class Parameters16(TypedDict):
+    subject: NotRequired[UnitRef]
+    lost: Literal[True]
+    remaining_max: NotRequired[int]
+    damaged: NotRequired[Literal[True]]
+
+
+class Parameters17(TypedDict):
+    subject: NotRequired[UnitRef]
+    lost: NotRequired[Literal[True]]
+    remaining_max: int
+    damaged: NotRequired[Literal[True]]
+
+
+class Parameters18(TypedDict):
+    subject: NotRequired[UnitRef]
+    lost: NotRequired[Literal[True]]
+    remaining_max: NotRequired[int]
+    damaged: Literal[True]
+
+
+class SimpleCondition13(TypedDict):
+    type: Literal["wounds"]
+    parameters: Parameters16 | Parameters17 | Parameters18
+
+
+class Parameters19(TypedDict):
+    subject: NotRequired[UnitRef]
+    model_keyword: NotRequired[Keyword]
+    uniform: Literal["ranged", "melee"]
+
+
+class SimpleCondition14(TypedDict):
+    type: Literal["loadout"]
+    parameters: Parameters19
+
+
+Parameters20 = TypedDict(
+    "Parameters20",
+    {
+        "subject": NotRequired[UnitRef],
+        "state": UnitState,
+        "with": NotRequired[UnitRef],
+        "at": NotRequired[Literal["now", "phase-start", "turn-start"]],
+    },
+)
+
+
+class SimpleCondition15(TypedDict):
+    type: Literal["unit-state"]
+    parameters: Parameters20
+
+
+class Parameters21(TypedDict):
+    subject: NotRequired[UnitRef]
+    to: Literal["shoot", "declare-charge", "fight", "start-action", "be-selected"]
+    source_ability: NotRequired[SourceAbility1]
+    at: NotRequired[Literal["now", "opponents-previous-turn-end"]]
+
+
+class SimpleCondition16(TypedDict):
+    type: Literal["eligible"]
+    parameters: Parameters21
+
+
+class Parameters22(TypedDict):
+    event: GameEvent
+    subject: NotRequired[UnitRef]
+    object: NotRequired[EventTarget]
+    filter: NotRequired[EventFilter]
+    window: HistoryWindow
+    count_min: NotRequired[int]
+    count_max: NotRequired[int]
+    proximity: NotRequired[Proximity]
+
+
+class SimpleCondition17(TypedDict):
+    type: Literal["happened"]
+    parameters: Parameters22
+
+
+class Left(TypedDict):
+    event: GameEvent
+    subject: NotRequired[UnitRef]
+    object: NotRequired[EventTarget]
+    filter: NotRequired[EventFilter]
+    window: HistoryWindow
+
+
+class Right(TypedDict):
+    event: GameEvent
+    subject: NotRequired[UnitRef]
+    object: NotRequired[EventTarget]
+    filter: NotRequired[EventFilter]
+    window: HistoryWindow
+
+
+class Parameters23(TypedDict):
+    left: Left
+    comparison: Literal["greater-than", "greater-or-equal"]
+    right: Right | Right1 | Right2
+
+
+class SimpleCondition18(TypedDict):
+    type: Literal["happened-compare"]
+    parameters: Parameters23
+
+
+class Parameters24(TypedDict):
+    subject: NotRequired[UnitRef]
+    of: UnitRef | Of | Of1 | Literal["battlefield-edge"]
+    range: NotRequired[RangeRef]
+    wholly: NotRequired[Literal[True]]
+    models: NotRequired[Literal["any", "every"]]
+    at: NotRequired[Literal["now", "phase-start"]]
+    count_min: NotRequired[int]
+
+
+class SimpleCondition19(TypedDict):
+    type: Literal["within"]
+    parameters: Parameters24
+
+
+class Parameters25(TypedDict):
+    subject: NotRequired[UnitRef]
+    region: RegionRef
+    wholly: NotRequired[Literal[True]]
+    models: NotRequired[Literal["any", "every"]]
+
+
+class SimpleCondition20(TypedDict):
+    type: Literal["in-region"]
+    parameters: Parameters25
+
+
+class Parameters26(TypedDict):
+    subject: NotRequired[UnitRef]
+    among: Literal["eligible-targets"] | UnitFilter
+    to: NotRequired[UnitRef]
+    range: NotRequired[RangeRef]
+
+
+class SimpleCondition21(TypedDict):
+    type: Literal["closest"]
+    parameters: Parameters26
+
+
+class Parameters31(TypedDict):
+    subject: NotRequired[UnitRef]
+    to: NotRequired[UnitRef]
+    fully: NotRequired[Literal[True]]
+    blocked_by: NotRequired[UnitRef]
+
+
+class SimpleCondition26(TypedDict):
+    type: Literal["visible"]
+    parameters: NotRequired[Parameters31]
+
+
+class Parameters32(TypedDict):
+    subject: NotRequired[UnitRef | Subject]
+    tag: str
+    count_min: NotRequired[int]
+    count_max: NotRequired[int]
+
+
+class SimpleCondition27(TypedDict):
+    type: Literal["designated"]
+    parameters: Parameters32
+
+
+SimpleCondition: TypeAlias = (
+    SimpleCondition1
+    | SimpleCondition2
+    | SimpleCondition3
+    | SimpleCondition4
+    | SimpleCondition5
+    | SimpleCondition6
+    | SimpleCondition7
+    | SimpleCondition8
+    | SimpleCondition9
+    | SimpleCondition10
+    | SimpleCondition11
+    | SimpleCondition12
+    | SimpleCondition13
+    | SimpleCondition14
+    | SimpleCondition15
+    | SimpleCondition16
+    | SimpleCondition17
+    | SimpleCondition18
+    | SimpleCondition19
+    | SimpleCondition20
+    | SimpleCondition21
+    | SimpleCondition22
+    | SimpleCondition23
+    | SimpleCondition24
+    | SimpleCondition25
+    | SimpleCondition26
+    | SimpleCondition27
+    | SimpleCondition28
+    | SimpleCondition29
+    | SimpleCondition30
+    | SimpleCondition31
+    | SimpleCondition32
+    | SimpleCondition33
+)
 
 
 class CompoundCondition1(TypedDict):
@@ -2364,17 +2649,19 @@ class CompoundCondition2(TypedDict):
 CompoundCondition: TypeAlias = CompoundCondition1 | CompoundCondition2
 
 
+EventTarget: TypeAlias = UnitRef | EventTarget1 | EventTarget2
+
+
 Condition: TypeAlias = ConditionNode
 
 
 EffectNode: TypeAlias = Union[
-    SingleEffect,
+    "SingleEffect",
     "StanceSelectEffect",
     StanceSelectionCapacityEffect,
     "ChoiceEffect",
     "SequenceEffect",
     "RulesBundleEffect",
-    "NamedEffect",
     "AbilityPart",
     "DiceGatedEffect",
     "DiceTableEffect",
@@ -2382,22 +2669,592 @@ EffectNode: TypeAlias = Union[
     "DicePoolAllocationEffect",
     "SelectUnitsEffect",
     "ForEachUnitEffect",
-    "MovementModifierEffect",
     "AuraEffect",
     "DesignateTargetEffect",
     "RiskRewardEffect",
     "IssueOrdersEffect",
     "ResourceActionMenuEffect",
+    "NamedRegionStateEffect",
     LeaderModelAbilityGrantEffect,
     "PersistentDesignationEffect",
     NoEffectEffect,
-    "SelectObjectiveEffect",
-    "ForEachObjectiveEffect",
-    "PairedDesignationEffect",
-    MiracleDieOperationEffect,
-    FormationAttachmentGrantEffect,
-    AttachmentEligibilityInheritEffect,
 ]
+
+
+class SingleEffect1(TypedDict):
+    type: Literal["stat-modifier"]
+    target: UnitRef
+    modifier: Modifier
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect2(TypedDict):
+    type: Literal["ignore-modifiers"]
+    target: UnitRef
+    modifier: Modifier1
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect3(TypedDict):
+    type: Literal["roll-modifier"]
+    target: UnitRef
+    modifier: Modifier2
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect4(TypedDict):
+    type: Literal["re-roll"]
+    target: UnitRef
+    modifier: Modifier3 | Modifier4
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect5(TypedDict):
+    type: Literal["roll-result"]
+    target: UnitRef
+    modifier: Modifier5 | Modifier6 | Modifier7
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect6(TypedDict):
+    type: Literal["end-attack-sequence"]
+    target: UnitRef
+    modifier: NotRequired[dict[str, Any]]
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect7(TypedDict):
+    type: Literal["ability-grant"]
+    target: UnitRef
+    modifier: Modifier8
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect8(TypedDict):
+    type: Literal["keyword-grant"]
+    target: UnitRef
+    modifier: Modifier9
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect9(TypedDict):
+    type: Literal["weapon-ability-grant"]
+    target: UnitRef
+    modifier: Modifier10
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect10(TypedDict):
+    type: Literal["weapon-grant"]
+    target: UnitRef
+    modifier: Modifier11
+    scaling: NotRequired[Scaling]
+
+
+class Ability2(TypedDict):
+    affecting: UnitFilter
+
+
+class AddOption(TypedDict):
+    name: str
+    effect: EffectNode
+
+
+class Modifier12(TypedDict):
+    ability: EntityId | Ability2 | Ability3 | Ability4
+    aspect: Literal[
+        "uses",
+        "range",
+        "targets",
+        "recipients",
+        "selections",
+        "concurrent",
+        "duration",
+        "start-round",
+        "threshold",
+        "options",
+    ]
+    operation: Literal["add", "subtract", "set", "lift-limit"]
+    value: NotRequired[float | str]
+    cap: NotRequired[float]
+    recipients: NotRequired[UnitFilter]
+    add_option: NotRequired[AddOption]
+
+
+class SingleEffect11(TypedDict):
+    type: Literal["ability-modifier"]
+    target: UnitRef
+    modifier: Modifier12
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect12(TypedDict):
+    type: Literal["ability-activate"]
+    target: UnitRef
+    modifier: Modifier13
+    scaling: NotRequired[Scaling]
+
+
+class Modifier14(TypedDict):
+    activity: Literal[
+        "shoot",
+        "declare-charge",
+        "fight",
+        "start-action",
+        "embark",
+        "disembark",
+        "fall-back",
+        "advance",
+        "use-stratagem",
+        "issue-order",
+        "attempt-ritual",
+        "use-enhancement",
+        "move",
+        "observe",
+    ]
+    allow: bool
+    after: NotRequired[
+        list[
+            Literal[
+                "advance",
+                "fall-back",
+                "disembark",
+                "normal-move",
+                "charge",
+                "remain-stationary",
+                "set-up",
+            ]
+        ]
+    ]
+    despite: NotRequired[
+        list[
+            Literal[
+                "engaged",
+                "battle-shocked",
+                "shot-this-phase",
+                "fought-this-phase",
+                "disembarked-this-turn",
+                "stratagem-used-this-phase",
+                "performing-action",
+                "advanced",
+                "fell-back",
+            ]
+        ]
+    ]
+    into: NotRequired[UnitRef]
+    as_if: NotRequired[Literal["shooting-phase", "snap-shooting", "fight-phase"]]
+    next: NotRequired[Literal[True]]
+    reach: NotRequired[float]
+    stratagem: NotRequired[EntityId]
+
+
+class SingleEffect13(TypedDict):
+    type: Literal["permission"]
+    target: UnitRef
+    modifier: Modifier14
+    scaling: NotRequired[Scaling]
+
+
+class Modifier15(TypedDict):
+    by: NotRequired[UnitRef]
+    may: Literal["target", "cannot-target", "must-target"]
+    target: NotRequired[UnitRef | Literal["every-eligible"]]
+    range: NotRequired[RangeRef]
+    kind: NotRequired[Literal["attack", "shoot", "fight", "charge", "stratagem", "ability"]]
+    stratagem: NotRequired[EntityId]
+    only_if_none: NotRequired[UnitFilter]
+    weapon_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_name: NotRequired[str]
+    weapon_keyword: NotRequired[str]
+
+
+class SingleEffect14(TypedDict):
+    type: Literal["targeting"]
+    target: UnitRef
+    modifier: Modifier15
+    scaling: NotRequired[Scaling]
+
+
+class Modifier16(TypedDict):
+    within: RangeRef
+    of: NotRequired[UnitRef]
+    in_region: NotRequired[RegionRef]
+
+
+class Modifier17(TypedDict):
+    within: NotRequired[RangeRef]
+    of: NotRequired[UnitRef]
+    in_region: RegionRef
+
+
+class SingleEffect15(TypedDict):
+    type: Literal["counts-as"]
+    target: UnitRef
+    modifier: Modifier16 | Modifier17
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect16(TypedDict):
+    type: Literal["rule-state"]
+    target: UnitRef
+    modifier: Modifier18
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect17(TypedDict):
+    type: Literal["mortal-wounds"]
+    target: UnitRef
+    modifier: Modifier19
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect18(TypedDict):
+    type: Literal["damage-reduction"]
+    target: UnitRef
+    modifier: Modifier20
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect19(TypedDict):
+    type: Literal["feel-no-pain"]
+    target: UnitRef
+    modifier: Modifier21
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect20(TypedDict):
+    type: Literal["invulnerable-save"]
+    target: UnitRef
+    modifier: Modifier22
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect21(TypedDict):
+    type: Literal["heal"]
+    target: UnitRef
+    modifier: Modifier23
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect22(TypedDict):
+    type: Literal["return-models"]
+    target: UnitRef
+    modifier: Modifier24
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect23(TypedDict):
+    type: Literal["destroy-models"]
+    target: UnitRef
+    modifier: Modifier25
+    scaling: NotRequired[Scaling]
+
+
+class Modifier26(TypedDict):
+    act: Literal["fight", "shoot"]
+    resolution: NotRequired[str]
+    removal: NotRequired[str]
+    gate: NotRequired[dict[str, Any]]
+    eligibility: NotRequired[Condition]
+
+
+class SingleEffect24(TypedDict):
+    type: Literal["act-on-death"]
+    target: UnitRef
+    modifier: Modifier26
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect25(TypedDict):
+    type: Literal["split-unit"]
+    target: UnitRef
+    modifier: Modifier27 | Modifier28
+    scaling: NotRequired[Scaling]
+
+
+class Modifier29(TypedDict):
+    copy_of: UnitRef
+    datasheet: NotRequired[EntityId]
+    count: NotRequired[int]
+    placement: NotRequired[
+        Literal["closest-to-destruction", "wholly-within", "strategic-reserves", "anywhere"]
+    ]
+    range: NotRequired[RangeRef]
+
+
+class Modifier30(TypedDict):
+    copy_of: NotRequired[UnitRef]
+    datasheet: EntityId
+    count: NotRequired[int]
+    placement: NotRequired[
+        Literal["closest-to-destruction", "wholly-within", "strategic-reserves", "anywhere"]
+    ]
+    range: NotRequired[RangeRef]
+
+
+class SingleEffect26(TypedDict):
+    type: Literal["add-unit"]
+    target: UnitRef
+    modifier: Modifier29 | Modifier30
+    scaling: NotRequired[Scaling]
+
+
+class Modifier31(TypedDict):
+    also: UnitRef
+
+
+class SingleEffect27(TypedDict):
+    type: Literal["destruction-rule"]
+    target: UnitRef
+    modifier: Modifier31
+    scaling: NotRequired[Scaling]
+
+
+class EndsWithin(TypedDict):
+    range: RangeRef
+    of: NotRequired[UnitRef]
+    wholly: NotRequired[Literal[True]]
+
+
+class Modifier32(TypedDict):
+    move_type: Literal[
+        "normal",
+        "advance",
+        "fall-back",
+        "charge",
+        "pile-in",
+        "consolidation",
+        "surge",
+        "scout",
+        "ingress",
+        "disembark",
+        "embark",
+        "pulse-jet",
+    ]
+    distance: NotRequired[int | str]
+    passthrough: NotRequired[list[PassthroughItem]]
+    ends_within: NotRequired[EndsWithin]
+    keeps_eligible: NotRequired[Literal[True]]
+
+
+class SingleEffect28(TypedDict):
+    type: Literal["move"]
+    target: UnitRef
+    modifier: Modifier32
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect29(TypedDict):
+    type: Literal["move-modifier"]
+    target: UnitRef
+    modifier: Modifier33
+    scaling: NotRequired[Scaling]
+
+
+class MinDistanceFrom(TypedDict):
+    of: NotRequired[UnitRef]
+    range: RangeRef
+
+
+Modifier34 = TypedDict(
+    "Modifier34",
+    {
+        "allow": NotRequired[bool],
+        "to": Literal["battlefield", "strategic-reserves"],
+        "from": NotRequired[Literal["strategic-reserves", "transport", "battlefield"]],
+        "via": NotRequired[Literal["deep-strike"]],
+        "subject": NotRequired[UnitRef | Literal["models-on-this-model"]],
+        "min_enemy_distance": NotRequired[float],
+        "within_edge": NotRequired[float],
+        "turns": NotRequired[list[Turn]],
+        "round_offset": NotRequired[int],
+        "min_distance_from": NotRequired[MinDistanceFrom],
+        "placement": NotRequired[
+            Literal[
+                "closest-to-original",
+                "connected-sections",
+                "anywhere",
+                "deployment-zone",
+                "on-terrain",
+            ]
+        ],
+        "sections": NotRequired[int],
+        "ignore_limits": NotRequired[Literal[True]],
+    },
+)
+
+
+class SingleEffect30(TypedDict):
+    type: Literal["set-up"]
+    target: UnitRef
+    modifier: Modifier34
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect31(TypedDict):
+    type: Literal["marker"]
+    target: UnitRef
+    modifier: Modifier35
+    scaling: NotRequired[Scaling]
+
+
+class Modifier40(TypedDict):
+    capacity: int
+    eligible: NotRequired[UnitFilter]
+    space_per_model: NotRequired[list[SpacePerModelItem]]
+
+
+class SingleEffect32(TypedDict):
+    type: Literal["transport-capacity"]
+    target: UnitRef
+    modifier: Modifier36 | Modifier37 | Modifier38 | Modifier39 | Modifier40
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect33(TypedDict):
+    type: Literal["test"]
+    target: UnitRef
+    modifier: Modifier41
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect34(TypedDict):
+    type: Literal["state-change"]
+    target: UnitRef
+    modifier: Modifier42
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect35(TypedDict):
+    type: Literal["cp-gain"]
+    target: UnitRef
+    modifier: Modifier43
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect36(TypedDict):
+    type: Literal["cost-modifier"]
+    target: UnitRef
+    modifier: Modifier44
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect37(TypedDict):
+    type: Literal["resource-gain"]
+    target: UnitRef
+    modifier: Modifier45
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect38(TypedDict):
+    type: Literal["resource-spend"]
+    target: UnitRef
+    modifier: Modifier46
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect39(TypedDict):
+    type: Literal["resource-die"]
+    target: UnitRef
+    modifier: Modifier47
+    scaling: NotRequired[Scaling]
+
+
+class SingleEffect40(TypedDict):
+    type: Literal["objective-sticky"]
+    target: UnitRef
+    modifier: NotRequired[dict[str, Any]]
+    scaling: NotRequired[Scaling]
+
+
+class Modifier48(TypedDict):
+    subject: NotRequired[UnitRef | Subject | Subject2]
+    tag: str
+    clear: NotRequired[Literal[True]]
+    clears_on: NotRequired[Literal["turn-rollover", "phase-end", "never"]]
+
+
+class SingleEffect41(TypedDict):
+    type: Literal["designate"]
+    target: UnitRef
+    modifier: Modifier48
+    scaling: NotRequired[Scaling]
+
+
+Modifier49 = TypedDict(
+    "Modifier49",
+    {
+        "rule": Literal[
+            "warlord-required",
+            "warlord-forbidden",
+            "unique",
+            "enhancement-forbidden",
+            "enhancement-slot",
+            "attachment",
+            "composition",
+            "faction-forbidden",
+        ],
+        "with": NotRequired[UnitFilter],
+        "max": NotRequired[int],
+        "led_by": NotRequired[str],
+        "mandatory": NotRequired[Literal[True]],
+        "faction": NotRequired[EntityId],
+        "enhancement_kind": NotRequired[str],
+    },
+)
+
+
+class SingleEffect42(TypedDict):
+    type: Literal["army-rule"]
+    target: UnitRef
+    modifier: Modifier49
+    scaling: NotRequired[Scaling]
+
+
+SingleEffect: TypeAlias = (
+    SingleEffect1
+    | SingleEffect2
+    | SingleEffect3
+    | SingleEffect4
+    | SingleEffect5
+    | SingleEffect6
+    | SingleEffect7
+    | SingleEffect8
+    | SingleEffect9
+    | SingleEffect10
+    | SingleEffect11
+    | SingleEffect12
+    | SingleEffect13
+    | SingleEffect14
+    | SingleEffect15
+    | SingleEffect16
+    | SingleEffect17
+    | SingleEffect18
+    | SingleEffect19
+    | SingleEffect20
+    | SingleEffect21
+    | SingleEffect22
+    | SingleEffect23
+    | SingleEffect24
+    | SingleEffect25
+    | SingleEffect26
+    | SingleEffect27
+    | SingleEffect28
+    | SingleEffect29
+    | SingleEffect30
+    | SingleEffect31
+    | SingleEffect32
+    | SingleEffect33
+    | SingleEffect34
+    | SingleEffect35
+    | SingleEffect36
+    | SingleEffect37
+    | SingleEffect38
+    | SingleEffect39
+    | SingleEffect40
+    | SingleEffect41
+    | SingleEffect42
+)
 
 
 class ChoiceEffect(TypedDict):
@@ -2419,19 +3276,6 @@ class RulesBundleEffect(TypedDict):
     steps: list[EffectNode]
 
 
-class NamedEffect(TypedDict):
-    type: Literal["named-effect"]
-    name: str
-    kind: NotRequired[Literal["psychic"]]
-    level: NotRequired[int]
-    effect: EffectNode
-    optional: NotRequired[bool]
-    cost: NotRequired[EffectNode]
-    duration: NotRequired[ScopeDuration]
-    trigger: NotRequired[AbilityTrigger]
-    usage: NotRequired[AbilityUsage]
-
-
 class AbilityPart(TypedDict):
     type: Literal["ability-part"]
     name: NotRequired[str]
@@ -2445,7 +3289,7 @@ class AbilityPart(TypedDict):
     usage: NotRequired[AbilityUsage]
 
 
-class Modifier(TypedDict):
+class Modifier50(TypedDict):
     condition: Condition
     value: int
 
@@ -2453,7 +3297,7 @@ class Modifier(TypedDict):
 class Test(TypedDict):
     kind: Literal["leadership", "battle-shock"]
     subject: Literal["unit", "self", "target"]
-    modifiers: NotRequired[list[Modifier]]
+    modifiers: NotRequired[list[Modifier50]]
 
 
 class DiceGatedEffect(TypedDict):
@@ -2476,6 +3320,8 @@ class Outcome(TypedDict):
 class DiceTableEffect(TypedDict):
     type: Literal["dice-table"]
     dice: Literal["D3", "D6"]
+    count: NotRequired[int]
+    distinct: NotRequired[Literal[True]]
     outcomes: list[Outcome]
 
 
@@ -2572,67 +3418,7 @@ class ForEachUnitEffect(TypedDict):
     effect: EffectNode
 
 
-class Modifier1(TypedDict):
-    move_type: NotRequired[
-        Literal[
-            "normal",
-            "advance",
-            "pile-in",
-            "consolidation",
-            "reactive",
-            "surge",
-            "redeploy",
-            "scout",
-            "infiltrate",
-            "shoot-and-scoot",
-            "ingress",
-        ]
-    ]
-    distance: NotRequired[int | str]
-    passthrough: NotRequired[
-        list[
-            Literal[
-                "non-titanic-models",
-                "friendly-vehicles",
-                "friendly-monsters",
-                "terrain-le-4",
-                "tall-terrain",
-                "all-terrain",
-            ]
-        ]
-    ]
-    vertical_limit: NotRequired[int]
-    ignore_vertical: NotRequired[bool]
-    replaces_default: NotRequired[bool]
-    to_reserves: NotRequired[bool]
-    applies_to_moves: NotRequired[list[Literal["normal", "advance", "fall-back", "charge"]]]
-    name: NotRequired[str]
-    excludes_keyword: NotRequired[str]
-    max_units: NotRequired[int]
-    marker: NotRequired[Marker]
-    condition: NotRequired[Condition]
-
-
-class MovementModifierEffect(TypedDict):
-    type: Literal["movement-modifier"]
-    target: Literal[
-        "self",
-        "bearer",
-        "unit",
-        "attached-unit",
-        "attacker",
-        "defender",
-        "target",
-        "friendly-within-aura",
-        "enemy-within-aura",
-        "all-friendly",
-        "all-enemy",
-    ]
-    modifier: Modifier1
-    after_move: NotRequired[EffectNode]
-
-
-class Modifier2(TypedDict):
+class Modifier51(TypedDict):
     range: NotRequired[int | list[RangeItem]]
     range_bonus: NotRequired[int]
     of: NotRequired[str]
@@ -2645,7 +3431,7 @@ class Modifier2(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier2
+    modifier: Modifier51
 
 
 class Select(TypedDict):
@@ -2697,6 +3483,8 @@ class StanceSelectEffect(TypedDict):
     scope: NotRequired[Literal["army", "unit"]]
     select: NotRequired[str]
     options: list[Option1]
+    min_choices: NotRequired[int]
+    max_choices: NotRequired[int]
 
 
 class Risk(TypedDict):
@@ -2716,6 +3504,12 @@ class IssueOrdersEffect(TypedDict):
     range: NotRequired[float]
     eligible: NotRequired[Eligible1]
     options: list[Option1]
+
+
+class NamedRegionStateEffect(TypedDict):
+    type: Literal["named-region-state"]
+    target: NotRequired[UnitRef]
+    modifier: NamedRegionState
 
 
 class Eligibility(TypedDict):
@@ -2751,19 +3545,7 @@ ResourceActionMenuTrigger: TypeAlias = Trigger
 class NamedRegionBranch(TypedDict):
     source: NamedRegionBranchActor
     beneficiary: NamedRegionBranchActor
-    target: Literal[
-        "self",
-        "bearer",
-        "unit",
-        "attached-unit",
-        "attacker",
-        "defender",
-        "target",
-        "friendly-within-aura",
-        "enemy-within-aura",
-        "all-friendly",
-        "all-enemy",
-    ]
+    target: UnitRef
     timing: NamedRegionBranchTiming
     duration: str
     effect: EffectNode
@@ -2808,28 +3590,6 @@ class PersistentDesignationEffect(TypedDict):
     consumer: NotRequired[Consumer]
     duration: Literal["phase", "turn", "battle-round", "battle", "until-next-command-phase"]
     lifecycle: NotRequired[Lifecycle]
-
-
-class SelectObjectiveEffect(TypedDict):
-    type: Literal["select-objective"]
-    selector: ObjectiveSelector
-    effect: EffectNode
-
-
-class ForEachObjectiveEffect(TypedDict):
-    type: Literal["for-each-objective"]
-    selector: ObjectiveSelector
-    effect: EffectNode
-
-
-class PairedDesignationEffect(TypedDict):
-    type: Literal["paired-designation"]
-    duration: Literal["phase"]
-    observer: Observer
-    spotted: Spotted
-    guided: Guided
-    observer_eligibility: Condition
-    effects: EffectNode
 
 
 Effect: TypeAlias = EffectNode

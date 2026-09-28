@@ -155,7 +155,12 @@ func unitFilterPhrase(f map[string]any) string {
 		noun = "model"
 	}
 	s := owner + all + noun
-	s = article(s) + " " + s
+	lower := strings.ToLower(s)
+	if strings.ContainsRune("aeio", rune(lower[0])) || (lower[0] == 'u' && !strings.HasPrefix(lower, "uni")) {
+		s = "an " + s
+	} else {
+		s = "a " + s
+	}
 	if isList(f["any_of"]) {
 		s += " with the " + orList(cstrList(f["any_of"])) + " keyword"
 	}
@@ -170,6 +175,19 @@ func unitFilterPhrase(f map[string]any) string {
 	}
 	if f["visible"] == true {
 		s += " that is visible to it"
+	}
+	if within, ok := asMap(f["within"]); ok && within != nil {
+		s += " within " + rangePhrase(within["range"])
+		if within["of"] != nil {
+			s += " of " + unitRefPhrase(within["of"], "the unit")
+		}
+	}
+	if f["excluding"] != nil {
+		if f["excluding"] == "this-unit" {
+			s += " other than this unit"
+		} else {
+			s += " other than " + unitRefPhrase(f["excluding"], "the unit")
+		}
 	}
 	return s
 }
@@ -279,7 +297,6 @@ var statePhrases = map[string]string{
 	"battle-shocked":        "Battle-shocked",
 	"embarked":              "embarked",
 	"in-strategic-reserves": "in Strategic Reserves",
-	"in-reserves":           "in Reserves",
 	"on-battlefield":        "on the battlefield",
 	"hidden":                "hidden",
 	"fights-first":          "a Fights First unit",
@@ -400,6 +417,12 @@ func describeCondition(c map[string]any) string {
 		if len(ops) == 1 && !jsTruthy(ops[0]["operator"]) {
 			return describePredicate(ops[0], true)
 		}
+		// not(not(X)) reads as X, never "not (... is not ...)".
+		if len(ops) == 1 {
+			if inner, ok := conditionOperands(ops[0], "not"); ok && len(inner) == 1 {
+				return describeCondition(inner[0])
+			}
+		}
 		parts := make([]string, len(ops))
 		for i, o := range ops {
 			parts[i] = describeCondition(o)
@@ -451,6 +474,21 @@ func describeSelectionEligibility(c map[string]any) string {
 			return strings.Join(parts, " and ")
 		}
 	}
+	if ops, ok := conditionOperands(c, "or"); ok {
+		var parts []string
+		all := true
+		for _, n := range ops {
+			part, ok := candidateClause(n)
+			if !ok {
+				all = false
+				break
+			}
+			parts = append(parts, part)
+		}
+		if all {
+			return strings.Join(parts, " or ")
+		}
+	}
 	if part, ok := candidateClause(c); ok {
 		return part
 	}
@@ -458,6 +496,7 @@ func describeSelectionEligibility(c map[string]any) string {
 }
 
 var candidatePrefixes = [][2]string{
+	{"the unit is not the same unit as ", "other than "},
 	{"the unit does not have ", "without "},
 	{"the unit has not ", "that has not "},
 	{"the unit has ", "with "},

@@ -11,7 +11,7 @@
         "units": {"type":"designated","parameters":{"tag":"infantry"}},
         "use_limit": 1,
         "completes": {"type":"within","parameters":{"of":{"objective":{}},"range":"objective-control"}},
-        "effect": { "type": "terrain-area-tag", "target": "unit", "modifier": { "tag": "cleansed" } }
+        "effect": {"type":"designate","target":"this-unit","modifier":{"subject":{"terrain_area":{}},"tag":"cleansed"}}
       }
     ],
     "awards": [

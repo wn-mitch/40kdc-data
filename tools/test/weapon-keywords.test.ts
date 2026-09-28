@@ -42,7 +42,7 @@ describe("weapon-keyword catalog", () => {
     const twin = ds.weaponKeywords.get("twin-linked");
     expect(twin?.raw.effect).toEqual({
       type: "re-roll",
-      target: "self",
+      target: "this-model",
       modifier: { roll: "wound", subset: "all-failures" },
     });
   });

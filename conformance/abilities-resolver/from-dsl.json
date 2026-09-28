@@ -262,7 +262,7 @@
         "applied": [],
         "unsupportedReasons": [
           "effect type \"resource-gain\" is not modelled by the buff layer",
-          "effect type \"resource-clear\" is not modelled by the buff layer"
+          "effect type \"resource-spend\" is not modelled by the buff layer"
         ],
         "activatable": [
           {

@@ -14,7 +14,7 @@ def _named_region(
 ) -> dict[str, Any]:
     return {
         "type": "named-region-state",
-        "target": "all-friendly",
+        "target": {"owner": "friendly"},
         "modifier": {
             "consumer": {
                 "beneficiary_gate": {"operator": operator, "keywords": keywords},
@@ -97,7 +97,7 @@ def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
 def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:
     effect = {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {"roll": "hit", "result_scope": "any-result", "count": 1},
     }
     result = effect_to_buffs(effect, _source(), {"phase": "shooting"})
@@ -141,7 +141,7 @@ def test_persistent_designation_requires_retained_selection_state() -> None:
         "consumer": {
             "effect": {
                 "type": "re-roll",
-                "target": "bearer",
+                "target": "this-model",
                 "modifier": {"roll": "hit", "subset": "all-failures"},
             }
         },
@@ -166,12 +166,12 @@ def test_rules_bundle_walks_every_effect_step() -> None:
             "steps": [
                 {
                     "type": "re-roll",
-                    "target": "unit",
+                    "target": "this-unit",
                     "modifier": {"roll": "hit", "subset": "ones"},
                 },
                 {
                     "type": "re-roll",
-                    "target": "unit",
+                    "target": "this-unit",
                     "modifier": {"roll": "wound", "subset": "ones"},
                 },
             ],

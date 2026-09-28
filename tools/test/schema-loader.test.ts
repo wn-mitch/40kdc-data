@@ -369,7 +369,7 @@ describe("schema-loader", () => {
         results: [1, 2, 3],
         effect: {
           type: "mortal-wounds",
-          target: "target",
+          target: "defender",
           modifier: { count: "D3" },
         },
       },
@@ -377,7 +377,7 @@ describe("schema-loader", () => {
         results: [4, 5],
         effect: {
           type: "mortal-wounds",
-          target: "target",
+          target: "defender",
           modifier: { count: 3 },
         },
       },
@@ -385,7 +385,7 @@ describe("schema-loader", () => {
         results: [6],
         effect: {
           type: "mortal-wounds",
-          target: "target",
+          target: "defender",
           modifier: { count: "D3+3" },
         },
       },
@@ -470,7 +470,7 @@ describe("schema-loader", () => {
     });
     const valid = {
       type: "named-region-state",
-      target: "all-friendly",
+      target: { owner: "friendly" },
       modifier: {
         region_ref: regionRef,
         producer,
@@ -607,7 +607,7 @@ describe("schema-loader", () => {
         reference: { selection_var: "bound-target" },
         effect: {
           type: "re-roll",
-          target: "bearer",
+          target: "this-model",
           modifier: { roll: "hit", subset: "all-failures" },
         },
       },
@@ -649,7 +649,7 @@ describe("schema-loader", () => {
       },
       effect: {
         type: "mortal-wounds",
-        target: "unit",
+        target: "selected-unit",
         modifier: { count: 1 },
       },
     };
@@ -701,7 +701,7 @@ describe("schema-loader", () => {
     expect(
       validate!({
         type: "re-roll",
-        target: "bearer",
+        target: "this-model",
         reach: { who: "bearer", extent: "model" },
         modifier: { roll: "hit", subset: "all-failures" },
       }),
@@ -725,7 +725,7 @@ describe("schema-loader", () => {
         beneficiary: "bearer",
         effect: {
           type: "re-roll",
-          target: "bearer",
+          target: "this-model",
           modifier: { roll: "hit", subset: "all-failures" },
         },
       },
@@ -758,8 +758,8 @@ describe("schema-loader", () => {
     );
     expect(validate).toBeDefined();
     const groupedSingle = {
-      type: "transport-capacity-conversion",
-      target: "self",
+      type: "transport-capacity",
+      target: "this-model",
       modifier: {
         occupancy_kind: "grouped-models",
         subject_kind: "single-model",
@@ -777,8 +777,8 @@ describe("schema-loader", () => {
     ).toBe(false);
 
     const fixed = {
-      type: "transport-capacity-conversion",
-      target: "unit",
+      type: "transport-capacity",
+      target: "this-unit",
       modifier: {
         occupancy_kind: "fixed-model-spaces",
         subject_kind: "unit-models",
@@ -801,8 +801,8 @@ describe("schema-loader", () => {
     ).toBe(false);
 
     const equivalent = {
-      type: "transport-capacity-conversion",
-      target: "unit",
+      type: "transport-capacity",
+      target: "this-unit",
       modifier: {
         occupancy_kind: "equivalent-model",
         subject_kind: "unit-models",
@@ -828,8 +828,8 @@ describe("schema-loader", () => {
     expect(validate).toBeDefined();
     const valid = {
       type: "ability-grant",
-      target: "unit",
-      modifier: { ability_id: "shared-rules", rules_bundle: true },
+      target: "this-unit",
+      modifier: { ability: "shared-rules", rules_bundle: true },
     };
 
     expect(validate!(valid)).toBe(true);
@@ -839,7 +839,7 @@ describe("schema-loader", () => {
     expect(
       validate!({
         ...valid,
-        modifier: { ability_id: "Not An Entity", rules_bundle: true },
+        modifier: { ability: "Not An Entity", rules_bundle: true },
       }),
     ).toBe(false);
   });
@@ -854,8 +854,8 @@ describe("schema-loader", () => {
       name: "Fixture Ability",
       authored_by: "40kdc-community",
       game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
-      effect: { type: "fight-first", target: "unit" },
-      scope: { range: "unit", duration: "phase" },
+      effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } },
+      scope: { duration: "phase" },
     };
     const digest = sourceDigest("Add 1 to the Strength characteristic.");
 

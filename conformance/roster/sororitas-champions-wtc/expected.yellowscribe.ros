@@ -22,7 +22,8 @@
             </profile>
             <profile name="Laud Hailer" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit gains the Once Per Battle Special ability.</characteristic>
+                <characteristic name="Description">Once per battle:
+  -&gt; Select one friendly ADEPTA SORORITAS unit within 12" that is Battle-shocked: that unit is no longer Battle-shocked.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -32,7 +33,7 @@
             </profile>
             <profile name="Stirring Rhetoric" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an Act of Faith is performed, while this model is leading a unit, until the end of the phase, the unit gains the Miracle Dice Value Set 6 ability.</characteristic>
+                <characteristic name="Description">When an Act of Faith is performed, while this model is leading a unit, until the end of the phase, discard a die from your Miracle dice and use its value in place of a dice roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -104,12 +105,12 @@
             </profile>
             <profile name="Litany of Deeds" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If 1+ friendly units destroyed, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, this model gains the Miracle Dice Reroll Before Pool ability.</characteristic>
+                <characteristic name="Description">If 1+ friendly units destroyed, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stanchion of Holy Martyrs" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, modify the unit's Save characteristic to 2.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, set the unit's Save characteristic to 2.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -215,7 +216,7 @@
             <profile name="Deadly Demise 1" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -410,7 +411,7 @@
             </profile>
             <profile name="Defenders of the Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit retains control of objective markers even after no models remain in range, until the enemy retakes them (sticky objectives).</characteristic>
+                <characteristic name="Description">Objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
               </characteristics>
             </profile>
           </profiles>

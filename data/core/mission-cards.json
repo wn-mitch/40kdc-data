@@ -174,7 +174,7 @@
         "player_turn": "your-turn",
         "use_limit": 3,
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "condemn", "result": "success" }, "window": "turn", "object": { "owner": "enemy" } } },
-        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "condemned", "source": "this-action", "clears_on": "turn-rollover" } }
+        "effect": { "type": "designate", "target": "this-unit", "modifier": { "subject": "event-object", "tag": "condemned", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [
@@ -270,7 +270,7 @@
         "timing": "end-of-turn",
         "player_turn": "your-turn",
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "consecrate", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "consecrated", "source": "this-action", "clears_on": "never" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "objective": {} }, "tag": "consecrated", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -315,7 +315,7 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "booby-trap", "result": "success" }, "window": "turn", "object": { "terrain_area": {} } } },
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "trapped", "source": "this-action", "clears_on": "never" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "terrain_area": {} }, "tag": "trapped", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -456,7 +456,7 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "decoy", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "decoyed", "source": "this-action", "clears_on": "never" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "objective": {} }, "tag": "decoyed", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -727,7 +727,7 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "surveil", "result": "success" }, "window": "turn", "object": { "owner": "enemy" } } },
-        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "surveilled", "source": "this-action", "clears_on": "turn-rollover" } }
+        "effect": { "type": "designate", "target": "this-unit", "modifier": { "subject": "event-object", "tag": "surveilled", "clears_on": "turn-rollover" } }
       },
       {
         "action_id": "clear-markers",
@@ -771,7 +771,7 @@
         "battle_round": { "min": 2 },
         "use_limit": 1,
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "triangulate", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "triangulated", "source": "this-action", "clears_on": "never" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "objective": {} }, "tag": "triangulated", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -1007,7 +1007,7 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "plundered", "source": "this-action", "clears_on": "never" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "terrain_area": {} }, "tag": "plundered", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -1136,7 +1136,7 @@
         "player_turn": "your-turn",
         "units": { "type": "within", "parameters": { "of": { "objective": {} }, "range": "objective-control" } },
         "completes": { "type": "happened", "parameters": { "event": "used", "filter": { "kind": "action", "id": "cleanse", "result": "success" }, "window": "turn", "object": { "objective": { "role": "non-home" } } } },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "cleansed", "source": "this-action", "clears_on": "turn-rollover" } }
+        "effect": { "type": "designate", "target": "this-model", "modifier": { "subject": { "objective": {} }, "tag": "cleansed", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [

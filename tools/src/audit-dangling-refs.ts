@@ -13,8 +13,8 @@
  *    keyword some unit, faction, or keyword catalog actually defines. An
  *    unresolvable entry is dead data: the gate can never become true (or the
  *    exclusion never excludes), and nothing reports it.
- *  - `cp-refund` / `stratagem-cost-modifier` effects, whose `modifier.stratagem`
- *    value must name a core Stratagem id. An unresolvable value points at no
+ *  - a Stratagem named by an effect (a Stratagem `cost-modifier`'s `modifier.id`,
+ *    a `permission` or `targeting` `modifier.stratagem`), which must be a core Stratagem id. An unresolvable value points at no
  *    entity, and the translators still title-case it into readable prose.
  *
  * This module is deliberately separate from `validate-all`: the repository
@@ -45,8 +45,9 @@ export type DanglingReferenceKind = "keyword" | "stratagem";
 export type DanglingReferenceType =
   | "has-keyword"
   | "unit-filter"
-  | "cp-refund"
-  | "stratagem-cost-modifier";
+  | "cost-modifier"
+  | "permission"
+  | "targeting";
 
 /** One unresolved reference, located precisely enough to fix by hand. */
 export interface DanglingReference {
@@ -68,17 +69,11 @@ export interface ReferenceVocabularies {
   stratagems: Set<string>;
 }
 
-/**
- * Effect types whose `modifier.stratagem` names a core Stratagem.
- *
- * Deliberately a closed list: other effects carry a `stratagem` property as
- * display text, so matching on the property name alone would invent references
- * the schemas never promised.
- */
-const STRATAGEM_EFFECT_TYPES = new Set<DanglingReferenceType>([
-  "cp-refund",
-  "stratagem-cost-modifier",
-]);
+/** The Stratagem an effect names: its modifier key, for the effect types that name one. */
+function stratagemKey(type: string, modifier: Record<string, unknown>): "id" | "stratagem" | null {
+  if (type === "cost-modifier") return modifier.of === "stratagem" ? "id" : null;
+  return type === "permission" || type === "targeting" ? "stratagem" : null;
+}
 
 /** The `has-keyword` operands that name gameplay keywords (`chosen_by` names an ability). */
 const HAS_KEYWORD_LISTS = ["all_of", "any_of"] as const;
@@ -87,7 +82,7 @@ const HAS_KEYWORD_LISTS = ["all_of", "any_of"] as const;
 const UNIT_FILTER_LISTS = ["all_of", "any_of", "none_of"] as const;
 
 /** Unit-filter properties (common.schema.json#/$defs/unit-filter); an object with any other key is not one. */
-const UNIT_FILTER_KEYS = new Set(["owner", "all_of", "any_of", "none_of", "designated", "state", "level", "visible"]);
+const UNIT_FILTER_KEYS = new Set(["owner", "all_of", "any_of", "none_of", "designated", "state", "level", "visible", "within", "excluding"]);
 
 /**
  * Is `node` a unit filter? The DSL has no discriminator for it, so match its closed property
@@ -382,23 +377,19 @@ export async function collectDanglingAbilityReferences(
           }
         }
 
-        if (STRATAGEM_EFFECT_TYPES.has(type as DanglingReferenceType)) {
-          const modifier = node.modifier;
-          if (modifier !== null && typeof modifier === "object") {
-            const stratagem = (modifier as Record<string, unknown>).stratagem;
-            if (
-              typeof stratagem === "string" &&
-              !vocabularies.stratagems.has(stratagem)
-            ) {
-              findings.push({
-                kind: "stratagem",
-                reference_type: type as DanglingReferenceType,
-                source_file: sourceFile,
-                ability_id: abilityId,
-                path: `${path}/modifier/stratagem`,
-                value: stratagem,
-              });
-            }
+        const modifier = node.modifier;
+        if (typeof type === "string" && modifier !== null && typeof modifier === "object" && !Array.isArray(modifier)) {
+          const key = stratagemKey(type, modifier as Record<string, unknown>);
+          const stratagem = key ? (modifier as Record<string, unknown>)[key] : undefined;
+          if (key && typeof stratagem === "string" && !vocabularies.stratagems.has(stratagem)) {
+            findings.push({
+              kind: "stratagem",
+              reference_type: type as DanglingReferenceType,
+              source_file: sourceFile,
+              ability_id: abilityId,
+              path: `${path}/modifier/${key}`,
+              value: stratagem,
+            });
           }
         }
       });

@@ -19,13 +19,17 @@ export function describeSelectionEligibility(c: Condition): string {
     const parts = flat(c).map(candidateClause);
     if (parts.every((part): part is string => part !== null)) return parts.join(" and ");
   }
+  if (c.operator === "or" && c.operands) {
+    const parts = c.operands.map(candidateClause);
+    if (parts.every((part): part is string => part !== null)) return parts.join(" or ");
+  }
   return candidateClause(c) ?? `if ${describeCondition(c)}`;
 }
 
 /** A condition on the candidate as a relative clause ("that was hit…", "without \"MONSTER\""), else null. */
 function candidateClause(c: Condition): string | null {
   const phrase = describeCondition(c);
-  for (const [from, to] of [["the unit does not have ", "without "], ["the unit has not ", "that has not "], ["the unit has ", "with "], ["not the unit is ", "that is not "], ["the unit ", "that "]] as const) {
+  for (const [from, to] of [["the unit is not the same unit as ", "other than "], ["the unit does not have ", "without "], ["the unit has not ", "that has not "], ["the unit has ", "with "], ["not the unit is ", "that is not "], ["the unit ", "that "]] as const) {
     if (phrase.startsWith(from)) return `${to}${phrase.slice(from.length)}`;
   }
   return null;
@@ -187,8 +191,11 @@ function joinLeadIns(operands: Condition[]): string {
     parts.push(conditionLeadIn(op));
     i++;
   }
-  return parts.reduce(
-    (acc, part) => (acc === "" ? part : part.startsWith("against ") || part.startsWith("(excluding ") ? `${acc} ${part}` : `${acc}, ${part}`),
-    "",
-  );
+  return parts.reduce((acc, part) => {
+    if (acc === "") return part;
+    // A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
+    const target = /^against (.+) targets$/.exec(part);
+    if (target && / targets$/.test(acc) && /(^|, )against /.test(acc)) return `${acc} that are also ${target[1]}`;
+    return part.startsWith("against ") || part.startsWith("(excluding ") ? `${acc} ${part}` : `${acc}, ${part}`;
+  }, "");
 }

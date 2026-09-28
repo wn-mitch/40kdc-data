@@ -43,7 +43,11 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
         "unit"
     };
     let base = format!("{owner}{all}{noun}");
-    let mut s = format!("{} {base}", article(&base));
+    // `/^(?:[aeio]|u(?!ni))/i`: "an ORKS unit", "a unit", "an UNDEAD unit".
+    let lower = base.to_lowercase();
+    let an = lower.starts_with(['a', 'e', 'i', 'o'])
+        || (lower.starts_with('u') && !lower.starts_with("uni"));
+    let mut s = format!("{} {base}", if an { "an" } else { "a" });
     if let Some(any) = strs(f.get("any_of")) {
         s.push_str(&format!(" with the {} keyword", or_list(&any)));
     }
@@ -61,6 +65,21 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     }
     if f.get("visible") == Some(&Value::Bool(true)) {
         s.push_str(" that is visible to it");
+    }
+    if let Some(within) = nn(f, "within") {
+        let w = obj(Some(within));
+        s.push_str(&format!(" within {}", range_phrase(w.get("range"))));
+        if let Some(of) = nn(w, "of") {
+            s.push_str(&format!(" of {}", unit_ref_phrase(Some(of), "the unit")));
+        }
+    }
+    if let Some(ex) = nn(f, "excluding") {
+        let other = if ex.as_str() == Some("this-unit") {
+            "this unit".to_string()
+        } else {
+            unit_ref_phrase(Some(ex), "the unit")
+        };
+        s.push_str(&format!(" other than {other}"));
     }
     s
 }
@@ -162,7 +181,6 @@ pub(crate) fn state_phrase_base(state: &str) -> Option<&'static str> {
         "battle-shocked" => "Battle-shocked",
         "embarked" => "embarked",
         "in-strategic-reserves" => "in Strategic Reserves",
-        "in-reserves" => "in Reserves",
         "on-battlefield" => "on the battlefield",
         "hidden" => "hidden",
         "fights-first" => "a Fights First unit",

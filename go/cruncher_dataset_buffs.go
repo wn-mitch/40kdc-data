@@ -27,7 +27,7 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 	case map[string]any:
 		if getStr(node, "type") == "ability-grant" {
 			modifier, _ := getMap(node, "modifier")
-			abilityID := getStr(modifier, "ability_id")
+			abilityID := getStr(modifier, "ability")
 			rulesBundle, _ := modifier["rules_bundle"].(bool)
 			if rulesBundle && abilityID != "" && !seen[abilityID] {
 				factionID := getStr(a.Raw, "faction_id")
@@ -130,8 +130,10 @@ func triggerGatedStep(behavior any, trigger any, effect any) (any, bool) {
 }
 
 // describeBuffs is the full DSL->Buff translation (applied/unsupported/
-// activatable), with a range-scoped ability's scope.range_inches stamped onto
-// every emitted buff as applicableWhen.maxRangeInches.
+// activatable). An aura (an effect whose target filter reaches units `within`
+// N") gates on distance to the target: the single inch range every such target
+// reaches (auraInches) is stamped onto every emitted buff as
+// applicableWhen.maxRangeInches.
 func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, perspective string) *effectTranslation {
 	if ctx == nil {
 		ctx = map[string]any{"phase": "shooting"}
@@ -142,12 +144,10 @@ func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, p
 		gated = usageGated(a.Raw["ability_type"], a.Raw["usage"], resolvedEffect)
 	}
 	translated := effectToBuffs(gated, source, ctx, perspective)
-	scope, _ := getMap(a.Raw, "scope")
-	rngVal := scope["range_inches"]
-	if !isNumber(rngVal) {
+	rng, ok := auraInches(resolvedEffect)
+	if !ok {
 		return translated
 	}
-	rng, _ := num(rngVal)
 	gate := func(bAny any) any {
 		b, _ := asMap(bAny)
 		nb := cloneMap(b)
@@ -268,4 +268,38 @@ func (ds *Dataset) buffsFor(input, context map[string]any) []any {
 
 func (ds *Dataset) defensiveBuffsFor(input, context map[string]any) []any {
 	return ds.collectBuffs(input, context, "target")
+}
+
+// auraInches is the one inch range every aura-filtered effect target in effect
+// reaches (target.within.range.inches), when there is exactly one.
+func auraInches(effect any) (float64, bool) {
+	found := map[float64]bool{}
+	var walk func(node any)
+	walk = func(node any) {
+		switch x := node.(type) {
+		case []any:
+			for _, c := range x {
+				walk(c)
+			}
+		case map[string]any:
+			if _, typed := x["type"].(string); typed {
+				if target, ok := asMap(x["target"]); ok && target != nil {
+					if inches, ok := mapOr(mapOr(target["within"])["range"])["inches"].(float64); ok {
+						found[inches] = true
+					}
+				}
+			}
+			for _, c := range x {
+				walk(c)
+			}
+		}
+	}
+	walk(effect)
+	if len(found) != 1 {
+		return 0, false
+	}
+	for v := range found {
+		return v, true
+	}
+	return 0, false
 }

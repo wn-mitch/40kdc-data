@@ -69,12 +69,15 @@ export function unitFilterPhrase(f: P): string {
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
   const noun = f.level === "model" ? "model" : "unit";
   let s = `${owner}${all}${noun}`;
-  s = `${/^[aeiou]/i.test(s) ? "an" : "a"} ${s}`;
+  s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
   if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}`;
   if (f.state != null) s += ` that is ${statePhrase(str(f.state))}`;
   if (f.visible === true) s += " that is visible to it";
+  const within = f.within as P | undefined;
+  if (within != null) s += ` within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
+  if (f.excluding != null) s += ` other than ${f.excluding === "this-unit" ? "this unit" : unitRefPhrase(f.excluding)}`;
   return s;
 }
 
@@ -129,7 +132,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
 
 const STATE_PHRASES: Record<string, string> = {
   engaged: "engaged", "battle-shocked": "Battle-shocked", embarked: "embarked",
-  "in-strategic-reserves": "in Strategic Reserves", "in-reserves": "in Reserves", "on-battlefield": "on the battlefield",
+  "in-strategic-reserves": "in Strategic Reserves", "on-battlefield": "on the battlefield",
   hidden: "hidden", "fights-first": "a Fights First unit", "benefit-of-cover": "receiving the benefit of cover",
 };
 const NEGATED_STATE: Record<string, string> = { engaged: "unengaged" };

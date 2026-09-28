@@ -130,7 +130,7 @@ test('active lease excludes a start-campaign task after its claim is released', 
   store.db.prepare('INSERT INTO leases(id,run_id,state,payload_json) VALUES (?,?,?,?)').run('lease-active', campaignId, 'active', JSON.stringify({ task_id: taskId, attempt_id: 'attempt-active', input_hash: 'a'.repeat(64), expires_at: new Date(Date.now() + 60_000).toISOString() }))
   const ranking = wholeGraphPriorities(store, {
     repoRoot,
-    candidates: [{ faction_id: 'fixture-faction', ability_id: 'fixture-ability', effect: { type: 'invulnerable-save', target: 'unit', modifier: { invuln_sv: 5 } } }],
+    candidates: [{ faction_id: 'fixture-faction', ability_id: 'fixture-ability', effect: { type: 'invulnerable-save', target: 'this-unit', modifier: { invuln_sv: 5 } } }],
   })
   assert.equal(task.payload.faction_id, 'fixture-faction')
   assert.deepEqual(ranking.eligible, [])

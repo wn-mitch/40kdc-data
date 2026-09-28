@@ -430,3 +430,7 @@ npx tsx fails from the repo root (tsx not on PATH); the parity README's runner c
 ## 2026-09-27T21:56:32Z — claude-opus-5-5
 
 tooling/parity/differ.py defaults to the stale gitignored tools/dist/runner.js when present, producing 240 false TS/Py diffs after TS source changes; pass --ts-cmd 'tools/node_modules/.bin/tsx tools/src/runner.ts' (bare npx tsx isn't on PATH) or rebuild tools first.
+
+## 2026-09-28T03:42:26Z — claude-opus-5-5
+
+lldb -b 'run; bt' on the wh40kdc debug test binary hung with no output (stack-overflow triage); bisecting RUST_MIN_STACK sizes found the needed stack faster.

@@ -251,6 +251,9 @@ func joinLeadIns(operands []map[string]any) string {
 		switch {
 		case acc == "":
 			acc = part
+		case againstTargetsRe.MatchString(part) && strings.HasSuffix(acc, " targets") && againstClauseRe.MatchString(acc):
+			// A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
+			acc += " that are also " + againstTargetsRe.FindStringSubmatch(part)[1]
 		case strings.HasPrefix(part, "against ") || strings.HasPrefix(part, "(excluding "):
 			acc += " " + part
 		default:
@@ -259,3 +262,6 @@ func joinLeadIns(operands []map[string]any) string {
 	}
 	return acc
 }
+
+var againstTargetsRe = regexp.MustCompile(`^against (.+) targets$`)
+var againstClauseRe = regexp.MustCompile(`(^|, )against `)

@@ -21,7 +21,18 @@ describe("Round 5C leaf describer audit", () => {
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
+      // It also carries the bearer/this-model pair below.
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // Round 6 compiles subject "bearer" and "this-model" to the same `this-model` target, so these
+      // leaves read the same for both: the leaf vocabulary keeps a distinction the DSL no longer has.
+      "characteristic-set": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "weapon-ability-grant": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "feel-no-pain": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "invulnerable-save": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "fights-first": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "no-advance-roll": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "act-after-move": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "regain-wounds": { unrendered: [], colliding: ["subject"], problems: 0 },
     });
   });
 

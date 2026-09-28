@@ -301,8 +301,17 @@ pub(crate) fn join_lead_ins(ops: &[Value]) -> String {
     }
     let mut acc = String::new();
     for part in parts {
+        // A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
+        let target = part
+            .strip_prefix("against ")
+            .and_then(|r| r.strip_suffix(" targets"))
+            .filter(|t| !t.is_empty());
         if acc.is_empty() {
             acc = part;
+        } else if let Some(target) = target.filter(|_| {
+            acc.ends_with(" targets") && (acc.starts_with("against ") || acc.contains(", against "))
+        }) {
+            acc = format!("{acc} that are also {target}");
         } else if part.starts_with("against ") || part.starts_with("(excluding ") {
             acc = format!("{acc} {part}");
         } else {

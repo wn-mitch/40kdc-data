@@ -48,11 +48,11 @@ func TestConditionShapesTheValidatorMustReject(t *testing.T) {
 	ability := func(condition map[string]any) map[string]any {
 		return map[string]any{
 			"ability_id": "fixture-condition", "ability_type": "unit", "name": "Fixture", "behavior": "passive",
-			"authored_by": "40kdc-community", "scope": map[string]any{"range": "unit", "duration": "battle"},
+			"authored_by": "40kdc-community", "scope": map[string]any{"duration": "battle"},
 			"game_version": map[string]any{"edition": "11th", "dataslate": "launch"},
 			"effect": map[string]any{
 				"type": "conditional", "condition": condition,
-				"effect": map[string]any{"type": "re-roll", "target": "unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}},
+				"effect": map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}},
 			},
 		}
 	}

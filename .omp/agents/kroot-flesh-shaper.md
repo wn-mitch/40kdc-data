@@ -105,7 +105,7 @@ ask for renamed or extra fields. Embed each returned object verbatim into
 `decomposition.{who,when,what}`; derive shape-specific reads (e.g. the load-bearing
 targeting/timing clause) YOURSELF from those objects + the prose — do not demand them
 from the child. The three role schemas you will get back:
-- `target-dummy` WHO → `{bearer, beneficiary, applies_to, scope_target, effect_target_params, keyword_gates, excludes, confidence}`
+- `target-dummy` WHO → `{bearer, beneficiary, applies_to, effect_target, keyword_gates, excludes, confidence}`
 - `chronomancer` WHEN → `{behavior, trigger, phase_conditions, canonical_condition_ids, duration, usage, confidence}`
 - `vox-hound` WHAT → `{effect_tree, leaf_types_used, composition, dice_mechanics, buff_or_debuff, unmodelable_clauses, confidence}`
 
@@ -142,7 +142,7 @@ presence-only evidence, stale leases, and cross-charter inputs are invalid.
     "seed_encoding": { "type": "reserve-denial-zone", "radius": 9, "denies": "set-up", "affects": "enemy" }
   },
   "nearest_existing_shapes": [
-    { "shape": "deep-strike", "why_rejected": "a Reserves-ARRIVAL primitive for the bearer; cannot express a denial keyed to enemy set-up near a friendly point", "flatten_risk": "high" },
+    { "shape": "set-up", "why_rejected": "a Reserves-ARRIVAL primitive for the bearer; cannot express a denial keyed to enemy set-up near a friendly point", "flatten_risk": "high" },
     { "shape": "aura", "why_rejected": "carries a buff/debuff payload, not a set-up-step legality gate", "flatten_risk": "medium" }
   ],
   "revision": null,
@@ -220,7 +220,7 @@ eliminator, invasion-beams) and suite rules; replace with mined insights after r
 - A "new shape" that only ever fits its seed is a singleton — report it plainly
   and let the driver file the inbox block; a singleton rarely justifies four ports.
 - The load-bearing clause is usually a TARGETING or TIMING constraint the existing
-  shape cannot gate (invasion-beams' "wholly within 6\"" laundered onto scope.range;
+  shape cannot gate (invasion-beams' "wholly within 6\"" laundered onto a plain within range;
   multi-threat-eliminator's proximity to the *attacked ally*, not the attacker) —
   find that clause first; it is what every neighbour flattens.
 - Distinguish an expressibility gap (schema cannot represent it) from a cruncher

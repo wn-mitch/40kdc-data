@@ -80,10 +80,10 @@ def test_translate_effect_op() -> None:
             "args": {
                 "effect": {
                     "type": "feel-no-pain",
-                    "target": "unit",
+                    "target": "this-unit",
                     "modifier": {"threshold": 5},
                 },
-                "scope": {"range": "unit", "duration": "phase"},
+                "scope": {"duration": "phase"},
             },
         },
     )

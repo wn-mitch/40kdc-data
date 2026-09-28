@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeCoverage, hasEmptyModifier } from "../src/audit-coverage.js";
+import { computeCoverage, hasEmptyModifier, isStubEntry } from "../src/audit-coverage.js";
 
 describe("computeCoverage", () => {
   it("classifies an offensive ability (+1 to hit) as offensive", () => {
@@ -10,7 +10,7 @@ describe("computeCoverage", () => {
           {
             ability_id: "keen-eye",
             ability_type: "unit",
-            effect: { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+            effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
           },
         ],
       },
@@ -28,7 +28,7 @@ describe("computeCoverage", () => {
           {
             ability_id: "disgustingly-resilient",
             ability_type: "unit",
-            effect: { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } },
+            effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } },
           },
         ],
       },
@@ -37,7 +37,7 @@ describe("computeCoverage", () => {
     expect(r.totals.offensive).toBe(0);
   });
 
-  it("classifies a non-damage ability (deep-strike) as inert and histograms the reason", () => {
+  it("classifies a non-damage ability (a Deep Strike grant) as inert and histograms the reason", () => {
     const r = computeCoverage([
       {
         faction: "test",
@@ -45,7 +45,7 @@ describe("computeCoverage", () => {
           {
             ability_id: "teleport-strike",
             ability_type: "unit",
-            effect: { type: "deep-strike", target: "unit", modifier: {} },
+            effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } },
           },
         ],
       },
@@ -53,7 +53,7 @@ describe("computeCoverage", () => {
     expect(r.totals.inert).toBe(1);
     expect(r.totals.offensive).toBe(0);
     expect(r.totals.defensive).toBe(0);
-    expect(r.unsupportedReasons.some((u) => u.reason.includes("deep-strike"))).toBe(true);
+    expect(r.unsupportedReasons.some((u) => u.reason.includes("ability-grant"))).toBe(true);
   });
 
   it("flags GW-text leaks, stubs, and skipped-defensive from community_notes", () => {
@@ -64,12 +64,12 @@ describe("computeCoverage", () => {
           {
             ability_id: "a",
             community_notes: "auto-generated stub — needs manual authoring. Original: While this model...",
-            effect: { type: "deep-strike", target: "unit", modifier: {} },
+            effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } },
           },
           {
             ability_id: "b",
             community_notes: "defensive ability (skipped for damage calc)",
-            effect: { type: "damage-reduction", target: "unit", modifier: { amount: 1 } },
+            effect: { type: "damage-reduction", target: "this-unit", modifier: { reduction: 1 } },
           },
         ],
       },
@@ -83,7 +83,7 @@ describe("computeCoverage", () => {
     const r = computeCoverage([
       {
         faction: "test",
-        abilities: [{ ability_id: "x", effect: { type: "cp-gain", target: "self", modifier: { amount: 1 } } }],
+        abilities: [{ ability_id: "x", effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } }],
       },
     ]);
     const cpGain = r.unsupportedReasons.find((u) => u.reason.includes("cp-gain"));
@@ -91,16 +91,35 @@ describe("computeCoverage", () => {
   });
 
   it("detects empty-modifier placeholder nodes structurally (incl. nested)", () => {
-    expect(hasEmptyModifier({ type: "stat-modifier", target: "unit", modifier: {} })).toBe(true);
-    expect(hasEmptyModifier({ type: "conditional", condition: { type: "phase-is" }, effect: { type: "stat-modifier", modifier: {} } })).toBe(true);
+    expect(hasEmptyModifier({ type: "stat-modifier", target: "this-unit", modifier: {} })).toBe(true);
+    expect(
+      hasEmptyModifier({ type: "conditional", condition: { type: "phase-is", parameters: { phase: "fight" } }, effect: { type: "stat-modifier", target: "this-unit", modifier: {} } }),
+    ).toBe(true);
+    // move-modifier requires at least one property, so an empty one is a placeholder too
+    expect(hasEmptyModifier({ type: "move-modifier", target: "this-unit", modifier: {} })).toBe(true);
     // parameterless flag effects are correct with an empty modifier — NOT stubs
-    expect(hasEmptyModifier({ type: "deep-strike", target: "unit", modifier: {} })).toBe(false);
-    expect(hasEmptyModifier({ type: "fight-first", target: "unit", modifier: {} })).toBe(false);
-    expect(hasEmptyModifier({ type: "model-destruction", target: "bearer", modifier: {} })).toBe(false);
+    expect(hasEmptyModifier({ type: "end-attack-sequence", target: "defender", modifier: {} })).toBe(false);
+    expect(hasEmptyModifier({ type: "objective-sticky", target: "this-unit", modifier: {} })).toBe(false);
+    // a named grant is fully specified by its ability, not a stub
+    expect(hasEmptyModifier({ type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } })).toBe(false);
     // a fully-specified modifier is not a stub
     expect(hasEmptyModifier({ type: "roll-modifier", modifier: { roll: "hit", operation: "add", value: 1 } })).toBe(false);
     // a type that carries no modifier (e.g. a container) is not itself a stub
     expect(hasEmptyModifier({ type: "sequence", steps: [] })).toBe(false);
+  });
+
+  it("detects a seeded stub by its marker, and not an authored no-effect", () => {
+    expect(isStubEntry({ stub: true, effect: { type: "no-effect" } })).toBe(true);
+    expect(isStubEntry({ effect: { type: "no-effect" } })).toBe(false);
+    // Older data without the marker is caught by its empty modifier.
+    expect(isStubEntry({ effect: { type: "stat-modifier", target: "this-unit", modifier: {} } })).toBe(true);
+    expect(isStubEntry({ effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } })).toBe(false);
+    expect(isStubEntry(undefined)).toBe(false);
+    const r = computeCoverage([{ faction: "test", abilities: [
+      { ability_id: "seeded", stub: true, effect: { type: "no-effect" } },
+      { ability_id: "army-selection", effect: { type: "no-effect" } },
+    ] }]);
+    expect(r.totals.stubStructural).toBe(1);
   });
 
   it("emits a named worklist entry per ability with shape + stub + gap", () => {
@@ -108,7 +127,7 @@ describe("computeCoverage", () => {
       {
         faction: "test",
         abilities: [
-          { ability_id: "ghost-step", name: "Ghost Step", effect: { type: "stat-modifier", target: "unit", modifier: {} } },
+          { ability_id: "ghost-step", name: "Ghost Step", effect: { type: "stat-modifier", target: "this-unit", modifier: {} } },
         ],
       },
     ]);
@@ -125,7 +144,7 @@ describe("computeCoverage", () => {
       {
         faction: "alpha",
         abilities: [
-          { ability_id: "a", effect: { type: "feel-no-pain", target: "unit", modifier: { threshold: 6 } } },
+          { ability_id: "a", effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
         ],
       },
     ]);

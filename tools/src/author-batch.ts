@@ -19,7 +19,7 @@
  * Two modes:
  *   propose  (default) — write proposals; never touch live data.
  *   apply              — splice gated proposals into live abilities.json. Only
- *                        rewrites entries that are STILL empty-modifier stubs,
+ *                        rewrites entries that are STILL stubs (isStubEntry),
  *                        so re-running is safe and authored work is never
  *                        clobbered. Gate defaults: schema-valid + verifier-
  *                        faithful + confidence≠low + not complex-flagged.
@@ -35,7 +35,7 @@ import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { createValidator } from "./schema-loader.js";
-import { hasEmptyModifier } from "./audit-coverage.js";
+import { isStubEntry } from "./audit-coverage.js";
 import { keywordIndex } from "./round5c/core-keywords.js";
 import { round5cDataRoot } from "./round5c/entries.js";
 
@@ -70,11 +70,24 @@ const TRIGGER_GUIDE = (() => {
   const events = readJSON(resolve(SCHEMA_ROOT, "$defs/common.schema.json")).$defs["game-event"].enum as string[];
   return `Ability-level trigger is an EVENT OBJECT, never a condition: {event, subject?, object?, filter?, proximity?:{of?, range}, condition?, optional?:boolean, cost?:{cp}, window?:string, binds_event_variable?:string}. event MUST be one of [${events.join(",")}]. subject is who acted (default this-unit; a filter such as {owner:"enemy"} for "an enemy unit"); object is what the action was aimed at (the unit targeted, charged, attacked or destroyed). filter narrows the family: {to} for selected (move|shoot|fight|attack|disembark|observe), {kind, id} for targets-selected / attacks-resolved / used (which Stratagem, ability, action…), {move_types, mode, through} for move-ended, {from} for set-up, {roll, result} for before-roll / after-roll, {by, attack_type, weapon_keyword, timing:"before-removal", first} for destroyed / model-destroyed. Phase and whose turn go in trigger.condition (phase-is, player-turn-is). `;
 })();
+/** The single effects and their closed modifiers, from the effect schema. */
+const EFFECT_GUIDE = (() => {
+  const schema = readJSON(resolve(SCHEMA_ROOT, "enrichment/ability-dsl/effect.schema.json"));
+  const lines = (schema.$defs["single-effect"].oneOf as Json[]).map((v) => {
+    const mod = v.properties.modifier ?? {};
+    const required = new Set<string>(mod.required ?? []);
+    const keys = Object.keys(mod.properties ?? {}).map((k) => (required.has(k) ? k : `${k}?`)).join(", ");
+    return `    - ${v.properties.type.const}{${keys}}: ${String(v.description).replace(/^\[[a-z]+\] /, "")}`;
+  });
+  return `A single effect is {type, target, modifier, scaling?}. Each type's modifier is CLOSED: use only the keys listed (weapon_type/weapon_name/weapon_keyword narrow to a weapon). ` +
+    `target is a unit-ref: this-unit (default), this-model (the bearer), model-in-this-unit, attacker, defender (the attack's target), event-subject, event-object (e.g. the destroyed model), stratagem-target, selected-unit (inside select-units/for-each-unit), recipient (inside an aura), or a filter {owner, all_of, any_of, none_of, designated, state, level, visible, within:{range, of?}, excluding} meaning every unit that matches — an aura's range lives in within ({owner:"friendly", within:{range:{inches:6}}}). ` +
+    `ability-grant names ONLY a core ability (${(readJSON(resolve(SCHEMA_ROOT, "../data/core/unit-keywords.json")) as Json[]).map((k) => k.id).join(", ")}) or an existing ability record id. Types:\n${lines.join("\n")}\n`;
+})();
 const writeJSON = (p: string, v: Json): void => writeFileSync(p, JSON.stringify(v, null, 2) + "\n");
 /** Stable digest of a stub's source rule — the resume key (rule changed ⇒ re-propose). */
 const srcHash = (s: string): string => createHash("sha1").update(s).digest("hex").slice(0, 12);
 
-const PARAMETERLESS = new Set(["deep-strike", "fallback-and-act", "fight-first", "fight-last", "shoot-on-death", "fight-on-death"]);
+const PARAMETERLESS = new Set(["end-attack-sequence", "objective-sticky"]);
 
 export interface Proposal {
   ability_id: string;
@@ -99,7 +112,7 @@ export interface Proposal {
   repaired?: boolean;
   /** Repair pass flagged this rule as genuinely unencodable (needs hand-authoring). */
   unencodable?: boolean;
-  /** Canonical-key lint result (repair pass only). false = invented/out-of-vocab modifier keys. */
+  /** Canonical lint result (repair pass only). false = a condition breaks the vocabulary conventions. */
   canonical?: boolean;
   /** Digest of the source rule at propose time — lets a resumed run skip unchanged stubs. */
   src_hash?: string;
@@ -159,28 +172,17 @@ export function callClaude(system: string, user: string, schema: Json, model: st
 
 const CLASSIFY_SYSTEM =
   `You translate Warhammer 40k ability rules into a structured DSL. For each ability return one slot-form.\n\n` +
-  `effect_type — pick the SINGLE best of:\n` +
-  `  stat-modifier {operation:"add"|"subtract"|"set", stat:"A"|"S"|"T"|"Sv"|"AP"|"OC"|"Ld", value:int}\n` +
-  `  roll-modifier {operation:"add"|"subtract", roll:"hit"|"wound"|"save"|"charge", value:int}\n` +
-  `  re-roll {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", subset:"ones"|"all-failures", count?:positive-int} for pass/fail dice, or {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", result_scope:"any-result", count?:positive-int} when any result can be re-rolled; count means up to that many qualifying rolls within the ability's active window — ONLY combat/movement dice, NOT Battle-shock/Leadership\n` +
-  `  leadership-modifier {test:"battle-shock", operation:"re-roll"} or {operation:"add"|"subtract", value:int} — USE for Battle-shock/Leadership rerolls or Ld changes\n` +
-  `  mortal-wounds {count:int|"D3"|"D6"} ; feel-no-pain {threshold:int} ; invulnerable-save {invuln_sv:int}\n` +
-  `  keyword-grant {keywords:[ "lethal-hits"|"sustained-hits"|"devastating-wounds"|"twin-linked"|... ]} (ARRAY)\n` +
-  `  damage-reduction {reduction:int} ; objective-control-modifier {operation,value}|{sticky:true}\n` +
-  `  ability-grant {ability_id:"kebab"}|{grant_type:"..."} ; attack-restriction {restriction:"..."}\n` +
-  `  cp-gain|cp-refund {amount:int} ; resurrection {count:int|"D3"} ; model-destruction {count:int}\n` +
-  `  resource-gain|resource-spend {pool_id:"...", amount:int|"D3"} — faction resources: Miracle Dice→"miracle-dice-pool", Khorne Blessings→"blessings-of-khorne-pool", Pain tokens→"pain-token-pool"\n` +
-  `  movement-modifier {move_type,value} ; deep-strike/fallback-and-act/fight-first/fight-last/shoot-on-death/fight-on-death → modifier {}\n\n` +
+  `effect_type — pick the SINGLE best single effect below; modifier follows its keys.\n` + EFFECT_GUIDE + `\n` +
   `attack_type — "melee"|"ranged" if the rule limits to that attack kind, else "any". (Do NOT encode this as a condition.)\n` +
   `condition_kind — DEFAULT "none". Only set if the rule EXPLICITLY restricts: "phase" (+condition_param = phase name), "vs-keyword" (+param=keyword), ` +
   `"charged", "stationary", "below-half", "below-starting", "attached", "leading". Do NOT add a phase condition just because the ability operates in a phase. ` +
   `If the rule needs a compound/event trigger (e.g. a dice roll, an either/or choice, or "when a friendly VEHICLE is destroyed within 12\\"") set complex=true.\n` +
-  `scope_range — EXACTLY one of "self"|"unit"|"attached"|"aura-6"|"aura-9"|"aura-12"|"aura-custom"|"engagement-range"|"any-visible"|"any-on-battlefield"|"terrain-within-range" (a distance from the bearer; NEVER a target like "all-friendly"/"friendly-within-aura"). For an army-wide detachment/faction buff ("all friendly X units"), use "unit". scope_duration — "phase"|"turn"|"battle-round"|"battle"|"until-next-command-phase"|"until-next-battle-round"|"until-start-next-turn"|"one-use"|"permanent".\n` +
-  `target — "self"|"unit"|"friendly-within-aura"|"enemy-within-aura"|"attacker"|"defender"|... (only values from the schema enum).\n` +
+  `scope_duration — "phase"|"turn"|"battle-round"|"battle"|"until-next-command-phase"|"until-next-battle-round"|"until-start-next-turn"|"one-use"|"permanent".\n` +
+  `target — a unit-ref as described above (a string role, or a filter object).\n` +
   `Never copy rule text into any field. Give confidence and a one-sentence reasoning.`;
 
 export const VERIFY_SYSTEM =
-  `You judge whether authored DSL faithfully captures a 40k rule. The DSL includes scope {range,duration} — credit the aura/range/duration when it is in scope (do NOT flag "missing 6\\" aura" if scope.range is "aura-6"). ` +
+  `You judge whether authored DSL faithfully captures a 40k rule. The DSL carries an aura's range in the effect target's filter ({owner, within:{range}}) and the duration in scope.duration — credit them there. ` +
   `Be strict about the core mechanic: wrong effect type, wrong stat/roll, wrong value, a condition the rule does NOT state (phantom), a stated condition that is missing, or modeling a Leadership/Battle-shock re-roll as a combat re-roll. ` +
   `severity "ok" = every stated mechanic, condition, usage/timing gate, target restriction, attack subtype, and scope detail is represented; "minor" = core correct but any secondary stated detail is imperfect; "wrong" = core mechanic wrong. Set faithful=true ONLY with severity "ok"; any omitted or imperfect stated detail requires faithful=false. Return one verdict per ability, echoing its ability_id.`;
 
@@ -189,13 +191,13 @@ const CLASSIFY_SCHEMA = {
   properties: { results: { type: "array", items: {
     type: "object", additionalProperties: false,
     properties: {
-      ability_id: { type: "string" }, effect_type: { type: "string" }, target: { type: "string" },
+      ability_id: { type: "string" }, effect_type: { type: "string" }, target: { oneOf: [{ type: "string" }, { type: "object", additionalProperties: true }] },
       modifier: { type: "object", additionalProperties: true }, attack_type: { enum: ["any", "melee", "ranged"] },
       condition_kind: { enum: ["none", "phase", "vs-keyword", "charged", "stationary", "below-half", "below-starting", "attached", "leading"] },
-      condition_param: { type: ["string", "null"] }, scope_range: { type: "string" }, scope_duration: { type: "string" },
+      condition_param: { type: ["string", "null"] }, scope_duration: { type: "string" },
       complex: { type: "boolean" }, confidence: { enum: ["high", "medium", "low"] }, reasoning: { type: "string" },
     },
-    required: ["ability_id", "effect_type", "target", "modifier", "attack_type", "condition_kind", "scope_range", "scope_duration", "complex", "confidence", "reasoning"],
+    required: ["ability_id", "effect_type", "target", "modifier", "attack_type", "condition_kind", "scope_duration", "complex", "confidence", "reasoning"],
   } } },
   required: ["results"],
 };
@@ -224,46 +226,39 @@ export const VERIFY_SCHEMA = {
 export const REPAIR_SYSTEM =
   `You repair Warhammer 40k ability DSL. You are given a rule and a DRAFT ability that an earlier pass produced. Emit the COMPLETE ability mechanics that fix the verifier's exact gap. The effect tree and scope are required. Return trigger, usage, and applies_to when the rule needs them; use null only to remove a stale draft field. Never copy rule text into any field.\n\n` +
   `An effect node is ONE of:\n` +
-  `  • a leaf: {type, target, modifier} — type ∈ [stat-modifier, roll-modifier, re-roll, mortal-wounds, feel-no-pain, invulnerable-save, ward, keyword-grant, movement-modifier, deep-strike, fallback-and-act, fight-first, fight-last, shoot-on-death, fight-on-death, objective-control-modifier, leadership-modifier, damage-reduction, attack-restriction, ability-grant, cp-gain, cp-refund, model-destruction, resurrection, resource-gain, resource-spend, charge-roll-modifier, terrain-area-tag, bs-modifier, engagement-passthrough, detection-range-modifier, hazard-rolls]; target ∈ [self, bearer, unit, attached-unit, attacker, defender, friendly-within-aura, enemy-within-aura, all-friendly, all-enemy]\n` +
+  `  • a single effect — ` + EFFECT_GUIDE +
   `  • conditional: {type:"conditional", condition, effect}\n` +
   `  • sequence: {type:"sequence", steps:[effect, ...]} — multiple effects that all apply\n` +
-  `  • rules-bundle: {type:"rules-bundle", steps:[effect, ...]} — the complete reusable effect set of the containing named ability; grant it elsewhere with ability-grant.modifier {ability_id, rules_bundle:true}\n` +
+  `  • rules-bundle: {type:"rules-bundle", steps:[effect, ...]} — the complete reusable effect set of the containing named ability; grant it elsewhere with ability-grant.modifier {ability, rules_bundle:true}\n` +
   `  • choice: {type:"choice", options:[effect, ...], choice_label?} — pick exactly one\n` +
-  `  • select-units: {type:"select-units", selector:{owner:"friendly"|"enemy", target_kind?:"unit"|"model", count:1, keywords?:[...], range_inches?:number, visibility_required?:boolean, engagement_relation?:"any"|"engaged-with-bearer"|"not-engaged-with-bearer", eligibility?:condition}, effect} — use this wrapper whenever the rule selects exactly one eligible unit or model; target_kind defaults to "unit", while target_kind:"model" binds nested target:"unit" effects to that selected model; count:1 enforces the one-target binding\n` +
+  `  • select-units: {type:"select-units", selector:{owner:"friendly"|"enemy", target_kind?:"unit"|"model", count:1, keywords?:[...], range_inches?:number, visibility_required?:boolean, engagement_relation?:"any"|"engaged-with-bearer"|"not-engaged-with-bearer", eligibility?:condition}, effect} — use this wrapper whenever the rule selects exactly one eligible unit or model; target_kind defaults to "unit"; nested effects name the selection as target:"selected-unit" (the selected model when target_kind is "model"); count:1 enforces the one-target binding\n` +
   `  • for-each-unit: {type:"for-each-unit", selector:{owner:"friendly"|"enemy", keywords?:[...], within_inches?:number}, effect} — independently resolve the effect once for every matching unit; keywords are all required\n` +
   `  • dice-gated: {type:"dice-gated", dice:"D6"|..., threshold:int, comparison?:"gte"|"lte"|"gt"|"lt"|"eq", on_success:effect, on_fail?:effect}\n` +
   `  • dice-table: {type:"dice-table", dice:"D3"|"D6", outcomes:[{results:[1,...], effect}, ...]} — one closed die whose outcome rows cover every face exactly once; use this instead of nested dice-gated effects when each face has a different result\n` +
   `  • dice-pool-allocation: {type:"dice-pool-allocation", pool:{count,die}, max_activations:int, options:[{name, requirement:{type:"pair"|"triple"|"single"|"run",min_value:1..6}, effect}, ...]} — ONLY for allocating an already-rolled dice pool by pair/triple/single/run requirements; never use it for an ordinary D6 outcome table\n\n` +
   CONDITION_GUIDE +
   `Encode every moment (when the rule fires) as a trigger, never as a condition: the moment the whole ability fires is the ability-level trigger (an array of triggers when any of several moments fires it), with its phase and whose turn in trigger.condition as phase-is + player-turn-is{turn:"your-turn"|"opponent-turn"}. A compound ability whose parts fire at different moments stays one ability: its effect is a sequence of {type:"ability-part", trigger, effect, usage?, optional?, name?} steps, one per moment, and it has no ability-level trigger. Encode frequency with usage (on the ability, or on the part it limits); do not invent timing condition strings for frequency.\n` +
-  `scope = {range, duration}: range ∈ [self, unit, attached, aura-6, aura-9, aura-12, aura-custom, engagement-range, any-visible, any-on-battlefield, terrain-within-range] — this is the COMPLETE list. range is a distance from the bearer and is NEVER a target value: do NOT put "all-friendly"/"friendly-within-aura"/"all-enemy" here (those are effect targets). For an army-wide detachment/faction buff ("all friendly X units"), use range "unit" and express the audience via the effect target / applies_to keywords. duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, until-next-movement-phase, until-next-battle-round, until-start-next-turn, one-use, permanent, attack-sequence, resolution]. Use until-start-next-turn exactly when the rule says "until the start of your next turn"; that is not equivalent to battle-round or until-next-command-phase.\n` +
+  `scope = {duration}: duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, until-next-movement-phase, until-next-battle-round, until-start-next-turn, one-use, permanent, attack-sequence, resolution]. Use until-start-next-turn exactly when the rule says "until the start of your next turn"; that is not equivalent to battle-round or until-next-command-phase. Who is affected lives in each effect's target, never in scope.\n` +
   TRIGGER_GUIDE +
   `usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {required_keywords?:[...], excluded_keywords?:[...]} for static bearer/datasheet eligibility such as "WARBOSS model only".\n` +
   `behavior ∈ [passive, activated, reactive, aura].\n\n` +
-  `CANONICAL MODIFIER KEYS — use ONLY the keys listed per type; never invent a key (an unknown key is silently ignored by consumers and corrupts the data):\n` +
-  `  stat-modifier.modifier: {stat, operation:"add"|"subtract"|"set", value:int}. stat ∈ [A,S,T,Sv,AP,OC,Ld,M,W,D] ONLY (use "M" for Move, never "Move"/"range"; weapon range is NOT a unit stat). operation:"set" IS allowed for "characteristic of N" rules (e.g. OC of 9). Optional narrowing: attack_type:"melee"|"ranged", weapon_type:"melee"|"ranged", weapon_name:"<weapon>" for a single named weapon, or weapon_keyword:"<ability>" to restrict to weapons with a keyword like "Torrent"/"Blast"/"Pistol". Do NOT use weapon_filter/model_filter.\n` +
-  `  roll-modifier.modifier: {roll:"hit"|"wound"|"save"|"charge"|"damage", operation, value}. re-roll.modifier: {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", subset:"ones"|"all-failures", count?:positive-int} for pass/fail dice, or {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", result_scope:"any-result", count?:positive-int} when the player can re-roll any result. count means up to that many qualifying rolls within the ability's active window; omit it only for an uncapped permission. Optional attack_type/weapon_type/weapon_name/weapon_keyword as above.\n` +
-  `  keyword-grant.modifier: {keywords:[...]} (array) — combat keywords as written ("Lethal Hits","Sustained Hits 1","Twin-linked"). Optional weapon_type:"melee"|"ranged", weapon_name, weapon_keyword.\n` +
-  `  feel-no-pain.modifier:{threshold:int}; damage-reduction.modifier:{reduction:int}; bs-modifier.modifier:{operation,value}; detection-range-modifier.modifier:{operation:"add"|"subtract",value:int}; hazard-rolls.modifier:{engaged_keyword,additional_per_engaged_unit,roll_modifier_if_battle_shocked?}; model-destruction.modifier:{count?:int|dice-expression,model_keyword?:string}; mortal-wounds.modifier may use {dice,per_model:"this"|"target",model_relation?:"engaged-with-target",comparison,threshold,mortal_per_success}; remove-battle-shock has target and no modifier; ability-grant.modifier:{grant_type:"kebab-label",enabled?:boolean} or {ability_id:"entity-id",rules_bundle:true,enabled?:boolean}; use the latter to grant or disable a named reusable rule such as riled-up. objective-control-modifier.modifier:{operation:"add"|"set",value} or {sticky:true}; movement-modifier.modifier uses ONLY {move_type?:"normal"|"advance"|"pile-in"|"consolidation"|"reactive"|"surge"|"redeploy"|"scout"|"infiltrate"|"shoot-and-scoot", distance?:int|dice-expression, passthrough?:["non-titanic-models"|"friendly-vehicles"|"friendly-monsters"|"terrain-le-4"|"tall-terrain"|"all-terrain"], vertical_limit?:int, ignore_vertical?:boolean, replaces_default?:boolean, to_reserves?:boolean, applies_to_moves?:["normal"|"advance"|"fall-back"|"charge"]}. Use distance, NEVER value. deep-strike.modifier:{} (parameterless).\n` +
-  `  SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"models-in-or-embarked-in-bearer"|"enemy-units-in-range"|"wounds-lost", within_inches?:int, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,attack_type:"melee"},scaling:{per:5,of:"enemy-models-in-range",within_inches:6}}). Do NOT flatten the scaling away.\n\n` +
+  `SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"models-in-or-embarked-in-bearer"|"enemy-units-in-range"|"wounds-lost", within_inches?:int, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,weapon_type:"melee"},scaling:{per:5,of:"enemy-models-in-range",within_inches:6}}). Do NOT flatten the scaling away.\n\n` +
   `dice-gated.comparison ∈ ["gte","lte","gt","lt","eq"] (use "gte" for "on a 2+"). dice e.g. "D6","2D6"; threshold int. on_success/on_fail are effect nodes.\n` +
   `ENCODING THE RESIDUE — these ARE expressible, do not punt on them:\n` +
   `  • "roll a D6, on 2+ <effect>" → dice-gated {dice:"D6", threshold:2, comparison:"gte", on_success:<effect>}.\n` +
   `  • "select one of N abilities/effects" → choice {options:[<effect>,...]}.\n` +
-  `  • "re-roll Battle-shock/Leadership tests" → leadership-modifier {test:"battle-shock", operation:"re-roll"} (NOT a combat re-roll).\n` +
-  `  • deployment/redeploy ("set up in Strategic Reserves", "set up anywhere >9\\"", "redeploy after deployment") → deep-strike, or ability-grant {grant_type:"<descriptive-kebab>"} for a named deployment rule.\n` +
-  `  • "move through terrain" → movement-modifier {target, modifier:{passthrough:["all-terrain"]}}; "move through non-Titanic models" → {passthrough:["non-titanic-models"]}. Do not invent a move_type for traversal permissions.\n` +
-  `  • "characteristic of N" → the matching stat/OC modifier with operation:"set".\n` +
-  `  • "when/if this unit WAS HIT by one or more attacks" → was-hit-by-attack {subject:"self"} (NOT has-lost-wounds — a hit that is saved still counts). "if an enemy unit was hit by [the bearer's] attacks" (offensive follow-up like grav-pinning) → was-hit-by-attack {subject:"target"}; narrow with attack_type/weapon_name when the rule names the weapon.\n\n` +
+  `  • "re-roll Battle-shock/Leadership tests" → re-roll {roll:"battle-shock", result_scope:"any-result"} (NOT a combat re-roll).\n` +
+  `  • deployment ("set up in Strategic Reserves", "set up anywhere >9\\"", "redeploy after deployment") → set-up {to, from?, min_enemy_distance?, …}; Deep Strike, Scouts and Infiltrators are ability-grant.\n` +
+  `  • "move through terrain" → move-modifier {passthrough:["all-terrain"]}; "move through non-Titanic models" → {passthrough:["non-titanic-models"]}. A move made now is move {move_type}; a reactive move is move_type "surge" when the rule calls it one.\n` +
+  `  • "eligible to shoot/charge after Advancing/Falling Back", "can shoot even while engaged" → permission {activity, allow:true, after|despite}. "cannot be targeted unless …" → targeting.\n` +
+  `  • "characteristic of N" → stat-modifier with operation:"set".\n\n` +
   `FIDELITY EXTENSIONS (all fields below are schema-backed; do not replace them with invented modifier keys):\n` +
-  `  for-each-unit.selector {owner:"friendly", target_kind:"model", member_of:"bearer-unit", keywords:[...]} filters EACH individual model in the bearer's current unit. Attached-unit keyword unions cannot qualify a Leader that lacks the model keyword. Nested target:"unit" binds to the selected model.\n` +
+  `  for-each-unit.selector {owner:"friendly", target_kind:"model", member_of:"bearer-unit", keywords:[...]} filters EACH individual model in the bearer's current unit. Attached-unit keyword unions cannot qualify a Leader that lacks the model keyword.\n` +
   `  select-units.selector.reference:"bearer"|"bearer-unit" defines the range/engagement origin. selector.selection_limit:{count,period:"turn"|"phase"|"battle-round"|"battle"} limits EACH selected target across ALL bearers in the army, separately from ability usage.\n` +
   `  A real Leadership test is dice-gated {dice:"2D6",threshold:"leadership",comparison:"gte",test:{kind:"leadership",subject:"unit"|"self"},on_success}. This uses current Leadership and test modifiers/permissions, not a fixed 6 and not Battle-shock. Use {type:"no-effect"} for a no-result dice-table band.\n` +
-  `  trigger event:"stratagem-targeted" binds the current use. stratagem-cost-modifier.modifier {operation:"decrease",amount:1,applies_to:"triggering-stratagem-use"} reduces cost before payment (floor 0); it is neither a refund nor set-to-zero. set-to requires set_to. A separate stratagem-targeting-permission {exception:"already-targeted-different-unit-this-phase",stratagem:<id>} grants ONLY the named repeated-use exception.\n` +
-  `  trigger event:"ability-target-selected" carries source_ability:{ability_id,owner,keywords}. subject identifies the selected target; source_ability filters the ability and unit that selected it. These are different actors. trigger.proximity.of:"bearer-unit" measures from the bearer's unit.\n` +
-  `  unit-within-range-of parameters:{target_type:"friendly-keyword"|"enemy-keyword",keywords:[...],range:<inches>|"engagement",subject:"self"|"unit"|"triggering-unit"} tests all keywords on the SAME nearby unit. within-range-of-objective parameters:{subject:"target"|"unit",controlled_by?:"your-army"|"opponent"} binds range and control to the SAME marker. target-is-visible means visible to the individual attacking model.\n` +
-  `  designate-target.select.eligibility can require a hit in the bound triggering attack sequence. applies.attacker_keywords filters individual attacking MODEL keywords, only with to:"attackers-of-target". movement-modifier.after_move is an effect node resolved ONLY if the move is actually made; declining the move never applies its follow-up.\n` +
-  `  objective-control-modifier.modifier {sticky:true,retake:"opponent-control-greater-at-phase-end"} retains a marker until the opponent's Level of Control exceeds yours at a phase end. re-roll.modifier.optional:false makes the re-roll mandatory; result_scope:"any-result" is a full re-roll including successful results.\n` +
+  `  A Stratagem's reduced cost for the use that triggered it is cost-modifier {of:"stratagem", operation:"decrease", amount:1, applies_to:"the-triggering-use"} (floor 0); it is neither a refund nor set-to-zero. "Use X for 0CP on this unit" is cost-modifier {of:"stratagem", id, operation:"set", amount:0, applies_to:"targeting-this-unit"}.\n` +
+  `  designate-target.select.eligibility can require a hit in the bound triggering attack sequence. applies.attacker_keywords filters individual attacking MODEL keywords, only with to:"attackers-of-target".\n` +
+  `  objective-sticky keeps a marker until the opponent's Level of Control exceeds yours at a phase end. re-roll result_scope:"any-result" is a full re-roll including successful results.\n` +
   `  named-region-state.modifier.producer.additive_extensions can use kind:"unit-proximity",radius_inches,activation:{event:"continuous"},source_gate:{gate_ref,owner:"owner-army",unit_predicate:{faction,keywords}}. This is a continuously updated union of unit-centred areas, not an objective extension. consumer.attack_condition gates BOTH default and qualified effects, not region production. Qualified conditions may compose keyword OR whole-unit region membership. Reuse the current full named-region schema and Power Matrix/Flow of Magic patterns.\n` +
   `  scope.duration:"attack-sequence" expires after the currently selected unit finishes its attacks. "resolution" is this activation only, not once per battle. Do not put army-wide audience predicates in applies_to (reserved for static bearer eligibility).\n` +
   `Set unencodable:true when ANY material claim has no faithful current-schema representation, including in-battle mechanics. Such proposals are blocked from application; record the precise gap in reasoning, never in community_notes. Do not force the rule into a neighboring effect or invent a grant. Give confidence and one-sentence reasoning.`;
@@ -309,13 +304,13 @@ export function conditionNode(kind: string, param: string | null | undefined): J
 /** Build the effect node + scope from a flat-form. */
 export function assembleEffect(form: Json): { effect: Json; scope: Json } {
   const modifier = PARAMETERLESS.has(form.effect_type) ? {} : { ...(form.modifier ?? {}) };
-  if (form.attack_type && form.attack_type !== "any" && ["stat-modifier", "roll-modifier", "re-roll"].includes(form.effect_type)) {
-    modifier.attack_type = form.attack_type;
+  if (form.attack_type && form.attack_type !== "any" && ["stat-modifier", "roll-modifier", "re-roll", "roll-result", "weapon-ability-grant"].includes(form.effect_type)) {
+    modifier.weapon_type = form.attack_type;
   }
   let effect: Json = { type: form.effect_type, target: form.target, modifier };
   const cond = conditionNode(form.condition_kind, form.condition_param);
   if (cond) effect = { type: "conditional", condition: cond, effect };
-  return { effect, scope: { range: form.scope_range, duration: form.scope_duration } };
+  return { effect, scope: { duration: form.scope_duration } };
 }
 
 function authoringNote(entry: Json): string {
@@ -329,56 +324,19 @@ function authoringNote(entry: Json): string {
 /** Splice the authored effect+scope onto the original entry, preserving metadata. */
 export function buildEntry(original: Json, form: Json): Json {
   const { effect, scope } = assembleEffect(form);
-  return { ...original, effect, scope, community_notes: authoringNote(original) };
+  const { stub: _stub, ...authored } = original;
+  return { ...authored, effect, scope, community_notes: authoringNote(original) };
 }
 
 const BEHAVIOR_VALUES = new Set(["passive", "activated", "reactive", "aura"]);
 
-// ─── canonical-key lint ──────────────────────────────────────────────
+// ─── canonical lint ──────────────────────────────────────────────────
 //
-// The full-tree repair model emits the whole effect node, including the open
-// `modifier` object. AJV permits any modifier key (additionalProperties:true),
-// so an invented key (`weapon_keyword`, `model_filter`, `critical_threshold`)
-// passes schema validation — but the cruncher reads ONLY the canonical keys, so
-// an ignored filter on an `add` operation silently OVER-APPLIES the buff. The
-// verifier can't catch this: it judges the JSON against the rule as a reader,
-// not against what the engine honors. This lint is the deterministic gate.
-//
-// Vocabulary is calibrated to what EXISTING enrichment data actually uses (not
-// world-eaters alone): `keywords` array is the dominant keyword-grant form,
-// `damage-reduction` uses `reduction`, and `stat` spans the full statline. The
-// lint only runs on NEW repair proposals, so strictness can't regress shipped
-// data — a rejected proposal just stays residue for hand-authoring.
+// Every single effect's modifier is closed in the schema, so AJV rejects an
+// invented modifier key. What AJV cannot see is a condition's vocabulary: a
+// parameter placed beside `parameters`, an unknown phase or turn, or a keyword
+// that is not one unit keyword as the rules print it. This lint is that gate.
 
-/** Modifier keys the cruncher / canonical conventions recognise, per leaf type. */
-const CANONICAL_MODIFIER_KEYS: Record<string, Set<string>> = {
-  // weapon_type/weapon_name are valid narrowing keys (gold uses weapon_name): the
-  // cruncher honors weapon_type as a phase gate and fail-safes (unsupported) on
-  // weapon_name, so the data can carry them without risking a silent over-apply.
-  "stat-modifier": new Set(["stat", "operation", "value", "attack_type", "weapon_type", "weapon_name", "weapon_keyword"]),
-  "roll-modifier": new Set(["roll", "operation", "value", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "critical_on", "uses", "context"]),
-  "re-roll": new Set(["roll", "subset", "result_scope", "count", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "uses", "context", "optional"]),
-  "keyword-grant": new Set(["keyword", "keywords", "weapon_type", "weapon_name", "weapon_keyword"]),
-  "bs-modifier": new Set(["operation", "value", "attack_type"]),
-  "feel-no-pain": new Set(["threshold", "scope"]),
-  "damage-reduction": new Set(["reduction", "amount"]),
-};
-const CANONICAL_STATS = new Set(["A", "S", "T", "Sv", "AP", "OC", "Ld", "M", "W", "D", "Damage", "BS", "WS"]);
-const CANONICAL_ROLLS = new Set([
-  "hit",
-  "wound",
-  "save",
-  "charge",
-  "damage",
-  "advance",
-  "surge",
-  "normal-move-distance",
-  "any",
-  "all",
-]);
-const CANONICAL_SUBSETS = new Set(["ones", "all-failures"]);
-const CANONICAL_RESULT_SCOPES = new Set(["any-result"]);
-const CANONICAL_ATTACK_TYPES = new Set(["melee", "ranged"]);
 const CANONICAL_PHASES = new Set(["command", "movement", "shooting", "charge", "fight"]);
 /** Tags the data still writes as keywords, until they get a designation condition of their own. */
 const TAG_KEYWORDS = new Set(["RILED UP", "SPOTTED", "AFFLICTED", "GUIDED", "HIDDEN", "MARKED", "OATH OF MOMENT TARGET"]);
@@ -399,13 +357,7 @@ const CANONICAL_CONDITION_CHILD_KEYS = new Set([
   "requires",
 ]);
 
-/**
- * Walk an effect tree and flag any cruncher-interpreted leaf whose modifier
- * carries an unknown key or an out-of-vocabulary stat/roll/subset/attack_type.
- * Non-interpreted leaf types (ability-grant, movement-modifier, …) are left
- * permissive — they don't reach the damage path, so an unknown key there is a
- * consistency nit, not a silent-corruption risk.
- */
+/** Walk an effect tree and flag every condition that breaks the predicate vocabulary's conventions. */
 export function lintCanonical(effect: Json): { canonical: boolean; issues: string[] } {
   const issues: string[] = [];
   // A simple condition is {type, parameters?, negated?}; every param lives UNDER
@@ -437,20 +389,6 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
   const visit = (node: Json): void => {
     if (Array.isArray(node)) return node.forEach(visit);
     if (!node || typeof node !== "object") return;
-    const type = node.type as string | undefined;
-    const allow = type ? CANONICAL_MODIFIER_KEYS[type] : undefined;
-    if (allow && node.modifier && typeof node.modifier === "object") {
-      const m = node.modifier as Record<string, unknown>;
-      for (const k of Object.keys(m)) if (!allow.has(k)) issues.push(`${type}: non-canonical modifier key "${k}"`);
-      if (type === "stat-modifier" && m.stat != null && !CANONICAL_STATS.has(String(m.stat))) issues.push(`stat-modifier: unknown stat "${String(m.stat)}"`);
-      if ((type === "roll-modifier" || type === "re-roll") && m.roll != null && !CANONICAL_ROLLS.has(String(m.roll))) issues.push(`${type}: unknown roll "${String(m.roll)}"`);
-      if (m.subset != null && !CANONICAL_SUBSETS.has(String(m.subset))) issues.push(`${type}: unknown subset "${String(m.subset)}"`);
-      if (m.result_scope != null && !CANONICAL_RESULT_SCOPES.has(String(m.result_scope))) issues.push(`${type}: unknown result_scope "${String(m.result_scope)}"`);
-      if (type === "re-roll" && (m.subset != null) === (m.result_scope != null)) {
-        issues.push(`${type}: modifier must carry exactly one of subset or result_scope`);
-      }
-      if (m.attack_type != null && !CANONICAL_ATTACK_TYPES.has(String(m.attack_type))) issues.push(`${type}: unknown attack_type "${String(m.attack_type)}"`);
-    }
     // Traverse every nested object rather than naming current wrapper fields.
     // The effect schema is intentionally extensible; a new wrapper must not
     // create an unchecked path to a cruncher-interpreted leaf.
@@ -477,7 +415,9 @@ export function buildRepairedEntry(
   behavior?: string,
   fields: { trigger?: Json | null; usage?: Json | null; applies_to?: Json | null } = {},
 ): Json {
-  const entry: Json = { ...original, effect, scope, community_notes: authoringNote(original) };
+  // An authored effect replaces a stub's placeholder, so the entry is no longer a stub.
+  const { stub: _stub, ...authored } = original;
+  const entry: Json = { ...authored, effect, scope, community_notes: authoringNote(original) };
   if (behavior && BEHAVIOR_VALUES.has(behavior)) entry.behavior = behavior;
   for (const key of ["trigger", "usage", "applies_to"] as const) {
     if (!Object.prototype.hasOwnProperty.call(fields, key)) continue;
@@ -516,14 +456,14 @@ export function passesGate(p: Proposal, opts: GateOpts): boolean {
   return true;
 }
 
-/** Whether a deterministic recipe may replace the current effect tree. */
-export function canReplaceAuthoredEffect(effect: Json, reauthor: boolean): boolean {
-  return reauthor || hasEmptyModifier(effect);
+/** Whether a deterministic recipe may replace the entry's current effect tree. */
+export function canReplaceAuthoredEffect(entry: Json, reauthor: boolean): boolean {
+  return reauthor || isStubEntry(entry);
 }
 
 /** Default apply fills structural stubs; replacing authored effects requires --reauthor. */
-export function canReplaceEffect(proposal: Proposal, effect: Json, opts: GateOpts & { reauthor: boolean }): boolean {
-  return passesGate(proposal, opts) && canReplaceAuthoredEffect(effect, opts.reauthor);
+export function canReplaceEffect(proposal: Proposal, entry: Json, opts: GateOpts & { reauthor: boolean }): boolean {
+  return passesGate(proposal, opts) && canReplaceAuthoredEffect(entry, opts.reauthor);
 }
 
 // ─── batching helpers ────────────────────────────────────────────────
@@ -576,7 +516,7 @@ async function proposeFaction(faction: string, opts: ProposeOpts, validate: (x: 
   for (const a of readJSON(resolve(ENRICHMENT_ROOT, faction, "abilities.json")) as Json[]) original.set(a.ability_id, a);
   const input = readJSON(inputPath)
     .filter((e: Json) => e.resolved)
-    .filter((e: Json) => !opts.stubsOnly || hasEmptyModifier(original.get(e.ability_id)?.effect));
+    .filter((e: Json) => !opts.stubsOnly || isStubEntry(original.get(e.ability_id)));
   if (input.length === 0) return { faction, skipped: opts.stubsOnly ? "no resolved stubs" : "no resolved source rules" };
   // Resume: reuse prior proposals whose source rule is unchanged (skip errored ones so
   // they get retried). A checkpoint is written after every batch, so an interrupted run
@@ -818,12 +758,14 @@ function applyFaction(faction: string, opts: ApplyOpts): Json {
   for (const p of proposals) {
     const entry = byId.get(p.ability_id);
     if (!entry) { skipped.push({ id: p.ability_id, why: "gone" }); continue; }
-    if (!canReplaceEffect(p, entry.effect, opts)) {
+    if (!canReplaceEffect(p, entry, opts)) {
       skipped.push({ id: p.ability_id, why: passesGate(p, opts) ? "not-a-stub" : "gate" });
       continue;
     }
     entry.effect = p.proposed_effect;
     entry.scope = p.proposed_scope;
+    // An authored effect replaces the placeholder, so the entry is no longer a stub.
+    delete entry.stub;
     if (p.proposed_behavior && BEHAVIOR_VALUES.has(p.proposed_behavior)) entry.behavior = p.proposed_behavior;
     for (const [proposalKey, entryKey] of [
       ["proposed_trigger", "trigger"],

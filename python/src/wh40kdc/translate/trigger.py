@@ -183,7 +183,6 @@ _USED: dict[str, str] = {
 
 _SET_UP_FROM: dict[str, str] = {
     "deep-strike": "is set up by Deep Strike",
-    "reserves": "arrives from Reserves",
     "strategic-reserves": "arrives from Strategic Reserves",
     "cult-ambush": "is set up using Cult Ambush",
     "transport": "is set up from a Transport",
@@ -257,12 +256,12 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if f.get("through") == "terrain":
             return f"when {who} moves through terrain"
         kinds = move_kinds(f["move_types"]) if isinstance(f.get("move_types"), list) else ""
+        # Another unit's move is a reaction window: "each time an enemy unit ends a move".
         if subject_obj and kinds == "Fall Back" and obj is None:
-            return f"{who} Falls Back"
+            return f"each time {who} Falls Back"
         tail = f" from {_object_phrase(obj)}" if obj is not None else ""
-        if subject_obj:
-            return f"{who} ends {f'a {kinds}' if kinds else 'a'} move{tail}"
-        return f"when {who} ends {f'{_article(kinds)} {kinds}' if kinds else 'a'} move{tail}"
+        move = f"{f'{_article(kinds)} {kinds}' if kinds else 'a'} move{tail}"
+        return f"each time {who} ends {move}" if subject_obj else f"when {who} ends {move}"
     if event == "set-up":
         return f"when {who} {_SET_UP_FROM.get(_str(f.get('from')), 'is set up')}"
     if event == "disembarked":
@@ -293,7 +292,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "the first time a model in the unit is destroyed"
         if obj == "this-model":
             return "when this model is destroyed"
-        if obj == "model-in-this-unit" or obj is None:
+        # A model of this unit dying: the object names the model's unit, never the whole
+        # unit's destruction.
+        if obj in ("model-in-this-unit", "this-unit") or obj is None:
             return "when a model in the unit is destroyed"
         return f"when {_object_phrase(obj)} is destroyed"
     if event == "used":

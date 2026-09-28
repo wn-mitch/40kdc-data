@@ -37,7 +37,7 @@
             </profile>
             <profile name="Fights First" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Fights First ability.</characteristic>
+                <characteristic name="Description">The unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

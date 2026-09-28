@@ -17,7 +17,7 @@
             </profile>
             <profile name="Jammer Array" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If set up happened, for the rest of the battle, enemy units within 12": prevent reserve setup (within 12").</characteristic>
+                <characteristic name="Description">If an enemy unit was set up, for the rest of the battle, enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -32,12 +32,12 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts 7&quot;" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 7".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts 7" ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -105,12 +105,12 @@
             </profile>
             <profile name="Pulse Accelerator Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Weapon Range Increase ability.</characteristic>
+                <characteristic name="Description">Add 6 to the Range characteristic of Pulse Carbine weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The bearer gains the Weapon Grant ability.
+                <characteristic name="Description">This model gains 1 Drone Burst Cannon weapon.
 The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
@@ -121,7 +121,7 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Scouts 7&quot;" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 7".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts 7" ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -327,12 +327,12 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Starscythe" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, subtract 1 from the unit's Armour Penetration characteristic.</characteristic>
+                <characteristic name="Description">During the Shooting phase, improve the unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

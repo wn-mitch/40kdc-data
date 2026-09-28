@@ -359,12 +359,12 @@ mod tests {
             "steps": [
                 {
                     "type": "re-roll",
-                    "target": "unit",
+                    "target": "this-unit",
                     "modifier": {"roll": "hit", "subset": "ones"}
                 },
                 {
                     "type": "re-roll",
-                    "target": "unit",
+                    "target": "this-unit",
                     "modifier": {"roll": "wound", "subset": "ones"}
                 }
             ]
@@ -380,7 +380,7 @@ mod tests {
             "consumer": {
                 "effect": {
                     "type": "re-roll",
-                    "target": "bearer",
+                    "target": "this-model",
                     "modifier": {"roll": "hit", "subset": "all-failures"}
                 }
             }

@@ -1,7 +1,7 @@
 /**
  * Build the DSL-authoring input for *new 11e detachments* from a Faction Pack PDF.
  *
- * The stock `author-input.ts` resolves each empty-modifier ability stub to its
+ * The stock `author-input.ts` resolves each ability stub (isStubEntry) to its
  * source rule in the **10e army-assist archive** (unit→datasheet→ability chain).
  * That archive predates the 11e Faction Packs, so the new detachments' rules /
  * stratagems / enhancements aren't in it — the chain returns nothing and the
@@ -17,7 +17,7 @@
  * `data/_audit/author-input/<faction>.json` (.gitignore). It is never written to
  * the committed `faction-pack-input/` staging (that stays names + metadata only).
  *
- * Scope: only empty-modifier stubs that belong to a detachment (`detachment_id`
+ * Scope: only stubs that belong to a detachment (`detachment_id`
  * set) — i.e. the new-detachment rules/stratagems/enhancements the pack covers.
  * Unit-scoped stubs (`detachment_id` null) remain the 10e-archive path's job.
  *
@@ -38,7 +38,7 @@ import {
   normCaps,
 } from "./pack-blocks.js";
 import { detachmentSegments } from "./extract-faction-pack.js";
-import { hasEmptyModifier } from "./audit-coverage.js";
+import { isStubEntry } from "./audit-coverage.js";
 import type { AuthorInputEntry } from "./author-input.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -199,9 +199,9 @@ export function buildFactionFromPack(faction: string, pdf: string): AuthorInputE
   if (!existsSync(abilitiesPath)) return [];
   const abilities: Json[] = readJSON(abilitiesPath);
 
-  // In scope: empty-modifier stubs that belong to a detachment (the new-detachment
+  // In scope: stubs that belong to a detachment (the new-detachment
   // rules/stratagems/enhancements). Unit-scoped stubs stay the 10e-archive path's.
-  const stubs = abilities.filter((a) => a.detachment_id && hasEmptyModifier(a.effect));
+  const stubs = abilities.filter((a) => a.detachment_id && isStubEntry(a));
 
   const segments = detachmentSegments(pdf);
   const segById = new Map(segments.map((s) => [s.id, s]));

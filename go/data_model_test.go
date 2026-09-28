@@ -425,12 +425,12 @@ func TestEntityBackedRulesBundleExpandsBeforeBuffTranslation(t *testing.T) {
 				"steps": []any{
 					map[string]any{
 						"type":     "re-roll",
-						"target":   "unit",
+						"target":   "this-unit",
 						"modifier": map[string]any{"roll": "hit", "subset": "ones"},
 					},
 					map[string]any{
 						"type":     "re-roll",
-						"target":   "unit",
+						"target":   "this-unit",
 						"modifier": map[string]any{"roll": "wound", "subset": "ones"},
 					},
 				},
@@ -442,9 +442,9 @@ func TestEntityBackedRulesBundleExpandsBeforeBuffTranslation(t *testing.T) {
 			"faction_id": "orks",
 			"effect": map[string]any{
 				"type":   "ability-grant",
-				"target": "unit",
+				"target": "this-unit",
 				"modifier": map[string]any{
-					"ability_id":   "shared-rules",
+					"ability":      "shared-rules",
 					"rules_bundle": true,
 				},
 			},
@@ -458,8 +458,8 @@ func TestEntityBackedRulesBundleExpandsBeforeBuffTranslation(t *testing.T) {
 				"steps": []any{
 					map[string]any{
 						"type":     "ability-grant",
-						"target":   "unit",
-						"modifier": map[string]any{"ability_id": "cycle-b", "rules_bundle": true},
+						"target":   "this-unit",
+						"modifier": map[string]any{"ability": "cycle-b", "rules_bundle": true},
 					},
 				},
 			},
@@ -473,8 +473,8 @@ func TestEntityBackedRulesBundleExpandsBeforeBuffTranslation(t *testing.T) {
 				"steps": []any{
 					map[string]any{
 						"type":     "ability-grant",
-						"target":   "unit",
-						"modifier": map[string]any{"ability_id": "cycle-a", "rules_bundle": true},
+						"target":   "this-unit",
+						"modifier": map[string]any{"ability": "cycle-a", "rules_bundle": true},
 					},
 				},
 			},
@@ -557,7 +557,7 @@ func TestWeaponKeywordTargetGatesApplyInLinkedBuffAPI(t *testing.T) {
 // TestUsageAndTriggerGatingMatchTheReference pins the five fabricated gating
 // abilities also pinned in tools/test/buff-gating.test.ts and the Python tests.
 func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
-	reroll := map[string]any{"type": "re-roll", "target": "unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}}
+	reroll := map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}}
 	ability := func(id string, fields map[string]any) map[string]any {
 		out := map[string]any{"ability_id": id, "name": id, "faction_id": "orks", "effect": reroll}
 		for k, v := range fields {

@@ -3,7 +3,7 @@
     "keyword_id": "twin-linked",
     "expected_effect": {
       "type": "re-roll",
-      "target": "self",
+      "target": "this-model",
       "modifier": { "roll": "wound", "subset": "all-failures" }
     }
   },
@@ -14,7 +14,7 @@
       "condition": {"type":"happened","parameters":{"event":"move-ended","filter":{"move_types":["remain-stationary"]},"window":"turn"}},
       "effect": {
         "type": "roll-modifier",
-        "target": "self",
+        "target": "this-model",
         "modifier": { "roll": "hit", "operation": "add", "value": 1 }
       }
     }

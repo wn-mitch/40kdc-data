@@ -41,8 +41,8 @@ const records = [
 function authoredEntry(abilityId: string): Record<string, unknown> {
   return {
     ability_id: abilityId, name: abilityId, authored_by: "fixture", game_version: { edition: "10th", dataslate: "fixture" },
-    effect: { type: "re-roll", target: "unit", modifier: { roll: "wound", subset: "ones" } },
-    scope: { range: "unit", duration: "permanent" }, behavior: "passive",
+    effect: { type: "re-roll", target: "this-unit", modifier: { roll: "wound", subset: "ones" } },
+    scope: { duration: "permanent" }, behavior: "passive",
   };
 }
 
@@ -126,8 +126,8 @@ describe("Round 5C shapes", () => {
     await publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
     const published = JSON.parse(readFileSync(abilitiesFile, "utf8")) as Array<Record<string, unknown>>;
     expect(published.find((entry) => entry.ability_id === "copy")).toMatchObject({
-      effect: { type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "all-failures" } } },
-      scope: { range: "unit", duration: "permanent" },
+      effect: { type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures" } } },
+      scope: { duration: "permanent" },
       behavior: "passive",
     });
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);

@@ -375,9 +375,9 @@
      }
     ]
    },
-   "describe": "during the shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\"",
+   "describe": "during the Shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\"",
    "lead_in": "during the Shooting phase against a unit that is not a MONSTER or VEHICLE",
-   "eligibility": "if during the shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\""
+   "eligibility": "if during the Shooting phase and the target does not have \"MONSTER\" and the target does not have \"VEHICLE\""
   },
   {
    "input": {
@@ -562,7 +562,7 @@
      "of": "this-model"
     }
    },
-   "text": "an enemy unit ends a Normal, Advance or Fall Back move within 9\" of this model"
+   "text": "each time an enemy unit ends a Normal, Advance or Fall Back move within 9\" of this model"
   },
   {
    "input": {
