@@ -20,8 +20,14 @@ import { seedStratagems } from "../src/mfm/seed-stratagems.js";
 function fixture(): MfmDump {
   return new MfmDump({
     data: {
+      // A codex publication places the detachment's stratagems in its faction; the core one is Core Rules'.
+      faction_keyword: [{ id: "fk-sm", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Astartes" } } }],
+      publication: [
+        { id: "codex", factionKeywordId: "fk-sm", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } },
+        { id: "core", factionKeywordId: null, isCombatPatrol: false, isLegends: false, isCoreRules: true, localisations: { en: { name: "Core" } } },
+      ],
       detachment: [
-        { id: "d1", localisations: { en: { name: "Bastion Task Force" } } },
+        { id: "d1", publicationId: "codex", localisations: { en: { name: "Bastion Task Force" } } },
       ],
       stratagem: [
         {
@@ -38,6 +44,7 @@ function fixture(): MfmDump {
           category: null,
           cpCost: "1",
           detachmentId: null,
+          publicationId: "core",
           localisations: { en: { name: "Insane Bravery", whenRules: "Battle-shock step of your Command phase." } },
         },
         {
@@ -57,7 +64,7 @@ describe("stratagem canon derivation (synthetic)", () => {
   const canon = buildStratCanon(fixture());
 
   it("maps the first-class key to player_turn (eitherPlayer => either)", () => {
-    const c = canon.get(detachmentScopedId("Codex Discipline", "Bastion Task Force"))!;
+    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
     expect(c.player_turn).toBe("either");
     expect(c.type).toBe("battle-tactic");
     expect(c.category).toBe("detachment");
@@ -65,20 +72,20 @@ describe("stratagem canon derivation (synthetic)", () => {
   });
 
   it("treats a null detachmentId as the core category and a null category as no type", () => {
-    const c = canon.get(nameToId("Insane Bravery"))!;
+    const c = canon.get("insane-bravery")!;
     expect(c.player_turn).toBe("your-turn");
     expect(c.category).toBe("core");
     expect(c.type).toBeNull();
   });
 
   it("maps opponentsTurn => opponent-turn and epicDeed => epic-deed", () => {
-    const c = canon.get(detachmentScopedId("Sudden Reprisal", "Bastion Task Force"))!;
+    const c = canon.get("sudden-reprisal-bastion-task-force-adeptus-astartes")!;
     expect(c.player_turn).toBe("opponent-turn");
     expect(c.type).toBe("epic-deed");
   });
 
   it("derives review-only phases from whenRules prose (both phases of an 'or' idiom)", () => {
-    const c = canon.get(detachmentScopedId("Codex Discipline", "Bastion Task Force"))!;
+    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
     expect(c.phases_review).toEqual(expect.arrayContaining(["shooting", "fight"]));
   });
 });
@@ -117,7 +124,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the
   });
 
   it("derives player_turn/type/category for a known detachment stratagem", () => {
-    const c = canon.get("codex-discipline-bastion-task-force")!;
+    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
     expect(c.player_turn).toBe("either");
     expect(c.type).toBe("battle-tactic");
     expect(c.category).toBe("detachment");
@@ -137,7 +144,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the
   it("reflects the applied dump player_turn in the data (idempotent end-state)", () => {
     const file = path.join(CORE_DIR, "adeptus-astartes", "stratagems.json");
     const rec = JSON.parse(fs.readFileSync(file, "utf8")).find(
-      (s: { id: string }) => s.id === "codex-discipline-bastion-task-force",
+      (s: { id: string }) => s.id === "codex-discipline-bastion-task-force-adeptus-astartes",
     ) as { player_turn: string };
     expect(rec.player_turn).toBe("either");
   });
@@ -175,12 +182,15 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seedStratagems over the real
   });
 
   it("does not re-seed entries excluded by current Codex rosters", () => {
-    expect(report.skippedOutsideRoster).toContain("krump-em-ardmob");
+    expect(report.skippedOutsideRoster).toContain("krump-em-ardmob-orks");
   });
-  it("skips coreless dump stratagems (universal core set is complete; spelling mismatches)", () => {
-    // The dump's one-word "Counteroffensive" must NOT seed a duplicate of the
-    // authored core "counter-offensive"; coreless rows are held for manual review.
-    expect(report.skippedCoreless).toContain("counteroffensive");
+  it("never seeds a duplicate of a core stratagem (the mirrored core id is the repo's id)", () => {
+    // The dump's one-word "Counteroffensive" is the repo's core `counteroffensive`
+    // (D11: the dump's spelling), so it is neither seeded again nor held as coreless.
+    expect(report.seeded.map((s) => s.id)).not.toContain("counteroffensive");
+    expect(report.skippedCoreless).toEqual([]);
+    const core = JSON.parse(fs.readFileSync(path.join(CORE_DIR, "stratagems.json"), "utf8")) as { id: string }[];
+    expect(core.map((s) => s.id)).toContain("counteroffensive");
   });
 
   it("persists legal provisional skeletons from the completed sync", () => {

@@ -11,6 +11,7 @@
  * 3. Every export target: `exportRoster(roster, fmt)` reproduces each
  *    `expected.<fmt>.{txt,json}` golden byte-for-byte.
  */
+import { withRating } from "../src/data/ability-refs.js";
 import { describe, it, expect } from "vitest";
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -434,6 +435,8 @@ describe("abilities-resolver conformance corpus", () => {
 
   type DslCase = {
     abilityId: string;
+    /** The rating a unit prints for a rated rule ({rating: true} in the record). */
+    rating?: string | number;
     source: { kind: "ability"; abilityId: string; abilityKind: string };
     context: EngineContext;
     perspective?: "attacker" | "target";
@@ -450,8 +453,9 @@ describe("abilities-resolver conformance corpus", () => {
     for (const c of dsl.cases) {
       const ability = ds.abilities.getAny(c.abilityId);
       expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
+      // A rated rule reads the unit's printed rating; the case supplies it.
       const result = effectToBuffs(
-        ability!.raw.effect,
+        withRating(ability!.raw.effect, c.rating),
         c.source as never,
         c.context,
         c.perspective ?? "attacker",

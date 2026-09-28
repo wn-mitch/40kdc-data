@@ -25,7 +25,7 @@ describe("rule and turn-start vocabulary", () => {
   });
 
   it("tests whether a rule is active rather than a unit keyword, including negation", () => {
-    const condition = { type: "rule-active", parameters: { rule: "acts-of-faith" } };
+    const condition = { type: "rule-active", parameters: { rule: "acts-of-faith-adepta-sororitas" } };
     expect(describeCondition(condition)).toBe("the Acts of Faith is active");
     expect(describeCondition({ operator: "not", operands: [condition] })).toBe("the Acts of Faith is not active");
     expect(describeCondition({
@@ -130,7 +130,7 @@ describe("leaf English defects found by the corpus sweep", () => {
       render({
         type: "ability-modifier",
         target: { owner: "friendly", all_of: ["OFFICER"] },
-        modifier: { ability: "voice-of-command", aspect: "recipients", operation: "add", recipients: { all_of: ["SQUADRON"] } },
+        modifier: { ability: "voice-of-command-astra-militarum", aspect: "recipients", operation: "add", recipients: { all_of: ["SQUADRON"] } },
       }),
     ).toBe("All friendly OFFICER units' Voice of Command ability can also affect all SQUADRON units.");
   });

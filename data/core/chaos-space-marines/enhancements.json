@@ -1,13 +1,13 @@
 [
   {
-    "id": "warmasters-gift-veterans-of-the-long-war",
+    "id": "warmasters-gift-veterans-of-the-long-war-chaos-space-marines",
     "name": "Warmaster’s Gift",
     "detachment_id": "veterans-of-the-long-war",
     "cost": 15,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "warmasters-gift-veterans-of-the-long-war-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "id": "talisman-of-burning-blood-pactbound-zealots",
+    "id": "talisman-of-burning-blood-pactbound-zealots-chaos-space-marines",
     "name": "Talisman of Burning Blood",
     "detachment_id": "pactbound-zealots",
     "cost": 15,
@@ -36,7 +36,7 @@
       "Heretic Astartes",
       "Khorne"
     ],
-    "ability_id": null,
+    "ability_id": "talisman-of-burning-blood-pactbound-zealots-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": "eye-of-tzeentch-pactbound-zealots",
+    "id": "eye-of-tzeentch-pactbound-zealots-chaos-space-marines",
     "name": "Eye of Tzeentch",
     "detachment_id": "pactbound-zealots",
     "cost": 15,
@@ -65,7 +65,7 @@
       "Heretic Astartes",
       "Tzeentch"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-tzeentch-pactbound-zealots-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -86,14 +86,14 @@
     ]
   },
   {
-    "id": "eager-for-vengeance-veterans-of-the-long-war",
+    "id": "eager-for-vengeance-veterans-of-the-long-war-chaos-space-marines",
     "name": "Eager for Vengeance",
     "detachment_id": "veterans-of-the-long-war",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eager-for-vengeance-veterans-of-the-long-war-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -117,14 +117,14 @@
     ]
   },
   {
-    "id": "eye-of-abaddon-veterans-of-the-long-war",
+    "id": "eye-of-abaddon-veterans-of-the-long-war-chaos-space-marines",
     "name": "Eye of Abaddon",
     "detachment_id": "veterans-of-the-long-war",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-abaddon-veterans-of-the-long-war-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -148,7 +148,7 @@
     ]
   },
   {
-    "id": "orbs-of-unlife-pactbound-zealots",
+    "id": "orbs-of-unlife-pactbound-zealots-chaos-space-marines",
     "name": "Orbs of Unlife",
     "detachment_id": "pactbound-zealots",
     "cost": 15,
@@ -156,7 +156,7 @@
       "Heretic Astartes",
       "Nurgle"
     ],
-    "ability_id": null,
+    "ability_id": "orbs-of-unlife-pactbound-zealots-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -177,14 +177,14 @@
     ]
   },
   {
-    "id": "mark-of-legend-veterans-of-the-long-war",
+    "id": "mark-of-legend-veterans-of-the-long-war-chaos-space-marines",
     "name": "Mark of Legend",
     "detachment_id": "veterans-of-the-long-war",
     "cost": 10,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "mark-of-legend-veterans-of-the-long-war-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "id": "intoxicating-elixir-pactbound-zealots",
+    "id": "intoxicating-elixir-pactbound-zealots-chaos-space-marines",
     "name": "Intoxicating Elixir",
     "detachment_id": "pactbound-zealots",
     "cost": 15,
@@ -216,7 +216,7 @@
       "Heretic Astartes",
       "Slaanesh"
     ],
-    "ability_id": null,
+    "ability_id": "intoxicating-elixir-pactbound-zealots-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -237,14 +237,14 @@
     ]
   },
   {
-    "id": "falsehood-deceptors",
+    "id": "falsehood-deceptors-chaos-space-marines",
     "name": "Falsehood",
     "detachment_id": "deceptors",
     "cost": 10,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "falsehood-deceptors-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -269,7 +269,7 @@
     ]
   },
   {
-    "id": "cursed-fang-deceptors",
+    "id": "cursed-fang-deceptors-chaos-space-marines",
     "name": "Cursed Fang",
     "detachment_id": "deceptors",
     "cost": 10,
@@ -277,7 +277,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "cursed-fang-deceptors-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -298,7 +298,7 @@
     ]
   },
   {
-    "id": "shroud-of-obfuscation-deceptors",
+    "id": "shroud-of-obfuscation-deceptors-chaos-space-marines",
     "name": "Shroud of Obfuscation",
     "detachment_id": "deceptors",
     "cost": 15,
@@ -306,7 +306,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "shroud-of-obfuscation-deceptors-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -327,7 +327,7 @@
     ]
   },
   {
-    "id": "soul-link-deceptors",
+    "id": "soul-link-deceptors-chaos-space-marines",
     "name": "Soul Link",
     "detachment_id": "deceptors",
     "cost": 5,
@@ -335,7 +335,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "soul-link-deceptors-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -356,14 +356,14 @@
     ]
   },
   {
-    "id": "despots-claim-renegade-raiders",
+    "id": "despots-claim-renegade-raiders-chaos-space-marines",
     "name": "Despot’s Claim",
     "detachment_id": "renegade-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "despots-claim-renegade-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -384,14 +384,14 @@
     ]
   },
   {
-    "id": "dread-reaver-renegade-raiders",
+    "id": "dread-reaver-renegade-raiders-chaos-space-marines",
     "name": "Dread Reaver",
     "detachment_id": "renegade-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "dread-reaver-renegade-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -412,14 +412,14 @@
     ]
   },
   {
-    "id": "mark-of-the-hound-renegade-raiders",
+    "id": "mark-of-the-hound-renegade-raiders-chaos-space-marines",
     "name": "Mark of the Hound",
     "detachment_id": "renegade-raiders",
     "cost": 25,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "mark-of-the-hound-renegade-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -440,14 +440,14 @@
     ]
   },
   {
-    "id": "tyrants-lash-renegade-raiders",
+    "id": "tyrants-lash-renegade-raiders-chaos-space-marines",
     "name": "Tyrant’s Lash",
     "detachment_id": "renegade-raiders",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "tyrants-lash-renegade-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -468,14 +468,14 @@
     ]
   },
   {
-    "id": "nights-shroud-dread-talons",
+    "id": "nights-shroud-dread-talons-chaos-space-marines",
     "name": "Night’s Shroud",
     "detachment_id": "dread-talons",
     "cost": 10,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "nights-shroud-dread-talons-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -499,14 +499,14 @@
     ]
   },
   {
-    "id": "willbreaker-dread-talons",
+    "id": "willbreaker-dread-talons-chaos-space-marines",
     "name": "Willbreaker",
     "detachment_id": "dread-talons",
     "cost": 10,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "willbreaker-dread-talons-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -527,7 +527,7 @@
     ]
   },
   {
-    "id": "warp-fuelled-thrusters-dread-talons",
+    "id": "warp-fuelled-thrusters-dread-talons-chaos-space-marines",
     "name": "Warp-Fuelled Thrusters",
     "detachment_id": "dread-talons",
     "cost": 20,
@@ -535,7 +535,7 @@
       "Chaos Lord",
       "Jump Pack"
     ],
-    "ability_id": null,
+    "ability_id": "warp-fuelled-thrusters-dread-talons-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -556,14 +556,14 @@
     ]
   },
   {
-    "id": "eater-of-dread-dread-talons",
+    "id": "eater-of-dread-dread-talons-chaos-space-marines",
     "name": "Eater of Dread",
     "detachment_id": "dread-talons",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eater-of-dread-dread-talons-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -584,14 +584,14 @@
     ]
   },
   {
-    "id": "bastion-plate-fellhammer-siege-host",
+    "id": "bastion-plate-fellhammer-siege-host-chaos-space-marines",
     "name": "Bastion Plate",
     "detachment_id": "fellhammer-siege-host",
     "cost": 10,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "bastion-plate-fellhammer-siege-host-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -615,14 +615,14 @@
     ]
   },
   {
-    "id": "warp-tracer-fellhammer-siege-host",
+    "id": "warp-tracer-fellhammer-siege-host-chaos-space-marines",
     "name": "Warp Tracer",
     "detachment_id": "fellhammer-siege-host",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "warp-tracer-fellhammer-siege-host-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -643,14 +643,14 @@
     ]
   },
   {
-    "id": "ironbound-enmity-fellhammer-siege-host",
+    "id": "ironbound-enmity-fellhammer-siege-host-chaos-space-marines",
     "name": "Ironbound Enmity",
     "detachment_id": "fellhammer-siege-host",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "ironbound-enmity-fellhammer-siege-host-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -671,7 +671,7 @@
     ]
   },
   {
-    "id": "iron-artifice-fellhammer-siege-host",
+    "id": "iron-artifice-fellhammer-siege-host-chaos-space-marines",
     "name": "Iron Artifice",
     "detachment_id": "fellhammer-siege-host",
     "cost": 10,
@@ -679,7 +679,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "iron-artifice-fellhammer-siege-host-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -700,11 +700,11 @@
     ]
   },
   {
-    "id": "cultists-brand-chaos-cult",
+    "id": "cultists-brand-chaos-cult-chaos-space-marines",
     "name": "Cultist’s Brand",
     "detachment_id": "chaos-cult",
     "cost": 30,
-    "ability_id": null,
+    "ability_id": "cultists-brand-chaos-cult-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -733,14 +733,14 @@
     ]
   },
   {
-    "id": "amulet-of-tainted-vigour-chaos-cult",
+    "id": "amulet-of-tainted-vigour-chaos-cult-chaos-space-marines",
     "name": "Amulet of Tainted Vigour",
     "detachment_id": "chaos-cult",
     "cost": 20,
     "keyword_restrictions": [
       "Dark Apostle"
     ],
-    "ability_id": null,
+    "ability_id": "amulet-of-tainted-vigour-chaos-cult-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -761,11 +761,11 @@
     ]
   },
   {
-    "id": "incendiary-goad-chaos-cult",
+    "id": "incendiary-goad-chaos-cult-chaos-space-marines",
     "name": "Incendiary Goad",
     "detachment_id": "chaos-cult",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "incendiary-goad-chaos-cult-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -794,11 +794,11 @@
     ]
   },
   {
-    "id": "warped-foresight-chaos-cult",
+    "id": "warped-foresight-chaos-cult-chaos-space-marines",
     "name": "Warped Foresight",
     "detachment_id": "chaos-cult",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "warped-foresight-chaos-cult-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -827,14 +827,14 @@
     ]
   },
   {
-    "id": "invigorated-mechatendrils-soulforged-warpack",
+    "id": "invigorated-mechatendrils-soulforged-warpack-chaos-space-marines",
     "name": "Invigorated Mechatendrils",
     "detachment_id": "soulforged-warpack",
     "cost": 15,
     "keyword_restrictions": [
       "Warpsmith"
     ],
-    "ability_id": null,
+    "ability_id": "invigorated-mechatendrils-soulforged-warpack-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -855,14 +855,14 @@
     ]
   },
   {
-    "id": "tempting-addendum-soulforged-warpack",
+    "id": "tempting-addendum-soulforged-warpack-chaos-space-marines",
     "name": "Tempting Addendum",
     "detachment_id": "soulforged-warpack",
     "cost": 40,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "tempting-addendum-soulforged-warpack-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -883,14 +883,14 @@
     ]
   },
   {
-    "id": "forges-blessing-soulforged-warpack",
+    "id": "forges-blessing-soulforged-warpack-chaos-space-marines",
     "name": "Forge’s Blessing",
     "detachment_id": "soulforged-warpack",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "forges-blessing-soulforged-warpack-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -911,14 +911,14 @@
     ]
   },
   {
-    "id": "soul-harvester-soulforged-warpack",
+    "id": "soul-harvester-soulforged-warpack-chaos-space-marines",
     "name": "Soul Harvester",
     "detachment_id": "soulforged-warpack",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "soul-harvester-soulforged-warpack-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -939,14 +939,14 @@
     ]
   },
   {
-    "id": "surgical-precision-creations-of-bile",
+    "id": "surgical-precision-creations-of-bile-chaos-space-marines",
     "name": "Surgical Precision",
     "detachment_id": "creations-of-bile",
     "cost": 10,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "surgical-precision-creations-of-bile-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -970,14 +970,14 @@
     ]
   },
   {
-    "id": "living-carapace-creations-of-bile",
+    "id": "living-carapace-creations-of-bile-chaos-space-marines",
     "name": "Living Carapace",
     "detachment_id": "creations-of-bile",
     "cost": 15,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "living-carapace-creations-of-bile-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -998,7 +998,7 @@
     ]
   },
   {
-    "id": "helm-of-all-seeing-creations-of-bile",
+    "id": "helm-of-all-seeing-creations-of-bile-chaos-space-marines",
     "name": "Helm of All-Seeing",
     "detachment_id": "creations-of-bile",
     "cost": 25,
@@ -1006,7 +1006,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "helm-of-all-seeing-creations-of-bile-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1030,7 +1030,7 @@
     ]
   },
   {
-    "id": "prime-test-subject-creations-of-bile",
+    "id": "prime-test-subject-creations-of-bile-chaos-space-marines",
     "name": "Prime Test Subject",
     "detachment_id": "creations-of-bile",
     "cost": 35,
@@ -1038,7 +1038,7 @@
       "Heretic Astartes",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "prime-test-subject-creations-of-bile-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1062,14 +1062,14 @@
     ]
   },
   {
-    "id": "touched-by-the-warp-cabal-of-chaos",
+    "id": "touched-by-the-warp-cabal-of-chaos-chaos-space-marines",
     "name": "Touched by the Warp",
     "detachment_id": "cabal-of-chaos",
     "cost": 10,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "touched-by-the-warp-cabal-of-chaos",
+    "ability_id": "touched-by-the-warp-cabal-of-chaos-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1093,14 +1093,14 @@
     ]
   },
   {
-    "id": "greyveil-hex-nightmare-hunt",
+    "id": "greyveil-hex-nightmare-hunt-chaos-space-marines",
     "name": "Greyveil Hex",
     "detachment_id": "nightmare-hunt",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Lord"
     ],
-    "ability_id": null,
+    "ability_id": "greyveil-hex-nightmare-hunt-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1121,7 +1121,7 @@
     ]
   },
   {
-    "id": "warp-fuelled-thrusters-nightmare-hunt",
+    "id": "warp-fuelled-thrusters-nightmare-hunt-chaos-space-marines",
     "name": "Warp-fuelled Thrusters",
     "detachment_id": "nightmare-hunt",
     "cost": 20,
@@ -1129,7 +1129,7 @@
       "Chaos Lord",
       "Jump Pack"
     ],
-    "ability_id": null,
+    "ability_id": "warp-fuelled-thrusters-nightmare-hunt-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1150,14 +1150,14 @@
     ]
   },
   {
-    "id": "terrorglut-parasite-nightmare-hunt",
+    "id": "terrorglut-parasite-nightmare-hunt-chaos-space-marines",
     "name": "Terrorglut Parasite",
     "detachment_id": "nightmare-hunt",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "terrorglut-parasite-nightmare-hunt-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1178,7 +1178,7 @@
     ]
   },
   {
-    "id": "sorrowscent-vulture-nightmare-hunt",
+    "id": "sorrowscent-vulture-nightmare-hunt-chaos-space-marines",
     "name": "Sorrowscent Vulture",
     "detachment_id": "nightmare-hunt",
     "cost": 35,
@@ -1186,7 +1186,7 @@
       "Chaos Lord",
       "Jump Pack"
     ],
-    "ability_id": null,
+    "ability_id": "sorrowscent-vulture-nightmare-hunt-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1210,14 +1210,14 @@
     ]
   },
   {
-    "id": "voice-of-the-tyrant-hurons-marauders",
+    "id": "voice-of-the-tyrant-hurons-marauders-chaos-space-marines",
     "name": "Voice of the Tyrant",
     "detachment_id": "hurons-marauders",
     "cost": 25,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "voice-of-the-tyrant-hurons-marauders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1241,14 +1241,14 @@
     ]
   },
   {
-    "id": "raid-leader-hurons-marauders",
+    "id": "raid-leader-hurons-marauders-chaos-space-marines",
     "name": "Raid Leader",
     "detachment_id": "hurons-marauders",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "raid-leader-hurons-marauders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1272,14 +1272,14 @@
     ]
   },
   {
-    "id": "dread-reputation-hurons-marauders",
+    "id": "dread-reputation-hurons-marauders-chaos-space-marines",
     "name": "Dread Reputation",
     "detachment_id": "hurons-marauders",
     "cost": 25,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "dread-reputation-hurons-marauders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1303,14 +1303,14 @@
     ]
   },
   {
-    "id": "eager-for-bloodshed-hurons-marauders",
+    "id": "eager-for-bloodshed-hurons-marauders-chaos-space-marines",
     "name": "Eager for Bloodshed",
     "detachment_id": "hurons-marauders",
     "cost": 30,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eager-for-bloodshed-hurons-marauders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1331,14 +1331,14 @@
     ]
   },
   {
-    "id": "weaponised-hatred-renegade-warband",
+    "id": "weaponised-hatred-renegade-warband-chaos-space-marines",
     "name": "Weaponised Hatred",
     "detachment_id": "renegade-warband",
     "cost": 35,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "weaponised-hatred-renegade-warband-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1359,14 +1359,14 @@
     ]
   },
   {
-    "id": "eyes-of-the-hunter-renegade-warband",
+    "id": "eyes-of-the-hunter-renegade-warband-chaos-space-marines",
     "name": "Eyes of the Hunter",
     "detachment_id": "renegade-warband",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eyes-of-the-hunter-renegade-warband-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1387,7 +1387,7 @@
     ]
   },
   {
-    "id": "fratricidal-trophies-renegade-warband",
+    "id": "fratricidal-trophies-renegade-warband-chaos-space-marines",
     "name": "Fratricidal Trophies",
     "detachment_id": "renegade-warband",
     "cost": 5,
@@ -1395,7 +1395,7 @@
       "Heretic Astartes",
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "fratricidal-trophies-renegade-warband-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1416,14 +1416,14 @@
     ]
   },
   {
-    "id": "empyric-symbiote-renegade-warband",
+    "id": "empyric-symbiote-renegade-warband-chaos-space-marines",
     "name": "Empyric Symbiote",
     "detachment_id": "renegade-warband",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "empyric-symbiote-renegade-warband-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1444,7 +1444,7 @@
     ]
   },
   {
-    "id": "conduit-of-chaos-cabal-of-chaos",
+    "id": "conduit-of-chaos-cabal-of-chaos-chaos-space-marines",
     "name": "Conduit of Chaos",
     "detachment_id": "cabal-of-chaos",
     "cost": 20,
@@ -1452,7 +1452,7 @@
       "Daemon",
       "Heretic Astartes"
     ],
-    "ability_id": "conduit-of-chaos-cabal-of-chaos",
+    "ability_id": "conduit-of-chaos-cabal-of-chaos-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1476,14 +1476,14 @@
     ]
   },
   {
-    "id": "pact-of-destruction-devotees-of-destruction",
+    "id": "pact-of-destruction-devotees-of-destruction-chaos-space-marines",
     "name": "Pact of Destruction",
     "detachment_id": "devotees-of-destruction",
     "cost": 15,
     "keyword_restrictions": [
       "Warpsmith"
     ],
-    "ability_id": "pact-of-destruction-devotees-of-destruction",
+    "ability_id": "pact-of-destruction-devotees-of-destruction-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1504,14 +1504,14 @@
     ]
   },
   {
-    "id": "eye-of-oblivion-devotees-of-destruction",
+    "id": "eye-of-oblivion-devotees-of-destruction-chaos-space-marines",
     "name": "Eye of Oblivion",
     "detachment_id": "devotees-of-destruction",
     "cost": 20,
     "keyword_restrictions": [
       "Warpsmith"
     ],
-    "ability_id": "eye-of-oblivion-devotees-of-destruction",
+    "ability_id": "eye-of-oblivion-devotees-of-destruction-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1532,7 +1532,7 @@
     ]
   },
   {
-    "id": "shadowcowl-talisman-murdertalon-raiders",
+    "id": "shadowcowl-talisman-murdertalon-raiders-chaos-space-marines",
     "name": "Shadowcowl Talisman",
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
@@ -1540,7 +1540,7 @@
       "Chaos Lord with Jump Pack",
       "Heretic Astartes"
     ],
-    "ability_id": "shadowcowl-talisman-murdertalon-raiders",
+    "ability_id": "shadowcowl-talisman-murdertalon-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1561,7 +1561,7 @@
     ]
   },
   {
-    "id": "pact-of-cursed-pinions-murdertalon-raiders",
+    "id": "pact-of-cursed-pinions-murdertalon-raiders-chaos-space-marines",
     "name": "Pact of Cursed Pinions",
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
@@ -1569,7 +1569,7 @@
       "Chaos Lord with Jump Pack",
       "Heretic Astartes"
     ],
-    "ability_id": "pact-of-cursed-pinions-murdertalon-raiders",
+    "ability_id": "pact-of-cursed-pinions-murdertalon-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1593,14 +1593,14 @@
     ]
   },
   {
-    "id": "infernal-fulgurite-warpstrike-champions",
+    "id": "infernal-fulgurite-warpstrike-champions-chaos-space-marines",
     "name": "Infernal Fulgurite",
     "detachment_id": "warpstrike-champions",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "infernal-fulgurite-warpstrike-champions",
+    "ability_id": "infernal-fulgurite-warpstrike-champions-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1624,14 +1624,14 @@
     ]
   },
   {
-    "id": "eye-of-the-warp-warpstrike-champions",
+    "id": "eye-of-the-warp-warpstrike-champions-chaos-space-marines",
     "name": "Eye of the Warp",
     "detachment_id": "warpstrike-champions",
     "cost": 15,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "eye-of-the-warp-warpstrike-champions",
+    "ability_id": "eye-of-the-warp-warpstrike-champions-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1652,14 +1652,14 @@
     ]
   },
   {
-    "id": "akshurs-binding-runes-warpstrike-champions",
+    "id": "akshurs-binding-runes-warpstrike-champions-chaos-space-marines",
     "name": "Akshur’s Binding Runes",
     "detachment_id": "warpstrike-champions",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "akshurs-binding-runes-warpstrike-champions",
+    "ability_id": "akshurs-binding-runes-warpstrike-champions-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1680,14 +1680,14 @@
     ]
   },
   {
-    "id": "tzagulla-warpstrike-champions",
+    "id": "tzagulla-warpstrike-champions-chaos-space-marines",
     "name": "Tzagulla",
     "detachment_id": "warpstrike-champions",
     "cost": 25,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "tzagulla-warpstrike-champions",
+    "ability_id": "tzagulla-warpstrike-champions-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1708,14 +1708,14 @@
     ]
   },
   {
-    "id": "wyredjinn-cult-of-the-arkifane",
+    "id": "wyredjinn-cult-of-the-arkifane-chaos-space-marines",
     "name": "Wyredjinn",
     "detachment_id": "cult-of-the-arkifane",
     "cost": 25,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "wyredjinn-cult-of-the-arkifane",
+    "ability_id": "wyredjinn-cult-of-the-arkifane-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1739,14 +1739,14 @@
     ]
   },
   {
-    "id": "cybinfernal-font-cult-of-the-arkifane",
+    "id": "cybinfernal-font-cult-of-the-arkifane-chaos-space-marines",
     "name": "Cybinfernal Font",
     "detachment_id": "cult-of-the-arkifane",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "cybinfernal-font-cult-of-the-arkifane",
+    "ability_id": "cybinfernal-font-cult-of-the-arkifane-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1770,14 +1770,14 @@
     ]
   },
   {
-    "id": "mark-of-the-soul-forges-cult-of-the-arkifane",
+    "id": "mark-of-the-soul-forges-cult-of-the-arkifane-chaos-space-marines",
     "name": "Mark of the Soul Forges",
     "detachment_id": "cult-of-the-arkifane",
     "cost": 20,
     "keyword_restrictions": [
       "Heretic Astartes"
     ],
-    "ability_id": "mark-of-the-soul-forges-cult-of-the-arkifane",
+    "ability_id": "mark-of-the-soul-forges-cult-of-the-arkifane-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1801,14 +1801,14 @@
     ]
   },
   {
-    "id": "crown-of-worms-cult-of-the-arkifane",
+    "id": "crown-of-worms-cult-of-the-arkifane-chaos-space-marines",
     "name": "Crown of Worms",
     "detachment_id": "cult-of-the-arkifane",
     "cost": 15,
     "keyword_restrictions": [
       "Warpsmith"
     ],
-    "ability_id": "crown-of-worms-cult-of-the-arkifane",
+    "ability_id": "crown-of-worms-cult-of-the-arkifane-chaos-space-marines",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1829,7 +1829,7 @@
     ]
   },
   {
-    "id": "infernal-infusion-zarkans-daemonkin",
+    "id": "infernal-infusion-zarkans-daemonkin-chaos-space-marines",
     "name": "Infernal Infusion",
     "detachment_id": "zarkans-daemonkin",
     "cost": 0,
@@ -1854,7 +1854,7 @@
     ]
   },
   {
-    "id": "prey-on-the-weak-zarkans-daemonkin",
+    "id": "prey-on-the-weak-zarkans-daemonkin-chaos-space-marines",
     "name": "Prey on the Weak",
     "detachment_id": "zarkans-daemonkin",
     "cost": 0,

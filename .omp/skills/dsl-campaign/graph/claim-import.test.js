@@ -9,7 +9,11 @@ import { importAbilityDslCandidates, importLegacyClaimCandidates } from './claim
 import { queryClaims } from './retrieval.js'
 import { GraphStore } from './store.js'
 const repoRoot = new URL('../../../..', import.meta.url).pathname.replace(/\/$/, '')
-const abilityFile = 'data/enrichment/adeptus-astartes/abilities.json'
+const abilityFile = 'data/enrichment/deathwatch/abilities.json'
+// A Feel No Pain 6+ on the unit, located by id so a reordered data file keeps the test on it.
+const fnpId = 'helix-gauntlet-deathwatch'
+const abilities = () => JSON.parse(readFileSync(join(repoRoot, abilityFile), 'utf8'))
+const fnpIndex = () => abilities().findIndex(a => a.ability_id === fnpId)
 const legacyFixture = JSON.parse(readFileSync(new URL('./fixtures/legacy-claim-candidates-v1.json', import.meta.url), 'utf8'))
 
 function setup() {
@@ -25,8 +29,8 @@ function counts(store) {
 
 test('Ability DSL import maps Feel No Pain as an origin-bound non-authoritative candidate', () => {
   const { store, repository } = setup()
-  const ability = JSON.parse(readFileSync(join(repoRoot, abilityFile), 'utf8'))[114]
-  const input = { repo_root: repoRoot, repository_version_node_id: repository.node_id, faction_id: 'adeptus-astartes', file_path: abilityFile, record_index: 114, ability }
+  const ability = abilities()[fnpIndex()]
+  const input = { repo_root: repoRoot, repository_version_node_id: repository.node_id, faction_id: 'deathwatch', file_path: abilityFile, record_index: fnpIndex(), ability }
   const first = importAbilityDslCandidates(store, input)
   assert.equal(first.idempotent, false)
   const claims = queryClaims(store, { origin_id: first.origin_id })
@@ -43,7 +47,7 @@ test('Ability DSL import maps Feel No Pain as an origin-bound non-authoritative 
     JOIN claim_evidence_bindings b USING(binding_id)
     WHERE a.claim_occurrence_id=?
   `).all(feelNoPain.claim_occurrence_id).map(row => ({ ...row }))
-  assert.deepEqual(assertionEvidence, [{ kind: 'structured_path', path: '/114/effect' }])
+  assert.deepEqual(assertionEvidence, [{ kind: 'structured_path', path: `/${fnpIndex()}/effect` }])
   assert.equal(store.db.prepare("SELECT COUNT(*) AS n FROM claim_evidence_bindings WHERE kind='source_span'").get().n, 0)
   assert.equal(store.db.prepare('SELECT COUNT(*) AS n FROM claim_review_decisions').get().n, 0)
 
@@ -103,9 +107,9 @@ test('legacy certificate and workflow claims remain historical candidates with r
 test('candidate import CLI writes once and reports an idempotent replay', () => {
   const root = mkdtempSync(join(tmpdir(), 'claim-import-cli-'))
   const graphRoot = join(root, 'graph')
-  const factionRoot = join(root, 'data', 'enrichment', 'adeptus-astartes')
+  const factionRoot = join(root, 'data', 'enrichment', 'deathwatch')
   mkdirSync(factionRoot, { recursive: true })
-  const ability = JSON.parse(readFileSync(join(repoRoot, abilityFile), 'utf8'))[114]
+  const ability = abilities()[fnpIndex()]
   writeFileSync(join(factionRoot, 'abilities.json'), `${JSON.stringify([ability], null, 2)}\n`)
 
   const store = new GraphStore(graphRoot, { repositoryRoot: root, verify: false })

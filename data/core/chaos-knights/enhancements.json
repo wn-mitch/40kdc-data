@@ -1,13 +1,13 @@
 [
   {
-    "id": "nightmares-master-traitoris-lance",
+    "id": "nightmares-master-traitoris-lance-chaos-knights",
     "name": "Nightmare’s Master",
     "detachment_id": "traitoris-lance",
     "cost": 20,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "nightmares-master-traitoris-lance",
+    "ability_id": "nightmares-master-traitoris-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "tyrants-shadow-traitoris-lance",
+    "id": "tyrants-shadow-traitoris-lance-chaos-knights",
     "name": "Tyrant’s Shadow",
     "detachment_id": "traitoris-lance",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "tyrants-shadow-traitoris-lance",
+    "ability_id": "tyrants-shadow-traitoris-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "malevolent-heraldry-traitoris-lance",
+    "id": "malevolent-heraldry-traitoris-lance-chaos-knights",
     "name": "Malevolent Heraldry",
     "detachment_id": "traitoris-lance",
     "cost": 30,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "malevolent-heraldry-traitoris-lance",
+    "ability_id": "malevolent-heraldry-traitoris-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "veil-of-medrengard-traitoris-lance",
+    "id": "veil-of-medrengard-traitoris-lance-chaos-knights",
     "name": "Veil of Medrengard",
     "detachment_id": "traitoris-lance",
     "cost": 35,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "veil-of-medrengard-traitoris-lance",
+    "ability_id": "veil-of-medrengard-traitoris-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "knight-diabolus-infernal-lance",
+    "id": "knight-diabolus-infernal-lance-chaos-knights",
     "name": "Knight Diabolus",
     "detachment_id": "infernal-lance",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "knight-diabolus-infernal-lance",
+    "ability_id": "knight-diabolus-infernal-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "blasphemous-engine-infernal-lance",
+    "id": "blasphemous-engine-infernal-lance-chaos-knights",
     "name": "Blasphemous Engine",
     "detachment_id": "infernal-lance",
     "cost": 35,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "blasphemous-engine-infernal-lance",
+    "ability_id": "blasphemous-engine-infernal-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,14 +168,14 @@
     ]
   },
   {
-    "id": "fleshmetal-fusion-infernal-lance",
+    "id": "fleshmetal-fusion-infernal-lance-chaos-knights",
     "name": "Fleshmetal Fusion",
     "detachment_id": "infernal-lance",
     "cost": 35,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "fleshmetal-fusion-infernal-lance",
+    "ability_id": "fleshmetal-fusion-infernal-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -196,14 +196,14 @@
     ]
   },
   {
-    "id": "bestial-aspect-infernal-lance",
+    "id": "bestial-aspect-infernal-lance-chaos-knights",
     "name": "Bestial Aspect",
     "detachment_id": "infernal-lance",
     "cost": 30,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "bestial-aspect-infernal-lance",
+    "ability_id": "bestial-aspect-infernal-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -224,14 +224,14 @@
     ]
   },
   {
-    "id": "throne-mechanicum-of-skulls-lords-of-dread",
+    "id": "throne-mechanicum-of-skulls-lords-of-dread-chaos-knights",
     "name": "Throne Mechanicum of Skulls",
     "detachment_id": "lords-of-dread",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "throne-mechanicum-of-skulls-lords-of-dread",
+    "ability_id": "throne-mechanicum-of-skulls-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -252,14 +252,14 @@
     ]
   },
   {
-    "id": "blade-of-celerity-lords-of-dread",
+    "id": "blade-of-celerity-lords-of-dread-chaos-knights",
     "name": "Blade of Celerity",
     "detachment_id": "lords-of-dread",
     "cost": 35,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "blade-of-celerity-lords-of-dread",
+    "ability_id": "blade-of-celerity-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -280,14 +280,14 @@
     ]
   },
   {
-    "id": "warp-borne-stalker-lords-of-dread",
+    "id": "warp-borne-stalker-lords-of-dread-chaos-knights",
     "name": "Warp-borne Stalker",
     "detachment_id": "lords-of-dread",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "warp-borne-stalker-lords-of-dread",
+    "ability_id": "warp-borne-stalker-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -308,14 +308,14 @@
     ]
   },
   {
-    "id": "putrid-carapace-lords-of-dread",
+    "id": "putrid-carapace-lords-of-dread-chaos-knights",
     "name": "Putrid Carapace",
     "detachment_id": "lords-of-dread",
     "cost": 30,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "putrid-carapace-lords-of-dread",
+    "ability_id": "putrid-carapace-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -336,14 +336,14 @@
     ]
   },
   {
-    "id": "mirror-of-fates-lords-of-dread",
+    "id": "mirror-of-fates-lords-of-dread-chaos-knights",
     "name": "Mirror of Fates",
     "detachment_id": "lords-of-dread",
     "cost": 30,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "mirror-of-fates-lords-of-dread",
+    "ability_id": "mirror-of-fates-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -364,14 +364,14 @@
     ]
   },
   {
-    "id": "blessing-of-the-dark-master-lords-of-dread",
+    "id": "blessing-of-the-dark-master-lords-of-dread-chaos-knights",
     "name": "Blessing of the Dark Master",
     "detachment_id": "lords-of-dread",
     "cost": 20,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "blessing-of-the-dark-master-lords-of-dread",
+    "ability_id": "blessing-of-the-dark-master-lords-of-dread-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -392,14 +392,14 @@
     ]
   },
   {
-    "id": "preyslayers-mantle-houndpack-lance",
+    "id": "preyslayers-mantle-houndpack-lance-chaos-knights",
     "name": "Preyslayer’s Mantle",
     "detachment_id": "houndpack-lance",
     "cost": 15,
     "keyword_restrictions": [
       "War Dog"
     ],
-    "ability_id": "preyslayers-mantle-houndpack-lance",
+    "ability_id": "preyslayers-mantle-houndpack-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -420,14 +420,14 @@
     ]
   },
   {
-    "id": "final-howl-aura-houndpack-lance",
+    "id": "final-howl-aura-houndpack-lance-chaos-knights",
     "name": "Final Howl (Aura)",
     "detachment_id": "houndpack-lance",
     "cost": 20,
     "keyword_restrictions": [
       "War Dog"
     ],
-    "ability_id": "final-howl-aura-houndpack-lance",
+    "ability_id": "final-howl-aura-houndpack-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -448,14 +448,14 @@
     ]
   },
   {
-    "id": "loping-predator-houndpack-lance",
+    "id": "loping-predator-houndpack-lance-chaos-knights",
     "name": "Loping Predator",
     "detachment_id": "houndpack-lance",
     "cost": 10,
     "keyword_restrictions": [
       "War Dog"
     ],
-    "ability_id": "loping-predator-houndpack-lance",
+    "ability_id": "loping-predator-houndpack-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -476,14 +476,14 @@
     ]
   },
   {
-    "id": "panoply-of-the-cursed-knights-houndpack-lance",
+    "id": "panoply-of-the-cursed-knights-houndpack-lance-chaos-knights",
     "name": "Panoply of the Cursed Knights",
     "detachment_id": "houndpack-lance",
     "cost": 15,
     "keyword_restrictions": [
       "War Dog"
     ],
-    "ability_id": "panoply-of-the-cursed-knights-houndpack-lance",
+    "ability_id": "panoply-of-the-cursed-knights-houndpack-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -504,7 +504,7 @@
     ]
   },
   {
-    "id": "pterrorshade-rookery-bastions-of-tyranny",
+    "id": "pterrorshade-rookery-bastions-of-tyranny-chaos-knights",
     "name": "Pterrorshade Rookery",
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
@@ -512,7 +512,7 @@
       "Chaos Knights",
       "Knight Tyrant"
     ],
-    "ability_id": "pterrorshade-rookery-bastions-of-tyranny",
+    "ability_id": "pterrorshade-rookery-bastions-of-tyranny-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -533,7 +533,7 @@
     ]
   },
   {
-    "id": "hate-filled-dominion-bastions-of-tyranny",
+    "id": "hate-filled-dominion-bastions-of-tyranny-chaos-knights",
     "name": "Hate-filled Dominion",
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
@@ -541,7 +541,7 @@
       "Chaos Knights",
       "Knight Tyrant"
     ],
-    "ability_id": "hate-filled-dominion-bastions-of-tyranny",
+    "ability_id": "hate-filled-dominion-bastions-of-tyranny-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -562,14 +562,14 @@
     ]
   },
   {
-    "id": "soul-spoor-auspicator-upgrade-hunting-warpack",
+    "id": "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
     "name": "Soul-spoor Auspicator (Upgrade)",
     "detachment_id": "hunting-warpack",
     "cost": 15,
     "keyword_restrictions": [
       "Huntsman"
     ],
-    "ability_id": "soul-spoor-auspicator-hunting-warpack",
+    "ability_id": "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -590,14 +590,14 @@
     ]
   },
   {
-    "id": "snarling-rivalry-upgrade-hunting-warpack",
+    "id": "snarling-rivalry-upgrade-hunting-warpack-chaos-knights",
     "name": "Snarling Rivalry (Upgrade)",
     "detachment_id": "hunting-warpack",
     "cost": 10,
     "keyword_restrictions": [
       "Executioner"
     ],
-    "ability_id": "snarling-rivalry-hunting-warpack",
+    "ability_id": "snarling-rivalry-upgrade-hunting-warpack-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -618,14 +618,14 @@
     ]
   },
   {
-    "id": "cruel-lashmaster-aura-iconoclast-fiefdom",
+    "id": "cruel-lashmaster-aura-iconoclast-fiefdom-chaos-knights",
     "name": "Cruel Lashmaster (Aura)",
     "detachment_id": "iconoclast-fiefdom",
     "cost": 25,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "cruel-lashmaster-iconoclast-fiefdom",
+    "ability_id": "cruel-lashmaster-aura-iconoclast-fiefdom-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -646,14 +646,14 @@
     ]
   },
   {
-    "id": "iconoclast-idol-aura-iconoclast-fiefdom",
+    "id": "iconoclast-idol-aura-iconoclast-fiefdom-chaos-knights",
     "name": "Iconoclast Idol (Aura)",
     "detachment_id": "iconoclast-fiefdom",
     "cost": 20,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "iconoclast-idol-iconoclast-fiefdom",
+    "ability_id": "iconoclast-idol-aura-iconoclast-fiefdom-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -674,14 +674,14 @@
     ]
   },
   {
-    "id": "hunters-helm-helhunt-lance",
+    "id": "hunters-helm-helhunt-lance-chaos-knights",
     "name": "Hunter’s Helm",
     "detachment_id": "helhunt-lance",
     "cost": 15,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "hunters-helm-helhunt-lance",
+    "ability_id": "hunters-helm-helhunt-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -702,14 +702,14 @@
     ]
   },
   {
-    "id": "octagram-of-conjuration-helhunt-lance",
+    "id": "octagram-of-conjuration-helhunt-lance-chaos-knights",
     "name": "Octagram of Conjuration",
     "detachment_id": "helhunt-lance",
     "cost": 40,
     "keyword_restrictions": [
       "Knight Abominant"
     ],
-    "ability_id": "octagram-of-conjuration-helhunt-lance",
+    "ability_id": "octagram-of-conjuration-helhunt-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -730,7 +730,7 @@
     ]
   },
   {
-    "id": "throne-tyrannicus-helhunt-lance",
+    "id": "throne-tyrannicus-helhunt-lance-chaos-knights",
     "name": "Throne Tyrannicus",
     "detachment_id": "helhunt-lance",
     "cost": 25,
@@ -738,7 +738,7 @@
       "Chaos Knights",
       "Titanic"
     ],
-    "ability_id": "throne-tyrannicus-helhunt-lance",
+    "ability_id": "throne-tyrannicus-helhunt-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -759,14 +759,14 @@
     ]
   },
   {
-    "id": "aspect-of-the-beast-helhunt-lance",
+    "id": "aspect-of-the-beast-helhunt-lance-chaos-knights",
     "name": "Aspect of the Beast",
     "detachment_id": "helhunt-lance",
     "cost": 30,
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": "aspect-of-the-beast-helhunt-lance",
+    "ability_id": "aspect-of-the-beast-helhunt-lance-chaos-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

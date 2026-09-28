@@ -45,11 +45,14 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "ascended-daemon",
-      "daemonic-allegiance",
-      "dark-blessing-aura",
-      "deadly-demise-d3",
-      "lord-of-chaos"
+      "ascended-daemon-chaos-space-marines",
+      "daemonic-allegiance-chaos-space-marines",
+      "dark-blessing-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "lord-of-chaos-heretic-astartes-daemon-prince-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -119,10 +122,14 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "daemonic-destruction",
+      "daemonic-destruction-chaos-space-marines",
       "deep-strike",
-      "flying-horror",
-      "deadly-demise-d3"
+      "flying-horror-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daemonic-allegiance-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -196,12 +203,13 @@
       "infernal-gaze"
     ],
     "ability_ids": [
-      "chaos-familiar",
-      "death-hex-psychic",
-      "empyric-guidance-psychic",
+      {
+        "id": "chaos-familiar-chaos-space-marines",
+        "wargear": "chaos-familiar"
+      },
+      "death-hex-chaos-space-marines",
       "leader",
-      "marked-by-fate-psychic",
-      "warptime-psychic",
+      "warptime-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -311,10 +319,13 @@
       "power-fist"
     ],
     "ability_ids": [
-      "attached-unit",
+      "attached-unit-chaos-space-marines",
       "stealth",
-      "visions-of-suffering-psychic",
-      "voice-eater"
+      "visions-of-suffering-chaos-space-marines",
+      {
+        "id": "voice-eater-chaos-space-marines",
+        "wargear": "voice-eater"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -416,13 +427,9 @@
       "infernal-gaze"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
+      "gift-of-chaos-chaos-space-marines",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "prescience-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -542,9 +549,12 @@
       "warp-curse"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "dark-ritual",
-      "faithful-flock",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-ritual-chaos-space-marines",
+      "faithful-flock-chaos-space-marines",
       "leader"
     ],
     "game_version": {
@@ -622,9 +632,9 @@
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic",
+      "daemonkin-chaos-space-marines",
       "leader",
-      "sacrificial-dagger"
+      "sacrificial-dagger-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -706,7 +716,7 @@
       "fleshmetal-guns"
     ],
     "ability_ids": [
-      "warp-rift-firepower",
+      "warp-rift-firepower-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -782,8 +792,8 @@
       "techno-virus-injector"
     ],
     "ability_ids": [
-      "corrupt-machine-spirits",
-      "spirit-thief"
+      "corrupt-machine-spirits-chaos-space-marines",
+      "spirit-thief-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -861,7 +871,7 @@
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "despoilers",
+      "despoilers-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -971,8 +981,8 @@
       "close-combat-weapon-cultist-firebrand"
     ],
     "ability_ids": [
-      "cursed-flames",
-      "fiery-faith",
+      "cursed-flames-chaos-space-marines",
+      "fiery-faith-chaos-space-marines",
       "leader"
     ],
     "game_version": {
@@ -1064,8 +1074,12 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-chaos-space-marines"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1156,7 +1170,11 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "unholy-bloodshed"
+      "unholy-bloodshed-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1250,9 +1268,9 @@
       "power-fist-traitor-enforcer"
     ],
     "ability_ids": [
-      "brutal-example",
+      "brutal-example-chaos-space-marines",
       "leader",
-      "mutated-bodyguard"
+      "mutated-bodyguard-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1343,10 +1361,10 @@
       "close-combat-weapon-dark-apostle"
     ],
     "ability_ids": [
-      "dark-zealotry",
-      "demagogue",
+      "dark-zealotry-chaos-space-marines",
+      "demagogue-chaos-space-marines",
       "leader",
-      "malign-sacrifice"
+      "malign-sacrifice-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1428,15 +1446,11 @@
       "hideous-mutations-chaos-spawn"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "mind-breaking-mutations-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1545,11 +1559,12 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "annihilator-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1669,8 +1684,11 @@
       "soulflayer-tendrils-and-claws"
     ],
     "ability_ids": [
-      "soul-eater",
-      "deadly-demise-d3"
+      "soul-eater-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1756,7 +1774,7 @@
       "power-fist"
     ],
     "ability_ids": [
-      "stabilisation-talons"
+      "stabilisation-talons-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1821,10 +1839,13 @@
       "lashing-warp-energies"
     ],
     "ability_ids": [
-      "fortification",
-      "malevolent-locus-aura",
-      "malign-cover",
-      "deadly-demise-d6"
+      "fortification-chaos-space-marines",
+      "malevolent-locus-chaos-space-marines",
+      "malign-cover-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1923,8 +1944,8 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "fearsome-aura",
-      "terrifying-assault",
+      "fearsome-chaos-space-marines",
+      "terrifying-assault-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -2024,9 +2045,13 @@
       "magma-cutters"
     ],
     "ability_ids": [
-      "daemonforge",
-      "deadly-demise-d6",
-      "scuttling-walker"
+      "daemonforge-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-chaos-space-marines",
+      "damaged-1-6-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2135,11 +2160,12 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "destructor-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2277,7 +2303,11 @@
       "power-fist-chosen"
     ],
     "ability_ids": [
-      "chosen-marauders"
+      "chosen-marauders-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2391,7 +2421,7 @@
       "power-weapon"
     ],
     "ability_ids": [
-      "twisted-defence-force"
+      "twisted-defence-force-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2484,10 +2514,13 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
+      "airborne-predator-chaos-space-marines",
       "hover",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2566,8 +2599,12 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "siege-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "siege-shield-chaos-space-marines",
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2649,10 +2686,12 @@
       "hades-autocannon"
     ],
     "ability_ids": [
-      "blazing-salvoes",
-      "daemonic-ordnance",
-      "furious-onslaught",
-      "deadly-demise-d3"
+      "daemonic-ordnance-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2760,10 +2799,10 @@
       "plasma-pistol-warpsmith"
     ],
     "ability_ids": [
-      "enrage-machine-spirits",
+      "enrage-machine-spirits-chaos-space-marines",
       "leader",
-      "master-of-mechanisms",
-      "warpsmith"
+      "master-of-mechanisms-chaos-space-marines",
+      "warpsmith-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2838,9 +2877,10 @@
       "power-fist-chaos-lord-in-terminator-armour"
     ],
     "ability_ids": [
-      "formidably-resilient",
+      "formidably-resilient-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2941,7 +2981,7 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "trophy-takers"
+      "trophy-takers-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3011,11 +3051,9 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "forwards-for-blood",
-      "leader",
-      "trophy-taker",
-      "warp-sighted-butcher"
+      "trophy-taker-chaos-space-marines",
+      "warp-sighted-butcher-chaos-space-marines",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -3122,9 +3160,15 @@
       "hideous-mutations-accursed-cultists"
     ],
     "ability_ids": [
-      "howling-horde",
-      "feel-no-pain-6",
-      "scouts-6"
+      "howling-horde-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3204,13 +3248,12 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      "dark-ascension-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3307,9 +3350,10 @@
       "twin-lightning-claws"
     ],
     "ability_ids": [
-      "cruel-hunter",
+      "cruel-hunter-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3392,7 +3436,7 @@
       "brutal-assault-weapon"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3464,8 +3508,9 @@
       "power-fist-chaos-lord"
     ],
     "ability_ids": [
-      "chance-for-glory",
-      "leader"
+      "chance-for-glory-chaos-space-marines",
+      "leader",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3554,7 +3599,11 @@
       "power-fist"
     ],
     "ability_ids": [
-      "rapid-assault"
+      "rapid-assault-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3664,7 +3713,7 @@
       "warp-claws"
     ],
     "ability_ids": [
-      "warp-strike",
+      "warp-strike-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -3738,7 +3787,7 @@
       "plasma-pistol-fellgor-beastmen"
     ],
     "ability_ids": [
-      "bestial-raiders"
+      "bestial-raiders-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3827,12 +3876,12 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "siege-crawler-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3960,13 +4009,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "self-repair-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -4118,7 +4169,11 @@
       "reaper-chaincannon"
     ],
     "ability_ids": [
-      "veterans-of-the-long-war"
+      "veterans-of-the-long-war-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4218,9 +4273,9 @@
       "power-sword"
     ],
     "ability_ids": [
-      "brutal-raider",
+      "brutal-raider-chaos-space-marines",
       "leader",
-      "raider-s-due",
+      "raiders-due-chaos-space-marines",
       "infiltrators"
     ],
     "game_version": {
@@ -4310,10 +4365,10 @@
       "reductor-array"
     ],
     "ability_ids": [
-      "choice-samples",
-      "fleet-command",
-      "masters-of-the-maelstrom",
-      "plunder"
+      "choice-samples-chaos-space-marines",
+      "fleet-command-chaos-space-marines",
+      "plunder-chaos-space-marines",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -4385,11 +4440,15 @@
       "vashtorrs-hammer"
     ],
     "ability_ids": [
-      "indentured-daemon-engines",
-      "reorder-reality",
-      "unholy-mechanisms-aura",
+      "indentured-daemon-engines-chaos-space-marines",
+      "reorder-reality-chaos-space-marines",
+      "unholy-mechanisms-chaos-space-marines",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -4459,11 +4518,14 @@
       "tyrants-claw-heavy-flamer"
     ],
     "ability_ids": [
-      "hamadrya-s-knowledge-psychic",
+      "hamadryas-knowledge-chaos-space-marines",
       "leader",
-      "lord-of-badab-aura",
+      "lord-of-badab-chaos-space-marines",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4536,8 +4598,8 @@
       "heralds-talon"
     ],
     "ability_ids": [
-      "head-taker",
-      "herald-of-the-apocalypse-aura",
+      "head-taker-chaos-space-marines",
+      "herald-of-the-apocalypse-chaos-space-marines",
       "leader",
       "deep-strike"
     ],
@@ -4611,10 +4673,10 @@
       "talon-of-horus"
     ],
     "ability_ids": [
-      "dark-destiny",
+      "dark-destiny-chaos-space-marines",
       "leader",
-      "supreme-commander",
-      "warmaster",
+      "supreme-commander-chaos-space-marines",
+      "warmaster-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -4698,11 +4760,14 @@
       "xyclos-needler"
     ],
     "ability_ids": [
-      "chirurgeon",
-      "enhanced-warriors",
+      "chirurgeon-chaos-space-marines",
+      "enhanced-warriors-chaos-space-marines",
       "leader",
-      "surgeon-acolyte",
-      "feel-no-pain-5"
+      "surgeon-acolyte-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4777,8 +4842,8 @@
       "cyphers-plasma-pistol"
     ],
     "ability_ids": [
-      "agent-of-discord-aura",
-      "guns-blazing",
+      "agent-of-discord-chaos-space-marines",
+      "guns-blazing-chaos-space-marines",
       "lone-operative"
     ],
     "game_version": {
@@ -4861,10 +4926,12 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "idol-of-blessed-blood",
-      "plough-through-the-enemy",
-      "super-heavy-war-engine"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "plough-through-the-enemy-chaos-space-marines",
+      "damaged-1-8-wounds-remaining-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -4954,9 +5021,8 @@
       "fleshmetal-weapons"
     ],
     "ability_ids": [
-      "cult-of-destruction",
-      "death-frenzy",
-      "deep-strike"
+      "deep-strike",
+      "crushing-charge-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5048,6 +5114,12 @@
         "namespace": "mfm",
         "id": "b390ed9e-515f-46f4-8fab-ad6a526b9623"
       }
+    ],
+    "ability_ids": [
+      "architect-of-ruin-chaos-space-marines",
+      "deep-strike",
+      "headlong-destruction-chaos-space-marines",
+      "leader"
     ]
   },
   {
@@ -5094,8 +5166,8 @@
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic-zarkans-daemonkin",
-      "leader"
+      "daemonkin-aranis-zarkan-chaos-space-marines",
+      "sacrificial-dagger-aranis-zarkan-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5162,7 +5234,7 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-zarkans-daemonkin-cultist-mob-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5231,8 +5303,9 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "veterans-of-the-long-war-zarkans-daemonkin"
+      "veterans-of-the-long-war-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "combat-squad-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5293,7 +5366,8 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "unholy-bloodshed-zarkans-daemonkin"
+      "unholy-bloodshed-zarkans-daemonkin-possessed-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-possessed-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",

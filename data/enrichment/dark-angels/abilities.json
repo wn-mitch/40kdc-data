@@ -1,6 +1,6 @@
 [
   {
-    "ability_id": "searing-bursts-dark-age-arsenal",
+    "ability_id": "searing-bursts-dark-age-arsenal-dark-angels",
     "name": "Searing Bursts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -30,7 +30,7 @@
     "community_notes": "Used after a Hellblaster Squad has shot: one enemy unit hit by its plasma ranged attacks is seared - it has -2\" Move until the start of your next turn"
   },
   {
-    "ability_id": "no-sacrifice-too-great-dark-age-arsenal",
+    "ability_id": "no-sacrifice-too-great-dark-age-arsenal-dark-angels",
     "name": "No Sacrifice Too Great",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -62,7 +62,7 @@
     "community_notes": "Applies to the unit's [HAZARDOUS] plasma ranged attacks only"
   },
   {
-    "ability_id": "revelation-of-guilt-dark-age-arsenal",
+    "ability_id": "revelation-of-guilt-dark-age-arsenal-dark-angels",
     "name": "Revelation of Guilt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -93,7 +93,7 @@
     "community_notes": "Applies to the unit's plasma ranged attacks only"
   },
   {
-    "ability_id": "for-the-lion-the-vengeful-brethren",
+    "ability_id": "for-the-lion-the-vengeful-brethren-dark-angels",
     "name": "For the Lion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -123,7 +123,7 @@
     "community_notes": "Used in the Command phase on one Vengeful Brethren unit"
   },
   {
-    "ability_id": "mission-focus-the-vengeful-brethren",
+    "ability_id": "mission-focus-the-vengeful-brethren-dark-angels",
     "name": "Mission Focus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -165,7 +165,7 @@
     "community_notes": "Used when a Vengeful Brethren unit within range of an objective is selected to attack in your Shooting phase or the Fight phase"
   },
   {
-    "ability_id": "determined-to-the-last-the-vengeful-brethren",
+    "ability_id": "determined-to-the-last-the-vengeful-brethren-dark-angels",
     "name": "Determined to the Last",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -210,7 +210,7 @@
     "community_notes": "Bladeguard Veteran Squad targeted in the Fight phase before it has fought: each destroyed model stays on a 2+ and is removed once the unit has fought or at the end of the phase, whichever comes first"
   },
   {
-    "ability_id": "wings-of-shadow-darkflight-pursuit",
+    "ability_id": "wings-of-shadow-darkflight-pursuit-dark-angels",
     "name": "Wings of Shadow",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -248,7 +248,7 @@
     "community_notes": "Used when an enemy unit targets a Ravenwing Fly unit in the opponent's Shooting phase"
   },
   {
-    "ability_id": "skyborne-surveillance-darkflight-pursuit",
+    "ability_id": "skyborne-surveillance-darkflight-pursuit-dark-angels",
     "name": "Skyborne Surveillance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -278,7 +278,7 @@
     "community_notes": "Used after a Ravenwing Fly unit has shot: visible enemy units within 6\" of it have +3\" detection range"
   },
   {
-    "ability_id": "we-are-vengeance-darkflight-pursuit",
+    "ability_id": "we-are-vengeance-darkflight-pursuit-dark-angels",
     "name": "We Are Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -316,7 +316,7 @@
     "community_notes": "Usable on an unengaged Ravenwing Fly unit that the enemy unit targeted"
   },
   {
-    "ability_id": "terrifying-zeal-interrogation-conclave",
+    "ability_id": "terrifying-zeal-interrogation-conclave-dark-angels",
     "name": "Terrifying Zeal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -354,7 +354,7 @@
     "community_notes": "Select one engaged enemy unit (excluding Monsters and Vehicles); the -1 to hit applies only if that unit fails a leadership roll"
   },
   {
-    "ability_id": "exacting-punishment-interrogation-conclave",
+    "ability_id": "exacting-punishment-interrogation-conclave-dark-angels",
     "name": "Exacting Punishment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -384,7 +384,7 @@
     "community_notes": "Used when a Chaplain unit is selected to attack in your Shooting phase or the Fight phase"
   },
   {
-    "ability_id": "wages-of-cowardice-interrogation-conclave",
+    "ability_id": "wages-of-cowardice-interrogation-conclave-dark-angels",
     "name": "Wages of Cowardice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -419,7 +419,7 @@
     "community_notes": "Used when an enemy unit that was engaged with an unengaged Chaplain unit ends a fall-back move"
   },
   {
-    "ability_id": "armour-of-contempt-company-of-hunters",
+    "ability_id": "armour-of-contempt-company-of-hunters-dark-angels",
     "name": "Armour Of Contempt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -460,7 +460,7 @@
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "high-speed-focus-company-of-hunters",
+    "ability_id": "high-speed-focus-company-of-hunters-dark-angels",
     "name": "High-speed Focus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -500,7 +500,7 @@
     "community_notes": "Used on a Ravenwing unit targeted in the opponent's Shooting phase"
   },
   {
-    "ability_id": "hunters-trail-company-of-hunters",
+    "ability_id": "hunters-trail-company-of-hunters-dark-angels",
     "name": "Hunter's Trail",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -525,7 +525,7 @@
     "community_notes": "Used in the Command phase on a Ravenwing Mounted unit within range of an objective you control: that objective stays yours until your opponent out-controls it at the end of a phase"
   },
   {
-    "ability_id": "rapid-reappraisal-company-of-hunters",
+    "ability_id": "rapid-reappraisal-company-of-hunters-dark-angels",
     "name": "Rapid Reappraisal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -573,7 +573,7 @@
     "community_notes": "At the end of the opponent's Fight phase, one unengaged Ravenwing unit is removed from the battlefield and placed into Strategic Reserves"
   },
   {
-    "ability_id": "death-on-the-wind-company-of-hunters",
+    "ability_id": "death-on-the-wind-company-of-hunters-dark-angels",
     "name": "Death on the Wind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -605,7 +605,7 @@
     "community_notes": "Used when a unit ends an advance move: that advance does not prevent it from declaring a charge"
   },
   {
-    "ability_id": "talon-strike-company-of-hunters",
+    "ability_id": "talon-strike-company-of-hunters-dark-angels",
     "name": "Talon Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -635,7 +635,7 @@
     }
   },
   {
-    "ability_id": "inescapable-wrath-lions-blade-task-force",
+    "ability_id": "inescapable-wrath-lions-blade-task-force-dark-angels",
     "name": "Inescapable Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -683,7 +683,7 @@
     "community_notes": "At the end of the opponent's Charge phase, one Deathwing Infantry or Deathwing Walker unit within 6\" of enemy units resolves a charge against them; no Charge bonus this turn"
   },
   {
-    "ability_id": "strength-in-unity-lions-blade-task-force",
+    "ability_id": "strength-in-unity-lions-blade-task-force-dark-angels",
     "name": "Strength in Unity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -754,7 +754,7 @@
     "community_notes": "The -1 to hit applies while the attacker is engaged with your Ravenwing units, the -1 to wound (against higher-Strength attacks) while it is engaged with your Deathwing units; cannot be combined with Armour of Contempt in the same phase"
   },
   {
-    "ability_id": "illuminating-fire-lions-blade-task-force",
+    "ability_id": "illuminating-fire-lions-blade-task-force-dark-angels",
     "name": "Illuminating Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -797,7 +797,7 @@
     "community_notes": "Used after a Ravenwing unit selects its shooting targets: one targeted enemy unit within 12\" is illuminated - friendly Deathwing units add 1 to wound rolls against it this phase"
   },
   {
-    "ability_id": "armour-of-contempt-lions-blade-task-force",
+    "ability_id": "armour-of-contempt-lions-blade-task-force-dark-angels",
     "name": "Armour Of Contempt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -838,7 +838,7 @@
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "knights-of-iron-lions-blade-task-force",
+    "ability_id": "knights-of-iron-lions-blade-task-force-dark-angels",
     "name": "Knights of Iron",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -873,7 +873,7 @@
     "community_notes": "One Ravenwing unit: models can move horizontally through terrain features during Normal, Advance and Charge moves this phase"
   },
   {
-    "ability_id": "overpowering-exaction-lions-blade-task-force",
+    "ability_id": "overpowering-exaction-lions-blade-task-force-dark-angels",
     "name": "Overpowering Exaction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -904,7 +904,7 @@
     "community_notes": "Select one enemy unit engaged with your unit: it takes a Battle-shock test, at -1 if your unit is Deathwing or Ravenwing"
   },
   {
-    "ability_id": "unbreakable-lines-unforgiven-task-force",
+    "ability_id": "unbreakable-lines-unforgiven-task-force-dark-angels",
     "name": "Unbreakable Lines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -945,7 +945,7 @@
     "community_notes": "Used just after an enemy unit ends a Charge move, on one of your units within Engagement Range of it"
   },
   {
-    "ability_id": "armour-of-contempt-unforgiven-task-force",
+    "ability_id": "armour-of-contempt-unforgiven-task-force-dark-angels",
     "name": "Armour Of Contempt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -986,7 +986,7 @@
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "grim-retribution-unforgiven-task-force",
+    "ability_id": "grim-retribution-unforgiven-task-force-dark-angels",
     "name": "Grim Retribution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1025,7 +1025,7 @@
     "community_notes": "Used on a unit that lost models to the attacking unit's shooting: it shoots back, targeting only that enemy unit (if eligible)"
   },
   {
-    "ability_id": "unforgiven-fury-unforgiven-task-force",
+    "ability_id": "unforgiven-fury-unforgiven-task-force-dark-angels",
     "name": "Unforgiven Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1068,7 +1068,7 @@
     "community_notes": "The 5+ Critical Hits apply only while one or more friendly Adeptus Astartes units are Battle-shocked"
   },
   {
-    "ability_id": "fire-discipline-unforgiven-task-force",
+    "ability_id": "fire-discipline-unforgiven-task-force-dark-angels",
     "name": "Fire Discipline",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1100,7 +1100,7 @@
     }
   },
   {
-    "ability_id": "intractable-unforgiven-task-force",
+    "ability_id": "intractable-unforgiven-task-force-dark-angels",
     "name": "Intractable",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1148,7 +1148,7 @@
     "community_notes": "Used just after the unit Falls Back"
   },
   {
-    "ability_id": "leonine-aggression-wrath-of-the-rock",
+    "ability_id": "leonine-aggression-wrath-of-the-rock-dark-angels",
     "name": "Leonine Aggression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1196,7 +1196,7 @@
     "community_notes": "At the end of the opponent's Charge phase, one unit within 3\" of enemy units (6\" for Deathwing) resolves a charge against them; no Charge bonus this turn"
   },
   {
-    "ability_id": "tactical-mastery-wrath-of-the-rock",
+    "ability_id": "tactical-mastery-wrath-of-the-rock-dark-angels",
     "name": "Tactical Mastery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1243,7 +1243,7 @@
     "community_notes": "A Ravenwing unit is additionally eligible to shoot and charge in a turn in which it Fell Back"
   },
   {
-    "ability_id": "inescapable-justice-wrath-of-the-rock",
+    "ability_id": "inescapable-justice-wrath-of-the-rock-dark-angels",
     "name": "Inescapable Justice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1285,7 +1285,7 @@
     "community_notes": "Used just after your Oath of Moment target is destroyed: one enemy unit within 12\" of and visible to your Character becomes your Oath of Moment target"
   },
   {
-    "ability_id": "relics-of-the-dark-age-wrath-of-the-rock",
+    "ability_id": "relics-of-the-dark-age-wrath-of-the-rock-dark-angels",
     "name": "Relics of the Dark Age",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1316,7 +1316,7 @@
     "community_notes": "Infantry or Mounted unit not yet selected to shoot this phase"
   },
   {
-    "ability_id": "armour-of-contempt-wrath-of-the-rock",
+    "ability_id": "armour-of-contempt-wrath-of-the-rock-dark-angels",
     "name": "Armour Of Contempt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1357,7 +1357,7 @@
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "lions-will-wrath-of-the-rock",
+    "ability_id": "lions-will-wrath-of-the-rock-dark-angels",
     "name": "Lion's Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1419,7 +1419,7 @@
     "community_notes": "Used in the Command phase on an engaged unit; the +1 OC lasts until your next Command phase, the +1 to hit until the end of the turn"
   },
   {
-    "ability_id": "martial-mastery-inner-circle-task-force",
+    "ability_id": "martial-mastery-inner-circle-task-force-dark-angels",
     "name": "Martial Mastery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1473,7 +1473,7 @@
     "community_notes": "Deathwing Infantry unit not yet selected to fight; the full wound re-rolls apply while it is within range of your Vowed objective marker"
   },
   {
-    "ability_id": "armour-of-contempt-inner-circle-task-force",
+    "ability_id": "armour-of-contempt-inner-circle-task-force-dark-angels",
     "name": "Armour Of Contempt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1514,7 +1514,7 @@
     "community_notes": "Worsen the AP of attacks targeting the unit by 1 until the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "duty-unto-death-inner-circle-task-force",
+    "ability_id": "duty-unto-death-inner-circle-task-force-dark-angels",
     "name": "Duty Unto Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1559,7 +1559,7 @@
     "community_notes": "Deathwing unit targeted in the Fight phase: roll per destroyed model that has not fought, adding 1 if the unit is within range of your Vowed objective marker; on a 4+ the model fights after the attacking unit finishes, then is removed"
   },
   {
-    "ability_id": "unmatched-fortitude-inner-circle-task-force",
+    "ability_id": "unmatched-fortitude-inner-circle-task-force-dark-angels",
     "name": "Unmatched Fortitude",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1616,7 +1616,7 @@
     "community_notes": "Deathwing Infantry unit targeted in the opponent's Shooting phase"
   },
   {
-    "ability_id": "wrath-of-the-lion-inner-circle-task-force",
+    "ability_id": "wrath-of-the-lion-inner-circle-task-force-dark-angels",
     "name": "Wrath of the Lion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1659,7 +1659,7 @@
     "community_notes": "Deathwing Infantry unit after a Charge move: select one engaged enemy unit and roll one D6 per model, adding 1 if that enemy unit is within range of your Vowed objective marker - each 4+ inflicts 1 mortal wound (max 3)"
   },
   {
-    "ability_id": "relic-teleportarium-inner-circle-task-force",
+    "ability_id": "relic-teleportarium-inner-circle-task-force-dark-angels",
     "name": "Relic Teleportarium",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1689,7 +1689,7 @@
     "community_notes": "A Deathwing unit arriving by Deep Strike can be set up anywhere more than 6\" horizontally from enemy models; it is then not eligible to declare a charge this turn"
   },
   {
-    "ability_id": "champion-of-the-deathwing-inner-circle-task-force",
+    "ability_id": "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
     "name": "Champion of the Deathwing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1746,7 +1746,7 @@
     "community_notes": "Deathwing model only; the 5+ Critical Hits apply while the bearer is within range of your Vowed objective marker"
   },
   {
-    "ability_id": "eye-of-the-unseen-inner-circle-task-force",
+    "ability_id": "eye-of-the-unseen-inner-circle-task-force-dark-angels",
     "name": "Eye of the Unseen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1781,7 +1781,7 @@
     "community_notes": "Deathwing model only. Roll each time you target the bearer's unit with a Stratagem, adding 1 if the bearer is within range of your Vowed objective marker"
   },
   {
-    "ability_id": "singular-will-inner-circle-task-force",
+    "ability_id": "singular-will-inner-circle-task-force-dark-angels",
     "name": "Singular Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1823,7 +1823,7 @@
     "community_notes": "Deathwing model only. Models in the bearer's unit move an additional 3\" (6\" total) when they Pile In or Consolidate"
   },
   {
-    "ability_id": "deathwing-assault-inner-circle-task-force",
+    "ability_id": "deathwing-assault-inner-circle-task-force-dark-angels",
     "name": "Deathwing Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1859,7 +1859,7 @@
     "community_notes": "Deathwing model with Deep Strike only: the bearer's unit can arrive in the Reinforcements step of your first, second or third Movement phase regardless of mission rules"
   },
   {
-    "ability_id": "supreme-combatant-the-vengeful-brethren",
+    "ability_id": "supreme-combatant-the-vengeful-brethren-dark-angels",
     "name": "Supreme Combatant",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1904,7 +1904,7 @@
     "community_notes": "Vengeful Brethren Gravis Captain only; chosen when the unit is selected to attack"
   },
   {
-    "ability_id": "dutiful-defenders-the-vengeful-brethren",
+    "ability_id": "dutiful-defenders-the-vengeful-brethren-dark-angels",
     "name": "Dutiful Defenders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1940,7 +1940,7 @@
     "community_notes": "Upgrade: Vengeful Brethren Bladeguard Veteran Squad only. Targeting this unit with Heroic Intervention costs 1 less CP (once per battle round)"
   },
   {
-    "ability_id": "mounted-strategist-company-of-hunters",
+    "ability_id": "mounted-strategist-company-of-hunters-dark-angels",
     "name": "Mounted Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1982,7 +1982,7 @@
     "community_notes": "Ravenwing model only"
   },
   {
-    "ability_id": "master-of-manoeuvre-company-of-hunters",
+    "ability_id": "master-of-manoeuvre-company-of-hunters-dark-angels",
     "name": "Master of Manoeuvre",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2025,7 +2025,7 @@
     "community_notes": "Ravenwing model only; applies when the bearer's unit starts the battle in Strategic Reserves"
   },
   {
-    "ability_id": "master-crafted-weapon-company-of-hunters",
+    "ability_id": "master-crafted-weapon-company-of-hunters-dark-angels",
     "name": "Master-crafted Weapon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2056,7 +2056,7 @@
     "community_notes": "Ravenwing model only; the bearer's melee weapons"
   },
   {
-    "ability_id": "recon-hunter-company-of-hunters",
+    "ability_id": "recon-hunter-company-of-hunters-dark-angels",
     "name": "Recon Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2085,7 +2085,7 @@
     "community_notes": "Ravenwing model only; models in the bearer's unit have Scouts 9\""
   },
   {
-    "ability_id": "fulgus-magna-lions-blade-task-force",
+    "ability_id": "fulgus-magna-lions-blade-task-force-dark-angels",
     "name": "Fulgus Magna",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2113,7 +2113,7 @@
     "community_notes": "Deathwing model only. Once per battle, at the end of the opponent's turn, if the bearer's unit is unengaged it can be removed and placed into Strategic Reserves"
   },
   {
-    "ability_id": "lord-of-the-hunt-lions-blade-task-force",
+    "ability_id": "lord-of-the-hunt-lions-blade-task-force-dark-angels",
     "name": "Lord of the Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2169,7 +2169,7 @@
     "community_notes": "Ravenwing model only"
   },
   {
-    "ability_id": "calibanite-armaments-lions-blade-task-force",
+    "ability_id": "calibanite-armaments-lions-blade-task-force-dark-angels",
     "name": "Calibanite Armaments",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2200,7 +2200,7 @@
     "community_notes": "The bearer's melee weapons only"
   },
   {
-    "ability_id": "stalwart-champion-lions-blade-task-force",
+    "ability_id": "stalwart-champion-lions-blade-task-force-dark-angels",
     "name": "Stalwart Champion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2244,7 +2244,7 @@
     "community_notes": "Captain, Chaplain or Lieutenant model only; applies to models in the bearer's unit"
   },
   {
-    "ability_id": "weapons-of-the-first-legion-unforgiven-task-force",
+    "ability_id": "weapons-of-the-first-legion-unforgiven-task-force-dark-angels",
     "name": "Weapons of the First Legion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2300,7 +2300,7 @@
     "community_notes": "The bearer's melee weapons; while the bearer is Battle-shocked the bonuses become +2 instead"
   },
   {
-    "ability_id": "stubborn-tenacity-unforgiven-task-force",
+    "ability_id": "stubborn-tenacity-unforgiven-task-force-dark-angels",
     "name": "Stubborn Tenacity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2373,7 +2373,7 @@
     "community_notes": "While the bearer is leading a unit"
   },
   {
-    "ability_id": "pennant-of-remembrance-unforgiven-task-force",
+    "ability_id": "pennant-of-remembrance-unforgiven-task-force-dark-angels",
     "name": "Pennant of Remembrance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2422,7 +2422,7 @@
     "community_notes": "Ancient model only; applies to models in the unit the bearer is leading (4+ replaces 6+ while Battle-shocked)"
   },
   {
-    "ability_id": "shroud-of-heroes-unforgiven-task-force",
+    "ability_id": "shroud-of-heroes-unforgiven-task-force-dark-angels",
     "name": "Shroud of Heroes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2503,7 +2503,7 @@
     "community_notes": "Rolled when the bearer is destroyed; it returns unengaged with 3 wounds (full wounds if it was Battle-shocked when destroyed), unattached and with a starting strength of 1"
   },
   {
-    "ability_id": "tempered-in-battle-aura-wrath-of-the-rock",
+    "ability_id": "tempered-in-battle-aura-wrath-of-the-rock-dark-angels",
     "name": "Tempered in Battle (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2565,7 +2565,7 @@
     "community_notes": "Friendly Adeptus Astartes units within 6\" of the bearer re-roll Battle-shock and Leadership tests"
   },
   {
-    "ability_id": "ancient-weapons-wrath-of-the-rock",
+    "ability_id": "ancient-weapons-wrath-of-the-rock-dark-angels",
     "name": "Ancient Weapons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2621,7 +2621,7 @@
     "community_notes": "The bearer's melee weapons only"
   },
   {
-    "ability_id": "deathwing-assault-wrath-of-the-rock",
+    "ability_id": "deathwing-assault-wrath-of-the-rock-dark-angels",
     "name": "Deathwing Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2657,7 +2657,7 @@
     "community_notes": "Deathwing model with Deep Strike only: the bearer's unit can arrive in the Reinforcements step of your first, second or third Movement phase regardless of mission rules"
   },
   {
-    "ability_id": "lord-of-the-ravenwing-wrath-of-the-rock",
+    "ability_id": "lord-of-the-ravenwing-wrath-of-the-rock-dark-angels",
     "name": "Lord of the Ravenwing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2699,7 +2699,7 @@
     "community_notes": "Ravenwing model only"
   },
   {
-    "ability_id": "limitless-zeal-interrogation-conclave",
+    "ability_id": "limitless-zeal-interrogation-conclave-dark-angels",
     "name": "Limitless Zeal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2729,7 +2729,7 @@
     "community_notes": "Chaplain model only"
   },
   {
-    "ability_id": "inescapable-interrogation-interrogation-conclave",
+    "ability_id": "inescapable-interrogation-interrogation-conclave-dark-angels",
     "name": "Inescapable Interrogation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2760,7 +2760,7 @@
     "community_notes": "Chaplain model only"
   },
   {
-    "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit",
+    "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",
     "name": "Thundercowl Turbines (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2788,7 +2788,7 @@
     "community_notes": "Upgrade: Ravenwing Fly unit only. In your first Movement phase this unit can make an ingress move"
   },
   {
-    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit",
+    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
     "name": "Nightforged Battery (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2830,7 +2830,7 @@
     "community_notes": "Upgrade: Land Speeder Vengeance unit only. Re-roll rolls that determine a weapon's number of Attacks, and Hazard rolls"
   },
   {
-    "ability_id": "petition-of-stability-upgrade-dark-age-arsenal",
+    "ability_id": "petition-of-stability-upgrade-dark-age-arsenal-dark-angels",
     "name": "Petition of Stability (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2861,7 +2861,7 @@
     "community_notes": "Upgrade: this unit's plasma ranged attacks only"
   },
   {
-    "ability_id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal",
+    "ability_id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal-dark-angels",
     "name": "Entreaty of Perpetual Ardour (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2898,5 +2898,1749 @@
       "duration": "permanent"
     },
     "community_notes": "Upgrade: Hellblaster Squad only. Snap shooting attacks hit on unmodified hit rolls of 5+"
+  },
+  {
+    "ability_id": "astartes-banner-dark-angels",
+    "name": "Astartes Banner",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "0a5a1c2fa83f04b06c4fd9a8c78b29fb44558cde5ea8333958017cc2ab857d6c",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ravenwing-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "book-of-salvation-dark-angels",
+    "name": "Book of Salvation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9c6fd7f2b3402fdb228a7bf132eb9f568da2cce5c699ff474cf486b56179c332",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "subject": "this-model"
+          },
+          "effect": {
+            "type": "test",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "modifier": {
+              "test": "battle-shock"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ezekiel"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "braziers-of-judgement-dark-angels",
+    "name": "Braziers of Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3e29093135d2643ca69754cfea7c305321d8d6ec97bb2304ef2836f90ab295cd",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "inner-circle-companions"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "cut-off-their-escape-dark-angels",
+    "name": "Cut Off Their Escape",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "656688a4a735d3523742caa3b5bec29561dc4e9ac0ffade8c23bc01b855e556a",
+    "version": "2025-q3",
+    "effect": {
+      "type": "permission",
+      "target": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ],
+        "within": {
+          "range": "engagement"
+        }
+      },
+      "modifier": {
+        "activity": "fall-back",
+        "allow": false
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sammael"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "dark-angels-bodyguard-dark-angels",
+    "name": "Dark Angels Bodyguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "87210492f81198c81fc62fd81a1d1a8eaf2c631ee983f60ce5533e101a9f81ff",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "INFANTRY"
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "lone-operative"
+        }
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "lion-eljonson"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "deathwing-dark-angels",
+    "name": "Deathwing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "34734b2864a338b22147873cbc0835155aa14176bcce1e7a184465a24130e64a",
+    "version": "2025-q3",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "deathwing-terminator-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "engulfing-fear-dark-angels",
+    "name": "Engulfing Fear (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "749513ef6cf036f51a65bc24e2be43ed5d8c2274f3c7fd841926ec43125a2560",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 18
+            }
+          }
+        },
+        "modifier": {
+          "test": "battle-shock"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ezekiel"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "enmity-for-the-unworthy-dark-angels",
+    "name": "Enmity for the Unworthy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "b664fb79f5fe6bd950853547cd3de7e28d9cb90aaba5c53cac79c9a63f306c41",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "all_of": [
+            "CHARACTER"
+          ]
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "inner-circle-companions"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "exemplar-of-hate-dark-angels",
+    "name": "Exemplar of Hate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "33256c0f772d82f5bac3cf157e33a731ac980d4f3d86b74308995cc2bc606248",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "subset": "all-failures"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "asmodai"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "feared-interrogator-dark-angels",
+    "name": "Feared Interrogator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "38cd680cc3c6fa6ad13e15a385da30f3fd49834eccaa717a89d4885b133d66df",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "test",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
+        "modifier": {
+          "test": "battle-shock"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "asmodai"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "grand-master-of-the-deathwing-dark-angels",
+    "name": "Grand Master of the Deathwing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "6662928256e4cf5ae7da75a9c86b54c57f0c5f029fe869125114090d78cd77b8",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Precision"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "belial"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "grand-master-of-the-ravenwing-dark-angels",
+    "name": "Grand Master of the Ravenwing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "64983977105e54aa1b731c5b8bd137e5dd2ca191198d367b7e51d0bb5e32f266",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "charge",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sammael"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "honour-or-death-dark-angels",
+    "name": "Honour or Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "27935b2e8080f326f9eeec8f54e4a5ee06be89b8185cb7881ade7ed31a5f6865",
+    "version": "2025-q3",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "fire-overwatch",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "heroic-intervention",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ravenwing-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "icon-of-old-caliban-dark-angels",
+    "name": "Icon of Old Caliban (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "facce69f31dd10982e0eb9f1a1bedd9a5d2f9e51df17337935a8383e4f506b78",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "modifier": {
+        "ability": "stealth"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ravenwing-darkshroud"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "inner-circle-dark-angels",
+    "name": "Inner Circle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "99c1102a98f35f338145a493a6b095c5e21ece8206e4f8f9bba95b4448d71ba8",
+    "version": "2025-q3",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "this-unit",
+      "modifier": {
+        "reduction": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "deathwing-knights"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "intractable-will-dark-angels",
+    "name": "Intractable Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "8a606502edf57e2fe4c7dfbee920e1385f11b8f7ae13a4be7a1b8591d2025673",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "lazarus"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "knights-of-caliban-dark-angels",
+    "name": "Knights of Caliban",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "a2787baba450ca4111e50d712451b6adb765c6a9d2857c0fa690831d34d1a2ea",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Anti MONSTER 4+"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "ravenwing-black-knights"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "lightning-fast-manoeuvres-dark-angels",
+    "name": "Lightning-fast Manoeuvres",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "efabae04446c4138bba0e51cecd0292fbbdbdbdc0fa7145ae80e7bea2cc1b23d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "nephilim-jetfighter"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "masterful-tactician-dark-angels",
+    "name": "Masterful Tactician",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "c854a368d449138189de6f6b20d2837404d478196ecd791f1bba0844dcabf804",
+    "version": "2025-q3",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "azrael"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "narthecium-dark-angels",
+    "name": "Narthecium",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1aa740d5dba4b6e63b935fe162b32bea53e762a85f631a64983142dc997fa90c",
+    "version": "2025-q3",
+    "effect": {
+      "type": "return-models",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ravenwing-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "primarch-of-the-first-legion-dark-angels",
+    "name": "Primarch of the First Legion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "25b91bcd40ecb90380d825fbbbd9b164cff8cec58fd3990e6b4a6e300ffeaf68",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "scope": "unit",
+      "select": "start-of-command-phase",
+      "min_choices": 2,
+      "max_choices": 2,
+      "options": [
+        {
+          "name": "Mist-wreathed Shadow Realms",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "engaged"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set-up",
+                  "target": "this-unit",
+                  "modifier": {
+                    "to": "strategic-reserves"
+                  }
+                },
+                {
+                  "type": "set-up",
+                  "target": "this-unit",
+                  "modifier": {
+                    "to": "battlefield",
+                    "from": "strategic-reserves",
+                    "ignore_limits": true
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Martial Exemplar",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS ASTARTES"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones",
+                  "weapon_type": "melee"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS ASTARTES"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones",
+                  "weapon_type": "melee"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "No Hiding From the Watchers",
+          "effect": {
+            "type": "feel-no-pain",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ],
+              "within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": "this-model"
+              }
+            },
+            "modifier": {
+              "threshold": 4,
+              "against": "mortal"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "battle-round"
+    },
+    "unit_ids": [
+      "lion-eljonson"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    },
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "psychic-hood-dark-angels",
+    "name": "Psychic Hood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ccee1e0b4d18b1358a9e666380b8960d3462683328db373f872871fd2b608439",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 4
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ezekiel"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "stasis-bomb-dark-angels",
+    "name": "Stasis Bomb",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ce231245c155fdb271340f0470f599578955f7cc205c569e4fa01421a8337f41",
+    "version": "2025-q3",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "defender",
+      "modifier": {
+        "count": "D3"
+      }
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "unit_ids": [
+      "ravenwing-dark-talon"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-turn"
+    },
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "storm-of-vengeance-dark-angels",
+    "name": "Storm of Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "14f917d5741c5020407a3ba0547832ddeda6ceb33128fa1422ac577c6a9885d4",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "excluding": "this-unit",
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-model",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "as_if": "shooting-phase"
+            }
+          },
+          {
+            "type": "targeting",
+            "target": "this-model",
+            "modifier": {
+              "by": "this-model",
+              "may": "must-target",
+              "target": "event-subject",
+              "kind": "shoot"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "land-speeder-vengeance"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "usage": {
+      "frequency": "once-per-turn"
+    },
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "strikes-of-retribution-dark-angels",
+    "name": "Strikes of Retribution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3b543a564051ffe6892f8147c55d695e295c2957faa696145765854709c624ea",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "defender",
+        "modifier": {
+          "count": "1"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "belial"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "supreme-grand-master-dark-angels",
+    "name": "Supreme Grand Master",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e46b158be4d4c9b976d8f9273b013f67d2ab6a55fdb0d126979763f56281ae9b",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Sustained Hits 1"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "azrael"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "the-deathwing-dark-angels",
+    "name": "The Deathwing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "5ec857a368b1600628338d051bcb5c3da6ca34975abbf43b9cd78b36d80a9cc7",
+    "version": "2025-q3",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "dark-angels",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "the-emperors-shield-dark-angels",
+    "name": "The Emperor’s Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7d5285b51fdc4865cda2e43d27e876f546b620c298195cdd630953d7352e6d6a",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
+          },
+          "comparison": "greater-than",
+          "right": {
+            "of": "defender",
+            "stat": "T"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "lion-eljonson"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "the-lion-helm-dark-angels",
+    "name": "The Lion Helm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "f6a6ff15cf505322625923d2abe2a1883d1b806e16572c6cacba44c11626ed5d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "azrael"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    },
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "the-ravenwing-dark-angels",
+    "name": "The Ravenwing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "289c22b214142132934cb7818c33f615bd9960ba445b76309e97263b383d9af4",
+    "version": "2025-q3",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "dark-angels",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "the-spiritshield-helm-dark-angels",
+    "name": "The Spiritshield Helm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2cbf343b90cbb8c7fea5bb638b9abc1cb51b4f4d9e740e9b536fc5b3276bbeef",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 3,
+        "against": "psychic"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "lazarus"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "the-unforgiven-dark-angels",
+    "name": "The Unforgiven",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "d572eb1d97922fa4e9d20781ed2d8f83a0f5cf6f42b69c6a9ec87b6aabd5b697",
+    "version": "2025-q3",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "rule": "composition"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "dark-angels",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "watcher-in-the-dark-dark-angels",
+    "name": "Watcher in the Dark",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9b01541172954a810142aa66ae5787509d0c650e857c2a7b9ea34be565615e98",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "deathwing-knights",
+      "deathwing-terminator-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    },
+    "faction_id": "dark-angels"
+  },
+  {
+    "ability_id": "black-winged-vigilance-dark-angels",
+    "name": "Black-winged Vigilance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "darkflight-pursuit",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bladeguard-dark-angels",
+    "name": "Bladeguard (Once per turn per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vengeful-brethren-bladeguard-veteran-squad"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-3-wounds-remaining-dark-angels",
+    "name": "DAMAGED: 1-3 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "nephilim-jetfighter",
+      "ravenwing-dark-talon"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-catechism-dark-angels",
+    "name": "Dread Catechism",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "interrogation-conclave",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dutiful-tenacity-dark-angels",
+    "name": "Dutiful Tenacity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "wrath-of-the-rock",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gravis-protection-dark-angels",
+    "name": "Gravis Protection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "master-zacharial"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grim-resolve-dark-angels",
+    "name": "Grim Resolve",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "unforgiven-task-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "honoured-knights-dark-angels",
+    "name": "Honoured Knights",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "the-vengeful-brethren",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "in-the-lions-claws-dark-angels",
+    "name": "In The Lion’s Claws",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "lions-blade-task-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "invocations-of-ancient-fury-dark-angels",
+    "name": "Invocations of Ancient Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "dark-age-arsenal",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "masters-of-manoeuvre-dark-angels",
+    "name": "Masters of Manoeuvre",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "company-of-hunters",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "oath-of-moment-dark-angels",
+    "name": "Oath of Moment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "objective-secured-dark-angels",
+    "name": "Objective Secured",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vengeful-brethren-intercessor-squad"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "punishing-volley-dark-angels",
+    "name": "Punishing Volley",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vengeful-brethren-hellblaster-squad"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "supreme-commander-dark-angels",
+    "name": "Supreme Commander",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "lion-eljonson"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teleport-homer-dark-angels",
+    "name": "Teleport Homer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "deathwing-knights",
+      "deathwing-terminator-squad"
+    ],
+    "faction_id": "dark-angels",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vowed-target-dark-angels",
+    "name": "Vowed Target",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "inner-circle-task-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

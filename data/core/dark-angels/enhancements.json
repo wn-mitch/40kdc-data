@@ -1,13 +1,13 @@
 [
   {
-    "id": "shroud-of-heroes-unforgiven-task-force",
+    "id": "shroud-of-heroes-unforgiven-task-force-dark-angels",
     "name": "Shroud of Heroes",
     "detachment_id": "unforgiven-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "shroud-of-heroes-unforgiven-task-force",
+    "ability_id": "shroud-of-heroes-unforgiven-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "stubborn-tenacity-unforgiven-task-force",
+    "id": "stubborn-tenacity-unforgiven-task-force-dark-angels",
     "name": "Stubborn Tenacity",
     "detachment_id": "unforgiven-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "stubborn-tenacity-unforgiven-task-force",
+    "ability_id": "stubborn-tenacity-unforgiven-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "weapons-of-the-first-legion-unforgiven-task-force",
+    "id": "weapons-of-the-first-legion-unforgiven-task-force-dark-angels",
     "name": "Weapons of the First Legion",
     "detachment_id": "unforgiven-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "weapons-of-the-first-legion-unforgiven-task-force",
+    "ability_id": "weapons-of-the-first-legion-unforgiven-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,11 +84,11 @@
     ]
   },
   {
-    "id": "pennant-of-remembrance-unforgiven-task-force",
+    "id": "pennant-of-remembrance-unforgiven-task-force-dark-angels",
     "name": "Pennant of Remembrance",
     "detachment_id": "unforgiven-task-force",
     "cost": 10,
-    "ability_id": "pennant-of-remembrance-unforgiven-task-force",
+    "ability_id": "pennant-of-remembrance-unforgiven-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -117,14 +117,14 @@
     ]
   },
   {
-    "id": "champion-of-the-deathwing-inner-circle-task-force",
+    "id": "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
     "name": "Champion of the Deathwing",
     "detachment_id": "inner-circle-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Deathwing"
     ],
-    "ability_id": "champion-of-the-deathwing-inner-circle-task-force",
+    "ability_id": "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -145,14 +145,14 @@
     ]
   },
   {
-    "id": "eye-of-the-unseen-inner-circle-task-force",
+    "id": "eye-of-the-unseen-inner-circle-task-force-dark-angels",
     "name": "Eye of the Unseen",
     "detachment_id": "inner-circle-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Deathwing"
     ],
-    "ability_id": "eye-of-the-unseen-inner-circle-task-force",
+    "ability_id": "eye-of-the-unseen-inner-circle-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -173,14 +173,14 @@
     ]
   },
   {
-    "id": "singular-will-inner-circle-task-force",
+    "id": "singular-will-inner-circle-task-force-dark-angels",
     "name": "Singular Will",
     "detachment_id": "inner-circle-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Deathwing"
     ],
-    "ability_id": "singular-will-inner-circle-task-force",
+    "ability_id": "singular-will-inner-circle-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -201,14 +201,14 @@
     ]
   },
   {
-    "id": "deathwing-assault-inner-circle-task-force",
+    "id": "deathwing-assault-inner-circle-task-force-dark-angels",
     "name": "Deathwing Assault",
     "detachment_id": "inner-circle-task-force",
     "cost": 30,
     "keyword_restrictions": [
       "Deathwing"
     ],
-    "ability_id": "deathwing-assault-inner-circle-task-force",
+    "ability_id": "deathwing-assault-inner-circle-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -229,14 +229,14 @@
     ]
   },
   {
-    "id": "calibanite-armaments-lions-blade-task-force",
+    "id": "calibanite-armaments-lions-blade-task-force-dark-angels",
     "name": "Calibanite Armaments",
     "detachment_id": "lions-blade-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "calibanite-armaments-lions-blade-task-force",
+    "ability_id": "calibanite-armaments-lions-blade-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -257,14 +257,14 @@
     ]
   },
   {
-    "id": "lord-of-the-hunt-lions-blade-task-force",
+    "id": "lord-of-the-hunt-lions-blade-task-force-dark-angels",
     "name": "Lord of the Hunt",
     "detachment_id": "lions-blade-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "lord-of-the-hunt-lions-blade-task-force",
+    "ability_id": "lord-of-the-hunt-lions-blade-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -285,11 +285,11 @@
     ]
   },
   {
-    "id": "stalwart-champion-lions-blade-task-force",
+    "id": "stalwart-champion-lions-blade-task-force-dark-angels",
     "name": "Stalwart Champion",
     "detachment_id": "lions-blade-task-force",
     "cost": 15,
-    "ability_id": "stalwart-champion-lions-blade-task-force",
+    "ability_id": "stalwart-champion-lions-blade-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -321,14 +321,14 @@
     ]
   },
   {
-    "id": "fulgus-magna-lions-blade-task-force",
+    "id": "fulgus-magna-lions-blade-task-force-dark-angels",
     "name": "Fulgus Magna",
     "detachment_id": "lions-blade-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Deathwing"
     ],
-    "ability_id": "fulgus-magna-lions-blade-task-force",
+    "ability_id": "fulgus-magna-lions-blade-task-force-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -349,14 +349,14 @@
     ]
   },
   {
-    "id": "tempered-in-battle-aura-wrath-of-the-rock",
+    "id": "tempered-in-battle-aura-wrath-of-the-rock-dark-angels",
     "name": "Tempered in Battle (Aura)",
     "detachment_id": "wrath-of-the-rock",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "tempered-in-battle-aura-wrath-of-the-rock",
+    "ability_id": "tempered-in-battle-aura-wrath-of-the-rock-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -377,14 +377,14 @@
     ]
   },
   {
-    "id": "ancient-weapons-wrath-of-the-rock",
+    "id": "ancient-weapons-wrath-of-the-rock-dark-angels",
     "name": "Ancient Weapons",
     "detachment_id": "wrath-of-the-rock",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "ancient-weapons-wrath-of-the-rock",
+    "ability_id": "ancient-weapons-wrath-of-the-rock-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -405,14 +405,14 @@
     ]
   },
   {
-    "id": "lord-of-the-ravenwing-wrath-of-the-rock",
+    "id": "lord-of-the-ravenwing-wrath-of-the-rock-dark-angels",
     "name": "Lord of the Ravenwing",
     "detachment_id": "wrath-of-the-rock",
     "cost": 10,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "lord-of-the-ravenwing-wrath-of-the-rock",
+    "ability_id": "lord-of-the-ravenwing-wrath-of-the-rock-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -433,14 +433,14 @@
     ]
   },
   {
-    "id": "petition-of-stability-upgrade-dark-age-arsenal",
+    "id": "petition-of-stability-upgrade-dark-age-arsenal-dark-angels",
     "name": "Petition of Stability (Upgrade)",
     "detachment_id": "dark-age-arsenal",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "petition-of-stability-upgrade-dark-age-arsenal",
+    "ability_id": "petition-of-stability-upgrade-dark-age-arsenal-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -461,7 +461,7 @@
     ]
   },
   {
-    "id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal",
+    "id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal-dark-angels",
     "name": "Entreaty of Perpetual Ardour (Upgrade)",
     "detachment_id": "dark-age-arsenal",
     "cost": 15,
@@ -469,7 +469,7 @@
       "Adeptus Astartes",
       "Hellblaster Squad"
     ],
-    "ability_id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal",
+    "ability_id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -490,7 +490,7 @@
     ]
   },
   {
-    "id": "thundercowl-turbines-upgrade-darkflight-pursuit",
+    "id": "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",
     "name": "Thundercowl Turbines (Upgrade)",
     "detachment_id": "darkflight-pursuit",
     "cost": 15,
@@ -498,7 +498,7 @@
       "Fly",
       "Ravenwing"
     ],
-    "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit",
+    "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -519,7 +519,7 @@
     ]
   },
   {
-    "id": "nightforged-battery-upgrade-darkflight-pursuit",
+    "id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
     "name": "Nightforged Battery (Upgrade)",
     "detachment_id": "darkflight-pursuit",
     "cost": 15,
@@ -527,7 +527,7 @@
       "Dark Angels",
       "Land Speeder Vengeance"
     ],
-    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit",
+    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -548,14 +548,14 @@
     ]
   },
   {
-    "id": "limitless-zeal-interrogation-conclave",
+    "id": "limitless-zeal-interrogation-conclave-dark-angels",
     "name": "Limitless Zeal",
     "detachment_id": "interrogation-conclave",
     "cost": 10,
     "keyword_restrictions": [
       "Chaplain"
     ],
-    "ability_id": "limitless-zeal-interrogation-conclave",
+    "ability_id": "limitless-zeal-interrogation-conclave-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -576,14 +576,14 @@
     ]
   },
   {
-    "id": "inescapable-interrogation-interrogation-conclave",
+    "id": "inescapable-interrogation-interrogation-conclave-dark-angels",
     "name": "Inescapable Interrogation",
     "detachment_id": "interrogation-conclave",
     "cost": 20,
     "keyword_restrictions": [
       "Chaplain"
     ],
-    "ability_id": "inescapable-interrogation-interrogation-conclave",
+    "ability_id": "inescapable-interrogation-interrogation-conclave-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -604,14 +604,14 @@
     ]
   },
   {
-    "id": "master-crafted-weapon-company-of-hunters",
+    "id": "master-crafted-weapon-company-of-hunters-dark-angels",
     "name": "Master-crafted Weapon",
     "detachment_id": "company-of-hunters",
     "cost": 10,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "master-crafted-weapon-company-of-hunters",
+    "ability_id": "master-crafted-weapon-company-of-hunters-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -632,14 +632,14 @@
     ]
   },
   {
-    "id": "mounted-strategist-company-of-hunters",
+    "id": "mounted-strategist-company-of-hunters-dark-angels",
     "name": "Mounted Strategist",
     "detachment_id": "company-of-hunters",
     "cost": 30,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "mounted-strategist-company-of-hunters",
+    "ability_id": "mounted-strategist-company-of-hunters-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -660,14 +660,14 @@
     ]
   },
   {
-    "id": "master-of-manoeuvre-company-of-hunters",
+    "id": "master-of-manoeuvre-company-of-hunters-dark-angels",
     "name": "Master of Manoeuvre",
     "detachment_id": "company-of-hunters",
     "cost": 15,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "master-of-manoeuvre-company-of-hunters",
+    "ability_id": "master-of-manoeuvre-company-of-hunters-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -688,14 +688,14 @@
     ]
   },
   {
-    "id": "recon-hunter-company-of-hunters",
+    "id": "recon-hunter-company-of-hunters-dark-angels",
     "name": "Recon Hunter",
     "detachment_id": "company-of-hunters",
     "cost": 30,
     "keyword_restrictions": [
       "Ravenwing"
     ],
-    "ability_id": "recon-hunter-company-of-hunters",
+    "ability_id": "recon-hunter-company-of-hunters-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -716,14 +716,14 @@
     ]
   },
   {
-    "id": "the-imperiums-sword-1st-company-task-force",
+    "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
     "name": "The Imperium’s Sword",
     "detachment_id": "1st-company-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-imperiums-sword-1st-company-task-force",
+    "ability_id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -744,14 +744,14 @@
     ]
   },
   {
-    "id": "fear-made-manifest-aura-1st-company-task-force",
+    "id": "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
     "name": "Fear Made Manifest (Aura)",
     "detachment_id": "1st-company-task-force",
     "cost": 30,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "fear-made-manifest-aura-1st-company-task-force",
+    "ability_id": "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -772,7 +772,7 @@
     ]
   },
   {
-    "id": "rites-of-war-1st-company-task-force",
+    "id": "rites-of-war-1st-company-task-force-adeptus-astartes",
     "name": "Rites of War",
     "detachment_id": "1st-company-task-force",
     "cost": 10,
@@ -780,7 +780,7 @@
       "Adeptus Astartes",
       "Terminator"
     ],
-    "ability_id": "rites-of-war-1st-company-task-force",
+    "ability_id": "rites-of-war-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -801,7 +801,7 @@
     ]
   },
   {
-    "id": "iron-resolve-1st-company-task-force",
+    "id": "iron-resolve-1st-company-task-force-adeptus-astartes",
     "name": "Iron Resolve",
     "detachment_id": "1st-company-task-force",
     "cost": 15,
@@ -809,7 +809,7 @@
       "Adeptus Astartes",
       "Terminator"
     ],
-    "ability_id": "iron-resolve-1st-company-task-force",
+    "ability_id": "iron-resolve-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -830,14 +830,14 @@
     ]
   },
   {
-    "id": "artificer-armour-gladius-task-force",
+    "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "artificer-armour-gladius-task-force",
+    "ability_id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -858,14 +858,14 @@
     ]
   },
   {
-    "id": "the-honour-vehement-gladius-task-force",
+    "id": "the-honour-vehement-gladius-task-force-adeptus-astartes",
     "name": "The Honour Vehement",
     "detachment_id": "gladius-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-honour-vehement-gladius-task-force",
+    "ability_id": "the-honour-vehement-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -886,14 +886,14 @@
     ]
   },
   {
-    "id": "adept-of-the-codex-gladius-task-force",
+    "id": "adept-of-the-codex-gladius-task-force-adeptus-astartes",
     "name": "Adept of the Codex",
     "detachment_id": "gladius-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Captain"
     ],
-    "ability_id": "adept-of-the-codex-gladius-task-force",
+    "ability_id": "adept-of-the-codex-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -914,14 +914,14 @@
     ]
   },
   {
-    "id": "fire-discipline-gladius-task-force",
+    "id": "fire-discipline-gladius-task-force-adeptus-astartes",
     "name": "Fire Discipline",
     "detachment_id": "gladius-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "fire-discipline-gladius-task-force",
+    "ability_id": "fire-discipline-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -942,7 +942,7 @@
     ]
   },
   {
-    "id": "fury-of-the-storm-stormlance-task-force",
+    "id": "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
     "name": "Fury of the Storm",
     "detachment_id": "stormlance-task-force",
     "cost": 25,
@@ -950,7 +950,7 @@
       "Adeptus Astartes",
       "Mounted"
     ],
-    "ability_id": "fury-of-the-storm-stormlance-task-force",
+    "ability_id": "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -971,14 +971,14 @@
     ]
   },
   {
-    "id": "portents-of-wisdom-stormlance-task-force",
+    "id": "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
     "name": "Portents of Wisdom",
     "detachment_id": "stormlance-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "portents-of-wisdom-stormlance-task-force",
+    "ability_id": "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -999,14 +999,14 @@
     ]
   },
   {
-    "id": "feinting-withdrawal-stormlance-task-force",
+    "id": "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
     "name": "Feinting Withdrawal",
     "detachment_id": "stormlance-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "feinting-withdrawal-stormlance-task-force",
+    "ability_id": "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1027,7 +1027,7 @@
     ]
   },
   {
-    "id": "hunters-instincts-stormlance-task-force",
+    "id": "hunters-instincts-stormlance-task-force-adeptus-astartes",
     "name": "Hunter’s Instincts",
     "detachment_id": "stormlance-task-force",
     "cost": 25,
@@ -1035,7 +1035,7 @@
       "Adeptus Astartes",
       "Mounted"
     ],
-    "ability_id": "hunters-instincts-stormlance-task-force",
+    "ability_id": "hunters-instincts-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1056,7 +1056,7 @@
     ]
   },
   {
-    "id": "celerity-librarius-conclave",
+    "id": "celerity-librarius-conclave-adeptus-astartes",
     "name": "Celerity",
     "detachment_id": "librarius-conclave",
     "cost": 35,
@@ -1064,7 +1064,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "celerity-librarius-conclave",
+    "ability_id": "celerity-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1085,7 +1085,7 @@
     ]
   },
   {
-    "id": "prescience-librarius-conclave",
+    "id": "prescience-librarius-conclave-adeptus-astartes",
     "name": "Prescience",
     "detachment_id": "librarius-conclave",
     "cost": 20,
@@ -1093,7 +1093,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "prescience-librarius-conclave",
+    "ability_id": "prescience-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1114,7 +1114,7 @@
     ]
   },
   {
-    "id": "obfuscation-librarius-conclave",
+    "id": "obfuscation-librarius-conclave-adeptus-astartes",
     "name": "Obfuscation",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1122,7 +1122,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "obfuscation-librarius-conclave",
+    "ability_id": "obfuscation-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1143,7 +1143,7 @@
     ]
   },
   {
-    "id": "temporal-corridor-librarius-conclave",
+    "id": "temporal-corridor-librarius-conclave-adeptus-astartes",
     "name": "Temporal Corridor",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1151,7 +1151,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "temporal-corridor-librarius-conclave",
+    "ability_id": "temporal-corridor-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1172,7 +1172,7 @@
     ]
   },
   {
-    "id": "fusillade-librarius-conclave",
+    "id": "fusillade-librarius-conclave-adeptus-astartes",
     "name": "Fusillade",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1180,7 +1180,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "fusillade-librarius-conclave",
+    "ability_id": "fusillade-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1201,7 +1201,7 @@
     ]
   },
   {
-    "id": "the-blade-driven-deep-vanguard-spearhead",
+    "id": "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
     "name": "The Blade Driven Deep",
     "detachment_id": "vanguard-spearhead",
     "cost": 25,
@@ -1209,7 +1209,7 @@
       "Adeptus Astartes",
       "Infantry"
     ],
-    "ability_id": "the-blade-driven-deep-vanguard-spearhead",
+    "ability_id": "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1230,14 +1230,14 @@
     ]
   },
   {
-    "id": "ghostweave-cloak-vanguard-spearhead",
+    "id": "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
     "name": "Ghostweave Cloak",
     "detachment_id": "vanguard-spearhead",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "ghostweave-cloak-vanguard-spearhead",
+    "ability_id": "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1258,14 +1258,14 @@
     ]
   },
   {
-    "id": "execute-and-redeploy-vanguard-spearhead",
+    "id": "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
     "name": "Execute and Redeploy",
     "detachment_id": "vanguard-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "execute-and-redeploy-vanguard-spearhead",
+    "ability_id": "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1286,14 +1286,14 @@
     ]
   },
   {
-    "id": "shadow-war-veteran-vanguard-spearhead",
+    "id": "shadow-war-veteran-vanguard-spearhead-adeptus-astartes",
     "name": "Shadow War Veteran",
     "detachment_id": "vanguard-spearhead",
     "cost": 30,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "shadow-war-veteran-vanguard-spearhead",
+    "ability_id": "shadow-war-veteran-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1314,14 +1314,14 @@
     ]
   },
   {
-    "id": "laurels-of-thunder-orbital-assault-force",
+    "id": "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
     "name": "Laurels of Thunder",
     "detachment_id": "orbital-assault-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "laurels-of-thunder-orbital-assault-force",
+    "ability_id": "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1342,14 +1342,14 @@
     ]
   },
   {
-    "id": "veteran-of-the-vanguard-orbital-assault-force",
+    "id": "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
     "name": "Veteran of the Vanguard",
     "detachment_id": "orbital-assault-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "veteran-of-the-vanguard-orbital-assault-force",
+    "ability_id": "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1370,14 +1370,14 @@
     ]
   },
   {
-    "id": "orbital-uplink-reliquary-orbital-assault-force",
+    "id": "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
     "name": "Orbital Uplink Reliquary",
     "detachment_id": "orbital-assault-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "orbital-uplink-reliquary-orbital-assault-force",
+    "ability_id": "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1398,14 +1398,14 @@
     ]
   },
   {
-    "id": "indomitable-fury-anvil-siege-force",
+    "id": "indomitable-fury-anvil-siege-force-adeptus-astartes",
     "name": "Indomitable Fury",
     "detachment_id": "anvil-siege-force",
     "cost": 20,
     "keyword_restrictions": [
       "Gravis"
     ],
-    "ability_id": "indomitable-fury-anvil-siege-force",
+    "ability_id": "indomitable-fury-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1426,14 +1426,14 @@
     ]
   },
   {
-    "id": "fleet-commander-anvil-siege-force",
+    "id": "fleet-commander-anvil-siege-force-adeptus-astartes",
     "name": "Fleet Commander",
     "detachment_id": "anvil-siege-force",
     "cost": 15,
     "keyword_restrictions": [
       "Captain"
     ],
-    "ability_id": "fleet-commander-anvil-siege-force",
+    "ability_id": "fleet-commander-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1454,14 +1454,14 @@
     ]
   },
   {
-    "id": "stoic-defender-anvil-siege-force",
+    "id": "stoic-defender-anvil-siege-force-adeptus-astartes",
     "name": "Stoic Defender",
     "detachment_id": "anvil-siege-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "stoic-defender-anvil-siege-force",
+    "ability_id": "stoic-defender-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1482,14 +1482,14 @@
     ]
   },
   {
-    "id": "architect-of-war-anvil-siege-force",
+    "id": "architect-of-war-anvil-siege-force-adeptus-astartes",
     "name": "Architect of War",
     "detachment_id": "anvil-siege-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "architect-of-war-anvil-siege-force",
+    "ability_id": "architect-of-war-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1510,14 +1510,14 @@
     ]
   },
   {
-    "id": "champion-of-humanity-firestorm-assault-force",
+    "id": "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
     "name": "Champion of Humanity",
     "detachment_id": "firestorm-assault-force",
     "cost": 10,
     "keyword_restrictions": [
       "Tacticus"
     ],
-    "ability_id": "champion-of-humanity-firestorm-assault-force",
+    "ability_id": "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1538,7 +1538,7 @@
     ]
   },
   {
-    "id": "war-tempered-artifice-firestorm-assault-force",
+    "id": "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
     "name": "War-tempered Artifice",
     "detachment_id": "firestorm-assault-force",
     "cost": 25,
@@ -1546,7 +1546,7 @@
       "Adeptus Astartes",
       "Infantry"
     ],
-    "ability_id": "war-tempered-artifice-firestorm-assault-force",
+    "ability_id": "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1567,14 +1567,14 @@
     ]
   },
   {
-    "id": "forged-in-battle-firestorm-assault-force",
+    "id": "forged-in-battle-firestorm-assault-force-adeptus-astartes",
     "name": "Forged in Battle",
     "detachment_id": "firestorm-assault-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "forged-in-battle-firestorm-assault-force",
+    "ability_id": "forged-in-battle-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1595,14 +1595,14 @@
     ]
   },
   {
-    "id": "adamantine-mantle-firestorm-assault-force",
+    "id": "adamantine-mantle-firestorm-assault-force-adeptus-astartes",
     "name": "Adamantine Mantle",
     "detachment_id": "firestorm-assault-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "adamantine-mantle-firestorm-assault-force",
+    "ability_id": "adamantine-mantle-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1623,14 +1623,14 @@
     ]
   },
   {
-    "id": "target-augury-web-ironstorm-spearhead",
+    "id": "target-augury-web-ironstorm-spearhead-adeptus-astartes",
     "name": "Target Augury Web",
     "detachment_id": "ironstorm-spearhead",
     "cost": 30,
     "keyword_restrictions": [
       "Techmarine"
     ],
-    "ability_id": "target-augury-web-ironstorm-spearhead",
+    "ability_id": "target-augury-web-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1651,14 +1651,14 @@
     ]
   },
   {
-    "id": "the-flesh-is-weak-ironstorm-spearhead",
+    "id": "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
     "name": "The Flesh Is Weak",
     "detachment_id": "ironstorm-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-flesh-is-weak-ironstorm-spearhead",
+    "ability_id": "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1679,14 +1679,14 @@
     ]
   },
   {
-    "id": "adept-of-the-omnissiah-ironstorm-spearhead",
+    "id": "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
     "name": "Adept of the Omnissiah",
     "detachment_id": "ironstorm-spearhead",
     "cost": 35,
     "keyword_restrictions": [
       "Techmarine"
     ],
-    "ability_id": "adept-of-the-omnissiah-ironstorm-spearhead",
+    "ability_id": "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1707,14 +1707,14 @@
     ]
   },
   {
-    "id": "master-of-machine-war-ironstorm-spearhead",
+    "id": "master-of-machine-war-ironstorm-spearhead-adeptus-astartes",
     "name": "Master of Machine War",
     "detachment_id": "ironstorm-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "master-of-machine-war-ironstorm-spearhead",
+    "ability_id": "master-of-machine-war-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1735,14 +1735,14 @@
     ]
   },
   {
-    "id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
+    "id": "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
     "name": "Bellicose Weapon Spirits (Upgrade)",
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Speeder"
     ],
-    "ability_id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
+    "ability_id": "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1763,14 +1763,14 @@
     ]
   },
   {
-    "id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
+    "id": "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes",
     "name": "Raptorial Cogitator Core (Upgrade)",
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Speeder"
     ],
-    "ability_id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
+    "ability_id": "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1791,14 +1791,14 @@
     ]
   },
   {
-    "id": "shroud-field-subversion-assets",
+    "id": "shroud-field-subversion-assets-adeptus-astartes",
     "name": "Shroud Field",
     "detachment_id": "subversion-assets",
     "cost": 20,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "shroud-field-subversion-assets",
+    "ability_id": "shroud-field-subversion-assets-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1819,7 +1819,7 @@
     ]
   },
   {
-    "id": "death-in-the-dark-upgrade-subversion-assets",
+    "id": "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes",
     "name": "Death in the Dark (Upgrade)",
     "detachment_id": "subversion-assets",
     "cost": 15,
@@ -1827,7 +1827,7 @@
       "Infantry",
       "Phobos"
     ],
-    "ability_id": "death-in-the-dark-upgrade-subversion-assets",
+    "ability_id": "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1848,14 +1848,14 @@
     ]
   },
   {
-    "id": "liberator-armoured-speartip",
+    "id": "liberator-armoured-speartip-adeptus-astartes",
     "name": "Liberator",
     "detachment_id": "armoured-speartip",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "liberator-armoured-speartip",
+    "ability_id": "liberator-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1876,14 +1876,14 @@
     ]
   },
   {
-    "id": "tip-of-the-spear-armoured-speartip",
+    "id": "tip-of-the-spear-armoured-speartip-adeptus-astartes",
     "name": "Tip of the Spear",
     "detachment_id": "armoured-speartip",
     "cost": 40,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "tip-of-the-spear-armoured-speartip",
+    "ability_id": "tip-of-the-spear-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1904,11 +1904,11 @@
     ]
   },
   {
-    "id": "shock-deployment-armoured-speartip",
+    "id": "shock-deployment-armoured-speartip-adeptus-astartes",
     "name": "Shock Deployment",
     "detachment_id": "armoured-speartip",
     "cost": 20,
-    "ability_id": "shock-deployment-armoured-speartip",
+    "ability_id": "shock-deployment-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1939,14 +1939,14 @@
     ]
   },
   {
-    "id": "armoured-commander-armoured-speartip",
+    "id": "armoured-commander-armoured-speartip-adeptus-astartes",
     "name": "Armoured Commander",
     "detachment_id": "armoured-speartip",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "armoured-commander-armoured-speartip",
+    "ability_id": "armoured-commander-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1967,14 +1967,14 @@
     ]
   },
   {
-    "id": "eye-of-the-primarch-bastion-task-force",
+    "id": "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
     "name": "Eye of the Primarch",
     "detachment_id": "bastion-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "eye-of-the-primarch-bastion-task-force",
+    "ability_id": "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1995,14 +1995,14 @@
     ]
   },
   {
-    "id": "hero-of-the-chapter-bastion-task-force",
+    "id": "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
     "name": "Hero of the Chapter",
     "detachment_id": "bastion-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "hero-of-the-chapter-bastion-task-force",
+    "ability_id": "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2023,14 +2023,14 @@
     ]
   },
   {
-    "id": "blades-of-valour-bastion-task-force",
+    "id": "blades-of-valour-bastion-task-force-adeptus-astartes",
     "name": "Blades of Valour",
     "detachment_id": "bastion-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "blades-of-valour-bastion-task-force",
+    "ability_id": "blades-of-valour-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2051,14 +2051,14 @@
     ]
   },
   {
-    "id": "bombast-omnivox-bastion-task-force",
+    "id": "bombast-omnivox-bastion-task-force-adeptus-astartes",
     "name": "Bombast Omnivox",
     "detachment_id": "bastion-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "bombast-omnivox-bastion-task-force",
+    "ability_id": "bombast-omnivox-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2079,14 +2079,14 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels",
+    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
     "cost": 25,
     "keyword_restrictions": [
       "Gravis"
     ],
-    "ability_id": "honour-indefatigable-ceramite-sentinels",
+    "ability_id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2107,14 +2107,14 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels",
+    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "castellum-omnivox-ceramite-sentinels",
+    "ability_id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2135,14 +2135,14 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels",
+    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "defensive-mastery-ceramite-sentinels",
+    "ability_id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2163,7 +2163,7 @@
     ]
   },
   {
-    "id": "redoubtable-machine-spirit-headhunter-task-force",
+    "id": "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
     "name": "Redoubtable Machine Spirit",
     "detachment_id": "headhunter-task-force",
     "cost": 25,
@@ -2171,7 +2171,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "redoubtable-machine-spirit-headhunter-task-force",
+    "ability_id": "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2192,7 +2192,7 @@
     ]
   },
   {
-    "id": "gunnery-honours-headhunter-task-force",
+    "id": "gunnery-honours-headhunter-task-force-adeptus-astartes",
     "name": "Gunnery Honours",
     "detachment_id": "headhunter-task-force",
     "cost": 20,
@@ -2200,7 +2200,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "gunnery-honours-headhunter-task-force",
+    "ability_id": "gunnery-honours-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2221,7 +2221,7 @@
     ]
   },
   {
-    "id": "firestorm-coordinators-headhunter-task-force",
+    "id": "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
     "name": "Firestorm Coordinators",
     "detachment_id": "headhunter-task-force",
     "cost": 20,
@@ -2229,7 +2229,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "firestorm-coordinators-headhunter-task-force",
+    "ability_id": "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2250,7 +2250,7 @@
     ]
   },
   {
-    "id": "astartes-tank-ace-aura-headhunter-task-force",
+    "id": "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes",
     "name": "Astartes Tank Ace (Aura)",
     "detachment_id": "headhunter-task-force",
     "cost": 40,
@@ -2258,7 +2258,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "astartes-tank-ace-aura-headhunter-task-force",
+    "ability_id": "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2279,11 +2279,11 @@
     ]
   },
   {
-    "id": "dedicated-gunship-orbital-assault-force",
+    "id": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
     "name": "Dedicated Gunship",
     "detachment_id": "orbital-assault-force",
     "cost": 15,
-    "ability_id": "dedicated-gunship-orbital-assault-force",
+    "ability_id": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2305,7 +2305,7 @@
     ]
   },
   {
-    "id": "dutiful-defenders-the-vengeful-brethren",
+    "id": "dutiful-defenders-the-vengeful-brethren-dark-angels",
     "name": "Dutiful Defenders",
     "detachment_id": "the-vengeful-brethren",
     "cost": 0,
@@ -2322,7 +2322,7 @@
       "Vengeful Brethren Bladeguard Veteran Squad"
     ],
     "upgrade_tag": true,
-    "ability_id": "dutiful-defenders-the-vengeful-brethren",
+    "ability_id": "dutiful-defenders-the-vengeful-brethren-dark-angels",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -2331,7 +2331,7 @@
     ]
   },
   {
-    "id": "supreme-combatant-the-vengeful-brethren",
+    "id": "supreme-combatant-the-vengeful-brethren-dark-angels",
     "name": "Supreme Combatant",
     "detachment_id": "the-vengeful-brethren",
     "cost": 0,
@@ -2349,7 +2349,7 @@
       "Gravis",
       "Vengeful Brethren"
     ],
-    "ability_id": "supreme-combatant-the-vengeful-brethren",
+    "ability_id": "supreme-combatant-the-vengeful-brethren-dark-angels",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -2358,11 +2358,11 @@
     ]
   },
   {
-    "id": "deathwing-assault-wrath-of-the-rock",
+    "id": "deathwing-assault-wrath-of-the-rock-dark-angels",
     "name": "Deathwing Assault",
     "detachment_id": "wrath-of-the-rock",
     "cost": 15,
-    "ability_id": "deathwing-assault-wrath-of-the-rock",
+    "ability_id": "deathwing-assault-wrath-of-the-rock-dark-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

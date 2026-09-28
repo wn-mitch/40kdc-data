@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strafing-run",
+    "source_id": "strafing-run-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -37,7 +37,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "command-uplink",
+    "source_id": "command-uplink-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -49,7 +49,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scuttling-walker",
+    "source_id": "scuttling-walker-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -61,7 +61,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "emanatus-force-field-aura",
+    "source_id": "emanatus-force-field-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -73,7 +73,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "broad-spectrum-data-tether",
+    "source_id": "broad-spectrum-data-tether-onager-dunecrawler-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -85,7 +85,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sentinel-directives",
+    "source_id": "sentinel-directives-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command",
@@ -98,7 +98,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "battle-protocols",
+    "source_id": "battle-protocols-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command",
@@ -112,20 +112,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "elevated-strider",
+    "source_id": "elevated-strider-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -137,7 +124,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "galvanic-field",
+    "source_id": "galvanic-field-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -149,7 +136,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "defend-the-divine-work",
+    "source_id": "defend-the-divine-work-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command",
@@ -177,7 +164,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "focused-hunters",
+    "source_id": "focused-hunters-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -190,7 +177,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "canticles-of-the-omnissiah",
+    "source_id": "canticles-of-the-omnissiah-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -202,7 +189,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "self-repair-mechanisms",
+    "source_id": "self-repair-mechanisms-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -214,7 +201,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "network-override",
+    "source_id": "network-override-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -227,7 +214,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "attached-unit",
+    "source_id": "attached-unit-servitor-battleclade-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -239,7 +226,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blistering-salvoes",
+    "source_id": "blistering-salvoes-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -264,7 +251,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dread-snipers",
+    "source_id": "dread-snipers-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -276,7 +263,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "achillan-eye",
+    "source_id": "achillan-eye-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -289,7 +276,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "voices-in-the-code",
+    "source_id": "voices-in-the-code-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -301,7 +288,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "neurostatic-interference-aura",
+    "source_id": "neurostatic-interference-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -325,7 +312,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aerial-deployment",
+    "source_id": "aerial-deployment-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -337,7 +324,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rad-saturation-aura",
+    "source_id": "rad-saturation-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -349,7 +336,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "enhanced-data-tether",
+    "source_id": "enhanced-data-tether-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -361,7 +348,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "omnispex",
+    "source_id": "omnispex-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -373,7 +360,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dataspike",
+    "source_id": "dataspike-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -385,7 +372,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ride-the-thermals",
+    "source_id": "ride-the-thermals-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -399,7 +386,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "breaching-command",
+    "source_id": "breaching-command-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -412,7 +399,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "optimised-gait",
+    "source_id": "optimised-gait-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -425,7 +412,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "seekers-of-divine-arcana",
+    "source_id": "seekers-of-divine-arcana-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -437,7 +424,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "electro-shock",
+    "source_id": "electro-shock-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -451,7 +438,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-9",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -463,7 +450,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tactica-obliqua",
+    "source_id": "tactica-obliqua-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -475,7 +462,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dynamic-efficiency",
+    "source_id": "dynamic-efficiency-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -488,7 +475,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "line-breakers",
+    "source_id": "line-breakers-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -500,19 +487,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "omnissiahs-blessing",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vengeance-for-the-omnissiah",
+    "source_id": "vengeance-for-the-omnissiah-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -525,7 +500,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "control-edict",
+    "source_id": "control-edict-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -538,7 +513,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "servo-skull-uplink",
+    "source_id": "servo-skull-uplink-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command",
@@ -554,7 +529,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -567,7 +542,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fire-support",
+    "source_id": "fire-support-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -581,7 +556,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "repulsor-grid",
+    "source_id": "repulsor-grid-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -593,7 +568,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "searing-conflagration",
+    "source_id": "searing-conflagration-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -606,7 +581,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bomb-rack",
+    "source_id": "bomb-rack-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -618,7 +593,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "objective-scouted-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "command"
@@ -630,699 +605,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "objective-scouted",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eradication-protocols",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "targeting-override",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guided-retreat",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "motive-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "auto-divinatory-targeting",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "benevolence-of-the-omnissiah",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "incantation-of-the-iron-soul",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chant-of-the-remorseless-fist",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "luminescent-blessing",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "priority-reclamation",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggressor-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pre-calibrated-purge-solution",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "auto-oracular-retrieval",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "baleful-halo",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bulwark-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "machine-spirit-resurgent",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "machine-superiority",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cached-acquisition",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "neural-overload",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggressive-impulse",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "analytical-divination",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "transcendent-cogitation",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "isolate-and-destroy",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shroud-protocols",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "programmed-withdrawal",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bionic-endurance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "expedited-purge-protocol",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "verse-of-vengeance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tribute-of-emphatic-veneration",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "litany-of-the-electromancer",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reactive-safeguard",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "extinction-order",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "binharic-offence",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infoslave-skull",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "incense-exhausts",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lethal-dosage",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "peerless-eradicator",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "autoclavic-denunciation",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cantic-thrallnet",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "veiled-hunter",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "battle-sphere-uplink",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mechanicus-locum",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "data-blessed-autosermon",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "temporcopia",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "magos",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "genetor",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "logis",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "artisan",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lord-of-machines",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arch-negator",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "transoracular-dyad-wafers",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cognitive-reinforcement",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sanctified-ordnance",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inloaded-lethality",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "noospheric-transference",
+    "source_id": "noospheric-transference-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1336,7 +619,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cyber-psalm-programming",
+    "source_id": "cyber-psalm-programming-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1349,7 +632,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "stealth-optimisation",
+    "source_id": "stealth-optimisation-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1361,7 +644,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "benedictions-of-the-omnissiah",
+    "source_id": "benedictions-of-the-omnissiah-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1376,7 +659,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "acquisition-at-any-cost",
+    "source_id": "acquisition-at-any-cost-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1390,7 +673,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rad-bombardment",
+    "source_id": "rad-bombardment-adeptus-mechanicus",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1402,7 +685,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "noospheric-recon",
+    "source_id": "noospheric-recon-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1414,31 +697,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "explorator-dispensation",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stealth-screened-cybercanids",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "defect-scrutiny",
+    "source_id": "war-form-mantles-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1450,67 +709,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "repolarised-augurs",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "clandestine-reposition",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "war-form-mantles",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vinghs-wafers-of-dynamism",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tl-409",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scriptural-prognosis",
+    "source_id": "cyber-static-canticles-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1523,229 +722,11 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "overloaded-safeguards",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "holy-avarice",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cyber-static-canticles",
+    "source_id": "murderous-imperative-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
       "shooting",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "voltagheist-reliquary",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "electromiasmic-brazier",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "echoes-of-the-conduit-wars",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chant-of-electrotraction",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "momentum-feedback",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "murderous-imperative",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "omnicogitator",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "martial-signatum-amplificator",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "belicosa-class-capacitor-vanes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "omnissiahs-fury",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "servo-driven-charge",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "threat-cogitation-targeters",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unrelenting-aggression",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "precision-onslaught",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unshackled-wrath",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "analytic-reprisals",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",

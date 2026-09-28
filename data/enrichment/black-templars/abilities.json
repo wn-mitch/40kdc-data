@@ -1,0 +1,2547 @@
+[
+  {
+    "ability_id": "attached-unit-black-templars",
+    "name": "Attached Unit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "bdf606013793b7b987b2dda59f4efa27312dd37634860126a98a0e121d21c77c",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "attachment",
+          "with": {
+            "all_of": [
+              "INTERCESSOR SQUAD"
+            ]
+          },
+          "led_by": "character"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sword-brethren-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "condemnatory-annihilation-black-templars",
+    "name": "Condemnatory Annihilation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "d0347ef7766395605d50db74feb3c26288eac4d62ed42f9fc7ccad164d6f5610",
+    "version": "2025-q3",
+    "effect": {
+      "type": "test",
+      "target": {
+        "owner": "enemy",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "modifier": {
+        "test": "battle-shock"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "execrator"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "crusade-of-wrath-black-templars",
+    "name": "Crusade of Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "f87c982dedc5c7bf649624f881aabada1b6801f44b7983b2c37b3371112c4f42",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "high-marshal-helbrecht"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "exploit-their-cowardice-black-templars",
+    "name": "Exploit Their Cowardice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e73a41f48599a1b346e72923096a461c9b568b58c2489f0f60481581906d88b1",
+    "version": "2025-q3",
+    "effect": {
+      "type": "permission",
+      "target": {
+        "owner": "enemy",
+        "within": {
+          "range": "engagement"
+        }
+      },
+      "modifier": {
+        "activity": "fall-back",
+        "allow": false
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sword-brethren-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "heirs-of-sigismund-black-templars",
+    "name": "Heirs of Sigismund",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e6cad7cff38c5c5929e8320fb24d32d88d7d5ac0df41ea6bc999371223ceae49",
+    "version": "2025-q3",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "rule": "composition"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "black-templars",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "high-marshal-black-templars",
+    "name": "High Marshal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "d1f25b9b1a9213a8ba9e208d8f0201442e3ee4fc854ab5d9f5cb9a0e05b0f383",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "defender",
+        "modifier": {
+          "count": "D3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "high-marshal-helbrecht"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "inspirational-exemplar-black-templars",
+    "name": "Inspirational Exemplar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "547f845bd67a1c7449e693e49bbf51e024355a4d750d7a75bd666ec7143f9ff1",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "marshal"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "interception-strike-black-templars",
+    "name": "Interception Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "74e8c8893547142dc00a79c6ffb4c1d4e6e18ced2d1774be22bd119d90dc97af",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              },
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "subset": "all-failures",
+          "weapon_type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "repulsor-executioner"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "judgement-of-the-weak-black-templars",
+    "name": "Judgement of the Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "5c9b5049d47ddf263742c51442ccc811257bb31ef63c3395d00a9685bcf2035d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "permission",
+      "target": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ],
+        "within": {
+          "range": "engagement"
+        }
+      },
+      "modifier": {
+        "activity": "fall-back",
+        "allow": false
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "terminator-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "legacy-of-jerulas-black-templars",
+    "name": "Legacy of Jerulas",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "16387755d00ab25c2fac4d165940703ee2332e62da3ba9400977bdd7afb37411",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "land-raider-crusader"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "auto-generated, partial",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "litanies-of-the-devout-black-templars",
+    "name": "Litanies of the Devout",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "73aa69c0901626f86bc1becd8015204b2a95f04bcd46be7042e58258d819c3d4",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "subset": "all-failures"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaplain-grimaldus"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "martial-honour-black-templars",
+    "name": "Martial Honour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "cce761fe1b164a52d142203e1a32bff239ce09bc2254e8d12c0302d248d26c1d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": {
+                "owner": "enemy"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "battle-shocked"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 5
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "crusade-ancient"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    },
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "pious-fervour-black-templars",
+    "name": "Pious Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e8070678a8d2b44a9e316f805136659f8b856b839eb75fa280a4825bf73d0b09",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1,
+        "weapon_type": "melee"
+      },
+      "scaling": {
+        "per": 1,
+        "of": "enemy-units-in-range",
+        "within_inches": 6,
+        "max_value": 3
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "marshal"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "prioritised-eradication-black-templars",
+    "name": "Prioritised Eradication",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "bb29ba4796d54349749e56f7ab4f4d3c57dfdef2fadad60bc443aea24b3cb89f",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "castellan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "remorseless-persecution-black-templars",
+    "name": "Remorseless Persecution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "a72f95578471fa6c2b6bdd93e84a197320634ee5aea9f8f37fe44846bdd02f55",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "after": [
+            "advance"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "execrator"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "righteous-zeal-black-templars",
+    "name": "Righteous Zeal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ad8b4602a2d23317dd3e5a2386cc5878fd873e63aaa56011966c33abc503733e",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "object": "event-object",
+              "filter": {
+                "attack_type": "ranged"
+              },
+              "window": "event"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "battle-shocked"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "within",
+                "parameters": {
+                  "of": {
+                    "owner": "enemy"
+                  },
+                  "range": "engagement"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6+2"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "crusader-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "stabilised-disembarkation-black-templars",
+    "name": "Stabilised Disembarkation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "cae4281885682f93237474fad0c22af7592db225d962f33055254111fd2f4874",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "owner": "friendly",
+          "eligibility": {
+            "type": "unit-state",
+            "parameters": {
+              "state": "embarked",
+              "with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "move",
+          "target": "recipient",
+          "modifier": {
+            "move_type": "disembark",
+            "ends_within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-unit",
+              "wholly": true
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "repulsor"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "[APPROX] After an enemy unit shoots this TRANSPORT in your opponent's Shooting phase, its embarked units can disembark and be set up wholly within 6\" of it and outside Engagement Range; modeled as a reactive move. The disembark itself and the placement rules are not modeled. Full rule in raw-text store.",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "templar-vows-black-templars",
+    "name": "Templar Vows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9e7f49a4dd74452cc744881680127e919668480316d33c87802fb86b473ce732",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "subset": "all-failures"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "abilities": [
+                "Precision"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "black-templars",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "community_notes": "auto-generated from faction rule",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "temple-relics-black-templars",
+    "name": "Temple Relics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3cc157f8ed0ac8c88cb0d43d050fd78df9d64b5583be09dcd5b60f068e72e40b",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "CENOBYTE SERVITOR"
+              ]
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "scope": "unit",
+        "select": "command-phase",
+        "options": [
+          {
+            "name": "Banner of the Emperor Victorious",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "advance",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "charge",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "Column from the Major Altar",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "T",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "name": "Water from the Stoup of Elucidation",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1,
+                "weapon_type": "melee"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "chaplain-grimaldus"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "vehement-aggression-black-templars",
+    "name": "Vehement Aggression",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7473a27caec0129b34340e0b780b3177c48f6faaf4573ea9d4f4aefc9ecdc7d9",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "castellan"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "vengeful-exhortation-black-templars",
+    "name": "Vengeful Exhortation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7b168e170752b37d5fd1a8a570a03e082f68d777d4def5fea8980660f9785bbc",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "crusade-ancient"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "virtuous-onslaught-black-templars",
+    "name": "Virtuous Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "71666d3365beab5803405bf4602b218b873dc71a7bf50acf913756cbdb527d5b",
+    "version": "2025-q3",
+    "effect": {
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "wound",
+        "subset": "ones"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sternguard-veteran-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "black-templars"
+  },
+  {
+    "ability_id": "a-ceaseless-cause-godhammer-assault-force-black-templars",
+    "name": "A Ceaseless Cause",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adaptable-executioner-wrathful-procession-black-templars",
+    "name": "Adaptable Executioner",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "anointed-champion-black-templars",
+    "name": "Anointed Champion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "the-living-miracle",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aquilon-optics-black-templars",
+    "name": "Aquilon Optics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gladiator-lancer"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "armour-of-faith-black-templars",
+    "name": "Armour of Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assault-ramp-black-templars",
+    "name": "Assault Ramp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "land-raider-crusader"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assault-vehicle-black-templars",
+    "name": "Assault Vehicle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "augury-servo-host-godhammer-assault-force-black-templars",
+    "name": "Augury Servo-Host",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "battle-psalm-precentor-godhammer-assault-force-black-templars",
+    "name": "Battle-Psalm Precentor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "benediction-of-fury-wrathful-procession-black-templars",
+    "name": "Benediction of Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blade-of-detestation-marshals-household-black-templars",
+    "name": "Blade of Detestation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bladeguard-black-templars",
+    "name": "Bladeguard (Once per turn per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vow-sworn-bladeguard-veteran-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blessed-aura-vow-sworn-of-vedrenn-black-templars",
+    "name": "Blessed Aura",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blessed-hull-godhammer-assault-force-black-templars",
+    "name": "Blessed Hull",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "castigate-the-demagogues-wrathful-procession-black-templars",
+    "name": "Castigate the Demagogues",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chant-of-deathless-devotion-black-templars",
+    "name": "Chant of Deathless Devotion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chosen-of-the-emperor-black-templars",
+    "name": "Chosen of the Emperor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "close-range-destruction-black-templars",
+    "name": "Close-range Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "come-to-their-aid-vow-sworn-of-vedrenn-black-templars",
+    "name": "Come To Their Aid",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "condemnatory-info-screed-godhammer-assault-force-black-templars",
+    "name": "Condemnatory Info-Screed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "consecrating-aura-vindication-task-force-black-templars",
+    "name": "Consecrating Aura",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-black-templars",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gladiator-lancer",
+      "gladiator-reaper",
+      "gladiator-valiant"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-black-templars",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "land-raider-crusader",
+      "repulsor",
+      "repulsor-executioner"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deft-riposte-black-templars",
+    "name": "Deft Riposte",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "emperors-champion-vedrenn"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "devout-push-companions-of-vehemence-black-templars",
+    "name": "Devout Push",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "divine-endurance-vow-sworn-of-vedrenn-black-templars",
+    "name": "Divine Endurance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "divine-protection-vow-sworn-of-vedrenn-black-templars",
+    "name": "Divine Protection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-crusaders-companions-of-vehemence-black-templars",
+    "name": "Dread Crusaders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exploit-their-cowardice-vow-sworn-sword-brethren-squad-black-templars",
+    "name": "Exploit Their Cowardice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vow-sworn-sword-brethren-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "faith-fuelled-resolve-black-templars",
+    "name": "Faith-fuelled Resolve",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fervent-exemplars-upgrade-marshals-household-black-templars",
+    "name": "Fervent Exemplars (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "focused-hatred-godhammer-assault-force-black-templars",
+    "name": "Focused Hatred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "for-the-emperors-honour-companions-of-vehemence-black-templars",
+    "name": "For The Emperor’s Honour!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fuelled-by-faith-wrathful-procession-black-templars",
+    "name": "Fuelled By Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gauntlet-of-the-god-emperor-godhammer-assault-force-black-templars",
+    "name": "Gauntlet of The God-Emperor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guiding-omens-the-living-miracle-black-templars",
+    "name": "Guiding Omens",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "the-living-miracle",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hearts-hardened-to-duty-companions-of-vehemence-black-templars",
+    "name": "Hearts Hardened to Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heavy-strikes-vow-sworn-of-vedrenn-black-templars",
+    "name": "Heavy Strikes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vow-sworn-of-vedrenn",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "herald-of-sacred-slaughter-godhammer-assault-force-black-templars",
+    "name": "Herald of Sacred Slaughter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heresy-begets-retribution-companions-of-vehemence-black-templars",
+    "name": "Heresy Begets Retribution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "imperialis-of-the-eternal-crusade-vindication-task-force-black-templars",
+    "name": "Imperialis of the Eternal Crusade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "incendiary-animus-companions-of-vehemence-black-templars",
+    "name": "Incendiary Animus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inheritors-of-sigismund-upgrade-marshals-household-black-templars",
+    "name": "Inheritors of Sigismund (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "litanies-of-purgation-vindication-task-force-black-templars",
+    "name": "Litanies of Purgation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "merciless-denunciation-companions-of-vehemence-black-templars",
+    "name": "Merciless Denunciation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "oathbound-exemplar-companions-of-vehemence-black-templars",
+    "name": "Oathbound Exemplar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orb-of-the-emperors-aegis-vindication-task-force-black-templars",
+    "name": "Orb of the Emperor’s Aegis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orbital-comms-array-black-templars",
+    "name": "Orbital Comms Array (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "paragon-of-fury-godhammer-assault-force-black-templars",
+    "name": "Paragon of Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "perfervid-intervention-vindication-task-force-black-templars",
+    "name": "Perfervid Intervention",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pious-enmity-companions-of-vehemence-black-templars",
+    "name": "Pious Enmity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "priority-target-acquisition-black-templars",
+    "name": "Priority Target Acquisition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gladiator-valiant"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purge-and-sanctify-black-templars",
+    "name": "Purge and Sanctify",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reaping-tally-black-templars",
+    "name": "Reaping Tally",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gladiator-reaper"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "recitation-of-the-revered-vindication-task-force-black-templars",
+    "name": "Recitation of the Revered",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reclaim-our-honour-vindication-task-force-black-templars",
+    "name": "Reclaim Our Honour!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "refusal-to-yield-vindication-task-force-black-templars",
+    "name": "Refusal to Yield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "righteous-fervour-black-templars",
+    "name": "Righteous Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "righteous-zeal-vow-sworn-crusader-squad-black-templars",
+    "name": "Righteous Zeal (Once per turn, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "vow-sworn-crusader-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rite-of-perfervid-wrath-wrathful-procession-black-templars",
+    "name": "Rite of Perfervid Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "wrathful-procession",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shield-dome-black-templars",
+    "name": "Shield Dome",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "impulsor"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shock-and-awe-black-templars",
+    "name": "Shock and Awe",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sigismunds-heir-black-templars",
+    "name": "Sigismund’s Heir",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "emperors-champion"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "slayers-of-abominations-marshals-household-black-templars",
+    "name": "Slayers of Abominations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spoor-of-the-unholy-vindication-task-force-black-templars",
+    "name": "Spoor of the Unholy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teleport-homer-black-templars",
+    "name": "Teleport Homer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "terminator-squad"
+    ],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "templar-vows-vow-sworn-of-vedrenn-black-templars",
+    "name": "Templar Vows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "uncompromising-egress-godhammer-assault-force-black-templars",
+    "name": "Uncompromising Egress",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "godhammer-assault-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unsparing-execution-marshals-household-black-templars",
+    "name": "Unsparing Execution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "marshals-household",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warden-of-honour-vindication-task-force-black-templars",
+    "name": "Warden of Honour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "vindication-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "zealous-vanguard-companions-of-vehemence-black-templars",
+    "name": "Zealous Vanguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "black-templars",
+    "detachment_id": "companions-of-vehemence",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

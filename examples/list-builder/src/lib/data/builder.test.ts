@@ -926,8 +926,8 @@ describe('unit configuration suggestions', () => {
 	it('discovers Necron leader and positional configurations from structured data', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const warriorState = { ...emptyBuilderState(), factionId, units: [warriors] };
-		const plasmancer = suggestionFor(warriorState, warriors, 'harbinger-of-destruction');
-		const szeras = suggestionFor(warriorState, warriors, 'mechanical-augmentation-aura');
+		const plasmancer = suggestionFor(warriorState, warriors, 'harbinger-of-destruction-necrons');
+		const szeras = suggestionFor(warriorState, warriors, 'mechanical-augmentation-necrons');
 
 		expect(plasmancer).toMatchObject({
 			kind: 'leader-attachment',
@@ -943,7 +943,7 @@ describe('unit configuration suggestions', () => {
 
 		const destroyers = necronUnit('lokhust-destroyers', 'destroyers');
 		const destroyerState = { ...emptyBuilderState(), factionId, units: [destroyers] };
-		expect(suggestionFor(destroyerState, destroyers, 'destroyer-cult')).toMatchObject({
+		expect(suggestionFor(destroyerState, destroyers, 'destroyer-cult-necrons')).toMatchObject({
 			kind: 'leader-attachment',
 			providerUnitId: 'lokhust-lord',
 			state: 'available',
@@ -954,7 +954,7 @@ describe('unit configuration suggestions', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const plasmancer = necronUnit('plasmancer', 'plasmancer');
 		const state = { ...emptyBuilderState(), factionId, units: [warriors, plasmancer] };
-		const suggestion = suggestionFor(state, warriors, 'harbinger-of-destruction');
+		const suggestion = suggestionFor(state, warriors, 'harbinger-of-destruction-necrons');
 		expect(suggestion).toMatchObject({
 			state: 'available',
 			attachExistingLeaderKey: 'plasmancer',
@@ -964,20 +964,20 @@ describe('unit configuration suggestions', () => {
 		expect(configured.units).toHaveLength(2);
 		expect(configured.units.find((unit) => unit.key === 'plasmancer')?.attachedToKey).toBe('warriors');
 		expect(applyConfigurationSuggestion(configured, suggestion, () => 'duplicate')).toBe(configured);
-		expect(suggestionFor(configured, warriors, 'harbinger-of-destruction').state).toBe('attached');
+		expect(suggestionFor(configured, warriors, 'harbinger-of-destruction-necrons').state).toBe('attached');
 	});
 
 	it('adds an aura source without claiming placement or attachment state', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const state = { ...emptyBuilderState(), factionId, units: [warriors] };
-		const suggestion = suggestionFor(state, warriors, 'mechanical-augmentation-aura');
+		const suggestion = suggestionFor(state, warriors, 'mechanical-augmentation-necrons');
 		const configured = applyConfigurationSuggestion(state, suggestion, () => 'szeras');
 		const szeras = configured.units.find((unit) => unit.key === 'szeras');
 
 		expect(szeras).toMatchObject({ datasheetId: 'illuminor-szeras' });
 		expect(szeras?.attachedToKey).toBeUndefined();
 		expect(configured.units.find((unit) => unit.key === 'warriors')?.attachedToKey).toBeUndefined();
-		expect(suggestionFor(configured, warriors, 'mechanical-augmentation-aura').state).toBe('source-present');
+		expect(suggestionFor(configured, warriors, 'mechanical-augmentation-necrons').state).toBe('source-present');
 	});
 
 	it('suppresses ability audiences and attachment conditions that cannot prove a bodyguard benefit', () => {
@@ -986,7 +986,7 @@ describe('unit configuration suggestions', () => {
 		const suggestions = configurationSuggestionsFor(state, warriors);
 
 		expect(suggestions.some((candidate) => candidate.abilityId === 'illuminor')).toBe(false);
-		expect(suggestions.some((candidate) => candidate.abilityId === 'vanguard-protocols')).toBe(false);
+		expect(suggestions.some((candidate) => candidate.abilityId === 'vanguard-protocols-necrons')).toBe(false);
 		expect(
 			configurationSuggestionsFor(
 				{ ...state, factionId: null },

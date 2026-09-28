@@ -3,20 +3,20 @@
     "id": "retaliation-cadre",
     "name": "Retaliation Cadre",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "bonded-heroes",
+    "detachment_rule_id": "bonded-heroes-tau-empire",
     "enhancement_ids": [
-      "puretide-engram-neurochip-retaliation-cadre",
-      "starflare-ignition-system-retaliation-cadre",
-      "internal-grenade-racks-retaliation-cadre",
-      "prototype-weapon-system-retaliation-cadre"
+      "puretide-engram-neurochip-retaliation-cadre-tau-empire",
+      "starflare-ignition-system-retaliation-cadre-tau-empire",
+      "internal-grenade-racks-retaliation-cadre-tau-empire",
+      "prototype-weapon-system-retaliation-cadre-tau-empire"
     ],
     "stratagem_ids": [
-      "the-arrokon-protocol-retaliation-cadre",
-      "fail-safe-detonator-retaliation-cadre",
-      "the-torchstar-gambit-retaliation-cadre",
-      "grav-inhibitor-field-retaliation-cadre",
-      "the-shortened-blade-retaliation-cadre",
-      "stimm-injectors-retaliation-cadre"
+      "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "fail-safe-detonator-retaliation-cadre-tau-empire",
+      "the-torchstar-gambit-retaliation-cadre-tau-empire",
+      "grav-inhibitor-field-retaliation-cadre-tau-empire",
+      "the-shortened-blade-retaliation-cadre-tau-empire",
+      "stimm-injectors-retaliation-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -40,20 +40,20 @@
     "id": "montka",
     "name": "Mont’ka",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "killing-blow",
+    "detachment_rule_id": "killing-blow-tau-empire",
     "enhancement_ids": [
-      "exemplar-of-the-montka-montka",
-      "strike-swiftly-montka",
-      "strategic-conqueror-montka",
-      "coordinated-exploitation-montka"
+      "exemplar-of-the-montka-montka-tau-empire",
+      "strike-swiftly-montka-tau-empire",
+      "strategic-conqueror-montka-tau-empire",
+      "coordinated-exploitation-montka-tau-empire"
     ],
     "stratagem_ids": [
-      "focused-fire-montka",
-      "combat-debarkation-montka",
-      "pinpoint-counter-offensive-montka",
-      "aggressive-mobility-montka",
-      "pulse-onslaught-montka",
-      "counterfire-defence-systems-montka"
+      "focused-fire-montka-tau-empire",
+      "combat-debarkation-montka-tau-empire",
+      "pinpoint-counter-offensive-montka-tau-empire",
+      "aggressive-mobility-montka-tau-empire",
+      "pulse-onslaught-montka-tau-empire",
+      "counterfire-defence-systems-montka-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -76,18 +76,18 @@
     "faction_id": "tau-empire",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "kroothawk-flock-kroot-hunting-pack",
-      "nomadic-hunter-kroot-hunting-pack",
-      "root-carved-weapons-kroot-hunting-pack",
-      "borthrod-gland-kroot-hunting-pack"
+      "kroothawk-flock-kroot-hunting-pack-tau-empire",
+      "nomadic-hunter-kroot-hunting-pack-tau-empire",
+      "root-carved-weapons-kroot-hunting-pack-tau-empire",
+      "borthrod-gland-kroot-hunting-pack-tau-empire"
     ],
     "stratagem_ids": [
-      "a-trap-well-laid-kroot-hunting-pack",
-      "join-the-hunt-kroot-hunting-pack",
-      "the-grisly-feast-kroot-hunting-pack",
-      "guerrilla-warriors-kroot-hunting-pack",
-      "hidden-hunters-kroot-hunting-pack",
-      "emp-grenades-kroot-hunting-pack"
+      "a-trap-well-laid-kroot-hunting-pack-tau-empire",
+      "join-the-hunt-kroot-hunting-pack-tau-empire",
+      "the-grisly-feast-kroot-hunting-pack-tau-empire",
+      "guerrilla-warriors-kroot-hunting-pack-tau-empire",
+      "hidden-hunters-kroot-hunting-pack-tau-empire",
+      "emp-grenades-kroot-hunting-pack-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -98,8 +98,8 @@
       "take-and-hold"
     ],
     "detachment_rule_ids": [
-      "hunters-instincts",
-      "skirmish-fighters"
+      "hunters-instincts-tau-empire",
+      "skirmish-fighters-tau-empire"
     ],
     "tags": [
       "auxiliary"
@@ -115,20 +115,14 @@
     "id": "experimental-prototype-cadre",
     "name": "Experimental Prototype Cadre",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "superior-craftsmanship",
+    "detachment_rule_id": "superior-craftsmanship-tau-empire",
     "enhancement_ids": [
-      "supernova-launcher-experimental-prototype-cadre",
-      "thermoneutronic-projector-experimental-prototype-cadre",
-      "plasma-accelerator-rifle-experimental-prototype-cadre",
-      "fusion-blades-experimental-prototype-cadre"
+      "supernova-launcher-experimental-prototype-cadre-tau-empire",
+      "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
+      "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire"
     ],
     "stratagem_ids": [
-      "reactive-impact-dampeners-experimental-prototype-cadre",
-      "experimental-weaponry-experimental-prototype-cadre",
-      "automated-repair-drones-experimental-prototype-cadre",
-      "experimental-ammunition-experimental-prototype-cadre",
-      "threat-assessment-analyser-experimental-prototype-cadre",
-      "neuroweb-system-jammer-experimental-prototype-cadre"
+      "experimental-ammunition-experimental-prototype-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -152,20 +146,20 @@
     "id": "kauyon",
     "name": "Kauyon",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "patient-hunter",
+    "detachment_rule_id": "patient-hunter-tau-empire",
     "enhancement_ids": [
-      "exemplar-of-the-kauyon-kauyon",
-      "precision-of-the-patient-hunter-kauyon",
-      "solid-image-projection-unit-kauyon",
-      "through-unity-devastation-kauyon"
+      "exemplar-of-the-kauyon-kauyon-tau-empire",
+      "precision-of-the-patient-hunter-kauyon-tau-empire",
+      "solid-image-projection-unit-kauyon-tau-empire",
+      "through-unity-devastation-kauyon-tau-empire"
     ],
     "stratagem_ids": [
-      "a-tempting-trap-kauyon",
-      "point-blank-ambush-kauyon",
-      "coordinate-to-engage-kauyon",
-      "wall-of-mirrors-kauyon",
-      "combat-embarkation-kauyon",
-      "photon-grenades-kauyon"
+      "a-tempting-trap-kauyon-tau-empire",
+      "point-blank-ambush-kauyon-tau-empire",
+      "coordinate-to-engage-kauyon-tau-empire",
+      "wall-of-mirrors-kauyon-tau-empire",
+      "combat-embarkation-kauyon-tau-empire",
+      "photon-grenades-kauyon-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -186,20 +180,14 @@
     "id": "auxiliary-cadre",
     "name": "Auxiliary Cadre",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "integrated-command-structure",
+    "detachment_rule_id": "integrated-command-structure-tau-empire",
     "enhancement_ids": [
-      "student-of-kauyon-auxiliary-cadre",
-      "admired-leader-auxiliary-cadre",
-      "fanatical-convert-auxiliary-cadre",
-      "transponder-lock-module-auxiliary-cadre"
+      "student-of-kauyon-auxiliary-cadre-tau-empire",
+      "admired-leader-auxiliary-cadre-tau-empire"
     ],
     "stratagem_ids": [
-      "multisensory-scanning-auxiliary-cadre",
-      "alien-expertise-auxiliary-cadre",
-      "guided-fire-auxiliary-cadre",
-      "experimental-modifications-auxiliary-cadre",
-      "interlocking-manouevres-auxiliary-cadre",
-      "pheromone-waypoints-auxiliary-cadre"
+      "alien-expertise-auxiliary-cadre-tau-empire",
+      "experimental-modifications-auxiliary-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -223,15 +211,15 @@
     "id": "advanced-acquisition-cadre",
     "name": "Advanced Acquisition Cadre",
     "faction_id": "tau-empire",
-    "detachment_rule_id": "expert-fieldcraft",
+    "detachment_rule_id": "expert-fieldcraft-tau-empire",
     "enhancement_ids": [
-      "negation-emitters-upgrade-advanced-acquisition-cadre",
-      "unmasking-suite-upgrade-advanced-acquisition-cadre"
+      "negation-emitters-upgrade-advanced-acquisition-cadre-tau-empire",
+      "unmasking-suite-upgrade-advanced-acquisition-cadre-tau-empire"
     ],
     "stratagem_ids": [
-      "marker-beacon-advanced-acquisition-cadre",
-      "microdrone-support-advanced-acquisition-cadre",
-      "autoreactive-camouflage-advanced-acquisition-cadre"
+      "marker-beacon-advanced-acquisition-cadre-tau-empire",
+      "microdrone-support-advanced-acquisition-cadre-tau-empire",
+      "autoreactive-camouflage-advanced-acquisition-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -253,8 +241,8 @@
     "name": "Sudden Dawn Cadre",
     "faction_id": "tau-empire",
     "enhancement_ids": [
-      "earth-caste-modifications-sudden-dawn-cadre",
-      "proximity-scanners-sudden-dawn-cadre"
+      "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
+      "proximity-scanners-sudden-dawn-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -272,6 +260,9 @@
         "namespace": "mfm",
         "id": "2663b47b-9e46-4b63-8258-7c21f66ac03d"
       }
+    ],
+    "detachment_rule_ids": [
+      "co-ordinated-eradication-tau-empire"
     ]
   }
 ]

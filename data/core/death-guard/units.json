@@ -46,9 +46,9 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "gift-of-poxes",
+      "gift-of-poxes-death-guard",
       "leader",
-      "shroud-of-disease"
+      "shroud-of-disease-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -135,9 +135,13 @@
       "electroscourge"
     ],
     "ability_ids": [
-      "barrage-of-filth",
-      "deadly-demise-d6",
-      "scuttling-walker"
+      "barrage-of-filth-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-death-guard",
+      "damaged-1-6-wounds-remaining-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -213,15 +217,19 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "lethal-ichor-death-guard",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -295,8 +303,8 @@
     ],
     "ability_ids": [
       "leader",
-      "malicious-calculations",
-      "sevenfold-chant"
+      "malicious-calculations-death-guard",
+      "sevenfold-chant-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -368,9 +376,12 @@
       "improvised-weapon"
     ],
     "ability_ids": [
-      "curse-of-the-walking-pox",
+      "curse-of-the-walking-pox-death-guard",
       "infiltrators",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -448,8 +459,8 @@
     "ability_ids": [
       "deep-strike",
       "leader",
-      "unholy-resilience",
-      "vector-of-disease"
+      "unholy-resilience-death-guard",
+      "vector-of-disease-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -531,11 +542,12 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "metalophagic-infection-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -616,11 +628,12 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "hail-of-corrosive-disease-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -697,8 +710,11 @@
       "plague-probe"
     ],
     "ability_ids": [
-      "explosive-blight",
-      "deadly-demise-d3"
+      "explosive-blight-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -784,8 +800,12 @@
       "rothail-volley-gun"
     ],
     "ability_ids": [
-      "spore-laced-shock-waves",
-      "deadly-demise-d3"
+      "spore-laced-shock-waves-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -856,10 +876,13 @@
       "plague-knives"
     ],
     "ability_ids": [
-      "extraction-of-fresh-disease",
-      "foul-infusion",
+      "extraction-of-fresh-disease-death-guard",
+      "foul-infusion-death-guard",
       "leader",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -950,8 +973,11 @@
       "power-fist"
     ],
     "ability_ids": [
-      "icon-of-despair-aura",
-      "infused-with-the-blessings-of-nurgle"
+      {
+        "id": "icon-of-despair-death-guard",
+        "wargear": "icon-of-despair-aura"
+      },
+      "infused-with-the-blessings-of-nurgle-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1037,9 +1063,9 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "inflamed-infections",
+      "inflamed-infections-death-guard",
       "leader",
-      "tainted-narthecium"
+      "tainted-narthecium-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1110,10 +1136,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "death-guard-defenders",
-      "fevered-strategist",
-      "miasma-of-pestilence-aura",
-      "deadly-demise-d3"
+      "death-guard-defenders-death-guard",
+      "fevered-strategist-death-guard",
+      "miasma-of-pestilence-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1203,9 +1232,13 @@
       "plaguespurt-gauntlet"
     ],
     "ability_ids": [
-      "death-approaches",
-      "silent-bodyguard",
-      "deep-strike"
+      "death-approaches-death-guard",
+      "silent-bodyguard-death-guard",
+      "deep-strike",
+      {
+        "id": "icon-of-despair-death-guard",
+        "wargear": "icon-of-despair-aura"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1275,9 +1308,9 @@
       "twin-plague-spewer"
     ],
     "ability_ids": [
-      "blight-bombardment",
+      "blight-bombardment-death-guard",
       "leader",
-      "virulent-aura",
+      "virulent-aura-death-guard",
       "deep-strike"
     ],
     "game_version": {
@@ -1357,8 +1390,11 @@
       "plaguespitter"
     ],
     "ability_ids": [
-      "hovering-death",
-      "deadly-demise-d3"
+      "hovering-death-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1434,8 +1470,8 @@
     ],
     "ability_ids": [
       "leader",
-      "sickening-vitality",
-      "tocsin-of-misery-aura"
+      "sickening-vitality-death-guard",
+      "tocsin-of-misery-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1507,10 +1543,13 @@
       "infernal-cannon-daemon-prince-of-nurgle-with-wings"
     ],
     "ability_ids": [
-      "enfeebling-miasma",
-      "horrifying-visage",
+      "enfeebling-miasma-death-guard",
+      "horrifying-visage-death-guard",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1576,10 +1615,13 @@
       "miasmic-gouts"
     ],
     "ability_ids": [
-      "diseased-cover",
-      "fortification",
-      "putrescent-fog",
-      "deadly-demise-d3"
+      "diseased-cover-death-guard",
+      "fortification-death-guard",
+      "putrescent-fog-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1657,13 +1699,12 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "diseased-malice-death-guard",
+      "froth-spattered-frenzy-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1744,7 +1785,11 @@
       "multi-melta"
     ],
     "ability_ids": [
-      "tank-hunters"
+      "tank-hunters-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1822,12 +1867,19 @@
       "silence"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "host-of-plagues",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "host-of-plagues-death-guard",
       "lord-of-the-death-guard",
-      "supreme-commander",
+      "supreme-commander-death-guard",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "damaged-1-6-wounds-remaining-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1898,9 +1950,9 @@
       "plague-wind"
     ],
     "ability_ids": [
-      "gift-of-contagion-psychic",
+      "gift-of-contagion-death-guard",
       "leader",
-      "pestilent-fallout-psychic"
+      "pestilent-fallout-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1982,13 +2034,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      "fire-support-death-guard",
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2072,8 +2126,12 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-death-guard"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -2146,9 +2204,9 @@
       "plague-sprayer"
     ],
     "ability_ids": [
-      "blinding-spray",
+      "blinding-spray-death-guard",
       "leader",
-      "putrefying-stink"
+      "putrefying-stink-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2219,9 +2277,9 @@
       "plague-knife"
     ],
     "ability_ids": [
-      "blessed-icon-of-disease",
+      "blessed-icon-of-disease-death-guard",
       "leader",
-      "unclean-icon"
+      "unclean-icon-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2293,8 +2351,8 @@
       "lakrimae"
     ],
     "ability_ids": [
-      "destroyer-hive",
-      "eater-plague-psychic",
+      "destroyer-hive-death-guard",
+      "eater-plague-death-guard",
       "leader",
       "deep-strike"
     ],
@@ -2381,7 +2439,7 @@
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "blistering-fusillade",
+      "blistering-fusillade-death-guard",
       "deep-strike"
     ],
     "game_version": {
@@ -2518,7 +2576,7 @@
       "plaguespurt-gauntlet-maggot-lords"
     ],
     "ability_ids": [
-      "obstinate-resistance-maggot-lords"
+      "obstinate-resistance-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2587,7 +2645,7 @@
       "power-fist"
     ],
     "ability_ids": [
-      "infused-with-the-blessings-of-nurgle-maggot-lords"
+      "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2652,7 +2710,8 @@
       "plasma-pistol-maggot-lords"
     ],
     "ability_ids": [
-      "malicious-calculations-maggot-lords"
+      "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",
+      "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2718,7 +2777,7 @@
       "twin-plague-spewer"
     ],
     "ability_ids": [
-      "enemy-spotted-maggot-lords"
+      "enemy-spotted-death-guard"
     ],
     "game_version": {
       "edition": "11th",

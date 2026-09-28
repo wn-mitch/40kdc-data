@@ -1,85 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "scout-sentinels",
-      "cyclops-demolition-vehicle",
-      "hippogriff-afv"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "scout-sentinels"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "daring-recon",
+    "ability_id": "daring-recon-astra-militarum",
     "name": "Daring Recon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -125,38 +46,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cadian-castellan",
-      "commissar-graves-on-foot",
-      "commissar-yarrick"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "senior-officer",
+    "ability_id": "senior-officer-astra-militarum",
     "name": "Senior Officer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -191,10 +85,11 @@
       "cadian-castellan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "get-back-in-the-fight",
+    "ability_id": "get-back-in-the-fight-astra-militarum",
     "name": "Get Back in the Fight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -231,10 +126,11 @@
       "cadian-castellan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "orders",
+    "ability_id": "orders-cadian-castellan-astra-militarum",
     "name": "Orders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -247,7 +143,7 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "uses",
         "operation": "set",
         "value": 2,
@@ -263,41 +159,15 @@
       "duration": "battle"
     },
     "unit_ids": [
-      "cadian-castellan",
-      "gaunts-ghosts"
+      "cadian-castellan"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "nork-deddog"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "ogryn-bodyguard",
+    "ability_id": "ogryn-bodyguard-astra-militarum",
     "name": "Ogryn Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -321,10 +191,11 @@
       "ogryn-bodyguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "thunderous-head-butt",
+    "ability_id": "thunderous-head-butt-astra-militarum",
     "name": "Thunderous Head-butt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -347,10 +218,11 @@
       "nork-deddog"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "loyal-protector",
+    "ability_id": "loyal-protector-astra-militarum",
     "name": "Loyal Protector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -398,14 +270,14 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "nork-deddog",
-      "ogryn-bodyguard"
+      "nork-deddog"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "shock-troops",
+    "ability_id": "shock-troops-astra-militarum",
     "name": "Shock Troops",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -425,10 +297,11 @@
       "cadian-shock-troops"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "vox-caster",
+    "ability_id": "vox-caster-astra-militarum",
     "name": "Vox-caster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -515,39 +388,19 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "cadian-shock-troops"
+      "cadian-recon-squad",
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "kasrkin",
+      "tempestus-scions"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "militarum-tempestus-command-squad"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "tempestor-prime",
+    "ability_id": "tempestor-prime-astra-militarum",
     "name": "Tempestor Prime",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -581,10 +434,11 @@
       "militarum-tempestus-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "command-rod",
+    "ability_id": "command-rod-astra-militarum",
     "name": "Command Rod",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -606,7 +460,7 @@
         "type": "ability-modifier",
         "target": "this-unit",
         "modifier": {
-          "ability": "voice-of-command",
+          "ability": "voice-of-command-astra-militarum",
           "aspect": "concurrent",
           "operation": "set",
           "value": 2
@@ -621,10 +475,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "regimental-standard",
+    "ability_id": "regimental-standard-astra-militarum",
     "name": "Regimental Standard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -646,13 +501,17 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "cadian-command-squad",
+      "catachan-command-squad",
+      "krieg-command-squad",
       "militarum-tempestus-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "master-vox",
+    "ability_id": "master-vox-astra-militarum",
     "name": "Master Vox",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -665,7 +524,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "range",
         "operation": "set",
         "value": 24
@@ -675,14 +534,18 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "cadian-command-squad",
+      "catachan-command-squad",
+      "krieg-command-squad",
       "militarum-tempestus-command-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "medi-pack",
+    "ability_id": "medi-pack-militarum-tempestus-command-squad-astra-militarum",
     "name": "Medi-pack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -714,10 +577,11 @@
       "militarum-tempestus-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "the-lord-solar",
+    "ability_id": "the-lord-solar-astra-militarum",
     "name": "The Lord Solar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -740,10 +604,11 @@
       "lord-solar-leontus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "the-collegiate-astrolex",
+    "ability_id": "the-collegiate-astrolex-astra-militarum",
     "name": "The Collegiate Astrolex",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -796,10 +661,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "deployment-ended"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-astra-militarum",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -822,10 +688,11 @@
       "lord-solar-leontus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "precision-drop",
+    "ability_id": "precision-drop-astra-militarum",
     "name": "Precision Drop",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -874,10 +741,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "servo-sentry",
+    "ability_id": "servo-sentry-astra-militarum",
     "name": "Servo-sentry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -909,10 +777,11 @@
       "filter": {
         "from": "deep-strike"
       }
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "final-duty",
+    "ability_id": "final-duty-astra-militarum",
     "name": "Final Duty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -935,10 +804,11 @@
       "krieg-heavy-weapons-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "embarking",
+    "ability_id": "embarking-krieg-heavy-weapons-squad-astra-militarum",
     "name": "Embarking",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -964,68 +834,11 @@
       "krieg-heavy-weapons-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "ratlings",
-      "gaunts-ghosts",
-      "cadian-recon-squad"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ratlings",
-      "gaunts-ghosts",
-      "cadian-recon-squad"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "shoot-sharp-and-scarper",
+    "ability_id": "shoot-sharp-and-scarper-astra-militarum",
     "name": "Shoot Sharp and Scarper",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1057,10 +870,11 @@
       "ratlings"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "demolition-gear",
+    "ability_id": "demolition-gear-astra-militarum",
     "name": "Demolition Gear",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1086,10 +900,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "ratling-battlemutt",
+    "ability_id": "ratling-battlemutt-astra-militarum",
     "name": "Ratling Battlemutt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1118,62 +933,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "leman-russ-battle-tank",
-      "centaur-rsv",
-      "commissar-graves"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "armoured-spearhead",
+    "ability_id": "armoured-spearhead-astra-militarum",
     "name": "Armoured Spearhead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1197,60 +961,11 @@
       "leman-russ-battle-tank"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormsword"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "concussive-wave",
+    "ability_id": "concussive-wave-astra-militarum",
     "name": "Concussive Wave",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1282,10 +997,11 @@
       "stormsword"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "transport-support",
+    "ability_id": "transport-support-astra-militarum",
     "name": "Transport Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1318,10 +1034,11 @@
       "taurox-prime"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "rearm-reload-fire",
+    "ability_id": "rearm-reload-fire-astra-militarum",
     "name": "Rearm, Reload, Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1361,10 +1078,11 @@
       "field-ordnance-battery"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "demolition-charges",
+    "ability_id": "demolition-charges-astra-militarum",
     "name": "Demolition Charges",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1387,10 +1105,11 @@
       "cyclops-demolition-vehicle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "unstable-payload",
+    "ability_id": "unstable-payload-astra-militarum",
     "name": "Unstable Payload",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1416,10 +1135,11 @@
       "cyclops-demolition-vehicle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "compact",
+    "ability_id": "compact-astra-militarum",
     "name": "Compact",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1447,60 +1167,11 @@
       "cyclops-demolition-vehicle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rogal-dorn-commander"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "vox-net",
+    "ability_id": "vox-net-astra-militarum",
     "name": "Vox-net",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1513,7 +1184,7 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "range",
         "operation": "set",
         "value": 12
@@ -1523,14 +1194,16 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "leman-russ-commander",
       "rogal-dorn-commander"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "called-shots",
+    "ability_id": "called-shots-astra-militarum",
     "name": "Called Shots",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1554,10 +1227,11 @@
       "rogal-dorn-commander"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "withering-hail",
+    "ability_id": "withering-hail-astra-militarum",
     "name": "Withering Hail",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1591,37 +1265,11 @@
       "leman-russ-exterminator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "bullgryn-squad",
-      "ogryn-bodyguard"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "wall-of-muscle",
+    "ability_id": "wall-of-muscle-astra-militarum",
     "name": "Wall of Muscle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1644,10 +1292,11 @@
       "bullgryn-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "slabshield",
+    "ability_id": "slabshield-astra-militarum",
     "name": "Slabshield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1669,14 +1318,14 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "bullgryn-squad",
-      "ogryn-bodyguard"
+      "bullgryn-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "brute-shield",
+    "ability_id": "brute-shield-astra-militarum",
     "name": "Brute Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1700,10 +1349,11 @@
       "ogryn-bodyguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "malign-wardings-psychic",
+    "ability_id": "malign-wardings-astra-militarum",
     "name": "Malign Wardings (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1736,10 +1386,11 @@
       "primaris-psyker"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "psychic-barrier-psychic",
+    "ability_id": "psychic-barrier-astra-militarum",
     "name": "Psychic Barrier (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1772,10 +1423,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "covering-fire",
+    "ability_id": "covering-fire-astra-militarum",
     "name": "Covering Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1862,37 +1514,11 @@
       "cadian-heavy-weapons-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "catachan-heavy-weapons-squad"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "bring-it-down",
+    "ability_id": "bring-it-down-astra-militarum",
     "name": "Bring it Down!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1939,10 +1565,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "close-quarters-warfare",
+    "ability_id": "close-quarters-warfare-astra-militarum",
     "name": "Close-quarters Warfare",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1988,10 +1615,11 @@
       "hellhammer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "emplacement-platform",
+    "ability_id": "emplacement-platform-astra-militarum",
     "name": "Emplacement Platform",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2064,10 +1692,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "reinforced-cover",
+    "ability_id": "reinforced-cover-astra-militarum",
     "name": "Reinforced Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2099,10 +1728,11 @@
       "aegis-defence-line"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "defence-line",
+    "ability_id": "defence-line-astra-militarum",
     "name": "Defence Line",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2126,10 +1756,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "fortification",
+    "ability_id": "fortification-astra-militarum",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2163,10 +1794,11 @@
       "aegis-defence-line"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deployment",
+    "ability_id": "deployment-astra-militarum",
     "name": "Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2192,10 +1824,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "mobile-hunter-killers",
+    "ability_id": "mobile-hunter-killers-astra-militarum",
     "name": "Mobile Hunter-killers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2232,10 +1865,11 @@
       "armoured-sentinels"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "summary-execution",
+    "ability_id": "summary-execution-astra-militarum",
     "name": "Summary Execution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2290,10 +1924,11 @@
       "commissar"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "political-overwatch",
+    "ability_id": "political-overwatch-astra-militarum",
     "name": "Political Overwatch",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2329,10 +1964,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "deathstrike-missile",
+    "ability_id": "deathstrike-missile-astra-militarum",
     "name": "Deathstrike Missile",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2385,10 +2021,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "first-this-battle"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "screening-line",
+    "ability_id": "screening-line-astra-militarum",
     "name": "Screening Line",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2451,10 +2088,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "remorseless-barrage",
+    "ability_id": "remorseless-barrage-astra-militarum",
     "name": "Remorseless Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2486,10 +2124,11 @@
       "artillery-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "gung-ho-executioners",
+    "ability_id": "gung-ho-executioners-astra-militarum",
     "name": "Gung-ho Executioners",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2523,10 +2162,11 @@
       "leman-russ-executioner"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "storm-troopers",
+    "ability_id": "storm-troopers-astra-militarum",
     "name": "Storm Troopers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2550,38 +2190,11 @@
       "tempestus-scions"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "firing-deck-12",
-    "name": "Firing Deck 12",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 12
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormlord",
-      "centaur-rsv"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mount-up",
+    "ability_id": "mount-up-astra-militarum",
     "name": "Mount Up!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2652,10 +2265,11 @@
       "stormlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "warrior-elite",
+    "ability_id": "warrior-elite-astra-militarum",
     "name": "Warrior Elite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2668,7 +2282,7 @@
       "type": "ability-activate",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command"
+        "ability": "voice-of-command-astra-militarum"
       }
     },
     "scope": {
@@ -2678,10 +2292,11 @@
       "kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "melta-mine",
+    "ability_id": "melta-mine-astra-militarum",
     "name": "Melta Mine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2704,10 +2319,11 @@
       "kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "cadia-stands",
+    "ability_id": "cadia-stands-astra-militarum",
     "name": "Cadia Stands!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2740,10 +2356,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "gung-ho-command",
+    "ability_id": "gung-ho-command-astra-militarum",
     "name": "Gung-ho Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2768,10 +2385,11 @@
       "catachan-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "close-range-titan-killer",
+    "ability_id": "close-range-titan-killer-astra-militarum",
     "name": "Close-range Titan Killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2818,10 +2436,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "ablative-plating-hammer-of-the-emperor",
+    "ability_id": "ablative-plating-astra-militarum",
     "name": "Ablative Plating",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2845,227 +2464,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "righteous-smiting",
-    "name": "Righteous Smiting",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f9996ab2d7695592b072c2025bf75cd9c71696144512fb0c054611ab11dfe887",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "zealot",
-    "name": "Zealot",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "96bb8f7cb3cf6dd2c7e81d2fa1c782d90b2be6ea2925a98f2476673478ce377c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 3
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 3
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "holy-mission",
-    "name": "Holy Mission",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "51abd9145f5aa949fd9ae789ef3e66c7dec8bdf2567726a932b56e9e5594795c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "attachment",
-              "parameters": {
-                "subject": "this-model",
-                "role": "leading",
-                "with": {
-                  "all_of": [
-                    "DOMINION SQUAD"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "scouts",
-                "value": 6
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "attachment",
-              "parameters": {
-                "subject": "this-model",
-                "role": "leading",
-                "with": {
-                  "all_of": [
-                    "SISTERS NOVITIATE SQUAD"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "infiltrators"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "holy-hatred",
-    "name": "Holy Hatred",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "62076bb0a3c6d5d3200f25ba9badf1a70e18607ed29341ad54eef65dbc382b38",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "war-hymns",
+    "ability_id": "war-hymns-astra-militarum",
     "name": "War Hymns",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3100,10 +2503,11 @@
       "ministorum-priest"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "holy-piety",
+    "ability_id": "holy-piety-astra-militarum",
     "name": "Holy Piety",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3136,10 +2540,11 @@
       "ministorum-priest"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "grim-demeanour",
+    "ability_id": "grim-demeanour-astra-militarum",
     "name": "Grim Demeanour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3199,10 +2604,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "death-korps-medi-pack",
+    "ability_id": "death-korps-medi-pack-astra-militarum",
     "name": "Death Korps Medi-pack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3234,10 +2640,11 @@
       "death-korps-of-krieg"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "armour-obliteration",
+    "ability_id": "armour-obliteration-astra-militarum",
     "name": "Armour Obliteration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3272,10 +2679,11 @@
       "banesword"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "suppression-bombardment",
+    "ability_id": "suppression-bombardment-astra-militarum",
     "name": "Suppression Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3314,10 +2722,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Applied via the Wyvern quad stormshard mortar; MONSTER and VEHICLE units cannot be suppressed."
+    "community_notes": "Applied via the Wyvern quad stormshard mortar; MONSTER and VEHICLE units cannot be suppressed.",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "horsemasters",
+    "ability_id": "horsemasters-astra-militarum",
     "name": "Horsemasters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3344,10 +2753,11 @@
       "attilan-rough-riders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "flush-them-out",
+    "ability_id": "flush-them-out-astra-militarum",
     "name": "Flush Them Out",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3379,10 +2789,11 @@
       "hellhound"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "mow-down-the-enemy",
+    "ability_id": "mow-down-the-enemy-astra-militarum",
     "name": "Mow Down the Enemy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3407,10 +2818,11 @@
       "leman-russ-punisher"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "grim-determination",
+    "ability_id": "grim-determination-astra-militarum",
     "name": "Grim Determination",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3447,7 +2859,7 @@
             "type": "ability-modifier",
             "target": "this-unit",
             "modifier": {
-              "ability": "voice-of-command",
+              "ability": "voice-of-command-astra-militarum",
               "aspect": "duration",
               "operation": "lift-limit"
             }
@@ -3463,10 +2875,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "alchemyk-counteragents",
+    "ability_id": "alchemyk-counteragents-astra-militarum",
     "name": "Alchemyk Counteragents",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3490,10 +2903,11 @@
       "krieg-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "servo-scribes",
+    "ability_id": "servo-scribes-astra-militarum",
     "name": "Servo-scribes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3506,7 +2920,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "uses",
         "operation": "add",
         "value": 1
@@ -3519,45 +2933,11 @@
       "krieg-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sly-marbo",
-      "gaunts-ghosts"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "one-man-army",
+    "ability_id": "one-man-army-astra-militarum",
     "name": "One-man Army",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3633,10 +3013,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "like-fighting-a-shadow",
+    "ability_id": "like-fighting-a-shadow-astra-militarum",
     "name": "Like Fighting a Shadow",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3668,10 +3049,11 @@
       "sly-marbo"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "loner",
+    "ability_id": "loner-astra-militarum",
     "name": "Loner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3695,10 +3077,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "line-breaker",
+    "ability_id": "line-breaker-astra-militarum",
     "name": "Line-breaker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3757,10 +3140,11 @@
       "leman-russ-demolisher"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "rapid-deployment",
+    "ability_id": "rapid-deployment-astra-militarum",
     "name": "Rapid Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3826,10 +3210,11 @@
       "taurox"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "point-blank-barrage",
+    "ability_id": "point-blank-barrage-astra-militarum",
     "name": "Point-blank Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3863,10 +3248,11 @@
       "ogryn-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "tough-to-kill",
+    "ability_id": "tough-to-kill-astra-militarum",
     "name": "Tough To Kill",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3912,10 +3298,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "first-this-battle"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "leading-the-charge",
+    "ability_id": "leading-the-charge-astra-militarum",
     "name": "Leading The Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3955,10 +3342,11 @@
       "lord-marshal-dreir"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "enginseer",
+    "ability_id": "enginseer-astra-militarum",
     "name": "Enginseer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4000,10 +3388,11 @@
       "tech-priest-enginseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "omnissiah-s-blessing",
+    "ability_id": "omnissiahs-blessing-astra-militarum",
     "name": "Omnissiah\u2019s Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4056,10 +3445,11 @@
       "tech-priest-enginseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "vengeance-for-the-omnissiah",
+    "ability_id": "vengeance-for-the-omnissiah-astra-militarum",
     "name": "Vengeance for the Omnissiah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4109,37 +3499,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "firing-deck-6",
-    "name": "Firing Deck 6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "banehammer"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "tremor-quake",
+    "ability_id": "tremor-quake-astra-militarum",
     "name": "Tremor Quake",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4178,10 +3542,11 @@
       "banehammer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "jungle-fighters",
+    "ability_id": "jungle-fighters-astra-militarum",
     "name": "Jungle Fighters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4232,10 +3597,11 @@
       "catachan-jungle-fighters"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "death-befitting-an-officer",
+    "ability_id": "death-befitting-an-officer-astra-militarum",
     "name": "Death Befitting An Officer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4265,36 +3631,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "valkyrie"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "airborne-insertion",
+    "ability_id": "airborne-insertion-astra-militarum",
     "name": "Airborne Insertion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4341,10 +3682,11 @@
       "valkyrie"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "lord-castellan",
+    "ability_id": "lord-castellan-astra-militarum",
     "name": "Lord Castellan",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4366,7 +3708,7 @@
         "type": "ability-modifier",
         "target": "this-unit",
         "modifier": {
-          "ability": "voice-of-command",
+          "ability": "voice-of-command-astra-militarum",
           "aspect": "concurrent",
           "operation": "set",
           "value": 2
@@ -4381,10 +3723,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "tactical-genius",
+    "ability_id": "tactical-genius-astra-militarum",
     "name": "Tactical Genius",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4420,10 +3763,11 @@
       "ursula-creed"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "titan-killer",
+    "ability_id": "titan-killer-astra-militarum",
     "name": "Titan-killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4457,10 +3801,11 @@
       "shadowsword"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "furious-barrage",
+    "ability_id": "furious-barrage-astra-militarum",
     "name": "Furious Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4533,37 +3878,11 @@
       "manticore"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chimera"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mobile-command-vehicle",
+    "ability_id": "mobile-command-vehicle-astra-militarum",
     "name": "Mobile Command Vehicle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4602,10 +3921,11 @@
       "chimera"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "fiery-vengeance",
+    "ability_id": "fiery-vengeance-astra-militarum",
     "name": "Fiery Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4690,10 +4010,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "tank-killer",
+    "ability_id": "tank-killer-astra-militarum",
     "name": "Tank-killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4726,10 +4047,11 @@
       "leman-russ-vanquisher"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "earthshaker-rounds",
+    "ability_id": "earthshaker-rounds-astra-militarum",
     "name": "Earthshaker Rounds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4806,10 +4128,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "rolling-fortress",
+    "ability_id": "rolling-fortress-astra-militarum",
     "name": "Rolling Fortress",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4841,10 +4164,11 @@
       "baneblade"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "grenadiers",
+    "ability_id": "grenadiers-astra-militarum",
     "name": "Grenadiers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4873,10 +4197,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "remote-mine",
+    "ability_id": "remote-mine-astra-militarum",
     "name": "Remote Mine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4908,10 +4233,11 @@
       "krieg-combat-engineers"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "flak-battery",
+    "ability_id": "flak-battery-astra-militarum",
     "name": "Flak Battery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4947,10 +4273,11 @@
       "hydra"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "urban-warfare",
+    "ability_id": "urban-warfare-astra-militarum",
     "name": "Urban Warfare",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4982,10 +4309,11 @@
       "leman-russ-eradicator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "voice-of-command",
+    "ability_id": "voice-of-command-astra-militarum",
     "name": "Voice of Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5096,63 +4424,13 @@
     "behavior": "activated",
     "community_notes": "Each OFFICER datasheet specifies how many Orders it can issue per battle round and which units are eligible; Orders are issued in your Command phase (and at the end of a phase in which the OFFICER disembarked from a TRANSPORT or was set up). A unit can be affected by only one Order at a time. TAKE COVER! cannot improve a Save to better than 3+. Only ASTRA MILITARUM models benefit from an Order.",
     "unit_ids": [
-      "gaunts-ghosts",
-      "commissar-graves",
-      "commissar-graves-on-foot",
-      "commissar-yarrick"
+      "draydens-lance-command-squad",
+      "draydens-lance-kasrkin",
+      "gaunts-ghosts"
     ]
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "FIGHTS FIRST"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "fights-first"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "gaunts-ghosts"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21. Core Fights First rule; the per-model every-model-has-this clause is modeled as a unit-level keyword gate."
-  },
-  {
-    "ability_id": "tanith-camo-cloaks",
+    "ability_id": "tanith-camo-cloaks-astra-militarum",
     "name": "Tanith Camo-cloaks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5178,10 +4456,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "covert-stealth-team",
+    "ability_id": "covert-stealth-team-astra-militarum",
     "name": "Covert Stealth Team",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5228,10 +4507,11 @@
           "turn": "opponent-turn"
         }
       }
-    }
+    },
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "absolutist-principles",
+    "ability_id": "absolutist-principles-astra-militarum",
     "name": "Absolutist Principles",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5275,7 +4555,7 @@
             "level": "model"
           },
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "recipients",
             "operation": "add",
             "value": 1,
@@ -5299,8 +4579,8 @@
     }
   },
   {
-    "ability_id": "sharp-eyes-light-fingers-abhuman-auxiliaries",
-    "name": "Sharp Eyes, Light Fingers",
+    "ability_id": "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum",
+    "name": "Sharp Eyes (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5344,7 +4624,7 @@
     }
   },
   {
-    "ability_id": "exemplar-of-duty-abhuman-auxiliaries",
+    "ability_id": "exemplar-of-duty-upgrade-abhuman-auxiliaries-astra-militarum",
     "name": "Exemplar of Duty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5376,7 +4656,7 @@
     }
   },
   {
-    "ability_id": "thick-skulled-obdurance-abhuman-auxiliaries",
+    "ability_id": "thick-skulled-obdurance-abhuman-auxiliaries-astra-militarum",
     "name": "Thick-skulled Obdurance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5411,7 +4691,7 @@
     }
   },
   {
-    "ability_id": "low-profile-abhuman-auxiliaries",
+    "ability_id": "low-profile-abhuman-auxiliaries-astra-militarum",
     "name": "Low Profile",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5454,7 +4734,7 @@
     }
   },
   {
-    "ability_id": "stirred-to-action-abhuman-auxiliaries",
+    "ability_id": "stirred-to-action-abhuman-auxiliaries-astra-militarum",
     "name": "Stirred to Action",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5487,7 +4767,7 @@
     }
   },
   {
-    "ability_id": "designated-targets",
+    "ability_id": "designated-targets-astra-militarum",
     "name": "Designated Targets",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5535,7 +4815,7 @@
     }
   },
   {
-    "ability_id": "long-range-scout-designation-force",
+    "ability_id": "long-range-scout-upgrade-designation-force-astra-militarum",
     "name": "Long-range Scout",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5567,7 +4847,7 @@
     }
   },
   {
-    "ability_id": "recon-star-designation-force",
+    "ability_id": "recon-star-upgrade-designation-force-astra-militarum",
     "name": "Recon Star",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5627,7 +4907,7 @@
     }
   },
   {
-    "ability_id": "close-range-detection-designation-force",
+    "ability_id": "close-range-detection-designation-force-astra-militarum",
     "name": "Close-range Detection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5670,7 +4950,7 @@
     }
   },
   {
-    "ability_id": "triggered-alerts-designation-force",
+    "ability_id": "triggered-alerts-designation-force-astra-militarum",
     "name": "Triggered Alerts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5704,7 +4984,7 @@
     }
   },
   {
-    "ability_id": "sump-smog-screen-designation-force",
+    "ability_id": "sump-smog-screen-designation-force-astra-militarum",
     "name": "Sump-smog Screen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5737,7 +5017,7 @@
     }
   },
   {
-    "ability_id": "ceaseless-cannonade",
+    "ability_id": "ceaseless-cannonade-astra-militarum",
     "name": "Ceaseless Cannonade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5847,7 +5127,7 @@
     }
   },
   {
-    "ability_id": "battalion-commander-steel-hammer",
+    "ability_id": "battalion-commander-steel-hammer-astra-militarum",
     "name": "Battalion Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5869,7 +5149,7 @@
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "voice-of-command"
+            "ability": "voice-of-command-astra-militarum"
           }
         },
         {
@@ -5885,7 +5165,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "uses",
             "operation": "set",
             "value": 2,
@@ -5915,7 +5195,7 @@
     }
   },
   {
-    "ability_id": "titan-killer-steel-hammer",
+    "ability_id": "titan-killer-steel-hammer-astra-militarum",
     "name": "Titan Killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5950,7 +5230,7 @@
     }
   },
   {
-    "ability_id": "engine-speaker-steel-hammer",
+    "ability_id": "engine-speaker-steel-hammer-astra-militarum",
     "name": "Engine Speaker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5985,7 +5265,7 @@
     }
   },
   {
-    "ability_id": "assault-hatches-steel-hammer",
+    "ability_id": "assault-hatches-steel-hammer-astra-militarum",
     "name": "Assault Hatches",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6040,7 +5320,7 @@
     }
   },
   {
-    "ability_id": "engine-of-wrath-steel-hammer",
+    "ability_id": "engine-of-wrath-steel-hammer-astra-militarum",
     "name": "Engine of Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6091,7 +5371,7 @@
     }
   },
   {
-    "ability_id": "shattering-salvo-steel-hammer",
+    "ability_id": "shattering-salvo-steel-hammer-astra-militarum",
     "name": "Shattering Salvo",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6128,7 +5408,7 @@
     }
   },
   {
-    "ability_id": "imposing-arrival-steel-hammer",
+    "ability_id": "imposing-arrival-steel-hammer-astra-militarum",
     "name": "Imposing Arrival",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6164,7 +5444,7 @@
     }
   },
   {
-    "ability_id": "withering-firepower-steel-hammer",
+    "ability_id": "withering-firepower-steel-hammer-astra-militarum",
     "name": "Withering Firepower",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6201,7 +5481,7 @@
     }
   },
   {
-    "ability_id": "adamantine-behemoth-steel-hammer",
+    "ability_id": "adamantine-behemoth-steel-hammer-astra-militarum",
     "name": "Adamantine Behemoth",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6236,7 +5516,7 @@
     }
   },
   {
-    "ability_id": "accuracy-under-pressure-steel-hammer",
+    "ability_id": "accuracy-under-pressure-steel-hammer-astra-militarum",
     "name": "Accuracy Under Pressure",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6269,7 +5549,7 @@
     }
   },
   {
-    "ability_id": "squadron-command",
+    "ability_id": "squadron-command-astra-militarum",
     "name": "Squadron Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6296,7 +5576,7 @@
             ]
           },
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "recipients",
             "operation": "add",
             "recipients": {
@@ -6315,7 +5595,7 @@
             ]
           },
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "options",
             "operation": "add",
             "add_option": {
@@ -6338,7 +5618,7 @@
     }
   },
   {
-    "ability_id": "exemplary-officer-armoured-infantry",
+    "ability_id": "exemplary-officer-armoured-infantry-astra-militarum",
     "name": "Exemplary Officer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6357,7 +5637,7 @@
       "type": "ability-modifier",
       "target": "this-model",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "recipients",
         "operation": "add",
         "value": 2,
@@ -6387,7 +5667,7 @@
     }
   },
   {
-    "ability_id": "master-manoeuvrist-armoured-infantry",
+    "ability_id": "master-manoeuvrist-armoured-infantry-astra-militarum",
     "name": "Master Manoeuvrist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6464,7 +5744,7 @@
     }
   },
   {
-    "ability_id": "omnissian-unguents-armoured-infantry",
+    "ability_id": "omnissian-unguents-aura-armoured-infantry-astra-militarum",
     "name": "Omnissian Unguents",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6508,7 +5788,7 @@
     }
   },
   {
-    "ability_id": "grand-strategist-armoured-infantry",
+    "ability_id": "grand-strategist-armoured-infantry-astra-militarum",
     "name": "Grand Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6612,7 +5892,7 @@
     }
   },
   {
-    "ability_id": "order-the-advance-armoured-infantry",
+    "ability_id": "order-the-advance-armoured-infantry-astra-militarum",
     "name": "Order the Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6652,7 +5932,7 @@
     }
   },
   {
-    "ability_id": "supporting-ordnance-armoured-infantry",
+    "ability_id": "supporting-ordnance-armoured-infantry-astra-militarum",
     "name": "Supporting Ordnance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6698,7 +5978,7 @@
     }
   },
   {
-    "ability_id": "mobile-firebase-armoured-infantry",
+    "ability_id": "mobile-firebase-armoured-infantry-astra-militarum",
     "name": "Mobile Firebase",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6735,7 +6015,7 @@
     }
   },
   {
-    "ability_id": "combined-fire-armoured-infantry",
+    "ability_id": "combined-fire-armoured-infantry-astra-militarum",
     "name": "Combined Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6800,7 +6080,7 @@
     }
   },
   {
-    "ability_id": "burst-of-speed-armoured-infantry",
+    "ability_id": "burst-of-speed-armoured-infantry-astra-militarum",
     "name": "Burst of Speed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6833,7 +6113,7 @@
     }
   },
   {
-    "ability_id": "opening-salvo-armoured-infantry",
+    "ability_id": "opening-salvo-armoured-infantry-astra-militarum",
     "name": "Opening Salvo",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6867,7 +6147,7 @@
     }
   },
   {
-    "ability_id": "fire-zone-purge",
+    "ability_id": "fire-zone-purge-astra-militarum",
     "name": "Fire Zone Purge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6954,7 +6234,7 @@
     }
   },
   {
-    "ability_id": "bombast-class-vox-array-bridgehead-strike",
+    "ability_id": "bombast-class-vox-array-bridgehead-strike-astra-militarum",
     "name": "Bombast-class Vox-array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6975,14 +6255,14 @@
         "type": "has-ability",
         "parameters": {
           "subject": "this-unit",
-          "ability": "master-vox"
+          "ability": "master-vox-astra-militarum"
         }
       },
       "effect": {
         "type": "ability-modifier",
         "target": "this-model",
         "modifier": {
-          "ability": "voice-of-command",
+          "ability": "voice-of-command-astra-militarum",
           "aspect": "recipients",
           "operation": "set",
           "value": 3,
@@ -7007,7 +6287,7 @@
     }
   },
   {
-    "ability_id": "priority-drop-beacon-bridgehead-strike",
+    "ability_id": "priority-drop-beacon-bridgehead-strike-astra-militarum",
     "name": "Priority-drop Beacon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7067,7 +6347,7 @@
     }
   },
   {
-    "ability_id": "on-my-position-bridgehead-strike",
+    "ability_id": "on-my-position-bridgehead-strike-astra-militarum",
     "name": "On My Position",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7119,7 +6399,7 @@
     }
   },
   {
-    "ability_id": "firing-hot-bridgehead-strike",
+    "ability_id": "firing-hot-bridgehead-strike-astra-militarum",
     "name": "Firing Hot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7287,7 +6567,7 @@
     }
   },
   {
-    "ability_id": "servo-designators-bridgehead-strike",
+    "ability_id": "servo-designators-bridgehead-strike-astra-militarum",
     "name": "Servo-designators",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7351,7 +6631,7 @@
     }
   },
   {
-    "ability_id": "masters-of-camouflage",
+    "ability_id": "masters-of-camouflage-astra-militarum",
     "name": "Masters of Camouflage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7404,7 +6684,7 @@
     "community_notes": "[APPROX] Save +1 (to a max of 3+) applies only when the WALKER/REGIMENT model already has Benefit of Cover for another reason (e.g. wholly within a Ruin); the cap and the 'other reason' gate are simplified. Applies to ASTRA MILITARUM WALKER and REGIMENT models. Full rule in raw-text store."
   },
   {
-    "ability_id": "iron-tread",
+    "ability_id": "iron-tread-astra-militarum",
     "name": "Iron Tread",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7433,7 +6713,7 @@
     "community_notes": "[APPROX] Applies to SQUADRON units on Advance (no Advance roll, +6\" Move). The clause allowing the Advance move to pass through \u2014 but not end within \u2014 enemy Engagement Range is not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "born-soldiers",
+    "ability_id": "born-soldiers-astra-militarum",
     "name": "Born Soldiers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7548,7 +6828,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "ruthless-discipline",
+    "ability_id": "ruthless-discipline-astra-militarum",
     "name": "Ruthless Discipline",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7577,7 +6857,7 @@
             "level": "model"
           },
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "uses",
             "operation": "add",
             "value": 1
@@ -7608,7 +6888,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "armoured-fist",
+    "ability_id": "armoured-fist-astra-militarum",
     "name": "Armoured Fist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7659,7 +6939,7 @@
     }
   },
   {
-    "ability_id": "artillery-support",
+    "ability_id": "artillery-support-astra-militarum",
     "name": "Artillery Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7728,7 +7008,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "independent-operatives",
+    "ability_id": "independent-operatives-astra-militarum",
     "name": "Independent Operatives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7741,7 +7021,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "orders",
+        "ability": "orders-cadian-castellan-astra-militarum",
         "aspect": "duration",
         "operation": "set",
         "value": "until-replaced-battle-shocked-or-battle-end"
@@ -7755,10 +7035,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "rapid-strike-vehicle",
+    "ability_id": "rapid-strike-vehicle-astra-militarum",
     "name": "Rapid Strike Vehicle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7804,10 +7085,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "mechanised-spearhead",
+    "ability_id": "mechanised-spearhead-astra-militarum",
     "name": "Mechanised Spearhead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7831,7 +7113,7 @@
             "type": "ability-modifier",
             "target": "this-model",
             "modifier": {
-              "ability": "voice-of-command",
+              "ability": "voice-of-command-astra-militarum",
               "aspect": "uses",
               "operation": "add",
               "value": 1,
@@ -7853,7 +7135,7 @@
             "type": "ability-activate",
             "target": "this-model",
             "modifier": {
-              "ability": "voice-of-command"
+              "ability": "voice-of-command-astra-militarum"
             }
           }
         ]
@@ -7867,10 +7149,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] Triggers when a friendly ASTRA MILITARUM REGIMENT unit disembarks from a Transport within 6\" of this model, letting it issue 1 Order to that unit regardless of Orders already issued; the disembark trigger and order bypass are collapsed into an opaque grant. Full rule in raw-text store."
+    "community_notes": "[APPROX] Triggers when a friendly ASTRA MILITARUM REGIMENT unit disembarks from a Transport within 6\" of this model, letting it issue 1 Order to that unit regardless of Orders already issued; the disembark trigger and order bypass are collapsed into an opaque grant. Full rule in raw-text store.",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "brutal-disciplinarian",
+    "ability_id": "brutal-disciplinarian-astra-militarum",
     "name": "Brutal Disciplinarian",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7934,18 +7217,18 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "commissar-graves",
-      "commissar-graves-on-foot"
+      "commissar-graves"
     ],
     "ability_type": "unit",
     "behavior": "activated",
     "usage": {
       "frequency": "once-per-turn"
     },
-    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost \u2014 one model in that unit is destroyed \u2014 is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store."
+    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost \u2014 one model in that unit is destroyed \u2014 is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store.",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "icon-of-discipline",
+    "ability_id": "icon-of-discipline-astra-militarum",
     "name": "Icon of Discipline",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7989,10 +7272,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "will-of-iron",
+    "ability_id": "will-of-iron-astra-militarum",
     "name": "Will of Iron",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8023,10 +7307,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "hero-of-hades-hive",
+    "ability_id": "hero-of-hades-hive-astra-militarum",
     "name": "Hero of Hades Hive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8204,7 +7489,7 @@
               "type": "ability-modifier",
               "target": "this-model",
               "modifier": {
-                "ability": "voice-of-command",
+                "ability": "voice-of-command-astra-militarum",
                 "aspect": "range",
                 "operation": "set",
                 "value": 12
@@ -8268,10 +7553,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "convoy-escort-vehicle",
+    "ability_id": "convoy-escort-vehicle-astra-militarum",
     "name": "Convoy Escort Vehicle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8317,10 +7603,11 @@
       "hippogriff-afv"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "horsemasters-draydens-lance",
+    "ability_id": "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum",
     "name": "Horsemasters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8346,10 +7633,11 @@
       "draydens-lance-attilan-rough-riders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "medi-pack-draydens-lance",
+    "ability_id": "medi-pack-draydens-lance-command-squad-astra-militarum",
     "name": "Medi-pack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8371,10 +7659,11 @@
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "orders-draydens-lance",
+    "ability_id": "orders-draydens-lance-command-squad-astra-militarum",
     "name": "Orders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8386,7 +7675,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "uses",
         "operation": "set",
         "value": 2,
@@ -8405,10 +7694,11 @@
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "regimental-standard-draydens-lance",
+    "ability_id": "regimental-standard-draydens-lance-command-squad-astra-militarum",
     "name": "Regimental Standard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8432,10 +7722,11 @@
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "master-vox-draydens-lance",
+    "ability_id": "master-vox-draydens-lance-command-squad-astra-militarum",
     "name": "Master Vox",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8447,7 +7738,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command",
+        "ability": "voice-of-command-astra-militarum",
         "aspect": "range",
         "operation": "set",
         "value": 24
@@ -8460,123 +7751,11 @@
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "voice-of-command-draydens-lance",
-    "name": "Voice of Command",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "version": "launch",
-    "effect": {
-      "type": "issue-orders",
-      "range": 6,
-      "options": [
-        {
-          "name": "Move! Move! Move!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 3
-            }
-          }
-        },
-        {
-          "name": "Fix Bayonets!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "WS",
-              "operation": "improve",
-              "value": 1,
-              "weapon_type": "melee"
-            }
-          }
-        },
-        {
-          "name": "Take Aim!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "BS",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "First Rank, Fire! Second Rank, Fire!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "improve",
-              "value": 1,
-              "weapon_keyword": "Rapid Fire"
-            }
-          }
-        },
-        {
-          "name": "Take Cover!",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "Sv",
-              "operation": "improve",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Duty and Honour!",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "battle-shock",
-                  "operation": "add",
-                  "value": 1
-                }
-              },
-              {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "OC",
-                  "operation": "add",
-                  "value": 1
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "draydens-lance-command-squad",
-      "draydens-lance-kasrkin"
-    ],
-    "ability_type": "faction",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "warrior-elite-draydens-lance",
+    "ability_id": "warrior-elite-draydens-lance-kasrkin-astra-militarum",
     "name": "Warrior Elite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8591,7 +7770,7 @@
           "type": "ability-modifier",
           "target": "this-unit",
           "modifier": {
-            "ability": "voice-of-command",
+            "ability": "voice-of-command-astra-militarum",
             "aspect": "concurrent",
             "operation": "add",
             "value": 1
@@ -8601,7 +7780,7 @@
           "type": "ability-activate",
           "target": "this-unit",
           "modifier": {
-            "ability": "voice-of-command"
+            "ability": "voice-of-command-astra-militarum"
           }
         }
       ]
@@ -8621,10 +7800,11 @@
       "draydens-lance-kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "melta-mine-draydens-lance",
+    "ability_id": "melta-mine-draydens-lance-kasrkin-astra-militarum",
     "name": "Melta Mine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8719,10 +7899,11 @@
       "draydens-lance-kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "vox-caster-draydens-lance",
+    "ability_id": "vox-caster-draydens-lance-kasrkin-astra-militarum",
     "name": "Vox-caster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8821,10 +8002,11 @@
       "draydens-lance-kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum"
   },
   {
-    "ability_id": "over-there-draydens-lance",
+    "ability_id": "over-there-astra-militarum",
     "name": "Over There",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8862,6 +8044,1836 @@
       "draydens-lance-command-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "astra-militarum"
+  },
+  {
+    "ability_id": "abhuman-detail-grizzled-company-astra-militarum",
+    "name": "Abhuman Detail",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ablative-plating-hammer-of-the-emperor-astra-militarum",
+    "name": "Ablative Plating",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "additional-armour-grizzled-company-astra-militarum",
+    "name": "Additional Armour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aquilan-eye-grizzled-company-astra-militarum",
+    "name": "Aquilan Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aquiline-prow-astra-militarum",
+    "name": "Aquiline Prow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-graves"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blazing-advance-hammer-of-the-emperor-astra-militarum",
+    "name": "Blazing Advance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bold-leadership-mechanised-assault-astra-militarum",
+    "name": "Bold Leadership",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum",
+    "name": "Brutal Disciplinarian",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-graves-on-foot"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "call-up-the-reserves-draydens-lance-astra-militarum",
+    "name": "Call Up the Reserves",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "callous-sacrifice-siege-regiment-astra-militarum",
+    "name": "Callous Sacrifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "calm-under-fire-hammer-of-the-emperor-astra-militarum",
+    "name": "Calm Under Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "clear-and-secure-mechanised-assault-astra-militarum",
+    "name": "Clear and Secure",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "coordinated-action-combined-arms-astra-militarum",
+    "name": "Coordinated Action",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "courageous-diversion-recon-element-astra-militarum",
+    "name": "Courageous Diversion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crack-shots-recon-element-astra-militarum",
+    "name": "Crack Shots",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crash-through-hammer-of-the-emperor-astra-militarum",
+    "name": "Crash Through",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-astra-militarum",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "basilisk",
+      "deathstrike",
+      "hellhound",
+      "hydra",
+      "leman-russ-battle-tank",
+      "leman-russ-commander",
+      "leman-russ-demolisher",
+      "leman-russ-eradicator",
+      "leman-russ-executioner",
+      "leman-russ-exterminator",
+      "leman-russ-punisher",
+      "leman-russ-vanquisher",
+      "manticore",
+      "wyvern"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-astra-militarum",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "avenger-strike-fighter",
+      "valkyrie"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-astra-militarum",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "rogal-dorn-battle-tank"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-rogal-dorn-commander-astra-militarum",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "rogal-dorn-commander"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-8-wounds-remaining-astra-militarum",
+    "name": "DAMAGED: 1-8 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "baneblade",
+      "banehammer",
+      "banesword",
+      "doomhammer",
+      "hellhammer",
+      "shadowsword",
+      "stormlord",
+      "stormsword"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-mask-of-ollanius-combined-arms-astra-militarum",
+    "name": "Death Mask of Ollanius",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "draw-them-out-recon-element-astra-militarum",
+    "name": "Draw Them Out",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "draydens-drill-draydens-lance-astra-militarum",
+    "name": "Drayden\u2019s Drill",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "drill-commander-combined-arms-astra-militarum",
+    "name": "Drill Commander",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eager-advance-siege-regiment-astra-militarum",
+    "name": "Eager Advance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "experienced-veterans-astra-militarum",
+    "name": "Experienced Veterans",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fields-of-fire-combined-arms-astra-militarum",
+    "name": "Fields of Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "final-hour-hammer-of-the-emperor-astra-militarum",
+    "name": "Final Hour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "first-wave-draydens-lance-astra-militarum",
+    "name": "First Wave",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flare-burst-siege-regiment-astra-militarum",
+    "name": "Flare Burst",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flash-grenades-siege-regiment-astra-militarum",
+    "name": "Flash Grenades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flexible-command-combined-arms-astra-militarum",
+    "name": "Flexible Command",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "focus-attacks-draydens-lance-astra-militarum",
+    "name": "Focus Attacks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "furious-cannonade-hammer-of-the-emperor-astra-militarum",
+    "name": "Furious Cannonade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "furious-fusillade-siege-regiment-astra-militarum",
+    "name": "Furious Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grand-strategist-combined-arms-astra-militarum",
+    "name": "Grand Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guerrilla-honours-recon-element-astra-militarum",
+    "name": "Guerrilla Honours",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hasty-extraction-mechanised-assault-astra-militarum",
+    "name": "Hasty Extraction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "indomitable-steed-hammer-of-the-emperor-astra-militarum",
+    "name": "Indomitable Steed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inspired-command-combined-arms-astra-militarum",
+    "name": "Inspired Command",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "laud-hailer-grizzled-company-astra-militarum",
+    "name": "Laud Hailer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "legacy-sidearm-siege-regiment-astra-militarum",
+    "name": "Legacy Sidearm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "loyal-protector-ogryn-bodyguard-astra-militarum",
+    "name": "Loyal Protector",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ogryn-bodyguard"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "medi-pack-astra-militarum",
+    "name": "Medi-pack",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cadian-command-squad",
+      "catachan-command-squad"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "minefield-siege-regiment-astra-militarum",
+    "name": "Minefield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mordian-minute-grizzled-company-astra-militarum",
+    "name": "Mordian Minute",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "move-out-mechanised-assault-astra-militarum",
+    "name": "Move Out",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "no-retreat-grizzled-company-astra-militarum",
+    "name": "No Retreat!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "order-astra-militarum",
+    "name": "Order",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "armoured-infantry",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cadian-command-squad",
+      "catachan-command-squad",
+      "krieg-command-squad",
+      "militarum-tempestus-command-squad"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-commissar-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-commissar-graves-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-graves"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-commissar-graves-on-foot-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-graves-on-foot"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-commissar-yarrick-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-yarrick"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-gaunts-ghosts-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gaunts-ghosts"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-leman-russ-commander-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "leman-russ-commander",
+      "rogal-dorn-commander"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-lord-marshal-dreir-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "lord-marshal-dreir",
+      "ursula-creed"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orders-lord-solar-leontus-astra-militarum",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "lord-solar-leontus"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "over-the-top-siege-regiment-astra-militarum",
+    "name": "Over the Top",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purging-fire-grizzled-company-astra-militarum",
+    "name": "Purging Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapid-dispersal-mechanised-assault-astra-militarum",
+    "name": "Rapid Dispersal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reactive-command-combined-arms-astra-militarum",
+    "name": "Reactive Command",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "regimental-banner-hammer-of-the-emperor-astra-militarum",
+    "name": "Regimental Banner",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reinforcements-combined-arms-astra-militarum",
+    "name": "Reinforcements!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sacred-unguents-mechanised-assault-astra-militarum",
+    "name": "Sacred Unguents",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scare-gas-grenades-recon-element-astra-militarum",
+    "name": "Scare Gas Grenades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scouting-outriders-recon-element-astra-militarum",
+    "name": "Scouting Outriders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scramble-field-recon-element-astra-militarum",
+    "name": "Scramble Field",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "slabshield-ogryn-bodyguard-astra-militarum",
+    "name": "Slabshield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ogryn-bodyguard"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "smoke-grenades-mechanised-assault-astra-militarum",
+    "name": "Smoke Grenades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "snap-to-it-grizzled-company-astra-militarum",
+    "name": "Snap To It",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spec-ops-veteran-grizzled-company-astra-militarum",
+    "name": "Spec Ops Veteran",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stalwart-protector-combined-arms-astra-militarum",
+    "name": "Stalwart Protector",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "combined-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stalwarts-honours-siege-regiment-astra-militarum",
+    "name": "Stalwart\u2019s Honours",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "survival-gear-recon-element-astra-militarum",
+    "name": "Survival Gear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swift-interception-mechanised-assault-astra-militarum",
+    "name": "Swift Interception",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tactical-withdrawal-hammer-of-the-emperor-astra-militarum",
+    "name": "Tactical Withdrawal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tanglefoot-grenades-recon-element-astra-militarum",
+    "name": "Tanglefoot Grenades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "trench-fighters-siege-regiment-astra-militarum",
+    "name": "Trench Fighters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "siege-regiment",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tripwires-recon-element-astra-militarum",
+    "name": "Tripwires",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "recon-element",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "using-commissar-graves-astra-militarum",
+    "name": "Using Commissar Graves",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commissar-graves-on-foot"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vanguard-honours-mechanised-assault-astra-militarum",
+    "name": "Vanguard Honours",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veteran-crew-hammer-of-the-emperor-astra-militarum",
+    "name": "Veteran Crew",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "hammer-of-the-emperor",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veteran-sharpshooters-grizzled-company-astra-militarum",
+    "name": "Veteran Sharpshooters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "grizzled-company",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veteran-skirmishers-draydens-lance-astra-militarum",
+    "name": "Veteran Skirmishers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "draydens-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vox-relay-beacon-astra-militarum",
+    "name": "Vox\u2011relay Beacon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cadian-recon-squad"
+    ],
+    "faction_id": "astra-militarum",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vox-relay-mechanised-assault-astra-militarum",
+    "name": "Vox-relay",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "astra-militarum",
+    "detachment_id": "mechanised-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

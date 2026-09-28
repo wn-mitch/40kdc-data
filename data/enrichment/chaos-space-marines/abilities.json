@@ -1,56 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "heretic-astartes-daemon-prince"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "dark-blessing-aura",
+    "ability_id": "dark-blessing-chaos-space-marines",
     "name": "Dark Blessing (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -93,10 +43,11 @@
       "heretic-astartes-daemon-prince"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "ascended-daemon",
+    "ability_id": "ascended-daemon-chaos-space-marines",
     "name": "Ascended Daemon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -135,10 +86,11 @@
       "heretic-astartes-daemon-prince"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "lord-of-chaos",
+    "ability_id": "lord-of-chaos-heretic-astartes-daemon-prince-chaos-space-marines",
     "name": "Lord of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -180,10 +132,11 @@
       "heretic-astartes-daemon-prince"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "daemonic-allegiance",
+    "ability_id": "daemonic-allegiance-chaos-space-marines",
     "name": "Daemonic Allegiance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -219,41 +172,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "heretic-astartes-daemon-prince"
+      "heretic-astartes-daemon-prince",
+      "heretic-astartes-daemon-prince-with-wings"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "heretic-astartes-daemon-prince-with-wings",
-      "kravek-morne"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "daemonic-destruction",
+    "ability_id": "daemonic-destruction-chaos-space-marines",
     "name": "Daemonic Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -276,10 +204,11 @@
       "heretic-astartes-daemon-prince-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "flying-horror",
+    "ability_id": "flying-horror-chaos-space-marines",
     "name": "Flying Horror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -302,37 +231,11 @@
       "heretic-astartes-daemon-prince-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sorcerer-in-terminator-armour",
-      "kravek-morne"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "warptime-psychic",
+    "ability_id": "warptime-chaos-space-marines",
     "name": "Warptime (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -366,10 +269,11 @@
       "sorcerer-in-terminator-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "death-hex-psychic",
+    "ability_id": "death-hex-chaos-space-marines",
     "name": "Death Hex (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -427,10 +331,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "chaos-familiar",
+    "ability_id": "chaos-familiar-chaos-space-marines",
     "name": "Chaos Familiar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -453,113 +358,11 @@
       "sorcerer-in-terminator-armour"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "empyric-guidance-psychic",
-    "name": "Empyric Guidance (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "48abdaff7f9f986c7464892c1a014938cdc6bf241654dc37cfdbbf0adcc8b9c2",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sorcerer-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "marked-by-fate-psychic",
-    "name": "Marked by Fate (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b270c1572a775040b83520e7aaf866c41d99a844f262a0d46ae984b8cb37b3d0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "sorcerer-in-terminator-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "nemesis-claw"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "visions-of-suffering-psychic",
+    "ability_id": "visions-of-suffering-chaos-space-marines",
     "name": "Visions of Suffering (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -619,10 +422,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "voice-eater",
+    "ability_id": "voice-eater-chaos-space-marines",
     "name": "Voice Eater",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -667,10 +471,11 @@
       "nemesis-claw"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "attached-unit",
+    "ability_id": "attached-unit-chaos-space-marines",
     "name": "Attached Unit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -709,10 +514,11 @@
       "nemesis-claw"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "prescience-psychic",
+    "ability_id": "prescience-chaos-space-marines",
     "name": "Prescience (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -747,10 +553,11 @@
       "sorcerer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "gift-of-chaos-psychic",
+    "ability_id": "gift-of-chaos-chaos-space-marines",
     "name": "Gift of Chaos (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -773,170 +580,11 @@
       "sorcerer"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "warped-interference-psychic",
-    "name": "Warped Interference (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b58e4408dfbbed10b6174c7a1f0c32d4a7e12216d0a2c3152fdf19faf3803e75",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sorcerer"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
-  },
-  {
-    "ability_id": "wracking-agonies-psychic",
-    "name": "Wracking Agonies (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "619d906f6bbe630cb1dff40255b67f324628ca55c3fd0cbccbcebefcb697ee44",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "eligibility": {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "this-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "weapon_name": "Agonising Energies"
-              },
-              "window": "event"
-            }
-          },
-          "keywords": [
-            "INFANTRY"
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "subtract",
-                "value": 2
-              }
-            },
-            {
-              "type": "roll-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "roll": "charge",
-                "operation": "subtract",
-                "value": 2
-              }
-            }
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sorcerer"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
-  },
-  {
-    "ability_id": "twisted-sorceries-psychic",
-    "name": "Twisted Sorceries (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "95cceaef0aad073ddbf53539e98fa8a4c5f415f368a531950342e6facef72910",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "S",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "sorcerer"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "faithful-flock",
+    "ability_id": "faithful-flock-chaos-space-marines",
     "name": "Faithful Flock",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -969,10 +617,11 @@
       "dark-commune"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "dark-ritual",
+    "ability_id": "dark-ritual-chaos-space-marines",
     "name": "Dark Ritual",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1016,10 +665,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "chaos-icon",
+    "ability_id": "chaos-icon-chaos-space-marines",
     "name": "Chaos Icon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1040,7 +690,11 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "dark-commune"
+      "chaos-bikers",
+      "chosen",
+      "dark-commune",
+      "legionaries",
+      "possessed"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1051,10 +705,11 @@
         "kind": "dark-pact"
       },
       "optional": true
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "daemonkin-psychic",
+    "ability_id": "daemonkin-chaos-space-marines",
     "name": "Daemonkin (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1089,10 +744,11 @@
       "master-of-possession"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "sacrificial-dagger",
+    "ability_id": "sacrificial-dagger-chaos-space-marines",
     "name": "Sacrificial Dagger",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1142,10 +798,11 @@
     "community_notes": "auto-generated, partial",
     "usage": {
       "frequency": "once-per-phase"
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "warp-rift-firepower",
+    "ability_id": "warp-rift-firepower-chaos-space-marines",
     "name": "Warp Rift Firepower",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1179,10 +836,11 @@
       "obliterators"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "corrupt-machine-spirits",
+    "ability_id": "corrupt-machine-spirits-chaos-space-marines",
     "name": "Corrupt Machine Spirits",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1214,10 +872,11 @@
       "lord-discordant-on-helstalker"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "spirit-thief",
+    "ability_id": "spirit-thief-chaos-space-marines",
     "name": "Spirit Thief",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1251,10 +910,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "despoilers",
+    "ability_id": "despoilers-chaos-space-marines",
     "name": "Despoilers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1278,10 +938,11 @@
       "chaos-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "fiery-faith",
+    "ability_id": "fiery-faith-chaos-space-marines",
     "name": "Fiery Faith",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1316,10 +977,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "cursed-flames",
+    "ability_id": "cursed-flames-chaos-space-marines",
     "name": "Cursed Flames",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1351,61 +1013,11 @@
       "cultist-firebrand"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-land-raider",
-      "defiler"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "assault-ramp",
+    "ability_id": "assault-ramp-chaos-space-marines",
     "name": "Assault Ramp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1457,10 +1069,11 @@
       "chaos-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "unholy-bloodshed",
+    "ability_id": "unholy-bloodshed-chaos-space-marines",
     "name": "Unholy Bloodshed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1489,10 +1102,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "brutal-example",
+    "ability_id": "brutal-example-chaos-space-marines",
     "name": "Brutal Example",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1548,10 +1162,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "mutated-bodyguard",
+    "ability_id": "mutated-bodyguard-chaos-space-marines",
     "name": "Mutated Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1574,10 +1189,11 @@
       "traitor-enforcer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "dark-zealotry",
+    "ability_id": "dark-zealotry-chaos-space-marines",
     "name": "Dark Zealotry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1623,10 +1239,11 @@
       "dark-apostle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "demagogue",
+    "ability_id": "demagogue-chaos-space-marines",
     "name": "Demagogue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1668,10 +1285,11 @@
       "dark-apostle"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "malign-sacrifice",
+    "ability_id": "malign-sacrifice-chaos-space-marines",
     "name": "Malign Sacrifice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1703,36 +1321,11 @@
       "dark-apostle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mind-breaking-mutations-aura",
+    "ability_id": "mind-breaking-mutations-chaos-space-marines",
     "name": "Mind-breaking Mutations (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1782,271 +1375,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "lethal-ichor",
-    "name": "Lethal Ichor",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e3e07fc31ce14b4a2003c13bfe1095f0d6eadea359bd11a67fb3645d2405aef7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "1"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "scuttling-horrors",
-    "name": "Scuttling Horrors",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d74226911a1121a417afcd59f2174b1078a6f4daa86592c8fc419407f931650d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "within",
-            "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "subject": "this-unit",
-                  "state": "engaged"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "optional": true
-    },
-    "usage": {
-      "frequency": "once-per-turn"
-    }
-  },
-  {
-    "ability_id": "regenerating-monstrosities",
-    "name": "Regenerating Monstrosities",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ea8b35e9195d72de1e5e998718a812cf294fe82c7398534177114bb29e890784",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 3
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "to-slake-its-rage",
-    "name": "To Slake its Rage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4b26303e351e1a976044235a1b48f365091d27c8bdeaf5720177c82d3222d4b3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "annihilator",
+    "ability_id": "annihilator-chaos-space-marines",
     "name": "Annihilator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2079,177 +1412,11 @@
       "chaos-predator-annihilator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "metalophagic-infection",
-    "name": "Metalophagic Infection",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "dc1ab4f6b1e4d639a778976a54a3e3efb8a351331d6baf767165a04611ad0380",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "ensorcelled-annihilation",
-    "name": "Ensorcelled Annihilation",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9761358eeb1fd371691e1dff290c85cd8bc2882c1297d476c70ea32f10a31185",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "damage",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "blood-hungry-annihilator",
-    "name": "Blood-hungry Annihilator",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a78cde15e84d8fcabdc38b7b1642e7de9b918a9b1479ccbef093cc3db0f400be",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "closest",
-            "parameters": {
-              "subject": "defender",
-              "among": "eligible-targets",
-              "range": {
-                "inches": 18
-              }
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "damage",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": "this-model",
-      "filter": {
-        "roll": "wound"
-      }
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "Re-roll the Wound roll and the Damage roll against the closest eligible Monster or Vehicle within 18\". Shared Chaos Predator Annihilator ability, kept identical to the World Eaters copy."
-  },
-  {
-    "ability_id": "soul-eater",
+    "ability_id": "soul-eater-chaos-space-marines",
     "name": "Soul Eater",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2283,10 +1450,11 @@
       "venomcrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "stabilisation-talons",
+    "ability_id": "stabilisation-talons-chaos-space-marines",
     "name": "Stabilisation Talons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2312,10 +1480,11 @@
       "havocs"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "malevolent-locus-aura",
+    "ability_id": "malevolent-locus-chaos-space-marines",
     "name": "Malevolent Locus (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2360,10 +1529,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "malign-cover",
+    "ability_id": "malign-cover-chaos-space-marines",
     "name": "Malign Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2395,10 +1565,11 @@
       "noctilith-crown"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "fortification",
+    "ability_id": "fortification-chaos-space-marines",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2432,10 +1603,11 @@
       "noctilith-crown"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "fearsome-aura",
+    "ability_id": "fearsome-chaos-space-marines",
     "name": "Fearsome (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2500,10 +1672,11 @@
           }
         }
       }
-    ]
+    ],
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "terrifying-assault",
+    "ability_id": "terrifying-assault-chaos-space-marines",
     "name": "Terrifying Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2540,10 +1713,11 @@
       "raptors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "daemonforge",
+    "ability_id": "daemonforge-chaos-space-marines",
     "name": "Daemonforge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2585,10 +1759,11 @@
       "frequency": "n-per-battle",
       "count": 1
     },
-    "community_notes": "[APPROX] On a Dark Pact this unit re-rolls Wound rolls of 1; the second step models the once-per-battle overcharge that instead grants a full Wound re-roll. The overcharge is optional and, if the Dark Pact Leadership test is then failed, the model suffers 3 mortal wounds instead of D3 — not modeled here. Full rule in raw-text store."
+    "community_notes": "[APPROX] On a Dark Pact this unit re-rolls Wound rolls of 1; the second step models the once-per-battle overcharge that instead grants a full Wound re-roll. The overcharge is optional and, if the Dark Pact Leadership test is then failed, the model suffers 3 mortal wounds instead of D3 — not modeled here. Full rule in raw-text store.",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "scuttling-walker",
+    "ability_id": "scuttling-walker-chaos-space-marines",
     "name": "Scuttling Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2613,196 +1788,11 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "barrage-of-filth",
-    "name": "Barrage of Filth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7bea022924b2f05b9989670ef25363f66eddc58f9f7d7b15ced4897967c8b785",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "destroyer-of-futures",
-    "name": "Destroyer of Futures",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5d47c99e7260e0f1081782263169754dbf0c5fe21256ac2022631c497d03a5eb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "use-stratagem",
-            "allow": true,
-            "despite": [
-              "stratagem-used-this-phase"
-            ],
-            "stratagem": "counter-offensive"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "of": "stratagem",
-            "id": "counter-offensive",
-            "operation": "decrease",
-            "amount": 1,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "unleash-wrath",
-    "name": "Unleash Wrath",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d5ab4b32d95575ff4280b7bb886086cd31c127509853b90e4100b8a71017829d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "of": {
-            "owner": "enemy"
-          },
-          "range": {
-            "inches": 12
-          }
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "options": [
-          {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "permission",
-                "target": "this-model",
-                "modifier": {
-                  "activity": "shoot",
-                  "allow": true,
-                  "as_if": "shooting-phase"
-                }
-              },
-              {
-                "type": "targeting",
-                "target": "this-model",
-                "modifier": {
-                  "by": "this-model",
-                  "may": "must-target",
-                  "target": "selected-unit",
-                  "kind": "shoot"
-                }
-              }
-            ]
-          },
-          {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "permission",
-                "target": "this-model",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": true
-                }
-              },
-              {
-                "type": "targeting",
-                "target": "this-model",
-                "modifier": {
-                  "by": "this-model",
-                  "may": "must-target",
-                  "target": "selected-unit",
-                  "kind": "charge"
-                }
-              }
-            ]
-          }
-        ],
-        "choice_label": "Shoot at or charge the arriving unit"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "destructor",
+    "ability_id": "destructor-chaos-space-marines",
     "name": "Destructor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2836,146 +1826,11 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "hail-of-corrosive-disease",
-    "name": "Hail of Corrosive Disease",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ec09ab314cc9ad2dbab8003fa7a45e762eff6afaa282d6ec9e76dbbe8a122631",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "ensorcelled-destruction",
-    "name": "Ensorcelled Destruction",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6576d881e3fb69a78e7418fe09666286fa47553dba2eb9d1aef45eb3be8a357d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "punishing-suppression",
-    "name": "Punishing Suppression",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ef495731fd4c03408c108954f5d230577b72ffe049f6fbbc5792d35ea2748675",
-    "version": "2025-q3",
-    "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
-        }
-      },
-      "duration": "until-next-command-phase"
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "MONSTER and VEHICLE units cannot be suppressed."
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "chosen-marauders",
+    "ability_id": "chosen-marauders-chaos-space-marines",
     "name": "Chosen Marauders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3002,10 +1857,11 @@
       "chosen"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "twisted-defence-force",
+    "ability_id": "twisted-defence-force-chaos-space-marines",
     "name": "Twisted Defence Force",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3038,36 +1894,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "heldrake"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "airborne-predator",
+    "ability_id": "airborne-predator-chaos-space-marines",
     "name": "Airborne Predator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3103,36 +1934,11 @@
       "heldrake"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "flame-wreathed",
-    "name": "Flame-wreathed",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0e91e9ce75838cca115ee817dc5c0c2611e6581d99e5878031672e17a4ac626a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "benefit-of-cover"
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "heldrake"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "siege-shield",
+    "ability_id": "siege-shield-chaos-space-marines",
     "name": "Siege Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3191,10 +1997,11 @@
       "chaos-vindicator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "daemonic-ordnance",
+    "ability_id": "daemonic-ordnance-chaos-space-marines",
     "name": "Daemonic Ordnance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3219,99 +2026,11 @@
       "forgefiend"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "blazing-salvoes",
-    "name": "Blazing Salvoes",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e6d650d614c122d71d2f776af3cc2474f7d692acc17203944fc046db5f219cd1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "forgefiend"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "furious-onslaught",
-    "name": "Furious Onslaught",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6bd89d694fa4ca863e2f0f066fb5656357045733c3ab6a2ca75f42bf22da9fdc",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "closest",
-            "parameters": {
-              "subject": "defender",
-              "among": "eligible-targets",
-              "to": "this-model",
-              "range": {
-                "inches": 18
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "forgefiend"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "warpsmith",
+    "ability_id": "warpsmith-chaos-space-marines",
     "name": "Warpsmith",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3353,10 +2072,11 @@
       "warpsmith"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "master-of-mechanisms",
+    "ability_id": "master-of-mechanisms-chaos-space-marines",
     "name": "Master of Mechanisms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3410,10 +2130,11 @@
       "warpsmith"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "enrage-machine-spirits",
+    "ability_id": "enrage-machine-spirits-chaos-space-marines",
     "name": "Enrage Machine Spirits",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3443,10 +2164,11 @@
       "warpsmith"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "formidably-resilient",
+    "ability_id": "formidably-resilient-chaos-space-marines",
     "name": "Formidably Resilient",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3470,36 +2192,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "red-corsairs-raiders"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "trophy-takers",
+    "ability_id": "trophy-takers-chaos-space-marines",
     "name": "Trophy Takers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3524,10 +2221,11 @@
       "red-corsairs-raiders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "warp-sighted-butcher",
+    "ability_id": "warp-sighted-butcher-chaos-space-marines",
     "name": "Warp-sighted Butcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3598,10 +2296,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "trophy-taker",
+    "ability_id": "trophy-taker-chaos-space-marines",
     "name": "Trophy Taker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3624,124 +2323,11 @@
       "master-of-executions"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "forwards-for-blood",
-    "name": "Forwards, for Blood!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5ffdd8e33c57c0285d51225e0b73418b82bbcf9464e37b4aa96fb969421f8caf",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "advance",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "surge",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "master-of-executions"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "a-worthy-skull",
-    "name": "A Worthy Skull",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e9296df876d1b927b4c120f13d0770d3fd58deb3d2dda29eaa105fa73e3b1b7b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "master-of-executions"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "howling-horde",
+    "ability_id": "howling-horde-chaos-space-marines",
     "name": "Howling Horde",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3810,10 +2396,11 @@
       "accursed-cultists"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "dark-ascension-aura",
+    "ability_id": "dark-ascension-chaos-space-marines",
     "name": "Dark Ascension (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3826,7 +2413,7 @@
       "type": "ability-modifier",
       "target": "event-subject",
       "modifier": {
-        "ability": "dark-pacts",
+        "ability": "dark-pacts-chaos-space-marines",
         "aspect": "selections",
         "operation": "set",
         "value": 2
@@ -3858,10 +2445,11 @@
           "inches": 6
         }
       }
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "devoted-to-destruction",
+    "ability_id": "devoted-to-destruction-chaos-space-marines",
     "name": "Devoted to Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3886,108 +2474,11 @@
       "helbrute"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "diseased-malice",
-    "name": "Diseased Malice",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3aed51adecd127e4385aae2a90707cfa7a392c229fad55ef1985691694cc880a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "designated",
-        "parameters": {
-          "subject": "defender",
-          "tag": "AFFLICTED"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "froth-spattered-frenzy",
-    "name": "Froth-spattered Frenzy",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "35a0742f18f5a090fa40c27731e9f9626abee68fbbe2afe7bf8811ac5415dd8e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "frenzy",
-    "name": "Frenzy",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d61d9ce5cba4d0695840b8ee8f860cd779b1e61d4811daa84374f074d9343688",
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "fight",
-        "allow": true,
-        "despite": [
-          "fought-this-phase"
-        ],
-        "next": true
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "cruel-hunter",
+    "ability_id": "cruel-hunter-chaos-space-marines",
     "name": "Cruel Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4021,10 +2512,11 @@
       "chaos-lord-with-jump-pack"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "for-the-dark-gods",
+    "ability_id": "for-the-dark-gods-chaos-space-marines",
     "name": "For the Dark Gods",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4044,10 +2536,11 @@
       "cultist-mob"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "chance-for-glory",
+    "ability_id": "chance-for-glory-chaos-space-marines",
     "name": "Chance for Glory",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4081,10 +2574,11 @@
       "chaos-lord"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "rapid-assault",
+    "ability_id": "rapid-assault-chaos-space-marines",
     "name": "Rapid Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4135,10 +2629,11 @@
       "chaos-bikers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "warp-strike",
+    "ability_id": "warp-strike-chaos-space-marines",
     "name": "Warp Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4203,10 +2698,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "bestial-raiders",
+    "ability_id": "bestial-raiders-chaos-space-marines",
     "name": "Bestial Raiders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4278,10 +2774,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "siege-crawler",
+    "ability_id": "siege-crawler-chaos-space-marines",
     "name": "Siege Crawler",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4307,299 +2804,11 @@
       "maulerfiend"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "glutton-for-punishment",
-    "name": "Glutton for Punishment",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "45110617bf448a0e94f4da6041a744f80fd11b6cdebc80cea1e4d7ee46fd8bac",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "maulerfiend"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "snarling-protector",
-    "name": "Snarling Protector",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1ad9f0a362cd2e6a8d35bdf00178571b590960d987a70c6c0a4f300621997407",
-    "version": "2025-q3",
-    "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "charge",
-        "subset": "all-failures"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "maulerfiend"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "the-scent-of-blood",
-    "name": "The Scent of Blood",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9a37587b9a0a2c87941841d791521fa52b41d7d8f6c005aebcbdad1ac06f6005",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
-          },
-          {
-            "type": "within",
-            "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 9
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "Enemy weakness within 9\"",
-        "options": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "strength",
-              "parameters": {
-                "subject": {
-                  "owner": "enemy",
-                  "within": {
-                    "range": {
-                      "inches": 9
-                    }
-                  }
-                },
-                "below": "starting"
-              }
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "charge",
-                "operation": "add",
-                "value": 1
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "strength",
-              "parameters": {
-                "subject": {
-                  "owner": "enemy",
-                  "within": {
-                    "range": {
-                      "inches": 9
-                    }
-                  }
-                },
-                "below": "half"
-              }
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "charge",
-                "operation": "add",
-                "value": 2
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "maulerfiend"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
-  },
-  {
-    "ability_id": "savage-exaltation",
-    "name": "Savage Exaltation",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "bba9e9e607b09b6f5bbd3b3f6a0bb493ef363a80bfbe95802333280e1d376ed0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "maulerfiend"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
-  },
-  {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "self-repair",
+    "ability_id": "self-repair-chaos-space-marines",
     "name": "Self Repair",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4622,217 +2831,11 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fire-support",
-    "name": "Fire Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a14f7b7ffd3387e00fc9b9e71a35abe7e4f5d8a1cb778560e6f97acc60eaa68a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "assault-vehicle",
-    "name": "Assault Vehicle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4ab406ce36efb22a414375533c6b08391a97f5a83025e0d36cb331c4fc5790da",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "disembark",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "disembarked",
-            "subject": {
-              "owner": "friendly"
-            },
-            "object": "this-model"
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "this-model",
-                "filter": {
-                  "move_types": [
-                    "advance"
-                  ]
-                },
-                "window": "turn"
-              }
-            },
-            "effect": {
-              "type": "permission",
-              "target": "event-subject",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": false
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "sorcerous-support",
-    "name": "Sorcerous Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6bfa24229471175538d8cb20994aefcadea93ca4dfb38ee384bfc7dbfea9c61f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "meet-any-challenge",
-    "name": "Meet Any Challenge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d31e6bedebb92536fa04f0bf839e552a1bf3bbe9bf287d1910954ad9516213dd",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "subject": "event-subject",
-          "of": "this-model",
-          "range": {
-            "inches": 8
-          }
-        }
-      },
-      "effect": {
-        "type": "permission",
-        "target": {
-          "owner": "friendly",
-          "state": "embarked"
-        },
-        "modifier": {
-          "activity": "disembark",
-          "allow": true
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "optional": true
-    }
-  },
-  {
-    "ability_id": "veterans-of-the-long-war",
+    "ability_id": "veterans-of-the-long-war-chaos-space-marines",
     "name": "Veterans of the Long War",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4865,10 +2868,11 @@
       "legionaries"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "brutal-raider",
+    "ability_id": "brutal-raider-chaos-space-marines",
     "name": "Brutal Raider",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4908,10 +2912,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "raider-s-due",
+    "ability_id": "raiders-due-chaos-space-marines",
     "name": "Raider’s Due",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4935,10 +2940,11 @@
       "red-corsairs-reave-captain"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "choice-samples",
+    "ability_id": "choice-samples-chaos-space-marines",
     "name": "Choice Samples",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4970,10 +2976,11 @@
       "masters-of-the-maelstrom"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "fleet-command",
+    "ability_id": "fleet-command-chaos-space-marines",
     "name": "Fleet Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5046,10 +3053,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "deployment-ended"
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "plunder",
+    "ability_id": "plunder-chaos-space-marines",
     "name": "Plunder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5087,36 +3095,11 @@
       "masters-of-the-maelstrom"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "masters-of-the-maelstrom",
-    "name": "Masters of the Maelstrom",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3eb6fedb735b25c4e4f9b0320098eeeafd3edc4d09506cd886c9da6e4838cb87",
-    "version": "2025-q3",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "attachment"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "masters-of-the-maelstrom"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "unholy-mechanisms-aura",
+    "ability_id": "unholy-mechanisms-chaos-space-marines",
     "name": "Unholy Mechanisms (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5152,10 +3135,11 @@
       "vashtorr-the-arkifane"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "reorder-reality",
+    "ability_id": "reorder-reality-chaos-space-marines",
     "name": "Reorder Reality",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5180,10 +3164,11 @@
       "vashtorr-the-arkifane"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "indentured-daemon-engines",
+    "ability_id": "indentured-daemon-engines-chaos-space-marines",
     "name": "Indentured Daemon Engines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5225,10 +3210,11 @@
       "vashtorr-the-arkifane"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "lord-of-badab-aura",
+    "ability_id": "lord-of-badab-chaos-space-marines",
     "name": "Lord of Badab (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5282,10 +3268,11 @@
       "huron-blackheart"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "hamadrya-s-knowledge-psychic",
+    "ability_id": "hamadryas-knowledge-chaos-space-marines",
     "name": "Hamadrya’s Knowledge (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5345,10 +3332,11 @@
         "owner": "enemy"
       },
       "optional": true
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "head-taker",
+    "ability_id": "head-taker-chaos-space-marines",
     "name": "Head Taker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5381,10 +3369,11 @@
       "haarken-worldclaimer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "herald-of-the-apocalypse-aura",
+    "ability_id": "herald-of-the-apocalypse-chaos-space-marines",
     "name": "Herald of the Apocalypse (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5423,10 +3412,11 @@
       "haarken-worldclaimer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "warmaster",
+    "ability_id": "warmaster-chaos-space-marines",
     "name": "Warmaster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5576,10 +3566,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "dark-destiny",
+    "ability_id": "dark-destiny-chaos-space-marines",
     "name": "Dark Destiny",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5602,10 +3593,11 @@
       "abaddon-the-despoiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-chaos-space-marines",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5628,10 +3620,11 @@
       "abaddon-the-despoiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "enhanced-warriors",
+    "ability_id": "enhanced-warriors-chaos-space-marines",
     "name": "Enhanced Warriors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5666,10 +3659,11 @@
       "fabius-bile"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "surgeon-acolyte",
+    "ability_id": "surgeon-acolyte-chaos-space-marines",
     "name": "Surgeon Acolyte",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5695,10 +3689,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "chirurgeon",
+    "ability_id": "chirurgeon-chaos-space-marines",
     "name": "Chirurgeon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5737,44 +3732,11 @@
       "filter": {
         "first": true
       }
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cypher"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "agent-of-discord-aura",
+    "ability_id": "agent-of-discord-chaos-space-marines",
     "name": "Agent of Discord (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5807,10 +3769,11 @@
       "cypher"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "guns-blazing",
+    "ability_id": "guns-blazing-chaos-space-marines",
     "name": "Guns Blazing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5875,60 +3838,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "khorne-lord-of-skulls"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "plough-through-the-enemy",
+    "ability_id": "plough-through-the-enemy-chaos-space-marines",
     "name": "Plough Through the Enemy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5983,176 +3897,11 @@
       "khorne-lord-of-skulls"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "idol-of-blessed-blood",
-    "name": "Idol of Blessed Blood",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "52b2504b0593c9457ea9f17916a5ca2928760b63cca0b59e14cc5de1cd8f8964",
-    "version": "2025-q3",
-    "effect": {
-      "type": "resource-die",
-      "target": "this-model",
-      "modifier": {
-        "pool": "blessings-of-khorne-pool",
-        "operation": "add",
-        "value": "rolled",
-        "count": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "khorne-lord-of-skulls"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "At the start of the battle round, while this model is on the battlefield, one additional (rolled) D6 is added to your Blessings of Khorne roll. Shared datasheet ability (Khorne Lord of Skulls); the world-eaters copy is the authored original — the linked API resolves each faction's own copy, so the two may evolve independently.",
-    "trigger": {
-      "event": "round-started"
-    }
-  },
-  {
-    "ability_id": "super-heavy-war-engine",
-    "name": "Super-heavy War Engine",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3f83d9490cdbf1acef828c5a81f4c355680f8828c9fb767f81755a49dbf012ee",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move-modifier",
-          "target": "this-model",
-          "modifier": {
-            "applies_to_moves": [
-              "normal",
-              "advance",
-              "fall-back"
-            ],
-            "passthrough": [
-              "models-excluding-titanic",
-              "terrain"
-            ],
-            "no_end_in_engagement": true
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "subject": "this-model",
-              "filter": {
-                "through": "tall-terrain"
-              },
-              "window": "event"
-            }
-          },
-          "effect": {
-            "type": "dice-gated",
-            "dice": "D6",
-            "threshold": 1,
-            "comparison": "eq",
-            "on_success": {
-              "type": "state-change",
-              "target": "this-unit",
-              "modifier": {
-                "state": "battle-shocked",
-                "set": true
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "khorne-lord-of-skulls"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "death-frenzy",
-    "name": "Death Frenzy",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "bcf93ec4a4121e8ace2472008b618ce4bffde6147ba7cb55aa96593d420292a8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "act-on-death",
-        "target": "this-model",
-        "modifier": {
-          "act": "fight"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mutilators"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "cult-of-destruction",
-    "name": "CULT OF DESTRUCTION",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28b1e2304599d6c33d1d93749bfcd64ec393747031f897dae0e00f04114d8017",
-    "version": "2025-q3",
-    "effect": {
-      "type": "transport-capacity",
-      "target": "this-unit",
-      "modifier": {
-        "occupancy_kind": "equivalent-model",
-        "subject_kind": "unit-models",
-        "model_keyword": "MUTILATOR",
-        "equivalent_model_keyword": "OBLITERATOR"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mutilators"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "dark-pacts",
+    "ability_id": "dark-pacts-chaos-space-marines",
     "name": "Dark Pacts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6220,12 +3969,10 @@
     "faction_id": "chaos-space-marines",
     "ability_type": "faction",
     "behavior": "activated",
-    "unit_ids": [
-      "kravek-morne"
-    ]
+    "unit_ids": []
   },
   {
-    "ability_id": "cults-of-the-dark-gods",
+    "ability_id": "cults-of-the-dark-gods-chaos-space-marines",
     "name": "Cults of the Dark Gods",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6294,7 +4041,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "empyric-wellspring",
+    "ability_id": "empyric-wellspring-chaos-space-marines",
     "name": "Empyric Wellspring",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6455,7 +4202,7 @@
     }
   },
   {
-    "ability_id": "touched-by-the-warp-cabal-of-chaos",
+    "ability_id": "touched-by-the-warp-cabal-of-chaos-chaos-space-marines",
     "name": "Touched by the Warp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6506,7 +4253,7 @@
     }
   },
   {
-    "ability_id": "conduit-of-chaos-cabal-of-chaos",
+    "ability_id": "conduit-of-chaos-cabal-of-chaos-chaos-space-marines",
     "name": "Conduit of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6545,7 +4292,7 @@
     }
   },
   {
-    "ability_id": "infernal-vigour-cabal-of-chaos",
+    "ability_id": "infernal-vigour-cabal-of-chaos-chaos-space-marines",
     "name": "Infernal Vigour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6580,7 +4327,7 @@
     }
   },
   {
-    "ability_id": "fleshy-curse-cabal-of-chaos",
+    "ability_id": "fleshy-curse-cabal-of-chaos-chaos-space-marines",
     "name": "Fleshy Curse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6663,7 +4410,7 @@
     }
   },
   {
-    "ability_id": "wreathed-in-warpflame-cabal-of-chaos",
+    "ability_id": "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines",
     "name": "Wreathed in Warpflame",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6699,7 +4446,7 @@
     }
   },
   {
-    "ability_id": "rain-of-ruin",
+    "ability_id": "rain-of-ruin-chaos-space-marines",
     "name": "Rain of Ruin",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6740,7 +4487,7 @@
     }
   },
   {
-    "ability_id": "pact-of-destruction-devotees-of-destruction",
+    "ability_id": "pact-of-destruction-devotees-of-destruction-chaos-space-marines",
     "name": "Pact of Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6813,7 +4560,7 @@
     }
   },
   {
-    "ability_id": "eye-of-oblivion-devotees-of-destruction",
+    "ability_id": "eye-of-oblivion-devotees-of-destruction-chaos-space-marines",
     "name": "Eye of Oblivion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6855,7 +4602,7 @@
     }
   },
   {
-    "ability_id": "ruinations-bounty-devotees-of-destruction",
+    "ability_id": "ruinations-bounty-devotees-of-destruction-chaos-space-marines",
     "name": "Ruination's Bounty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6905,7 +4652,7 @@
     }
   },
   {
-    "ability_id": "snare-of-fire-devotees-of-destruction",
+    "ability_id": "snare-of-fire-devotees-of-destruction-chaos-space-marines",
     "name": "Snare of Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6938,7 +4685,7 @@
     }
   },
   {
-    "ability_id": "undying-hatred-devotees-of-destruction",
+    "ability_id": "undying-hatred-devotees-of-destruction-chaos-space-marines",
     "name": "Undying Hatred",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6990,7 +4737,7 @@
     }
   },
   {
-    "ability_id": "prey-on-the-weak-raiders",
+    "ability_id": "prey-on-the-weak-chaos-space-marines",
     "name": "Prey on the Weak",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7086,7 +4833,7 @@
     }
   },
   {
-    "ability_id": "shadowcowl-talisman-murdertalon-raiders",
+    "ability_id": "shadowcowl-talisman-murdertalon-raiders-chaos-space-marines",
     "name": "Shadowcowl Talisman",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7118,7 +4865,7 @@
     }
   },
   {
-    "ability_id": "pact-of-cursed-pinions-murdertalon-raiders",
+    "ability_id": "pact-of-cursed-pinions-murdertalon-raiders-chaos-space-marines",
     "name": "Pact of Cursed Pinions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7167,7 +4914,7 @@
     }
   },
   {
-    "ability_id": "plunging-talons-murdertalon-raiders",
+    "ability_id": "plunging-talons-murdertalon-raiders-chaos-space-marines",
     "name": "Plunging Talons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7204,7 +4951,7 @@
     }
   },
   {
-    "ability_id": "raking-pass-murdertalon-raiders",
+    "ability_id": "raking-pass-murdertalon-raiders-chaos-space-marines",
     "name": "Raking Pass",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7242,7 +4989,7 @@
     }
   },
   {
-    "ability_id": "warp-twisted-terrors-murdertalon-raiders",
+    "ability_id": "warp-twisted-terrors-murdertalon-raiders-chaos-space-marines",
     "name": "Warp-Twisted Terrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7288,7 +5035,7 @@
     }
   },
   {
-    "ability_id": "warp-portals",
+    "ability_id": "warp-portals-chaos-space-marines",
     "name": "Warp Portals",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7367,7 +5114,7 @@
     }
   },
   {
-    "ability_id": "infernal-fulgurite-warpstrike-champions",
+    "ability_id": "infernal-fulgurite-warpstrike-champions-chaos-space-marines",
     "name": "Infernal Fulgurite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7423,7 +5170,7 @@
     }
   },
   {
-    "ability_id": "eye-of-the-warp-warpstrike-champions",
+    "ability_id": "eye-of-the-warp-warpstrike-champions-chaos-space-marines",
     "name": "Eye of the Warp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7459,7 +5206,7 @@
     }
   },
   {
-    "ability_id": "akshurs-binding-runes-warpstrike-champions",
+    "ability_id": "akshurs-binding-runes-warpstrike-champions-chaos-space-marines",
     "name": "Akshur's Binding Runes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7499,7 +5246,7 @@
     }
   },
   {
-    "ability_id": "tzagulla-warpstrike-champions",
+    "ability_id": "tzagulla-warpstrike-champions-chaos-space-marines",
     "name": "Tzagulla",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7574,7 +5321,7 @@
     }
   },
   {
-    "ability_id": "empyric-dislocation-warpstrike-champions",
+    "ability_id": "empyric-dislocation-warpstrike-champions-chaos-space-marines",
     "name": "Empyric Dislocation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7612,7 +5359,7 @@
     }
   },
   {
-    "ability_id": "warp-tainted-warpstrike-champions",
+    "ability_id": "warp-tainted-warpstrike-champions-chaos-space-marines",
     "name": "Warp-Tainted",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7648,7 +5395,7 @@
     }
   },
   {
-    "ability_id": "siegebreaker-strike-warpstrike-champions",
+    "ability_id": "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
     "name": "Siegebreaker Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7683,7 +5430,7 @@
     }
   },
   {
-    "ability_id": "armour-of-corruption-warpstrike-champions",
+    "ability_id": "armour-of-corruption-warpstrike-champions-chaos-space-marines",
     "name": "Armour of Corruption",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7715,7 +5462,7 @@
     }
   },
   {
-    "ability_id": "warp-flicker-warpstrike-champions",
+    "ability_id": "warp-flicker-warpstrike-champions-chaos-space-marines",
     "name": "Warp Flicker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7767,7 +5514,7 @@
     }
   },
   {
-    "ability_id": "portal-of-spite-warpstrike-champions",
+    "ability_id": "portal-of-spite-warpstrike-champions-chaos-space-marines",
     "name": "Portal of Spite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7801,7 +5548,7 @@
     }
   },
   {
-    "ability_id": "soul-forge-boons",
+    "ability_id": "soul-forge-boons-chaos-space-marines",
     "name": "Soul Forge Boons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7893,7 +5640,7 @@
     }
   },
   {
-    "ability_id": "wyredjinn-cult-of-the-arkifane",
+    "ability_id": "wyredjinn-cult-of-the-arkifane-chaos-space-marines",
     "name": "Wyredjinn",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7944,7 +5691,7 @@
     }
   },
   {
-    "ability_id": "cybinfernal-font-cult-of-the-arkifane",
+    "ability_id": "cybinfernal-font-cult-of-the-arkifane-chaos-space-marines",
     "name": "Cybinfernal Font",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7981,7 +5728,7 @@
     }
   },
   {
-    "ability_id": "mark-of-the-soul-forges-cult-of-the-arkifane",
+    "ability_id": "mark-of-the-soul-forges-cult-of-the-arkifane-chaos-space-marines",
     "name": "Mark of the Soul Forges",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8017,7 +5764,7 @@
     }
   },
   {
-    "ability_id": "crown-of-worms-cult-of-the-arkifane",
+    "ability_id": "crown-of-worms-cult-of-the-arkifane-chaos-space-marines",
     "name": "Crown of Worms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8039,7 +5786,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "warpsmith",
+            "ability": "warpsmith-chaos-space-marines",
             "aspect": "range",
             "operation": "add",
             "value": 3
@@ -8049,7 +5796,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "master-of-mechanisms",
+            "ability": "master-of-mechanisms-chaos-space-marines",
             "aspect": "range",
             "operation": "add",
             "value": 3
@@ -8059,7 +5806,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "enrage-machine-spirits",
+            "ability": "enrage-machine-spirits-chaos-space-marines",
             "aspect": "range",
             "operation": "add",
             "value": 3
@@ -8077,7 +5824,7 @@
     }
   },
   {
-    "ability_id": "touch-of-the-arkifane-cult-of-the-arkifane",
+    "ability_id": "touch-of-the-arkifane-cult-of-the-arkifane-chaos-space-marines",
     "name": "Touch of the Arkifane",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8096,7 +5843,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "dark-pacts",
+        "ability": "dark-pacts-chaos-space-marines",
         "aspect": "selections",
         "operation": "set",
         "value": 2
@@ -8115,7 +5862,7 @@
     }
   },
   {
-    "ability_id": "balefire-boon-cult-of-the-arkifane",
+    "ability_id": "balefire-boon-cult-of-the-arkifane-chaos-space-marines",
     "name": "Balefire Boon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8149,53 +5896,7 @@
     }
   },
   {
-    "ability_id": "soul-tally-offering-cult-of-the-arkifane",
-    "name": "Soul-Tally Offering",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "chaos-space-marines",
-    "detachment_id": "cult-of-the-arkifane",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "CHARACTER",
-            "MONSTER",
-            "VEHICLE"
-          ]
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "applies_to": {
-      "required_keywords": [
-        "Soul Forge"
-      ]
-    }
-  },
-  {
-    "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane",
+    "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
     "name": "Biomechanoid Regeneration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8268,7 +5969,7 @@
     }
   },
   {
-    "ability_id": "forge-fire-surge-cult-of-the-arkifane",
+    "ability_id": "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
     "name": "Forge-Fire Surge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8331,7 +6032,7 @@
     }
   },
   {
-    "ability_id": "unholy-fortitude-cult-of-the-arkifane",
+    "ability_id": "unholy-fortitude-cult-of-the-arkifane-chaos-space-marines",
     "name": "Unholy Fortitude",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8365,7 +6066,7 @@
     }
   },
   {
-    "ability_id": "tyrannical-motivation",
+    "ability_id": "tyrannical-motivation-chaos-space-marines",
     "name": "Tyrannical Motivation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8436,7 +6137,7 @@
     "community_notes": "[APPROX] Each Command phase, HERETIC ASTARTES INFANTRY units gain one selected ability — Huron's Elite (+1 to Hit rolls) or Mobile Marauders (eligible to shoot and declare a charge in a turn it Fell Back), modeled as a re-selectable menu. The clause granting BOTH abilities to units visible to Huron Blackheart is not modeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "raiders-and-reavers",
+    "ability_id": "raiders-and-reavers-chaos-space-marines",
     "name": "Raiders and Reavers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8498,7 +6199,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "iron-fortitude",
+    "ability_id": "iron-fortitude-chaos-space-marines",
     "name": "Iron Fortitude",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8564,7 +6265,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "masters-of-misdirection",
+    "ability_id": "masters-of-misdirection-chaos-space-marines",
     "name": "Masters of Misdirection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8644,7 +6345,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "debt-to-the-soul-forge",
+    "ability_id": "debt-to-the-soul-forge-chaos-space-marines",
     "name": "Debt to the Soul Forge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8702,7 +6403,7 @@
     "community_notes": "[APPROX] When a HERETIC ASTARTES DAEMON VEHICLE unit invokes its contract on a Dark Pact: −1 to the resulting Leadership test, +1 to ranged Wound rolls, and +2 Attacks to melee weapons. The DAEMON VEHICLE restriction and the optional invoke are noted rather than gated in the tree. Full rule in raw-text store."
   },
   {
-    "ability_id": "slaves-to-none",
+    "ability_id": "slaves-to-none-chaos-space-marines",
     "name": "Slaves to None",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8726,7 +6427,7 @@
           "modifier": {
             "direction": "suppressed",
             "rule_kind": "ability",
-            "rule": "dark-pacts"
+            "rule": "dark-pacts-chaos-space-marines"
           }
         },
         {
@@ -8752,7 +6453,7 @@
     "community_notes": "[APPROX] Models the two static clauses: HERETIC ASTARTES models lose the Dark Pacts ability and their ranged weapons gain [ASSAULT]. Not modeled: the mustering restriction (cannot use Cults of the Dark Gods), the Vendetta target (re-roll Hit rolls against a chosen enemy unit by non-DAMNED models), and Twisted Doctrine (Default to Doctrine, taking a Battle-shock test to gain shoot/charge-after-Fall-Back or charge-after-Advance). Full rule in raw-text store."
   },
   {
-    "ability_id": "terror-descends-aura",
+    "ability_id": "terror-descends-chaos-space-marines",
     "name": "Terror Descends (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8859,7 +6560,7 @@
     "community_notes": "[APPROX] A 12\" battle-shock-test debuff aura: forces the test and applies −1 to the result. The rule forces the test specifically on enemy units below their Starting Strength and applies the −1 to any enemy unit within 12\" (the encoding ties the −1 to below-half via `bonus_if_below_half`); its 'no other Battle-shock tests this phase' clause is not modeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "desperate-devotion",
+    "ability_id": "desperate-devotion-chaos-space-marines",
     "name": "Desperate Devotion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8917,7 +6618,7 @@
     "community_notes": "[APPROX] Models the Desperate Pact bonus for DAMNED units with Dark Pacts: +2\" Move and +2 to Charge rolls. Not modeled: the optional activation, the exclusion of units that arrived from Reserves this turn, and the Leadership test taken to make a Desperate Pact (D3 mortal wounds on failure). Full rule in raw-text store."
   },
   {
-    "ability_id": "focus-of-hatred",
+    "ability_id": "focus-of-hatred-chaos-space-marines",
     "name": "Focus of Hatred",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8959,7 +6660,7 @@
     "community_notes": "[APPROX] Each Command phase, mark one enemy unit as the focus of hatred; HERETIC ASTARTES models re-roll Hit rolls against it. The rule excludes DAMNED models from the re-roll — an exclusion not modeled here. Full rule in raw-text store."
   },
   {
-    "ability_id": "terror-made-manifest",
+    "ability_id": "terror-made-manifest-chaos-space-marines",
     "name": "Terror Made Manifest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9034,7 +6735,7 @@
     "community_notes": "[APPROX] Models the 12\" battle-shock-test debuff (force + −1) and +1 to Hit rolls against targets Below Half-strength. Not modeled (the DSL has no Battle-shocked-state condition): −1 to Hit for Battle-shocked attackers targeting HERETIC ASTARTES, and +1 to Wound against Battle-shocked targets; nor the 'no other Battle-shock tests this phase' clause. Full rule in raw-text store."
   },
   {
-    "ability_id": "marks-of-chaos",
+    "ability_id": "marks-of-chaos-chaos-space-marines",
     "name": "Marks of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9325,7 +7026,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "experimental-augmentations",
+    "ability_id": "experimental-augmentations-chaos-space-marines",
     "name": "Experimental Augmentations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9429,7 +7130,7 @@
     "community_notes": "[APPROX] Models the six augmentation options as a battle-long selectable menu for HERETIC ASTARTES INFANTRY. Not modeled: the pick-one-or-roll-two-D6 selection method, the DAMNED exclusion, the duplicate-has-no-effect clause, and Fabius Bile's re-roll of the augmentation dice. Full rule in raw-text store."
   },
   {
-    "ability_id": "headlong-destruction",
+    "ability_id": "headlong-destruction-chaos-space-marines",
     "name": "Headlong Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9465,10 +7166,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "architect-of-ruin",
+    "ability_id": "architect-of-ruin-chaos-space-marines",
     "name": "Architect of Ruin",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9506,10 +7208,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] Selects a hated foe at the start of the battle; models the re-roll to Wound rolls against it via the marked-target mechanism. Because that mechanism buffs all attacks against the mark, the restriction to this model's own attacks is not enforced, and the clause allowing a new hated foe to be chosen when the current one is destroyed is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Selects a hated foe at the start of the battle; models the re-roll to Wound rolls against it via the marked-target mechanism. Because that mechanism buffs all attacks against the mark, the restriction to this model's own attacks is not enforced, and the clause allowing a new hated foe to be chosen when the current one is destroyed is not modeled. Full rule in raw-text store.",
+    "faction_id": "chaos-space-marines"
   },
   {
-    "ability_id": "daemonkin-psychic-zarkans-daemonkin",
+    "ability_id": "daemonkin-aranis-zarkan-chaos-space-marines",
     "name": "Daemonkin (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9562,7 +7265,7 @@
     }
   },
   {
-    "ability_id": "unholy-bloodshed-zarkans-daemonkin",
+    "ability_id": "unholy-bloodshed-zarkans-daemonkin-possessed-chaos-space-marines",
     "name": "Unholy Bloodshed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9603,7 +7306,7 @@
     }
   },
   {
-    "ability_id": "veterans-of-the-long-war-zarkans-daemonkin",
+    "ability_id": "veterans-of-the-long-war-zarkans-daemonkin-legionaries-chaos-space-marines",
     "name": "Veterans of the Long War",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9659,7 +7362,7 @@
     }
   },
   {
-    "ability_id": "sacrificial-dagger-zarkans-daemonkin",
+    "ability_id": "sacrificial-dagger-aranis-zarkan-chaos-space-marines",
     "name": "Sacrificial Dagger",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9730,7 +7433,7 @@
     ]
   },
   {
-    "ability_id": "combat-squad-zarkans-daemonkin",
+    "ability_id": "combat-squad-chaos-space-marines",
     "name": "Combat Squad",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9766,6 +7469,2752 @@
     },
     "scope": {
       "duration": "battle"
+    }
+  },
+  {
+    "ability_id": "abject-fear-chaos-space-marines",
+    "name": "Abject Fear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "alert-to-danger-zarkans-daemonkin-chaos-space-marines",
+    "name": "Alert to Danger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "amulet-of-tainted-vigour-chaos-cult-chaos-space-marines",
+    "name": "Amulet of Tainted Vigour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
+    "name": "At the Tyrant’s Command",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "autostimulants-creations-of-bile-chaos-space-marines",
+    "name": "Autostimulants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bastion-plate-fellhammer-siege-host-chaos-space-marines",
+    "name": "Bastion Plate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "black-crusade-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Black Crusade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bloody-example-dread-talons-chaos-space-marines",
+    "name": "Bloody Example",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bringers-of-despair-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Bringers of Despair",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brutal-attrition-fellhammer-siege-host-chaos-space-marines",
+    "name": "Brutal Attrition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
+    "name": "Chaos Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "zarkans-daemonkin-legionaries"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chaos-icon-zarkans-daemonkin-possessed-chaos-space-marines",
+    "name": "Chaos Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "zarkans-daemonkin-possessed"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chosen-for-glory-chaos-cult-chaos-space-marines",
+    "name": "Chosen for Glory",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "coils-of-deception-deceptors-chaos-space-marines",
+    "name": "Coils of Deception",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Contemptuous Disregard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "corrupted-munitions-renegade-warband-chaos-space-marines",
+    "name": "Corrupted Munitions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crazed-focus-chaos-cult-chaos-space-marines",
+    "name": "Crazed Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crushing-charge-chaos-space-marines",
+    "name": "Crushing Charge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "mutilators"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cultists-brand-chaos-cult-chaos-space-marines",
+    "name": "Cultist’s Brand",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cursed-fang-deceptors-chaos-space-marines",
+    "name": "Cursed Fang",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-frenzy-zarkans-daemonkin-chaos-space-marines",
+    "name": "Daemonic Frenzy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
+    "name": "Daemonic Possession",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-chaos-space-marines",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-predator-annihilator",
+      "chaos-predator-destructor",
+      "chaos-vindicator",
+      "forgefiend",
+      "heldrake",
+      "maulerfiend",
+      "vashtorr-the-arkifane"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-chaos-space-marines",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-land-raider"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-chaos-space-marines",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "defiler"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-8-wounds-remaining-chaos-space-marines",
+    "name": "DAMAGED: 1-8 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "khorne-lord-of-skulls"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "delayed-mutations-creations-of-bile-chaos-space-marines",
+    "name": "Delayed Mutations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "depthless-cruelty-dread-talons-chaos-space-marines",
+    "name": "Depthless Cruelty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "desperate-pledge-soulforged-warpack-chaos-space-marines",
+    "name": "Desperate Pledge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "despots-claim-renegade-raiders-chaos-space-marines",
+    "name": "Despot’s Claim",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "detonator-deceptors-chaos-space-marines",
+    "name": "Detonator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "diabolic-regeneration-creations-of-bile-chaos-space-marines",
+    "name": "Diabolic Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-reaver-renegade-raiders-chaos-space-marines",
+    "name": "Dread Reaver",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-reputation-hurons-marauders-chaos-space-marines",
+    "name": "Dread Reputation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eager-for-bloodshed-hurons-marauders-chaos-space-marines",
+    "name": "Eager for Bloodshed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eager-for-vengeance-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Eager for Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eater-of-dread-dread-talons-chaos-space-marines",
+    "name": "Eater of Dread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "empyric-symbiote-renegade-warband-chaos-space-marines",
+    "name": "Empyric Symbiote",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "encircling-surge-hurons-marauders-chaos-space-marines",
+    "name": "Encircling Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "endless-ire-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Endless Ire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eternal-hate-pactbound-zealots-chaos-space-marines",
+    "name": "Eternal Hate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-abaddon-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Eye of Abaddon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
+    "name": "Eye of the Gods",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-tzeentch-pactbound-zealots-chaos-space-marines",
+    "name": "Eye of Tzeentch",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eyes-of-the-hunter-renegade-warband-chaos-space-marines",
+    "name": "Eyes of the Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "falsehood-deceptors-chaos-space-marines",
+    "name": "Falsehood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "feeding-frenzy-soulforged-warpack-chaos-space-marines",
+    "name": "Feeding Frenzy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "festering-miasma-pactbound-zealots-chaos-space-marines",
+    "name": "Festering Miasma",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "for-the-dark-gods-zarkans-daemonkin-cultist-mob-chaos-space-marines",
+    "name": "For the Dark Gods",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "zarkans-daemonkin-cultist-mob"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "forges-blessing-soulforged-warpack-chaos-space-marines",
+    "name": "Forge’s Blessing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fratricidal-trophies-renegade-warband-chaos-space-marines",
+    "name": "Fratricidal Trophies",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "from-all-sides-deceptors-chaos-space-marines",
+    "name": "From All Sides",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "glut-of-souls-soulforged-warpack-chaos-space-marines",
+    "name": "Glut of Souls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "greyveil-hex-nightmare-hunt-chaos-space-marines",
+    "name": "Greyveil Hex",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hardened-killers-hurons-marauders-chaos-space-marines",
+    "name": "Hardened Killers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "helm-of-all-seeing-creations-of-bile-chaos-space-marines",
+    "name": "Helm of All-Seeing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "horrific-incursion-nightmare-hunt-chaos-space-marines",
+    "name": "Horrific Incursion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "incendiary-goad-chaos-cult-chaos-space-marines",
+    "name": "Incendiary Goad",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infernal-infusion-zarkans-daemonkin-chaos-space-marines",
+    "name": "Infernal Infusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infernal-sacrifice-chaos-cult-chaos-space-marines",
+    "name": "Infernal Sacrifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "intoxicating-elixir-pactbound-zealots-chaos-space-marines",
+    "name": "Intoxicating Elixir",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "invigorated-mechatendrils-soulforged-warpack-chaos-space-marines",
+    "name": "Invigorated Mechatendrils",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "iron-artifice-fellhammer-siege-host-chaos-space-marines",
+    "name": "Iron Artifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ironbound-enmity-fellhammer-siege-host-chaos-space-marines",
+    "name": "Ironbound Enmity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "let-the-galaxy-burn-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Let the Galaxy Burn",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "living-carapace-creations-of-bile-chaos-space-marines",
+    "name": "Living Carapace",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lord-of-chaos-chaos-space-marines",
+    "name": "Lord of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-lord",
+      "chaos-lord-in-terminator-armour",
+      "chaos-lord-with-jump-pack"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malicious-surge-nightmare-hunt-chaos-space-marines",
+    "name": "Malicious Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mark-of-legend-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Mark of Legend",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mark-of-the-hound-renegade-raiders-chaos-space-marines",
+    "name": "Mark of the Hound",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "masters-are-watching-creations-of-bile-chaos-space-marines",
+    "name": "Masters Are Watching",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "merciless-pursuit-dread-talons-chaos-space-marines",
+    "name": "Merciless Pursuit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Millennia of Experience",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "monstrous-visages-creations-of-bile-chaos-space-marines",
+    "name": "Monstrous Visages",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mortal-thralls-chaos-cult-chaos-space-marines",
+    "name": "Mortal Thralls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "never-outgunned-renegade-warband-chaos-space-marines",
+    "name": "Never Outgunned",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nights-shroud-dread-talons-chaos-space-marines",
+    "name": "Night’s Shroud",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "opportunistic-raiders-renegade-raiders-chaos-space-marines",
+    "name": "Opportunistic Raiders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "orbs-of-unlife-pactbound-zealots-chaos-space-marines",
+    "name": "Orbs of Unlife",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
+    "name": "Persistent Assailants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pick-them-off-deceptors-chaos-space-marines",
+    "name": "Pick Them Off",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
+    "name": "Pitiless Cannonade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pitiless-hunters-dread-talons-chaos-space-marines",
+    "name": "Pitiless Hunters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "point-blank-destruction-fellhammer-siege-host-chaos-space-marines",
+    "name": "Point-blank Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
+    "name": "Predatory Pursuit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "prey-on-the-weak-nightmare-hunt-chaos-space-marines",
+    "name": "Prey on the Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "prey-on-the-weak-zarkans-daemonkin-chaos-space-marines",
+    "name": "Prey on the Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "prime-test-subject-creations-of-bile-chaos-space-marines",
+    "name": "Prime Test Subject",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "profane-zeal-pactbound-zealots-chaos-space-marines",
+    "name": "Profane Zeal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "raid-leader-hurons-marauders-chaos-space-marines",
+    "name": "Raid Leader",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
+    "name": "Reavers’ Flurry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reavers-haste-renegade-raiders-chaos-space-marines",
+    "name": "Reaver’s Haste",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reavers-reaction-renegade-warband-chaos-space-marines",
+    "name": "Reavers’ Reaction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reckless-haste-chaos-cult-chaos-space-marines",
+    "name": "Reckless Haste",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-pursuit-deceptors-chaos-space-marines",
+    "name": "Relentless Pursuit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-terror-dread-talons-chaos-space-marines",
+    "name": "Relentless Terror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-terror-nightmare-hunt-chaos-space-marines",
+    "name": "Relentless Terror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "renegade-claim-renegade-warband-chaos-space-marines",
+    "name": "Renegade Claim",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ruinous-raid-renegade-raiders-chaos-space-marines",
+    "name": "Ruinous Raid",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sadistic-display-nightmare-hunt-chaos-space-marines",
+    "name": "Sadistic Display",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scour-and-seize-renegade-raiders-chaos-space-marines",
+    "name": "Scour and Seize",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scrambled-coordinates-deceptors-chaos-space-marines",
+    "name": "Scrambled Coordinates",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "screaming-descent-dread-talons-chaos-space-marines",
+    "name": "Screaming Descent",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seize-the-prize-hurons-marauders-chaos-space-marines",
+    "name": "Seize the Prize",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "selfless-demise-chaos-cult-chaos-space-marines",
+    "name": "Selfless Demise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shroud-of-obfuscation-deceptors-chaos-space-marines",
+    "name": "Shroud of Obfuscation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "siegecraft-fellhammer-siege-host-chaos-space-marines",
+    "name": "Siegecraft",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",
+    "name": "Skinshift",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sorrowscent-vulture-nightmare-hunt-chaos-space-marines",
+    "name": "Sorrowscent Vulture",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-harvester-soulforged-warpack-chaos-space-marines",
+    "name": "Soul Harvester",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-link-deceptors-chaos-space-marines",
+    "name": "Soul Link",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "deceptors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
+    "name": "Soul-Tally Offerings",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
+    "name": "Specimens For The Spider",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
+    "name": "Steadfast Determination",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "surgical-precision-creations-of-bile-chaos-space-marines",
+    "name": "Surgical Precision",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "creations-of-bile",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "talisman-of-burning-blood-pactbound-zealots-chaos-space-marines",
+    "name": "Talisman of Burning Blood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "talons-sunk-deep-nightmare-hunt-chaos-space-marines",
+    "name": "Talons Sunk Deep",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tempting-addendum-soulforged-warpack-chaos-space-marines",
+    "name": "Tempting Addendum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "terrorglut-parasite-nightmare-hunt-chaos-space-marines",
+    "name": "Terrorglut Parasite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
+    "name": "To the Favoured the Spoils",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "torpefying-refrain-pactbound-zealots-chaos-space-marines",
+    "name": "Torpefying Refrain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "pactbound-zealots",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tyrants-lash-renegade-raiders-chaos-space-marines",
+    "name": "Tyrant’s Lash",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "undying-hatred-renegade-warband-chaos-space-marines",
+    "name": "Undying Hatred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
+    "name": "Unfailingly Obdurate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
+    "name": "Unstoppable Rampage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "soulforged-warpack",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeful-destruction-renegade-warband-chaos-space-marines",
+    "name": "Vengeful Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
+    "name": "Vindictive Strategy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "zarkans-daemonkin",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "voice-of-the-tyrant-hurons-marauders-chaos-space-marines",
+    "name": "Voice of the Tyrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "hurons-marauders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warmasters-gift-veterans-of-the-long-war-chaos-space-marines",
+    "name": "Warmaster’s Gift",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "veterans-of-the-long-war",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warp-fuelled-thrusters-dread-talons-chaos-space-marines",
+    "name": "Warp-Fuelled Thrusters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warp-fuelled-thrusters-nightmare-hunt-chaos-space-marines",
+    "name": "Warp-fuelled Thrusters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "nightmare-hunt",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warp-tracer-fellhammer-siege-host-chaos-space-marines",
+    "name": "Warp Tracer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "fellhammer-siege-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warpcharged-engines-renegade-raiders-chaos-space-marines",
+    "name": "Warpcharged Engines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warped-foresight-chaos-cult-chaos-space-marines",
+    "name": "Warped Foresight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "chaos-cult",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weaponised-hatred-renegade-warband-chaos-space-marines",
+    "name": "Weaponised Hatred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "renegade-warband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "willbreaker-dread-talons-chaos-space-marines",
+    "name": "Willbreaker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "dread-talons",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

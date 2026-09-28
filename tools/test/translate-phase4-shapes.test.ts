@@ -123,7 +123,7 @@ describe("describer: dice", () => {
   });
 
   it("renders an ability's own roll, unmodified results, fail thresholds and mandatory re-rolls", () => {
-    expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols" }, operation: "add", value: 1 }))).toBe("The unit gets +1 to Reanimation Protocols rolls.");
+    expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe("The unit gets +1 to Reanimation Protocols rolls.");
     expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("The unit's Hit rolls count as an unmodified 6.");
     expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapon_type: "ranged", incoming: true }))).toBe(
       "Each time a ranged attack targets the unit, an unmodified Hit roll of 1-3 for that attack always fails.",
@@ -162,7 +162,7 @@ describe("describer: battle size and counts", () => {
 
 describe("describer: abilities, rules and army", () => {
   it("renders the ability-modifier limits and ability-activate selection", () => {
-    expect(render(leaf("ability-modifier", { ability: "killing-blow", aspect: "end-round", operation: "set", value: 4 }))).toBe("The last battle round of the unit's Killing Blow ability is 4.");
+    expect(render(leaf("ability-modifier", { ability: "killing-blow-tau-empire", aspect: "end-round", operation: "set", value: 4 }))).toBe("The last battle round of the unit's Killing Blow ability is 4.");
     expect(render(leaf("ability-modifier", { ability: "overkill", aspect: "uses", operation: "set", value: 2, cap_per: { count: 1, period: "battle-round" } }, "this-model"))).toBe(
       "The number of uses of this model's Overkill ability is 2, but it can be used at most once per battle round.",
     );
@@ -172,7 +172,7 @@ describe("describer: abilities, rules and army", () => {
     expect(render(leaf("ability-activate", { ability: "blessings-of-khorne", select: { by: "roll" } }))).toBe(
       "Make a new Blessings of Khorne roll and activate one result it allows for the unit, in addition to any already active.",
     );
-    expect(render(leaf("ability-activate", { ability: "reanimation-protocols", override: { amount: "D6" } }))).toBe("The unit resolves the Reanimation Protocols ability now, using D6 in place of its usual amount.");
+    expect(render(leaf("ability-activate", { ability: "reanimation-protocols-necrons", override: { amount: "D6" } }))).toBe("The unit resolves the Reanimation Protocols ability now, using D6 in place of its usual amount.");
   });
 
   it("joins a usage list into one lead", () => {
@@ -317,8 +317,8 @@ describe("cruncher: phase-4 shapes", () => {
   });
 
   it("names an ability's own roll in its diagnostic and reports the D18 leaves", () => {
-    const own = effectToBuffs(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols" }, operation: "add", value: 1 }), source, ctx);
-    expect(own.unsupported[0]!.reason).toBe('roll-modifier on "reanimation-protocols roll" is outside the damage path');
+    const own = effectToBuffs(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }), source, ctx);
+    expect(own.unsupported[0]!.reason).toBe('roll-modifier on "reanimation-protocols-necrons roll" is outside the damage path');
     for (const type of ["characteristic-resolution", "borrow-weapons", "select-weapon"]) {
       const result = effectToBuffs(leaf(type, { stat: "T", rule: "highest", max_models: 2, bind_as: "b" }), source, ctx);
       expect(result.applied).toEqual([]);

@@ -33,8 +33,8 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("faction-fields over the real
     const dg = byDir.get("death-guard");
     expect(dg?.ruleConfirmed).toBeFalsy();
     expect(dg?.ruleReview).toEqual({
-      authored: ["nurgle-s-gift-aura"],
-      candidates: ["nurgles-gift", "pact-of-decay"],
+      authored: ["nurgles-gift-death-guard"],
+      candidates: ["nurgles-gift-death-guard", "pact-of-decay-death-guard"],
     });
     expect(dg?.ruleFilled).toBeUndefined();
   });

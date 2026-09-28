@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "gift-of-poxes",
+    "source_id": "gift-of-poxes-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shroud-of-disease",
+    "source_id": "shroud-of-disease-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -38,7 +38,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scuttling-walker",
+    "source_id": "scuttling-walker-death-guard",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -50,7 +50,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "barrage-of-filth",
+    "source_id": "barrage-of-filth-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -62,7 +62,31 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "scouts",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "lethal-ichor-death-guard",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "malicious-calculations-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -75,7 +99,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "sevenfold-chant-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -87,44 +111,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lethal-ichor",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "malicious-calculations",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sevenfold-chant",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "curse-of-the-walking-pox",
+    "source_id": "curse-of-the-walking-pox-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -149,7 +136,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vector-of-disease",
+    "source_id": "vector-of-disease-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -162,7 +149,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "metalophagic-infection",
+    "source_id": "metalophagic-infection-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -174,7 +161,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hail-of-corrosive-disease",
+    "source_id": "hail-of-corrosive-disease-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -186,7 +173,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "explosive-blight",
+    "source_id": "explosive-blight-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -199,7 +186,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "spore-laced-shock-waves",
+    "source_id": "spore-laced-shock-waves-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -211,7 +198,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "foul-infusion",
+    "source_id": "foul-infusion-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -224,7 +211,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "extraction-of-fresh-disease",
+    "source_id": "extraction-of-fresh-disease-death-guard",
     "source_type": "ability",
     "phases": [
       "command",
@@ -238,7 +225,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "infused-with-the-blessings-of-nurgle",
+    "source_id": "infused-with-the-blessings-of-nurgle-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -250,7 +237,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "icon-of-despair-aura",
+    "source_id": "icon-of-despair-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -262,7 +249,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tainted-narthecium",
+    "source_id": "tainted-narthecium-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -274,7 +261,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "inflamed-infections",
+    "source_id": "inflamed-infections-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -287,7 +274,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fevered-strategist",
+    "source_id": "fevered-strategist-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -299,7 +286,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "miasma-of-pestilence-aura",
+    "source_id": "miasma-of-pestilence-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -311,7 +298,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-approaches",
+    "source_id": "death-approaches-death-guard",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -323,7 +310,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "virulent-aura",
+    "source_id": "virulent-aura-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -335,7 +322,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blight-bombardment",
+    "source_id": "blight-bombardment-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -347,7 +334,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hovering-death",
+    "source_id": "hovering-death-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -360,7 +347,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sickening-vitality",
+    "source_id": "sickening-vitality-death-guard",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -373,7 +360,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tocsin-of-misery-aura",
+    "source_id": "tocsin-of-misery-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -385,7 +372,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "horrifying-visage",
+    "source_id": "horrifying-visage-death-guard",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -397,7 +384,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "enfeebling-miasma",
+    "source_id": "enfeebling-miasma-death-guard",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -409,7 +396,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "diseased-cover",
+    "source_id": "diseased-cover-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -421,7 +408,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fortification",
+    "source_id": "fortification-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -433,7 +420,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "diseased-malice",
+    "source_id": "diseased-malice-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -446,7 +433,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "froth-spattered-frenzy",
+    "source_id": "froth-spattered-frenzy-death-guard",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -458,20 +445,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tank-hunters",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6",
+    "source_id": "tank-hunters-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -484,7 +458,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "host-of-plagues",
+    "source_id": "host-of-plagues-death-guard",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -496,7 +470,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "gift-of-contagion-psychic",
+    "source_id": "gift-of-contagion-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -509,7 +483,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pestilent-fallout-psychic",
+    "source_id": "pestilent-fallout-death-guard",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -522,7 +496,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -535,7 +509,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fire-support",
+    "source_id": "fire-support-death-guard",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -548,7 +522,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "assault-ramp",
+    "source_id": "assault-ramp-death-guard",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -561,7 +535,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blinding-spray",
+    "source_id": "blinding-spray-death-guard",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -573,7 +547,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unclean-icon",
+    "source_id": "unclean-icon-death-guard",
     "source_type": "ability",
     "phases": [
       "command"
@@ -585,7 +559,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blessed-icon-of-disease",
+    "source_id": "blessed-icon-of-disease-death-guard",
     "source_type": "ability",
     "phases": [
       "command",
@@ -601,7 +575,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "destroyer-hive",
+    "source_id": "destroyer-hive-death-guard",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -613,7 +587,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "eater-plague-psychic",
+    "source_id": "eater-plague-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -625,7 +599,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blistering-fusillade",
+    "source_id": "blistering-fusillade-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -637,493 +611,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "droning-horror",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "clutching-corruption",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blessings-of-filth",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grotesque-fortitude",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "drawn-to-despair",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gnawing-hunger",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grim-reapers",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "disgustingly-resilient",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "malignance-magnified",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "leechspore-eruption",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blooming-pestilence",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "signal-pox",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "plaguesurge",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "putrid-detonation",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nauseating-paroxysms",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eye-of-the-swarm",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "persistent-pests",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "all-is-rot",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fleshy-avalanche",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "avatars-of-decay",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mireslick",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rabid-infusion",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mobile-vector",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "font-of-filth",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eyestinger-storm",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stinking-mire",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "relentless-grind",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grip-of-the-walking-pox",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "smeared-with-filth",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hidden-amongst-the-dead",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shock-and-horror",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shambling-wall",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "undying-spite",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mortarions-teachings",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sickening-impact",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blighted-land",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "overwhelming-generosity",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "creeping-blight",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deaths-heads",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daemon-weapon-of-nurgle",
+    "source_id": "face-of-death-aeldari",
     "source_type": "enhancement",
     "phases": [
       "fight"
@@ -1135,257 +623,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "furnace-of-plagues",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "arch-contaminator",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eye-of-affliction",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bilemaw-blight",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "insectile-murmuration",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rejuvenating-swarm",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shriekworm-familiar",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "plagueveil",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tendrilous-emissions",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cornucophagus",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "beckoning-blight",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fell-harvester",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "entropic-knell",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tome-of-bounteous-blessings",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "witherbone-pipes",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lord-of-the-walking-pox",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "face-of-death",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vile-vigour",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warprot-talisman",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "helm-of-the-fly-king",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "worldblight",
+    "source_id": "worldblight-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1397,7 +635,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "verminous-haze",
+    "source_id": "verminous-haze-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "movement"
@@ -1409,7 +647,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "reverberant-rancidity",
+    "source_id": "reverberant-rancidity-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1422,7 +660,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "manifold-maladies",
+    "source_id": "manifold-maladies-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1434,7 +672,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "miasmic-bombardment",
+    "source_id": "miasmic-bombardment-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1446,7 +684,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "numberless-horde",
+    "source_id": "numberless-horde-death-guard",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1459,7 +697,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "warped-and-rusted-animus",
+    "source_id": "warped-and-rusted-animus-death-guard",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1472,121 +710,12 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypervirulent-strains",
+    "source_id": "hypervirulent-strains-death-guard",
     "source_type": "ability",
     "phases": [
       "command",
       "shooting",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "parasitic-woe-reaper",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lancet-of-the-worldsore",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "host-of-the-hybridised-pox",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fresh-vectors",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bloodrust-deluge",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "soulrot-flux",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "territorial-infection",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggravus-spasms",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "simultaneous-contamination",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",

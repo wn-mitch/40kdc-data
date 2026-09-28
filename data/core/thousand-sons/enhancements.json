@@ -1,6 +1,6 @@
 [
   {
-    "id": "lord-of-forbidden-lore-grand-coven",
+    "id": "lord-of-forbidden-lore-grand-coven-thousand-sons",
     "name": "Lord of Forbidden Lore",
     "detachment_id": "grand-coven",
     "cost": 20,
@@ -8,7 +8,7 @@
       "Psyker",
       "Thousand Sons"
     ],
-    "ability_id": "lord-of-forbidden-lore-grand-coven",
+    "ability_id": "lord-of-forbidden-lore-grand-coven-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -29,14 +29,14 @@
     ]
   },
   {
-    "id": "incandaeum-grand-coven",
+    "id": "incandaeum-grand-coven-thousand-sons",
     "name": "Incandaeum",
     "detachment_id": "grand-coven",
     "cost": 15,
     "keyword_restrictions": [
       "Exalted Sorcerer"
     ],
-    "ability_id": "incandaeum-grand-coven",
+    "ability_id": "incandaeum-grand-coven-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -57,14 +57,14 @@
     ]
   },
   {
-    "id": "umbralefic-crystal-grand-coven",
+    "id": "umbralefic-crystal-grand-coven-thousand-sons",
     "name": "Umbralefic Crystal",
     "detachment_id": "grand-coven",
     "cost": 30,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "umbralefic-crystal-grand-coven",
+    "ability_id": "umbralefic-crystal-grand-coven-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -85,14 +85,14 @@
     ]
   },
   {
-    "id": "eldritch-vortex-of-etaph-grand-coven",
+    "id": "eldritch-vortex-of-etaph-grand-coven-thousand-sons",
     "name": "Eldritch Vortex of E’Taph",
     "detachment_id": "grand-coven",
     "cost": 35,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "eldritch-vortex-of-etaph-grand-coven",
+    "ability_id": "eldritch-vortex-of-etaph-grand-coven-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -113,14 +113,14 @@
     ]
   },
   {
-    "id": "arcane-might-hexwarp-thrallband",
+    "id": "arcane-might-hexwarp-thrallband-thousand-sons",
     "name": "Arcane Might",
     "detachment_id": "hexwarp-thrallband",
     "cost": 20,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "arcane-might-hexwarp-thrallband",
+    "ability_id": "arcane-might-hexwarp-thrallband-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -141,14 +141,14 @@
     ]
   },
   {
-    "id": "empowered-manifestation-hexwarp-thrallband",
+    "id": "empowered-manifestation-hexwarp-thrallband-thousand-sons",
     "name": "Empowered Manifestation",
     "detachment_id": "hexwarp-thrallband",
     "cost": 20,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "empowered-manifestation-hexwarp-thrallband",
+    "ability_id": "empowered-manifestation-hexwarp-thrallband-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -169,14 +169,14 @@
     ]
   },
   {
-    "id": "empyric-onslaught-hexwarp-thrallband",
+    "id": "empyric-onslaught-hexwarp-thrallband-thousand-sons",
     "name": "Empyric Onslaught",
     "detachment_id": "hexwarp-thrallband",
     "cost": 25,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "empyric-onslaught-hexwarp-thrallband",
+    "ability_id": "empyric-onslaught-hexwarp-thrallband-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -197,14 +197,14 @@
     ]
   },
   {
-    "id": "noctilith-mantle-hexwarp-thrallband",
+    "id": "noctilith-mantle-hexwarp-thrallband-thousand-sons",
     "name": "Noctilith Mantle",
     "detachment_id": "hexwarp-thrallband",
     "cost": 15,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "noctilith-mantle-hexwarp-thrallband",
+    "ability_id": "noctilith-mantle-hexwarp-thrallband-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -225,11 +225,11 @@
     ]
   },
   {
-    "id": "nethershriek-mind-eater-changehost-of-deceit",
+    "id": "nethershriek-mind-eater-changehost-of-deceit-thousand-sons",
     "name": "Nethershriek Mind-Eater",
     "detachment_id": "changehost-of-deceit",
     "cost": 10,
-    "ability_id": "nethershriek-mind-eater-changehost-of-deceit",
+    "ability_id": "nethershriek-mind-eater-changehost-of-deceit-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -258,7 +258,7 @@
     ]
   },
   {
-    "id": "diabolic-savant-changehost-of-deceit",
+    "id": "diabolic-savant-changehost-of-deceit-thousand-sons",
     "name": "Diabolic Savant",
     "detachment_id": "changehost-of-deceit",
     "cost": 20,
@@ -266,7 +266,7 @@
       "Infantry",
       "Thousand Sons"
     ],
-    "ability_id": "diabolic-savant-changehost-of-deceit",
+    "ability_id": "diabolic-savant-changehost-of-deceit-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -287,11 +287,11 @@
     ]
   },
   {
-    "id": "duplicitous-malediction-changehost-of-deceit",
+    "id": "duplicitous-malediction-changehost-of-deceit-thousand-sons",
     "name": "Duplicitous Malediction",
     "detachment_id": "changehost-of-deceit",
     "cost": 15,
-    "ability_id": "duplicitous-malediction-changehost-of-deceit",
+    "ability_id": "duplicitous-malediction-changehost-of-deceit-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -320,7 +320,7 @@
     ]
   },
   {
-    "id": "tome-of-true-names-changehost-of-deceit",
+    "id": "tome-of-true-names-changehost-of-deceit-thousand-sons",
     "name": "Tome of True Names",
     "detachment_id": "changehost-of-deceit",
     "cost": 20,
@@ -328,7 +328,7 @@
       "Infantry",
       "Thousand Sons"
     ],
-    "ability_id": "tome-of-true-names-changehost-of-deceit",
+    "ability_id": "tome-of-true-names-changehost-of-deceit-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -349,14 +349,14 @@
     ]
   },
   {
-    "id": "warpmeld-dagger-warpmeld-pact",
+    "id": "warpmeld-dagger-warpmeld-pact-thousand-sons",
     "name": "Warpmeld Dagger",
     "detachment_id": "warpmeld-pact",
     "cost": 10,
     "keyword_restrictions": [
       "Tzaangor Shaman"
     ],
-    "ability_id": "warpmeld-dagger-warpmeld-pact",
+    "ability_id": "warpmeld-dagger-warpmeld-pact-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -377,14 +377,14 @@
     ]
   },
   {
-    "id": "diamond-of-distortion-warpmeld-pact",
+    "id": "diamond-of-distortion-warpmeld-pact-thousand-sons",
     "name": "Diamond of Distortion",
     "detachment_id": "warpmeld-pact",
     "cost": 20,
     "keyword_restrictions": [
       "Tzaangor Shaman"
     ],
-    "ability_id": "diamond-of-distortion-warpmeld-pact",
+    "ability_id": "diamond-of-distortion-warpmeld-pact-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -405,11 +405,11 @@
     ]
   },
   {
-    "id": "bray-lord-warpmeld-pact",
+    "id": "bray-lord-warpmeld-pact-thousand-sons",
     "name": "Bray Lord",
     "detachment_id": "warpmeld-pact",
     "cost": 15,
-    "ability_id": "bray-lord-warpmeld-pact",
+    "ability_id": "bray-lord-warpmeld-pact-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -441,14 +441,14 @@
     ]
   },
   {
-    "id": "flowing-flesh-warpmeld-pact",
+    "id": "flowing-flesh-warpmeld-pact-thousand-sons",
     "name": "Flowing Flesh",
     "detachment_id": "warpmeld-pact",
     "cost": 10,
     "keyword_restrictions": [
       "Tzaangor Shaman"
     ],
-    "ability_id": "flowing-flesh-warpmeld-pact",
+    "ability_id": "flowing-flesh-warpmeld-pact-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -469,14 +469,14 @@
     ]
   },
   {
-    "id": "risen-rubricae-rubricae-phalanx",
+    "id": "risen-rubricae-rubricae-phalanx-thousand-sons",
     "name": "Risen Rubricae",
     "detachment_id": "rubricae-phalanx",
     "cost": 30,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "risen-rubricae-rubricae-phalanx",
+    "ability_id": "risen-rubricae-rubricae-phalanx-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -497,14 +497,14 @@
     ]
   },
   {
-    "id": "arcane-thralls-aura-rubricae-phalanx",
+    "id": "arcane-thralls-aura-rubricae-phalanx-thousand-sons",
     "name": "Arcane Thralls (Aura)",
     "detachment_id": "rubricae-phalanx",
     "cost": 5,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "arcane-thralls-aura-rubricae-phalanx",
+    "ability_id": "arcane-thralls-aura-rubricae-phalanx-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -525,14 +525,14 @@
     ]
   },
   {
-    "id": "lord-of-the-rubricae-rubricae-phalanx",
+    "id": "lord-of-the-rubricae-rubricae-phalanx-thousand-sons",
     "name": "Lord of the Rubricae",
     "detachment_id": "rubricae-phalanx",
     "cost": 15,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "lord-of-the-rubricae-rubricae-phalanx",
+    "ability_id": "lord-of-the-rubricae-rubricae-phalanx-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -553,7 +553,7 @@
     ]
   },
   {
-    "id": "stave-abominus-rubricae-phalanx",
+    "id": "stave-abominus-rubricae-phalanx-thousand-sons",
     "name": "Stave Abominus",
     "detachment_id": "rubricae-phalanx",
     "cost": 20,
@@ -561,7 +561,7 @@
       "Infantry",
       "Thousand Sons"
     ],
-    "ability_id": "stave-abominus-rubricae-phalanx",
+    "ability_id": "stave-abominus-rubricae-phalanx-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -582,14 +582,14 @@
     ]
   },
   {
-    "id": "warp-syphon-warpforged-cabal",
+    "id": "warp-syphon-warpforged-cabal-thousand-sons",
     "name": "Warp Syphon",
     "detachment_id": "warpforged-cabal",
     "cost": 5,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "warp-syphon-warpforged-cabal",
+    "ability_id": "warp-syphon-warpforged-cabal-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -610,7 +610,7 @@
     ]
   },
   {
-    "id": "perplexing-cloak-warpforged-cabal",
+    "id": "perplexing-cloak-warpforged-cabal-thousand-sons",
     "name": "Perplexing Cloak",
     "detachment_id": "warpforged-cabal",
     "cost": 20,
@@ -618,7 +618,7 @@
       "Infantry",
       "Thousand Sons"
     ],
-    "ability_id": "perplexing-cloak-warpforged-cabal",
+    "ability_id": "perplexing-cloak-warpforged-cabal-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -639,14 +639,14 @@
     ]
   },
   {
-    "id": "biomechanical-mutation-warpforged-cabal",
+    "id": "biomechanical-mutation-warpforged-cabal-thousand-sons",
     "name": "Biomechanical Mutation",
     "detachment_id": "warpforged-cabal",
     "cost": 15,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "biomechanical-mutation-warpforged-cabal",
+    "ability_id": "biomechanical-mutation-warpforged-cabal-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -667,14 +667,14 @@
     ]
   },
   {
-    "id": "warp-cursed-runemaster-warpforged-cabal",
+    "id": "warp-cursed-runemaster-warpforged-cabal-thousand-sons",
     "name": "Warp-Cursed Runemaster",
     "detachment_id": "warpforged-cabal",
     "cost": 10,
     "keyword_restrictions": [
       "Thousand Sons"
     ],
-    "ability_id": "warp-cursed-runemaster-warpforged-cabal",
+    "ability_id": "warp-cursed-runemaster-warpforged-cabal-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -695,11 +695,11 @@
     ]
   },
   {
-    "id": "eruption-of-vitality-ritual-of-regeneration",
+    "id": "eruption-of-vitality-ritual-of-regeneration-thousand-sons",
     "name": "Eruption of Vitality",
     "detachment_id": "ritual-of-regeneration",
     "cost": 35,
-    "ability_id": "eruption-of-vitality-ritual-of-regeneration",
+    "ability_id": "eruption-of-vitality-ritual-of-regeneration-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -732,11 +732,11 @@
     ]
   },
   {
-    "id": "curse-of-life-ritual-of-regeneration",
+    "id": "curse-of-life-ritual-of-regeneration-thousand-sons",
     "name": "Curse of Life",
     "detachment_id": "ritual-of-regeneration",
     "cost": 20,
-    "ability_id": "curse-of-life-ritual-of-regeneration",
+    "ability_id": "curse-of-life-ritual-of-regeneration-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -769,11 +769,11 @@
     ]
   },
   {
-    "id": "walking-rampart-sekhetar-cohort",
+    "id": "walking-rampart-sekhetar-cohort-thousand-sons",
     "name": "Walking Rampart",
     "detachment_id": "sekhetar-cohort",
     "cost": 30,
-    "ability_id": "walking-rampart-sekhetar-cohort",
+    "ability_id": "walking-rampart-sekhetar-cohort-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -802,11 +802,11 @@
     ]
   },
   {
-    "id": "occulus-infernum-sekhetar-cohort",
+    "id": "occulus-infernum-sekhetar-cohort-thousand-sons",
     "name": "Occulus Infernum",
     "detachment_id": "sekhetar-cohort",
     "cost": 20,
-    "ability_id": "occulus-infernum-sekhetar-cohort",
+    "ability_id": "occulus-infernum-sekhetar-cohort-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -835,7 +835,7 @@
     ]
   },
   {
-    "id": "unravelled-fates-servants-of-change",
+    "id": "unravelled-fates-servants-of-change-thousand-sons",
     "name": "Unravelled Fates",
     "detachment_id": "servants-of-change",
     "cost": 15,
@@ -843,7 +843,7 @@
       "Thousand Sons",
       "Tzaangor Shaman"
     ],
-    "ability_id": "unravelled-fates-servants-of-change",
+    "ability_id": "unravelled-fates-servants-of-change-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -864,14 +864,14 @@
     ]
   },
   {
-    "id": "thicket-of-bladed-bone-upgrade-servants-of-change",
+    "id": "thicket-of-bladed-bone-upgrade-servants-of-change-thousand-sons",
     "name": "Thicket of Bladed Bone (Upgrade)",
     "detachment_id": "servants-of-change",
     "cost": 10,
     "keyword_restrictions": [
       "Chaos Spawn"
     ],
-    "ability_id": "thicket-of-bladed-bone-servants-of-change",
+    "ability_id": "thicket-of-bladed-bone-upgrade-servants-of-change-thousand-sons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -892,7 +892,7 @@
     ]
   },
   {
-    "id": "foresight-of-the-changer-prism-of-zadophon",
+    "id": "foresight-of-the-changer-prism-of-zadophon-thousand-sons",
     "name": "Foresight of the Changer",
     "detachment_id": "prism-of-zadophon",
     "cost": 0,
@@ -909,7 +909,7 @@
       "Prism of Zadophon",
       "Tzaangor Shaman"
     ],
-    "ability_id": "foresight-of-the-changer-prism-of-zadophon",
+    "ability_id": "foresight-of-the-changer-prism-of-zadophon-thousand-sons",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -918,7 +918,7 @@
     ]
   },
   {
-    "id": "warp-tainted-shells-prism-of-zadophon",
+    "id": "warp-tainted-shells-prism-of-zadophon-thousand-sons",
     "name": "Warp-tainted Shells",
     "detachment_id": "prism-of-zadophon",
     "cost": 0,
@@ -935,7 +935,7 @@
       "Daemon Prince",
       "Prism of Zadophon"
     ],
-    "ability_id": "warp-tainted-shells-prism-of-zadophon",
+    "ability_id": "warp-tainted-shells-prism-of-zadophon-thousand-sons",
     "external_refs": [
       {
         "namespace": "mfm",

@@ -55,9 +55,13 @@
       "twin-plasma-projector"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "devoted-to-destruction",
-      "guardian-eternal"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "devoted-to-destruction-adeptus-custodes",
+      "guardian-eternal-adeptus-custodes",
+      "damaged-1-4-wounds-remaining-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -134,8 +138,11 @@
       "twin-adrathic-destructor"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "dread-foe"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "dread-foe-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -209,8 +216,11 @@
       "galatus-warblade"
     ],
     "ability_ids": [
-      "galatus-shield",
-      "deadly-demise-1"
+      "galatus-shield-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -287,8 +297,11 @@
       "multi-melta"
     ],
     "ability_ids": [
-      "unyielding-ancient",
-      "deadly-demise-1"
+      "unyielding-ancient-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -365,8 +378,8 @@
     "ability_ids": [
       "deep-strike",
       "leader",
-      "martial-inspiration",
-      "swift-onslaught"
+      "martial-inspiration-adeptus-custodes",
+      "swift-onslaught-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -445,8 +458,12 @@
       "twin-lastrum-bolt-cannon"
     ],
     "ability_ids": [
-      "advanced-firepower",
-      "deadly-demise-d3"
+      "advanced-firepower-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -567,9 +584,12 @@
       "misericordia"
     ],
     "ability_ids": [
-      "from-golden-light",
-      "slayers-of-tyrants",
-      "vexilla",
+      "from-golden-light-adeptus-custodes",
+      "slayers-of-tyrants-adeptus-custodes",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      },
       "deep-strike"
     ],
     "game_version": {
@@ -653,8 +673,8 @@
     ],
     "ability_ids": [
       "leader",
-      "strategic-mastery",
-      "sweeping-advance"
+      "strategic-mastery-adeptus-custodes",
+      "sweeping-advance-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -734,8 +754,8 @@
       "executioner-greatblade"
     ],
     "ability_ids": [
-      "daughters-of-the-abyss",
-      "deft-parry"
+      "daughters-of-the-abyss-adeptus-custodes",
+      "deft-parry-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -801,9 +821,9 @@
       "misericordia-sagittarum-custodians"
     ],
     "ability_ids": [
-      "custodian-guard",
-      "disintegration-beams",
-      "saturation-volleys",
+      "custodian-guard-adeptus-custodes",
+      "disintegration-beams-adeptus-custodes",
+      "saturation-volleys-adeptus-custodes",
       "deep-strike"
     ],
     "game_version": {
@@ -884,8 +904,12 @@
       "witchseeker-flamer"
     ],
     "ability_ids": [
-      "sanctified-flames",
-      "scouts-6"
+      "sanctified-flames-adeptus-custodes",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "daughters-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -962,9 +986,12 @@
       "armoured-hull-ares-gunship"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "hover",
-      "infernus-firebombs"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "infernus-firebombs-adeptus-custodes",
+      "damaged-1-7-wounds-remaining-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1053,10 +1080,17 @@
       "sentinel-blade"
     ],
     "ability_ids": [
-      "praesidium-shield",
-      "sentinel-storm",
-      "stand-vigil",
-      "deep-strike"
+      {
+        "id": "praesidium-shield-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      },
+      "sentinel-storm-adeptus-custodes",
+      "stand-vigil-adeptus-custodes",
+      "deep-strike",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1145,9 +1179,13 @@
       "twin-lastrum-bolt-cannon"
     ],
     "ability_ids": [
-      "assault-dropship",
+      "assault-dropship-adeptus-custodes",
       "hover",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-7-wounds-remaining-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1221,11 +1259,14 @@
       "witchseeker-flamer"
     ],
     "ability_ids": [
-      "corner-the-quarry",
-      "daughter-of-the-abyss",
+      "corner-the-quarry-adeptus-custodes",
+      "daughter-of-the-abyss-adeptus-custodes",
       "leader",
-      "seeker-s-instincts",
-      "scouts-6"
+      "seekers-instincts-adeptus-custodes",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1306,9 +1347,16 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "self-repair",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "self-repair-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daughters-of-the-abyss-anathema-psykana-rhino-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1380,11 +1428,18 @@
       "somnus"
     ],
     "ability_ids": [
-      "feel-no-pain-5",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
       "leader",
-      "tactical-perception",
-      "tenacious-spirit",
-      "scouts-6"
+      "tactical-perception-adeptus-custodes",
+      "tenacious-spirit-adeptus-custodes",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "daughter-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1460,9 +1515,9 @@
       "twin-las-pulsar"
     ],
     "ability_ids": [
-      "implacable-vanguard",
-      "jetbike-outriders",
-      "turbo-boost"
+      "implacable-vanguard-adeptus-custodes",
+      "jetbike-outriders-adeptus-custodes",
+      "turbo-boost-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1541,8 +1596,12 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -1631,9 +1690,13 @@
       "guardian-spear"
     ],
     "ability_ids": [
-      "living-fortress",
-      "resolute-will",
-      "deep-strike"
+      "living-fortress-adeptus-custodes",
+      "resolute-will-adeptus-custodes",
+      "deep-strike",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1710,8 +1773,11 @@
       "twin-arachnus-blaze-cannon"
     ],
     "ability_ids": [
-      "merciless-hunter",
-      "deadly-demise-d3"
+      "merciless-hunter-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1800,7 +1866,8 @@
       "vertus-hurricane-bolter"
     ],
     "ability_ids": [
-      "quicksilver-execution"
+      "quicksilver-execution-adeptus-custodes",
+      "turbo-boost-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1869,9 +1936,12 @@
       "gnosis"
     ],
     "ability_ids": [
-      "feel-no-pain-6",
-      "golden-laurels",
-      "hero-of-lion-s-gate",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "golden-laurels-adeptus-custodes",
+      "hero-of-lions-gate-adeptus-custodes",
       "leader",
       "deep-strike"
     ],
@@ -1964,10 +2034,13 @@
       "venatari-lance"
     ],
     "ability_ids": [
-      "jump-packs",
-      "strike-from-the-skies",
-      "swooping-dive",
-      "tarsis-buckler",
+      "jump-packs-adeptus-custodes",
+      "strike-from-the-skies-adeptus-custodes",
+      "swooping-dive-adeptus-custodes",
+      {
+        "id": "tarsis-buckler-adeptus-custodes",
+        "wargear": "tarsis-buckler"
+      },
       "deep-strike"
     ],
     "game_version": {
@@ -2044,9 +2117,10 @@
       "guardian-spear-shield-captain-in-allarus-terminator-armour"
     ],
     "ability_ids": [
-      "auramite-and-adamantine",
+      "auramite-and-adamantine-adeptus-custodes",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "strategic-mastery-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2122,9 +2196,10 @@
       "twin-adrathic-destructor"
     ],
     "ability_ids": [
-      "heavy-assault-infantry",
-      "lions-of-the-emperor",
-      "deep-strike"
+      "heavy-assault-infantry-adeptus-custodes",
+      "lions-of-the-emperor-adeptus-custodes",
+      "deep-strike",
+      "from-golden-light-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2198,8 +2273,10 @@
       "pyrithite-spear"
     ],
     "ability_ids": [
-      "no-foe-shall-stand",
-      "deep-strike"
+      "no-foe-shall-stand-adeptus-custodes",
+      "deep-strike",
+      "custodian-guard-adeptus-custodes",
+      "stand-vigil-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2277,8 +2354,12 @@
       "twin-lastrum-bolt-cannon"
     ],
     "ability_ids": [
-      "fire-support",
-      "deadly-demise-d6"
+      "fire-support-adeptus-custodes",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 8
@@ -2361,7 +2442,8 @@
       "close-combat-weapon"
     ],
     "ability_ids": [
-      "purity-of-execution"
+      "purity-of-execution-adeptus-custodes",
+      "daughters-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2438,8 +2520,13 @@
     ],
     "ability_ids": [
       "leader",
-      "master-of-the-stances",
-      "deep-strike"
+      "master-of-the-stances-adeptus-custodes",
+      "deep-strike",
+      {
+        "id": "praesidium-shield-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      },
+      "strategic-mastery-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2509,12 +2596,15 @@
       "watchers-axe"
     ],
     "ability_ids": [
-      "captain-general",
+      "captain-general-adeptus-custodes",
       "leader",
-      "moment-shackle",
-      "supreme-commander",
+      "moment-shackle-adeptus-custodes",
+      "supreme-commander-adeptus-custodes",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2578,8 +2668,8 @@
       "guardian-spear"
     ],
     "ability_ids": [
-      "from-golden-light-gilded-blades",
-      "slayers-of-tyrants-gilded-blades"
+      "from-golden-light-gilded-blades-allarus-custodians-adeptus-custodes",
+      "slayers-of-tyrants-gilded-blades-allarus-custodians-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2641,9 +2731,13 @@
       "sentinel-blade"
     ],
     "ability_ids": [
-      "praesidium-shield-gilded-blades",
-      "sentinel-storm-gilded-blades",
-      "stand-vigil-gilded-blades"
+      {
+        "id": "praesidium-shield-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      },
+      "sentinel-storm-gilded-blades-custodian-guard-adeptus-custodes",
+      "stand-vigil-gilded-blades-custodian-guard-adeptus-custodes",
+      "praesidium-shield-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2704,7 +2798,7 @@
       "guardian-spear"
     ],
     "ability_ids": [
-      "divine-protection-gilded-blades"
+      "divine-protection-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2767,7 +2861,7 @@
       "vaultswords"
     ],
     "ability_ids": [
-      "rapid-strike-gilded-blades"
+      "rapid-strike-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",

@@ -54,13 +54,12 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-thousand-sons",
+      "terrifying-assault-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -138,10 +137,17 @@
       "warp-vortex"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "feel-no-pain-5",
-      "immaterial-flare-aura",
-      "mutating-vortex-aura"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "immaterial-flare-thousand-sons",
+      "mutating-vortex-thousand-sons",
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -222,8 +228,12 @@
       "twin-inferno-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-thousand-sons"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -299,9 +309,9 @@
       "force-stave"
     ],
     "ability_ids": [
-      "bestial-prophet",
+      "bestial-prophet-thousand-sons",
       "leader",
-      "sacrificial-blessing"
+      "sacrificial-blessing-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -369,15 +379,11 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "regenerating-monstrosities-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -466,13 +472,9 @@
       "prosperine-khopesh"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
+      "empyric-guidance-thousand-sons",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "twisted-sorceries-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -552,8 +554,12 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "siege-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "siege-shield-thousand-sons",
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -634,13 +640,15 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "sorcerous-support-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -717,9 +725,9 @@
       "transmogrifying-blast"
     ],
     "ability_ids": [
-      "arch-sorcerer-of-tzeentch-psychic",
+      "arch-sorcerer-of-tzeentch-thousand-sons",
       "leader",
-      "scryer-of-fates-psychic"
+      "scryer-of-fates-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -829,8 +837,11 @@
       "warpflamer"
     ],
     "ability_ids": [
-      "bringers-of-change",
-      "icon-of-flame"
+      "bringers-of-change-thousand-sons",
+      {
+        "id": "icon-of-flame-thousand-sons",
+        "wargear": "icon-of-flame"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -918,9 +929,9 @@
       "inferno-bolt-pistol-infernal-master"
     ],
     "ability_ids": [
-      "glimpse-of-eternity-psychic",
+      "glimpse-of-eternity-thousand-sons",
       "leader",
-      "malefic-maelstrom-psychic"
+      "malefic-maelstrom-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -996,7 +1007,7 @@
       "divining-spear"
     ],
     "ability_ids": [
-      "prophesied-doom"
+      "prophesied-doom-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1071,7 +1082,7 @@
       "fatecaster-greatbow"
     ],
     "ability_ids": [
-      "malign-trickery"
+      "malign-trickery-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1179,7 +1190,7 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rites-of-coalescence"
+      "rites-of-coalescence-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1264,11 +1275,15 @@
       "tzeentchs-firestorm"
     ],
     "ability_ids": [
-      "lord-of-the-planet-of-the-sorcerers-psychic",
-      "supreme-commander",
-      "unearthly-power",
+      "lord-of-the-planet-of-the-sorcerers-thousand-sons",
+      "supreme-commander-thousand-sons",
+      "unearthly-power-thousand-sons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-6-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1349,11 +1364,12 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "ensorcelled-destruction-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1439,10 +1455,13 @@
       "hades-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "destroyer-of-futures",
-      "feel-no-pain-6",
-      "scuttling-walker"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "destroyer-of-futures-thousand-sons",
+      "scuttling-walker-thousand-sons",
+      "damaged-1-6-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1533,10 +1552,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "aetherstride-psychic",
-      "hunter-of-souls",
+      "aetherstride-thousand-sons",
+      "hunter-of-souls-thousand-sons",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1610,10 +1632,19 @@
       "tzaangor-blades"
     ],
     "ability_ids": [
-      "ambushing-hunters",
-      "brayhorn",
-      "herd-banner",
-      "scouts-6"
+      "ambushing-hunters-thousand-sons",
+      {
+        "id": "brayhorn-thousand-sons",
+        "wargear": "brayhorn"
+      },
+      {
+        "id": "herd-banner-thousand-sons",
+        "wargear": "herd-banner"
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1734,7 +1765,7 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "prophetic-sentinels",
+      "prophetic-sentinels-thousand-sons",
       "stealth"
     ],
     "game_version": {
@@ -1810,8 +1841,8 @@
       "prosperine-khopesh-exalted-sorcerer-on-disc-of-tzeentch"
     ],
     "ability_ids": [
-      "binding-tendrils-psychic",
-      "illusions-of-tzeentch-psychic",
+      "binding-tendrils-thousand-sons",
+      "illusions-of-tzeentch-thousand-sons",
       "leader"
     ],
     "game_version": {
@@ -1892,12 +1923,12 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "snarling-protector-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1970,9 +2001,9 @@
       "prosperine-khopesh-exalted-sorcerer"
     ],
     "ability_ids": [
-      "arcane-shield-psychic",
+      "arcane-shield-thousand-sons",
       "leader",
-      "rebind-rubricae-psychic"
+      "rebind-rubricae-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2054,12 +2085,9 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "chaos-familiar",
-      "death-hex-psychic",
-      "empyric-guidance-psychic",
+      "empyric-guidance-thousand-sons",
       "leader",
-      "marked-by-fate-psychic",
-      "warptime-psychic",
+      "marked-by-fate-thousand-sons",
       "deep-strike"
     ],
     "game_version": {
@@ -2142,11 +2170,12 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "ensorcelled-annihilation-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2227,10 +2256,12 @@
       "hades-autocannon"
     ],
     "ability_ids": [
-      "blazing-salvoes",
-      "daemonic-ordnance",
-      "furious-onslaught",
-      "deadly-demise-d3"
+      "blazing-salvoes-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2307,10 +2338,12 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
-      "hover",
-      "deadly-demise-d3"
+      "flame-wreathed-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2382,10 +2415,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "glamour-of-tzeentch-aura-psychic",
-      "servile-pawns",
-      "spirit-snare",
-      "deadly-demise-d3"
+      "glamour-of-tzeentch-thousand-sons",
+      "servile-pawns-thousand-sons",
+      "spirit-snare-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2455,7 +2491,8 @@
       "force-stave"
     ],
     "ability_ids": [
-      "bestial-prophet"
+      "bestial-prophet-kaaskrek-thousand-sons",
+      "sacrificial-blessing-kaaskrek-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2556,7 +2593,8 @@
       "warpflamer"
     ],
     "ability_ids": [
-      "bringers-of-change-prism-of-zadophon"
+      "bringers-of-change-prism-of-zadophon-rubric-marines-thousand-sons",
+      "icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2636,6 +2674,9 @@
         "namespace": "mfm",
         "id": "25946f4d-d31c-45e8-b832-4f2437363dd2"
       }
+    ],
+    "ability_ids": [
+      "prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons"
     ]
   },
   {
@@ -2683,7 +2724,8 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "glamour-of-tzeentch-aura-psychic"
+      "glamour-of-tzeentch-zadophon-the-soul-eater-thousand-sons",
+      "spirit-snare-zadophon-the-soul-eater-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",

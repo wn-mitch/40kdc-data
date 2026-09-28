@@ -2,9 +2,8 @@
  * enhancements.ts — Phase 3A: reconcile enhancement point costs against the
  * GW MFM dump.
  *
- * The repo enhancement id is `detachmentScopedId(name, detachment-name)`, which
- * is exactly how the dump's (enhancement, detachment) pair slugs — so matching is
- * a direct id lookup. For each matched enhancement we set the canon `cost`, clear
+ * The repo enhancement id is the one `mfm:mirror` derives from the dump row
+ * ({@link enhancementRepoId}), so matching is a direct id lookup. For each matched enhancement we set the canon `cost`, clear
  * `points_provisional`, and stamp the confirmed launch dataslate (cost is the
  * provisional field here, so confirming it is precisely what those flags record —
  * unlike Phase 2 dispositions, where touching game_version would over-claim).
@@ -15,6 +14,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow,
 type EnhancementRow,
 type MfmTableName, type MfmStringKey, type MfmRow, } from "./loader.js";
@@ -107,19 +107,20 @@ export function cleanEnhName(name: string): string {
  *  the value is `number | null` and callers must not overwrite an authored cost
  *  with null. */
 export function buildEnhCanon(dump: MfmDump): Map<string, number | null> {
-  const detName = dump.byId("detachment");
   const m = new Map<string, number | null>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      m.set(detachmentScopedId(en, dn), e.basePointsCost);
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) m.set(id, e.basePointsCost);
   }
   return m;
+}
+
+/**
+ * Repo id for a dump enhancement: the id `mfm:mirror` gives the row
+ * (`<name with its printed tag>-<detachment>-<faction>`). Null for a row no faction owns.
+ */
+export function enhancementRepoId(dump: MfmDump, e: { id: string }): string | null {
+  return mirrorIds(dump).idOf("enhancement", e.id) ?? null;
 }
 
 /** groupBy that tolerates a focused fixture omitting the table (returns empty). */
@@ -234,7 +235,7 @@ export interface EnhFields {
 
 /**
  * Enhancement repo-id → structured fields, from the dump. Keyed identically to
- * {@link buildEnhCanon} (`detachmentScopedId(cleanEnhName, detachment)`) so a
+ * {@link buildEnhCanon} ({@link enhancementRepoId}) so a
  * matched repo enhancement's fields line up with its cost.
  *
  *   - upgrade_tag           ← enhancementType === "upgrade" (11e upgrade class)
@@ -263,15 +264,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
 
   const out = new Map<string, EnhFields>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    let id: string;
-    try {
-      id = detachmentScopedId(en, dn);
-    } catch {
-      continue; // unsluggable — skip
-    }
+    const id = enhancementRepoId(dump, e);
+    if (!id) continue;
 
     const unresolved: string[] = [];
     const exclusion_keywords = keywordLabels(
@@ -339,18 +333,11 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
  * Id'd exactly as `buildEnhCanon` keys its canon so the ids line up.
  */
 export function combatPatrolEnhIds(dump: MfmDump): Set<string> {
-  const detName = dump.byId("detachment");
   const ids = new Set<string>();
   for (const e of dump.table("enhancement")) {
     if (!e.isCombatPatrol) continue;
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      ids.add(detachmentScopedId(en, dn));
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) ids.add(id);
   }
   return ids;
 }
@@ -391,10 +378,10 @@ export function normalizeEnhancementNames(dump: MfmDump): EnhNormResult {
     const dn = dump.enName(detName.get(e.detachmentId));
     if (!en || !dn) continue;
     let base: string;
-    let rawId: string;
+    const rawId = enhancementRepoId(dump, e);
+    if (!rawId) continue;
     try {
       base = detachmentScopedId(cleanEnhName(en), dn);
-      rawId = detachmentScopedId(en, dn);
     } catch {
       continue; // unsluggable — skip
     }
@@ -579,10 +566,11 @@ export function runEnhancements(
     const sourceDetachment = dump.byId("detachment").get(source.detachmentId);
     const detachmentName = dump.enName(sourceDetachment);
     if (!name || !detachmentName) continue;
-    let id: string;
+    const repoId = enhancementRepoId(dump, source);
+    if (!repoId) continue;
+    const id = repoId;
     let detachmentId: string;
     try {
-      id = detachmentScopedId(name, detachmentName);
       detachmentId = nameToId(detachmentName);
     } catch {
       continue;

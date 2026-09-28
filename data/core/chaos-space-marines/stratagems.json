@@ -1,6 +1,6 @@
 [
   {
-    "id": "alert-to-danger-zarkans-daemonkin",
+    "id": "alert-to-danger-zarkans-daemonkin-chaos-space-marines",
     "name": "Alert to Danger",
     "category": "detachment",
     "detachment_id": "zarkans-daemonkin",
@@ -11,7 +11,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "alert-to-danger-zarkans-daemonkin",
+    "ability_id": "alert-to-danger-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -24,7 +24,7 @@
     ]
   },
   {
-    "id": "armour-of-corruption-warpstrike-champions",
+    "id": "armour-of-corruption-warpstrike-champions-chaos-space-marines",
     "name": "ARMOUR OF CORRUPTION",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -35,7 +35,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "armour-of-corruption-warpstrike-champions",
+    "ability_id": "armour-of-corruption-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -53,7 +53,7 @@
     ]
   },
   {
-    "id": "at-the-tyrants-command-hurons-marauders",
+    "id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
     "name": "AT THE TYRANT’S COMMAND",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -65,7 +65,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -82,7 +82,7 @@
     ]
   },
   {
-    "id": "autostimulants-creations-of-bile",
+    "id": "autostimulants-creations-of-bile-chaos-space-marines",
     "name": "AUTOSTIMULANTS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -94,7 +94,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "autostimulants-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -111,7 +111,7 @@
     ]
   },
   {
-    "id": "balefire-boon-cult-of-the-arkifane",
+    "id": "balefire-boon-cult-of-the-arkifane-chaos-space-marines",
     "name": "BALEFIRE BOON",
     "category": "detachment",
     "detachment_id": "cult-of-the-arkifane",
@@ -123,7 +123,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "balefire-boon-cult-of-the-arkifane",
+    "ability_id": "balefire-boon-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -141,7 +141,7 @@
     ]
   },
   {
-    "id": "biomechanoid-regeneration-cult-of-the-arkifane",
+    "id": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
     "name": "BIOMECHANOID REGENERATION",
     "category": "detachment",
     "detachment_id": "cult-of-the-arkifane",
@@ -152,7 +152,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane",
+    "ability_id": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -170,7 +170,7 @@
     ]
   },
   {
-    "id": "black-crusade-veterans-of-the-long-war",
+    "id": "black-crusade-veterans-of-the-long-war-chaos-space-marines",
     "name": "BLACK CRUSADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -182,7 +182,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "black-crusade-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -199,7 +199,7 @@
     ]
   },
   {
-    "id": "bloody-example-dread-talons",
+    "id": "bloody-example-dread-talons-chaos-space-marines",
     "name": "BLOODY EXAMPLE",
     "category": "detachment",
     "type": "epic-deed",
@@ -211,7 +211,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bloody-example-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -228,7 +228,7 @@
     ]
   },
   {
-    "id": "bringers-of-despair-veterans-of-the-long-war",
+    "id": "bringers-of-despair-veterans-of-the-long-war-chaos-space-marines",
     "name": "BRINGERS OF DESPAIR",
     "category": "detachment",
     "type": "epic-deed",
@@ -240,7 +240,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bringers-of-despair-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -257,7 +257,7 @@
     ]
   },
   {
-    "id": "brutal-attrition-fellhammer-siege-host",
+    "id": "brutal-attrition-fellhammer-siege-host-chaos-space-marines",
     "name": "BRUTAL ATTRITION",
     "category": "detachment",
     "type": "epic-deed",
@@ -269,7 +269,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "brutal-attrition-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -286,7 +286,7 @@
     ]
   },
   {
-    "id": "chosen-for-glory-chaos-cult",
+    "id": "chosen-for-glory-chaos-cult-chaos-space-marines",
     "name": "CHOSEN FOR GLORY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -299,7 +299,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "chosen-for-glory-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -316,7 +316,7 @@
     ]
   },
   {
-    "id": "coils-of-deception-deceptors",
+    "id": "coils-of-deception-deceptors-chaos-space-marines",
     "name": "COILS OF DECEPTION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -328,7 +328,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "coils-of-deception-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -345,7 +345,7 @@
     ]
   },
   {
-    "id": "contemptuous-disregard-veterans-of-the-long-war",
+    "id": "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
     "name": "CONTEMPTUOUS DISREGARD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -358,7 +358,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -375,7 +375,7 @@
     ]
   },
   {
-    "id": "corrupted-munitions-renegade-warband",
+    "id": "corrupted-munitions-renegade-warband-chaos-space-marines",
     "name": "CORRUPTED MUNITIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -387,7 +387,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "corrupted-munitions-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -404,7 +404,7 @@
     ]
   },
   {
-    "id": "crazed-focus-chaos-cult",
+    "id": "crazed-focus-chaos-cult-chaos-space-marines",
     "name": "CRAZED FOCUS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -416,7 +416,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "crazed-focus-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -433,7 +433,7 @@
     ]
   },
   {
-    "id": "daemonic-frenzy-zarkans-daemonkin",
+    "id": "daemonic-frenzy-zarkans-daemonkin-chaos-space-marines",
     "name": "Daemonic Frenzy",
     "category": "detachment",
     "detachment_id": "zarkans-daemonkin",
@@ -444,7 +444,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "daemonic-frenzy-zarkans-daemonkin",
+    "ability_id": "daemonic-frenzy-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -457,7 +457,7 @@
     ]
   },
   {
-    "id": "daemonic-possession-soulforged-warpack",
+    "id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
     "name": "DAEMONIC POSSESSION",
     "category": "detachment",
     "type": "epic-deed",
@@ -469,7 +469,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -486,7 +486,7 @@
     ]
   },
   {
-    "id": "delayed-mutations-creations-of-bile",
+    "id": "delayed-mutations-creations-of-bile-chaos-space-marines",
     "name": "DELAYED MUTATIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -498,7 +498,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "delayed-mutations-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -515,7 +515,7 @@
     ]
   },
   {
-    "id": "depthless-cruelty-dread-talons",
+    "id": "depthless-cruelty-dread-talons-chaos-space-marines",
     "name": "DEPTHLESS CRUELTY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -527,7 +527,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "depthless-cruelty-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -544,7 +544,7 @@
     ]
   },
   {
-    "id": "desperate-pledge-soulforged-warpack",
+    "id": "desperate-pledge-soulforged-warpack-chaos-space-marines",
     "name": "DESPERATE PLEDGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -557,7 +557,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "desperate-pledge-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -574,7 +574,7 @@
     ]
   },
   {
-    "id": "detonator-deceptors",
+    "id": "detonator-deceptors-chaos-space-marines",
     "name": "DETONATOR",
     "category": "detachment",
     "type": "wargear",
@@ -590,7 +590,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "detonator-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -607,7 +607,7 @@
     ]
   },
   {
-    "id": "diabolic-regeneration-creations-of-bile",
+    "id": "diabolic-regeneration-creations-of-bile-chaos-space-marines",
     "name": "DIABOLIC REGENERATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -619,7 +619,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "diabolic-regeneration-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -636,7 +636,7 @@
     ]
   },
   {
-    "id": "empyric-dislocation-warpstrike-champions",
+    "id": "empyric-dislocation-warpstrike-champions-chaos-space-marines",
     "name": "EMPYRIC DISLOCATION",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -648,7 +648,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "empyric-dislocation-warpstrike-champions",
+    "ability_id": "empyric-dislocation-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -666,7 +666,7 @@
     ]
   },
   {
-    "id": "encircling-surge-hurons-marauders",
+    "id": "encircling-surge-hurons-marauders-chaos-space-marines",
     "name": "ENCIRCLING SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -678,7 +678,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "encircling-surge-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -695,7 +695,7 @@
     ]
   },
   {
-    "id": "endless-ire-veterans-of-the-long-war",
+    "id": "endless-ire-veterans-of-the-long-war-chaos-space-marines",
     "name": "ENDLESS IRE",
     "category": "detachment",
     "type": "epic-deed",
@@ -711,7 +711,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "endless-ire-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -728,7 +728,7 @@
     ]
   },
   {
-    "id": "eternal-hate-pactbound-zealots",
+    "id": "eternal-hate-pactbound-zealots-chaos-space-marines",
     "name": "ETERNAL HATE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -740,7 +740,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eternal-hate-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -757,7 +757,7 @@
     ]
   },
   {
-    "id": "eye-of-the-gods-pactbound-zealots",
+    "id": "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
     "name": "EYE OF THE GODS",
     "category": "detachment",
     "type": "epic-deed",
@@ -769,7 +769,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -786,7 +786,7 @@
     ]
   },
   {
-    "id": "feeding-frenzy-soulforged-warpack",
+    "id": "feeding-frenzy-soulforged-warpack-chaos-space-marines",
     "name": "FEEDING FRENZY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -798,7 +798,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "feeding-frenzy-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -815,7 +815,7 @@
     ]
   },
   {
-    "id": "festering-miasma-pactbound-zealots",
+    "id": "festering-miasma-pactbound-zealots-chaos-space-marines",
     "name": "FESTERING MIASMA",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -827,7 +827,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "festering-miasma-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -844,7 +844,7 @@
     ]
   },
   {
-    "id": "fleshy-curse-cabal-of-chaos",
+    "id": "fleshy-curse-cabal-of-chaos-chaos-space-marines",
     "name": "FLESHY CURSE",
     "category": "detachment",
     "detachment_id": "cabal-of-chaos",
@@ -855,7 +855,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fleshy-curse-cabal-of-chaos",
+    "ability_id": "fleshy-curse-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -872,7 +872,7 @@
     ]
   },
   {
-    "id": "forge-fire-surge-cult-of-the-arkifane",
+    "id": "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
     "name": "FORGE-FIRE SURGE",
     "category": "detachment",
     "detachment_id": "cult-of-the-arkifane",
@@ -883,7 +883,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "forge-fire-surge-cult-of-the-arkifane",
+    "ability_id": "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -901,7 +901,7 @@
     ]
   },
   {
-    "id": "from-all-sides-deceptors",
+    "id": "from-all-sides-deceptors-chaos-space-marines",
     "name": "FROM ALL SIDES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -913,7 +913,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "from-all-sides-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -930,7 +930,7 @@
     ]
   },
   {
-    "id": "glut-of-souls-soulforged-warpack",
+    "id": "glut-of-souls-soulforged-warpack-chaos-space-marines",
     "name": "GLUT OF SOULS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -942,7 +942,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "glut-of-souls-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -959,7 +959,7 @@
     ]
   },
   {
-    "id": "hardened-killers-hurons-marauders",
+    "id": "hardened-killers-hurons-marauders-chaos-space-marines",
     "name": "HARDENED KILLERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -971,7 +971,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hardened-killers-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -988,7 +988,7 @@
     ]
   },
   {
-    "id": "horrific-incursion-nightmare-hunt",
+    "id": "horrific-incursion-nightmare-hunt-chaos-space-marines",
     "name": "HORRIFIC INCURSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1000,7 +1000,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "horrific-incursion-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1017,7 +1017,7 @@
     ]
   },
   {
-    "id": "infernal-sacrifice-chaos-cult",
+    "id": "infernal-sacrifice-chaos-cult-chaos-space-marines",
     "name": "INFERNAL SACRIFICE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1029,7 +1029,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "infernal-sacrifice-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1046,7 +1046,7 @@
     ]
   },
   {
-    "id": "infernal-vigour-cabal-of-chaos",
+    "id": "infernal-vigour-cabal-of-chaos-chaos-space-marines",
     "name": "INFERNAL VIGOUR",
     "category": "detachment",
     "detachment_id": "cabal-of-chaos",
@@ -1057,7 +1057,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "infernal-vigour-cabal-of-chaos",
+    "ability_id": "infernal-vigour-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1074,7 +1074,7 @@
     ]
   },
   {
-    "id": "let-the-galaxy-burn-veterans-of-the-long-war",
+    "id": "let-the-galaxy-burn-veterans-of-the-long-war-chaos-space-marines",
     "name": "LET THE GALAXY BURN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1086,7 +1086,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "let-the-galaxy-burn-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1103,7 +1103,7 @@
     ]
   },
   {
-    "id": "malicious-surge-nightmare-hunt",
+    "id": "malicious-surge-nightmare-hunt-chaos-space-marines",
     "name": "MALICIOUS SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1115,7 +1115,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "malicious-surge-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1132,7 +1132,7 @@
     ]
   },
   {
-    "id": "masters-are-watching-creations-of-bile",
+    "id": "masters-are-watching-creations-of-bile-chaos-space-marines",
     "name": "MASTERS ARE WATCHING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1144,7 +1144,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "masters-are-watching-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1161,7 +1161,7 @@
     ]
   },
   {
-    "id": "merciless-pursuit-dread-talons",
+    "id": "merciless-pursuit-dread-talons-chaos-space-marines",
     "name": "MERCILESS PURSUIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1173,7 +1173,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "merciless-pursuit-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1190,7 +1190,7 @@
     ]
   },
   {
-    "id": "millennia-of-experience-veterans-of-the-long-war",
+    "id": "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines",
     "name": "MILLENNIA OF EXPERIENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1202,7 +1202,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1219,7 +1219,7 @@
     ]
   },
   {
-    "id": "monstrous-visages-creations-of-bile",
+    "id": "monstrous-visages-creations-of-bile-chaos-space-marines",
     "name": "MONSTROUS VISAGES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1232,7 +1232,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "monstrous-visages-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1249,7 +1249,7 @@
     ]
   },
   {
-    "id": "mortal-thralls-chaos-cult",
+    "id": "mortal-thralls-chaos-cult-chaos-space-marines",
     "name": "MORTAL THRALLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1261,7 +1261,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mortal-thralls-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1278,7 +1278,7 @@
     ]
   },
   {
-    "id": "never-outgunned-renegade-warband",
+    "id": "never-outgunned-renegade-warband-chaos-space-marines",
     "name": "NEVER OUTGUNNED",
     "category": "detachment",
     "type": "epic-deed",
@@ -1291,7 +1291,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "never-outgunned-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1308,7 +1308,7 @@
     ]
   },
   {
-    "id": "opportunistic-raiders-renegade-raiders",
+    "id": "opportunistic-raiders-renegade-raiders-chaos-space-marines",
     "name": "OPPORTUNISTIC RAIDERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1320,7 +1320,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "opportunistic-raiders-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1337,7 +1337,7 @@
     ]
   },
   {
-    "id": "persistent-assailants-fellhammer-siege-host",
+    "id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
     "name": "PERSISTENT ASSAILANTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1349,7 +1349,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1366,7 +1366,7 @@
     ]
   },
   {
-    "id": "pick-them-off-deceptors",
+    "id": "pick-them-off-deceptors-chaos-space-marines",
     "name": "PICK THEM OFF",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1378,7 +1378,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pick-them-off-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1395,7 +1395,7 @@
     ]
   },
   {
-    "id": "pitiless-cannonade-fellhammer-siege-host",
+    "id": "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
     "name": "PITILESS CANNONADE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1407,7 +1407,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1424,7 +1424,7 @@
     ]
   },
   {
-    "id": "pitiless-hunters-dread-talons",
+    "id": "pitiless-hunters-dread-talons-chaos-space-marines",
     "name": "PITILESS HUNTERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1436,7 +1436,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pitiless-hunters-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1453,7 +1453,7 @@
     ]
   },
   {
-    "id": "plunging-talons-murdertalon-raiders",
+    "id": "plunging-talons-murdertalon-raiders-chaos-space-marines",
     "name": "PLUNGING TALONS",
     "category": "detachment",
     "detachment_id": "murdertalon-raiders",
@@ -1464,7 +1464,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "plunging-talons-murdertalon-raiders",
+    "ability_id": "plunging-talons-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1481,7 +1481,7 @@
     ]
   },
   {
-    "id": "point-blank-destruction-fellhammer-siege-host",
+    "id": "point-blank-destruction-fellhammer-siege-host-chaos-space-marines",
     "name": "POINT-BLANK DESTRUCTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1493,7 +1493,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "point-blank-destruction-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1510,7 +1510,7 @@
     ]
   },
   {
-    "id": "portal-of-spite-warpstrike-champions",
+    "id": "portal-of-spite-warpstrike-champions-chaos-space-marines",
     "name": "PORTAL OF SPITE",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -1521,7 +1521,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "portal-of-spite-warpstrike-champions",
+    "ability_id": "portal-of-spite-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1539,7 +1539,7 @@
     ]
   },
   {
-    "id": "predatory-pursuit-soulforged-warpack",
+    "id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
     "name": "PREDATORY PURSUIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1551,7 +1551,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1568,7 +1568,7 @@
     ]
   },
   {
-    "id": "prey-on-the-weak-nightmare-hunt",
+    "id": "prey-on-the-weak-nightmare-hunt-chaos-space-marines",
     "name": "PREY ON THE WEAK",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1581,7 +1581,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "prey-on-the-weak-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1598,7 +1598,7 @@
     ]
   },
   {
-    "id": "profane-zeal-pactbound-zealots",
+    "id": "profane-zeal-pactbound-zealots-chaos-space-marines",
     "name": "PROFANE ZEAL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1611,7 +1611,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "profane-zeal-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1628,7 +1628,7 @@
     ]
   },
   {
-    "id": "raking-pass-murdertalon-raiders",
+    "id": "raking-pass-murdertalon-raiders-chaos-space-marines",
     "name": "RAKING PASS",
     "category": "detachment",
     "detachment_id": "murdertalon-raiders",
@@ -1639,7 +1639,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "raking-pass-murdertalon-raiders",
+    "ability_id": "raking-pass-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1656,7 +1656,7 @@
     ]
   },
   {
-    "id": "reavers-flurry-hurons-marauders",
+    "id": "reavers-flurry-hurons-marauders-chaos-space-marines",
     "name": "REAVERS’ FLURRY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1668,7 +1668,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1685,7 +1685,7 @@
     ]
   },
   {
-    "id": "reavers-haste-renegade-raiders",
+    "id": "reavers-haste-renegade-raiders-chaos-space-marines",
     "name": "REAVER’S HASTE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1697,7 +1697,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reavers-haste-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1714,7 +1714,7 @@
     ]
   },
   {
-    "id": "reavers-reaction-renegade-warband",
+    "id": "reavers-reaction-renegade-warband-chaos-space-marines",
     "name": "REAVERS’ REACTION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1726,7 +1726,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reavers-reaction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1743,7 +1743,7 @@
     ]
   },
   {
-    "id": "reckless-haste-chaos-cult",
+    "id": "reckless-haste-chaos-cult-chaos-space-marines",
     "name": "RECKLESS HASTE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1755,7 +1755,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reckless-haste-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1772,7 +1772,7 @@
     ]
   },
   {
-    "id": "relentless-pursuit-deceptors",
+    "id": "relentless-pursuit-deceptors-chaos-space-marines",
     "name": "RELENTLESS PURSUIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1784,7 +1784,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "relentless-pursuit-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1801,7 +1801,7 @@
     ]
   },
   {
-    "id": "relentless-terror-dread-talons",
+    "id": "relentless-terror-dread-talons-chaos-space-marines",
     "name": "RELENTLESS TERROR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1813,7 +1813,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "relentless-terror-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1830,7 +1830,7 @@
     ]
   },
   {
-    "id": "relentless-terror-nightmare-hunt",
+    "id": "relentless-terror-nightmare-hunt-chaos-space-marines",
     "name": "RELENTLESS TERROR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1842,7 +1842,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "relentless-terror-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1859,7 +1859,7 @@
     ]
   },
   {
-    "id": "renegade-claim-renegade-warband",
+    "id": "renegade-claim-renegade-warband-chaos-space-marines",
     "name": "RENEGADE CLAIM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1871,7 +1871,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "renegade-claim-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1888,7 +1888,7 @@
     ]
   },
   {
-    "id": "ruinations-bounty-devotees-of-destruction",
+    "id": "ruinations-bounty-devotees-of-destruction-chaos-space-marines",
     "name": "RUINATION'S BOUNTY",
     "category": "detachment",
     "detachment_id": "devotees-of-destruction",
@@ -1899,7 +1899,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ruinations-bounty-devotees-of-destruction",
+    "ability_id": "ruinations-bounty-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1916,7 +1916,7 @@
     ]
   },
   {
-    "id": "ruinous-raid-renegade-raiders",
+    "id": "ruinous-raid-renegade-raiders-chaos-space-marines",
     "name": "RUINOUS RAID",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1929,7 +1929,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ruinous-raid-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1946,7 +1946,7 @@
     ]
   },
   {
-    "id": "sadistic-display-nightmare-hunt",
+    "id": "sadistic-display-nightmare-hunt-chaos-space-marines",
     "name": "SADISTIC DISPLAY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1958,7 +1958,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sadistic-display-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1975,7 +1975,7 @@
     ]
   },
   {
-    "id": "scour-and-seize-renegade-raiders",
+    "id": "scour-and-seize-renegade-raiders-chaos-space-marines",
     "name": "SCOUR AND SEIZE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1987,7 +1987,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "scour-and-seize-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2004,7 +2004,7 @@
     ]
   },
   {
-    "id": "scrambled-coordinates-deceptors",
+    "id": "scrambled-coordinates-deceptors-chaos-space-marines",
     "name": "SCRAMBLED COORDINATES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2016,7 +2016,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "scrambled-coordinates-deceptors-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2033,7 +2033,7 @@
     ]
   },
   {
-    "id": "screaming-descent-dread-talons",
+    "id": "screaming-descent-dread-talons-chaos-space-marines",
     "name": "SCREAMING DESCENT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2045,7 +2045,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "screaming-descent-dread-talons-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2062,7 +2062,7 @@
     ]
   },
   {
-    "id": "seize-the-prize-hurons-marauders",
+    "id": "seize-the-prize-hurons-marauders-chaos-space-marines",
     "name": "SEIZE THE PRIZE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2074,7 +2074,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "seize-the-prize-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2091,7 +2091,7 @@
     ]
   },
   {
-    "id": "selfless-demise-chaos-cult",
+    "id": "selfless-demise-chaos-cult-chaos-space-marines",
     "name": "SELFLESS DEMISE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2103,7 +2103,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "selfless-demise-chaos-cult-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2120,7 +2120,7 @@
     ]
   },
   {
-    "id": "siegebreaker-strike-warpstrike-champions",
+    "id": "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
     "name": "SIEGEBREAKER STRIKE",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -2131,7 +2131,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "siegebreaker-strike-warpstrike-champions",
+    "ability_id": "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2149,7 +2149,7 @@
     ]
   },
   {
-    "id": "siegecraft-fellhammer-siege-host",
+    "id": "siegecraft-fellhammer-siege-host-chaos-space-marines",
     "name": "SIEGECRAFT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2161,7 +2161,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "siegecraft-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2178,7 +2178,7 @@
     ]
   },
   {
-    "id": "skinshift-pactbound-zealots",
+    "id": "skinshift-pactbound-zealots-chaos-space-marines",
     "name": "SKINSHIFT",
     "category": "detachment",
     "type": "epic-deed",
@@ -2190,7 +2190,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2207,7 +2207,7 @@
     ]
   },
   {
-    "id": "snare-of-fire-devotees-of-destruction",
+    "id": "snare-of-fire-devotees-of-destruction-chaos-space-marines",
     "name": "SNARE OF FIRE",
     "category": "detachment",
     "detachment_id": "devotees-of-destruction",
@@ -2218,7 +2218,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "snare-of-fire-devotees-of-destruction",
+    "ability_id": "snare-of-fire-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2235,26 +2235,7 @@
     ]
   },
   {
-    "id": "soul-tally-offering-cult-of-the-arkifane",
-    "name": "SOUL-TALLY OFFERING",
-    "category": "detachment",
-    "detachment_id": "cult-of-the-arkifane",
-    "cp_cost": 2,
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "soul-tally-offering-cult-of-the-arkifane",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "soul-tally-offerings-cult-of-the-arkifane",
+    "id": "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
     "name": "Soul-Tally Offerings",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2267,7 +2248,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "soul-tally-offerings-cult-of-the-arkifane",
+    "ability_id": "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2284,7 +2265,7 @@
     ]
   },
   {
-    "id": "specimens-for-the-spider-creations-of-bile",
+    "id": "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
     "name": "SPECIMENS FOR THE SPIDER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2296,7 +2277,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2313,7 +2294,7 @@
     ]
   },
   {
-    "id": "steadfast-determination-fellhammer-siege-host",
+    "id": "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
     "name": "STEADFAST DETERMINATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2325,7 +2306,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2342,7 +2323,7 @@
     ]
   },
   {
-    "id": "talons-sunk-deep-nightmare-hunt",
+    "id": "talons-sunk-deep-nightmare-hunt-chaos-space-marines",
     "name": "TALONS SUNK DEEP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2355,7 +2336,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "talons-sunk-deep-nightmare-hunt-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2372,7 +2353,7 @@
     ]
   },
   {
-    "id": "to-the-favoured-the-spoils-hurons-marauders",
+    "id": "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
     "name": "TO THE FAVOURED THE SPOILS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2384,7 +2365,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2401,7 +2382,7 @@
     ]
   },
   {
-    "id": "torpefying-refrain-pactbound-zealots",
+    "id": "torpefying-refrain-pactbound-zealots-chaos-space-marines",
     "name": "TORPEFYING REFRAIN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2413,7 +2394,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "torpefying-refrain-pactbound-zealots-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2430,7 +2411,7 @@
     ]
   },
   {
-    "id": "touch-of-the-arkifane-cult-of-the-arkifane",
+    "id": "touch-of-the-arkifane-cult-of-the-arkifane-chaos-space-marines",
     "name": "TOUCH OF THE ARKIFANE",
     "category": "detachment",
     "detachment_id": "cult-of-the-arkifane",
@@ -2445,7 +2426,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "touch-of-the-arkifane-cult-of-the-arkifane",
+    "ability_id": "touch-of-the-arkifane-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2463,7 +2444,7 @@
     ]
   },
   {
-    "id": "undying-hatred-devotees-of-destruction",
+    "id": "undying-hatred-devotees-of-destruction-chaos-space-marines",
     "name": "UNDYING HATRED",
     "category": "detachment",
     "detachment_id": "devotees-of-destruction",
@@ -2474,7 +2455,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "undying-hatred-devotees-of-destruction",
+    "ability_id": "undying-hatred-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2491,7 +2472,7 @@
     ]
   },
   {
-    "id": "undying-hatred-renegade-warband",
+    "id": "undying-hatred-renegade-warband-chaos-space-marines",
     "name": "UNDYING HATRED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2503,7 +2484,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "undying-hatred-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2520,7 +2501,7 @@
     ]
   },
   {
-    "id": "unfailingly-obdurate-renegade-raiders",
+    "id": "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
     "name": "UNFAILINGLY OBDURATE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2533,7 +2514,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2550,7 +2531,7 @@
     ]
   },
   {
-    "id": "unholy-fortitude-cult-of-the-arkifane",
+    "id": "unholy-fortitude-cult-of-the-arkifane-chaos-space-marines",
     "name": "UNHOLY FORTITUDE",
     "category": "detachment",
     "detachment_id": "cult-of-the-arkifane",
@@ -2561,7 +2542,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unholy-fortitude-cult-of-the-arkifane",
+    "ability_id": "unholy-fortitude-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2579,7 +2560,7 @@
     ]
   },
   {
-    "id": "unstoppable-rampage-soulforged-warpack",
+    "id": "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
     "name": "UNSTOPPABLE RAMPAGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2592,7 +2573,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2609,7 +2590,7 @@
     ]
   },
   {
-    "id": "vengeful-destruction-renegade-warband",
+    "id": "vengeful-destruction-renegade-warband-chaos-space-marines",
     "name": "VENGEFUL DESTRUCTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2622,7 +2603,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeful-destruction-renegade-warband-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2639,7 +2620,7 @@
     ]
   },
   {
-    "id": "vindictive-strategy-zarkans-daemonkin",
+    "id": "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
     "name": "Vindictive Strategy",
     "category": "detachment",
     "detachment_id": "zarkans-daemonkin",
@@ -2651,7 +2632,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vindictive-strategy-zarkans-daemonkin",
+    "ability_id": "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2664,7 +2645,7 @@
     ]
   },
   {
-    "id": "warp-flicker-warpstrike-champions",
+    "id": "warp-flicker-warpstrike-champions-chaos-space-marines",
     "name": "WARP FLICKER",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -2675,7 +2656,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-flicker-warpstrike-champions",
+    "ability_id": "warp-flicker-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2693,7 +2674,7 @@
     ]
   },
   {
-    "id": "warp-tainted-warpstrike-champions",
+    "id": "warp-tainted-warpstrike-champions-chaos-space-marines",
     "name": "WARP-TAINTED",
     "category": "detachment",
     "detachment_id": "warpstrike-champions",
@@ -2704,7 +2685,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-tainted-warpstrike-champions",
+    "ability_id": "warp-tainted-warpstrike-champions-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2722,7 +2703,7 @@
     ]
   },
   {
-    "id": "warp-twisted-terrors-murdertalon-raiders",
+    "id": "warp-twisted-terrors-murdertalon-raiders-chaos-space-marines",
     "name": "WARP-TWISTED TERRORS",
     "category": "detachment",
     "detachment_id": "murdertalon-raiders",
@@ -2733,7 +2714,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-twisted-terrors-murdertalon-raiders",
+    "ability_id": "warp-twisted-terrors-murdertalon-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2750,7 +2731,7 @@
     ]
   },
   {
-    "id": "warpcharged-engines-renegade-raiders",
+    "id": "warpcharged-engines-renegade-raiders-chaos-space-marines",
     "name": "WARPCHARGED ENGINES",
     "category": "detachment",
     "type": "wargear",
@@ -2762,7 +2743,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "warpcharged-engines-renegade-raiders-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2779,7 +2760,7 @@
     ]
   },
   {
-    "id": "wreathed-in-warpflame-cabal-of-chaos",
+    "id": "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines",
     "name": "WREATHED IN WARPFLAME",
     "category": "detachment",
     "detachment_id": "cabal-of-chaos",
@@ -2790,7 +2771,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "wreathed-in-warpflame-cabal-of-chaos",
+    "ability_id": "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

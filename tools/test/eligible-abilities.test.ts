@@ -12,7 +12,7 @@ describe("Dataset.eligibleAbilities", () => {
       "shooting",
     );
     const armyIds = result.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("combat-doctrines");
+    expect(armyIds).toContain("combat-doctrines-assault-force-adeptus-astartes");
   });
 
   it("returns nothing for an unknown unit", () => {
@@ -29,7 +29,7 @@ describe("Dataset.eligibleAbilities", () => {
       "command",
     );
     const armyIds = inCommand.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("combat-doctrines");
+    expect(armyIds).toContain("combat-doctrines-assault-force-adeptus-astartes");
   });
 
   it("includes the unit's own ability_ids", () => {
@@ -101,9 +101,9 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
     expect(armyBuffs).toEqual([]);
     // Its one buff-bearing option is offered as a mutually-exclusive lever.
     const { buffs: levers } = ds.stackableBuffsFor(input, ctx);
-    const devastator = levers.find((l) => l.id === "combat-doctrines#Devastator Doctrine");
+    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#Devastator Doctrine");
     expect(devastator, "Devastator Doctrine lever missing").toBeDefined();
-    expect(devastator!.group).toBe("combat-doctrines?stance");
+    expect(devastator!.group).toBe("combat-doctrines-assault-force-adeptus-astartes?stance");
   });
 
   it("respects optedInStratagemIds — stratagems are excluded by default", () => {

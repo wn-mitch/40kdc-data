@@ -5,6 +5,7 @@
  *
  * @packageDocumentation
  */
+import { abilityRefId, abilityRefValue, unitAbilityIds, withRating } from "./ability-refs.js";
 import type {
   AbilityDSLEntry,
   Faction,
@@ -97,13 +98,16 @@ export class UnitView {
   /** Abilities referenced by `ability_ids`; unresolved ids are skipped. */
   get abilities(): AbilityView[] {
     return resolveAll(
-      this.raw.ability_ids,
-      // Resolve within the unit's faction first — an ability_id shared across
-      // factions has per-faction copies that diverge. The fallback catches the
-      // faction-less `_core` pool (and any id absent from this faction's
-      // enrichment).
-      (id) => this.ds.abilities.getInFaction(id, this.raw.faction_id) ?? this.ds.abilities.getAny(id),
+      unitAbilityIds(this.raw.ability_ids),
+      // Ability ids are unique: a chapter unit's supplement ability resolves like any other.
+      (id) => this.ds.abilities.get(id),
     );
+  }
+
+  /** The rating this unit's datasheet prints for a rated rule (the D3 of Deadly Demise D3), if any. */
+  ratingOf(abilityId: string): string | number | undefined {
+    const ref = (this.raw.ability_ids ?? []).find((r) => abilityRefId(r) === abilityId);
+    return ref === undefined ? undefined : abilityRefValue(ref);
   }
 
   /** Wargear options (weapon swaps, add-ons, choices) authored for this unit. */
@@ -216,8 +220,9 @@ export class AbilityView {
     source: BuffSource,
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
+    rating?: string | number,
   ): Buff[] {
-    return this.describeBuffs(source, context, perspective).applied;
+    return this.describeBuffs(source, context, perspective, rating).applied;
   }
 
   /**
@@ -244,10 +249,7 @@ export class AbilityView {
       const modifier = node.modifier as Record<string, unknown>;
       const abilityId = modifier.ability;
       if (modifier.rules_bundle === true && typeof abilityId === "string" && !seen.has(abilityId)) {
-        const factionId = this.raw.faction_id;
-        const target =
-          (factionId ? this.ds.abilities.getInFaction(abilityId, factionId) : undefined) ??
-          this.ds.abilities.getAny(abilityId);
+        const target = this.ds.abilities.get(abilityId);
         const targetEffect = target?.raw.effect as unknown;
         if (
           targetEffect !== null &&
@@ -281,9 +283,11 @@ export class AbilityView {
     source: BuffSource,
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
+    rating?: string | number,
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
-    const resolved = this.resolveRulesBundles(this.raw.effect);
+    // A rated rule ({rating: true}) reads the rating the owning unit prints.
+    const resolved = withRating(this.resolveRulesBundles(this.raw.effect), rating);
     const moment = triggerGated(this.raw.behavior, this.raw.trigger, resolved);
     const translated = effectToBuffs(
       moment !== resolved ? moment : usageGated(this.raw.ability_type, this.raw.usage, resolved),

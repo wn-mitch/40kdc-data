@@ -2,10 +2,11 @@
   "name": "DSL\u2192Buff translations under target perspective (defender-side)",
   "cases": [
     {
-      "abilityId": "feel-no-pain-5",
+      "abilityId": "feel-no-pain",
+      "rating": 5,
       "source": {
         "kind": "ability",
-        "abilityId": "feel-no-pain-5",
+        "abilityId": "feel-no-pain",
         "abilityKind": "unit"
       },
       "context": {
@@ -20,13 +21,15 @@
           }
         ],
         "unsupportedReasons": []
-      }
+      },
+      "_comment": "Feel No Pain is one core record whose threshold reads the unit's printed rating ({rating: true}); rating is that value (a unit printing Feel No Pain 5+)."
     },
     {
-      "abilityId": "feel-no-pain-5",
+      "abilityId": "feel-no-pain",
+      "rating": 5,
       "source": {
         "kind": "ability",
-        "abilityId": "feel-no-pain-5",
+        "abilityId": "feel-no-pain",
         "abilityKind": "unit"
       },
       "context": {
@@ -39,10 +42,10 @@
       }
     },
     {
-      "abilityId": "combat-doctrines",
+      "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
       "source": {
         "kind": "ability",
-        "abilityId": "combat-doctrines",
+        "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
         "abilityKind": "army"
       },
       "context": {
@@ -56,10 +59,10 @@
     },
     {
       "_comment": "Core rule 19.04: a model-scoped effect (target self/bearer) read as the chosen unit's own ability still buffs it \u2014 the Archon's personal 4+ invulnerable save applies when the Archon is the unit being crunched.",
-      "abilityId": "shadowfield",
+      "abilityId": "shadowfield-drukhari",
       "source": {
         "kind": "ability",
-        "abilityId": "shadowfield",
+        "abilityId": "shadowfield-drukhari",
         "abilityKind": "unit"
       },
       "context": {
@@ -78,10 +81,10 @@
     },
     {
       "_comment": "\u2026but the same effect pooled in from an attached member stays on that model: no buff on the combined unit, one diagnostic instead.",
-      "abilityId": "shadowfield",
+      "abilityId": "shadowfield-drukhari",
       "source": {
         "kind": "ability",
-        "abilityId": "shadowfield",
+        "abilityId": "shadowfield-drukhari",
         "abilityKind": "attached",
         "sourceUnitId": "archon"
       },
@@ -98,10 +101,10 @@
     },
     {
       "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit \u2014 'models in that unit have a 4+ invulnerable save') still reaches the whole combined unit from an attached source. Guards against the 19.04 gate over-reaching.",
-      "abilityId": "mental-fortress-psychic",
+      "abilityId": "mental-fortress-adeptus-astartes",
       "source": {
         "kind": "ability",
-        "abilityId": "mental-fortress-psychic",
+        "abilityId": "mental-fortress-adeptus-astartes",
         "abilityKind": "attached",
         "sourceUnitId": "librarian"
       },

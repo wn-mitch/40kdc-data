@@ -1,13 +1,13 @@
 [
   {
-    "id": "steeped-in-suffering-mercurial-host",
+    "id": "steeped-in-suffering-mercurial-host-emperors-children",
     "name": "Steeped in Suffering",
     "detachment_id": "mercurial-host",
     "cost": 20,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "steeped-in-suffering-mercurial-host",
+    "ability_id": "steeped-in-suffering-mercurial-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "intoxicating-musk-mercurial-host",
+    "id": "intoxicating-musk-mercurial-host-emperors-children",
     "name": "Intoxicating Musk",
     "detachment_id": "mercurial-host",
     "cost": 20,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "intoxicating-musk-mercurial-host",
+    "ability_id": "intoxicating-musk-mercurial-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "tactical-perfection-mercurial-host",
+    "id": "tactical-perfection-mercurial-host-emperors-children",
     "name": "Tactical Perfection",
     "detachment_id": "mercurial-host",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "tactical-perfection-mercurial-host",
+    "ability_id": "tactical-perfection-mercurial-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "loathsome-dexterity-mercurial-host",
+    "id": "loathsome-dexterity-mercurial-host-emperors-children",
     "name": "Loathsome Dexterity",
     "detachment_id": "mercurial-host",
     "cost": 10,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "loathsome-dexterity-mercurial-host",
+    "ability_id": "loathsome-dexterity-mercurial-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "faultless-opportunist-peerless-bladesmen",
+    "id": "faultless-opportunist-peerless-bladesmen-emperors-children",
     "name": "Faultless Opportunist",
     "detachment_id": "peerless-bladesmen",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "faultless-opportunist-peerless-bladesmen",
+    "ability_id": "faultless-opportunist-peerless-bladesmen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "blinding-speed-peerless-bladesmen",
+    "id": "blinding-speed-peerless-bladesmen-emperors-children",
     "name": "Blinding Speed",
     "detachment_id": "peerless-bladesmen",
     "cost": 25,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "blinding-speed-peerless-bladesmen",
+    "ability_id": "blinding-speed-peerless-bladesmen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,14 +168,14 @@
     ]
   },
   {
-    "id": "distortion-peerless-bladesmen",
+    "id": "distortion-peerless-bladesmen-emperors-children",
     "name": "Distortion",
     "detachment_id": "peerless-bladesmen",
     "cost": 25,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "distortion-peerless-bladesmen",
+    "ability_id": "distortion-peerless-bladesmen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -196,7 +196,7 @@
     ]
   },
   {
-    "id": "rise-to-the-challenge-peerless-bladesmen",
+    "id": "rise-to-the-challenge-peerless-bladesmen-emperors-children",
     "name": "Rise to the Challenge",
     "detachment_id": "peerless-bladesmen",
     "cost": 30,
@@ -204,7 +204,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "rise-to-the-challenge-peerless-bladesmen",
+    "ability_id": "rise-to-the-challenge-peerless-bladesmen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -225,7 +225,7 @@
     ]
   },
   {
-    "id": "sublime-prescience-rapid-evisceration",
+    "id": "sublime-prescience-rapid-evisceration-emperors-children",
     "name": "Sublime Prescience",
     "detachment_id": "rapid-evisceration",
     "cost": 25,
@@ -233,7 +233,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "sublime-prescience-rapid-evisceration",
+    "ability_id": "sublime-prescience-rapid-evisceration-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -254,7 +254,7 @@
     ]
   },
   {
-    "id": "spearhead-striker-rapid-evisceration",
+    "id": "spearhead-striker-rapid-evisceration-emperors-children",
     "name": "Spearhead Striker",
     "detachment_id": "rapid-evisceration",
     "cost": 20,
@@ -262,7 +262,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "spearhead-striker-rapid-evisceration",
+    "ability_id": "spearhead-striker-rapid-evisceration-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -283,7 +283,7 @@
     ]
   },
   {
-    "id": "accomplished-tactician-rapid-evisceration",
+    "id": "accomplished-tactician-rapid-evisceration-emperors-children",
     "name": "Accomplished Tactician",
     "detachment_id": "rapid-evisceration",
     "cost": 35,
@@ -291,7 +291,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "accomplished-tactician-rapid-evisceration",
+    "ability_id": "accomplished-tactician-rapid-evisceration-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -312,7 +312,7 @@
     ]
   },
   {
-    "id": "heretek-adept-rapid-evisceration",
+    "id": "heretek-adept-rapid-evisceration-emperors-children",
     "name": "Heretek Adept",
     "detachment_id": "rapid-evisceration",
     "cost": 35,
@@ -320,7 +320,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "heretek-adept-rapid-evisceration",
+    "ability_id": "heretek-adept-rapid-evisceration-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -341,14 +341,14 @@
     ]
   },
   {
-    "id": "empyric-suffusion-carnival-of-excess",
+    "id": "empyric-suffusion-carnival-of-excess-emperors-children",
     "name": "Empyric Suffusion",
     "detachment_id": "carnival-of-excess",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "empyric-suffusion-carnival-of-excess",
+    "ability_id": "empyric-suffusion-carnival-of-excess-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -369,7 +369,7 @@
     ]
   },
   {
-    "id": "dark-blessings-carnival-of-excess",
+    "id": "dark-blessings-carnival-of-excess-emperors-children",
     "name": "Dark Blessings",
     "detachment_id": "carnival-of-excess",
     "cost": 10,
@@ -377,7 +377,7 @@
       "Emperor’s Children",
       "Infantry"
     ],
-    "ability_id": "dark-blessings-carnival-of-excess",
+    "ability_id": "dark-blessings-carnival-of-excess-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -398,14 +398,14 @@
     ]
   },
   {
-    "id": "possessed-blade-carnival-of-excess",
+    "id": "possessed-blade-carnival-of-excess-emperors-children",
     "name": "Possessed Blade",
     "detachment_id": "carnival-of-excess",
     "cost": 35,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "possessed-blade-carnival-of-excess",
+    "ability_id": "possessed-blade-carnival-of-excess-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -426,11 +426,11 @@
     ]
   },
   {
-    "id": "warp-walker-carnival-of-excess",
+    "id": "warp-walker-carnival-of-excess-emperors-children",
     "name": "Warp Walker",
     "detachment_id": "carnival-of-excess",
     "cost": 35,
-    "ability_id": "warp-walker-carnival-of-excess",
+    "ability_id": "warp-walker-carnival-of-excess-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -459,32 +459,14 @@
     ]
   },
   {
-    "id": "pledge-to-eternal-servitude-coterie-of-the-conceited",
-    "name": "Pledge to Eternal Servitude",
-    "detachment_id": "coterie-of-the-conceited",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Emperor’s Children"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "pledge-of-dark-glory-coterie-of-the-conceited",
+    "id": "pledge-of-dark-glory-coterie-of-the-conceited-emperors-children",
     "name": "Pledge of Dark Glory",
     "detachment_id": "coterie-of-the-conceited",
     "cost": 25,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "pledge-of-dark-glory-coterie-of-the-conceited",
+    "ability_id": "pledge-of-dark-glory-coterie-of-the-conceited-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -505,14 +487,14 @@
     ]
   },
   {
-    "id": "pledge-of-mortal-pain-coterie-of-the-conceited",
+    "id": "pledge-of-mortal-pain-coterie-of-the-conceited-emperors-children",
     "name": "Pledge of Mortal Pain",
     "detachment_id": "coterie-of-the-conceited",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "pledge-of-mortal-pain-coterie-of-the-conceited",
+    "ability_id": "pledge-of-mortal-pain-coterie-of-the-conceited-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -533,14 +515,14 @@
     ]
   },
   {
-    "id": "pledge-of-unholy-fortune-coterie-of-the-conceited",
+    "id": "pledge-of-unholy-fortune-coterie-of-the-conceited-emperors-children",
     "name": "Pledge of Unholy Fortune",
     "detachment_id": "coterie-of-the-conceited",
     "cost": 30,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "pledge-of-unholy-fortune-coterie-of-the-conceited",
+    "ability_id": "pledge-of-unholy-fortune-coterie-of-the-conceited-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -561,14 +543,14 @@
     ]
   },
   {
-    "id": "eager-to-prove-slaaneshs-chosen",
+    "id": "eager-to-prove-slaaneshs-chosen-emperors-children",
     "name": "Eager to Prove",
     "detachment_id": "slaaneshs-chosen",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "eager-to-prove-slaaneshs-chosen",
+    "ability_id": "eager-to-prove-slaaneshs-chosen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -589,14 +571,14 @@
     ]
   },
   {
-    "id": "repulsed-by-weakness-slaaneshs-chosen",
+    "id": "repulsed-by-weakness-slaaneshs-chosen-emperors-children",
     "name": "Repulsed by Weakness",
     "detachment_id": "slaaneshs-chosen",
     "cost": 25,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "repulsed-by-weakness-slaaneshs-chosen",
+    "ability_id": "repulsed-by-weakness-slaaneshs-chosen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -617,14 +599,14 @@
     ]
   },
   {
-    "id": "proud-and-vainglorious-slaaneshs-chosen",
+    "id": "proud-and-vainglorious-slaaneshs-chosen-emperors-children",
     "name": "Proud and Vainglorious",
     "detachment_id": "slaaneshs-chosen",
     "cost": 20,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "proud-and-vainglorious-slaaneshs-chosen",
+    "ability_id": "proud-and-vainglorious-slaaneshs-chosen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -645,14 +627,14 @@
     ]
   },
   {
-    "id": "slayer-of-champions-slaaneshs-chosen",
+    "id": "slayer-of-champions-slaaneshs-chosen-emperors-children",
     "name": "Slayer of Champions",
     "detachment_id": "slaaneshs-chosen",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "slayer-of-champions-slaaneshs-chosen",
+    "ability_id": "slayer-of-champions-slaaneshs-chosen-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -673,14 +655,14 @@
     ]
   },
   {
-    "id": "tears-of-the-phoenix-court-of-the-phoenician",
+    "id": "tears-of-the-phoenix-court-of-the-phoenician-emperors-children",
     "name": "Tears of the Phoenix",
     "detachment_id": "court-of-the-phoenician",
     "cost": 25,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "tears-of-the-phoenix-court-of-the-phoenician",
+    "ability_id": "tears-of-the-phoenix-court-of-the-phoenician-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -701,14 +683,14 @@
     ]
   },
   {
-    "id": "exalted-patron-court-of-the-phoenician",
+    "id": "exalted-patron-court-of-the-phoenician-emperors-children",
     "name": "Exalted Patron",
     "detachment_id": "court-of-the-phoenician",
     "cost": 15,
     "keyword_restrictions": [
       "Lord Exultant"
     ],
-    "ability_id": "exalted-patron-court-of-the-phoenician",
+    "ability_id": "exalted-patron-court-of-the-phoenician-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -732,14 +714,14 @@
     ]
   },
   {
-    "id": "soulstain-made-manifest-court-of-the-phoenician",
+    "id": "soulstain-made-manifest-court-of-the-phoenician-emperors-children",
     "name": "Soulstain Made Manifest",
     "detachment_id": "court-of-the-phoenician",
     "cost": 15,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": "soulstain-made-manifest-court-of-the-phoenician",
+    "ability_id": "soulstain-made-manifest-court-of-the-phoenician-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -760,7 +742,7 @@
     ]
   },
   {
-    "id": "spiritsliver-court-of-the-phoenician",
+    "id": "spiritsliver-court-of-the-phoenician-emperors-children",
     "name": "Spiritsliver",
     "detachment_id": "court-of-the-phoenician",
     "cost": 20,
@@ -768,7 +750,7 @@
       "Daemon Prince",
       "Emperor’s Children"
     ],
-    "ability_id": "spiritsliver-court-of-the-phoenician",
+    "ability_id": "spiritsliver-court-of-the-phoenician-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -789,7 +771,7 @@
     ]
   },
   {
-    "id": "cacophonic-accompaniment-elegant-brutes",
+    "id": "cacophonic-accompaniment-elegant-brutes-emperors-children",
     "name": "Cacophonic Accompaniment",
     "detachment_id": "elegant-brutes",
     "cost": 20,
@@ -797,7 +779,7 @@
       "Emperor’s Children",
       "Lord Kakophonist"
     ],
-    "ability_id": "cacophonic-accompaniment-elegant-brutes",
+    "ability_id": "cacophonic-accompaniment-elegant-brutes-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -818,7 +800,7 @@
     ]
   },
   {
-    "id": "frenzied-ferocity-upgrade-elegant-brutes",
+    "id": "frenzied-ferocity-upgrade-elegant-brutes-emperors-children",
     "name": "Frenzied Ferocity (Upgrade)",
     "detachment_id": "elegant-brutes",
     "cost": 15,
@@ -826,7 +808,7 @@
       "Emperor’s Children",
       "Terminator Squad"
     ],
-    "ability_id": "frenzied-ferocity-elegant-brutes",
+    "ability_id": "frenzied-ferocity-upgrade-elegant-brutes-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -847,7 +829,7 @@
     ]
   },
   {
-    "id": "euphoric-crown-frenzied-host",
+    "id": "euphoric-crown-frenzied-host-emperors-children",
     "name": "Euphoric Crown",
     "detachment_id": "frenzied-host",
     "cost": 20,
@@ -855,7 +837,7 @@
       "Emperor’s Children",
       "Lord Exultant"
     ],
-    "ability_id": "euphoric-crown-frenzied-host",
+    "ability_id": "euphoric-crown-frenzied-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -876,7 +858,7 @@
     ]
   },
   {
-    "id": "howling-plate-frenzied-host",
+    "id": "howling-plate-frenzied-host-emperors-children",
     "name": "Howling Plate",
     "detachment_id": "frenzied-host",
     "cost": 20,
@@ -884,7 +866,7 @@
       "Emperor’s Children",
       "Lord Exultant"
     ],
-    "ability_id": "howling-plate-frenzied-host",
+    "ability_id": "howling-plate-frenzied-host-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -905,7 +887,7 @@
     ]
   },
   {
-    "id": "eager-patrons-upgrade-spectacle-of-slaughter",
+    "id": "eager-patrons-upgrade-spectacle-of-slaughter-emperors-children",
     "name": "Eager Patrons (Upgrade)",
     "detachment_id": "spectacle-of-slaughter",
     "cost": 20,
@@ -913,7 +895,7 @@
       "Emperor’s Children",
       "Flawless Blades"
     ],
-    "ability_id": "eager-patrons-spectacle-of-slaughter",
+    "ability_id": "eager-patrons-upgrade-spectacle-of-slaughter-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -934,7 +916,7 @@
     ]
   },
   {
-    "id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter",
+    "id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter-emperors-children",
     "name": "Beguiling Grotesquerie (Upgrade)",
     "detachment_id": "spectacle-of-slaughter",
     "cost": 15,
@@ -942,7 +924,7 @@
       "Emperor’s Children",
       "Flawless Blades"
     ],
-    "ability_id": "beguiling-grotesquerie-spectacle-of-slaughter",
+    "ability_id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -963,7 +945,7 @@
     ]
   },
   {
-    "id": "invigorating-agonies-callous-blades",
+    "id": "invigorating-agonies-callous-blades-emperors-children",
     "name": "Invigorating Agonies",
     "detachment_id": "callous-blades",
     "cost": 0,
@@ -980,7 +962,7 @@
       "Callous Blades",
       "Lord Exultant"
     ],
-    "ability_id": "invigorating-agonies-callous-blades",
+    "ability_id": "invigorating-agonies-callous-blades-emperors-children",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -989,7 +971,7 @@
     ]
   },
   {
-    "id": "martial-perfection-callous-blades",
+    "id": "martial-perfection-callous-blades-emperors-children",
     "name": "Martial Perfection",
     "detachment_id": "callous-blades",
     "cost": 0,
@@ -1006,7 +988,7 @@
       "Callous Blades Infractors"
     ],
     "upgrade_tag": true,
-    "ability_id": "martial-perfection-callous-blades",
+    "ability_id": "martial-perfection-callous-blades-emperors-children",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -1015,11 +997,11 @@
     ]
   },
   {
-    "id": "pledge-of-eternal-servitude-coterie-of-the-conceited",
+    "id": "pledge-of-eternal-servitude-coterie-of-the-conceited-emperors-children",
     "name": "Pledge of Eternal Servitude",
     "detachment_id": "coterie-of-the-conceited",
     "cost": 25,
-    "ability_id": "pledge-of-eternal-servitude-coterie-of-the-conceited",
+    "ability_id": "pledge-of-eternal-servitude-coterie-of-the-conceited-emperors-children",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

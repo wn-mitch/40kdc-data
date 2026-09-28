@@ -234,7 +234,7 @@ describe("external source identities", () => {
         store,
         "enhancement",
         "adeptus-astartes",
-        "artificer-armour-gladius-task-force",
+        "artificer-armour-gladius-task-force-adeptus-astartes",
       ),
     ).toContainEqual({
       namespace: "game-datacards",

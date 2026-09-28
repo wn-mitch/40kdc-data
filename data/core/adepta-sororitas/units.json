@@ -70,7 +70,7 @@
       "spear-of-the-faithful"
     ],
     "ability_ids": [
-      "sworn-protectors"
+      "sworn-protectors-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -146,10 +146,19 @@
       "twin-penitent-flails"
     ],
     "ability_ids": [
-      "anchorite-sarcophagus",
-      "anguish-of-the-unredeemed",
-      "deadly-demise-1",
-      "feel-no-pain-5"
+      {
+        "id": "anchorite-sarcophagus-adepta-sororitas",
+        "wargear": "anchorite-sarcophagus"
+      },
+      "anguish-of-the-unredeemed-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -232,9 +241,9 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "divine-deliverance",
+      "divine-deliverance-adepta-sororitas",
       "leader",
-      "sacred-command"
+      "sacred-command-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -305,9 +314,9 @@
       "plasma-pistol-palatine"
     ],
     "ability_ids": [
-      "fury-of-the-righteous",
+      "fury-of-the-righteous-adepta-sororitas",
       "leader",
-      "rapturous-blows"
+      "rapturous-blows-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -422,12 +431,21 @@
       "sanctifier-melee-weapon"
     ],
     "ability_ids": [
-      "attached-unit",
-      "cherub",
-      "ministorum-sermon",
-      "salvationist-medikit",
-      "scouts-6",
-      "simulacrum-imperialis"
+      "attached-unit-sanctifiers-adepta-sororitas",
+      "cherub-adepta-sororitas",
+      "ministorum-sermon-adepta-sororitas",
+      {
+        "id": "salvationist-medikit-adepta-sororitas",
+        "wargear": "salvationist-medikit"
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "simulacrum-imperialis-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -498,8 +516,11 @@
       "arco-flails"
     ],
     "ability_ids": [
-      "extremis-trigger-word",
-      "feel-no-pain-5"
+      "extremis-trigger-word-adepta-sororitas",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -570,9 +591,16 @@
       "virge-of-admonition"
     ],
     "ability_ids": [
-      "denuncia-oratory",
-      "rituale-nullificatus",
-      "virtue-of-intolerance"
+      {
+        "id": "denuncia-oratory-adepta-sororitas",
+        "wargear": "denuncia-oratory"
+      },
+      "rituale-nullificatus-adepta-sororitas",
+      "virtue-of-intolerance-adepta-sororitas",
+      {
+        "id": "simulacrum-imperialis-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -658,9 +686,9 @@
       "close-combat-weapon-imagifier"
     ],
     "ability_ids": [
-      "leader",
-      "litany-of-deeds",
-      "stanchion-of-holy-martyrs"
+      "litany-of-deeds-adepta-sororitas",
+      "stanchion-of-holy-martyrs-adepta-sororitas",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -733,8 +761,9 @@
     ],
     "ability_ids": [
       "leader",
-      "relics-of-the-matriarchs",
-      "solemn-procession"
+      "relics-of-the-matriarchs-adepta-sororitas",
+      "solemn-procession-adepta-sororitas",
+      "damaged-1-6-wounds-remaining-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -831,7 +860,7 @@
       "power-weapon-seraphim-squad"
     ],
     "ability_ids": [
-      "angelic-ascent",
+      "angelic-ascent-adepta-sororitas",
       "deep-strike"
     ],
     "game_version": {
@@ -926,8 +955,11 @@
       "penitent-eviscerator"
     ],
     "ability_ids": [
-      "overseer-of-redemption",
-      "feel-no-pain-5"
+      "overseer-of-redemption-adepta-sororitas",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -995,9 +1027,9 @@
       "dialogus-staff"
     ],
     "ability_ids": [
-      "laud-hailer",
-      "leader",
-      "stirring-rhetoric"
+      "laud-hailer-adepta-sororitas",
+      "stirring-rhetoric-adepta-sororitas",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -1067,9 +1099,9 @@
       "mace-of-the-righteous"
     ],
     "ability_ids": [
-      "executioner-of-heretics-aura",
-      "leader",
-      "unflinching-determination"
+      "executioner-of-heretics-adepta-sororitas",
+      "unflinching-determination-adepta-sororitas",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -1152,8 +1184,11 @@
       "twin-multi-melta"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "purge-and-cleanse"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "purge-and-cleanse-adepta-sororitas"
     ],
     "transport_capacity": {
       "capacity": 6,
@@ -1241,9 +1276,9 @@
       "chirurgeons-tools"
     ],
     "ability_ids": [
-      "leader",
-      "medicus-ministorum",
-      "sacred-healing"
+      "medicus-ministorum-adepta-sororitas",
+      "sacred-healing-adepta-sororitas",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -1315,11 +1350,14 @@
       "paragon-missile-launcher"
     ],
     "ability_ids": [
-      "abbess-sanctorum",
+      "abbess-sanctorum-adepta-sororitas",
       "leader",
-      "righteous-repugnance",
-      "supreme-commander",
-      "deadly-demise-1"
+      "righteous-repugnance-adepta-sororitas",
+      "supreme-commander-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1406,8 +1444,8 @@
       "power-weapon-retributor-squad"
     ],
     "ability_ids": [
-      "cherubs",
-      "storm-of-retribution"
+      "cherubs-adepta-sororitas",
+      "storm-of-retribution-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1497,9 +1535,16 @@
       "power-weapon-sisters-novitiate-squad"
     ],
     "ability_ids": [
-      "impetuous-fervour",
+      "impetuous-fervour-adepta-sororitas",
       "infiltrators",
-      "sacred-banner"
+      {
+        "id": "sacred-banner-adepta-sororitas",
+        "wargear": "sacred-banner"
+      },
+      {
+        "id": "simulacrum-imperialis-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1604,9 +1649,9 @@
     ],
     "ability_ids": [
       "fights-first",
-      "holy-judgement",
+      "holy-judgement-adepta-sororitas",
       "lone-operative",
-      "mysterious-saviours",
+      "mysterious-saviours-adepta-sororitas",
       "deep-strike"
     ],
     "game_version": {
@@ -1686,9 +1731,15 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "self-repair",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "self-repair-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -1776,7 +1827,7 @@
       "paragon-war-mace"
     ],
     "ability_ids": [
-      "righteous-paragons"
+      "righteous-paragons-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1861,8 +1912,12 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "rites-of-castigation",
-      "deadly-demise-d3"
+      "rites-of-castigation-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1940,8 +1995,12 @@
       "hunter-killer-missile"
     ],
     "ability_ids": [
-      "devastating-refrain",
-      "deadly-demise-d3"
+      "devastating-refrain-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2016,9 +2075,15 @@
       "twin-penitent-flails-penitent-engines"
     ],
     "ability_ids": [
-      "endless-suffering",
-      "deadly-demise-1",
-      "feel-no-pain-5"
+      "endless-suffering-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2088,10 +2153,13 @@
       "twin-ministorum-heavy-flamer"
     ],
     "ability_ids": [
-      "fiery-conviction",
+      "fiery-conviction-adepta-sororitas",
       "leader",
-      "the-pulpit-of-saint-holline-s-basilica",
-      "deadly-demise-1"
+      "the-pulpit-of-saint-hollines-basilica-adepta-sororitas",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2162,13 +2230,10 @@
       "zealots-vindictor"
     ],
     "ability_ids": [
-      "holy-hatred",
-      "holy-mission",
-      "holy-piety",
+      "holy-mission-adepta-sororitas",
       "leader",
-      "righteous-smiting",
-      "war-hymns",
-      "zealot"
+      "righteous-smiting-adepta-sororitas",
+      "zealot-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2261,8 +2326,12 @@
       "power-weapon-zephyrim-squad"
     ],
     "ability_ids": [
-      "embodied-prophecy",
-      "deep-strike"
+      "embodied-prophecy-adepta-sororitas",
+      "deep-strike",
+      {
+        "id": "sacred-banner-adepta-sororitas",
+        "wargear": "sacred-banner"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2348,9 +2417,17 @@
       "power-weapon-dominion-squad"
     ],
     "ability_ids": [
-      "holy-vanguard",
-      "righteous-awareness",
-      "scouts-6"
+      "holy-vanguard-adepta-sororitas",
+      "righteous-awareness-adepta-sororitas",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "cherub-adepta-sororitas",
+      {
+        "id": "simulacrum-imperialis-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2457,10 +2534,10 @@
       "the-ardent-blade"
     ],
     "ability_ids": [
-      "healing-tears",
+      "healing-tears-adepta-sororitas",
       "leader",
-      "lifewards",
-      "miraculous-intervention",
+      "lifewards-adepta-sororitas",
+      "miraculous-intervention-adepta-sororitas",
       "deep-strike"
     ],
     "game_version": {
@@ -2549,7 +2626,12 @@
       "power-weapon-battle-sisters-squad"
     ],
     "ability_ids": [
-      "defenders-of-the-faith"
+      "defenders-of-the-faith-adepta-sororitas",
+      "cherub-adepta-sororitas",
+      {
+        "id": "simulacrum-imperialis-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2646,9 +2728,16 @@
     ],
     "ability_ids": [
       "leader",
-      "null-rod",
-      "rod-of-office",
-      "the-emperor-s-grace"
+      {
+        "id": "null-rod-adepta-sororitas",
+        "wargear": "null-rod"
+      },
+      {
+        "id": "rod-of-office-adepta-sororitas",
+        "wargear": "rod-of-office"
+      },
+      "the-emperors-grace-adepta-sororitas",
+      "sacred-command-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2731,9 +2820,9 @@
       "scribes-staff"
     ],
     "ability_ids": [
-      "auto-tapestry-of-the-emperor-s-judgement",
+      "auto-tapestry-of-the-emperors-judgement-adepta-sororitas",
       "leader",
-      "recount-the-deeds-of-the-saints"
+      "recount-the-deeds-of-the-saints-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2810,11 +2899,17 @@
       "throne-of-blame"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "acts-of-faith",
-      "righteous-denunciation",
-      "judged-for-execution"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "acts-of-faith-adepta-sororitas",
+      "righteous-denunciation-adepta-sororitas",
+      "judged-for-execution-adepta-sororitas"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2891,6 +2986,10 @@
         "namespace": "mfm",
         "id": "98040cde-31af-462b-95a6-7192d92df536"
       }
+    ],
+    "ability_ids": [
+      "divine-guidance-adepta-sororitas",
+      "null-rod-sanctuary-canoness-adalya-adepta-sororitas"
     ]
   },
   {
@@ -2946,6 +3045,9 @@
         "namespace": "mfm",
         "id": "822ff2a3-f588-4647-917e-b46065ca0ddd"
       }
+    ],
+    "ability_ids": [
+      "extremis-trigger-word-sanctuary-guardians-arco-flagellants-adepta-sororitas"
     ]
   },
   {
@@ -3003,6 +3105,15 @@
         "namespace": "mfm",
         "id": "d38c5ef2-6e31-418a-8a63-3cc3060e5b28"
       }
+    ],
+    "ability_ids": [
+      "cherub-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",
+      "defenders-of-the-faith-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",
+      "simulacrum-imperialis-sanctuary-guardians-adepta-sororitas",
+      {
+        "id": "simulacrum-imperialis-wargear-adepta-sororitas",
+        "wargear": "simulacrum-imperialis"
+      }
     ]
   },
   {
@@ -3058,6 +3169,9 @@
         "namespace": "mfm",
         "id": "1790cfaf-7e86-4b8c-b889-5b2ffe34f14e"
       }
+    ],
+    "ability_ids": [
+      "sworn-protectors-sanctuary-guardians-celestian-sacresants-adepta-sororitas"
     ]
   }
 ]

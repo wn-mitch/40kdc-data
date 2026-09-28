@@ -7,180 +7,180 @@ authored separately and is untouched.
 
 | Dir | Matched | tags-chg | tags-ok | req-chg | req-ok | rule-fill | rule-ok | rule-rev | rule-unauth |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
-| adepta-sororitas | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 1 |
-| adeptus-astartes | 17 | 0 | 17 | 0 | 17 | 0 | 14 | 0 | 3 |
-| adeptus-custodes | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
-| adeptus-mechanicus | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
-| aeldari | 16 | 0 | 16 | 0 | 16 | 0 | 15 | 0 | 1 |
-| agents-of-the-imperium | 6 | 0 | 6 | 0 | 6 | 0 | 5 | 0 | 1 |
-| astra-militarum | 12 | 0 | 12 | 0 | 12 | 0 | 10 | 1 | 1 |
-| black-templars | 7 | 0 | 7 | 0 | 7 | 0 | 0 | 0 | 7 |
-| blood-angels | 9 | 0 | 9 | 0 | 9 | 0 | 0 | 0 | 9 |
-| chaos-daemons | 9 | 0 | 9 | 0 | 9 | 0 | 9 | 0 | 0 |
-| chaos-knights | 8 | 0 | 8 | 0 | 8 | 0 | 8 | 0 | 0 |
-| chaos-space-marines | 18 | 0 | 18 | 0 | 18 | 0 | 16 | 1 | 1 |
-| dark-angels | 9 | 0 | 9 | 0 | 9 | 0 | 0 | 0 | 9 |
-| death-guard | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
-| deathwatch | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
-| drukhari | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
-| emperors-children | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
-| genestealer-cults | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
-| grey-knights | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| adepta-sororitas | 9 | 0 | 9 | 0 | 9 | 1 | 8 | 0 | 0 |
+| adeptus-astartes | 17 | 0 | 17 | 0 | 17 | 3 | 13 | 1 | 0 |
+| adeptus-custodes | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
+| adeptus-mechanicus | 11 | 0 | 11 | 0 | 11 | 1 | 9 | 0 | 0 |
+| aeldari | 16 | 0 | 16 | 0 | 16 | 1 | 13 | 2 | 0 |
+| agents-of-the-imperium | 6 | 0 | 6 | 0 | 6 | 1 | 5 | 0 | 0 |
+| astra-militarum | 12 | 0 | 12 | 0 | 12 | 1 | 9 | 1 | 0 |
+| black-templars | 7 | 0 | 7 | 0 | 7 | 7 | 0 | 0 | 0 |
+| blood-angels | 9 | 0 | 9 | 0 | 9 | 9 | 0 | 0 | 0 |
+| chaos-daemons | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 0 |
+| chaos-knights | 8 | 0 | 8 | 0 | 8 | 0 | 7 | 0 | 0 |
+| chaos-space-marines | 18 | 0 | 18 | 0 | 18 | 1 | 16 | 0 | 0 |
+| dark-angels | 9 | 0 | 9 | 0 | 9 | 8 | 0 | 0 | 0 |
+| death-guard | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
+| deathwatch | 1 | 0 | 1 | 0 | 1 | 1 | 0 | 0 | 0 |
+| drukhari | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
+| emperors-children | 11 | 0 | 11 | 0 | 11 | 1 | 10 | 0 | 0 |
+| genestealer-cults | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
+| grey-knights | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
 | imperial-fists | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
 | imperial-knights | 8 | 0 | 8 | 0 | 8 | 0 | 8 | 0 | 0 |
 | iron-hands | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
-| leagues-of-votann | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
-| necrons | 13 | 0 | 13 | 0 | 13 | 0 | 12 | 0 | 1 |
-| orks | 15 | 0 | 15 | 0 | 15 | 0 | 0 | 15 | 0 |
+| leagues-of-votann | 11 | 0 | 11 | 0 | 11 | 1 | 10 | 0 | 0 |
+| necrons | 13 | 0 | 13 | 0 | 13 | 1 | 11 | 0 | 0 |
+| orks | 15 | 0 | 15 | 0 | 15 | 15 | 0 | 0 | 0 |
 | raven-guard | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
 | salamanders | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
-| space-wolves | 8 | 0 | 8 | 0 | 8 | 0 | 0 | 0 | 8 |
-| tau-empire | 8 | 0 | 8 | 0 | 8 | 0 | 7 | 0 | 1 |
-| thousand-sons | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
-| tyranids | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
+| space-wolves | 8 | 0 | 8 | 0 | 8 | 7 | 0 | 0 | 0 |
+| tau-empire | 8 | 0 | 8 | 0 | 8 | 1 | 7 | 0 | 0 |
+| thousand-sons | 10 | 0 | 10 | 0 | 10 | 1 | 9 | 0 | 0 |
+| tyranids | 11 | 0 | 11 | 0 | 11 | 1 | 9 | 0 | 0 |
 | ultramarines | 2 | 0 | 2 | 0 | 2 | 0 | 0 | 0 | 2 |
 | white-scars | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
-| world-eaters | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 1 |
-| **TOTAL** | **293** | **0** | **293** | **0** | **293** | **0** | **214** | **17** | **62** |
+| world-eaters | 9 | 0 | 9 | 0 | 9 | 1 | 7 | 0 | 0 |
+| **TOTAL** | **293** | **0** | **293** | **0** | **293** | **68** | **204** | **4** | **7** |
 
 ## adepta-sororitas
-- detachment_rule_ids UNAUTHORED sanctuary-guardians: dump rule(s) [blessed-believers] have no authored ability yet
+- detachment_rule_ids filled sanctuary-guardians: [blessed-believers-adepta-sororitas]
 
 ## adeptus-astartes
-- detachment_rule_ids UNAUTHORED subversion-assets: dump rule(s) [nowhere-to-hide] have no authored ability yet
-- detachment_rule_ids UNAUTHORED assault-force: dump rule(s) [indomitable-resolve] have no authored ability yet
-- detachment_rule_ids UNAUTHORED vengeful-hosts: dump rule(s) [imperator-unleashed] have no authored ability yet
+- detachment_rule_ids filled subversion-assets: [nowhere-to-hide-adeptus-astartes]
+- detachment_rule_ids filled assault-force: [indomitable-resolve-adeptus-astartes]
+- detachment_rule_ids filled vengeful-hosts: [imperator-unleashed-adeptus-astartes]
+- detachment_rule_ids REVIEW gladius-task-force: authored [codex-discipline-bastion-task-force-adeptus-astartes] vs dump [combat-doctrines-adeptus-astartes]
 
 ## adeptus-custodes
-- detachment_rule_ids UNAUTHORED tristraens-gilded-blades: dump rule(s) [fearless-and-unrelenting] have no authored ability yet
+- detachment_rule_ids filled tristraens-gilded-blades: [fearless-and-unrelenting-adeptus-custodes]
 
 ## adeptus-mechanicus
-- detachment_rule_ids UNAUTHORED purge-corps-deltic-9: dump rule(s) [imperative-overload] have no authored ability yet
+- detachment_rule_ids filled purge-corps-deltic-9: [imperative-overload-adeptus-mechanicus]
 
 ## aeldari
-- detachment_rule_ids UNAUTHORED kygharils-protectors: dump rule(s) [graceful-warriors] have no authored ability yet
+- detachment_rule_ids filled kygharils-protectors: [graceful-warriors-aeldari]
+- detachment_rule_ids REVIEW ghosts-of-the-webway: authored [acrobatic-onslaught-aeldari] vs dump [acrobatic-onslaught-ghosts-of-the-webway-aeldari]
+- detachment_rule_ids REVIEW eldritch-raiders: authored [veterans-of-the-void-aeldari, yriels-own-aeldari] vs dump [veterans-of-the-void-eldritch-raiders-aeldari, yriels-own-aeldari]
 
 ## agents-of-the-imperium
-- detachment_rule_ids UNAUTHORED inquisitors-hand: dump rule(s) [marked-for-death] have no authored ability yet
+- detachment_rule_ids filled inquisitors-hand: [marked-for-death-agents-of-the-imperium]
 
 ## astra-militarum
-- detachment_rule_ids REVIEW armoured-infantry: authored [squadron-command] vs dump [order, squadron-command]
-- detachment_rule_ids UNAUTHORED draydens-lance: dump rule(s) [experienced-veterans] have no authored ability yet
+- detachment_rule_ids filled draydens-lance: [experienced-veterans-astra-militarum]
+- detachment_rule_ids REVIEW armoured-infantry: authored [squadron-command-astra-militarum] vs dump [order-astra-militarum, squadron-command-astra-militarum]
 
 ## black-templars
-- detachment_rule_ids UNAUTHORED companions-of-vehemence: dump rule(s) [righteous-fervour] have no authored ability yet
-- detachment_rule_ids UNAUTHORED vindication-task-force: dump rule(s) [purge-and-sanctify] have no authored ability yet
-- detachment_rule_ids UNAUTHORED wrathful-procession: dump rule(s) [chant-of-deathless-devotion] have no authored ability yet
-- detachment_rule_ids UNAUTHORED godhammer-assault-force: dump rule(s) [shock-and-awe] have no authored ability yet
-- detachment_rule_ids UNAUTHORED marshals-household: dump rule(s) [faith-fuelled-resolve] have no authored ability yet
-- detachment_rule_ids UNAUTHORED the-living-miracle: dump rule(s) [anointed-champion] have no authored ability yet
-- detachment_rule_ids UNAUTHORED vow-sworn-of-vedrenn: dump rule(s) [close-range-destruction] have no authored ability yet
+- detachment_rule_ids filled companions-of-vehemence: [righteous-fervour-black-templars]
+- detachment_rule_ids filled vindication-task-force: [purge-and-sanctify-black-templars]
+- detachment_rule_ids filled wrathful-procession: [chant-of-deathless-devotion-black-templars]
+- detachment_rule_ids filled godhammer-assault-force: [shock-and-awe-black-templars]
+- detachment_rule_ids filled marshals-household: [faith-fuelled-resolve-black-templars]
+- detachment_rule_ids filled the-living-miracle: [anointed-champion-black-templars]
+- detachment_rule_ids filled vow-sworn-of-vedrenn: [close-range-destruction-black-templars]
 
 ## blood-angels
-- detachment_rule_ids UNAUTHORED the-lost-brethren: dump rule(s) [a-noble-death-in-combat] have no authored ability yet
-- detachment_rule_ids UNAUTHORED angelic-inheritors: dump rule(s) [legacy-of-the-angel] have no authored ability yet
-- detachment_rule_ids UNAUTHORED the-angelic-host: dump rule(s) [upon-wings-of-fire] have no authored ability yet
-- detachment_rule_ids UNAUTHORED rage-cursed-onslaught: dump rule(s) [maddened-ferocity] have no authored ability yet
-- detachment_rule_ids UNAUTHORED encarmine-speartip: dump rule(s) [wrath-of-angels] have no authored ability yet
-- detachment_rule_ids UNAUTHORED legacy-of-grace: dump rule(s) [legacy-of-the-angel] have no authored ability yet
-- detachment_rule_ids UNAUTHORED wrath-of-the-doomed: dump rule(s) [fanatical-celerity] have no authored ability yet
-- detachment_rule_ids UNAUTHORED liberator-assault-group: dump rule(s) [red-thirst] have no authored ability yet
-- detachment_rule_ids UNAUTHORED sanguinary-spearhead: dump rule(s) [rapid-manoeuvres] have no authored ability yet
+- detachment_rule_ids filled the-lost-brethren: [a-noble-death-in-combat-blood-angels]
+- detachment_rule_ids filled angelic-inheritors: [legacy-of-the-angel-blood-angels]
+- detachment_rule_ids filled the-angelic-host: [upon-wings-of-fire-blood-angels]
+- detachment_rule_ids filled rage-cursed-onslaught: [maddened-ferocity-blood-angels]
+- detachment_rule_ids filled encarmine-speartip: [wrath-of-angels-blood-angels]
+- detachment_rule_ids filled legacy-of-grace: [legacy-of-the-angel-legacy-of-grace-blood-angels]
+- detachment_rule_ids filled wrath-of-the-doomed: [fanatical-celerity-blood-angels]
+- detachment_rule_ids filled liberator-assault-group: [red-thirst-blood-angels]
+- detachment_rule_ids filled sanguinary-spearhead: [rapid-manoeuvres-blood-angels]
 
 ## chaos-space-marines
-- detachment_rule_ids REVIEW murdertalon-raiders: authored [prey-on-the-weak-raiders] vs dump [prey-on-the-weak]
-- detachment_rule_ids UNAUTHORED zarkans-daemonkin: dump rule(s) [abject-fear] have no authored ability yet
+- detachment_rule_ids filled zarkans-daemonkin: [abject-fear-chaos-space-marines]
 
 ## dark-angels
-- detachment_rule_ids UNAUTHORED inner-circle-task-force: dump rule(s) [vowed-target] have no authored ability yet
-- detachment_rule_ids UNAUTHORED unforgiven-task-force: dump rule(s) [grim-resolve] have no authored ability yet
-- detachment_rule_ids UNAUTHORED lions-blade-task-force: dump rule(s) [in-the-lions-claws] have no authored ability yet
-- detachment_rule_ids UNAUTHORED wrath-of-the-rock: dump rule(s) [dutiful-tenacity] have no authored ability yet
-- detachment_rule_ids UNAUTHORED dark-age-arsenal: dump rule(s) [invocations-of-ancient-fury] have no authored ability yet
-- detachment_rule_ids UNAUTHORED darkflight-pursuit: dump rule(s) [black-winged-vigilance] have no authored ability yet
-- detachment_rule_ids UNAUTHORED interrogation-conclave: dump rule(s) [dread-catechism] have no authored ability yet
-- detachment_rule_ids UNAUTHORED company-of-hunters: dump rule(s) [masters-of-manoeuvre] have no authored ability yet
-- detachment_rule_ids UNAUTHORED the-vengeful-brethren: dump rule(s) [honoured-knights] have no authored ability yet
+- detachment_rule_ids filled unforgiven-task-force: [grim-resolve-dark-angels]
+- detachment_rule_ids filled lions-blade-task-force: [in-the-lions-claws-dark-angels]
+- detachment_rule_ids filled wrath-of-the-rock: [dutiful-tenacity-dark-angels]
+- detachment_rule_ids filled dark-age-arsenal: [invocations-of-ancient-fury-dark-angels]
+- detachment_rule_ids filled darkflight-pursuit: [black-winged-vigilance-dark-angels]
+- detachment_rule_ids filled interrogation-conclave: [dread-catechism-dark-angels]
+- detachment_rule_ids filled company-of-hunters: [masters-of-manoeuvre-dark-angels]
+- detachment_rule_ids filled the-vengeful-brethren: [honoured-knights-dark-angels]
 
 ## death-guard
-- detachment_rule_ids UNAUTHORED maggot-lords: dump rule(s) [creeping-rot] have no authored ability yet
+- detachment_rule_ids filled maggot-lords: [creeping-rot-death-guard]
 
 ## deathwatch
-- detachment_rule_ids UNAUTHORED black-spear-task-force: dump rule(s) [mission-tactics] have no authored ability yet
+- detachment_rule_ids filled black-spear-task-force: [mission-tactics-deathwatch]
 
 ## drukhari
-- detachment_rule_ids UNAUTHORED coven-of-agonies: dump rule(s) [pain-enlivens] have no authored ability yet
+- detachment_rule_ids filled coven-of-agonies: [pain-enlivens-drukhari]
 
 ## emperors-children
-- detachment_rule_ids UNAUTHORED callous-blades: dump rule(s) [nimble-strikes] have no authored ability yet
+- detachment_rule_ids filled callous-blades: [nimble-strikes-emperors-children]
 
 ## genestealer-cults
-- detachment_rule_ids UNAUTHORED claw-of-ascension: dump rule(s) [xenos-resilience] have no authored ability yet
+- detachment_rule_ids filled claw-of-ascension: [xenos-resilience-genestealer-cults]
 
 ## grey-knights
-- detachment_rule_ids UNAUTHORED crowes-sanctifiers: dump rule(s) [strike-from-the-warp] have no authored ability yet
+- detachment_rule_ids filled crowes-sanctifiers: [strike-from-the-warp-grey-knights]
 
 ## imperial-fists
-- detachment_rule_ids UNAUTHORED emperors-shield: dump rule(s) [wrath-of-dorn] have no authored ability yet
+- detachment_rule_ids UNAUTHORED emperors-shield: dump rule(s) [wrath-of-dorn-adeptus-astartes] have no authored ability yet
 
 ## iron-hands
-- detachment_rule_ids UNAUTHORED hammer-of-avernii: dump rule(s) [calculated-annihilation, recalculating] have no authored ability yet
+- detachment_rule_ids UNAUTHORED hammer-of-avernii: dump rule(s) [calculated-annihilation-adeptus-astartes, recalculating-adeptus-astartes] have no authored ability yet
 
 ## leagues-of-votann
-- detachment_rule_ids UNAUTHORED bane-slayers-bulwark: dump rule(s) [secure-resources] have no authored ability yet
+- detachment_rule_ids filled bane-slayers-bulwark: [secure-resources-leagues-of-votann]
 
 ## necrons
-- detachment_rule_ids UNAUTHORED amonhotekhs-guard: dump rule(s) [territorial-imperatives] have no authored ability yet
+- detachment_rule_ids filled amonhotekhs-guard: [territorial-imperatives-necrons]
 
 ## orks
-- detachment_rule_ids REVIEW dread-mob: authored [try-dat-button-dread-mob] vs dump [try-dat-button]
-- detachment_rule_ids REVIEW blitz-brigade: authored [eager-for-the-fight] vs dump [unstoppable-momentum]
-- detachment_rule_ids REVIEW kult-of-speed: authored [adrenaline-junkies-kult-of-speed] vs dump [adrenaline-junkies]
-- detachment_rule_ids REVIEW da-big-hunt: authored [da-hunt-is-on-da-big-hunt] vs dump [da-hunt-is-on]
-- detachment_rule_ids REVIEW war-horde: authored [get-stuck-in-war-horde] vs dump [get-stuck-in]
-- detachment_rule_ids REVIEW bully-boyz: authored [displays-of-savagery-bully-boyz] vs dump [displays-of-savagery]
-- detachment_rule_ids REVIEW green-tide: authored [mob-handed-brutality-green-tide] vs dump [mob-handed-brutality]
-- detachment_rule_ids REVIEW taktikal-brigade: authored [suspiciously-well-organised-taktikal-brigade] vs dump [suspiciously-well-organised]
-- detachment_rule_ids REVIEW brute-bosses: authored [ard-as-nails-brute-bosses] vs dump [ard-as-nails]
-- detachment_rule_ids REVIEW flyboyz: authored [skyborne-loons-flyboyz] vs dump [skyborne-loons]
-- detachment_rule_ids REVIEW madcap-meks: authored [try-dat-button-madcap-meks, unpredictable-genius-madcap-meks] vs dump [unpredictable-genius]
-- detachment_rule_ids REVIEW runt-swarm: authored [sneaky-little-gitz-runt-swarm] vs dump [sneaky-little-gitz]
-- detachment_rule_ids REVIEW shoota-boyz: authored [dakka-dakka-dakka-shoota-boyz] vs dump [dakka-dakka-dakka]
-- detachment_rule_ids REVIEW wreckas: authored [wreckin-and-lootin-wreckas] vs dump [wreckin-and-lootin]
-- detachment_rule_ids REVIEW wurrband: authored [powers-of-da-waaagh-wurrband] vs dump [powers-of-da-waaagh]
+- detachment_rule_ids filled blitz-brigade: [unstoppable-momentum-orks]
+- detachment_rule_ids filled brute-bosses: [ard-as-nails-orks]
+- detachment_rule_ids filled bully-boyz: [displays-of-savagery-orks]
+- detachment_rule_ids filled da-big-hunt: [da-hunt-is-on-orks]
+- detachment_rule_ids filled dread-mob: [try-dat-button-orks]
+- detachment_rule_ids filled flyboyz: [skyborne-loons-orks]
+- detachment_rule_ids filled green-tide: [mob-handed-brutality-orks]
+- detachment_rule_ids filled kult-of-speed: [adrenaline-junkies-orks]
+- detachment_rule_ids filled madcap-meks: [unpredictable-genius-orks]
+- detachment_rule_ids filled runt-swarm: [sneaky-little-gitz-orks]
+- detachment_rule_ids filled shoota-boyz: [dakka-dakka-dakka-orks]
+- detachment_rule_ids filled taktikal-brigade: [suspiciously-well-organised-orks]
+- detachment_rule_ids filled war-horde: [get-stuck-in-orks]
+- detachment_rule_ids filled wreckas: [wreckin-and-lootin-orks]
+- detachment_rule_ids filled wurrband: [powers-of-da-waaagh-orks]
 
 ## raven-guard
-- detachment_rule_ids UNAUTHORED shadowmark-talon: dump rule(s) [masters-of-shadow, unparalleled-tactician] have no authored ability yet
+- detachment_rule_ids UNAUTHORED shadowmark-talon: dump rule(s) [masters-of-shadow-adeptus-astartes, unparalleled-tactician-adeptus-astartes] have no authored ability yet
 
 ## salamanders
-- detachment_rule_ids UNAUTHORED forgefathers-seekers: dump rule(s) [seekers-companions, vulkans-quest] have no authored ability yet
+- detachment_rule_ids UNAUTHORED forgefathers-seekers: dump rule(s) [seekers-companions-adeptus-astartes, vulkans-quest-adeptus-astartes] have no authored ability yet
 
 ## space-wolves
-- detachment_rule_ids UNAUTHORED saga-of-the-beastslayer: dump rule(s) [legendary-slayers] have no authored ability yet
-- detachment_rule_ids UNAUTHORED champions-of-fenris: dump rule(s) [the-great-wolf-watches] have no authored ability yet
-- detachment_rule_ids UNAUTHORED saga-of-the-hunter: dump rule(s) [packs-quarry] have no authored ability yet
-- detachment_rule_ids UNAUTHORED saga-of-the-great-wolf: dump rule(s) [howling-onslaught, master-of-wolves] have no authored ability yet
-- detachment_rule_ids UNAUTHORED saga-of-the-bold: dump rule(s) [heroes-all] have no authored ability yet
-- detachment_rule_ids UNAUTHORED legends-of-saga-and-song: dump rule(s) [loping-charge] have no authored ability yet
-- detachment_rule_ids UNAUTHORED veterans-of-the-fang: dump rule(s) [old-greymanes] have no authored ability yet
-- detachment_rule_ids UNAUTHORED askars-wolfpack: dump rule(s) [hidden-hunters] have no authored ability yet
+- detachment_rule_ids filled saga-of-the-beastslayer: [legendary-slayers-space-wolves]
+- detachment_rule_ids filled champions-of-fenris: [the-great-wolf-watches-space-wolves]
+- detachment_rule_ids filled saga-of-the-hunter: [packs-quarry-space-wolves]
+- detachment_rule_ids filled saga-of-the-great-wolf: [howling-onslaught-space-wolves]
+- detachment_rule_ids filled legends-of-saga-and-song: [loping-charge-space-wolves]
+- detachment_rule_ids filled veterans-of-the-fang: [old-greymanes-space-wolves]
+- detachment_rule_ids filled askars-wolfpack: [hidden-hunters-space-wolves]
 
 ## tau-empire
-- detachment_rule_ids UNAUTHORED sudden-dawn-cadre: dump rule(s) [co-ordinated-eradication] have no authored ability yet
+- detachment_rule_ids filled sudden-dawn-cadre: [co-ordinated-eradication-tau-empire]
 
 ## thousand-sons
-- detachment_rule_ids UNAUTHORED prism-of-zadophon: dump rule(s) [committed-to-the-ritual] have no authored ability yet
+- detachment_rule_ids filled prism-of-zadophon: [committed-to-the-ritual-thousand-sons]
 
 ## tyranids
-- detachment_rule_ids UNAUTHORED the-vardenghast-swarm: dump rule(s) [skittering-hordes] have no authored ability yet
+- detachment_rule_ids filled the-vardenghast-swarm: [skittering-hordes-tyranids]
 
 ## ultramarines
-- detachment_rule_ids UNAUTHORED blade-of-ultramar: dump rule(s) [mastered-doctrines] have no authored ability yet
-- detachment_rule_ids UNAUTHORED reclamation-force: dump rule(s) [oath-of-reclamation] have no authored ability yet
+- detachment_rule_ids UNAUTHORED blade-of-ultramar: dump rule(s) [mastered-doctrines-adeptus-astartes] have no authored ability yet
+- detachment_rule_ids UNAUTHORED reclamation-force: dump rule(s) [oath-of-reclamation-adeptus-astartes] have no authored ability yet
 
 ## white-scars
-- detachment_rule_ids UNAUTHORED spearpoint-task-force: dump rule(s) [storm-swift-onslaught, wrath-of-the-first-khan] have no authored ability yet
+- detachment_rule_ids UNAUTHORED spearpoint-task-force: dump rule(s) [storm-swift-onslaught-adeptus-astartes, wrath-of-the-first-khan-adeptus-astartes] have no authored ability yet
 
 ## world-eaters
-- detachment_rule_ids UNAUTHORED frenzied-reavers: dump rule(s) [berzerker-charge] have no authored ability yet
+- detachment_rule_ids filled frenzied-reavers: [berzerker-charge-world-eaters]
 

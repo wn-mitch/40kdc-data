@@ -47,8 +47,12 @@
       "reaper-chaintalon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "huntsman"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "huntsman-chaos-knights",
+      "damaged-1-5-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -126,8 +130,12 @@
       "havoc-multi-launcher"
     ],
     "ability_ids": [
-      "brigand",
-      "deadly-demise-d3"
+      "brigand-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -205,8 +213,12 @@
       "war-dog-autocannon"
     ],
     "ability_ids": [
-      "executioner",
-      "deadly-demise-d3"
+      "executioner-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -285,9 +297,16 @@
       "slaughterclaw"
     ],
     "ability_ids": [
-      "scouts-6",
-      "stalker",
-      "deadly-demise-d3"
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "stalker-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -375,8 +394,12 @@
       "volkite-veuglaire"
     ],
     "ability_ids": [
-      "protection-protocols",
-      "deadly-demise-d3"
+      "protection-protocols-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-war-dog-moirax-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -453,8 +476,12 @@
       "slaughterclaw-war-dog-karnivore"
     ],
     "ability_ids": [
-      "karnivore",
-      "deadly-demise-d3"
+      "karnivore-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -552,9 +579,13 @@
       "warpstrike-claw"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "dread-dominion-aura",
-      "seething-hatred"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "dread-dominion-chaos-knights",
+      "seething-hatred-chaos-knights",
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -647,9 +678,13 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "searing-flames",
-      "unrestrained-terror-aura"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "searing-flames-chaos-knights",
+      "unrestrained-terror-chaos-knights",
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -732,9 +767,13 @@
       "terrorpulse-missiles"
     ],
     "ability_ids": [
-      "close-range-killers-aura",
-      "methodical-destruction",
-      "deadly-demise-d6"
+      "close-range-killers-chaos-knights",
+      "methodical-destruction-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-knight-ruinator-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -818,9 +857,13 @@
       "warpstrike-claw"
     ],
     "ability_ids": [
-      "obsessive-ruthlessness",
-      "taskmaster-aura",
-      "deadly-demise-d6"
+      "obsessive-ruthlessness-chaos-knights",
+      "taskmaster-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -903,8 +946,12 @@
       "twin-magna-lascannon"
     ],
     "ability_ids": [
-      "bastion-of-firepower",
-      "deadly-demise-2d6"
+      "bastion-of-firepower-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -985,9 +1032,13 @@
       "graviton-singularity-cannon"
     ],
     "ability_ids": [
-      "consumed-with-hunger-aura",
-      "macro-extinction-protocols",
-      "deadly-demise-d6-2"
+      "consumed-with-hunger-chaos-knights",
+      "macro-extinction-protocols-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1068,8 +1119,12 @@
       "twin-conversion-beam-cannon"
     ],
     "ability_ids": [
-      "sunderer-of-fortresses",
-      "deadly-demise-2d6"
+      "sunderer-of-fortresses-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1151,9 +1206,13 @@
       "tempest-warblade"
     ],
     "ability_ids": [
-      "offerings-for-the-dark-gods-aura",
-      "storm-of-bolts",
-      "deadly-demise-d6-2"
+      "offerings-for-the-dark-gods-chaos-knights",
+      "storm-of-bolts-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1233,9 +1292,13 @@
       "cerastus-shock-lance"
     ],
     "ability_ids": [
-      "dark-fervour-aura",
-      "shock-charge",
-      "deadly-demise-d6-2"
+      "dark-fervour-chaos-knights",
+      "shock-charge-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1318,9 +1381,13 @@
       "warpstrike-claw-knight-rampager"
     ],
     "ability_ids": [
-      "bloodlust",
-      "frenzied-rampage-aura",
-      "deadly-demise-d6"
+      "bloodlust-chaos-knights",
+      "frenzied-rampage-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1404,9 +1471,13 @@
       "twin-rad-cleanser"
     ],
     "ability_ids": [
-      "huntmaster-aura",
-      "repair-auto-simulacra",
-      "deadly-demise-d6"
+      "huntmaster-chaos-knights",
+      "repair-auto-simulacra-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1493,9 +1564,13 @@
       "warpshock-harpoon"
     ],
     "ability_ids": [
-      "bastion-of-corruption",
-      "infernal-aegis-aura",
-      "deadly-demise-d6-2"
+      "bastion-of-corruption-chaos-knights",
+      "infernal-aegis-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1580,9 +1655,13 @@
       "volkite-combustor"
     ],
     "ability_ids": [
-      "vortex-terrors-psychic",
-      "warp-storms-psychic",
-      "deadly-demise-d6"
+      "vortex-terrors-chaos-knights",
+      "warp-storms-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1666,9 +1745,13 @@
       "volkite-chierovile"
     ],
     "ability_ids": [
-      "grav-pinned",
-      "preysight-aura",
-      "deadly-demise-d6"
+      "grav-pinned-chaos-knights",
+      "preysight-chaos-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",

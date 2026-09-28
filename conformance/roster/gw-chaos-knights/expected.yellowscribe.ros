@@ -20,10 +20,15 @@
                 <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -119,10 +124,15 @@
                 <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -219,10 +229,15 @@
 If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -304,10 +319,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
 If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -388,10 +408,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -472,10 +497,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -556,10 +586,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -640,10 +675,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -719,9 +759,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
@@ -729,10 +769,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -808,9 +853,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
@@ -818,10 +863,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -897,9 +947,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
@@ -907,10 +957,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -986,9 +1041,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
@@ -996,10 +1051,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1075,9 +1135,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
@@ -1085,10 +1145,15 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1169,10 +1234,10 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">5+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise 1" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Grotesque Regeneration" typeName="Abilities">
@@ -1180,9 +1245,9 @@ If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Batt
                 <characteristic name="Description">At the end of each phase, if the unit has the BEASTS OF NURGLE keyword, while the model has lost wounds, unless 1+ models destroyed this phase, until the end of the phase, set this model's Wounds characteristic to 7.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

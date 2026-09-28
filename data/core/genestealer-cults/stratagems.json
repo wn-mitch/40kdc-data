@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-dark-network-brood-brothers-auxilia",
+    "id": "a-dark-network-brood-brothers-auxilia-genestealer-cults",
     "name": "A DARK NETWORK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-dark-network-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "a-deadly-snare-host-of-ascension",
+    "id": "a-deadly-snare-host-of-ascension-genestealer-cults",
     "name": "A DEADLY SNARE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -41,7 +41,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-deadly-snare-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "id": "acceptable-losses-brood-brothers-auxilia",
+    "id": "acceptable-losses-brood-brothers-auxilia-genestealer-cults",
     "name": "ACCEPTABLE LOSSES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -70,7 +70,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "acceptable-losses-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -87,7 +87,7 @@
     ]
   },
   {
-    "id": "along-shadowed-trails-outlander-claw",
+    "id": "along-shadowed-trails-outlander-claw-genestealer-cults",
     "name": "ALONG SHADOWED TRAILS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -103,7 +103,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "along-shadowed-trails-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "id": "avenge-the-star-children-final-day",
+    "id": "avenge-the-star-children-final-day-genestealer-cults",
     "name": "AVENGE THE STAR CHILDREN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -133,7 +133,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "avenge-the-star-children-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -150,7 +150,7 @@
     ]
   },
   {
-    "id": "bio-horror-revelation-biosanctic-broodsurge",
+    "id": "bio-horror-revelation-biosanctic-broodsurge-genestealer-cults",
     "name": "BIO-HORROR REVELATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -162,7 +162,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bio-horror-revelation-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -179,7 +179,7 @@
     ]
   },
   {
-    "id": "close-range-shoot-out-outlander-claw",
+    "id": "close-range-shoot-out-outlander-claw-genestealer-cults",
     "name": "CLOSE-RANGE SHOOT-OUT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -191,7 +191,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "close-range-shoot-out-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "id": "coordinated-trap-host-of-ascension",
+    "id": "coordinated-trap-host-of-ascension-genestealer-cults",
     "name": "COORDINATED TRAP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -221,7 +221,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "coordinated-trap-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -238,7 +238,7 @@
     ]
   },
   {
-    "id": "crawling-horror-purestrain-broodswarm",
+    "id": "crawling-horror-purestrain-broodswarm-genestealer-cults",
     "name": "Crawling Horror",
     "category": "detachment",
     "detachment_id": "purestrain-broodswarm",
@@ -249,7 +249,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "crawling-horror-purestrain-broodswarm",
+    "ability_id": "crawling-horror-purestrain-broodswarm-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -266,7 +266,7 @@
     ]
   },
   {
-    "id": "cult-zealotry-claw-of-ascension",
+    "id": "cult-zealotry-claw-of-ascension-genestealer-cults",
     "name": "Cult Zealotry",
     "category": "detachment",
     "detachment_id": "claw-of-ascension",
@@ -277,7 +277,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cult-zealotry-claw-of-ascension",
+    "ability_id": "cult-zealotry-claw-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -290,7 +290,7 @@
     ]
   },
   {
-    "id": "darting-attacks-final-day",
+    "id": "darting-attacks-final-day-genestealer-cults",
     "name": "DARTING ATTACKS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -303,7 +303,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "darting-attacks-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -320,7 +320,7 @@
     ]
   },
   {
-    "id": "dedicated-to-the-end-claw-of-ascension",
+    "id": "dedicated-to-the-end-claw-of-ascension-genestealer-cults",
     "name": "Dedicated to the End",
     "category": "detachment",
     "detachment_id": "claw-of-ascension",
@@ -331,7 +331,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dedicated-to-the-end-claw-of-ascension",
+    "ability_id": "dedicated-to-the-end-claw-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -344,7 +344,7 @@
     ]
   },
   {
-    "id": "deft-manoeuvring-outlander-claw",
+    "id": "deft-manoeuvring-outlander-claw-genestealer-cults",
     "name": "DEFT MANOEUVRING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -356,7 +356,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "deft-manoeuvring-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -373,7 +373,7 @@
     ]
   },
   {
-    "id": "devoted-crew-outlander-claw",
+    "id": "devoted-crew-outlander-claw-genestealer-cults",
     "name": "DEVOTED CREW",
     "category": "detachment",
     "type": "battle-tactic",
@@ -386,7 +386,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "devoted-crew-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -403,7 +403,7 @@
     ]
   },
   {
-    "id": "divine-imperative-final-day",
+    "id": "divine-imperative-final-day-genestealer-cults",
     "name": "DIVINE IMPERATIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -415,7 +415,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "divine-imperative-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -432,7 +432,7 @@
     ]
   },
   {
-    "id": "encircling-the-prey-outlander-claw",
+    "id": "encircling-the-prey-outlander-claw-genestealer-cults",
     "name": "ENCIRCLING THE PREY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -444,7 +444,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "encircling-the-prey-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -461,7 +461,7 @@
     ]
   },
   {
-    "id": "evasive-vanguard-biosanctic-broodsurge",
+    "id": "evasive-vanguard-biosanctic-broodsurge-genestealer-cults",
     "name": "EVASIVE VANGUARD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -477,7 +477,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "evasive-vanguard-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -494,7 +494,7 @@
     ]
   },
   {
-    "id": "eyes-of-the-cult-xenocult-masses",
+    "id": "eyes-of-the-cult-xenocult-masses-genestealer-cults",
     "name": "Eyes of the Cult",
     "category": "detachment",
     "detachment_id": "xenocult-masses",
@@ -505,7 +505,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "eyes-of-the-cult-xenocult-masses",
+    "ability_id": "eyes-of-the-cult-xenocult-masses-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -522,7 +522,7 @@
     ]
   },
   {
-    "id": "fanatical-hail-xenocult-masses",
+    "id": "fanatical-hail-xenocult-masses-genestealer-cults",
     "name": "Fanatical Hail",
     "category": "detachment",
     "detachment_id": "xenocult-masses",
@@ -533,7 +533,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fanatical-hail-xenocult-masses",
+    "ability_id": "fanatical-hail-xenocult-masses-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -550,7 +550,7 @@
     ]
   },
   {
-    "id": "frenzied-devotion-xenocreed-congregation",
+    "id": "frenzied-devotion-xenocreed-congregation-genestealer-cults",
     "name": "FRENZIED DEVOTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -562,7 +562,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "frenzied-devotion-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -579,7 +579,7 @@
     ]
   },
   {
-    "id": "gene-twisted-muscle-biosanctic-broodsurge",
+    "id": "gene-twisted-muscle-biosanctic-broodsurge-genestealer-cults",
     "name": "GENE-TWISTED MUSCLE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -591,7 +591,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "gene-twisted-muscle-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -608,7 +608,7 @@
     ]
   },
   {
-    "id": "guerrilla-warriors-claw-of-ascension",
+    "id": "guerrilla-warriors-claw-of-ascension-genestealer-cults",
     "name": "Guerrilla Warriors",
     "category": "detachment",
     "detachment_id": "claw-of-ascension",
@@ -619,7 +619,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "guerrilla-warriors-claw-of-ascension",
+    "ability_id": "guerrilla-warriors-claw-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -632,7 +632,7 @@
     ]
   },
   {
-    "id": "hyper-metabolic-vigour-biosanctic-broodsurge",
+    "id": "hyper-metabolic-vigour-biosanctic-broodsurge-genestealer-cults",
     "name": "HYPER-METABOLIC VIGOUR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -644,7 +644,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hyper-metabolic-vigour-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -661,7 +661,7 @@
     ]
   },
   {
-    "id": "hyperferocity-final-day",
+    "id": "hyperferocity-final-day-genestealer-cults",
     "name": "HYPERFEROCITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -673,7 +673,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hyperferocity-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -690,7 +690,7 @@
     ]
   },
   {
-    "id": "in-the-shadow-of-iron-brood-brothers-auxilia",
+    "id": "in-the-shadow-of-iron-brood-brothers-auxilia-genestealer-cults",
     "name": "IN THE SHADOW OF IRON",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -706,7 +706,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "in-the-shadow-of-iron-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -723,7 +723,7 @@
     ]
   },
   {
-    "id": "inhuman-reactions-purestrain-broodswarm",
+    "id": "inhuman-reactions-purestrain-broodswarm-genestealer-cults",
     "name": "Inhuman Reactions",
     "category": "detachment",
     "detachment_id": "purestrain-broodswarm",
@@ -734,7 +734,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inhuman-reactions-purestrain-broodswarm",
+    "ability_id": "inhuman-reactions-purestrain-broodswarm-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -751,7 +751,7 @@
     ]
   },
   {
-    "id": "living-up-to-legend-heroes-of-the-uprising",
+    "id": "living-up-to-legend-heroes-of-the-uprising-genestealer-cults",
     "name": "Living Up to Legend",
     "category": "detachment",
     "detachment_id": "heroes-of-the-uprising",
@@ -763,7 +763,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "living-up-to-legend-heroes-of-the-uprising",
+    "ability_id": "living-up-to-legend-heroes-of-the-uprising-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -780,7 +780,7 @@
     ]
   },
   {
-    "id": "loyal-to-the-end-heroes-of-the-uprising",
+    "id": "loyal-to-the-end-heroes-of-the-uprising-genestealer-cults",
     "name": "Loyal to the End",
     "category": "detachment",
     "detachment_id": "heroes-of-the-uprising",
@@ -791,7 +791,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "loyal-to-the-end-heroes-of-the-uprising",
+    "ability_id": "loyal-to-the-end-heroes-of-the-uprising-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -808,7 +808,7 @@
     ]
   },
   {
-    "id": "lurk-and-strike-purestrain-broodswarm",
+    "id": "lurk-and-strike-purestrain-broodswarm-genestealer-cults",
     "name": "Lurk and Strike",
     "category": "detachment",
     "detachment_id": "purestrain-broodswarm",
@@ -819,7 +819,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "lurk-and-strike-purestrain-broodswarm",
+    "ability_id": "lurk-and-strike-purestrain-broodswarm-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -836,7 +836,7 @@
     ]
   },
   {
-    "id": "lying-in-wait-host-of-ascension",
+    "id": "lying-in-wait-host-of-ascension-genestealer-cults",
     "name": "LYING IN WAIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -848,7 +848,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "lying-in-wait-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -865,7 +865,7 @@
     ]
   },
   {
-    "id": "primed-and-readied-host-of-ascension",
+    "id": "primed-and-readied-host-of-ascension-genestealer-cults",
     "name": "PRIMED AND READIED",
     "category": "detachment",
     "type": "battle-tactic",
@@ -878,7 +878,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "primed-and-readied-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -895,7 +895,7 @@
     ]
   },
   {
-    "id": "psi-surge-final-day",
+    "id": "psi-surge-final-day-genestealer-cults",
     "name": "PSI SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -911,7 +911,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "psi-surge-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -928,7 +928,7 @@
     ]
   },
   {
-    "id": "rapid-feint-outlander-claw",
+    "id": "rapid-feint-outlander-claw-genestealer-cults",
     "name": "RAPID FEINT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -940,7 +940,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-feint-outlander-claw-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -957,7 +957,7 @@
     ]
   },
   {
-    "id": "regimental-reinforcements-brood-brothers-auxilia",
+    "id": "regimental-reinforcements-brood-brothers-auxilia-genestealer-cults",
     "name": "REGIMENTAL REINFORCEMENTS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -970,7 +970,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "regimental-reinforcements-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -987,7 +987,7 @@
     ]
   },
   {
-    "id": "resistance-tunnels-final-day",
+    "id": "resistance-tunnels-final-day-genestealer-cults",
     "name": "RESISTANCE TUNNELS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -999,7 +999,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "resistance-tunnels-final-day-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1016,7 +1016,7 @@
     ]
   },
   {
-    "id": "return-to-the-shadows-host-of-ascension",
+    "id": "return-to-the-shadows-host-of-ascension-genestealer-cults",
     "name": "RETURN TO THE SHADOWS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1028,7 +1028,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "return-to-the-shadows-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1045,7 +1045,7 @@
     ]
   },
   {
-    "id": "saintly-paroxysm-biosanctic-broodsurge",
+    "id": "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
     "name": "SAINTLY PAROXYSM",
     "category": "detachment",
     "type": "epic-deed",
@@ -1057,7 +1057,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1074,7 +1074,7 @@
     ]
   },
   {
-    "id": "slunk-from-the-underbelly-xenocult-masses",
+    "id": "slunk-from-the-underbelly-xenocult-masses-genestealer-cults",
     "name": "Slunk From the Underbelly",
     "category": "detachment",
     "detachment_id": "xenocult-masses",
@@ -1085,7 +1085,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "slunk-from-the-underbelly-xenocult-masses",
+    "ability_id": "slunk-from-the-underbelly-xenocult-masses-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1102,7 +1102,7 @@
     ]
   },
   {
-    "id": "stimulated-bio-surge-biosanctic-broodsurge",
+    "id": "stimulated-bio-surge-biosanctic-broodsurge-genestealer-cults",
     "name": "STIMULATED BIO-SURGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1114,7 +1114,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stimulated-bio-surge-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1131,7 +1131,7 @@
     ]
   },
   {
-    "id": "suppress-and-overwhelm-brood-brothers-auxilia",
+    "id": "suppress-and-overwhelm-brood-brothers-auxilia-genestealer-cults",
     "name": "SUPPRESS AND OVERWHELM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1143,7 +1143,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "suppress-and-overwhelm-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1160,7 +1160,7 @@
     ]
   },
   {
-    "id": "surging-broodworship-heroes-of-the-uprising",
+    "id": "surging-broodworship-heroes-of-the-uprising-genestealer-cults",
     "name": "Surging Broodworship",
     "category": "detachment",
     "detachment_id": "heroes-of-the-uprising",
@@ -1172,7 +1172,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "surging-broodworship-heroes-of-the-uprising",
+    "ability_id": "surging-broodworship-heroes-of-the-uprising-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1189,7 +1189,7 @@
     ]
   },
   {
-    "id": "symbiotic-destruction-brood-brothers-auxilia",
+    "id": "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",
     "name": "SYMBIOTIC DESTRUCTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1201,7 +1201,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1218,7 +1218,7 @@
     ]
   },
   {
-    "id": "the-downtrodden-rise-xenocreed-congregation",
+    "id": "the-downtrodden-rise-xenocreed-congregation-genestealer-cults",
     "name": "THE DOWNTRODDEN RISE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1230,7 +1230,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-downtrodden-rise-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1247,7 +1247,7 @@
     ]
   },
   {
-    "id": "the-path-of-anguish-xenocreed-congregation",
+    "id": "the-path-of-anguish-xenocreed-congregation-genestealer-cults",
     "name": "THE PATH OF ANGUISH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1259,7 +1259,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-path-of-anguish-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1276,7 +1276,7 @@
     ]
   },
   {
-    "id": "tireless-fervour-xenocreed-congregation",
+    "id": "tireless-fervour-xenocreed-congregation-genestealer-cults",
     "name": "TIRELESS FERVOUR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1288,7 +1288,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tireless-fervour-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1305,7 +1305,7 @@
     ]
   },
   {
-    "id": "transcendent-celerity-xenocreed-congregation",
+    "id": "transcendent-celerity-xenocreed-congregation-genestealer-cults",
     "name": "TRANSCENDENT CELERITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1317,7 +1317,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "transcendent-celerity-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1334,7 +1334,7 @@
     ]
   },
   {
-    "id": "tunnel-crawlers-host-of-ascension",
+    "id": "tunnel-crawlers-host-of-ascension-genestealer-cults",
     "name": "TUNNEL CRAWLERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1346,7 +1346,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tunnel-crawlers-host-of-ascension-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1363,7 +1363,7 @@
     ]
   },
   {
-    "id": "vengeance-for-the-martyr-xenocreed-congregation",
+    "id": "vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults",
     "name": "VENGEANCE FOR THE MARTYR!",
     "category": "detachment",
     "type": "epic-deed",
@@ -1376,7 +1376,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

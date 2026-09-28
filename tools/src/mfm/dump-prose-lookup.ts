@@ -158,8 +158,8 @@ export class DumpProse implements AbilityRowSet {
   /**
    * The owner's rows the ability names, by the first tier that matches: the exact slug; then the
    * query without its detachment suffix or `-aura`/`-psychic` tails; then spelling-insensitive
-   * (hyphens and apostrophes ignored, "counter-offensive" = "Counteroffensive"); last, a repo id
-   * that extends one printed name with an owner suffix ("rapid-strike-gilded-blades"), longest
+   * (hyphens and apostrophes ignored, counter-offensive = "Counteroffensive"); last, a repo id
+   * that extends one printed name with an owner suffix (rapid-strike-gilded-blades), longest
    * name first.
    */
   candidates(q: ProseQuery): AbilityRow[] {

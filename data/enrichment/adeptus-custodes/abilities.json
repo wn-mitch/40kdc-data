@@ -1,56 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "telemon-heavy-dreadnought"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "guardian-eternal",
+    "ability_id": "guardian-eternal-adeptus-custodes",
     "name": "Guardian Eternal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -73,10 +23,11 @@
       "telemon-heavy-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "devoted-to-destruction",
+    "ability_id": "devoted-to-destruction-adeptus-custodes",
     "name": "Devoted to Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -101,60 +52,11 @@
       "telemon-heavy-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "contemptor-achillus-dreadnought"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "dread-foe",
+    "ability_id": "dread-foe-adeptus-custodes",
     "name": "Dread Foe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -192,10 +94,11 @@
       "contemptor-achillus-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "galatus-shield",
+    "ability_id": "galatus-shield-adeptus-custodes",
     "name": "Galatus Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -229,10 +132,11 @@
       "contemptor-galatus-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "unyielding-ancient",
+    "ability_id": "unyielding-ancient-adeptus-custodes",
     "name": "Unyielding Ancient",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -277,62 +181,11 @@
       "venerable-contemptor-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "blade-champion"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "blade-champion"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "swift-onslaught",
+    "ability_id": "swift-onslaught-adeptus-custodes",
     "name": "Swift Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -366,10 +219,11 @@
       "blade-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "martial-inspiration",
+    "ability_id": "martial-inspiration-adeptus-custodes",
     "name": "Martial Inspiration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -396,10 +250,11 @@
       "blade-champion"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "advanced-firepower",
+    "ability_id": "advanced-firepower-adeptus-custodes",
     "name": "Advanced Firepower",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -424,10 +279,11 @@
       "caladius-grav-tank"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "slayers-of-tyrants",
+    "ability_id": "slayers-of-tyrants-adeptus-custodes",
     "name": "Slayers of Tyrants",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -465,10 +321,11 @@
       "allarus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "from-golden-light",
+    "ability_id": "from-golden-light-adeptus-custodes",
     "name": "From Golden Light",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -488,13 +345,15 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "allarus-custodians"
+      "allarus-custodians",
+      "aquilon-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "vexilla",
+    "ability_id": "vexilla-adeptus-custodes",
     "name": "Vexilla",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -516,13 +375,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "allarus-custodians"
+      "allarus-custodians",
+      "custodian-guard",
+      "custodian-wardens"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "sweeping-advance",
+    "ability_id": "sweeping-advance-adeptus-custodes",
     "name": "Sweeping Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -558,10 +420,11 @@
       "shield-captain-on-dawneagle-jetbike"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "strategic-mastery",
+    "ability_id": "strategic-mastery-adeptus-custodes",
     "name": "Strategic Mastery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -581,13 +444,16 @@
       "duration": "one-use"
     },
     "unit_ids": [
+      "shield-captain",
+      "shield-captain-in-allarus-terminator-armour",
       "shield-captain-on-dawneagle-jetbike"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "daughters-of-the-abyss",
+    "ability_id": "daughters-of-the-abyss-adeptus-custodes",
     "name": "Daughters of the Abyss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -608,13 +474,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "vigilators"
+      "prosecutors",
+      "vigilators",
+      "witchseekers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "deft-parry",
+    "ability_id": "deft-parry-adeptus-custodes",
     "name": "Deft Parry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -648,10 +517,11 @@
       "vigilators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "saturation-volleys",
+    "ability_id": "saturation-volleys-adeptus-custodes",
     "name": "Saturation Volleys",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -685,10 +555,11 @@
       "sagittarum-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "disintegration-beams",
+    "ability_id": "disintegration-beams-adeptus-custodes",
     "name": "Disintegration Beams",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -722,10 +593,11 @@
       "sagittarum-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "custodian-guard",
+    "ability_id": "custodian-guard-adeptus-custodes",
     "name": "Custodian Guard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -761,40 +633,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "custodian-guard-with-adrasite-and-pyrithite-spears",
       "sagittarum-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "witchseekers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "sanctified-flames",
+    "ability_id": "sanctified-flames-adeptus-custodes",
     "name": "Sanctified Flames",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -826,86 +673,11 @@
       "witchseekers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ares-gunship"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ares-gunship"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "infernus-firebombs",
+    "ability_id": "infernus-firebombs-adeptus-custodes",
     "name": "Infernus Firebombs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -928,10 +700,11 @@
       "ares-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "stand-vigil",
+    "ability_id": "stand-vigil-adeptus-custodes",
     "name": "Stand Vigil",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -952,13 +725,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "custodian-guard"
+      "custodian-guard",
+      "custodian-guard-with-adrasite-and-pyrithite-spears"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "sentinel-storm",
+    "ability_id": "sentinel-storm-adeptus-custodes",
     "name": "Sentinel Storm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -994,10 +769,11 @@
       "custodian-guard"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "praesidium-shield",
+    "ability_id": "praesidium-shield-adeptus-custodes",
     "name": "Praesidium Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1019,13 +795,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "custodian-guard"
+      "custodian-guard",
+      "gilded-blades-custodian-guard",
+      "shield-captain"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "assault-dropship",
+    "ability_id": "assault-dropship-adeptus-custodes",
     "name": "Assault Dropship",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1078,10 +857,11 @@
       "orion-assault-dropship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "seeker-s-instincts",
+    "ability_id": "seekers-instincts-adeptus-custodes",
     "name": "Seeker\u2019s Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1116,10 +896,11 @@
       "knight-centura"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "daughter-of-the-abyss",
+    "ability_id": "daughter-of-the-abyss-adeptus-custodes",
     "name": "Daughter of the Abyss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1140,13 +921,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "aleya",
       "knight-centura"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "corner-the-quarry",
+    "ability_id": "corner-the-quarry-adeptus-custodes",
     "name": "Corner the Quarry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1179,37 +962,11 @@
       "knight-centura"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "anathema-psykana-rhino"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "self-repair",
+    "ability_id": "self-repair-adeptus-custodes",
     "name": "Self Repair",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1232,36 +989,11 @@
       "anathema-psykana-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "aleya"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "tactical-perception",
+    "ability_id": "tactical-perception-adeptus-custodes",
     "name": "Tactical Perception",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1294,10 +1026,11 @@
       "aleya"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "tenacious-spirit",
+    "ability_id": "tenacious-spirit-adeptus-custodes",
     "name": "Tenacious Spirit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1364,10 +1097,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "turbo-boost",
+    "ability_id": "turbo-boost-adeptus-custodes",
     "name": "Turbo-boost",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1389,13 +1123,15 @@
       "duration": "phase"
     },
     "unit_ids": [
-      "agamatus-custodians"
+      "agamatus-custodians",
+      "vertus-praetors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "implacable-vanguard",
+    "ability_id": "implacable-vanguard-adeptus-custodes",
     "name": "Implacable Vanguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1456,10 +1192,11 @@
       "agamatus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "jetbike-outriders",
+    "ability_id": "jetbike-outriders-adeptus-custodes",
     "name": "Jetbike Outriders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1498,10 +1235,11 @@
       "agamatus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "assault-ramp",
+    "ability_id": "assault-ramp-adeptus-custodes",
     "name": "Assault Ramp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1554,10 +1292,11 @@
       "venerable-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "resolute-will",
+    "ability_id": "resolute-will-adeptus-custodes",
     "name": "Resolute Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1592,10 +1331,11 @@
       "custodian-wardens"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "living-fortress",
+    "ability_id": "living-fortress-adeptus-custodes",
     "name": "Living Fortress",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1622,10 +1362,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "merciless-hunter",
+    "ability_id": "merciless-hunter-adeptus-custodes",
     "name": "Merciless Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1670,10 +1411,11 @@
       "pallas-grav-attack"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "quicksilver-execution",
+    "ability_id": "quicksilver-execution-adeptus-custodes",
     "name": "Quicksilver Execution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1696,36 +1438,11 @@
       "vertus-praetors"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "valerian"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "golden-laurels",
+    "ability_id": "golden-laurels-adeptus-custodes",
     "name": "Golden Laurels",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1772,10 +1489,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "hero-of-lion-s-gate",
+    "ability_id": "hero-of-lions-gate-adeptus-custodes",
     "name": "Hero of Lion\u2019s Gate",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1821,10 +1539,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "strike-from-the-skies",
+    "ability_id": "strike-from-the-skies-adeptus-custodes",
     "name": "Strike from the Skies",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1851,10 +1570,11 @@
       "venatari-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "swooping-dive",
+    "ability_id": "swooping-dive-adeptus-custodes",
     "name": "Swooping Dive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1880,10 +1600,11 @@
       "venatari-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "tarsis-buckler",
+    "ability_id": "tarsis-buckler-adeptus-custodes",
     "name": "Tarsis buckler",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1908,10 +1629,11 @@
       "venatari-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "jump-packs",
+    "ability_id": "jump-packs-adeptus-custodes",
     "name": "Jump Packs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1941,10 +1663,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "auramite-and-adamantine",
+    "ability_id": "auramite-and-adamantine-adeptus-custodes",
     "name": "Auramite and Adamantine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1971,10 +1694,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "heavy-assault-infantry",
+    "ability_id": "heavy-assault-infantry-adeptus-custodes",
     "name": "Heavy Assault Infantry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2007,10 +1731,11 @@
       "aquilon-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "lions-of-the-emperor",
+    "ability_id": "lions-of-the-emperor-adeptus-custodes",
     "name": "Lions of the Emperor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2049,10 +1774,11 @@
       "aquilon-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "no-foe-shall-stand",
+    "ability_id": "no-foe-shall-stand-adeptus-custodes",
     "name": "No Foe Shall Stand",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2101,10 +1827,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "fire-support",
+    "ability_id": "fire-support-adeptus-custodes",
     "name": "Fire Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2137,10 +1864,11 @@
       "coronus-grav-carrier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "purity-of-execution",
+    "ability_id": "purity-of-execution-adeptus-custodes",
     "name": "Purity of Execution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2203,10 +1931,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "master-of-the-stances",
+    "ability_id": "master-of-the-stances-adeptus-custodes",
     "name": "Master of the Stances",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2219,7 +1948,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "martial-ka-tah",
+        "ability": "martial-katah-adeptus-custodes",
         "aspect": "concurrent",
         "operation": "set",
         "value": 2
@@ -2232,10 +1961,11 @@
       "shield-captain"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "captain-general",
+    "ability_id": "captain-general-adeptus-custodes",
     "name": "Captain-General",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2271,10 +2001,11 @@
       "trajann-valoris"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "moment-shackle",
+    "ability_id": "moment-shackle-adeptus-custodes",
     "name": "Moment Shackle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2306,10 +2037,11 @@
       "trajann-valoris"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-adeptus-custodes",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2332,10 +2064,11 @@
       "trajann-valoris"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "martial-ka-tah",
+    "ability_id": "martial-katah-adeptus-custodes",
     "name": "Martial Ka\u2019tah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2386,7 +2119,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "march-of-the-honoured-dead",
+    "ability_id": "march-of-the-honoured-dead-adeptus-custodes",
     "name": "March of the Honoured Dead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2439,7 +2172,7 @@
     }
   },
   {
-    "ability_id": "interred-expertise-might-of-the-moritoi",
+    "ability_id": "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
     "name": "Interred Expertise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2495,7 +2228,7 @@
     }
   },
   {
-    "ability_id": "auramite-sarcophagus-might-of-the-moritoi",
+    "ability_id": "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes",
     "name": "Auramite Sarcophagus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2532,7 +2265,7 @@
     }
   },
   {
-    "ability_id": "flawless-construction-might-of-the-moritoi",
+    "ability_id": "flawless-construction-might-of-the-moritoi-adeptus-custodes",
     "name": "Flawless Construction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2584,7 +2317,7 @@
     }
   },
   {
-    "ability_id": "unstoppable-advance-might-of-the-moritoi",
+    "ability_id": "unstoppable-advance-might-of-the-moritoi-adeptus-custodes",
     "name": "Unstoppable Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2619,7 +2352,7 @@
     }
   },
   {
-    "ability_id": "prioritised-eradication-might-of-the-moritoi",
+    "ability_id": "prioritised-eradication-might-of-the-moritoi-adeptus-custodes",
     "name": "Prioritised Eradication",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2671,7 +2404,7 @@
     }
   },
   {
-    "ability_id": "skin-crawling-disorientation",
+    "ability_id": "skin-crawling-disorientation-adeptus-custodes",
     "name": "Skin-Crawling Disorientation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2773,7 +2506,7 @@
     }
   },
   {
-    "ability_id": "encircling-hunter-silent-hunters",
+    "ability_id": "encircling-hunter-silent-hunters-adeptus-custodes",
     "name": "Encircling Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2832,7 +2565,7 @@
     }
   },
   {
-    "ability_id": "psyk-out-grenades-silent-hunters",
+    "ability_id": "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes",
     "name": "Psyk-out Grenades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2866,7 +2599,7 @@
     }
   },
   {
-    "ability_id": "deathsong-scythes-silent-hunters",
+    "ability_id": "deathsong-scythes-silent-hunters-adeptus-custodes",
     "name": "Deathsong Scythes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2927,7 +2660,7 @@
     }
   },
   {
-    "ability_id": "umbral-prosecution-silent-hunters",
+    "ability_id": "umbral-prosecution-silent-hunters-adeptus-custodes",
     "name": "Umbral Prosecution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2979,7 +2712,7 @@
     }
   },
   {
-    "ability_id": "synchronised-inferno-silent-hunters",
+    "ability_id": "synchronised-inferno-silent-hunters-adeptus-custodes",
     "name": "Synchronised Inferno",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3015,7 +2748,7 @@
     }
   },
   {
-    "ability_id": "the-hammer-falls",
+    "ability_id": "the-hammer-falls-adeptus-custodes",
     "name": "The Hammer Falls",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3066,7 +2799,7 @@
     }
   },
   {
-    "ability_id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow",
+    "ability_id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Mnemo-locked Shrine Cipher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3099,7 +2832,7 @@
     }
   },
   {
-    "ability_id": "efficient-aggression-tharanatoi-hammerblow",
+    "ability_id": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Efficient Aggression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3143,7 +2876,7 @@
     }
   },
   {
-    "ability_id": "hardened-resolve-tharanatoi-hammerblow",
+    "ability_id": "hardened-resolve-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Hardened Resolve",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3178,7 +2911,7 @@
     }
   },
   {
-    "ability_id": "unleash-the-lions-tharanatoi-hammerblow",
+    "ability_id": "unleash-the-lions-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Unleash the Lions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3210,7 +2943,7 @@
     }
   },
   {
-    "ability_id": "electroexorcist-saturation-tharanatoi-hammerblow",
+    "ability_id": "electroexorcist-saturation-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Electroexorcist Saturation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3247,7 +2980,7 @@
     }
   },
   {
-    "ability_id": "against-all-odds",
+    "ability_id": "against-all-odds-adeptus-custodes",
     "name": "Against All Odds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3310,7 +3043,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "assemblage-of-might",
+    "ability_id": "assemblage-of-might-adeptus-custodes",
     "name": "Assemblage of Might",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3376,7 +3109,7 @@
     }
   },
   {
-    "ability_id": "auric-armour",
+    "ability_id": "auric-armour-adeptus-custodes",
     "name": "Auric Armour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3488,7 +3221,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "moritoi-ancients",
+    "ability_id": "moritoi-ancients-adeptus-custodes",
     "name": "Moritoi Ancients",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3540,7 +3273,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "martial-mastery",
+    "ability_id": "martial-mastery-adeptus-custodes",
     "name": "Martial Mastery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3569,7 +3302,7 @@
               "type": "has-ability",
               "parameters": {
                 "subject": "this-unit",
-                "ability": "martial-ka-tah"
+                "ability": "martial-katah-adeptus-custodes"
               }
             },
             "effect": {
@@ -3604,7 +3337,7 @@
     "community_notes": "[APPROX] Both options apply only to ADEPTUS CUSTODES models with the Martial Ka'tah ability (this gate is not encoded). The 'unmodified melee Hit of 5+ scores a Critical Hit' option is an opaque grant, as crit-threshold changes have no dedicated encoding. Full rule in raw-text store."
   },
   {
-    "ability_id": "creeping-dread-aura",
+    "ability_id": "creeping-dread-adeptus-custodes",
     "name": "Creeping Dread (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3707,7 +3440,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "revered-companions",
+    "ability_id": "revered-companions-adeptus-custodes",
     "ability_type": "detachment",
     "authored_by": "40kdc-community",
     "behavior": "passive",
@@ -3787,7 +3520,7 @@
     "version": "2025-q3"
   },
   {
-    "ability_id": "defiant-to-the-last-lions-of-the-emperor",
+    "ability_id": "defiant-to-the-last-lions-of-the-emperor-adeptus-custodes",
     "name": "Defiant to the Last",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3844,7 +3577,7 @@
     "community_notes": "Roll one D6 per destroyed model that has not fought this phase, adding 2 to the roll if that model has the Character keyword; the Character bonus is not encoded. A model kept in play fights with 1 wound remaining and is then removed."
   },
   {
-    "ability_id": "gilded-champion-lions-of-the-emperor",
+    "ability_id": "gilded-champion-lions-of-the-emperor-adeptus-custodes",
     "name": "Gilded Champion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3888,7 +3621,7 @@
     "community_notes": "The model can use a datasheet ability that states it can only be used once per battle one additional time, but not in the same phase. Cannot be used on the same Character model more than once per battle."
   },
   {
-    "ability_id": "manoeuvre-and-fire-lions-of-the-emperor",
+    "ability_id": "manoeuvre-and-fire-lions-of-the-emperor-adeptus-custodes",
     "name": "Manoeuvre and Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3924,7 +3657,7 @@
     }
   },
   {
-    "ability_id": "peerless-warrior-lions-of-the-emperor",
+    "ability_id": "peerless-warrior-lions-of-the-emperor-adeptus-custodes",
     "name": "Peerless Warrior",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3960,7 +3693,7 @@
     "community_notes": "Targets one unit that has not been selected to fight this phase."
   },
   {
-    "ability_id": "swift-as-the-eagle-lions-of-the-emperor",
+    "ability_id": "swift-as-the-eagle-lions-of-the-emperor-adeptus-custodes",
     "name": "Swift as the Eagle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3994,7 +3727,7 @@
     "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your unit; the unit makes a Normal move of up to D6\". Vehicle units cannot be selected."
   },
   {
-    "ability_id": "unleash-the-lions-lions-of-the-emperor",
+    "ability_id": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
     "name": "Unleash the Lions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4027,7 +3760,7 @@
     "community_notes": "Used in your Command phase on one Allarus Custodians or Aquilon Custodians unit on the battlefield: the unit is split into separate single-model units, each with a Starting Strength of 1."
   },
   {
-    "ability_id": "earning-of-a-name-auric-champions",
+    "ability_id": "earning-of-a-name-auric-champions-adeptus-custodes",
     "name": "Earning of a Name",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4088,7 +3821,7 @@
     "community_notes": "Targets up to two Character units that have not been selected to fight this phase; only attacks made by Character models benefit."
   },
   {
-    "ability_id": "shoulder-the-mantle-auric-champions",
+    "ability_id": "shoulder-the-mantle-auric-champions-adeptus-custodes",
     "name": "Shoulder the Mantle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4122,7 +3855,7 @@
     "community_notes": "Used in your Movement phase before the Reinforcements step on a Character model that is not leading a unit: it attaches as a Leader to one friendly unit it could lead (excluding Battle-shocked and Attached units) within 2\" horizontally and 5\" vertically. The unit's Starting Strength changes accordingly."
   },
   {
-    "ability_id": "slayer-of-champions-auric-champions",
+    "ability_id": "slayer-of-champions-auric-champions-adeptus-custodes",
     "name": "Slayer of Champions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4170,7 +3903,7 @@
     "community_notes": "Usable just after a Character unit destroys the target of your Assemblage of Might ability; only attacks made by Adeptus Custodes Character models gain the bonus. If the destroyed unit was a Character unit, you also gain 1CP (not encoded)."
   },
   {
-    "ability_id": "superhuman-reserves-auric-champions",
+    "ability_id": "superhuman-reserves-auric-champions-adeptus-custodes",
     "name": "Superhuman Reserves",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4214,7 +3947,7 @@
     "community_notes": "The Warlord can use a 'once per battle' ability from its datasheet or an Enhancement one additional time, but not in the same phase."
   },
   {
-    "ability_id": "the-emperors-auspice-auric-champions",
+    "ability_id": "the-emperors-auspice-auric-champions-adeptus-custodes",
     "name": "The Emperor's Auspice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4248,7 +3981,7 @@
     "community_notes": "Only Character models in the unit gain the Feel No Pain 4+ ability."
   },
   {
-    "ability_id": "vigil-unending-auric-champions",
+    "ability_id": "vigil-unending-auric-champions-adeptus-custodes",
     "name": "Vigil Unending",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4300,7 +4033,7 @@
     "community_notes": "Used on a Character model that was just destroyed and has not fought this phase; it fights after the attacking unit finishes its attacks and is then removed from play."
   },
   {
-    "ability_id": "emperors-vengeance-solar-spearhead",
+    "ability_id": "emperors-vengeance-solar-spearhead-adeptus-custodes",
     "name": "Emperor's Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4357,7 +4090,7 @@
     "community_notes": "Add 1 to the roll if the unit has the Walker keyword (not encoded). A model kept in play fights as if it has 1 wound remaining and is then removed."
   },
   {
-    "ability_id": "flawless-construction-solar-spearhead",
+    "ability_id": "flawless-construction-solar-spearhead-adeptus-custodes",
     "name": "Flawless Construction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4410,7 +4143,7 @@
     }
   },
   {
-    "ability_id": "punishment-inescapable-solar-spearhead",
+    "ability_id": "punishment-inescapable-solar-spearhead-adeptus-custodes",
     "name": "Punishment Inescapable",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4461,7 +4194,7 @@
     "community_notes": "Targets one unit that has not been selected to shoot this phase; modifiers to the attack's Ballistic Skill characteristic can also be ignored."
   },
   {
-    "ability_id": "relentless-persecution-solar-spearhead",
+    "ability_id": "relentless-persecution-solar-spearhead-adeptus-custodes",
     "name": "Relentless Persecution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4525,7 +4258,7 @@
     "community_notes": "Used just after the Vehicle unit Advances; Walker units are eligible to shoot and declare a charge this turn, other Vehicles are eligible to shoot only."
   },
   {
-    "ability_id": "unstoppable-solar-spearhead",
+    "ability_id": "unstoppable-solar-spearhead-adeptus-custodes",
     "name": "Unstoppable",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4560,7 +4293,7 @@
     "community_notes": "Used in your Movement or Charge phase on one Vehicle or Mounted unit; its models can move through terrain features until the end of the phase."
   },
   {
-    "ability_id": "wrathful-advance-solar-spearhead",
+    "ability_id": "wrathful-advance-solar-spearhead-adeptus-custodes",
     "name": "Wrathful Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4594,7 +4327,7 @@
     "community_notes": "Used just before the unit Piles In: each model can make its Pile-in move up to D3+3\" instead of up to 3\"."
   },
   {
-    "ability_id": "arcane-genetic-alchemy-shield-host",
+    "ability_id": "arcane-genetic-alchemy-shield-host-adeptus-custodes",
     "name": "Arcane Genetic Alchemy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4628,7 +4361,7 @@
     "community_notes": "Used just after a mortal wound is allocated to a model in the unit; Anathema Psykana units cannot be selected."
   },
   {
-    "ability_id": "archeotech-munitions-shield-host",
+    "ability_id": "archeotech-munitions-shield-host-adeptus-custodes",
     "name": "Archeotech Munitions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4680,7 +4413,7 @@
     "community_notes": "Targets one unit (excluding Anathema Psykana units) that has not been selected to shoot this phase."
   },
   {
-    "ability_id": "avenge-the-fallen-shield-host",
+    "ability_id": "avenge-the-fallen-shield-host-adeptus-custodes",
     "name": "Avenge the Fallen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4725,7 +4458,7 @@
     "community_notes": "Excludes Anathema Psykana units. If the unit is Below Half-strength, add 2 to the Attacks characteristic instead (escalation not encoded)."
   },
   {
-    "ability_id": "multipotentiality-shield-host",
+    "ability_id": "multipotentiality-shield-host-adeptus-custodes",
     "name": "Multipotentiality",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4761,7 +4494,7 @@
     }
   },
   {
-    "ability_id": "unwavering-sentinels-shield-host",
+    "ability_id": "unwavering-sentinels-shield-host-adeptus-custodes",
     "name": "Unwavering Sentinels",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4807,7 +4540,7 @@
     "community_notes": "Excludes Anathema Psykana units; the unit must be within range of an objective marker you control."
   },
   {
-    "ability_id": "vigilance-eternal-shield-host",
+    "ability_id": "vigilance-eternal-shield-host-adeptus-custodes",
     "name": "Vigilance Eternal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4838,7 +4571,7 @@
     "community_notes": "Excludes Anathema Psykana units; the objective the unit is in range of remains under your control until your opponent's Level of Control exceeds yours at the end of a phase."
   },
   {
-    "ability_id": "anathema-blademastery-null-maiden-vigil",
+    "ability_id": "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
     "name": "Anathema Blademastery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4906,7 +4639,7 @@
     "community_notes": "Wound re-rolls also apply against Battle-shocked targets (not encoded)."
   },
   {
-    "ability_id": "desperations-price-null-maiden-vigil",
+    "ability_id": "desperations-price-null-maiden-vigil-adeptus-custodes",
     "name": "Desperation's Price",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4939,7 +4672,7 @@
     "community_notes": "Used just after an enemy Psyker unit within 18\" uses a Psychic ability or makes Psychic Attacks: that unit takes a Leadership test. If passed it is Battle-shocked; if failed it suffers 3 mortal wounds and is Battle-shocked (encoded as a Battle-shock test; the mortal-wound rider is not encoded)."
   },
   {
-    "ability_id": "psy-chaff-volley-null-maiden-vigil",
+    "ability_id": "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
     "name": "Psy-Chaff Volley",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4987,7 +4720,7 @@
     "community_notes": "Only Anathema Psykana models improve their AP against the prosecuted unit. While a Psyker or Battle-shocked unit is prosecuted, its models also subtract 1 from their Hit rolls (not encoded)."
   },
   {
-    "ability_id": "psychic-abominations-null-maiden-vigil",
+    "ability_id": "psychic-abominations-null-maiden-vigil-adeptus-custodes",
     "name": "Psychic Abominations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5021,7 +4754,7 @@
     "community_notes": "In addition, Battle-shocked and Psyker models can only select the unit as a target of a ranged attack while within 12\" (not encoded)."
   },
   {
-    "ability_id": "purgation-sweep-null-maiden-vigil",
+    "ability_id": "purgation-sweep-null-maiden-vigil-adeptus-custodes",
     "name": "Purgation Sweep",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5058,7 +4791,7 @@
     "community_notes": "If a Torrent weapon targets a Psyker or Battle-shocked unit this phase, add 2 to its Attacks characteristic instead (escalation not encoded)."
   },
   {
-    "ability_id": "witch-hunters-null-maiden-vigil",
+    "ability_id": "witch-hunters-null-maiden-vigil-adeptus-custodes",
     "name": "Witch Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5108,7 +4841,7 @@
     "community_notes": "While active, models in the unit can only target Psyker units with their attacks (restriction not encoded)."
   },
   {
-    "ability_id": "emperors-executioners-talons-of-the-emperor",
+    "ability_id": "emperors-executioners-talons-of-the-emperor-adeptus-custodes",
     "name": "Emperor's Executioners",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5153,7 +4886,7 @@
     "community_notes": "Targets up to two units at the start of the Fight phase; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
   },
   {
-    "ability_id": "empyric-severance-talons-of-the-emperor",
+    "ability_id": "empyric-severance-talons-of-the-emperor-adeptus-custodes",
     "name": "Empyric Severance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5187,7 +4920,7 @@
     "community_notes": "Requires a friendly Anathema Psykana unit within 6\" of the targeted unit."
   },
   {
-    "ability_id": "hunt-as-one-talons-of-the-emperor",
+    "ability_id": "hunt-as-one-talons-of-the-emperor-adeptus-custodes",
     "name": "Hunt as One",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5224,7 +4957,7 @@
     "community_notes": "Targets up to two units at the start of your Movement phase; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
   },
   {
-    "ability_id": "shield-of-honour-talons-of-the-emperor",
+    "ability_id": "shield-of-honour-talons-of-the-emperor-adeptus-custodes",
     "name": "Shield of Honour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5275,7 +5008,7 @@
     "community_notes": "Targets one Anathema Psykana Infantry unit that was selected as a target and one other friendly Adeptus Custodes Infantry unit (excluding Anathema Psykana) within 6\": until the end of the phase, attacks that target the Anathema Psykana unit must instead target the other unit, unless it is not an eligible target."
   },
   {
-    "ability_id": "taloned-pincer-talons-of-the-emperor",
+    "ability_id": "taloned-pincer-talons-of-the-emperor-adeptus-custodes",
     "name": "Taloned Pincer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5309,7 +5042,7 @@
     "community_notes": "Used just after an enemy unit ends a Normal, Advance or Fall Back move: up to two units within 8\" of it can make a Normal move of up to 6\". Units in Engagement Range cannot be selected; two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
   },
   {
-    "ability_id": "talons-interlocked-talons-of-the-emperor",
+    "ability_id": "talons-interlocked-talons-of-the-emperor-adeptus-custodes",
     "name": "Talons Interlocked",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5361,7 +5094,7 @@
     "community_notes": "Targets up to two Infantry units and one enemy unit that is an eligible target for all of them; your units can only target that enemy unit this phase. Two units may only be selected if exactly one is an Anathema Psykana unit and both are within 6\" of each other."
   },
   {
-    "ability_id": "gilded-spear-tristraens-gilded-blades",
+    "ability_id": "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
     "name": "Gilded Spear",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5394,7 +5127,7 @@
     }
   },
   {
-    "ability_id": "inevitable-wrath-tristraens-gilded-blades",
+    "ability_id": "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
     "name": "Inevitable Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5429,7 +5162,7 @@
     "community_notes": "Used in your opponent's Shooting phase after an enemy unit has shot, on an unengaged Blade Champion unit that lost a wound to those attacks."
   },
   {
-    "ability_id": "never-outmatched-tristraens-gilded-blades",
+    "ability_id": "never-outmatched-tristraens-gilded-blades-adeptus-custodes",
     "name": "Never Outmatched",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5473,7 +5206,7 @@
     }
   },
   {
-    "ability_id": "superior-creation-lions-of-the-emperor",
+    "ability_id": "superior-creation-lions-of-the-emperor-adeptus-custodes",
     "name": "Superior Creation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5515,7 +5248,7 @@
     "community_notes": "The bearer is set back up as close as possible to where it was destroyed and not within Engagement Range of enemy units, with its full wounds remaining."
   },
   {
-    "ability_id": "praesidius-lions-of-the-emperor",
+    "ability_id": "praesidius-lions-of-the-emperor-adeptus-custodes",
     "name": "Praesidius",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5559,7 +5292,7 @@
     }
   },
   {
-    "ability_id": "fierce-conqueror-lions-of-the-emperor",
+    "ability_id": "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
     "name": "Fierce Conqueror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5595,7 +5328,7 @@
     "community_notes": "At the start of the Fight phase, add 2 Attacks for every 5 enemy models within 6\" of the bearer, rounding down (per-5-models scaling not encoded)."
   },
   {
-    "ability_id": "admonimortis-lions-of-the-emperor",
+    "ability_id": "admonimortis-lions-of-the-emperor-adeptus-custodes",
     "name": "Admonimortis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5655,7 +5388,7 @@
     }
   },
   {
-    "ability_id": "blade-imperator-auric-champions",
+    "ability_id": "blade-imperator-auric-champions-adeptus-custodes",
     "name": "Blade Imperator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5709,7 +5442,7 @@
     "community_notes": "Each time the bearer's unit ends a Charge move, select one enemy unit within Engagement Range of the bearer for the roll. Once per battle, after the bearer's unit ends a Charge move, all enemy units within 6\" of the bearer must take a Battle-shock test (not encoded)."
   },
   {
-    "ability_id": "inspirational-exemplar-auric-champions",
+    "ability_id": "inspirational-exemplar-auric-champions-adeptus-custodes",
     "name": "Inspirational Exemplar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5766,7 +5499,7 @@
     "community_notes": "Once per battle, at the start of any phase, one friendly Adeptus Custodes unit that is Battle-shocked and within 12\" of the bearer is no longer Battle-shocked. The bearer also has a Leadership characteristic of 5+ (not encoded)."
   },
   {
-    "ability_id": "veiled-blade-auric-champions",
+    "ability_id": "veiled-blade-auric-champions-adeptus-custodes",
     "name": "Veiled Blade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5802,7 +5535,7 @@
     "community_notes": "Once per battle, at the start of any Command phase, triple the bearer's Objective Control characteristic until the end of the turn (not encoded)."
   },
   {
-    "ability_id": "martial-philosopher-auric-champions",
+    "ability_id": "martial-philosopher-auric-champions-adeptus-custodes",
     "name": "Martial Philosopher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5839,7 +5572,7 @@
     "community_notes": "The bearer's unit is eligible to shoot and/or declare a charge in a turn in which it Fell Back. Once per battle, when an enemy unit ends a Normal, Advance or Fall Back move within 8\" of the bearer, the bearer's unit can make a Normal move of up to 6\" if unengaged (not encoded)."
   },
   {
-    "ability_id": "adamantine-talisman-solar-spearhead",
+    "ability_id": "adamantine-talisman-solar-spearhead-adeptus-custodes",
     "name": "Adamantine Talisman",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5899,7 +5632,7 @@
     }
   },
   {
-    "ability_id": "augury-uplink-solar-spearhead",
+    "ability_id": "augury-uplink-solar-spearhead-adeptus-custodes",
     "name": "Augury Uplink",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5931,7 +5664,7 @@
     }
   },
   {
-    "ability_id": "honoured-fallen-aura-solar-spearhead",
+    "ability_id": "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
     "name": "Honoured Fallen (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5973,7 +5706,7 @@
     "community_notes": "Affects friendly Adeptus Custodes Infantry and Adeptus Custodes Mounted units within 6\" of the bearer."
   },
   {
-    "ability_id": "veteran-of-the-kataphraktoi-solar-spearhead",
+    "ability_id": "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes",
     "name": "Veteran of the Kataphraktoi",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6010,7 +5743,7 @@
     "community_notes": "In your Command phase, select one Adeptus Custodes Vehicle or Mounted unit within 6\" of the bearer; until the start of your next Command phase, that unit is eligible to shoot in a turn in which it Fell Back. Bearer must be an Infantry or Mounted model."
   },
   {
-    "ability_id": "from-the-hall-of-armouries-shield-host",
+    "ability_id": "from-the-hall-of-armouries-shield-host-adeptus-custodes",
     "name": "From the Hall of Armouries",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6060,7 +5793,7 @@
     }
   },
   {
-    "ability_id": "castellans-mark-shield-host",
+    "ability_id": "castellans-mark-shield-host-adeptus-custodes",
     "name": "Castellan's Mark",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6093,7 +5826,7 @@
     "community_notes": "After both players deploy, select up to two Adeptus Custodes units (excluding Anathema Psykana) and redeploy them; any of them can be placed into Strategic Reserves regardless of how many units are already there."
   },
   {
-    "ability_id": "auric-mantle-shield-host",
+    "ability_id": "auric-mantle-shield-host-adeptus-custodes",
     "name": "Auric Mantle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6128,7 +5861,7 @@
     "community_notes": "Shield-Captain or Blade Champion model only."
   },
   {
-    "ability_id": "panoptispex-shield-host",
+    "ability_id": "panoptispex-shield-host-adeptus-custodes",
     "name": "Panoptispex",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6174,7 +5907,7 @@
     "community_notes": "Shield-Captain or Blade Champion model only."
   },
   {
-    "ability_id": "raptor-blade-null-maiden-vigil",
+    "ability_id": "raptor-blade-null-maiden-vigil-adeptus-custodes",
     "name": "Raptor Blade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6235,7 +5968,7 @@
     "community_notes": "While the bearer is within Engagement Range of one or more Battle-shocked enemy Psyker units, the bonus is +2 to each characteristic instead (escalation not encoded)."
   },
   {
-    "ability_id": "enhanced-voidsheen-cloak-null-maiden-vigil",
+    "ability_id": "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
     "name": "Enhanced Voidsheen Cloak",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6268,7 +6001,7 @@
     "community_notes": "If the attack was made by a Psyker or Battle-shocked model, change its Damage characteristic to 1 instead (not encoded)."
   },
   {
-    "ability_id": "huntress-eye-null-maiden-vigil",
+    "ability_id": "huntress-eye-null-maiden-vigil-adeptus-custodes",
     "name": "Huntress' Eye",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6301,7 +6034,7 @@
     "community_notes": "In your Command phase, select one enemy unit within 12\" of the bearer; that unit must take a Battle-shock test."
   },
   {
-    "ability_id": "oblivion-knight-null-maiden-vigil",
+    "ability_id": "oblivion-knight-null-maiden-vigil-adeptus-custodes",
     "name": "Oblivion Knight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6371,7 +6104,7 @@
     }
   },
   {
-    "ability_id": "radiant-mantle-talons-of-the-emperor",
+    "ability_id": "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
     "name": "Radiant Mantle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6407,7 +6140,7 @@
     "community_notes": "Applies only while the attacking model is within 12\" of the bearer's unit (range condition not encoded)."
   },
   {
-    "ability_id": "gift-of-terran-artifice-talons-of-the-emperor",
+    "ability_id": "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
     "name": "Gift of Terran Artifice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6450,7 +6183,7 @@
     }
   },
   {
-    "ability_id": "champion-of-the-imperium-talons-of-the-emperor",
+    "ability_id": "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
     "name": "Champion of the Imperium",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6501,7 +6234,7 @@
     "community_notes": "The range of the bearer's Null Aegis or Deadly Unity ability is increased to 9\"."
   },
   {
-    "ability_id": "aegis-projector-talons-of-the-emperor",
+    "ability_id": "aegis-projector-talons-of-the-emperor-adeptus-custodes",
     "name": "Aegis Projector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6537,7 +6270,7 @@
     "community_notes": "Once per turn, the first time a saving throw is failed for the bearer's unit, change the Damage characteristic of that attack to 0."
   },
   {
-    "ability_id": "comrades-in-wrath-tristraens-gilded-blades",
+    "ability_id": "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
     "name": "Comrades in Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6573,7 +6306,7 @@
     "community_notes": "Upgrade for a Gilded Blades Allarus Custodians unit."
   },
   {
-    "ability_id": "shattering-charge-tristraens-gilded-blades",
+    "ability_id": "shattering-charge-tristraens-gilded-blades-adeptus-custodes",
     "name": "Shattering Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6632,7 +6365,7 @@
     "community_notes": "When the bearer's unit ends a Charge move, select one enemy unit engaged with it: that unit makes a Battle-shock roll with -1 to the roll."
   },
   {
-    "ability_id": "slayers-of-tyrants-gilded-blades",
+    "ability_id": "slayers-of-tyrants-gilded-blades-allarus-custodians-adeptus-custodes",
     "name": "Slayers of Tyrants",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6670,10 +6403,11 @@
       "gilded-blades-allarus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "sentinel-storm-gilded-blades",
+    "ability_id": "sentinel-storm-gilded-blades-custodian-guard-adeptus-custodes",
     "name": "Sentinel Storm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6704,10 +6438,11 @@
       "gilded-blades-custodian-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "stand-vigil-gilded-blades",
+    "ability_id": "stand-vigil-gilded-blades-custodian-guard-adeptus-custodes",
     "name": "Stand Vigil",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6758,38 +6493,11 @@
       "gilded-blades-custodian-guard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "praesidium-shield-gilded-blades",
-    "name": "Praesidium Shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "source_digest": "6a50cd34b88428e209ccddb9bd411a5eebf362bea01fa27d5ef2840e84ed7113",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "W",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "gilded-blades-custodian-guard"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "divine-protection-gilded-blades",
+    "ability_id": "divine-protection-adeptus-custodes",
     "name": "Divine Protection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6813,10 +6521,11 @@
       "gilded-blades-custodian-wardens"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "rapid-strike-gilded-blades",
+    "ability_id": "rapid-strike-adeptus-custodes",
     "name": "Rapid Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6840,10 +6549,11 @@
       "tristraen-of-the-gilded-blades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-custodes"
   },
   {
-    "ability_id": "from-golden-light-gilded-blades",
+    "ability_id": "from-golden-light-gilded-blades-allarus-custodians-adeptus-custodes",
     "name": "From Golden Light",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6892,6 +6602,140 @@
       "gilded-blades-allarus-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes"
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-adeptus-custodes",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "telemon-heavy-dreadnought"
+    ],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-adeptus-custodes",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "caladius-grav-tank",
+      "coronus-grav-carrier",
+      "venerable-land-raider"
+    ],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-adeptus-custodes",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ares-gunship",
+      "orion-assault-dropship"
+    ],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daughters-of-the-abyss-anathema-psykana-rhino-adeptus-custodes",
+    "name": "Daughters of the Abyss",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "anathema-psykana-rhino"
+    ],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fearless-and-unrelenting-adeptus-custodes",
+    "name": "Fearless and Unrelenting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": "tristraens-gilded-blades",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
+    "name": "Praesidium Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gilded-blades-custodian-guard"
+    ],
+    "faction_id": "adeptus-custodes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

@@ -9,7 +9,7 @@
  * Why this exists: core entities (stratagems/enhancements/units/detachments) and
  * the enrichment `abilities.json` were produced by independent pipelines, so their
  * ids diverge — the abilities pipeline disambiguates same-named rules across
- * detachments with a short tag (`flawless-construction-solar-spearhead`) that the
+ * detachments with a short tag (`flawless-construction-solar-spearhead-adeptus-custodes`) that the
  * bare core id (`flawless-construction`) lacks. The app's join then misses. This
  * tool reconciles the two by populating the link fields the schema already carries.
  *
@@ -38,6 +38,7 @@
  *   npx tsx tools/src/author-reconcile.ts <faction>... [--dry-run] [--force] [--json]
  *   npx tsx tools/src/author-reconcile.ts --all [--dry-run]
  */
+import { abilityIdsOf } from "./data/ability-refs.js";
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -191,17 +192,19 @@ export function reconcileFaction(faction: string, core: CoreFiles, abilities: Js
   for (const u of core.units ?? []) {
     const want = unitToAbilities.get(u.id) ?? [];
     if (want.length === 0) continue;
-    const have = new Set<string>(u.ability_ids ?? []);
+    const have = new Set<string>(abilityIdsOf(u.ability_ids));
+    const next: unknown[] = [...(u.ability_ids ?? [])];
     let added = 0;
     for (const id of want) {
       usedAbilityIds.add(id);
       if (!have.has(id)) {
         have.add(id);
+        next.push(id);
         added++;
       }
     }
     if (added > 0) {
-      u.ability_ids = [...have];
+      u.ability_ids = next as typeof u.ability_ids;
       report.units.abilityLinksAdded += added;
       report.units.unitsTouched++;
     }

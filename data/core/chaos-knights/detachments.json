@@ -3,15 +3,15 @@
     "id": "iconoclast-fiefdom",
     "name": "Iconoclast Fiefdom",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "wretched-thralls",
+    "detachment_rule_id": "wretched-thralls-chaos-knights",
     "enhancement_ids": [
-      "cruel-lashmaster-aura-iconoclast-fiefdom",
-      "iconoclast-idol-aura-iconoclast-fiefdom"
+      "cruel-lashmaster-aura-iconoclast-fiefdom-chaos-knights",
+      "iconoclast-idol-aura-iconoclast-fiefdom-chaos-knights"
     ],
     "stratagem_ids": [
-      "avenge-the-masters-iconoclast-fiefdom",
-      "dark-sacrifice-iconoclast-fiefdom",
-      "coursing-thralls-iconoclast-fiefdom"
+      "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
+      "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
+      "coursing-thralls-iconoclast-fiefdom-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -32,22 +32,22 @@
     "id": "lords-of-dread",
     "name": "Lords of Dread",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "tyrannical-court",
+    "detachment_rule_id": "tyrannical-court-chaos-knights",
     "enhancement_ids": [
-      "throne-mechanicum-of-skulls-lords-of-dread",
-      "blade-of-celerity-lords-of-dread",
-      "warp-borne-stalker-lords-of-dread",
-      "putrid-carapace-lords-of-dread",
-      "mirror-of-fates-lords-of-dread",
-      "blessing-of-the-dark-master-lords-of-dread"
+      "throne-mechanicum-of-skulls-lords-of-dread-chaos-knights",
+      "blade-of-celerity-lords-of-dread-chaos-knights",
+      "warp-borne-stalker-lords-of-dread-chaos-knights",
+      "putrid-carapace-lords-of-dread-chaos-knights",
+      "mirror-of-fates-lords-of-dread-chaos-knights",
+      "blessing-of-the-dark-master-lords-of-dread-chaos-knights"
     ],
     "stratagem_ids": [
-      "claimed-for-the-dark-gods-lords-of-dread",
-      "spiteful-demise-lords-of-dread",
-      "titanic-duel-lords-of-dread",
-      "trophy-hunter-lords-of-dread",
-      "crushed-like-vermin-lords-of-dread",
-      "runes-of-disdain-lords-of-dread"
+      "claimed-for-the-dark-gods-lords-of-dread-chaos-knights",
+      "spiteful-demise-lords-of-dread-chaos-knights",
+      "titanic-duel-lords-of-dread-chaos-knights",
+      "trophy-hunter-lords-of-dread-chaos-knights",
+      "crushed-like-vermin-lords-of-dread-chaos-knights",
+      "runes-of-disdain-lords-of-dread-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -68,20 +68,20 @@
     "id": "infernal-lance",
     "name": "Infernal Lance",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "malefic-surge",
+    "detachment_rule_id": "malefic-surge-chaos-knights",
     "enhancement_ids": [
-      "knight-diabolus-infernal-lance",
-      "blasphemous-engine-infernal-lance",
-      "fleshmetal-fusion-infernal-lance",
-      "bestial-aspect-infernal-lance"
+      "knight-diabolus-infernal-lance-chaos-knights",
+      "blasphemous-engine-infernal-lance-chaos-knights",
+      "fleshmetal-fusion-infernal-lance-chaos-knights",
+      "bestial-aspect-infernal-lance-chaos-knights"
     ],
     "stratagem_ids": [
-      "profane-symbiosis-infernal-lance",
-      "hellforged-construction-infernal-lance",
-      "corrupting-taint-infernal-lance",
-      "unleash-balefire-infernal-lance",
-      "warp-vision-infernal-lance",
-      "diabolic-bulwark-infernal-lance"
+      "profane-symbiosis-infernal-lance-chaos-knights",
+      "hellforged-construction-infernal-lance-chaos-knights",
+      "corrupting-taint-infernal-lance-chaos-knights",
+      "unleash-balefire-infernal-lance-chaos-knights",
+      "warp-vision-infernal-lance-chaos-knights",
+      "diabolic-bulwark-infernal-lance-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -102,20 +102,20 @@
     "id": "houndpack-lance",
     "name": "Houndpack Lance",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "marked-prey",
+    "detachment_rule_id": "marked-prey-chaos-knights",
     "enhancement_ids": [
-      "preyslayers-mantle-houndpack-lance",
-      "final-howl-aura-houndpack-lance",
-      "loping-predator-houndpack-lance",
-      "panoply-of-the-cursed-knights-houndpack-lance"
+      "preyslayers-mantle-houndpack-lance-chaos-knights",
+      "final-howl-aura-houndpack-lance-chaos-knights",
+      "loping-predator-houndpack-lance-chaos-knights",
+      "panoply-of-the-cursed-knights-houndpack-lance-chaos-knights"
     ],
     "stratagem_ids": [
-      "hungry-for-combat-houndpack-lance",
-      "animalistic-rage-houndpack-lance",
-      "vox-howl-houndpack-lance",
-      "cunning-hunter-houndpack-lance",
-      "harrying-hounds-houndpack-lance",
-      "encircling-pack-houndpack-lance"
+      "hungry-for-combat-houndpack-lance-chaos-knights",
+      "animalistic-rage-houndpack-lance-chaos-knights",
+      "vox-howl-houndpack-lance-chaos-knights",
+      "cunning-hunter-houndpack-lance-chaos-knights",
+      "harrying-hounds-houndpack-lance-chaos-knights",
+      "encircling-pack-houndpack-lance-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -158,20 +158,20 @@
     "id": "traitoris-lance",
     "name": "Traitoris Lance",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "paragons-of-terror",
+    "detachment_rule_id": "paragons-of-terror-chaos-knights",
     "enhancement_ids": [
-      "nightmares-master-traitoris-lance",
-      "tyrants-shadow-traitoris-lance",
-      "malevolent-heraldry-traitoris-lance",
-      "veil-of-medrengard-traitoris-lance"
+      "nightmares-master-traitoris-lance-chaos-knights",
+      "tyrants-shadow-traitoris-lance-chaos-knights",
+      "malevolent-heraldry-traitoris-lance-chaos-knights",
+      "veil-of-medrengard-traitoris-lance-chaos-knights"
     ],
     "stratagem_ids": [
-      "conquerors-without-mercy-traitoris-lance",
-      "imperious-advance-traitoris-lance",
-      "disdain-for-the-weak-traitoris-lance",
-      "a-long-leash-traitoris-lance",
-      "storm-of-darkness-traitoris-lance",
-      "pterrorshades-traitoris-lance"
+      "conquerors-without-mercy-traitoris-lance-chaos-knights",
+      "imperious-advance-traitoris-lance-chaos-knights",
+      "disdain-for-the-weak-traitoris-lance-chaos-knights",
+      "a-long-leash-traitoris-lance-chaos-knights",
+      "storm-of-darkness-traitoris-lance-chaos-knights",
+      "pterrorshades-traitoris-lance-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -192,15 +192,15 @@
     "id": "bastions-of-tyranny",
     "name": "Bastions of Tyranny",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "annihilate-the-unworthy",
+    "detachment_rule_id": "annihilate-the-unworthy-chaos-knights",
     "enhancement_ids": [
-      "pterrorshade-rookery-bastions-of-tyranny",
-      "hate-filled-dominion-bastions-of-tyranny"
+      "pterrorshade-rookery-bastions-of-tyranny-chaos-knights",
+      "hate-filled-dominion-bastions-of-tyranny-chaos-knights"
     ],
     "stratagem_ids": [
-      "rune-cursed-stronghold-bastions-of-tyranny",
-      "pitiless-focus-bastions-of-tyranny",
-      "intimidating-reminder-bastions-of-tyranny"
+      "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights",
+      "pitiless-focus-bastions-of-tyranny-chaos-knights",
+      "intimidating-reminder-bastions-of-tyranny-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -221,15 +221,15 @@
     "id": "hunting-warpack",
     "name": "Hunting Warpack",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "scenting-fear",
+    "detachment_rule_id": "scenting-fear-chaos-knights",
     "enhancement_ids": [
-      "soul-spoor-auspicator-upgrade-hunting-warpack",
-      "snarling-rivalry-upgrade-hunting-warpack"
+      "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
+      "snarling-rivalry-upgrade-hunting-warpack-chaos-knights"
     ],
     "stratagem_ids": [
-      "insensate-bloodthirst-hunting-warpack",
-      "leash-of-the-masters-hunting-warpack",
-      "stalking-focus-hunting-warpack"
+      "insensate-bloodthirst-hunting-warpack-chaos-knights",
+      "leash-of-the-masters-hunting-warpack-chaos-knights",
+      "stalking-focus-hunting-warpack-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -251,20 +251,20 @@
     "id": "helhunt-lance",
     "name": "Helhunt Lance",
     "faction_id": "chaos-knights",
-    "detachment_rule_id": "masters-of-the-pack",
+    "detachment_rule_id": "masters-of-the-pack-chaos-knights",
     "enhancement_ids": [
-      "hunters-helm-helhunt-lance",
-      "octagram-of-conjuration-helhunt-lance",
-      "throne-tyrannicus-helhunt-lance",
-      "aspect-of-the-beast-helhunt-lance"
+      "hunters-helm-helhunt-lance-chaos-knights",
+      "octagram-of-conjuration-helhunt-lance-chaos-knights",
+      "throne-tyrannicus-helhunt-lance-chaos-knights",
+      "aspect-of-the-beast-helhunt-lance-chaos-knights"
     ],
     "stratagem_ids": [
-      "feral-arrogance-helhunt-lance",
-      "merciless-fusillade-helhunt-lance",
-      "beasthide-manifestation-helhunt-lance",
-      "flush-the-quarry-helhunt-lance",
-      "contemptuous-volleys-helhunt-lance",
-      "goaded-beast-helhunt-lance"
+      "feral-arrogance-helhunt-lance-chaos-knights",
+      "merciless-fusillade-helhunt-lance-chaos-knights",
+      "beasthide-manifestation-helhunt-lance-chaos-knights",
+      "flush-the-quarry-helhunt-lance-chaos-knights",
+      "contemptuous-volleys-helhunt-lance-chaos-knights",
+      "goaded-beast-helhunt-lance-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",

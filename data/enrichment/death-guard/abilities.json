@@ -1,32 +1,6 @@
 [
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lord-of-poxes"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "gift-of-poxes",
+    "ability_id": "gift-of-poxes-death-guard",
     "name": "Gift of Poxes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -51,10 +25,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "shroud-of-disease",
+    "ability_id": "shroud-of-disease-death-guard",
     "name": "Shroud of Disease",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -106,97 +81,11 @@
       "lord-of-poxes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "daemonforge",
-    "name": "Daemonforge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "used",
-          "subject": "this-unit",
-          "filter": {
-            "kind": "dark-pact"
-          },
-          "window": "phase"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-model",
-        "modifier": {
-          "roll": "wound",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "scuttling-walker",
+    "ability_id": "scuttling-walker-death-guard",
     "name": "Scuttling Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -221,10 +110,11 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "barrage-of-filth",
+    "ability_id": "barrage-of-filth-death-guard",
     "name": "Barrage of Filth",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -256,327 +146,11 @@
       "defiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "destroyer-of-futures",
-    "name": "Destroyer of Futures",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5d47c99e7260e0f1081782263169754dbf0c5fe21256ac2022631c497d03a5eb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "use-stratagem",
-            "allow": true,
-            "despite": [
-              "stratagem-used-this-phase"
-            ],
-            "stratagem": "counter-offensive"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "of": "stratagem",
-            "id": "counter-offensive",
-            "operation": "decrease",
-            "amount": 1,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "unleash-wrath",
-    "name": "Unleash Wrath",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d5ab4b32d95575ff4280b7bb886086cd31c127509853b90e4100b8a71017829d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "enemy",
-          "max_count": 1,
-          "range_inches": 12,
-          "eligibility": {
-            "type": "happened",
-            "parameters": {
-              "event": "set-up",
-              "subject": "recipient",
-              "window": "phase"
-            }
-          }
-        },
-        "effect": {
-          "type": "choice",
-          "options": [
-            {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "permission",
-                  "target": "this-model",
-                  "modifier": {
-                    "activity": "shoot",
-                    "allow": true,
-                    "as_if": "shooting-phase"
-                  }
-                },
-                {
-                  "type": "targeting",
-                  "target": "this-model",
-                  "modifier": {
-                    "by": "this-model",
-                    "may": "must-target",
-                    "target": "selected-unit",
-                    "kind": "shoot"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "permission",
-                  "target": "this-model",
-                  "modifier": {
-                    "activity": "declare-charge",
-                    "allow": true
-                  }
-                },
-                {
-                  "type": "targeting",
-                  "target": "this-model",
-                  "modifier": {
-                    "by": "this-model",
-                    "may": "must-target",
-                    "target": "selected-unit",
-                    "kind": "charge"
-                  }
-                }
-              ]
-            }
-          ],
-          "choice_label": "Shoot at or charge the arriving unit"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mind-breaking-mutations-aura",
-    "name": "Mind-breaking Mutations (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "704b31d8b1ce5f0d7681c27c6bd2e99c09fbd8f6bc51ac082ec07cc050fc9495",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": {
-        "owner": "enemy",
-        "none_of": [
-          "VEHICLE"
-        ],
-        "within": {
-          "range": {
-            "inches": 3
-          }
-        }
-      },
-      "modifier": {
-        "stat": "OC",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "494103040b6b071db846249b09c8cb6e0d74f571abb1744f603480202ea2ba03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "lethal-ichor",
+    "ability_id": "lethal-ichor-death-guard",
     "name": "Lethal Ichor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -608,159 +182,11 @@
       "chaos-spawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "scuttling-horrors",
-    "name": "Scuttling Horrors",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d74226911a1121a417afcd59f2174b1078a6f4daa86592c8fc419407f931650d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "within",
-            "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal",
-          "distance": 6
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "optional": true
-    },
-    "usage": {
-      "frequency": "once-per-turn"
-    }
-  },
-  {
-    "ability_id": "regenerating-monstrosities",
-    "name": "Regenerating Monstrosities",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ea8b35e9195d72de1e5e998718a812cf294fe82c7398534177114bb29e890784",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 3
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "to-slake-its-rage",
-    "name": "To Slake its Rage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4b26303e351e1a976044235a1b48f365091d27c8bdeaf5720177c82d3222d4b3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-spawn"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "malicious-calculations",
+    "ability_id": "malicious-calculations-death-guard",
     "name": "Malicious Calculations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -796,10 +222,11 @@
       "tallyman"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "sevenfold-chant",
+    "ability_id": "sevenfold-chant-death-guard",
     "name": "Sevenfold Chant",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -822,36 +249,11 @@
       "tallyman"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "poxwalkers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "curse-of-the-walking-pox",
+    "ability_id": "curse-of-the-walking-pox-death-guard",
     "name": "Curse of the Walking Pox",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -929,7 +331,7 @@
                       },
                       "filter": {
                         "kind": "ability",
-                        "id": "eater-plague-psychic",
+                        "id": "eater-plague-death-guard",
                         "by": {
                           "all_of": [
                             "TYPHUS"
@@ -963,36 +365,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "attacks-resolved"
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lord-of-contagion"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "vector-of-disease",
+    "ability_id": "vector-of-disease-death-guard",
     "name": "Vector of Disease",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1027,10 +404,11 @@
       "lord-of-contagion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "unholy-resilience",
+    "ability_id": "unholy-resilience-death-guard",
     "name": "Unholy Resilience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1066,46 +444,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] The first time this model is destroyed in a battle round, roll a D6 at the end of the phase: on a 2+ it is set up again as close as possible to where it was destroyed with 3 wounds remaining. The not-within-Engagement-Range placement clause and the end-of-phase timing are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] The first time this model is destroyed in a battle round, roll a D6 at the end of the phase: on a 2+ it is set up again as close as possible to where it was destroyed with 3 wounds remaining. The not-within-Engagement-Range placement clause and the end-of-phase timing are not encoded. Full rule in raw-text store.",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "annihilator",
-    "name": "Annihilator",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5c0b288379f2072bb0ef386426bd5b0083b1016040792233c7e5bf9f10ce8d4f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "damage",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "metalophagic-infection",
+    "ability_id": "metalophagic-infection-death-guard",
     "name": "Metalophagic Infection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1137,179 +480,11 @@
       "chaos-predator-annihilator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "ensorcelled-annihilation",
-    "name": "Ensorcelled Annihilation",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9761358eeb1fd371691e1dff290c85cd8bc2882c1297d476c70ea32f10a31185",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "damage",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "blood-hungry-annihilator",
-    "name": "Blood-hungry Annihilator",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a78cde15e84d8fcabdc38b7b1642e7de9b918a9b1479ccbef093cc3db0f400be",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "closest",
-            "parameters": {
-              "subject": "defender",
-              "among": "eligible-targets",
-              "range": {
-                "inches": 18
-              }
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "wound",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "damage",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-roll",
-      "subject": "this-model",
-      "filter": {
-        "roll": "wound"
-      }
-    },
-    "unit_ids": [
-      "chaos-predator-annihilator"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "Re-roll the Wound roll and the Damage roll against the closest eligible Monster or Vehicle within 18\". Shared Chaos Predator Annihilator ability, kept identical to the World Eaters copy."
-  },
-  {
-    "ability_id": "destructor",
-    "name": "Destructor",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "34e0260a803729cdeb52724928eefa5ac805e7077453eee30070383142443c7f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "hail-of-corrosive-disease",
+    "ability_id": "hail-of-corrosive-disease-death-guard",
     "name": "Hail of Corrosive Disease",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1343,109 +518,11 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "ensorcelled-destruction",
-    "name": "Ensorcelled Destruction",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6576d881e3fb69a78e7418fe09666286fa47553dba2eb9d1aef45eb3be8a357d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "punishing-suppression",
-    "name": "Punishing Suppression",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ef495731fd4c03408c108954f5d230577b72ffe049f6fbbc5792d35ea2748675",
-    "version": "2025-q3",
-    "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
-        }
-      },
-      "duration": "until-next-command-phase"
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "chaos-predator-destructor"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "MONSTER and VEHICLE units cannot be suppressed."
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "explosive-blight",
+    "ability_id": "explosive-blight-death-guard",
     "name": "Explosive Blight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1559,10 +636,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "spore-laced-shock-waves",
+    "ability_id": "spore-laced-shock-waves-death-guard",
     "name": "Spore-laced Shock Waves",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1594,10 +672,11 @@
       "plagueburst-crawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "foul-infusion",
+    "ability_id": "foul-infusion-death-guard",
     "name": "Foul Infusion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1632,10 +711,11 @@
       "biologus-putrifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "extraction-of-fresh-disease",
+    "ability_id": "extraction-of-fresh-disease-death-guard",
     "name": "Extraction of Fresh Disease",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1669,10 +749,11 @@
       "biologus-putrifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "infused-with-the-blessings-of-nurgle",
+    "ability_id": "infused-with-the-blessings-of-nurgle-death-guard",
     "name": "Infused with the Blessings of Nurgle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1724,10 +805,11 @@
       "plague-marines"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "icon-of-despair-aura",
+    "ability_id": "icon-of-despair-death-guard",
     "name": "Icon of Despair (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1756,13 +838,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "deathshroud-terminators",
       "plague-marines"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "tainted-narthecium",
+    "ability_id": "tainted-narthecium-death-guard",
     "name": "Tainted Narthecium",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1795,10 +879,11 @@
       "plague-surgeon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "inflamed-infections",
+    "ability_id": "inflamed-infections-death-guard",
     "name": "Inflamed Infections",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1843,10 +928,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "death-guard-defenders",
+    "ability_id": "death-guard-defenders-death-guard",
     "name": "Death Guard Defenders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1888,10 +974,11 @@
       "daemon-prince-of-nurgle"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "fevered-strategist",
+    "ability_id": "fevered-strategist-death-guard",
     "name": "Fevered Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1927,10 +1014,11 @@
       "daemon-prince-of-nurgle"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "miasma-of-pestilence-aura",
+    "ability_id": "miasma-of-pestilence-death-guard",
     "name": "Miasma of Pestilence (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1973,10 +1061,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "silent-bodyguard",
+    "ability_id": "silent-bodyguard-death-guard",
     "name": "Silent Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2009,10 +1098,11 @@
       "deathshroud-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "death-approaches",
+    "ability_id": "death-approaches-death-guard",
     "name": "Death Approaches",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2053,10 +1143,11 @@
       "filter": {
         "from": "deep-strike"
       }
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "virulent-aura",
+    "ability_id": "virulent-aura-death-guard",
     "name": "Virulent Aura",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2101,10 +1192,11 @@
       "lord-of-virulence"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "blight-bombardment",
+    "ability_id": "blight-bombardment-death-guard",
     "name": "Blight Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2193,10 +1285,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "hovering-death",
+    "ability_id": "hovering-death-death-guard",
     "name": "Hovering Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2223,10 +1316,11 @@
       "foetid-bloat-drone"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "sickening-vitality",
+    "ability_id": "sickening-vitality-death-guard",
     "name": "Sickening Vitality",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2260,10 +1354,11 @@
       "noxious-blightbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "tocsin-of-misery-aura",
+    "ability_id": "tocsin-of-misery-death-guard",
     "name": "Tocsin of Misery (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2302,10 +1397,11 @@
       "noxious-blightbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "horrifying-visage",
+    "ability_id": "horrifying-visage-death-guard",
     "name": "Horrifying Visage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2328,10 +1424,11 @@
       "daemon-prince-of-nurgle-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "enfeebling-miasma",
+    "ability_id": "enfeebling-miasma-death-guard",
     "name": "Enfeebling Miasma",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2428,10 +1525,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "putrescent-fog",
+    "ability_id": "putrescent-fog-death-guard",
     "name": "Putrescent Fog",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2464,10 +1562,11 @@
       "miasmic-malignifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "diseased-cover",
+    "ability_id": "diseased-cover-death-guard",
     "name": "Diseased Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2499,10 +1598,11 @@
       "miasmic-malignifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "fortification",
+    "ability_id": "fortification-death-guard",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2536,78 +1636,11 @@
       "miasmic-malignifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "dark-ascension-aura",
-    "name": "Dark Ascension (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "65c50c1e3c8a5ac6e053d66515b909c7e2b2effcde9d0028c22297dc09af15f7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-modifier",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "HERETIC ASTARTES"
-        ],
-        "within": {
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "modifier": {
-        "ability": "dark-pacts",
-        "aspect": "selections",
-        "operation": "set",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "devoted-to-destruction",
-    "name": "Devoted to Destruction",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "35a0742f18f5a090fa40c27731e9f9626abee68fbbe2afe7bf8811ac5415dd8e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "diseased-malice",
+    "ability_id": "diseased-malice-death-guard",
     "name": "Diseased Malice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2642,10 +1675,11 @@
       "helbrute"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "froth-spattered-frenzy",
+    "ability_id": "froth-spattered-frenzy-death-guard",
     "name": "Froth-spattered Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2670,84 +1704,11 @@
       "helbrute"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "terrifying-assault",
-    "name": "Terrifying Assault",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "042a271ea08fb83a45e2256201028632cb7c63441161803a27b23eac3d7fffcd",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 9
-            }
-          }
-        },
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "frenzy",
-    "name": "Frenzy",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d61d9ce5cba4d0695840b8ee8f860cd779b1e61d4811daa84374f074d9343688",
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "fight",
-        "allow": true,
-        "despite": [
-          "fought-this-phase"
-        ],
-        "next": true
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "helbrute"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "tank-hunters",
+    "ability_id": "tank-hunters-death-guard",
     "name": "Tank Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2796,58 +1757,8 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
-  },
-  {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mortarion",
-      "defiler"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
+    "community_notes": "auto-generated, partial",
+    "faction_id": "death-guard"
   },
   {
     "ability_id": "lord-of-the-death-guard",
@@ -2872,10 +1783,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "host-of-plagues",
+    "ability_id": "host-of-plagues-death-guard",
     "name": "Host of Plagues",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2898,10 +1810,11 @@
       "mortarion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-death-guard",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2924,10 +1837,11 @@
       "mortarion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "gift-of-contagion-psychic",
+    "ability_id": "gift-of-contagion-death-guard",
     "name": "Gift of Contagion (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2974,10 +1888,11 @@
       "malignant-plaguecaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "pestilent-fallout-psychic",
+    "ability_id": "pestilent-fallout-death-guard",
     "name": "Pestilent Fallout (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3042,63 +1957,11 @@
           "phase": "shooting"
         }
       }
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "self-repair",
-    "name": "Self Repair",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4b19112f35e85157ac580964d95c0983124bc05f5573dd530567b407558b2e6c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fire-support",
+    "ability_id": "fire-support-death-guard",
     "name": "Fire Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3131,181 +1994,11 @@
       "chaos-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "assault-vehicle",
-    "name": "Assault Vehicle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "4ab406ce36efb22a414375533c6b08391a97f5a83025e0d36cb331c4fc5790da",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "disembark",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "disembarked",
-            "subject": {
-              "owner": "friendly"
-            },
-            "object": "this-model"
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "this-model",
-                "filter": {
-                  "move_types": [
-                    "advance"
-                  ]
-                },
-                "window": "turn"
-              }
-            },
-            "effect": {
-              "type": "permission",
-              "target": "event-subject",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": false
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "sorcerous-support",
-    "name": "Sorcerous Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "6bfa24229471175538d8cb20994aefcadea93ca4dfb38ee384bfc7dbfea9c61f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "meet-any-challenge",
-    "name": "Meet Any Challenge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d31e6bedebb92536fa04f0bf839e552a1bf3bbe9bf287d1910954ad9516213dd",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "subject": "event-subject",
-          "of": "this-model",
-          "range": {
-            "inches": 8
-          }
-        }
-      },
-      "effect": {
-        "type": "permission",
-        "target": {
-          "owner": "friendly",
-          "state": "embarked"
-        },
-        "modifier": {
-          "activity": "disembark",
-          "allow": true
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "chaos-rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "optional": true
-    }
-  },
-  {
-    "ability_id": "assault-ramp",
+    "ability_id": "assault-ramp-death-guard",
     "name": "Assault Ramp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3357,10 +2050,11 @@
       "chaos-land-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "blinding-spray",
+    "ability_id": "blinding-spray-death-guard",
     "name": "Blinding Spray",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3392,10 +2086,11 @@
       "foul-blightspawn"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "putrefying-stink",
+    "ability_id": "putrefying-stink-death-guard",
     "name": "Putrefying Stink",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3426,10 +2121,11 @@
       "foul-blightspawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "unclean-icon",
+    "ability_id": "unclean-icon-death-guard",
     "name": "Unclean Icon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3464,10 +2160,11 @@
       "icon-bearer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "blessed-icon-of-disease",
+    "ability_id": "blessed-icon-of-disease-death-guard",
     "name": "Blessed Icon of Disease",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3509,10 +2206,11 @@
       "icon-bearer"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "destroyer-hive",
+    "ability_id": "destroyer-hive-death-guard",
     "name": "Destroyer Hive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3558,10 +2256,11 @@
       "typhus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "eater-plague-psychic",
+    "ability_id": "eater-plague-death-guard",
     "name": "Eater Plague (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3593,10 +2292,11 @@
       "typhus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "blistering-fusillade",
+    "ability_id": "blistering-fusillade-death-guard",
     "name": "Blistering Fusillade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3649,10 +2349,11 @@
       "blightlord-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "nurgle-s-gift-aura",
+    "ability_id": "nurgles-gift-death-guard",
     "name": "Nurgle\u2019s Gift (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3769,7 +2470,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "pact-of-decay",
+    "ability_id": "pact-of-decay-death-guard",
     "name": "Pact of Decay",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3795,7 +2496,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "warped-and-rusted-animus",
+    "ability_id": "warped-and-rusted-animus-death-guard",
     "name": "Warped and Rusted Animus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3857,7 +2558,7 @@
     }
   },
   {
-    "ability_id": "verminous-haze",
+    "ability_id": "verminous-haze-death-guard",
     "name": "Verminous Haze",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3900,7 +2601,7 @@
     }
   },
   {
-    "ability_id": "hypervirulent-strains",
+    "ability_id": "hypervirulent-strains-death-guard",
     "name": "Hypervirulent Strains",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3925,7 +2626,7 @@
         ]
       },
       "modifier": {
-        "ability": "nurgle-s-gift-aura",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "range",
         "operation": "add",
         "value": 3,
@@ -3943,7 +2644,7 @@
     }
   },
   {
-    "ability_id": "insectile-murmuration-flyblown-host",
+    "ability_id": "insectile-murmuration-upgrade-flyblown-host-death-guard",
     "name": "Insectile Murmuration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3968,7 +2669,7 @@
             "owner": "friendly"
           },
           "range": {
-            "aura_of": "nurgle-s-gift-aura"
+            "aura_of": "nurgles-gift-death-guard"
           }
         }
       },
@@ -3991,7 +2692,7 @@
     }
   },
   {
-    "ability_id": "plagueveil-flyblown-host",
+    "ability_id": "plagueveil-upgrade-flyblown-host-death-guard",
     "name": "Plagueveil",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4025,7 +2726,7 @@
     }
   },
   {
-    "ability_id": "rejuvenating-swarm-paragons-of-putrescence",
+    "ability_id": "rejuvenating-swarm-paragons-of-putrescence-death-guard",
     "name": "Rejuvenating Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4081,7 +2782,7 @@
     }
   },
   {
-    "ability_id": "parasitic-woe-reaper-contagion-engines",
+    "ability_id": "parasitic-woe-reaper-upgrade-contagion-engines-death-guard",
     "name": "Parasitic Woe-Reaper",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4126,7 +2827,7 @@
     }
   },
   {
-    "ability_id": "lancet-of-the-worldsore-contagion-engines",
+    "ability_id": "lancet-of-the-worldsore-upgrade-contagion-engines-death-guard",
     "name": "Lancet of the Worldsore",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4160,7 +2861,7 @@
     }
   },
   {
-    "ability_id": "host-of-the-hybridised-pox-paragons-of-putrescence",
+    "ability_id": "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard",
     "name": "Host of the Hybridised Pox",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4179,7 +2880,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "nurgle-s-gift-aura",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "selections",
         "operation": "add",
         "value": 1,
@@ -4187,7 +2888,7 @@
           "owner": "enemy",
           "within": {
             "range": {
-              "aura_of": "nurgle-s-gift-aura"
+              "aura_of": "nurgles-gift-death-guard"
             }
           }
         }
@@ -4204,7 +2905,7 @@
     }
   },
   {
-    "ability_id": "nauseating-paroxysms-flyblown-host",
+    "ability_id": "nauseating-paroxysms-flyblown-host-death-guard",
     "name": "Nauseating Paroxysms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4246,7 +2947,7 @@
     }
   },
   {
-    "ability_id": "droning-horror-flyblown-host",
+    "ability_id": "droning-horror-flyblown-host-death-guard",
     "name": "Droning Horror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4305,7 +3006,7 @@
     }
   },
   {
-    "ability_id": "eye-of-the-swarm-flyblown-host",
+    "ability_id": "eye-of-the-swarm-flyblown-host-death-guard",
     "name": "Eye of the Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4340,7 +3041,7 @@
     }
   },
   {
-    "ability_id": "fresh-vectors-contagion-engines",
+    "ability_id": "fresh-vectors-contagion-engines-death-guard",
     "name": "Fresh Vectors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4373,7 +3074,7 @@
     }
   },
   {
-    "ability_id": "bloodrust-deluge-contagion-engines",
+    "ability_id": "bloodrust-deluge-contagion-engines-death-guard",
     "name": "Bloodrust Deluge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4414,7 +3115,7 @@
     }
   },
   {
-    "ability_id": "soulrot-flux-contagion-engines",
+    "ability_id": "soulrot-flux-contagion-engines-death-guard",
     "name": "Soulrot Flux",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4479,7 +3180,7 @@
     }
   },
   {
-    "ability_id": "territorial-infection-paragons-of-putrescence",
+    "ability_id": "territorial-infection-paragons-of-putrescence-death-guard",
     "name": "Territorial Infection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4514,7 +3215,7 @@
     }
   },
   {
-    "ability_id": "aggravus-spasms-paragons-of-putrescence",
+    "ability_id": "aggravus-spasms-paragons-of-putrescence-death-guard",
     "name": "Aggravus Spasms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4540,7 +3241,7 @@
           "parameters": {
             "of": "this-unit",
             "range": {
-              "aura_of": "nurgle-s-gift-aura"
+              "aura_of": "nurgles-gift-death-guard"
             }
           }
         }
@@ -4566,7 +3267,7 @@
     }
   },
   {
-    "ability_id": "simultaneous-contamination-paragons-of-putrescence",
+    "ability_id": "simultaneous-contamination-paragons-of-putrescence-death-guard",
     "name": "Simultaneous Contamination",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4603,7 +3304,7 @@
     }
   },
   {
-    "ability_id": "damaged-1-6-wounds-remaining",
+    "ability_id": "damaged-1-6-wounds-remaining-death-guard",
     "name": "Damaged: 1-6 Wounds Remaining",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4634,14 +3335,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "defiler"
+      "defiler",
+      "mortarion"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "worldblight",
+    "ability_id": "worldblight-death-guard",
     "name": "Worldblight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4745,7 +3448,7 @@
     }
   },
   {
-    "ability_id": "reverberant-rancidity",
+    "ability_id": "reverberant-rancidity-death-guard",
     "name": "Reverberant Rancidity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4812,7 +3515,7 @@
               }
             },
             "modifier": {
-              "ability": "nurgle-s-gift-aura"
+              "ability": "nurgles-gift-death-guard"
             }
           }
         },
@@ -4865,7 +3568,7 @@
               }
             },
             "modifier": {
-              "ability": "nurgle-s-gift-aura",
+              "ability": "nurgles-gift-death-guard",
               "aspect": "range",
               "operation": "add",
               "value": 3
@@ -4880,7 +3583,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "manifold-maladies",
+    "ability_id": "manifold-maladies-death-guard",
     "name": "Manifold Maladies",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4899,7 +3602,7 @@
       "type": "ability-modifier",
       "target": "this-unit",
       "modifier": {
-        "ability": "nurgle-s-gift-aura",
+        "ability": "nurgles-gift-death-guard",
         "aspect": "options",
         "operation": "set",
         "value": "reselect-plague"
@@ -4914,7 +3617,7 @@
     }
   },
   {
-    "ability_id": "miasmic-bombardment",
+    "ability_id": "miasmic-bombardment-death-guard",
     "name": "Miasmic Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4966,7 +3669,7 @@
     }
   },
   {
-    "ability_id": "numberless-horde",
+    "ability_id": "numberless-horde-death-guard",
     "name": "Numberless Horde",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5016,7 +3719,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "deadly-vectors",
+    "ability_id": "deadly-vectors-death-guard",
     "name": "Deadly Vectors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5118,7 +3821,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "malicious-calculations-maggot-lords",
+    "ability_id": "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",
     "name": "Malicious Calculations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5144,10 +3847,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "infused-with-the-blessings-of-nurgle-maggot-lords",
+    "ability_id": "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard",
     "name": "Infused with the Blessings of Nurgle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5215,10 +3919,11 @@
     },
     "scope": {
       "duration": "until-start-next-turn"
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "obstinate-resistance-maggot-lords",
+    "ability_id": "obstinate-resistance-death-guard",
     "name": "Obstinate Resistance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5252,10 +3957,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "death-guard"
   },
   {
-    "ability_id": "enemy-spotted-maggot-lords",
+    "ability_id": "enemy-spotted-death-guard",
     "name": "Enemy Spotted",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5294,6 +4000,1415 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "faction_id": "death-guard"
+  },
+  {
+    "ability_id": "all-is-rot-tallyband-summoners-death-guard",
+    "name": "All Is Rot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "arch-contaminator-virulent-vectorium-death-guard",
+    "name": "Arch Contaminator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "avatars-of-decay-tallyband-summoners-death-guard",
+    "name": "Avatars of Decay",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "beckoning-blight-tallyband-summoners-death-guard",
+    "name": "Beckoning Blight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bilemaw-blight-mortarions-hammer-death-guard",
+    "name": "Bilemaw Blight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blessings-of-filth-champions-of-contagion-death-guard",
+    "name": "Blessings of Filth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blighted-land-mortarions-hammer-death-guard",
+    "name": "Blighted Land",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blooming-pestilence-death-lords-chosen-death-guard",
+    "name": "Blooming Pestilence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bountiful-regeneration-maggot-lords-death-guard",
+    "name": "Bountiful Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "clutching-corruption-tallyband-summoners-death-guard",
+    "name": "Clutching Corruption",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cornucophagus-champions-of-contagion-death-guard",
+    "name": "Cornucophagus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "creeping-blight-virulent-vectorium-death-guard",
+    "name": "Creeping Blight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "creeping-rot-death-guard",
+    "name": "Creeping Rot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemon-weapon-of-nurgle-virulent-vectorium-death-guard",
+    "name": "Daemon Weapon of Nurgle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-death-guard",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-predator-annihilator",
+      "chaos-predator-destructor",
+      "plagueburst-crawler"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-death-guard",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-land-raider"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deaths-heads-champions-of-contagion-death-guard",
+    "name": "Death\u2019s Heads",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "disgustingly-resilient-virulent-vectorium-death-guard",
+    "name": "Disgustingly Resilient",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "drawn-to-despair-mortarions-hammer-death-guard",
+    "name": "Drawn to Despair",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "entropic-knell-tallyband-summoners-death-guard",
+    "name": "Entropic Knell",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-affliction-mortarions-hammer-death-guard",
+    "name": "Eye of Affliction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eyestinger-storm-mortarions-hammer-death-guard",
+    "name": "Eyestinger Storm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "face-of-death-death-lords-chosen-death-guard",
+    "name": "Face of Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fell-harvester-tallyband-summoners-death-guard",
+    "name": "Fell Harvester",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "final-ingredient-champions-of-contagion-death-guard",
+    "name": "Final Ingredient",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fleshy-avalanche-tallyband-summoners-death-guard",
+    "name": "Fleshy Avalanche",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "font-of-filth-mortarions-hammer-death-guard",
+    "name": "Font of Filth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "furnace-of-plagues-virulent-vectorium-death-guard",
+    "name": "Furnace of Plagues",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gnawing-hunger-shamblerot-vectorium-death-guard",
+    "name": "Gnawing Hunger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grim-reapers-death-lords-chosen-death-guard",
+    "name": "Grim Reapers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grip-of-the-walking-pox-shamblerot-vectorium-death-guard",
+    "name": "Grip of the Walking Pox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grotesque-fortitude-champions-of-contagion-death-guard",
+    "name": "Grotesque Fortitude",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "helm-of-the-fly-king-death-lords-chosen-death-guard",
+    "name": "Helm of The Fly King",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
+    "name": "Hidden Amongst The Dead",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inexorable-executioners-maggot-lords-death-guard",
+    "name": "Inexorable Executioners",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "leechspore-eruption-virulent-vectorium-death-guard",
+    "name": "Leechspore Eruption",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lord-of-the-walking-pox-shamblerot-vectorium-death-guard",
+    "name": "Lord of the Walking Pox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malignance-magnified-champions-of-contagion-death-guard",
+    "name": "Malignance Magnified",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mireslick-tallyband-summoners-death-guard",
+    "name": "Mireslick",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mobile-vector-champions-of-contagion-death-guard",
+    "name": "Mobile Vector",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mortarions-teachings-death-lords-chosen-death-guard",
+    "name": "Mortarion\u2019s Teachings",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "needle-of-nurgle-champions-of-contagion-death-guard",
+    "name": "Needle of Nurgle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "noisome-veil-maggot-lords-death-guard",
+    "name": "Noisome Veil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nurgles-gift-maggot-lords-death-guard",
+    "name": "Nurgle\u2019s Gift (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "overwhelming-generosity-virulent-vectorium-death-guard",
+    "name": "Overwhelming Generosity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "persistent-pests-tallyband-summoners-death-guard",
+    "name": "Persistent Pests",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "plaguesurge-virulent-vectorium-death-guard",
+    "name": "Plaguesurge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "putrid-detonation-virulent-vectorium-death-guard",
+    "name": "Putrid Detonation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rabid-infusion-champions-of-contagion-death-guard",
+    "name": "Rabid Infusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-grind-mortarions-hammer-death-guard",
+    "name": "Relentless Grind",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "revolting-regeneration-virulent-vectorium-death-guard",
+    "name": "Revolting Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "virulent-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard",
+    "name": "Sevenfold Chant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "septimol-fulg-maggot-lords-tallyman"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shambling-wall-shamblerot-vectorium-death-guard",
+    "name": "Shambling Wall",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shock-and-horror-shamblerot-vectorium-death-guard",
+    "name": "Shock and Horror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shriekworm-familiar-mortarions-hammer-death-guard",
+    "name": "Shriekworm Familiar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sickening-horror-maggot-lords-death-guard",
+    "name": "Sickening Horror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sickening-impact-death-lords-chosen-death-guard",
+    "name": "Sickening Impact",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "signal-pox-death-lords-chosen-death-guard",
+    "name": "Signal Pox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "smeared-with-filth-shamblerot-vectorium-death-guard",
+    "name": "Smeared With Filth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sorrowsyphon-shamblerot-vectorium-death-guard",
+    "name": "Sorrowsyphon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stinking-mire-mortarions-hammer-death-guard",
+    "name": "Stinking Mire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "talisman-of-burgeoning-shamblerot-vectorium-death-guard",
+    "name": "Talisman of Burgeoning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tendrilous-emissions-mortarions-hammer-death-guard",
+    "name": "Tendrilous Emissions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "mortarions-hammer",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tome-of-bounteous-blessings-tallyband-summoners-death-guard",
+    "name": "Tome of Bounteous Blessings",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "tallyband-summoners",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "undying-spite-death-lords-chosen-death-guard",
+    "name": "Undying Spite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vile-vigour-death-lords-chosen-death-guard",
+    "name": "Vile Vigour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "visions-of-virulence-champions-of-contagion-death-guard",
+    "name": "Visions of Virulence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "champions-of-contagion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vomitous-salvoes-maggot-lords-death-guard",
+    "name": "Vomitous Salvoes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "maggot-lords",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warprot-talisman-death-lords-chosen-death-guard",
+    "name": "Warprot Talisman",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "death-lords-chosen",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "witherbone-pipes-shamblerot-vectorium-death-guard",
+    "name": "Witherbone Pipes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "shamblerot-vectorium",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

@@ -1,83 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "soul-grinder"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "soul-grinder",
-      "belakor"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "scuttling-walker",
+    "ability_id": "scuttling-walker-chaos-daemons",
     "name": "Scuttling Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -144,10 +67,11 @@
           ]
         }
       }
-    ]
+    ],
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemonic-allegiance",
+    "ability_id": "daemonic-allegiance-soul-grinder-chaos-daemons",
     "name": "Daemonic Allegiance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -268,10 +192,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] the choice is made once, when the model is added to the army, and also equips the matching god-specific ranged weapon (torrent of burning blood / warp gaze / phlegm bombardment / scream of despair)"
+    "community_notes": "[APPROX] the choice is made once, when the model is added to the army, and also equips the matching god-specific ranged weapon (torrent of burning blood / warp gaze / phlegm bombardment / scream of despair)",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "malefic-destruction",
+    "ability_id": "malefic-destruction-chaos-daemons",
     "name": "Malefic Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -305,10 +230,11 @@
       "daemon-prince-of-chaos-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "harbinger-of-death",
+    "ability_id": "harbinger-of-death-chaos-daemons",
     "name": "Harbinger of Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -357,10 +283,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemonic-lord",
+    "ability_id": "daemonic-lord-chaos-daemons",
     "name": "Daemonic Lord",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -402,10 +329,11 @@
       "daemon-prince-of-chaos"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "prince-of-darkness-aura",
+    "ability_id": "prince-of-darkness-chaos-daemons",
     "name": "Prince of Darkness (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -450,10 +378,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "unholy-vigour",
+    "ability_id": "unholy-vigour-chaos-daemons",
     "name": "Unholy Vigour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -480,87 +409,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rotigus",
-      "belakor"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rotigus"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "greater-daemon-of-nurgle-aura",
+    "ability_id": "greater-daemon-of-nurgle-chaos-daemons",
     "name": "Greater Daemon of Nurgle (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -615,14 +468,16 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "great-unclean-one",
       "rotigus"
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "virulent-blessing-psychic",
+    "ability_id": "virulent-blessing-chaos-daemons",
     "name": "Virulent Blessing (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -681,10 +536,11 @@
       "rotigus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "deluge-of-nurgle-aura",
+    "ability_id": "deluge-of-nurgle-chaos-daemons",
     "name": "Deluge of Nurgle (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -733,70 +589,11 @@
       "rotigus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-masque-of-slaanesh"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-masque-of-slaanesh"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "the-eternal-dance",
+    "ability_id": "the-eternal-dance-chaos-daemons",
     "name": "The Eternal Dance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -889,10 +686,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "dazzling-acrobatics",
+    "ability_id": "dazzling-acrobatics-chaos-daemons",
     "name": "Dazzling Acrobatics",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -919,10 +717,11 @@
       "the-masque-of-slaanesh"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "horrifying-beauty",
+    "ability_id": "horrifying-beauty-chaos-daemons",
     "name": "Horrifying Beauty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -970,10 +769,11 @@
       "daemonettes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "instrument-of-chaos",
+    "ability_id": "instrument-of-chaos-chaos-daemons",
     "name": "Instrument of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -995,14 +795,21 @@
       "duration": "battle"
     },
     "unit_ids": [
-      "daemonettes"
+      "bloodcrushers",
+      "bloodletters",
+      "daemonettes",
+      "pink-horrors",
+      "plague-drones",
+      "plaguebearers",
+      "seekers"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemonic-icon",
+    "ability_id": "daemonic-icon-chaos-daemons",
     "name": "Daemonic Icon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1024,41 +831,20 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "daemonettes"
+      "bloodcrushers",
+      "bloodletters",
+      "daemonettes",
+      "pink-horrors",
+      "plague-drones",
+      "plaguebearers",
+      "seekers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "nurglings",
-      "feculent-gnarlmaw",
-      "skull-altar"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "mischief-makers",
+    "ability_id": "mischief-makers-chaos-daemons",
     "name": "Mischief Makers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1092,36 +878,11 @@
       "nurglings"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "bloodmaster"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "bloodmaster",
+    "ability_id": "bloodmaster-chaos-daemons",
     "name": "Bloodmaster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1156,10 +917,11 @@
       "bloodmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "a-gory-path",
+    "ability_id": "a-gory-path-chaos-daemons",
     "name": "A Gory Path",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1183,10 +945,11 @@
       "bloodmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "tranceweaver",
+    "ability_id": "tranceweaver-chaos-daemons",
     "name": "Tranceweaver",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1210,10 +973,11 @@
       "tranceweaver"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "symphony-of-pain-psychic",
+    "ability_id": "symphony-of-pain-chaos-daemons",
     "name": "Symphony of Pain (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1307,10 +1071,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "eldritch-flames-psychic",
+    "ability_id": "eldritch-flames-chaos-daemons",
     "name": "Eldritch Flames (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1342,10 +1107,11 @@
       "burning-chariot"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "split",
+    "ability_id": "split-pink-horrors-chaos-daemons",
     "name": "Split",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1430,10 +1196,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "attacks-resolved"
-    }
+    },
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two",
+    "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons",
     "name": "HORRORS ARE PINK. HORRORS ARE BLUE. WHERE ONCE THERE WAS ONE, NOW THERE ARE TWO.",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1464,14 +1231,14 @@
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "sullen-malevolence-aura"
+              "ability": "sullen-malevolence-chaos-daemons"
             }
           },
           {
             "type": "ability-grant",
             "target": "this-unit",
             "modifier": {
-              "ability": "exploding-horrors"
+              "ability": "exploding-horrors-chaos-daemons"
             }
           }
         ]
@@ -1485,10 +1252,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] while any PINK HORROR models remain, the Blue Horrors datasheet's Sullen Malevolence and Exploding Horrors abilities do not apply"
+    "community_notes": "[APPROX] while any PINK HORROR models remain, the Blue Horrors datasheet's Sullen Malevolence and Exploding Horrors abilities do not apply",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "harmonic-alignment",
+    "ability_id": "harmonic-alignment-chaos-daemons",
     "name": "Harmonic Alignment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1521,10 +1289,11 @@
       "infernal-enrapturess"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "discordant-disruption-aura",
+    "ability_id": "discordant-disruption-chaos-daemons",
     "name": "Discordant Disruption (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1570,10 +1339,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "infected-outbreak",
+    "ability_id": "infected-outbreak-chaos-daemons",
     "name": "Infected Outbreak",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1593,10 +1363,11 @@
       "plaguebearers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "greater-daemon-of-slaanesh-aura",
+    "ability_id": "greater-daemon-of-slaanesh-chaos-daemons",
     "name": "Greater Daemon of Slaanesh (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1651,14 +1422,16 @@
       "duration": "battle"
     },
     "unit_ids": [
-      "keeper-of-secrets"
+      "keeper-of-secrets",
+      "shalaxi-helbane"
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemon-lord-of-slaanesh-aura",
+    "ability_id": "daemon-lord-of-slaanesh-chaos-daemons",
     "name": "Daemon Lord of Slaanesh (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1695,10 +1468,11 @@
       "keeper-of-secrets"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "mesmerising-form",
+    "ability_id": "mesmerising-form-chaos-daemons",
     "name": "Mesmerising Form",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1723,10 +1497,11 @@
       "keeper-of-secrets"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "shining-aegis",
+    "ability_id": "shining-aegis-chaos-daemons",
     "name": "Shining Aegis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1751,10 +1526,11 @@
       "keeper-of-secrets"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "no-prey-can-evade",
+    "ability_id": "no-prey-can-evade-chaos-daemons",
     "name": "No Prey Can Evade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1778,10 +1554,11 @@
       "shalaxi-helbane"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "monarch-of-the-hunt",
+    "ability_id": "monarch-of-the-hunt-chaos-daemons",
     "name": "Monarch of the Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1828,37 +1605,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "seekers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "unholy-speed",
+    "ability_id": "unholy-speed-chaos-daemons",
     "name": "Unholy Speed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1882,10 +1633,11 @@
       "seekers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "slashing-dive",
+    "ability_id": "slashing-dive-chaos-daemons",
     "name": "Slashing Dive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1908,10 +1660,11 @@
       "screamers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "bane-of-cowards",
+    "ability_id": "bane-of-cowards-chaos-daemons",
     "name": "Bane of Cowards",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1944,10 +1697,11 @@
       "bloodletters"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "greater-daemon-of-tzeentch-aura",
+    "ability_id": "greater-daemon-of-tzeentch-chaos-daemons",
     "name": "Greater Daemon of Tzeentch (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2002,14 +1756,16 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "kairos-fateweaver",
       "lord-of-change"
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemon-lord-of-tzeentch-aura",
+    "ability_id": "daemon-lord-of-tzeentch-chaos-daemons",
     "name": "Daemon Lord of Tzeentch (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2055,10 +1811,11 @@
       "lord-of-change"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "master-of-magicks-psychic",
+    "ability_id": "master-of-magicks-chaos-daemons",
     "name": "Master of Magicks (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2107,10 +1864,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "changecaster",
+    "ability_id": "changecaster-chaos-daemons",
     "name": "Changecaster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2145,10 +1903,11 @@
       "changecaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "storm-of-mutating-sorcery-psychic",
+    "ability_id": "storm-of-mutating-sorcery-chaos-daemons",
     "name": "Storm of Mutating Sorcery (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2180,72 +1939,11 @@
       "changecaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "shroud-of-flies-aura",
-    "name": "Shroud of Flies (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7facc5c142a49eb18f5912c982b3f198affbb7112589d595f028afe0c443c8c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "NURGLE"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "LEGIONES DAEMONICA"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "abilities": [
-            "stealth"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "battle-round"
-    },
-    "unit_ids": [
-      "feculent-gnarlmaw"
-    ],
-    "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "diseased-cover",
+    "ability_id": "diseased-cover-chaos-daemons",
     "name": "Diseased Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2277,10 +1975,11 @@
       "feculent-gnarlmaw"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "fortification",
+    "ability_id": "fortification-chaos-daemons",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2315,10 +2014,11 @@
       "skull-altar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemon-lord-of-nurgle-aura",
+    "ability_id": "daemon-lord-of-nurgle-chaos-daemons",
     "name": "Daemon Lord of Nurgle (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2377,10 +2077,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "nurgle-s-rot-psychic",
+    "ability_id": "nurgles-rot-chaos-daemons",
     "name": "Nurgle\u2019s Rot (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2412,10 +2113,11 @@
       "great-unclean-one"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "brass-stampede",
+    "ability_id": "brass-stampede-chaos-daemons",
     "name": "Brass Stampede",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2438,10 +2140,11 @@
       "bloodcrushers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "soporific-musk",
+    "ability_id": "soporific-musk-chaos-daemons",
     "name": "Soporific Musk",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2474,10 +2177,11 @@
       "fiends"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "greater-daemon-of-khorne-aura",
+    "ability_id": "greater-daemon-of-khorne-chaos-daemons",
     "name": "Greater Daemon of Khorne (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2532,14 +2236,16 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "bloodthirster",
       "skarbrand"
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "rage-embodied-aura",
+    "ability_id": "rage-embodied-chaos-daemons",
     "name": "Rage Embodied (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2576,10 +2282,11 @@
       "skarbrand"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "murderlust",
+    "ability_id": "murderlust-chaos-daemons",
     "name": "Murderlust",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2606,10 +2313,11 @@
       "skarbrand"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "beast-handler",
+    "ability_id": "beast-handler-chaos-daemons",
     "name": "Beast Handler",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2643,10 +2351,11 @@
       "horticulous-slimux"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "seed-the-garden-of-nurgle",
+    "ability_id": "seed-the-garden-of-nurgle-chaos-daemons",
     "name": "Seed the Garden of Nurgle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2704,10 +2413,11 @@
           }
         ]
       }
-    }
+    },
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "swallow-energy-psychic",
+    "ability_id": "swallow-energy-chaos-daemons",
     "name": "Swallow Energy (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2740,10 +2450,11 @@
       "contorted-epitome"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "horrible-fascination-psychic",
+    "ability_id": "horrible-fascination-chaos-daemons",
     "name": "Horrible Fascination (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2776,36 +2487,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "poxbringer"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "poxbringer",
+    "ability_id": "poxbringer-chaos-daemons",
     "name": "Poxbringer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2839,10 +2525,11 @@
       "poxbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "feculent-despair-aura-psychic",
+    "ability_id": "feculent-despair-chaos-daemons",
     "name": "Feculent Despair (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2875,10 +2562,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "fateskimmer",
+    "ability_id": "fateskimmer-chaos-daemons",
     "name": "Fateskimmer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2913,10 +2601,11 @@
       "fateskimmer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "rider-of-the-immaterial-winds",
+    "ability_id": "rider-of-the-immaterial-winds-chaos-daemons",
     "name": "Rider of the Immaterial Winds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2939,10 +2628,11 @@
       "fateskimmer"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "cutting-down-the-foe",
+    "ability_id": "cutting-down-the-foe-chaos-daemons",
     "name": "Cutting Down the Foe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3008,10 +2698,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "death-s-heads",
+    "ability_id": "deaths-heads-chaos-daemons",
     "name": "Death\u2019s Heads",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3045,10 +2736,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "daemon-lord-of-khorne-aura",
+    "ability_id": "daemon-lord-of-khorne-chaos-daemons",
     "name": "Daemon Lord of Khorne (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3095,10 +2787,11 @@
       "bloodthirster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "relentless-carnage",
+    "ability_id": "relentless-carnage-chaos-daemons",
     "name": "Relentless Carnage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3130,10 +2823,11 @@
       "bloodthirster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "blazing-warpfire-psychic",
+    "ability_id": "blazing-warpfire-chaos-daemons",
     "name": "Blazing Warpfire (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3168,10 +2862,11 @@
       "exalted-flamer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "flames-of-change-psychic",
+    "ability_id": "flames-of-change-chaos-daemons",
     "name": "Flames of Change (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3265,10 +2960,11 @@
       "exalted-flamer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "manifestation-of-destruction",
+    "ability_id": "manifestation-of-destruction-chaos-daemons",
     "name": "Manifestation of Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3303,10 +2999,11 @@
       "exalted-flamer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "skullmaster-s-fury",
+    "ability_id": "skullmasters-fury-chaos-daemons",
     "name": "Skullmaster\u2019s Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3341,10 +3038,11 @@
       "skullmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "devastating-charge",
+    "ability_id": "devastating-charge-chaos-daemons",
     "name": "Devastating Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3372,10 +3070,11 @@
       "skullmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "blessed-by-the-plague-god",
+    "ability_id": "blessed-by-the-plague-god-chaos-daemons",
     "name": "Blessed by the Plague God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3408,10 +3107,11 @@
       "epidemius"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "tally-of-pestilence",
+    "ability_id": "tally-of-pestilence-chaos-daemons",
     "name": "Tally of Pestilence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3434,10 +3134,11 @@
       "epidemius"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "pack-leader",
+    "ability_id": "pack-leader-chaos-daemons",
     "name": "Pack Leader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3471,10 +3172,11 @@
       "karanak"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "prey-of-the-blood-god",
+    "ability_id": "prey-of-the-blood-god-chaos-daemons",
     "name": "Prey of the Blood God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3507,10 +3209,11 @@
       "karanak"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "brass-collar-of-bloody-vengeance",
+    "ability_id": "brass-collar-of-bloody-vengeance-chaos-daemons",
     "name": "Brass Collar of Bloody Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3534,10 +3237,11 @@
       "karanak"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "keep-counting",
+    "ability_id": "keep-counting-chaos-daemons",
     "name": "Keep Counting!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3572,10 +3276,11 @@
       "spoilpox-scrivener"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "meet-your-quota",
+    "ability_id": "meet-your-quota-chaos-daemons",
     "name": "Meet Your Quota!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3610,10 +3315,11 @@
       "spoilpox-scrivener"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "tormentbringer-aura",
+    "ability_id": "tormentbringer-chaos-daemons",
     "name": "Tormentbringer (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3650,10 +3356,11 @@
       "tormentbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "hysterical-frenzy",
+    "ability_id": "hysterical-frenzy-chaos-daemons",
     "name": "Hysterical Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3676,10 +3383,11 @@
       "tormentbringer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "lord-of-decapitations",
+    "ability_id": "lord-of-decapitations-chaos-daemons",
     "name": "Lord of Decapitations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3714,10 +3422,11 @@
       "skulltaker"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "skulls-for-khorne",
+    "ability_id": "skulls-for-khorne-chaos-daemons",
     "name": "Skulls for Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3767,10 +3476,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "blood-throne",
+    "ability_id": "blood-throne-chaos-daemons",
     "name": "Blood Throne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3865,10 +3575,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "champion-slayer",
+    "ability_id": "champion-slayer-chaos-daemons",
     "name": "Champion Slayer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3901,64 +3612,11 @@
       "rendmaster-on-blood-throne"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "shadow-of-khorne-aura",
-    "name": "Shadow of Khorne (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b9ceef1b396d0a208197ff3e3b3dff0397455d3f19e02462d14d276d106f8b40",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "designate",
-          "target": "this-model",
-          "modifier": {
-            "subject": {
-              "terrain_area": {}
-            },
-            "tag": "shadow-of-chaos"
-          }
-        },
-        {
-          "type": "re-roll",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "KHORNE",
-              "LEGIONES DAEMONICA"
-            ],
-            "within": {
-              "range": {
-                "inches": 6
-              }
-            }
-          },
-          "modifier": {
-            "roll": "battle-shock",
-            "subset": "all-failures"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "skull-altar"
-    ],
-    "ability_type": "unit",
-    "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "cover",
+    "ability_id": "cover-chaos-daemons",
     "name": "Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3990,10 +3648,11 @@
       "skull-altar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "jolly-gutpipes",
+    "ability_id": "jolly-gutpipes-chaos-daemons",
     "name": "Jolly Gutpipes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4028,10 +3687,11 @@
       "sloppity-bilepiper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "disease-of-mirth-aura",
+    "ability_id": "disease-of-mirth-chaos-daemons",
     "name": "Disease of Mirth (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4070,10 +3730,11 @@
       "sloppity-bilepiper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "one-head-looks-forward",
+    "ability_id": "one-head-looks-forward-chaos-daemons",
     "name": "One Head Looks Forward",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4096,10 +3757,11 @@
       "kairos-fateweaver"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "one-head-looks-back-aura",
+    "ability_id": "one-head-looks-back-chaos-daemons",
     "name": "One Head Looks Back (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4132,10 +3794,11 @@
       "kairos-fateweaver"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "sullen-malevolence-aura",
+    "ability_id": "sullen-malevolence-chaos-daemons",
     "name": "Sullen Malevolence (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4167,10 +3830,11 @@
       "blue-horrors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "exploding-horrors",
+    "ability_id": "exploding-horrors-chaos-daemons",
     "name": "Exploding Horrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4193,10 +3857,11 @@
       "blue-horrors"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "p-tarix-s-sorcerous-syphon-aura",
+    "ability_id": "ptarixs-sorcerous-syphon-chaos-daemons",
     "name": "P\u2019tarix\u2019s Sorcerous Syphon (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4237,10 +3902,11 @@
       "the-blue-scribes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "xirat-p-s-sorcerous-barrages-psychic",
+    "ability_id": "xiratps-sorcerous-barrages-chaos-daemons",
     "name": "Xirat\u2019p\u2019s Sorcerous Barrages (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4263,39 +3929,11 @@
       "the-blue-scribes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-changeling",
-      "belakor"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "formless-horror",
+    "ability_id": "formless-horror-chaos-daemons",
     "name": "Formless Horror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4341,10 +3979,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "mischief-and-confusion",
+    "ability_id": "mischief-and-confusion-chaos-daemons",
     "name": "Mischief and Confusion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4378,10 +4017,11 @@
       "the-changeling"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "fluxmaster",
+    "ability_id": "fluxmaster-chaos-daemons",
     "name": "Fluxmaster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4416,10 +4056,11 @@
       "fluxmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "altered-reality-psychic",
+    "ability_id": "altered-reality-chaos-daemons",
     "name": "Altered Reality (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4465,10 +4106,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "bounding-leaps",
+    "ability_id": "bounding-leaps-chaos-daemons",
     "name": "Bounding Leaps",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4495,87 +4137,11 @@
       "flamers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beasts-of-nurgle"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beasts-of-nurgle"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "grotesque-regeneration",
+    "ability_id": "grotesque-regeneration-chaos-daemons",
     "name": "Grotesque Regeneration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4640,10 +4206,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "phase-ended"
-    }
+    },
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "hunters-from-the-warp",
+    "ability_id": "hunters-from-the-warp-chaos-daemons",
     "name": "Hunters from the Warp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4666,10 +4233,11 @@
       "flesh-hounds"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "collar-of-khorne",
+    "ability_id": "collar-of-khorne-chaos-daemons",
     "name": "Collar of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4693,10 +4261,11 @@
       "flesh-hounds"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "skulls-of-the-fallen",
+    "ability_id": "skulls-of-the-fallen-chaos-daemons",
     "name": "Skulls of the Fallen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4728,10 +4297,11 @@
       "skull-cannon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "the-shadow-of-chaos",
+    "ability_id": "the-shadow-of-chaos-chaos-daemons",
     "name": "The Shadow of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4754,13 +4324,11 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": [
-      "belakor",
-      "feculent-gnarlmaw",
-      "skull-altar"
+      "belakor"
     ]
   },
   {
-    "ability_id": "daemonic-pact",
+    "ability_id": "daemonic-pact-chaos-daemons",
     "name": "Daemonic Pact",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4824,7 +4392,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "the-dark-master-aura",
+    "ability_id": "the-dark-master-chaos-daemons",
     "name": "The Dark Master (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4851,10 +4419,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "shadow-form-abilities",
+    "ability_id": "shadow-form-abilities-chaos-daemons",
     "name": "Shadow Form Abilities",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4963,10 +4532,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] At the start of each battle round Belakor picks one Shadow Form ability (a re-selectable start-of-battle-round choice). The specific Shadow Form options are defined on the datasheet and are not enumerated in the rule prose, so this is captured as an opaque ability grant rather than a stance-select menu. Full rule in raw-text store."
+    "community_notes": "[APPROX] At the start of each battle round Belakor picks one Shadow Form ability (a re-selectable start-of-battle-round choice). The specific Shadow Form options are defined on the datasheet and are not enumerated in the rule prose, so this is captured as an opaque ability grant rather than a stance-select menu. Full rule in raw-text store.",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-chaos-daemons",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4990,10 +4560,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "unholy-avalanche",
+    "ability_id": "unholy-avalanche-chaos-daemons",
     "name": "Unholy Avalanche",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5065,7 +4636,7 @@
     }
   },
   {
-    "ability_id": "loci-of-power",
+    "ability_id": "loci-of-power-chaos-daemons",
     "name": "Loci of Power",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5121,7 +4692,7 @@
     }
   },
   {
-    "ability_id": "shudderblink",
+    "ability_id": "shudderblink-chaos-daemons",
     "name": "Shudderblink",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5192,7 +4763,7 @@
     }
   },
   {
-    "ability_id": "apocalyptic-steeds-cavalcade-of-chaos",
+    "ability_id": "apocalyptic-steeds-upgrade-cavalcade-of-chaos-chaos-daemons",
     "name": "Apocalyptic Steeds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5227,7 +4798,7 @@
     }
   },
   {
-    "ability_id": "soul-shattering-charge-cavalcade-of-chaos",
+    "ability_id": "soul-shattering-charge-upgrade-cavalcade-of-chaos-chaos-daemons",
     "name": "Soul-Shattering Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5277,7 +4848,7 @@
     }
   },
   {
-    "ability_id": "swollen-with-power-lords-of-the-warp",
+    "ability_id": "swollen-with-power-upgrade-lords-of-the-warp-chaos-daemons",
     "name": "Swollen with Power",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5315,7 +4886,7 @@
     }
   },
   {
-    "ability_id": "bane-forged-weapons-warptide",
+    "ability_id": "bane-forged-weapons-upgrade-warptide-chaos-daemons",
     "name": "Bane-Forged Weapons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5350,7 +4921,7 @@
     }
   },
   {
-    "ability_id": "soul-hungry-slaughterers-warptide",
+    "ability_id": "soul-hungry-slaughterers-upgrade-warptide-chaos-daemons",
     "name": "Soul-Hungry Slaughterers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5403,7 +4974,7 @@
     }
   },
   {
-    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos",
+    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
     "name": "From Beyond the Veil",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5436,7 +5007,7 @@
     }
   },
   {
-    "ability_id": "warp-riders-cavalcade-of-chaos",
+    "ability_id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "name": "Warp-Riders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5471,7 +5042,7 @@
     }
   },
   {
-    "ability_id": "inescapable-manifestations-cavalcade-of-chaos",
+    "ability_id": "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
     "name": "Inescapable Manifestations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5571,7 +5142,7 @@
     }
   },
   {
-    "ability_id": "carnival-of-excess-lords-of-the-warp",
+    "ability_id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",
     "name": "Carnival of Excess",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5622,7 +5193,7 @@
     }
   },
   {
-    "ability_id": "call-to-murder-lords-of-the-warp",
+    "ability_id": "call-to-murder-lords-of-the-warp-chaos-daemons",
     "name": "Call to Murder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5677,7 +5248,7 @@
     }
   },
   {
-    "ability_id": "bilious-blessing-lords-of-the-warp",
+    "ability_id": "bilious-blessing-lords-of-the-warp-chaos-daemons",
     "name": "Bilious Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5728,7 +5299,7 @@
     }
   },
   {
-    "ability_id": "skirling-magicks-lords-of-the-warp",
+    "ability_id": "skirling-magicks-lords-of-the-warp-chaos-daemons",
     "name": "Skirling Magicks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5768,7 +5339,7 @@
     }
   },
   {
-    "ability_id": "daemonic-infestation-warptide",
+    "ability_id": "daemonic-infestation-warptide-chaos-daemons",
     "name": "Daemonic Infestation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5805,7 +5376,7 @@
     }
   },
   {
-    "ability_id": "soulseeing-warptide",
+    "ability_id": "soulseeing-warptide-chaos-daemons",
     "name": "Soulseeing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5849,7 +5420,7 @@
     }
   },
   {
-    "ability_id": "incorporeal-entities-warptide",
+    "ability_id": "incorporeal-entities-warptide-chaos-daemons",
     "name": "Incorporeal Entities",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5903,7 +5474,7 @@
     }
   },
   {
-    "ability_id": "murdercall",
+    "ability_id": "murdercall-chaos-daemons",
     "name": "Murdercall",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5977,7 +5548,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "blood-tainted",
+    "ability_id": "blood-tainted-chaos-daemons",
     "name": "Blood Tainted",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6035,7 +5606,7 @@
     }
   },
   {
-    "ability_id": "warp-rifts",
+    "ability_id": "warp-rifts-chaos-daemons",
     "name": "Warp Rifts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6066,7 +5637,7 @@
     "community_notes": "[APPROX] Grants the reduced Deep Strike distance (set up more than 6\" from enemies instead of 9\") as an opaque ability grant. The placement preconditions \u2014 set up wholly within the army's Shadow of Chaos, and/or wholly within 6\" of a friendly Bloodthirster/Great Unclean One/Kairos Fateweaver/Keeper of Secrets/Lord of Change/Rotigus/Shalaxi Helbane/Skarbrand unit sharing its god keyword \u2014 are not gated in the DSL. Full rule in raw-text store."
   },
   {
-    "ability_id": "melancholic-miasma",
+    "ability_id": "melancholic-miasma-chaos-daemons",
     "name": "Melancholic Miasma",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6110,7 +5681,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "first-prince-of-chaos",
+    "ability_id": "first-prince-of-chaos-chaos-daemons",
     "name": "First Prince of Chaos",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6293,7 +5864,7 @@
                 "type": "ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "ability": "dark-pacts"
+                  "ability": "dark-pacts-chaos-space-marines"
                 }
               },
               {
@@ -6332,7 +5903,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "fates-in-flux",
+    "ability_id": "fates-in-flux-chaos-daemons",
     "name": "Fates In Flux",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6373,7 +5944,7 @@
     "community_notes": "[APPROX] Modeled with the pooled-resource `replace-roll-from-pool` frame over a `flux-token-pool`, covering the rolls a Flux token affects for your LEGIONES DAEMONICA TZEENTCH units. Semantically a Flux token funds a re-roll (not a die-value substitution), and the token economy \u2014 starting with three tokens, the opponent gaining a token whenever you spend one, the reciprocal opponent re-roll, and the Command-phase regain \u2014 is not modeled. Pool state is not tracked by the buff layer (fail-safe). Full rule in raw-text store."
   },
   {
-    "ability_id": "beguiling-aura",
+    "ability_id": "beguiling-aura-chaos-daemons",
     "name": "Beguiling Aura",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6411,7 +5982,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "seductive-gambit",
+    "ability_id": "seductive-gambit-chaos-daemons",
     "name": "Seductive Gambit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6479,7 +6050,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "shroud-of-flies",
+    "ability_id": "shroud-of-flies-chaos-daemons",
     "name": "Shroud of Flies",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6538,10 +6109,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
   },
   {
-    "ability_id": "shadow-of-khorne",
+    "ability_id": "shadow-of-khorne-chaos-daemons",
     "name": "Shadow of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6592,6 +6164,1390 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "chaos-daemons"
+  },
+  {
+    "ability_id": "archagonists-legion-of-excess-chaos-daemons",
+    "name": "Archagonists",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons",
+    "name": "A\u2019rgath, The King of Blades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "avatar-of-perfection-legion-of-excess-chaos-daemons",
+    "name": "Avatar of Perfection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "binding-shadow-shadow-legion-chaos-daemons",
+    "name": "Binding Shadow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blood-begets-skulls-blood-legion-chaos-daemons",
+    "name": "Blood Begets Skulls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brazenmaw-blood-legion-chaos-daemons",
+    "name": "Brazenmaw",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cankerblight-aura-plague-legion-chaos-daemons",
+    "name": "Cankerblight (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
+    "name": "Cavalcade of Blades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "channelled-wrath-shadow-legion-chaos-daemons",
+    "name": "Channelled Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "corrupt-realspace-daemonic-incursion-chaos-daemons",
+    "name": "Corrupt Realspace",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-allegiance-chaos-daemons",
+    "name": "Daemonic Allegiance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "daemon-prince-of-chaos",
+      "daemon-prince-of-chaos-with-wings"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
+    "name": "Daemonic Invulnerability",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-chaos-daemons",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "soul-grinder"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-chaos-daemons",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodthirster",
+      "keeper-of-secrets"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-chaos-daemons",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "belakor",
+      "great-unclean-one",
+      "kairos-fateweaver",
+      "lord-of-change",
+      "rotigus",
+      "shalaxi-helbane"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-skarbrand-chaos-daemons",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "skarbrand"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-denied-shadow-legion-chaos-daemons",
+    "name": "Death Denied",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "delightful-agonies-chaos-daemons",
+    "name": "Delightful Agonies",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "syllesske"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "delirium-unmade-scintillating-legion-chaos-daemons",
+    "name": "Delirium Unmade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
+    "name": "Denizens of the Warp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "draught-of-terror-daemonic-incursion-chaos-daemons",
+    "name": "Draught of Terror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dreaming-crown-aura-legion-of-excess-chaos-daemons",
+    "name": "Dreaming Crown (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "droning-shroud-aura-plague-legion-chaos-daemons",
+    "name": "Droning Shroud (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "encroaching-darkness-shadow-legion-chaos-daemons",
+    "name": "Encroaching Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fade-to-darkness-shadow-legion-chaos-daemons",
+    "name": "Fade to Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "false-majesty-aura-legion-of-excess-chaos-daemons",
+    "name": "False Majesty (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fateborne-nightmares-scintillating-legion-chaos-daemons",
+    "name": "Fateborne Nightmares",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fever-visions-plague-legion-chaos-daemons",
+    "name": "Fever Visions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ficklefire-scintillating-legion-chaos-daemons",
+    "name": "Ficklefire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flickering-reality-scintillating-legion-chaos-daemons",
+    "name": "Flickering Reality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "foetid-resurgence-plague-legion-chaos-daemons",
+    "name": "Foetid Resurgence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "font-of-spores-aura-plague-legion-chaos-daemons",
+    "name": "Font of Spores (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fools-flight-blood-legion-chaos-daemons",
+    "name": "Fool\u2019s Flight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "furys-cage-blood-legion-chaos-daemons",
+    "name": "Fury\u2019s Cage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gateway-unto-damnation-blood-legion-chaos-daemons",
+    "name": "Gateway Unto Damnation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gore-hungry-onslaught-blood-legion-chaos-daemons",
+    "name": "Gore-hungry Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "impossible-eclipse-scintillating-legion-chaos-daemons",
+    "name": "Impossible Eclipse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "improbable-shield-aura-scintillating-legion-chaos-daemons",
+    "name": "Improbable Shield (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inescapable-eye-scintillating-legion-chaos-daemons",
+    "name": "Inescapable Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infernal-puppeteer-scintillating-legion-chaos-daemons",
+    "name": "Infernal Puppeteer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "leaping-shadows-shadow-legion-chaos-daemons",
+    "name": "Leaping Shadows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "maggot-maws-plague-legion-chaos-daemons",
+    "name": "Maggot Maws",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malice-made-manifest-shadow-legion-chaos-daemons",
+    "name": "Malice Made Manifest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mantle-of-gloom-aura-shadow-legion-chaos-daemons",
+    "name": "Mantle of Gloom (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murkshadows-plague-legion-chaos-daemons",
+    "name": "Murkshadows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "neverblade-scintillating-legion-chaos-daemons",
+    "name": "Neverblade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "overwhelming-excess-legion-of-excess-chaos-daemons",
+    "name": "Overwhelming Excess",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phantasmal-longing-legion-of-excess-chaos-daemons",
+    "name": "Phantasmal Longing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "plague-of-woes-plague-legion-chaos-daemons",
+    "name": "Plague of Woes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "prince-of-slaanesh-chaos-daemons",
+    "name": "Prince of Slaanesh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "syllesske"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pyrogenesis-scintillating-legion-chaos-daemons",
+    "name": "Pyrogenesis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "scintillating-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rot-and-renewal-plague-legion-chaos-daemons",
+    "name": "Rot and Renewal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seeping-virulence-plague-legion-chaos-daemons",
+    "name": "Seeping Virulence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "plague-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sensory-excruciation-legion-of-excess-chaos-daemons",
+    "name": "Sensory Excruciation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shade-path-shadow-legion-chaos-daemons",
+    "name": "Shade Path",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sheathed-in-brass-blood-legion-chaos-daemons",
+    "name": "Sheathed In Brass",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skulls-beget-blood-blood-legion-chaos-daemons",
+    "name": "Skulls Beget Blood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "slaughterthirst-aura-blood-legion-chaos-daemons",
+    "name": "Slaughterthirst (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-glutton-legion-of-excess-chaos-daemons",
+    "name": "Soul Glutton",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soulstealer-daemonic-incursion-chaos-daemons",
+    "name": "Soulstealer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spiteful-demise-shadow-legion-chaos-daemons",
+    "name": "Spiteful Demise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "shadow-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "split-chaos-daemons",
+    "name": "Split",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "blue-horrors"
+    ],
+    "faction_id": "chaos-daemons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-endless-gift-daemonic-incursion-chaos-daemons",
+    "name": "The Endless Gift",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-everstave-daemonic-incursion-chaos-daemons",
+    "name": "The Everstave",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
+    "name": "The Realm of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "thieves-of-pain-legion-of-excess-chaos-daemons",
+    "name": "Thieves of Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "legion-of-excess",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warp-surge-daemonic-incursion-chaos-daemons",
+    "name": "Warp Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "daemonic-incursion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wrath-undeniable-blood-legion-chaos-daemons",
+    "name": "Wrath Undeniable",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "blood-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

@@ -10,6 +10,8 @@ import type { Inline, Leaf } from "./effect-leaf.js";
 import {
   amountOf, andList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
   rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
+  isRatingRef,
+  abilityLabel,
 } from "./effect-words.js";
 import { expiryTrail } from "./expiry.js";
 import { placePhrase, placementLimits, placementPhrase } from "./effect-placement.js";
@@ -214,7 +216,7 @@ function costModifier(m: Record<string, unknown>, subj: string): string {
     if (m.operation === "increase") return `increase the CP cost of that use of the ${noun} by ${jstr(m.amount)}CP`;
     return m.operation === "waive" ? `that use of the ${noun} costs no CP` : `that use of the ${noun} costs ${jstr(m.amount)}CP`;
   }
-  const which = m.id != null ? `the ${titleCase(jstr(m.id))} ${noun}` : `${noun === "ability" ? "abilities" : `${noun}s`}`;
+  const which = m.id != null ? `the ${abilityLabel(m.id)} ${noun}` : `${noun === "ability" ? "abilities" : `${noun}s`}`;
   const whose = m.applies_to === "targeting-this-unit" ? ` that ${m.id != null ? "targets" : "target"} ${subj}` : m.applies_to === "used-by-this-unit" ? ` used by ${subj}` : "";
   const verb = m.id != null ? "costs" : "cost";
   if (m.operation === "waive") return `${which}${whose} can be used without paying ${m.id != null ? "its" : "their"} CP cost`;
@@ -349,7 +351,10 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       const attack = m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null ? `an attack with ${weaponNoun(m)}` : "an attack";
       return `each time ${attack} is allocated to ${subj}, ${how}`;
     }
-    case "feel-no-pain": return `${subj} ${v(subj, "has")} the Feel No Pain ${jstr(m.threshold)}+ ability${FNP_AGAINST[jstr(m.against)] ?? ""}`;
+    case "feel-no-pain": {
+      const rated = isRatingRef(m.threshold);
+      return `${subj} ${v(subj, "has")} the Feel No Pain ${rated ? "X" : jstr(m.threshold)}+ ability${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
+    }
     case "invulnerable-save": {
       const vs = m.weapon_type != null ? ` against ${jstr(m.weapon_type)} attacks` : "";
       return `${subj} ${v(subj, "has")} a ${jstr(m.invuln_sv)}+ invulnerable save${vs}`;

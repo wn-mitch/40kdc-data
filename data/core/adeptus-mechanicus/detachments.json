@@ -3,20 +3,20 @@
     "id": "haloscreed-battle-clade",
     "name": "Haloscreed Battle Clade",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "noospheric-transference",
+    "detachment_rule_id": "noospheric-transference-adeptus-mechanicus",
     "enhancement_ids": [
-      "transoracular-dyad-wafers-haloscreed-battle-clade",
-      "cognitive-reinforcement-haloscreed-battle-clade",
-      "sanctified-ordnance-haloscreed-battle-clade",
-      "inloaded-lethality-haloscreed-battle-clade"
+      "transoracular-dyad-wafers-haloscreed-battle-clade-adeptus-mechanicus",
+      "cognitive-reinforcement-haloscreed-battle-clade-adeptus-mechanicus",
+      "sanctified-ordnance-haloscreed-battle-clade-adeptus-mechanicus",
+      "inloaded-lethality-haloscreed-battle-clade-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "eradication-protocols-haloscreed-battle-clade",
-      "targeting-override-haloscreed-battle-clade",
-      "guided-retreat-haloscreed-battle-clade",
-      "neural-overload-haloscreed-battle-clade",
-      "aggressive-impulse-haloscreed-battle-clade",
-      "analytical-divination-haloscreed-battle-clade"
+      "eradication-protocols-haloscreed-battle-clade-adeptus-mechanicus",
+      "targeting-override-haloscreed-battle-clade-adeptus-mechanicus",
+      "guided-retreat-haloscreed-battle-clade-adeptus-mechanicus",
+      "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
+      "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
+      "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -37,20 +37,20 @@
     "id": "cohort-cybernetica",
     "name": "Cohort Cybernetica",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "cyber-psalm-programming",
+    "detachment_rule_id": "cyber-psalm-programming-adeptus-mechanicus",
     "enhancement_ids": [
-      "necromechanic-cohort-cybernetica",
-      "lord-of-machines-cohort-cybernetica",
-      "emotionless-clarity-cohort-cybernetica",
-      "arch-negator-cohort-cybernetica"
+      "necromechanic-cohort-cybernetica-adeptus-mechanicus",
+      "lord-of-machines-cohort-cybernetica-adeptus-mechanicus",
+      "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",
+      "arch-negator-cohort-cybernetica-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "motive-imperative-cohort-cybernetica",
-      "auto-divinatory-targeting-cohort-cybernetica",
-      "benevolence-of-the-omnissiah-cohort-cybernetica",
-      "machine-spirit-resurgent-cohort-cybernetica",
-      "machine-superiority-cohort-cybernetica",
-      "transcendent-cogitation-cohort-cybernetica"
+      "motive-imperative-cohort-cybernetica-adeptus-mechanicus",
+      "auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus",
+      "benevolence-of-the-omnissiah-cohort-cybernetica-adeptus-mechanicus",
+      "machine-spirit-resurgent-cohort-cybernetica-adeptus-mechanicus",
+      "machine-superiority-cohort-cybernetica-adeptus-mechanicus",
+      "transcendent-cogitation-cohort-cybernetica-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -71,20 +71,20 @@
     "id": "skitarii-hunter-cohort",
     "name": "Skitarii Hunter Cohort",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "stealth-optimisation",
+    "detachment_rule_id": "stealth-optimisation-adeptus-mechanicus",
     "enhancement_ids": [
-      "cantic-thrallnet-skitarii-hunter-cohort",
-      "clandestine-infiltrator-skitarii-hunter-cohort",
-      "veiled-hunter-skitarii-hunter-cohort",
-      "battle-sphere-uplink-skitarii-hunter-cohort"
+      "cantic-thrallnet-skitarii-hunter-cohort-adeptus-mechanicus",
+      "clandestine-infiltrator-skitarii-hunter-cohort-adeptus-mechanicus",
+      "veiled-hunter-skitarii-hunter-cohort-adeptus-mechanicus",
+      "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "isolate-and-destroy-skitarii-hunter-cohort",
-      "shroud-protocols-skitarii-hunter-cohort",
-      "programmed-withdrawal-skitarii-hunter-cohort",
-      "bionic-endurance-skitarii-hunter-cohort",
-      "expedited-purge-protocol-skitarii-hunter-cohort",
-      "binharic-offence-skitarii-hunter-cohort"
+      "isolate-and-destroy-skitarii-hunter-cohort-adeptus-mechanicus",
+      "shroud-protocols-skitarii-hunter-cohort-adeptus-mechanicus",
+      "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",
+      "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
+      "expedited-purge-protocol-skitarii-hunter-cohort-adeptus-mechanicus",
+      "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -105,20 +105,20 @@
     "id": "data-psalm-conclave",
     "name": "Data-psalm Conclave",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "benedictions-of-the-omnissiah",
+    "detachment_rule_id": "benedictions-of-the-omnissiah-adeptus-mechanicus",
     "enhancement_ids": [
-      "mechanicus-locum-data-psalm-conclave",
-      "mantle-of-the-gnosticarch-data-psalm-conclave",
-      "data-blessed-autosermon-data-psalm-conclave",
-      "temporcopia-data-psalm-conclave"
+      "mechanicus-locum-data-psalm-conclave-adeptus-mechanicus",
+      "mantle-of-the-gnosticarch-data-psalm-conclave-adeptus-mechanicus",
+      "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
+      "temporcopia-data-psalm-conclave-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "incantation-of-the-iron-soul-data-psalm-conclave",
-      "chant-of-the-remorseless-fist-data-psalm-conclave",
-      "luminescent-blessing-data-psalm-conclave",
-      "verse-of-vengeance-data-psalm-conclave",
-      "tribute-of-emphatic-veneration-data-psalm-conclave",
-      "litany-of-the-electromancer-data-psalm-conclave"
+      "incantation-of-the-iron-soul-data-psalm-conclave-adeptus-mechanicus",
+      "chant-of-the-remorseless-fist-data-psalm-conclave-adeptus-mechanicus",
+      "luminescent-blessing-data-psalm-conclave-adeptus-mechanicus",
+      "verse-of-vengeance-data-psalm-conclave-adeptus-mechanicus",
+      "tribute-of-emphatic-veneration-data-psalm-conclave-adeptus-mechanicus",
+      "litany-of-the-electromancer-data-psalm-conclave-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -142,20 +142,20 @@
     "id": "explorator-maniple",
     "name": "Explorator Maniple",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "acquisition-at-any-cost",
+    "detachment_rule_id": "acquisition-at-any-cost-adeptus-mechanicus",
     "enhancement_ids": [
-      "magos-explorator-maniple",
-      "genetor-explorator-maniple",
-      "logis-explorator-maniple",
-      "artisan-explorator-maniple"
+      "magos-explorator-maniple-adeptus-mechanicus",
+      "genetor-explorator-maniple-adeptus-mechanicus",
+      "logis-explorator-maniple-adeptus-mechanicus",
+      "artisan-explorator-maniple-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "priority-reclamation-explorator-maniple",
-      "auto-oracular-retrieval-explorator-maniple",
-      "cached-acquisition-explorator-maniple",
-      "reactive-safeguard-explorator-maniple",
-      "infoslave-skull-explorator-maniple",
-      "incense-exhausts-explorator-maniple"
+      "priority-reclamation-explorator-maniple-adeptus-mechanicus",
+      "auto-oracular-retrieval-explorator-maniple-adeptus-mechanicus",
+      "cached-acquisition-explorator-maniple-adeptus-mechanicus",
+      "reactive-safeguard-explorator-maniple-adeptus-mechanicus",
+      "infoslave-skull-explorator-maniple-adeptus-mechanicus",
+      "incense-exhausts-explorator-maniple-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -176,20 +176,20 @@
     "id": "rad-zone-corps",
     "name": "Rad-Zone Corps",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "rad-bombardment",
+    "detachment_rule_id": "rad-bombardment-adeptus-mechanicus",
     "enhancement_ids": [
-      "radial-suffusion-rad-zone-corps",
-      "malphonic-susurrus-rad-zone-corps",
-      "peerless-eradicator-rad-zone-corps",
-      "autoclavic-denunciation-rad-zone-corps"
+      "radial-suffusion-rad-zone-corps-adeptus-mechanicus",
+      "malphonic-susurrus-rad-zone-corps-adeptus-mechanicus",
+      "peerless-eradicator-rad-zone-corps-adeptus-mechanicus",
+      "autoclavic-denunciation-rad-zone-corps-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "aggressor-imperative-rad-zone-corps",
-      "pre-calibrated-purge-solution-rad-zone-corps",
-      "baleful-halo-rad-zone-corps",
-      "bulwark-imperative-rad-zone-corps",
-      "extinction-order-rad-zone-corps",
-      "lethal-dosage-rad-zone-corps"
+      "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
+      "pre-calibrated-purge-solution-rad-zone-corps-adeptus-mechanicus",
+      "baleful-halo-rad-zone-corps-adeptus-mechanicus",
+      "bulwark-imperative-rad-zone-corps-adeptus-mechanicus",
+      "extinction-order-rad-zone-corps-adeptus-mechanicus",
+      "lethal-dosage-rad-zone-corps-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -210,15 +210,15 @@
     "id": "cohort-acquisitus",
     "name": "Cohort Acquisitus",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "noospheric-recon",
+    "detachment_rule_id": "noospheric-recon-adeptus-mechanicus",
     "enhancement_ids": [
-      "explorator-dispensation-cohort-acquisitus",
-      "stealth-screened-cybercanids-upgrade-cohort-acquisitus"
+      "explorator-dispensation-cohort-acquisitus-adeptus-mechanicus",
+      "stealth-screened-cybercanids-upgrade-cohort-acquisitus-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "defect-scrutiny-cohort-acquisitus",
-      "repolarised-augurs-cohort-acquisitus",
-      "clandestine-reposition-cohort-acquisitus"
+      "defect-scrutiny-cohort-acquisitus-adeptus-mechanicus",
+      "repolarised-augurs-cohort-acquisitus-adeptus-mechanicus",
+      "clandestine-reposition-cohort-acquisitus-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -239,15 +239,15 @@
     "id": "lords-of-the-forge",
     "name": "Lords of the Forge",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "war-form-mantles",
+    "detachment_rule_id": "war-form-mantles-adeptus-mechanicus",
     "enhancement_ids": [
-      "vinghs-wafers-of-dynamism-lords-of-the-forge",
-      "tl-4-9-lords-of-the-forge"
+      "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
+      "tl-4-9-lords-of-the-forge-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "scriptural-prognosis-lords-of-the-forge",
-      "overloaded-safeguards-lords-of-the-forge",
-      "holy-avarice-lords-of-the-forge"
+      "scriptural-prognosis-lords-of-the-forge-adeptus-mechanicus",
+      "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",
+      "holy-avarice-lords-of-the-forge-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -269,15 +269,15 @@
     "id": "luminen-auto-choir",
     "name": "Luminen Auto-choir",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "cyber-static-canticles",
+    "detachment_rule_id": "cyber-static-canticles-adeptus-mechanicus",
     "enhancement_ids": [
-      "voltagheist-reliquary-luminen-auto-choir",
-      "electromiasmic-brazier-luminen-auto-choir"
+      "voltagheist-reliquary-luminen-auto-choir-adeptus-mechanicus",
+      "electromiasmic-brazier-luminen-auto-choir-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "echoes-of-the-conduit-wars-luminen-auto-choir",
-      "chant-of-electrotraction-luminen-auto-choir",
-      "momentum-feedback-luminen-auto-choir"
+      "echoes-of-the-conduit-wars-luminen-auto-choir-adeptus-mechanicus",
+      "chant-of-electrotraction-luminen-auto-choir-adeptus-mechanicus",
+      "momentum-feedback-luminen-auto-choir-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -301,20 +301,20 @@
     "id": "eradication-cohort",
     "name": "Eradication Cohort",
     "faction_id": "adeptus-mechanicus",
-    "detachment_rule_id": "murderous-imperative",
+    "detachment_rule_id": "murderous-imperative-adeptus-mechanicus",
     "enhancement_ids": [
-      "omnicogitator-eradication-cohort",
-      "martial-signatum-amplificator-eradication-cohort",
-      "belicosa-class-capacitor-vanes-eradication-cohort",
-      "omnissiahs-fury-eradication-cohort"
+      "omnicogitator-eradication-cohort-adeptus-mechanicus",
+      "martial-signatum-amplificator-eradication-cohort-adeptus-mechanicus",
+      "belicosa-class-capacitor-vanes-eradication-cohort-adeptus-mechanicus",
+      "omnissiahs-fury-eradication-cohort-adeptus-mechanicus"
     ],
     "stratagem_ids": [
-      "servo-driven-charge-eradication-cohort",
-      "threat-cogitation-targeters-eradication-cohort",
-      "unrelenting-aggression-eradication-cohort",
-      "precision-onslaught-eradication-cohort",
-      "unshackled-wrath-eradication-cohort",
-      "analytic-reprisals-eradication-cohort"
+      "servo-driven-charge-eradication-cohort-adeptus-mechanicus",
+      "threat-cogitation-targeters-eradication-cohort-adeptus-mechanicus",
+      "unrelenting-aggression-eradication-cohort-adeptus-mechanicus",
+      "precision-onslaught-eradication-cohort-adeptus-mechanicus",
+      "unshackled-wrath-eradication-cohort-adeptus-mechanicus",
+      "analytic-reprisals-eradication-cohort-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -336,8 +336,8 @@
     "name": "Purge Corps Deltic-9",
     "faction_id": "adeptus-mechanicus",
     "enhancement_ids": [
-      "empowered-mechanisms-purge-corps-deltic-9",
-      "miniaturised-autosimulacra-purge-corps-deltic-9"
+      "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus",
+      "miniaturised-autosimulacra-purge-corps-deltic-9-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -355,6 +355,9 @@
         "namespace": "mfm",
         "id": "13aa8e3b-3095-4a81-9597-c186a14a2318"
       }
+    ],
+    "detachment_rule_ids": [
+      "imperative-overload-adeptus-mechanicus"
     ]
   }
 ]

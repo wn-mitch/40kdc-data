@@ -1,307 +1,13 @@
 [
   {
-    "id": "armoured-duellists-blitz-brigade",
-    "name": "Armoured Duellists",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "armoured-duellists-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "battle-tactic",
+    "id": "armed-to-da-teef-bully-boyz-orks",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "c0f6b966-a1c6-40a9-9eae-718c8c22c74c"
+        "id": "04d59f9c-7a3a-4781-aa99-b6769325e575"
       }
-    ]
-  },
-  {
-    "id": "bigger-shells-for-bigger-gitz-dread-mob",
-    "name": "BIGGER SHELLS FOR BIGGER GITZ",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
     ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f2274ddd-3d7b-4fe8-a10a-8ca805bd29c9"
-      }
-    ]
-  },
-  {
-    "id": "conniving-runts-dread-mob",
-    "name": "CONNIVING RUNTS",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "8e4282b5-cfaa-4f45-b6d6-76db59ea9521"
-      }
-    ]
-  },
-  {
-    "id": "dakka-dakka-dakka-dread-mob",
-    "name": "DAKKA! DAKKA! DAKKA!",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "30ac141a-8589-47bc-809f-7a85d39c547d"
-      }
-    ]
-  },
-  {
-    "id": "extra-gubbinz-dread-mob",
-    "name": "EXTRA GUBBINZ",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "fdfdf495-19e2-479e-a31c-0b2faeb67c6d"
-      }
-    ]
-  },
-  {
-    "id": "impervious-blitz-brigade",
-    "name": "Impervious",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "impervious-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a336153d-b047-4159-b747-9a4097b53b2f"
-      }
-    ]
-  },
-  {
-    "id": "klankin-klaws-dread-mob",
-    "name": "KLANKIN’ KLAWS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "0bd39ff7-0073-4d87-91b4-a06887f947f0"
-      }
-    ]
-  },
-  {
-    "id": "mekanised-brutality-blitz-brigade",
-    "name": "Mekanised Brutality",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "mekanised-brutality-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "c9a7416e-faba-4aed-a860-61ed6d3bd483"
-      }
-    ]
-  },
-  {
-    "id": "mount-up-ladz-blitz-brigade",
-    "name": "Mount Up, Ladz",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "mount-up-ladz-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f0b1ff51-55a4-440f-aeea-24a460adb7ac"
-      }
-    ]
-  },
-  {
-    "id": "run-em-down-blitz-brigade",
-    "name": "Run ’em Down",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "run-em-down-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "0379925a-2712-40a3-bc37-d957b652fd5d"
-      }
-    ]
-  },
-  {
-    "id": "superfuelled-boiler-dread-mob",
-    "name": "SUPERFUELLED BOILER",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "dread-mob",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a8c4f685-8c50-417f-9822-6b513ec6314c"
-      }
-    ]
-  },
-  {
-    "id": "yooz-in-trouble-now-blitz-brigade",
-    "name": "Yooz in Trouble Now",
-    "category": "detachment",
-    "detachment_id": "blitz-brigade",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "yooz-in-trouble-now-blitz-brigade",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4e86ea5f-2340-4683-b30a-b25adc328bb7"
-      }
-    ]
-  },
-  {
-    "id": "armed-to-da-teef-bully-boyz",
-    "name": "ARMED TO DA TEEF",
+    "name": "Armed To Da Teef",
     "category": "detachment",
     "detachment_id": "bully-boyz",
     "cp_cost": 1,
@@ -312,25 +18,14 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "armed-to-da-teef-bully-boyz",
+    "ability_id": "armed-to-da-teef-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "battle-tactic",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "39e391ed-1f31-5fe5-afe3-8e106b618663"
-      },
-      {
-        "namespace": "mfm",
-        "id": "79ff1f46-6256-41a6-abf3-180a2ea0b800"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "breakin-heads-war-horde",
+    "id": "breakin-heads-war-horde-orks",
     "name": "BREAKIN' HEADS",
     "category": "detachment",
     "detachment_id": "war-horde",
@@ -345,7 +40,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "breakin-heads-war-horde",
+    "ability_id": "breakin-heads-war-horde-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -358,7 +53,7 @@
     ]
   },
   {
-    "id": "close-range-dakka-war-horde",
+    "id": "close-range-dakka-war-horde-orks",
     "name": "CLOSE-RANGE DAKKA",
     "category": "detachment",
     "detachment_id": "war-horde",
@@ -369,7 +64,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "close-range-dakka-war-horde",
+    "ability_id": "close-range-dakka-war-horde-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -382,26 +77,38 @@
     ]
   },
   {
-    "id": "clownin-dakka-shoota-boyz",
-    "name": "CLOWNIN’ DAKKA",
+    "id": "crazed-rampage-dread-mob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d346f908-20a9-4236-a136-a8d1ef36e762"
+      }
+    ],
+    "name": "Crazed Rampage",
     "category": "detachment",
-    "detachment_id": "shoota-boyz",
+    "detachment_id": "dread-mob",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "fight"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "clownin-dakka-shoota-boyz",
+    "ability_id": "crazed-rampage-dread-mob-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     }
   },
   {
-    "id": "dakkastorm-kult-of-speed",
-    "name": "DAKKASTORM",
+    "id": "dakkastorm-kult-of-speed-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "99acba71-ea9c-4977-829e-36fd55efee09"
+      }
+    ],
+    "name": "Dakkastorm",
     "category": "detachment",
     "detachment_id": "kult-of-speed",
     "cp_cost": 1,
@@ -411,25 +118,14 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dakkastorm-kult-of-speed",
+    "ability_id": "dakkastorm-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "battle-tactic",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "d337041e-4d71-5763-ba90-fa0bf1f0260b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d645ac95-42ca-488e-87c8-5ad5aed49b6e"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "delicious-eating-squigs-kult-of-speed",
+    "id": "delicious-eating-squigs-kult-of-speed-orks",
     "name": "DELICIOUS EATING SQUIGS",
     "category": "detachment",
     "detachment_id": "kult-of-speed",
@@ -440,7 +136,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "delicious-eating-squigs-kult-of-speed",
+    "ability_id": "delicious-eating-squigs-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -453,7 +149,31 @@
     ]
   },
   {
-    "id": "drive-by-bustin-wreckas",
+    "id": "dread-power-dread-mob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a36244f0-3ad7-4db6-8a87-6b8b73051872"
+      }
+    ],
+    "name": "Dread Power",
+    "category": "detachment",
+    "detachment_id": "dread-mob",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "dread-power-dread-mob-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "drive-by-bustin-wreckas-orks",
     "name": "DRIVE-BY BUSTIN’",
     "category": "detachment",
     "detachment_id": "wreckas",
@@ -464,7 +184,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "drive-by-bustin-wreckas",
+    "ability_id": "drive-by-bustin-wreckas-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -477,7 +197,7 @@
     ]
   },
   {
-    "id": "dubious-restraint-taktikal-brigade",
+    "id": "dubious-restraint-taktikal-brigade-orks",
     "name": "DUBIOUS RESTRAINT",
     "category": "detachment",
     "detachment_id": "taktikal-brigade",
@@ -488,7 +208,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dubious-restraint-taktikal-brigade",
+    "ability_id": "dubious-restraint-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -501,7 +221,7 @@
     ]
   },
   {
-    "id": "ere-we-go-green-tide",
+    "id": "ere-we-go-green-tide-orks",
     "name": "’ERE WE GO",
     "category": "detachment",
     "detachment_id": "green-tide",
@@ -512,7 +232,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ere-we-go-green-tide",
+    "ability_id": "ere-we-go-green-tide-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -525,7 +245,7 @@
     ]
   },
   {
-    "id": "flyin-headbutt-flyboyz",
+    "id": "flyin-headbutt-flyboyz-orks",
     "name": "FLYIN' HEADBUTT",
     "category": "detachment",
     "detachment_id": "flyboyz",
@@ -540,7 +260,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "flyin-headbutt-flyboyz",
+    "ability_id": "flyin-headbutt-flyboyz-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -553,7 +273,7 @@
     ]
   },
   {
-    "id": "fungus-fuel-injection-war-horde",
+    "id": "fungus-fuel-injection-war-horde-orks",
     "name": "FUNGUS-FUEL INJECTION",
     "category": "detachment",
     "detachment_id": "war-horde",
@@ -564,7 +284,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fungus-fuel-injection-war-horde",
+    "ability_id": "fungus-fuel-injection-war-horde-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -577,25 +297,55 @@
     ]
   },
   {
-    "id": "gooped-into-action-da-big-hunt",
-    "name": "GOOPED INTO ACTION",
+    "id": "glowin-dakka-shoota-boyz-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "643ae6df-8ba4-4e57-8bdc-281d28a47788"
+      }
+    ],
+    "name": "Glowin’ Dakka",
+    "category": "detachment",
+    "detachment_id": "shoota-boyz",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "glowin-dakka-shoota-boyz-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "goaded-into-action-da-big-hunt-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "785eac4d-5029-4cbb-8d64-d44dcb56e332"
+      }
+    ],
+    "name": "Goaded Into Action",
     "category": "detachment",
     "detachment_id": "da-big-hunt",
     "cp_cost": 1,
     "phases": [
       "shooting"
     ],
-    "player_turn": "either",
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "gooped-into-action-da-big-hunt",
+    "ability_id": "goaded-into-action-da-big-hunt-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "pre-launch-provisional"
     }
   },
   {
-    "id": "grab-it-wreckas",
+    "id": "grab-it-wreckas-orks",
     "name": "GRAB IT",
     "category": "detachment",
     "detachment_id": "wreckas",
@@ -606,7 +356,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "grab-it-wreckas",
+    "ability_id": "grab-it-wreckas-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -619,7 +369,7 @@
     ]
   },
   {
-    "id": "grot-shields-runt-swarm",
+    "id": "grot-shields-runt-swarm-orks",
     "name": "GROT SHIELDS",
     "category": "detachment",
     "detachment_id": "runt-swarm",
@@ -630,7 +380,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "grot-shields-runt-swarm",
+    "ability_id": "grot-shields-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -643,7 +393,7 @@
     ]
   },
   {
-    "id": "gun-crazy-show-offs-wreckas",
+    "id": "gun-crazy-show-offs-wreckas-orks",
     "name": "GUN-CRAZY SHOW-OFFS",
     "category": "detachment",
     "detachment_id": "wreckas",
@@ -654,7 +404,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "gun-crazy-show-offs-wreckas",
+    "ability_id": "gun-crazy-show-offs-wreckas-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -667,7 +417,7 @@
     ]
   },
   {
-    "id": "hit-em-harder-war-horde",
+    "id": "hit-em-harder-war-horde-orks",
     "name": "HIT ’EM HARDER",
     "category": "detachment",
     "detachment_id": "war-horde",
@@ -678,7 +428,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hit-em-harder-war-horde",
+    "ability_id": "hit-em-harder-war-horde-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -691,8 +441,14 @@
     ]
   },
   {
-    "id": "hulking-brutes-bully-boyz",
-    "name": "HULKING BRUTES",
+    "id": "hulking-brutes-bully-boyz-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4e4f020e-e883-42b8-a741-8dd01868f5b3"
+      }
+    ],
+    "name": "Hulking Brutes",
     "category": "detachment",
     "detachment_id": "bully-boyz",
     "cp_cost": 1,
@@ -702,25 +458,38 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hulking-brutes-bully-boyz",
+    "ability_id": "hulking-brutes-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "battle-tactic",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "dc200dd4-0262-531a-9162-d0648c20b3b9"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a92b516e-a846-4855-bc29-ad7a9c0a37c7"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "infested-war-zone-runt-swarm",
+    "id": "impending-krunch-blitz-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6484e3d5-78fa-45d3-bcc0-774748e5ca80"
+      }
+    ],
+    "name": "Impending Krunch",
+    "category": "detachment",
+    "detachment_id": "blitz-brigade",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "impending-krunch-blitz-brigade-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "infested-war-zone-runt-swarm-orks",
     "name": "INFESTED WAR ZONE",
     "category": "detachment",
     "detachment_id": "runt-swarm",
@@ -735,7 +504,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "infested-war-zone-runt-swarm",
+    "ability_id": "infested-war-zone-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -748,8 +517,14 @@
     ]
   },
   {
-    "id": "instinctive-hunters-da-big-hunt",
-    "name": "INSTINCTIVE HUNTERS",
+    "id": "instinctive-hunters-da-big-hunt-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3a3c3e0b-f780-4608-b210-61b53d352a12"
+      }
+    ],
+    "name": "Instinctive Hunters",
     "category": "detachment",
     "detachment_id": "da-big-hunt",
     "cp_cost": 1,
@@ -759,26 +534,45 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "instinctive-hunters-da-big-hunt",
+    "ability_id": "instinctive-hunters-da-big-hunt-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "7404de4f-335a-509c-8d1d-2d9986123752"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c1624e51-799f-4009-b089-82013835455c"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "kustom-dakka-shoota-boyz",
-    "name": "KUSTOM DAKKA",
+    "id": "keep-it-runnin-blitz-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c9a18a47-d991-45f5-89e9-b252b7fbeb66"
+      }
+    ],
+    "name": "Keep It Runnin’",
+    "category": "detachment",
+    "detachment_id": "blitz-brigade",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "keep-it-runnin-blitz-brigade-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "kustom-dakka-shoota-boyz-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "08a3c383-6193-4c71-b9ef-c76d53f2f2f4"
+      }
+    ],
+    "name": "Kustom Dakka",
     "category": "detachment",
     "detachment_id": "shoota-boyz",
     "cp_cost": 1,
@@ -788,20 +582,14 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "kustom-dakka-shoota-boyz",
+    "ability_id": "kustom-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "037a6a32-a5d0-55f8-993a-a2acb8b26f6d"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "long-uncontrolled-bursts-flyboyz",
+    "id": "long-uncontrolled-bursts-flyboyz-orks",
     "name": "LONG, UNCONTROLLED BURSTS",
     "category": "detachment",
     "detachment_id": "flyboyz",
@@ -812,7 +600,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "long-uncontrolled-bursts-flyboyz",
+    "ability_id": "long-uncontrolled-bursts-flyboyz-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -825,7 +613,7 @@
     ]
   },
   {
-    "id": "mind-mostly-on-the-mission-taktikal-brigade",
+    "id": "mind-mostly-on-the-mission-taktikal-brigade-orks",
     "name": "MIND MOSTLY ON THE MISSION",
     "category": "detachment",
     "detachment_id": "taktikal-brigade",
@@ -836,7 +624,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "mind-mostly-on-the-mission-taktikal-brigade",
+    "ability_id": "mind-mostly-on-the-mission-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -849,7 +637,7 @@
     ]
   },
   {
-    "id": "mob-mentality-green-tide",
+    "id": "mob-mentality-green-tide-orks",
     "name": "MOB MENTALITY",
     "category": "detachment",
     "detachment_id": "green-tide",
@@ -860,7 +648,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "mob-mentality-green-tide",
+    "ability_id": "mob-mentality-green-tide-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -873,7 +661,7 @@
     ]
   },
   {
-    "id": "mow-em-down-war-horde",
+    "id": "mow-em-down-war-horde-orks",
     "name": "MOW ’EM DOWN",
     "category": "detachment",
     "detachment_id": "war-horde",
@@ -884,7 +672,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "mow-em-down-war-horde",
+    "ability_id": "mow-em-down-war-horde-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -897,7 +685,7 @@
     ]
   },
   {
-    "id": "never-enough-dakka-shoota-boyz",
+    "id": "never-enough-dakka-shoota-boyz-orks",
     "name": "NEVER ENOUGH DAKKA",
     "category": "detachment",
     "detachment_id": "shoota-boyz",
@@ -908,7 +696,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "never-enough-dakka-shoota-boyz",
+    "ability_id": "never-enough-dakka-shoota-boyz-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -921,8 +709,14 @@
     ]
   },
   {
-    "id": "orks-is-never-beaten-war-horde",
-    "name": "ORKS IS NEVER BEATEN",
+    "id": "orks-is-never-beaten-war-horde-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f4a58d3b-a36b-4590-8a2b-0a801c6b2998"
+      }
+    ],
+    "name": "Orks Is Never Beaten",
     "category": "detachment",
     "detachment_id": "war-horde",
     "cp_cost": 1,
@@ -932,25 +726,38 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "orks-is-never-beaten-war-horde",
+    "ability_id": "orks-is-never-beaten-war-horde-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "epic-deed",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "a9e9ea1c-6601-5342-8744-409e40db21b3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d3c0e0be-0e68-4fa2-b828-567d0f1e2fb9"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "scarper-runt-swarm",
+    "id": "readied-brawlers-blitz-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "49100844-cd57-42f3-8df3-7fc41bb20652"
+      }
+    ],
+    "name": "Readied Brawlers",
+    "category": "detachment",
+    "detachment_id": "blitz-brigade",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "readied-brawlers-blitz-brigade-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "scarper-runt-swarm-orks",
     "name": "SCARPER!",
     "category": "detachment",
     "detachment_id": "runt-swarm",
@@ -961,7 +768,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "scarper-runt-swarm",
+    "ability_id": "scarper-runt-swarm-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -974,8 +781,14 @@
     ]
   },
   {
-    "id": "speediest-freeks-kult-of-speed",
-    "name": "SPEEDIEST FREEKS",
+    "id": "speediest-freeks-kult-of-speed-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bee52e3c-807e-43b4-962e-9c6927296533"
+      }
+    ],
+    "name": "Speediest Freeks",
     "category": "detachment",
     "detachment_id": "kult-of-speed",
     "cp_cost": 1,
@@ -985,26 +798,45 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "speediest-freeks-kult-of-speed",
+    "ability_id": "speediest-freeks-kult-of-speed-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "74000df5-075a-546b-aef9-e6987482afb4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b3bb4207-0b8b-4618-a78d-9f571cebbc07"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "too-arrogant-to-die-bully-boyz",
-    "name": "TOO ARROGANT TO DIE",
+    "id": "stomping-juggernaut-dread-mob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "82c0cb67-c355-4d10-87f6-b6fe2bb1e300"
+      }
+    ],
+    "name": "Stomping Juggernaut",
+    "category": "detachment",
+    "detachment_id": "dread-mob",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "stomping-juggernaut-dread-mob-orks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "too-arrogant-to-die-bully-boyz-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9972067d-b487-42b1-9e5b-936ecf119fbf"
+      }
+    ],
+    "name": "Too Arrogant to Die",
     "category": "detachment",
     "detachment_id": "bully-boyz",
     "cp_cost": 1,
@@ -1014,25 +846,14 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "too-arrogant-to-die-bully-boyz",
+    "ability_id": "too-arrogant-to-die-bully-boyz-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "83d70b70-71d8-54db-a1b2-1741a1d591f6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4fd9f064-a792-4f1a-ae2e-25cc5e656f84"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "unbridled-carnage-green-tide",
+    "id": "unbridled-carnage-green-tide-orks",
     "name": "UNBRIDLED CARNAGE",
     "category": "detachment",
     "detachment_id": "green-tide",
@@ -1043,7 +864,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unbridled-carnage-green-tide",
+    "ability_id": "unbridled-carnage-green-tide-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -1056,7 +877,7 @@
     ]
   },
   {
-    "id": "vindictive-artillerists-madcap-meks",
+    "id": "vindictive-artillerists-madcap-meks-orks",
     "name": "VINDICTIVE ARTILLERISTS",
     "category": "detachment",
     "detachment_id": "madcap-meks",
@@ -1067,7 +888,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vindictive-artillerists-madcap-meks",
+    "ability_id": "vindictive-artillerists-madcap-meks-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -1080,8 +901,14 @@
     ]
   },
   {
-    "id": "where-dya-fink-youre-going-da-big-hunt",
-    "name": "WHERE D’YA FINK YOU’RE GOING?",
+    "id": "where-dya-fink-youre-going-da-big-hunt-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6240efdf-7430-443f-99e2-1ec032f9d7ae"
+      }
+    ],
+    "name": "Where D’ya Fink You’re Going?",
     "category": "detachment",
     "detachment_id": "da-big-hunt",
     "cp_cost": 1,
@@ -1091,25 +918,14 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "where-dya-fink-youre-going-da-big-hunt",
+    "ability_id": "where-dya-fink-youre-going-da-big-hunt-orks",
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "type": "strategic-ploy",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "264086be-b469-56eb-9d48-a1b26e9e8476"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9e27c7e9-a9a4-40e0-9c7a-d4da019cfc8f"
-      }
-    ]
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
-    "id": "while-their-backs-are-turned-taktikal-brigade",
+    "id": "while-their-backs-are-turned-taktikal-brigade-orks",
     "name": "WHILE THEIR BACKS ARE TURNED",
     "category": "detachment",
     "detachment_id": "taktikal-brigade",
@@ -1120,7 +936,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "while-their-backs-are-turned-taktikal-brigade",
+    "ability_id": "while-their-backs-are-turned-taktikal-brigade-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
@@ -1133,7 +949,7 @@
     ]
   },
   {
-    "id": "whirligig-evasion-flyboyz",
+    "id": "whirligig-evasion-flyboyz-orks",
     "name": "WHIRLIGIG EVASION",
     "category": "detachment",
     "detachment_id": "flyboyz",
@@ -1144,7 +960,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "whirligig-evasion-flyboyz",
+    "ability_id": "whirligig-evasion-flyboyz-orks",
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"

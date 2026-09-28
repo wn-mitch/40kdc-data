@@ -22,7 +22,7 @@ describe("resolveDetachment", () => {
   it("resolves a detachment's rule, dispositions, enhancements, and stratagems", () => {
     const d = find("adepta-sororitas", "hallowed-martyrs");
     // the-blood-of-martyrs exists in enrichment, so the rule resolves.
-    expect(d.rules.map((r) => r.id)).toContain("the-blood-of-martyrs");
+    expect(d.rules.map((r) => r.id)).toContain("the-blood-of-martyrs-adepta-sororitas");
     expect(d.dispositions.map((x) => x.id)).toEqual(["priority-assets"]);
     expect(d.dispositions[0].name).toBe("Priority Assets");
     expect(d.enhancements).toHaveLength(4);
@@ -62,9 +62,9 @@ describe("resolveAbility", () => {
   });
 
   it("resolves a known ability to name + describer output", () => {
-    const r = resolveAbility("the-blood-of-martyrs", "adepta-sororitas");
+    const r = resolveAbility("the-blood-of-martyrs-adepta-sororitas", "adepta-sororitas");
     expect(r).toBeDefined();
-    expect(r!.id).toBe("the-blood-of-martyrs");
+    expect(r!.id).toBe("the-blood-of-martyrs-adepta-sororitas");
     expect(typeof r!.name).toBe("string");
     expect(r!.name.length).toBeGreaterThan(0);
     expect(typeof r!.description).toBe("string"); // may be "" but never throws

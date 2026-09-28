@@ -1,13 +1,13 @@
 [
   {
-    "id": "radial-suffusion-rad-zone-corps",
+    "id": "radial-suffusion-rad-zone-corps-adeptus-mechanicus",
     "name": "Radial Suffusion",
     "detachment_id": "rad-zone-corps",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "radial-suffusion-rad-zone-corps-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "malphonic-susurrus-rad-zone-corps",
+    "id": "malphonic-susurrus-rad-zone-corps-adeptus-mechanicus",
     "name": "Malphonic Susurrus",
     "detachment_id": "rad-zone-corps",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "malphonic-susurrus-rad-zone-corps-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "peerless-eradicator-rad-zone-corps",
+    "id": "peerless-eradicator-rad-zone-corps-adeptus-mechanicus",
     "name": "Peerless Eradicator",
     "detachment_id": "rad-zone-corps",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "peerless-eradicator-rad-zone-corps-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "autoclavic-denunciation-rad-zone-corps",
+    "id": "autoclavic-denunciation-rad-zone-corps-adeptus-mechanicus",
     "name": "Autoclavic Denunciation",
     "detachment_id": "rad-zone-corps",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "autoclavic-denunciation-rad-zone-corps-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "cantic-thrallnet-skitarii-hunter-cohort",
+    "id": "cantic-thrallnet-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "Cantic Thrallnet",
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 25,
     "keyword_restrictions": [
       "Marshal"
     ],
-    "ability_id": null,
+    "ability_id": "cantic-thrallnet-skitarii-hunter-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "clandestine-infiltrator-skitarii-hunter-cohort",
+    "id": "clandestine-infiltrator-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "Clandestine Infiltrator",
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 15,
     "keyword_restrictions": [
       "Skitarii"
     ],
-    "ability_id": null,
+    "ability_id": "clandestine-infiltrator-skitarii-hunter-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,14 +168,14 @@
     ]
   },
   {
-    "id": "veiled-hunter-skitarii-hunter-cohort",
+    "id": "veiled-hunter-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "Veiled Hunter",
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 10,
     "keyword_restrictions": [
       "Marshal"
     ],
-    "ability_id": null,
+    "ability_id": "veiled-hunter-skitarii-hunter-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -196,14 +196,14 @@
     ]
   },
   {
-    "id": "battle-sphere-uplink-skitarii-hunter-cohort",
+    "id": "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "Battle-sphere Uplink",
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 25,
     "keyword_restrictions": [
       "Skitarii"
     ],
-    "ability_id": null,
+    "ability_id": "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -224,14 +224,14 @@
     ]
   },
   {
-    "id": "mechanicus-locum-data-psalm-conclave",
+    "id": "mechanicus-locum-data-psalm-conclave-adeptus-mechanicus",
     "name": "Mechanicus Locum",
     "detachment_id": "data-psalm-conclave",
     "cost": 5,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "mechanicus-locum-data-psalm-conclave-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -252,14 +252,14 @@
     ]
   },
   {
-    "id": "mantle-of-the-gnosticarch-data-psalm-conclave",
+    "id": "mantle-of-the-gnosticarch-data-psalm-conclave-adeptus-mechanicus",
     "name": "Mantle of the Gnosticarch",
     "detachment_id": "data-psalm-conclave",
     "cost": 10,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "mantle-of-the-gnosticarch-data-psalm-conclave-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -280,14 +280,14 @@
     ]
   },
   {
-    "id": "data-blessed-autosermon-data-psalm-conclave",
+    "id": "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
     "name": "Data-blessed Autosermon",
     "detachment_id": "data-psalm-conclave",
     "cost": 15,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -308,14 +308,14 @@
     ]
   },
   {
-    "id": "temporcopia-data-psalm-conclave",
+    "id": "temporcopia-data-psalm-conclave-adeptus-mechanicus",
     "name": "Temporcopia",
     "detachment_id": "data-psalm-conclave",
     "cost": 20,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "temporcopia-data-psalm-conclave-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -336,14 +336,14 @@
     ]
   },
   {
-    "id": "magos-explorator-maniple",
+    "id": "magos-explorator-maniple-adeptus-mechanicus",
     "name": "Magos",
     "detachment_id": "explorator-maniple",
     "cost": 10,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "magos-explorator-maniple-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -364,14 +364,14 @@
     ]
   },
   {
-    "id": "genetor-explorator-maniple",
+    "id": "genetor-explorator-maniple-adeptus-mechanicus",
     "name": "Genetor",
     "detachment_id": "explorator-maniple",
     "cost": 20,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "genetor-explorator-maniple-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -392,14 +392,14 @@
     ]
   },
   {
-    "id": "logis-explorator-maniple",
+    "id": "logis-explorator-maniple-adeptus-mechanicus",
     "name": "Logis",
     "detachment_id": "explorator-maniple",
     "cost": 15,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "logis-explorator-maniple-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -420,14 +420,14 @@
     ]
   },
   {
-    "id": "artisan-explorator-maniple",
+    "id": "artisan-explorator-maniple-adeptus-mechanicus",
     "name": "Artisan",
     "detachment_id": "explorator-maniple",
     "cost": 10,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "artisan-explorator-maniple-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -448,14 +448,14 @@
     ]
   },
   {
-    "id": "necromechanic-cohort-cybernetica",
+    "id": "necromechanic-cohort-cybernetica-adeptus-mechanicus",
     "name": "Necromechanic",
     "detachment_id": "cohort-cybernetica",
     "cost": 20,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "necromechanic-cohort-cybernetica-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -476,14 +476,14 @@
     ]
   },
   {
-    "id": "lord-of-machines-cohort-cybernetica",
+    "id": "lord-of-machines-cohort-cybernetica-adeptus-mechanicus",
     "name": "Lord of Machines",
     "detachment_id": "cohort-cybernetica",
     "cost": 15,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "lord-of-machines-cohort-cybernetica-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -504,14 +504,14 @@
     ]
   },
   {
-    "id": "emotionless-clarity-cohort-cybernetica",
+    "id": "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",
     "name": "Emotionless Clarity",
     "detachment_id": "cohort-cybernetica",
     "cost": 10,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -532,14 +532,14 @@
     ]
   },
   {
-    "id": "arch-negator-cohort-cybernetica",
+    "id": "arch-negator-cohort-cybernetica-adeptus-mechanicus",
     "name": "Arch-negator",
     "detachment_id": "cohort-cybernetica",
     "cost": 5,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": null,
+    "ability_id": "arch-negator-cohort-cybernetica-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -560,14 +560,14 @@
     ]
   },
   {
-    "id": "transoracular-dyad-wafers-haloscreed-battle-clade",
+    "id": "transoracular-dyad-wafers-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "Transoracular Dyad Wafers",
     "detachment_id": "haloscreed-battle-clade",
     "cost": 15,
     "keyword_restrictions": [
       "Cybernetica Datasmith"
     ],
-    "ability_id": null,
+    "ability_id": "transoracular-dyad-wafers-haloscreed-battle-clade-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -588,14 +588,14 @@
     ]
   },
   {
-    "id": "cognitive-reinforcement-haloscreed-battle-clade",
+    "id": "cognitive-reinforcement-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "Cognitive Reinforcement",
     "detachment_id": "haloscreed-battle-clade",
     "cost": 30,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "cognitive-reinforcement-haloscreed-battle-clade-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -619,14 +619,14 @@
     ]
   },
   {
-    "id": "sanctified-ordnance-haloscreed-battle-clade",
+    "id": "sanctified-ordnance-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "Sanctified Ordnance",
     "detachment_id": "haloscreed-battle-clade",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": null,
+    "ability_id": "sanctified-ordnance-haloscreed-battle-clade-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -647,11 +647,11 @@
     ]
   },
   {
-    "id": "inloaded-lethality-haloscreed-battle-clade",
+    "id": "inloaded-lethality-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "Inloaded Lethality",
     "detachment_id": "haloscreed-battle-clade",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "inloaded-lethality-haloscreed-battle-clade-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -680,7 +680,7 @@
     ]
   },
   {
-    "id": "explorator-dispensation-cohort-acquisitus",
+    "id": "explorator-dispensation-cohort-acquisitus-adeptus-mechanicus",
     "name": "Explorator Dispensation",
     "detachment_id": "cohort-acquisitus",
     "cost": 20,
@@ -688,7 +688,7 @@
       "Adeptus Mechanicus",
       "Skitarii Marshal"
     ],
-    "ability_id": "explorator-dispensation-cohort-acquisitus",
+    "ability_id": "explorator-dispensation-cohort-acquisitus-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -709,7 +709,7 @@
     ]
   },
   {
-    "id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus",
+    "id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus-adeptus-mechanicus",
     "name": "Stealth-screened Cybercanids (Upgrade)",
     "detachment_id": "cohort-acquisitus",
     "cost": 15,
@@ -717,7 +717,7 @@
       "Adeptus Mechanicus",
       "Serberys Raiders"
     ],
-    "ability_id": "stealth-screened-cybercanids-cohort-acquisitus",
+    "ability_id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -738,7 +738,7 @@
     ]
   },
   {
-    "id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
+    "id": "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
     "name": "Vingh’s Wafers of Dynamism",
     "detachment_id": "lords-of-the-forge",
     "cost": 25,
@@ -746,7 +746,7 @@
       "Adeptus Mechanicus",
       "Cybernetica Datasmith"
     ],
-    "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
+    "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -767,7 +767,7 @@
     ]
   },
   {
-    "id": "tl-4-9-lords-of-the-forge",
+    "id": "tl-4-9-lords-of-the-forge-adeptus-mechanicus",
     "name": "TL-4ø9",
     "detachment_id": "lords-of-the-forge",
     "cost": 30,
@@ -775,7 +775,7 @@
       "Adeptus Mechanicus",
       "Tech-Priest"
     ],
-    "ability_id": "tl-4-9-lords-of-the-forge",
+    "ability_id": "tl-4-9-lords-of-the-forge-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -796,7 +796,7 @@
     ]
   },
   {
-    "id": "voltagheist-reliquary-luminen-auto-choir",
+    "id": "voltagheist-reliquary-luminen-auto-choir-adeptus-mechanicus",
     "name": "Voltagheist Reliquary",
     "detachment_id": "luminen-auto-choir",
     "cost": 15,
@@ -804,7 +804,7 @@
       "Adeptus Mechanicus",
       "Tech-Priest"
     ],
-    "ability_id": "voltagheist-reliquary-luminen-auto-choir",
+    "ability_id": "voltagheist-reliquary-luminen-auto-choir-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -825,7 +825,7 @@
     ]
   },
   {
-    "id": "electromiasmic-brazier-luminen-auto-choir",
+    "id": "electromiasmic-brazier-luminen-auto-choir-adeptus-mechanicus",
     "name": "Electromiasmic Brazier",
     "detachment_id": "luminen-auto-choir",
     "cost": 10,
@@ -833,7 +833,7 @@
       "Adeptus Mechanicus",
       "Tech-Priest"
     ],
-    "ability_id": "electromiasmic-brazier-luminen-auto-choir",
+    "ability_id": "electromiasmic-brazier-luminen-auto-choir-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -854,7 +854,7 @@
     ]
   },
   {
-    "id": "omnicogitator-eradication-cohort",
+    "id": "omnicogitator-eradication-cohort-adeptus-mechanicus",
     "name": "Omnicogitator",
     "detachment_id": "eradication-cohort",
     "cost": 25,
@@ -862,7 +862,7 @@
       "Marshal",
       "Skitarii"
     ],
-    "ability_id": "omnicogitator-eradication-cohort",
+    "ability_id": "omnicogitator-eradication-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -883,14 +883,14 @@
     ]
   },
   {
-    "id": "martial-signatum-amplificator-eradication-cohort",
+    "id": "martial-signatum-amplificator-eradication-cohort-adeptus-mechanicus",
     "name": "Martial Signatum Amplificator",
     "detachment_id": "eradication-cohort",
     "cost": 15,
     "keyword_restrictions": [
       "Tech-Priest"
     ],
-    "ability_id": "martial-signatum-amplificator-eradication-cohort",
+    "ability_id": "martial-signatum-amplificator-eradication-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -911,14 +911,14 @@
     ]
   },
   {
-    "id": "belicosa-class-capacitor-vanes-eradication-cohort",
+    "id": "belicosa-class-capacitor-vanes-eradication-cohort-adeptus-mechanicus",
     "name": "Belicosa-class Capacitor Vanes",
     "detachment_id": "eradication-cohort",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Mechanicus"
     ],
-    "ability_id": "belicosa-class-capacitor-vanes-eradication-cohort",
+    "ability_id": "belicosa-class-capacitor-vanes-eradication-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -939,7 +939,7 @@
     ]
   },
   {
-    "id": "omnissiahs-fury-eradication-cohort",
+    "id": "omnissiahs-fury-eradication-cohort-adeptus-mechanicus",
     "name": "Omnissiah’s Fury",
     "detachment_id": "eradication-cohort",
     "cost": 10,
@@ -947,7 +947,7 @@
       "Marshal",
       "Skitarii"
     ],
-    "ability_id": "omnissiahs-fury-eradication-cohort",
+    "ability_id": "omnissiahs-fury-eradication-cohort-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -968,7 +968,7 @@
     ]
   },
   {
-    "id": "empowered-mechanisms-purge-corps-deltic-9",
+    "id": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus",
     "name": "Empowered Mechanisms",
     "detachment_id": "purge-corps-deltic-9",
     "cost": 0,
@@ -993,7 +993,7 @@
     ]
   },
   {
-    "id": "miniaturised-autosimulacra-purge-corps-deltic-9",
+    "id": "miniaturised-autosimulacra-purge-corps-deltic-9-adeptus-mechanicus",
     "name": "Miniaturised Autosimulacra",
     "detachment_id": "purge-corps-deltic-9",
     "cost": 0,

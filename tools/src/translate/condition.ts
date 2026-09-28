@@ -19,7 +19,7 @@ export interface Condition {
 }
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
-import { andList, dekebab, designationPhrase, objectivePhrase, ord, orList, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase, type P } from "./condition-refs.js";
+import { andList, dekebab, designationPhrase, idLabel, objectivePhrase, ord, orList, type P, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
 
@@ -79,7 +79,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${neg}during ${where}`;
     }
     case "rule-active":
-      return `the ${titleCase(str(p.rule))} is ${negated ? "not " : ""}active`;
+      return `the ${idLabel(p.rule)} is ${negated ? "not " : ""}active`;
     case "has-keyword": {
       const who = p.subject === "defender" ? "the target" : subjectOf(p);
       return `${who} ${negated ? "does not have" : "has"} ${keywordList(p)}`;
@@ -91,7 +91,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "model-profile":
       return `${subjectOf(p, "the model")} is ${negated ? "not " : ""}the ${titleCase(str(p.profile))} model`;
     case "has-ability":
-      return `${neg}${subjectOf(p)} has the ${titleCase(str(p.ability))} ability`;
+      return `${neg}${subjectOf(p)} has the ${idLabel(p.ability)} ability`;
     case "attachment": {
       const w = (p.with ?? {}) as P;
       const kw = Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : "";

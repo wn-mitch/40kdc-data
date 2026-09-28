@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "scouts-9",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -24,7 +24,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "demolition-run",
+    "source_id": "demolition-run-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -60,7 +60,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "heroic-fusillade",
+    "source_id": "heroic-fusillade-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -72,7 +72,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypersensory-abilities",
+    "source_id": "hypersensory-abilities-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -85,7 +85,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "a-plan-generations-in-the-making",
+    "source_id": "a-plan-generations-in-the-making-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -97,7 +97,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cult-icon",
+    "source_id": "cult-icon-neophyte-hybrids-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -109,7 +109,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "voice-of-new-truths",
+    "source_id": "voice-of-new-truths-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -121,7 +121,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "primed-and-ready",
+    "source_id": "primed-and-ready-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command",
@@ -134,7 +134,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "planted-explosives",
+    "source_id": "planted-explosives-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -146,7 +146,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "might-from-beyond",
+    "source_id": "might-from-beyond-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -159,7 +159,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cosmic-horror-psychic",
+    "source_id": "cosmic-horror-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -171,7 +171,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-familiar",
+    "source_id": "psychic-familiar-patriarch-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -183,7 +183,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -196,7 +196,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-6",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -209,7 +209,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fire-support",
+    "source_id": "fire-support-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -223,7 +223,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "twisted-science",
+    "source_id": "twisted-science-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -236,7 +236,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "biological-warfare",
+    "source_id": "biological-warfare-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -248,7 +248,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "alchemicus-familiar",
+    "source_id": "alchemicus-familiar-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -261,7 +261,20 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "crossfire-genestealer-cults",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "flare-launcher-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -273,45 +286,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crossfire",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flare-launcher",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spotter",
+    "source_id": "spotter-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -323,7 +298,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "survey-augur",
+    "source_id": "survey-augur-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -336,7 +311,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cult-demagogue",
+    "source_id": "cult-demagogue-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -349,7 +324,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "decoys-and-misdirection",
+    "source_id": "decoys-and-misdirection-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -361,7 +336,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-chosen-one",
+    "source_id": "the-chosen-one-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -373,7 +348,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "regenerating-gene-mass",
+    "source_id": "regenerating-gene-mass-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -386,7 +361,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "battlefield-analysis",
+    "source_id": "battlefield-analysis-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -398,7 +373,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "creeping-shadow",
+    "source_id": "creeping-shadow-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -410,7 +385,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cloaked-assassin",
+    "source_id": "cloaked-assassin-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command",
@@ -423,7 +398,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-spoor",
+    "source_id": "psychic-spoor-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command",
@@ -437,7 +412,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "priority-target",
+    "source_id": "priority-target-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -450,7 +425,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "master-outrider",
+    "source_id": "master-outrider-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -464,7 +439,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "claimed-for-the-cult",
+    "source_id": "claimed-for-the-cult-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command"
@@ -476,7 +451,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "brood-surge",
+    "source_id": "brood-surge-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -488,7 +463,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "industrialised-destruction",
+    "source_id": "industrialised-destruction-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -513,7 +488,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sudden-assault",
+    "source_id": "sudden-assault-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -525,7 +500,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bio-horror-disruption-psychic",
+    "source_id": "bio-horror-disruption-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -537,36 +512,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psionic-shield-psychic",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swift-and-deadly",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spiritual-leader",
+    "source_id": "psionic-shield-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "command",
@@ -582,7 +528,36 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mind-control-psychic",
+    "source_id": "swift-and-deadly-genestealer-cults",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "spiritual-leader-genestealer-cults",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mind-control-genestealer-cults",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -595,751 +570,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "symbiotic-destruction",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gene-twisted-muscle",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hyper-metabolic-vigour",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stimulated-bio-surge",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "devoted-crew",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "close-range-shoot-out",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deft-manoeuvring",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hyperferocity",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "avenge-the-star-children",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "divine-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "frenzied-devotion",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coordinated-trap",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "primed-and-readied",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "saintly-paroxysm",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vengeance-for-the-martyr",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "in-the-shadow-of-iron",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "regimental-reinforcements",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "suppress-and-overwhelm",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-dark-network",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "evasive-vanguard",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bio-horror-revelation",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "along-shadowed-trails",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapid-feint",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "encircling-the-prey",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psi-surge",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "darting-attacks",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "resistance-tunnels",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tireless-fervour",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "transcendent-celerity",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-path-of-anguish",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tunnel-crawlers",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lying-in-wait",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "return-to-the-shadows",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-deadly-snare",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "acceptable-losses",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-downtrodden-rise",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prowling-agitant",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-chink-in-their-armour",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "our-time-is-nigh",
-    "source_type": "enhancement",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assassination-edict",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "denunciator-of-tyrants",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deeds-that-speak-to-the-masses",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "incendiary-inspiration",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "predatory-instincts",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "biomorph-adaptation",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mutagenic-regeneration",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "alien-majesty",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "serpentine-tactics",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cartographic-data-leech",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "starfall-shells",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assault-commando",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "martial-espionage",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "adaptive-reprisal",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-hero-returned",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-point-commander",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-auger",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enraptured-damnation",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vanguard-tyrant",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inhuman-integration",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "integrated-tactics",
+    "source_id": "integrated-tactics-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1351,7 +582,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypermorphic-fury",
+    "source_id": "hypermorphic-fury-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1365,7 +596,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-takeover",
+    "source_id": "rapid-takeover-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1377,7 +608,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psionic-parasitism",
+    "source_id": "psionic-parasitism-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1392,7 +623,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unquestioning-fanaticism",
+    "source_id": "unquestioning-fanaticism-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -1405,7 +636,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "a-perfect-ambush",
+    "source_id": "a-perfect-ambush-genestealer-cults",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",

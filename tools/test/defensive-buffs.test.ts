@@ -17,7 +17,8 @@ describe("Dataset.defensiveBuffsFor", () => {
     // Templar Vows — +1 to wound in the fight phase), the attacker walk yields
     // the buff while the defensive walk drops it.
     const crusader = ds.units.find("Crusader Squad")!;
-    const input = { unitId: crusader.id, factionId: "adeptus-astartes" };
+    // Templar Vows is the Black Templars supplement's army rule (D7), so the army is Black Templars.
+    const input = { unitId: crusader.id, factionId: "black-templars" };
     const atk = ds.buffsFor(input, { phase: "fight" });
     const def = ds.defensiveBuffsFor(input, { phase: "fight" });
     const atkWound = atk.filter((b) => b.contribution.type === "wound-mod");
@@ -65,15 +66,15 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       { unitId: "kabalite-warriors", factionId: "drukhari", attachedUnitIds: ["archon"] },
       { phase: "shooting" },
     );
-    expect(invulns(attached, "shadowfield")).toEqual([]);
+    expect(invulns(attached, "shadowfield-drukhari")).toEqual([]);
 
     // …but the Archon crunched as itself keeps it (source kind "unit").
     const own = ds.defensiveBuffsFor(
       { unitId: "archon", factionId: "drukhari" },
       { phase: "shooting" },
     );
-    expect(invulns(own, "shadowfield")).toHaveLength(1);
-    expect(invulns(own, "shadowfield")[0].contribution).toEqual({
+    expect(invulns(own, "shadowfield-drukhari")).toHaveLength(1);
+    expect(invulns(own, "shadowfield-drukhari")[0].contribution).toEqual({
       type: "invulnerable-save",
       threshold: 4,
     });
@@ -87,15 +88,15 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       { unitId: "intercessor-squad", factionId: "adeptus-astartes", attachedUnitIds: ["librarian"] },
       { phase: "fight" },
     );
-    const buffs = invulns(attached, "mental-fortress-psychic");
+    const buffs = invulns(attached, "mental-fortress-adeptus-astartes");
     expect(buffs).toHaveLength(1);
     expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "librarian" });
   });
 
   it("the dropped effect is reported as unsupported, not silently discarded", () => {
-    const shadowfield = ds.abilities.getAny("shadowfield")!;
+    const shadowfield = ds.abilities.getAny("shadowfield-drukhari")!;
     const translated = shadowfield.describeBuffs(
-      { kind: "ability", abilityId: "shadowfield", abilityKind: "attached", sourceUnitId: "archon" },
+      { kind: "ability", abilityId: "shadowfield-drukhari", abilityKind: "attached", sourceUnitId: "archon" },
       { phase: "shooting" },
       "target",
     );
@@ -126,13 +127,13 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       },
       { phase: "command" },
     );
-    expect(keywordsFrom(led, "psychic-gifts")).toEqual([]);
+    expect(keywordsFrom(led, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
     // …while the Inquisitor crunched as itself still carries it.
     const alone = ds.buffsFor(
       { unitId: "inquisitor", factionId: "agents-of-the-imperium" },
       { phase: "command" },
     );
-    expect(keywordsFrom(alone, "psychic-gifts")).toEqual(["psyker"]);
+    expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual(["psyker"]);
 
     // Surgical Precision is unit-scoped ("that unit's ranged weapons have
     // [LETHAL HITS]"), so an attached Apothecary Biologis still grants it.
@@ -144,7 +145,7 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       },
       { phase: "shooting" },
     );
-    expect(keywordsFrom(aggressors, "surgical-precision")).toEqual(["lethal-hits"]);
+    expect(keywordsFrom(aggressors, "surgical-precision-adeptus-astartes")).toEqual(["lethal-hits"]);
   });
 });
 

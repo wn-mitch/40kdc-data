@@ -1,0 +1,892 @@
+[
+  {
+    "ability_id": "astartes-shield-deathwatch",
+    "name": "Astartes shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1932a9069a89679fec8c06bb0995adab086eddeb56e983cbdfab4519f04a5538",
+    "version": "2025-q3",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "this-model",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "deathwatch-veterans",
+      "decimus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "auspex-array-deathwatch",
+    "name": "Auspex Array",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "071d01584806666355bbae334684b453f7f226d22fde041d6ea9634ef576073b",
+    "version": "2025-q3",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "abilities": [
+          "Ignores Cover"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "blackstar-cluster-launcher-deathwatch",
+    "name": "Blackstar Cluster Launcher",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "76e977fc735a8c62a2b5838755a02f425400e97846fd1bcfbaaee2fcd8d634c0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "defender",
+      "modifier": {
+        "count": "1"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "death-to-the-alien-deathwatch",
+    "name": "Death to the Alien",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7abe3ed178fbca178c5bdaa1ba2cfc72a575be18d44c6a1179810239d5a3f0ea",
+    "version": "2025-q3",
+    "effect": {
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "subset": "ones"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "deathwatch-veterans",
+      "decimus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "fortis-doctrines-deathwatch",
+    "name": "Fortis Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3321b5b96b143526834cbbb17079804d461dadd12d66b35072faf0475897a8bb",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
+          },
+          {
+            "type": "strength",
+            "parameters": {
+              "below": "half"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "fortis-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "auto-generated, partial",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "helix-gauntlet-deathwatch",
+    "name": "Helix Gauntlet",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3a375167eccdc3e71908e50e68a2c22443878aa5d67f2cc684a7f01a8a7ad988",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "spectrus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "indomitor-doctrines-deathwatch",
+    "name": "Indomitor Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "8c643ab63fb7bd14be6a549480302729679cb9b8aa7a4dbe2a30c33b7a42402e",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "add",
+          "value": 2
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "indomitor-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "infernum-halo-launcher-deathwatch",
+    "name": "Infernum Halo-launcher",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2966068a5e9674328be11b29d8c87aab75d736797205a5d57438f70435f50a13",
+    "version": "2025-q3",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "abilities": [
+          "Smoke"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "infiltrator-comms-array-deathwatch",
+    "name": "Infiltrator Comms Array",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "58fbcb829e38e968ccd5a3a462c7626738cebe80e9cfa53f54fa3e96bbed4888",
+    "version": "2025-q3",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "spectrus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "instigator-bolt-carbine-deathwatch",
+    "name": "Instigator Bolt Carbine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7d7846630ad11e85c388e594ea4ac8542c763bff91dfdfaa849dbe1d543cb64e",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal"
+        }
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "spectrus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "kill-teams-deathwatch",
+    "name": "Kill Teams",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3a2cd1eca935ef75202f3a29f6b9378004fadec8120dc453d982fc0696336c22",
+    "version": "2025-q3",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "deathwatch",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "mission-tactics-deathwatch",
+    "name": "Mission Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "428df1cd39cc58e370db27c64b6a3c2e5fc179ffd3e909f341e76d9724cb85b0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "decimus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "spectrus-doctrines-deathwatch",
+    "name": "Spectrus Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "da8ff923ac4182f1eb7f735da2e0fafd36d40f0bc3ed9eb1371dfb42e19f1a81",
+    "version": "2025-q3",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "spectrus-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "storm-shield-deathwatch",
+    "name": "Storm Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "W",
+        "operation": "set",
+        "value": 4
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "deathwatch-terminator-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "strategic-knowledge-deathwatch",
+    "name": "Strategic Knowledge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "02eae04bc55a7f857659ed986a1c91238563178293db341777cf85cebe356850",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "shoot",
+          "allow": true,
+          "after": [
+            "fall-back"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "watch-master"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "tactical-instinct-deathwatch",
+    "name": "Tactical Instinct",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "48abdaff7f9f986c7464892c1a014938cdc6bf241654dc37cfdbbf0adcc8b9c2",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Lethal Hits"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "watch-captain-artemis"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "talonstrike-doctrines-deathwatch",
+    "name": "Talonstrike Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "a6bbcd9a190f5e4bdc0da31c88e308fbfdecdf1804743fe152685d2faea9e13a",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "talonstrike-kill-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "unstoppable-champion-deathwatch",
+    "name": "Unstoppable Champion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "fd4c2d7bef28cc8bf5fe05f0d8cbdbe21b79e6261f6612335b9b7b80fc3bd60b",
+    "version": "2025-q3",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "return-models",
+        "target": "this-model",
+        "modifier": {
+          "count": 1,
+          "wounds_remaining": 1,
+          "placement": "closest-to-destruction"
+        }
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "watch-captain-artemis"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-unit",
+      "filter": {
+        "first": true
+      }
+    },
+    "faction_id": "deathwatch"
+  },
+  {
+    "ability_id": "adaptive-tactics-black-spear-task-force-deathwatch",
+    "name": "Adaptive Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "armour-of-contempt-black-spear-task-force-deathwatch",
+    "name": "Armour of Contempt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "beacon-angelis-black-spear-task-force-deathwatch",
+    "name": "Beacon Angelis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-deathwatch",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dragonfire-rounds-black-spear-task-force-deathwatch",
+    "name": "Dragonfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hellfire-rounds-black-spear-task-force-deathwatch",
+    "name": "Hellfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "kraken-rounds-black-spear-task-force-deathwatch",
+    "name": "Kraken Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "osseus-key-black-spear-task-force-deathwatch",
+    "name": "Osseus Key",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rites-of-battle-deathwatch",
+    "name": "Rites of Battle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "site-to-site-teleportation-black-spear-task-force-deathwatch",
+    "name": "Site-to-Site Teleportation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teleport-homer-deathwatch",
+    "name": "Teleport Homer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "deathwatch-terminator-squad"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "terminatus-assault-deathwatch",
+    "name": "Terminatus Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "deathwatch-terminator-squad"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-tome-of-ectoclades-black-spear-task-force-deathwatch",
+    "name": "The Tome of Ectoclades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "thief-of-secrets-black-spear-task-force-deathwatch",
+    "name": "Thief of Secrets",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "black-spear-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

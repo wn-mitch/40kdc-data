@@ -29,7 +29,7 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | iron-hands | 0 | 0 | 0 | 17 |
 | leagues-of-votann | 0 | 0 | 0 | 11 |
 | necrons | 0 | 0 | 0 | 13 |
-| orks | 0 | 0 | 0 | 16 |
+| orks | 15 | 0 | 0 | 1 |
 | raven-guard | 0 | 0 | 0 | 17 |
 | salamanders | 0 | 0 | 0 | 17 |
 | space-wolves | 0 | 0 | 0 | 24 |
@@ -40,5 +40,22 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | white-scars | 0 | 0 | 0 | 17 |
 | world-eaters | 0 | 0 | 0 | 9 |
 
-Total: 0 detachment(s), 0 enhancement(s) created; 0 held back; 468 skipped.
+Total: 15 detachment(s), 0 enhancement(s) created; 0 held back; 453 skipped.
+
+## orks
+- created detachment `blitz-brigade` (Blitz Brigade)
+- created detachment `brute-bosses` (Brute Bosses)
+- created detachment `bully-boyz` (Bully Boyz)
+- created detachment `da-big-hunt` (Da Big Hunt)
+- created detachment `dread-mob` (Dread Mob)
+- created detachment `flyboyz` (Flyboyz)
+- created detachment `green-tide` (Green Tide)
+- created detachment `kult-of-speed` (Kult of Speed)
+- created detachment `madcap-meks` (Madcap Meks)
+- created detachment `runt-swarm` (Runt Swarm)
+- created detachment `shoota-boyz` (Shoota Boyz)
+- created detachment `taktikal-brigade` (Taktikal Brigade)
+- created detachment `war-horde` (War Horde)
+- created detachment `wreckas` (Wreckas)
+- created detachment `wurrband` (Wurrband)
 

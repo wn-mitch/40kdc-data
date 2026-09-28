@@ -1,35 +1,6 @@
 [
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "trygon",
-      "mucolid-spores",
-      "spore-mines",
-      "the-red-terror"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "subterranean-tunnels",
+    "ability_id": "subterranean-tunnels-tyranids",
     "name": "Subterranean Tunnels",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -82,10 +53,11 @@
           "phase": "movement"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "terror-from-the-deep",
+    "ability_id": "terror-from-the-deep-tyranids",
     "name": "Terror From The Deep",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -108,10 +80,11 @@
       "mawloc"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "adaptable-predators",
+    "ability_id": "adaptable-predators-tyranids",
     "name": "Adaptable Predators",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -138,60 +111,11 @@
       "tyranid-warriors-with-ranged-bio-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "winged-hive-tyrant"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "will-of-the-hive-mind",
+    "ability_id": "will-of-the-hive-mind-tyranids",
     "name": "Will of the Hive Mind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -224,13 +148,15 @@
       "duration": "one-use"
     },
     "unit_ids": [
+      "hive-tyrant",
       "winged-hive-tyrant"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "paroxysm-psychic",
+    "ability_id": "paroxysm-tyranids",
     "name": "Paroxysm (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -262,86 +188,11 @@
       "winged-hive-tyrant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "deadly-demise-2d6",
-    "name": "Deadly Demise 2D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "2D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "harridan"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "harridan"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "frenzied-metabolism",
+    "ability_id": "frenzied-metabolism-tyranids",
     "name": "Frenzied Metabolism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -383,60 +234,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "norn-emissary"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "singular-purpose",
+    "ability_id": "singular-purpose-tyranids",
     "ability_type": "unit",
     "authored_by": "40kdc-community",
     "behavior": "activated",
@@ -528,12 +330,14 @@
       "duration": "battle"
     },
     "unit_ids": [
+      "norn-assimilator",
       "norn-emissary"
     ],
-    "version": "2025-q3"
+    "version": "2025-q3",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "unnatural-resilience",
+    "ability_id": "unnatural-resilience-tyranids",
     "name": "Unnatural Resilience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -557,36 +361,11 @@
       "norn-emissary"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9a56719535ea34ca272d2e23ebd450c1a4aa49fbce390e51a7f7c1a9e3b2ad53",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "winged-tyranid-prime"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "alpha-warrior",
+    "ability_id": "alpha-warrior-winged-tyranid-prime-tyranids",
     "name": "Alpha Warrior",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -621,10 +400,11 @@
       "winged-tyranid-prime"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "death-blow",
+    "ability_id": "death-blow-tyranids",
     "name": "Death Blow",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -656,10 +436,11 @@
       "winged-tyranid-prime"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "apex-beast",
+    "ability_id": "apex-beast-tyranids",
     "name": "Apex-beast",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -694,10 +475,11 @@
       "hierophant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "stalking-forward",
+    "ability_id": "stalking-forward-tyranids",
     "name": "Stalking Forward",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -722,10 +504,11 @@
       "hierophant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hive-commander",
+    "ability_id": "hive-commander-tyranids",
     "name": "Hive Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -748,10 +531,11 @@
       "the-swarmlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "malign-presence-aura",
+    "ability_id": "malign-presence-tyranids",
     "name": "Malign Presence (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -784,10 +568,11 @@
       "the-swarmlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "domination-of-the-hive-mind-aura",
+    "ability_id": "domination-of-the-hive-mind-tyranids",
     "name": "Domination of the Hive Mind (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -820,10 +605,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "symbiotic-targeting",
+    "ability_id": "symbiotic-targeting-tyranids",
     "name": "Symbiotic Targeting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -872,39 +658,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] After this model shoots, select one enemy unit hit by those attacks: until the end of the phase, friendly TYRANIDS models re-roll Hit rolls of 1 against it. The hit-by-this-model eligibility restriction is not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] After this model shoots, select one enemy unit hit by those attacks: until the end of the phase, friendly TYRANIDS models re-roll Hit rolls of 1 against it. The hit-by-this-model eligibility restriction is not encoded. Full rule in raw-text store.",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venomthropes",
-      "von-ryans-leapers"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "foul-spores-aura",
+    "ability_id": "foul-spores-tyranids",
     "name": "Foul Spores (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -938,10 +696,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "adaptive-instincts",
+    "ability_id": "adaptive-instincts-tyranids",
     "name": "Adaptive Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -975,10 +734,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "bio-minefield",
+    "ability_id": "bio-minefield-tyranids",
     "name": "Bio-minefield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1010,10 +770,11 @@
       "mucolid-spores"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "floating-death",
+    "ability_id": "floating-death-tyranids",
     "name": "Floating Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1033,14 +794,14 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "spore-mines",
       "mucolid-spores"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "aerial-seeding",
+    "ability_id": "aerial-seeding-tyranids",
     "name": "Aerial Seeding",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1129,10 +890,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] once set up on the battlefield no units can embark within it — the embark bar is not modeled"
+    "community_notes": "[APPROX] once set up on the battlefield no units can embark within it — the embark bar is not modeled",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "chitinous-horrors-aura",
+    "ability_id": "chitinous-horrors-tyranids",
     "name": "Chitinous Horrors (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1161,60 +923,11 @@
       "ripper-swarms"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "biovores"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "seed-spore-mines",
+    "ability_id": "seed-spore-mines-tyranids",
     "name": "Seed Spore Mines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1267,98 +980,11 @@
     "behavior": "activated",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deathleaper",
-      "von-ryans-leapers"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "deathleaper",
-      "von-ryans-leapers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deathleaper"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "feeder-tendrils",
+    "ability_id": "feeder-tendrils-tyranids",
     "name": "Feeder Tendrils",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1378,13 +1004,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "deathleaper"
+      "deathleaper",
+      "lictor",
+      "neurolictor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "fear-of-the-unseen-aura",
+    "ability_id": "fear-of-the-unseen-tyranids",
     "name": "Fear of the Unseen (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1423,10 +1052,11 @@
       "deathleaper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hunter-organism",
+    "ability_id": "hunter-organism-tyranids",
     "name": "Hunter Organism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1449,10 +1079,11 @@
       "deathleaper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "alpha-invader",
+    "ability_id": "alpha-invader-tyranids",
     "name": "Alpha Invader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1477,10 +1108,11 @@
       "hyperadapted-raveners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hypersensory-array",
+    "ability_id": "hypersensory-array-tyranids",
     "name": "Hypersensory Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1523,10 +1155,11 @@
       "hyperadapted-raveners"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "harpoon-barbs",
+    "ability_id": "harpoon-barbs-tyranids",
     "name": "Harpoon Barbs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1552,10 +1185,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "seed-mucolids",
+    "ability_id": "seed-mucolids-tyranids",
     "name": "Seed Mucolids",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1608,10 +1242,11 @@
     "behavior": "activated",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hive-defences",
+    "ability_id": "hive-defences-tyranids",
     "name": "Hive Defences",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1654,10 +1289,11 @@
       "sporocyst"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "resilient-organism",
+    "ability_id": "resilient-organism-tyranids",
     "name": "Resilient Organism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1681,10 +1317,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "neural-disruption",
+    "ability_id": "neural-disruption-tyranids",
     "name": "Neural Disruption",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1714,10 +1351,11 @@
       "neurolictor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "psychological-saboteur-aura",
+    "ability_id": "psychological-saboteur-tyranids",
     "name": "Psychological Saboteur (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1795,36 +1433,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "psychophage"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "bio-stimulus-aura",
+    "ability_id": "bio-stimulus-tyranids",
     "name": "Bio-stimulus (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1885,10 +1498,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] After this model shoots, select one enemy unit hit by those attacks: until the end of the turn, friendly TYRANIDS melee attacks against it have their Armour Penetration improved by 1. The hit-by-this-model eligibility and the once-per-turn-per-enemy-unit limits are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] After this model shoots, select one enemy unit hit by those attacks: until the end of the turn, friendly TYRANIDS melee attacks against it have their Armour Penetration improved by 1. The hit-by-this-model eligibility and the once-per-turn-per-enemy-unit limits are not encoded. Full rule in raw-text store.",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "feeding-frenzy",
+    "ability_id": "feeding-frenzy-tyranids",
     "name": "Feeding Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1954,10 +1568,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "spirit-leech-aura-psychic",
+    "ability_id": "spirit-leech-tyranids",
     "name": "Spirit Leech (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1980,10 +1595,11 @@
       "zoanthropes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "warp-field-aura-psychic",
+    "ability_id": "warp-field-tyranids",
     "name": "Warp Field (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2016,37 +1632,11 @@
       "zoanthropes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "broodlord"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "vicious-insight",
+    "ability_id": "vicious-insight-tyranids",
     "name": "Vicious Insight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2081,10 +1671,11 @@
       "broodlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hypnotic-gaze-psychic",
+    "ability_id": "hypnotic-gaze-tyranids",
     "name": "Hypnotic Gaze (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2118,10 +1709,11 @@
       "broodlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "spore-mine-cysts",
+    "ability_id": "spore-mine-cysts-tyranids",
     "name": "Spore Mine Cysts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2144,10 +1736,11 @@
       "harpy"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "parasitic-infection",
+    "ability_id": "parasitic-infection-tyranids",
     "name": "Parasitic Infection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2214,10 +1807,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "it-itches",
+    "ability_id": "it-itches-tyranids",
     "name": "It Itches!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2249,10 +1843,11 @@
       "parasite-of-mortrex"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "guardian-organism",
+    "ability_id": "guardian-organism-tyranids",
     "name": "Guardian Organism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2285,10 +1880,11 @@
       "tyrant-guard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "death-scream",
+    "ability_id": "death-scream-tyranids",
     "name": "Death Scream",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2320,10 +1916,11 @@
       "screamer-killer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "bounding-leap",
+    "ability_id": "bounding-leap-tyranids",
     "name": "Bounding Leap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2350,10 +1947,11 @@
       "hormagaunts"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "vanguard-predator",
+    "ability_id": "vanguard-predator-tyranids",
     "name": "Vanguard Predator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2391,10 +1989,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "grasping-tendrils",
+    "ability_id": "grasping-tendrils-tyranids",
     "name": "Grasping Tendrils",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2426,10 +2025,11 @@
       "toxicrene"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "hypertoxic-miasma-aura",
+    "ability_id": "hypertoxic-miasma-tyranids",
     "name": "Hypertoxic Miasma (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2452,10 +2052,11 @@
       "toxicrene"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "burning-spray",
+    "ability_id": "burning-spray-tyranids",
     "name": "Burning Spray",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2487,10 +2088,11 @@
       "pyrovores"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "node-lash-psychic",
+    "ability_id": "node-lash-tyranids",
     "name": "Node Lash (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2540,10 +2142,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "psychic-terror-psychic",
+    "ability_id": "psychic-terror-tyranids",
     "name": "Psychic Terror (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2590,7 +2193,7 @@
       },
       "filter": {
         "kind": "ability",
-        "id": "shadow-in-the-warp"
+        "id": "shadow-in-the-warp-tyranids"
       },
       "condition": {
         "type": "unit-state",
@@ -2599,10 +2202,11 @@
           "state": "on-battlefield"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "neuroloids",
+    "ability_id": "neuroloids-tyranids",
     "name": "Neuroloids",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2627,7 +2231,7 @@
         "target": "selected-unit",
         "modifier": {
           "within": {
-            "aura_of": "synapse"
+            "aura_of": "synapse-tyranids"
           },
           "of": {
             "owner": "friendly",
@@ -2654,10 +2258,11 @@
           "phase": "command"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "skulking-horrors",
+    "ability_id": "skulking-horrors-tyranids",
     "name": "Skulking Horrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2720,10 +2325,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "aggressive-leader-beast",
+    "ability_id": "aggressive-leader-beast-tyranids",
     "name": "Aggressive Leader‑beast",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2804,10 +2410,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-phase"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "defensive-stance",
+    "ability_id": "defensive-stance-tyranids",
     "name": "Defensive Stance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2888,10 +2495,11 @@
       "hive-guard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "disruption-bombardment",
+    "ability_id": "disruption-bombardment-tyranids",
     "name": "Disruption Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2978,10 +2586,11 @@
           "phase": "shooting"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "neurocytes",
+    "ability_id": "neurocytes-tyranids",
     "name": "Neurocytes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3005,7 +2614,7 @@
             ]
           },
           "range": {
-            "aura_of": "synapse"
+            "aura_of": "synapse-tyranids"
           }
         }
       },
@@ -3027,10 +2636,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "airborne-predator",
+    "ability_id": "airborne-predator-tyranids",
     "name": "Airborne Predator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3078,10 +2688,11 @@
       "hive-crone"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "spawn-termagants",
+    "ability_id": "spawn-termagants-tyranids",
     "name": "Spawn Termagants",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3120,10 +2731,11 @@
       "tervigon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "brood-progenitor-aura-psychic",
+    "ability_id": "brood-progenitor-tyranids",
     "name": "Brood Progenitor (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3159,10 +2771,11 @@
       "tervigon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "alpha-leader",
+    "ability_id": "alpha-leader-tyranids",
     "name": "Alpha Leader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3196,10 +2809,11 @@
       "old-one-eye"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "unstoppable-monster",
+    "ability_id": "unstoppable-monster-tyranids",
     "name": "Unstoppable Monster",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3222,10 +2836,11 @@
       "old-one-eye"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "encephalic-diffusion-aura-psychic",
+    "ability_id": "encephalic-diffusion-tyranids",
     "name": "Encephalic Diffusion (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3260,10 +2875,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "blistering-assault",
+    "ability_id": "blistering-assault-tyranids",
     "name": "Blistering Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3318,10 +2934,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-phase"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "onslaught-aura-psychic",
+    "ability_id": "onslaught-tyranids",
     "name": "Onslaught (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3358,10 +2975,11 @@
       "hive-tyrant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "winged-swarm",
+    "ability_id": "winged-swarm-tyranids",
     "name": "Winged Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3393,10 +3011,11 @@
       "gargoyles"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "grisly-spectacle",
+    "ability_id": "grisly-spectacle-tyranids",
     "name": "Grisly Spectacle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3452,10 +3071,11 @@
       "haruspex"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "pheromone-trail",
+    "ability_id": "pheromone-trail-tyranids",
     "name": "Pheromone Trail",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3481,10 +3101,11 @@
       "lictor"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "death-from-below",
+    "ability_id": "death-from-below-tyranids",
     "name": "Death From Below",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3507,10 +3128,11 @@
       "raveners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "synapse",
+    "ability_id": "synapse-tyranids",
     "name": "Synapse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3572,14 +3194,17 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": [
-      "von-ryans-leapers",
       "mucolid-spores",
-      "spore-mines",
-      "the-red-terror"
+      "terror-of-vardenghast",
+      "vardenghast-swarm-barbgaunts",
+      "vardenghast-swarm-psychophage",
+      "vardenghast-swarm-termagants",
+      "vardenghast-swarm-von-ryans-leapers",
+      "von-ryans-leapers"
     ]
   },
   {
-    "ability_id": "shadow-in-the-warp",
+    "ability_id": "shadow-in-the-warp-tyranids",
     "name": "Shadow in the Warp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3608,10 +3233,10 @@
     "faction_id": "tyranids",
     "ability_type": "faction",
     "behavior": "activated",
-    "unit_ids": []
+    "unit_ids": ["terror-of-vardenghast","vardenghast-swarm-barbgaunts","vardenghast-swarm-psychophage","vardenghast-swarm-termagants","vardenghast-swarm-von-ryans-leapers"]
   },
   {
-    "ability_id": "pouncing-leap",
+    "ability_id": "pouncing-leap-tyranids",
     "name": "Pouncing Leap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3656,10 +3281,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "mindhunger",
+    "ability_id": "mindhunger-tyranids",
     "name": "Mindhunger",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3724,7 +3350,7 @@
     }
   },
   {
-    "ability_id": "counterpredation-ambush-predators",
+    "ability_id": "counterpredation-ambush-predators-tyranids",
     "name": "Counterpredation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3791,7 +3417,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hypersensory-adaptations-ambush-predators",
+    "ability_id": "hypersensory-adaptations-ambush-predators-tyranids",
     "name": "Hypersensory Adaptations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3839,7 +3465,7 @@
     }
   },
   {
-    "ability_id": "scanner-gheist-ambush-predators",
+    "ability_id": "scanner-gheist-ambush-predators-tyranids",
     "name": "Scanner Gheist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3901,7 +3527,7 @@
     }
   },
   {
-    "ability_id": "encircling-horrors-ambush-predators",
+    "ability_id": "encircling-horrors-upgrade-ambush-predators-tyranids",
     "name": "Encircling Horrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3975,7 +3601,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "cryptophotaic-camouflage-ambush-predators",
+    "ability_id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
     "name": "Cryptophotaic Camouflage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4016,7 +3642,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "higher-imperatives",
+    "ability_id": "higher-imperatives-tyranids",
     "name": "Higher Imperatives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4049,7 +3675,7 @@
           ]
         },
         "modifier": {
-          "ability": "singular-purpose"
+          "ability": "singular-purpose-tyranids"
         }
       }
     },
@@ -4059,7 +3685,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "catalytic-biofortification-talons-of-the-norn-queen",
+    "ability_id": "catalytic-biofortification-talons-of-the-norn-queen-tyranids",
     "name": "Catalytic Biofortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4114,7 +3740,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "lesser-prey-talons-of-the-norn-queen",
+    "ability_id": "lesser-prey-talons-of-the-norn-queen-tyranids",
     "name": "Lesser Prey",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4154,7 +3780,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "tanglestrike-rounds-talons-of-the-norn-queen",
+    "ability_id": "tanglestrike-rounds-talons-of-the-norn-queen-tyranids",
     "name": "Tanglestrike Rounds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4197,7 +3823,7 @@
     "community_notes": "After a NORN ASSIMILATOR unit shoots, one enemy unit it hit is tethered until the start of your next Command phase; while tethered, its Move characteristic is set to 2\"."
   },
   {
-    "ability_id": "destabilising-predation-talons-of-the-norn-queen",
+    "ability_id": "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
     "name": "Destabilising Predation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4228,7 +3854,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "synaptoprescience-talons-of-the-norn-queen",
+    "ability_id": "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids",
     "name": "Synaptoprescience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4256,7 +3882,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "synaptic-imperatives",
+    "ability_id": "synaptic-imperatives-tyranids",
     "name": "Synaptic Imperatives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4346,7 +3972,7 @@
     }
   },
   {
-    "ability_id": "surprise-assault",
+    "ability_id": "surprise-assault-tyranids",
     "name": "Surprise Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4400,7 +4026,7 @@
     "community_notes": "[APPROX] TYRANIDS models re-roll Hit rolls of 1. BURROWER units arriving from Reserves place Tunnel Markers, and later Reserves can be set up near a Tunnel Marker; the marker placement/removal and near-marker deployment are captured as an opaque grant. Full rule in raw-text store."
   },
   {
-    "ability_id": "leader-beasts",
+    "ability_id": "leader-beasts-tyranids",
     "name": "Leader-beasts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4476,7 +4102,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "enraged-behemoths",
+    "ability_id": "enraged-behemoths-tyranids",
     "name": "Enraged Behemoths",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4611,7 +4237,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "untrammelled-ferocity-crusher-stampede",
+    "ability_id": "untrammelled-ferocity-crusher-stampede-tyranids",
     "name": "Untrammelled Ferocity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4715,7 +4341,7 @@
     "community_notes": "[APPROX] Target prerequisite 'has not been selected to move this phase' is a selection-sequencing precondition with no condition-schema representation, so it is not encoded in the effect tree. The effect models the co-occurring move permissions of one Normal, Advance or Fall Back move rather than gating each on which passthrough is used."
   },
   {
-    "ability_id": "insurmountable-odds",
+    "ability_id": "insurmountable-odds-tyranids",
     "name": "Insurmountable Odds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4783,7 +4409,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "questing-tendrils",
+    "ability_id": "questing-tendrils-tyranids",
     "name": "Questing Tendrils",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4853,7 +4479,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "vanguard-prime",
+    "ability_id": "vanguard-prime-tyranids",
     "name": "Vanguard Prime",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4882,7 +4508,7 @@
           "modifier": {
             "direction": "suppressed",
             "rule_kind": "ability",
-            "rule": "hunter-organism"
+            "rule": "hunter-organism-tyranids"
           }
         },
         {
@@ -4896,7 +4522,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hyper-adaptations",
+    "ability_id": "hyper-adaptations-tyranids",
     "name": "Hyper-adaptations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4999,7 +4625,7 @@
     "community_notes": "[APPROX] At the start of the first battle round, pick one Hyper-adaptation for the battle: Swarming Instincts ([SUSTAINED HITS 1] vs INFANTRY/SWARM), Hyper-aggression ([LETHAL HITS] vs MONSTER/VEHICLE), or Hive Predators ([PRECISION] vs CHARACTER). The Hive Predators grant applies only on a Critical Hit, which is not gated here. Full rule in raw-text store."
   },
   {
-    "ability_id": "feed-the-swarm",
+    "ability_id": "feed-the-swarm-tyranids",
     "name": "Feed the Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5067,7 +4693,7 @@
     "community_notes": "[APPROX] In your Command phase, each HARVESTER unit can Regenerate one friendly TYRANIDS unit within 6\": either heal D3+1 lost wounds on one model, or return one destroyed INFANTRY (non-CHARACTER) model at full wounds. ENDLESS MULTITUDE units return up to 3 models instead of 1 — the 3-model variant and per-HARVESTER selection are unmodeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "swallow-whole",
+    "ability_id": "swallow-whole-tyranids",
     "name": "Swallow Whole",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5151,10 +4777,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "subterranean-hunter",
+    "ability_id": "subterranean-hunter-tyranids",
     "name": "Subterranean Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5205,39 +4832,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "serpentine-fiend",
-    "name": "Serpentine Fiend",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cec23fe9e42eec85726d2ceb18bb851ebdeec3c8e82746703c83e78c6e1a85e5",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-red-terror"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] This model can move through terrain features (but cannot end a move inside a wall/floor). The RUINS floor-level placement clause is unmodeled. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "disruption-bombardment-vardenghast-swarm",
+    "ability_id": "disruption-bombardment-vardenghast-swarm-barbgaunts-tyranids",
     "name": "Disruption Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5319,10 +4918,11 @@
       "event": "attacks-resolved",
       "optional": true,
       "binds_event_variable": "disruption-bombardment-shooting"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "feeding-frenzy-vardenghast-swarm",
+    "ability_id": "feeding-frenzy-vardenghast-swarm-psychophage-tyranids",
     "name": "Feeding Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5401,10 +5001,11 @@
       "vardenghast-swarm-psychophage"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "bio-stimulus-aura-vardenghast-swarm",
+    "ability_id": "bio-stimulus-vardenghast-swarm-psychophage-tyranids",
     "name": "Bio-stimulus (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5446,10 +5047,11 @@
       "vardenghast-swarm-psychophage"
     ],
     "ability_type": "unit",
-    "behavior": "aura"
+    "behavior": "aura",
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "skulking-horrors-vardenghast-swarm",
+    "ability_id": "skulking-horrors-vardenghast-swarm-termagants-tyranids",
     "name": "Skulking Horrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5501,10 +5103,11 @@
     "usage": {
       "frequency": "once-per-phase",
       "per": "unit"
-    }
+    },
+    "faction_id": "tyranids"
   },
   {
-    "ability_id": "pouncing-leap-vardenghast-swarm",
+    "ability_id": "pouncing-leap-vardenghast-swarm-von-ryans-leapers-tyranids",
     "name": "Pouncing Leap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5567,6 +5170,1792 @@
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"
+    },
+    "faction_id": "tyranids"
+  },
+  {
+    "ability_id": "ablative-carapace-assimilation-swarm-tyranids",
+    "name": "Ablative Carapace",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adapted-organism-the-vardenghast-swarm-tyranids",
+    "name": "Adapted Organism",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adaptive-biology-invasion-fleet-tyranids",
+    "name": "Adaptive Biology",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adaptive-optimisation-subterranean-assault-tyranids",
+    "name": "Adaptive Optimisation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adrenal-surge-invasion-fleet-tyranids",
+    "name": "Adrenal Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adrenalised-onslaught-unending-swarm-tyranids",
+    "name": "Adrenalised Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "alien-cunning-invasion-fleet-tyranids",
+    "name": "Alien Cunning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "alien-physiology-warrior-bioform-onslaught-tyranids",
+    "name": "Alien Physiology",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "warrior-bioform-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "alpha-warrior-tyranids",
+    "name": "Alpha Warrior",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "tyranid-prime-with-lash-whip"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assassin-beasts-vanguard-onslaught-tyranids",
+    "name": "Assassin Beasts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bio-reserves-tyranids",
+    "name": "Bio-Reserves (Once per battle per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "terror-of-vardenghast"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "biophagic-flow-aura-assimilation-swarm-tyranids",
+    "name": "Biophagic Flow (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bounding-advance-unending-swarm-tyranids",
+    "name": "Bounding Advance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "broodguard-impulse-assimilation-swarm-tyranids",
+    "name": "Broodguard Impulse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brute-speed-the-vardenghast-swarm-tyranids",
+    "name": "Brute Speed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chameleonic-vanguard-onslaught-tyranids",
+    "name": "Chameleonic",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "corrosive-viscera-crusher-stampede-tyranids",
+    "name": "Corrosive Viscera",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-hierophant-tyranids",
+    "name": "Damaged: 1-10 wounds remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "hierophant"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-tyranids",
+    "name": "Damaged 1-10 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "harridan"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-tyranids",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "harpy",
+      "hive-crone"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-tyranids",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "exocrine",
+      "haruspex",
+      "maleceptor",
+      "mawloc",
+      "norn-assimilator",
+      "norn-emissary",
+      "tervigon",
+      "trygon",
+      "tyrannofex"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-blow-terror-of-vardenghast-tyranids",
+    "name": "Death Blow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "terror-of-vardenghast"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-frenzy-invasion-fleet-tyranids",
+    "name": "Death Frenzy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "elevated-might-warrior-bioform-onslaught-tyranids",
+    "name": "Elevated Might",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "warrior-bioform-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "endless-swarm-invasion-fleet-tyranids",
+    "name": "Endless Swarm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enfilading-emergence-subterranean-assault-tyranids",
+    "name": "Enfilading Emergence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enraged-reserves-crusher-stampede-tyranids",
+    "name": "Enraged Reserves",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "floating-death-spore-mines-tyranids",
+    "name": "Floating Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "spore-mines"
+    ],
+    "faction_id": "tyranids",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hunting-grounds-vanguard-onslaught-tyranids",
+    "name": "Hunting Grounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hypersensory-scillia-vanguard-onslaught-tyranids",
+    "name": "Hypersensory Scillia",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "imperative-dominance-synaptic-nexus-tyranids",
+    "name": "Imperative Dominance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instinctive-defence-assimilation-swarm-tyranids",
+    "name": "Instinctive Defence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "invisible-hunter-vanguard-onslaught-tyranids",
+    "name": "Invisible Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "irresistible-will-synaptic-nexus-tyranids",
+    "name": "Irresistible Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "massive-impact-crusher-stampede-tyranids",
+    "name": "Massive Impact",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "monstrous-nemesis-crusher-stampede-tyranids",
+    "name": "Monstrous Nemesis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "naturalised-camouflage-unending-swarm-tyranids",
+    "name": "Naturalised Camouflage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "neuronode-vanguard-onslaught-tyranids",
+    "name": "Neuronode",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "null-nodules-crusher-stampede-tyranids",
+    "name": "Null Nodules",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ocular-adaptation-warrior-bioform-onslaught-tyranids",
+    "name": "Ocular Adaptation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "warrior-bioform-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ominous-presence-crusher-stampede-tyranids",
+    "name": "Ominous Presence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "override-instincts-synaptic-nexus-tyranids",
+    "name": "Override Instincts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "overrun-invasion-fleet-tyranids",
+    "name": "Overrun",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "parasitic-biomorphology-assimilation-swarm-tyranids",
+    "name": "Parasitic Biomorphology",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "parasitic-payload-warrior-bioform-onslaught-tyranids",
+    "name": "Parasitic Payload",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "warrior-bioform-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "perfectly-adapted-invasion-fleet-tyranids",
+    "name": "Perfectly Adapted",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "piercing-talons-unending-swarm-tyranids",
+    "name": "Piercing Talons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "power-of-the-hive-mind-synaptic-nexus-tyranids",
+    "name": "Power of the Hive Mind",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "predatory-imperative-invasion-fleet-tyranids",
+    "name": "Predatory Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "preservation-imperative-unending-swarm-tyranids",
+    "name": "Preservation Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychoclastic-overload-the-vardenghast-swarm-tyranids",
+    "name": "Psychoclastic Overload",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychostatic-disruption-synaptic-nexus-tyranids",
+    "name": "Psychostatic Disruption",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rampaging-monstrosities-crusher-stampede-tyranids",
+    "name": "Rampaging Monstrosities",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapacious-hunger-assimilation-swarm-tyranids",
+    "name": "Rapacious Hunger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapid-regeneration-invasion-fleet-tyranids",
+    "name": "Rapid Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reclaim-biomass-assimilation-swarm-tyranids",
+    "name": "Reclaim Biomass",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "regenerating-monstrosity-assimilation-swarm-tyranids",
+    "name": "Regenerating Monstrosity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reinforced-hive-node-synaptic-nexus-tyranids",
+    "name": "Reinforced Hive Node",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-hunger-unending-swarm-tyranids",
+    "name": "Relentless Hunger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "replenishing-swarms-subterranean-assault-tyranids",
+    "name": "Replenishing Swarms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "retreat-below-subterranean-assault-tyranids",
+    "name": "Retreat Below",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "savage-roar-crusher-stampede-tyranids",
+    "name": "Savage Roar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "secure-biomass-assimilation-swarm-tyranids",
+    "name": "Secure Biomass",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seeded-broods-vanguard-onslaught-tyranids",
+    "name": "Seeded Broods",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skittering-hordes-tyranids",
+    "name": "Skittering Hordes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skulking-hunters-the-vardenghast-swarm-tyranids",
+    "name": "Skulking Hunters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stalker-vanguard-onslaught-tyranids",
+    "name": "Stalker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "surprise-assault-vanguard-onslaught-tyranids",
+    "name": "Surprise Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swarm-guided-salvoes-crusher-stampede-tyranids",
+    "name": "Swarm-guided Salvoes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "crusher-stampede",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swarm-marked-the-vardenghast-swarm-tyranids",
+    "name": "Swarm-marked",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "the-vardenghast-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swarming-assault-subterranean-assault-tyranids",
+    "name": "Swarming Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swarming-masses-unending-swarm-tyranids",
+    "name": "Swarming Masses",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-channelling-synaptic-nexus-tyranids",
+    "name": "Synaptic Channelling",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-control-synaptic-nexus-tyranids",
+    "name": "Synaptic Control",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-goading-unending-swarm-tyranids",
+    "name": "Synaptic Goading",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-linchpin-invasion-fleet-tyranids",
+    "name": "Synaptic Linchpin",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "invasion-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-micronodes-warrior-bioform-onslaught-tyranids",
+    "name": "Synaptic Micronodes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "warrior-bioform-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-strategy-subterranean-assault-tyranids",
+    "name": "Synaptic Strategy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teeming-masses-unending-swarm-tyranids",
+    "name": "Teeming Masses",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-dirgeheart-of-kharis-aura-synaptic-nexus-tyranids",
+    "name": "The Dirgeheart of Kharis (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-smothering-shadow-synaptic-nexus-tyranids",
+    "name": "The Smothering Shadow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "synaptic-nexus",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tremor-senses-subterranean-assault-tyranids",
+    "name": "Tremor Senses",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "trygon-prime-subterranean-assault-tyranids",
+    "name": "Trygon Prime",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tunnel-network-subterranean-assault-tyranids",
+    "name": "Tunnel Network",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tyrannoformed-assimilation-swarm-tyranids",
+    "name": "Tyrannoformed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "assimilation-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unending-waves-unending-swarm-tyranids",
+    "name": "Unending Waves",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "unending-swarm",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unseen-lurkers-vanguard-onslaught-tyranids",
+    "name": "Unseen Lurkers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "vanguard-onslaught",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vanguard-intellect-subterranean-assault-tyranids",
+    "name": "Vanguard Intellect",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tyranids",
+    "detachment_id": "subterranean-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

@@ -417,7 +417,7 @@ function memberKeywords(members: Member[]): string[] {
 }
 
 function abilityView(abilityId: string) {
-  return ds.abilities.getInFaction(abilityId, ROOT_FACTION) ?? ds.abilities.getAny(abilityId);
+  return ds.abilities.get(abilityId);
 }
 
 function isAuraRange(range: unknown): boolean {

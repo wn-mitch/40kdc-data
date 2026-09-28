@@ -9,7 +9,7 @@
       "disposition": null,
       "units": []
     },
-    "token": "ARkAAgEAAAA"
+    "token": "ARoAAgEAAAA"
   },
   {
     "name": "warlord-enhancement-grants",
@@ -26,7 +26,7 @@
           "datasheetId": "adrax-agatone",
           "modelCount": 5,
           "isWarlord": true,
-          "enhancementId": "a-chink-in-their-armour-host-of-ascension",
+          "enhancementId": "a-chink-in-their-armour-host-of-ascension-genestealer-cults",
           "allyFactionId": null,
           "allyRuleId": null,
           "attachedToOrdinal": null,
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "token": "ARkSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUT4AYBCUNoYXJhY3RlcgIPAhABDgoAAREK"
+    "token": "ARoSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUTsQ8BCUNoYXJhY3RlcgIPAhABDgoAAREK"
   },
   {
     "name": "allies-attachment",
@@ -118,7 +118,7 @@
         }
       ]
     },
-    "token": "ARkEU291cAIAAQIABQMKAQUBAA4FAAAQARgKDgEKQmF0dGxlbGluZQERAQ"
+    "token": "ARoEU291cAIAAQIABQMKAQUBAA4FAAAQARgKDgEKQmF0dGxlbGluZQERAQ"
   },
   {
     "name": "malformed-bad-format-byte",
@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "ARkAgIl6",
+    "decode_token": "ARoAgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

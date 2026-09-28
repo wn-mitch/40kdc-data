@@ -1,6 +1,6 @@
 [
   {
-    "ability_id": "matchless-swiftness",
+    "ability_id": "matchless-swiftness-drukhari",
     "name": "Matchless Swiftness",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -25,10 +25,11 @@
       "reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "eviscerating-fly-by",
+    "ability_id": "eviscerating-fly-by-drukhari",
     "name": "Eviscerating Fly\u2011by",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -51,10 +52,11 @@
       "reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "cluster-caltrops",
+    "ability_id": "cluster-caltrops-drukhari",
     "name": "Cluster caltrops",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -72,7 +74,7 @@
           "subject": "this-unit",
           "filter": {
             "kind": "ability",
-            "id": "eviscerating-fly-by"
+            "id": "eviscerating-fly-by-drukhari"
           },
           "window": "phase"
         }
@@ -94,10 +96,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store."
+    "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store.",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "grav-talon",
+    "ability_id": "grav-talon-drukhari",
     "name": "Grav-talon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -122,86 +125,11 @@
       "reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cronos"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cronos"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "pain-parasite",
+    "ability_id": "pain-parasite-drukhari",
     "name": "Pain Parasite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -257,10 +185,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "pain-engine-aura",
+    "ability_id": "pain-engine-drukhari",
     "name": "Pain Engine (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -306,36 +235,11 @@
           "inches": 9
         }
       }
-    }
+    },
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "succubus"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "lithe-agility",
+    "ability_id": "lithe-agility-drukhari",
     "name": "Lithe Agility",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -359,10 +263,11 @@
       "succubus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "storm-of-blades",
+    "ability_id": "storm-of-blades-drukhari",
     "name": "Storm of Blades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -397,10 +302,11 @@
       "succubus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "bloody-spectacle",
+    "ability_id": "bloody-spectacle-drukhari",
     "name": "Bloody Spectacle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -461,36 +367,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hellions"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "battlefield-butchery",
+    "ability_id": "battlefield-butchery-drukhari",
     "name": "Battlefield Butchery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -524,10 +405,11 @@
       "hellions"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "skyboard-evasion",
+    "ability_id": "skyboard-evasion-drukhari",
     "name": "Skyboard Evasion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -590,10 +472,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "phantasm-grenade-launcher",
+    "ability_id": "phantasm-grenade-launcher-drukhari",
     "name": "Phantasm Grenade Launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -616,69 +499,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "hellions"
+      "hellions",
+      "kabalite-warriors"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "firing-deck-6",
-    "name": "Firing Deck 6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venom"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venom"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "rapid-deployment",
+    "ability_id": "rapid-deployment-drukhari",
     "name": "Rapid Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -744,10 +574,11 @@
       "venom"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "aerialists",
+    "ability_id": "aerialists-drukhari",
     "name": "Aerialists",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -845,10 +676,11 @@
       "venom"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "swooping-descent",
+    "ability_id": "swooping-descent-drukhari",
     "name": "Swooping Descent",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -920,10 +752,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "murderous-crossfire",
+    "ability_id": "murderous-crossfire-drukhari",
     "name": "Murderous Crossfire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -957,10 +790,11 @@
       "scourges-with-shardcarbines"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "sadistic-raiders",
+    "ability_id": "sadistic-raiders-drukhari",
     "name": "Sadistic Raiders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -984,10 +818,11 @@
       "kabalite-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "cruel-enforcers",
+    "ability_id": "cruel-enforcers-drukhari",
     "name": "Cruel Enforcers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1007,10 +842,11 @@
       "kabalite-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "kabalite-icon",
+    "ability_id": "kabalite-icon-drukhari",
     "name": "Kabalite Icon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1046,91 +882,16 @@
       "duration": "turn"
     },
     "unit_ids": [
+      "hand-of-the-archon",
       "kabalite-warriors"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "raider"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "firing-deck-11",
-    "name": "Firing Deck 11",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 11
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "raider"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "splinter-racks",
+    "ability_id": "splinter-racks-drukhari",
     "name": "Splinter Racks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1163,10 +924,11 @@
       "raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "vanguard-of-the-dark-city",
+    "ability_id": "vanguard-of-the-dark-city-drukhari",
     "name": "Vanguard of the Dark City",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1342,36 +1104,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lelith-hesperax"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "brides-of-death",
+    "ability_id": "brides-of-death-drukhari",
     "name": "Brides of Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1405,10 +1142,11 @@
       "lelith-hesperax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "blur-of-blades",
+    "ability_id": "blur-of-blades-drukhari",
     "name": "Blur of Blades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1441,10 +1179,11 @@
       "lelith-hesperax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "thrilling-spectacle",
+    "ability_id": "thrilling-spectacle-drukhari",
     "name": "Thrilling Spectacle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1476,10 +1215,11 @@
       "lelith-hesperax"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "nowhere-to-run",
+    "ability_id": "nowhere-to-run-drukhari",
     "name": "Nowhere to Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1564,10 +1304,11 @@
       "razorwing-jetfighter"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "ground-attack-craft",
+    "ability_id": "ground-attack-craft-drukhari",
     "name": "Ground-attack Craft",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1601,10 +1342,11 @@
       "razorwing-jetfighter"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "winged-strike",
+    "ability_id": "winged-strike-drukhari",
     "name": "Winged Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1637,10 +1379,11 @@
       "scourges-with-heavy-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "airborne-evasion",
+    "ability_id": "airborne-evasion-drukhari",
     "name": "Airborne Evasion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1672,10 +1415,11 @@
       "scourges-with-heavy-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "mindless-killing-machines",
+    "ability_id": "mindless-killing-machines-drukhari",
     "name": "Mindless Killing Machines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1707,10 +1451,11 @@
       "talos"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "devoted-to-pain",
+    "ability_id": "devoted-to-pain-drukhari",
     "name": "Devoted to Pain",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1737,10 +1482,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "torture-device",
+    "ability_id": "torture-device-drukhari",
     "name": "Torture Device",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1778,10 +1524,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "experimental-enhancements",
+    "ability_id": "experimental-enhancements-drukhari",
     "name": "Experimental Enhancements",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1905,10 +1652,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21. Gated on token-count-at-or-above (a spend requires holding a Pain token) and capped at once per fight phase via the resource-spend cap; the cap is a community reading of the once-per-activation structure."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21. Gated on token-count-at-or-above (a spend requires holding a Pain token) and capped at once per fight phase via the resource-spend cap; the cap is a community reading of the once-per-activation structure.",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "torturer-s-craft",
+    "ability_id": "torturers-craft-drukhari",
     "name": "Torturer\u2019s Craft",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1940,10 +1688,11 @@
       "wracks"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "fleshcraft",
+    "ability_id": "fleshcraft-drukhari",
     "name": "Fleshcraft",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1966,10 +1715,11 @@
       "haemonculus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "fear-incarnate-aura",
+    "ability_id": "fear-incarnate-drukhari",
     "name": "Fear Incarnate (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2008,10 +1758,11 @@
       "haemonculus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "pain-adept",
+    "ability_id": "pain-adept-drukhari",
     "name": "Pain Adept",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2062,10 +1813,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "hatred-eternal",
+    "ability_id": "hatred-eternal-drukhari",
     "name": "Hatred Eternal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2089,10 +1841,11 @@
       "archon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "overlord",
+    "ability_id": "overlord-drukhari",
     "name": "Overlord",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2134,10 +1887,11 @@
       "archon"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "devious-mastermind",
+    "ability_id": "devious-mastermind-drukhari",
     "name": "Devious Mastermind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2160,10 +1914,11 @@
       "archon"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "shadowfield",
+    "ability_id": "shadowfield-drukhari",
     "name": "Shadowfield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2187,10 +1942,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "fragile invuln: lost on a failed save (engine reads the 4+; the breaking mechanic is not modelled)"
+    "community_notes": "fragile invuln: lost on a failed save (engine reads the 4+; the breaking mechanic is not modelled)",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "soul-trap",
+    "ability_id": "soul-trap-drukhari",
     "name": "Soul Trap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2224,10 +1980,11 @@
       "archon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "archon-of-the-poisoned-tongue",
+    "ability_id": "archon-of-the-poisoned-tongue-drukhari",
     "name": "Archon of the Poisoned Tongue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2276,10 +2033,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "precognisant",
+    "ability_id": "precognisant-drukhari",
     "name": "Precognisant",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2314,10 +2072,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] After both players deploy, up to three DRUKHARI units are redeployed; the rule additionally lets those units be set up in Strategic Reserves regardless of the reserve limit, which is not modeled by the redeploy move. Full rule in raw-text store."
+    "community_notes": "[APPROX] After both players deploy, up to three DRUKHARI units are redeployed; the rule additionally lets those units be set up in Strategic Reserves regardless of the reserve limit, which is not modeled by the redeploy move. Full rule in raw-text store.",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "mind-like-a-steel-trap-aura",
+    "ability_id": "mind-like-a-steel-trap-drukhari",
     "name": "Mind like a Steel Trap (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2350,10 +2109,11 @@
       "lady-malys"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "agonising-suppression",
+    "ability_id": "agonising-suppression-drukhari",
     "name": "Agonising Suppression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2392,10 +2152,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Requires spending 1 Pain token to Empower this model; the suppression then triggers after it shoots."
+    "community_notes": "Requires spending 1 Pain token to Empower this model; the suppression then triggers after it shoots.",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "eradicate-the-foe",
+    "ability_id": "eradicate-the-foe-drukhari",
     "name": "Eradicate the Foe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2419,10 +2180,11 @@
       "ravager"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "acrobatic-gladiators",
+    "ability_id": "acrobatic-gladiators-drukhari",
     "name": "Acrobatic Gladiators",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2449,10 +2211,11 @@
       "wyches"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "no-escape",
+    "ability_id": "no-escape-drukhari",
     "name": "No Escape",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2485,37 +2248,11 @@
       "wyches"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "scouts-7",
-    "name": "Scouts 7\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 7
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hand-of-the-archon"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "assassins-poisons",
+    "ability_id": "assassins-poisons-drukhari",
     "name": "Assassins\u2019 Poisons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2564,10 +2301,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "archon-s-will",
+    "ability_id": "archons-will-drukhari",
     "name": "Archon\u2019s Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2590,10 +2328,11 @@
       "hand-of-the-archon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "stimm-needler",
+    "ability_id": "stimm-needler-drukhari",
     "name": "Stimm-needler",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2620,10 +2359,11 @@
     "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "archon-s-retinue",
+    "ability_id": "archons-retinue-drukhari",
     "name": "Archon\u2019s Retinue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2658,10 +2398,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "nowhere-to-hide",
+    "ability_id": "nowhere-to-hide-drukhari",
     "name": "Nowhere to Hide",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2693,10 +2434,11 @@
       "voidraven-bomber"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "void-mine",
+    "ability_id": "void-mine-drukhari",
     "name": "Void Mine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2719,10 +2461,11 @@
       "voidraven-bomber"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "master-of-blades",
+    "ability_id": "master-of-blades-drukhari",
     "name": "Master of Blades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2756,10 +2499,11 @@
       "drazhar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "onslaught",
+    "ability_id": "onslaught-drukhari",
     "name": "Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2793,10 +2537,11 @@
       "drazhar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "silent-executioner",
+    "ability_id": "silent-executioner-drukhari",
     "name": "Silent Executioner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2854,10 +2599,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "decapitating-strikes",
+    "ability_id": "decapitating-strikes-drukhari",
     "name": "Decapitating Strikes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2905,10 +2651,11 @@
       "incubi"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "tormentors",
+    "ability_id": "tormentors-drukhari",
     "name": "Tormentors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2942,10 +2689,11 @@
       "incubi"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "incubi-shrine-token",
+    "ability_id": "incubi-shrine-token-drukhari",
     "name": "Incubi Shrine Token",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2983,36 +2731,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "Once per battle, change one Hit or Wound roll to an unmodified 6. Modeled as 1 guaranteed crit hit per activation."
+    "community_notes": "Once per battle, change one Hit or Wound roll to an unmodified 6. Modeled as 1 guaranteed crit hit per activation.",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "mandrakes"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "fade-away",
+    "ability_id": "fade-away-drukhari",
     "name": "Fade Away",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3083,10 +2806,11 @@
           }
         ]
       }
-    }
+    },
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "shade-weavers",
+    "ability_id": "shade-weavers-drukhari",
     "name": "Shade Weavers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3126,10 +2850,11 @@
       "mandrakes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "drukhari"
   },
   {
-    "ability_id": "corsairs-and-travelling-players",
+    "ability_id": "corsairs-and-travelling-players-drukhari",
     "name": "Corsairs and Travelling Players",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3198,7 +2923,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "exacting-cruelty",
+    "ability_id": "exacting-cruelty-drukhari",
     "name": "Exacting Cruelty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3251,7 +2976,7 @@
     }
   },
   {
-    "ability_id": "planned-strikes-exhibition-of-slaughter",
+    "ability_id": "planned-strikes-exhibition-of-slaughter-drukhari",
     "name": "Planned Strikes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3291,7 +3016,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "sculpting-the-stage-exhibition-of-slaughter",
+    "ability_id": "sculpting-the-stage-exhibition-of-slaughter-drukhari",
     "name": "Sculpting the Stage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3367,7 +3092,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "acrobatic-display-exhibition-of-slaughter",
+    "ability_id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "name": "Acrobatic Display",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3415,7 +3140,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "periapt-of-torments-exhibition-of-slaughter",
+    "ability_id": "periapt-of-torments-exhibition-of-slaughter-drukhari",
     "name": "Periapt of Torments",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3467,7 +3192,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter",
+    "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter-drukhari",
     "name": "Hyperstimm Trafficker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3508,7 +3233,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "contracted-harvest",
+    "ability_id": "contracted-harvest-drukhari",
     "name": "Contracted Harvest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3559,7 +3284,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "prioritised-victim-kabalite-agonysts",
+    "ability_id": "prioritised-victim-kabalite-agonysts-drukhari",
     "name": "Prioritised Victim",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3635,7 +3360,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "shadows-reach-kabalite-agonysts",
+    "ability_id": "shadows-reach-kabalite-agonysts-drukhari",
     "name": "Shadows’ Reach",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3674,7 +3399,7 @@
     }
   },
   {
-    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts",
+    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts-drukhari",
     "name": "Killers From the Dark Spires",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3717,7 +3442,7 @@
     }
   },
   {
-    "ability_id": "towering-arrogance-kabalite-agonysts",
+    "ability_id": "towering-arrogance-kabalite-agonysts-drukhari",
     "name": "Towering Arrogance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3771,7 +3496,7 @@
     "community_notes": "ARCHON-only enhancement. While the bearer leads a unit, models in that unit improve Leadership by 1 (modeled as a -1 to the Leadership characteristic) and Objective Control by 1."
   },
   {
-    "ability_id": "contempt-for-rivals-kabalite-agonysts",
+    "ability_id": "contempt-for-rivals-kabalite-agonysts-drukhari",
     "name": "Contempt for Rivals",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3811,7 +3536,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "darkest-artifice",
+    "ability_id": "darkest-artifice-drukhari",
     "name": "Darkest Artifice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3874,7 +3599,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "salting-the-wound-tools-of-torment",
+    "ability_id": "salting-the-wound-tools-of-torment-drukhari",
     "name": "Salting the Wound",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3914,7 +3639,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "dividends-of-agony-tools-of-torment",
+    "ability_id": "dividends-of-agony-tools-of-torment-drukhari",
     "name": "Dividends of Agony",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3990,7 +3715,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "urgent-metamorphosis-tools-of-torment",
+    "ability_id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "name": "Urgent Metamorphosis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4022,7 +3747,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "gnarlskin-experimentor-tools-of-torment",
+    "ability_id": "gnarlskin-experimentor-tools-of-torment-drukhari",
     "name": "Gnarlskin Experimentor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4069,7 +3794,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "elixir-of-the-corpse-courts-tools-of-torment",
+    "ability_id": "elixir-of-the-corpse-courts-upgrade-tools-of-torment-drukhari",
     "name": "Elixir of the Corpse Courts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4097,7 +3822,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "combat-drugs",
+    "ability_id": "combat-drugs-drukhari",
     "name": "Combat Drugs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4216,7 +3941,7 @@
     "community_notes": "[APPROX] At the start of your Command phase you either deliberately select one drug (cannot pick the same one twice per battle) or randomly select two by rolling 2D6; the once-per-battle-per-drug limit and the random-two alternative are not modeled (stance-select mode re-selectable). All options buff WYCH CULT models/weapons; 'improve' for Weapon Skill, Ballistic Skill and Leadership is modeled as a subtraction from the characteristic. Full rule in raw-text store."
   },
   {
-    "ability_id": "murderous-agenda",
+    "ability_id": "murderous-agenda-drukhari",
     "name": "Murderous Agenda",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4259,7 +3984,7 @@
     "community_notes": "[APPROX] Models the Trophy Hunters Contract: at the start of the first battle round one enemy CHARACTER is designated the Contract unit, and KABAL / BLADES FOR HIRE attacks against it gain [PRECISION]. The two other Contracts (Sow Fear and Terror \u2192 [SUSTAINED HITS 1] vs INFANTRY/MOUNTED; Show of Strength \u2192 [LETHAL HITS] vs MONSTER/VEHICLE), the KABAL/BLADES-FOR-HIRE attacker restriction, and the +3 Pain tokens gained when the Contract unit is destroyed are not modeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "rain-of-cruelty",
+    "ability_id": "rain-of-cruelty-drukhari",
     "name": "Rain of Cruelty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4315,7 +4040,7 @@
     "community_notes": "Each time a DRUKHARI unit disembarks from a TRANSPORT, until the end of the turn its ranged weapons gain [IGNORES COVER] and its melee weapons gain [LANCE]."
   },
   {
-    "ability_id": "callous-competition",
+    "ability_id": "callous-competition-drukhari",
     "name": "Callous Competition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4388,7 +4113,7 @@
     "community_notes": "[APPROX] DRUKHARI units start the battle winning the wager; each time a DRUKHARI unit destroys an enemy unit DRUKHARI units are winning and HARLEQUINS units are losing, and vice versa when a HARLEQUINS unit destroys an enemy unit"
   },
   {
-    "ability_id": "alliance-of-agony",
+    "ability_id": "alliance-of-agony-drukhari",
     "name": "Alliance of Agony",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4519,7 +4244,7 @@
     }
   },
   {
-    "ability_id": "stitchflesh-abominations",
+    "ability_id": "stitchflesh-abominations-drukhari",
     "name": "Stitchflesh Abominations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4566,7 +4291,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "empowered-engines-coven-of-agonies",
+    "ability_id": "empowered-engines-drukhari",
     "name": "Empowered Engines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4634,7 +4359,7 @@
     ]
   },
   {
-    "ability_id": "torture-device-coven-of-agonies",
+    "ability_id": "torture-device-coven-of-agonies-talos-drukhari",
     "name": "Torture Device",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4675,7 +4400,7 @@
     }
   },
   {
-    "ability_id": "fear-incarnate-aura-xatrophos-nuul",
+    "ability_id": "fear-incarnate-xatrophos-nuul-drukhari",
     "name": "Fear Incarnate (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4766,7 +4491,7 @@
     }
   },
   {
-    "ability_id": "vile-weaponry-xatrophos-nuul",
+    "ability_id": "vile-weaponry-drukhari",
     "name": "Vile Weaponry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4817,6 +4542,1522 @@
           "phase": "fight"
         }
       }
+    }
+  },
+  {
+    "ability_id": "a-challenge-met-spectacle-of-spite-drukhari",
+    "name": "A Challenge Met",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "acrobatic-display-spectacle-of-spite-drukhari",
+    "name": "Acrobatic Display",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "agonising-onslaught-coven-of-agonies-drukhari",
+    "name": "Agonising Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "archraider-reapers-wager-drukhari",
+    "name": "Archraider",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "berserk-fugue-spectacle-of-spite-drukhari",
+    "name": "Berserk Fugue",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chronoshard-spectacle-of-spite-drukhari",
+    "name": "Chronoshard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "conductor-of-torment-reapers-wager-drukhari",
+    "name": "Conductor of Torment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "connoisseurs-of-pain-covenite-coterie-drukhari",
+    "name": "Connoisseurs of Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crucible-of-malediction-realspace-raiders-drukhari",
+    "name": "Crucible of Malediction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-drukhari",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ravager"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-voidraven-bomber-drukhari",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "voidraven-bomber"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dance-macabre-reapers-wager-drukhari",
+    "name": "Dance Macabre",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dark-harvest-realspace-raiders-drukhari",
+    "name": "Dark Harvest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dark-vitality-realspace-raiders-drukhari",
+    "name": "Dark Vitality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deadly-debut-spectacle-of-spite-drukhari",
+    "name": "Deadly Debut",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deadly-deceivers-kabalite-cartel-drukhari",
+    "name": "Deadly Deceivers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "distillers-of-fear-covenite-coterie-drukhari",
+    "name": "Distillers of Fear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "double-cross-kabalite-cartel-drukhari",
+    "name": "Double-cross",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eager-for-the-kill-realspace-raiders-drukhari",
+    "name": "Eager for the Kill",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enemies-without-number-kabalite-cartel-drukhari",
+    "name": "Enemies Without Number",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enfolding-nightmare-covenite-coterie-drukhari",
+    "name": "Enfolding Nightmare",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "experimental-enhancements-coven-of-agonies-wracks-drukhari",
+    "name": "Experimental Enhancements (Pain)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "coven-of-agonies-wracks"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-spite-realspace-raiders-drukhari",
+    "name": "Eye of Spite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fateful-role-reapers-wager-drukhari",
+    "name": "Fateful Role",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "feigned-weakness-spectacle-of-spite-drukhari",
+    "name": "Feigned Weakness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fighting-shadows-realspace-raiders-drukhari",
+    "name": "Fighting Shadows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hardened-physiology-coven-of-agonies-drukhari",
+    "name": "Hardened Physiology",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "informant-network-kabalite-cartel-drukhari",
+    "name": "Informant Network",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "insensible-to-pain-realspace-raiders-drukhari",
+    "name": "Insensible to Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instinctive-spite-realspace-raiders-drukhari",
+    "name": "Instinctive Spite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "labyrinthine-cunning-realspace-raiders-drukhari",
+    "name": "Labyrinthine Cunning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "leechbite-plate-kabalite-cartel-drukhari",
+    "name": "Leechbite Plate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "making-a-point-kabalite-cartel-drukhari",
+    "name": "Making A Point",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malicious-frenzy-reapers-wager-drukhari",
+    "name": "Malicious Frenzy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-artisan-covenite-coterie-drukhari",
+    "name": "Master Artisan",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-nemesine-covenite-coterie-drukhari",
+    "name": "Master Nemesine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-regenesist-covenite-coterie-drukhari",
+    "name": "Master Regenesist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-repugnomancer-aura-covenite-coterie-drukhari",
+    "name": "Master Repugnomancer (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mindless-killing-machines-coven-of-agonies-talos-drukhari",
+    "name": "Mindless Killing Machines (Pain)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "coven-of-agonies-talos"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "morghennas-curse-spectacle-of-spite-drukhari",
+    "name": "Morghenna’s Curse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murderers-circus-reapers-wager-drukhari",
+    "name": "Murderer’s Circus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "night-shield-skysplinter-assault-drukhari",
+    "name": "Night Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nightmare-shroud-skysplinter-assault-drukhari",
+    "name": "Nightmare Shroud",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pain-adept-xatrophos-nuul-drukhari",
+    "name": "Pain Adept",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "xatrophos-nuul"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pain-engine-coven-of-agonies-cronos-drukhari",
+    "name": "Pain Engine (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "coven-of-agonies-cronos"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pain-enlivens-drukhari",
+    "name": "Pain Enlivens",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "periapt-of-torments-spectacle-of-spite-drukhari",
+    "name": "Periapt of Torments",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phantasm-grenade-launcher-hand-of-the-archon-drukhari",
+    "name": "Phantasm Grenade Launcher",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "hand-of-the-archon"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phantasmal-smoke-skysplinter-assault-drukhari",
+    "name": "Phantasmal Smoke",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pharmacophex-spectacle-of-spite-drukhari",
+    "name": "Pharmacophex",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "poisoners-art-covenite-coterie-drukhari",
+    "name": "Poisoner’s Art",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "postmortality-covenite-coterie-drukhari",
+    "name": "Postmortality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pounce-on-the-prey-skysplinter-assault-drukhari",
+    "name": "Pounce on the Prey",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "power-from-pain-drukhari",
+    "name": "Power From Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "powerful-creations-coven-of-agonies-drukhari",
+    "name": "Powerful Creations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "preternatural-agility-spectacle-of-spite-drukhari",
+    "name": "Preternatural Agility",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "spectacle-of-spite",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "raid-and-fade-realspace-raiders-drukhari",
+    "name": "Raid and Fade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "realspace-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reapers-cowl-reapers-wager-drukhari",
+    "name": "Reaper’s Cowl",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sadistic-fulcrum-skysplinter-assault-drukhari",
+    "name": "Sadistic Fulcrum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "scintillating-tempo-reapers-wager-drukhari",
+    "name": "Scintillating Tempo",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shorten-the-odds-reapers-wager-drukhari",
+    "name": "Shorten The Odds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skyborne-annihilation-skysplinter-assault-drukhari",
+    "name": "Skyborne Annihilation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spiteful-raider-skysplinter-assault-drukhari",
+    "name": "Spiteful Raider",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "superior-soulcraft-coven-of-agonies-drukhari",
+    "name": "Superior Soulcraft",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "swooping-mockery-skysplinter-assault-drukhari",
+    "name": "Swooping Mockery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "symphony-of-suffering-covenite-coterie-drukhari",
+    "name": "Symphony of Suffering",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "covenite-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tailored-toxins-kabalite-cartel-drukhari",
+    "name": "Tailored Toxins",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "taken-alive-kabalite-cartel-drukhari",
+    "name": "Taken Alive",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "torturers-craft-coven-of-agonies-wracks-drukhari",
+    "name": "Torturer’s Craft",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "coven-of-agonies-wracks"
+    ],
+    "faction_id": "drukhari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "towering-arrogance-kabalite-cartel-drukhari",
+    "name": "Towering Arrogance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "toxin-laced-blades-coven-of-agonies-drukhari",
+    "name": "Toxin-laced Blades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "coven-of-agonies",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vicious-blades-skysplinter-assault-drukhari",
+    "name": "Vicious Blades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "webway-awl-kabalite-cartel-drukhari",
+    "name": "Webway Awl",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "kabalite-cartel",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "webway-walker-reapers-wager-drukhari",
+    "name": "Webway Walker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "reapers-wager",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wraithlike-retreat-skysplinter-assault-drukhari",
+    "name": "Wraithlike Retreat",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "drukhari",
+    "detachment_id": "skysplinter-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

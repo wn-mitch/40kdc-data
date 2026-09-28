@@ -37,11 +37,11 @@ describe("AbilityView applies_to (integration)", () => {
   const ds = Dataset.embedded();
 
   it("exposes brazen-fury's curated filter", () => {
-    expect(ds.abilities.getAny("brazen-fury")?.appliesTo).toEqual({ required_keywords: ["POSSESSED"] });
+    expect(ds.abilities.getAny("brazen-fury-world-eaters")?.appliesTo).toEqual({ required_keywords: ["POSSESSED"] });
   });
 
   it("resolves brazen-fury to exactly the World Eaters Possessed units", () => {
-    const rule = abilities.get("brazen-fury")!;
+    const rule = abilities.get("brazen-fury-world-eaters")!;
     const worldEaters = units.all.filter((u) => u.raw.faction_id === "world-eaters");
     const affected = rule
       .affectedUnits(worldEaters)
@@ -51,7 +51,7 @@ describe("AbilityView applies_to (integration)", () => {
   });
 
   it("army-wide rules with no filter highlight nothing", () => {
-    const rule = abilities.get("relentless-rage")!;
+    const rule = abilities.get("relentless-rage-world-eaters")!;
     expect(rule.appliesTo).toBeUndefined();
     expect(rule.affectedUnits(units.all)).toEqual([]);
   });

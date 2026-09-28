@@ -191,7 +191,7 @@ describe("buildRepairedEntry → AJV gate", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "conditional",
       condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } }] },
-      effect: { type: "ability-grant", target: "this-model", modifier: { ability: "temple-relics" } },
+      effect: { type: "ability-grant", target: "this-model", modifier: { ability: "temple-relics-black-templars" } },
     }, { duration: "turn" }, "passive");
     expect(validate(entry)).toBe(true);
   });

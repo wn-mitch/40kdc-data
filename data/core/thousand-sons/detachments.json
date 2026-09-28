@@ -3,20 +3,20 @@
     "id": "changehost-of-deceit",
     "name": "Changehost of Deceit",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "infernal-pacts",
+    "detachment_rule_id": "infernal-pacts-thousand-sons",
     "enhancement_ids": [
-      "nethershriek-mind-eater-changehost-of-deceit",
-      "diabolic-savant-changehost-of-deceit",
-      "duplicitous-malediction-changehost-of-deceit",
-      "tome-of-true-names-changehost-of-deceit"
+      "nethershriek-mind-eater-changehost-of-deceit-thousand-sons",
+      "diabolic-savant-changehost-of-deceit-thousand-sons",
+      "duplicitous-malediction-changehost-of-deceit-thousand-sons",
+      "tome-of-true-names-changehost-of-deceit-thousand-sons"
     ],
     "stratagem_ids": [
-      "sulphurous-veil-changehost-of-deceit",
-      "ethereal-phantasm-changehost-of-deceit",
-      "fractal-disjunction-changehost-of-deceit",
-      "chronosorcerous-bleed-changehost-of-deceit",
-      "glimmershift-portal-changehost-of-deceit",
-      "deceptive-glamour-changehost-of-deceit"
+      "sulphurous-veil-changehost-of-deceit-thousand-sons",
+      "ethereal-phantasm-changehost-of-deceit-thousand-sons",
+      "fractal-disjunction-changehost-of-deceit-thousand-sons",
+      "chronosorcerous-bleed-changehost-of-deceit-thousand-sons",
+      "glimmershift-portal-changehost-of-deceit-thousand-sons",
+      "deceptive-glamour-changehost-of-deceit-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -37,20 +37,20 @@
     "id": "warpforged-cabal",
     "name": "Warpforged Cabal",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "warpfire-infusion",
+    "detachment_rule_id": "warpfire-infusion-thousand-sons",
     "enhancement_ids": [
-      "warp-syphon-warpforged-cabal",
-      "perplexing-cloak-warpforged-cabal",
-      "biomechanical-mutation-warpforged-cabal",
-      "warp-cursed-runemaster-warpforged-cabal"
+      "warp-syphon-warpforged-cabal-thousand-sons",
+      "perplexing-cloak-warpforged-cabal-thousand-sons",
+      "biomechanical-mutation-warpforged-cabal-thousand-sons",
+      "warp-cursed-runemaster-warpforged-cabal-thousand-sons"
     ],
     "stratagem_ids": [
-      "hex-marked-armour-warpforged-cabal",
-      "ensorcelled-infusion-warpforged-cabal",
-      "mutate-landscape-warpforged-cabal",
-      "malevolent-animus-warpforged-cabal",
-      "cyberspirit-machinations-warpforged-cabal",
-      "warpflame-gargoyles-warpforged-cabal"
+      "hex-marked-armour-warpforged-cabal-thousand-sons",
+      "ensorcelled-infusion-warpforged-cabal-thousand-sons",
+      "mutate-landscape-warpforged-cabal-thousand-sons",
+      "malevolent-animus-warpforged-cabal-thousand-sons",
+      "cyberspirit-machinations-warpforged-cabal-thousand-sons",
+      "warpflame-gargoyles-warpforged-cabal-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -71,20 +71,20 @@
     "id": "hexwarp-thrallband",
     "name": "Hexwarp Thrallband",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "flow-of-magic",
+    "detachment_rule_id": "flow-of-magic-thousand-sons",
     "enhancement_ids": [
-      "arcane-might-hexwarp-thrallband",
-      "empowered-manifestation-hexwarp-thrallband",
-      "empyric-onslaught-hexwarp-thrallband",
-      "noctilith-mantle-hexwarp-thrallband"
+      "arcane-might-hexwarp-thrallband-thousand-sons",
+      "empowered-manifestation-hexwarp-thrallband-thousand-sons",
+      "empyric-onslaught-hexwarp-thrallband-thousand-sons",
+      "noctilith-mantle-hexwarp-thrallband-thousand-sons"
     ],
     "stratagem_ids": [
-      "kaleidoscopic-tempest-hexwarp-thrallband",
-      "through-the-veil-hexwarp-thrallband",
-      "warding-hex-hexwarp-thrallband",
-      "scouring-warpflame-hexwarp-thrallband",
-      "wrath-of-the-doomed-hexwarp-thrallband",
-      "strands-of-time-hexwarp-thrallband"
+      "kaleidoscopic-tempest-hexwarp-thrallband-thousand-sons",
+      "through-the-veil-hexwarp-thrallband-thousand-sons",
+      "warding-hex-hexwarp-thrallband-thousand-sons",
+      "scouring-warpflame-hexwarp-thrallband-thousand-sons",
+      "wrath-of-the-doomed-hexwarp-thrallband-thousand-sons",
+      "strands-of-time-hexwarp-thrallband-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -105,20 +105,20 @@
     "id": "grand-coven",
     "name": "Grand Coven",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "kindred-sorcery",
+    "detachment_rule_id": "kindred-sorcery-thousand-sons",
     "enhancement_ids": [
-      "lord-of-forbidden-lore-grand-coven",
-      "incandaeum-grand-coven",
-      "umbralefic-crystal-grand-coven",
-      "eldritch-vortex-of-etaph-grand-coven"
+      "lord-of-forbidden-lore-grand-coven-thousand-sons",
+      "incandaeum-grand-coven-thousand-sons",
+      "umbralefic-crystal-grand-coven-thousand-sons",
+      "eldritch-vortex-of-etaph-grand-coven-thousand-sons"
     ],
     "stratagem_ids": [
-      "devastating-sorcery-grand-coven",
-      "psychic-dominion-grand-coven",
-      "destined-by-fate-grand-coven",
-      "desecration-of-worlds-grand-coven",
-      "arcane-focus-grand-coven",
-      "egotistical-power-grand-coven"
+      "devastating-sorcery-grand-coven-thousand-sons",
+      "psychic-dominion-grand-coven-thousand-sons",
+      "destined-by-fate-grand-coven-thousand-sons",
+      "desecration-of-worlds-grand-coven-thousand-sons",
+      "arcane-focus-grand-coven-thousand-sons",
+      "egotistical-power-grand-coven-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -139,20 +139,20 @@
     "id": "warpmeld-pact",
     "name": "Warpmeld Pact",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "warpmeld-sacrifice",
+    "detachment_rule_id": "warpmeld-sacrifice-thousand-sons",
     "enhancement_ids": [
-      "warpmeld-dagger-warpmeld-pact",
-      "diamond-of-distortion-warpmeld-pact",
-      "bray-lord-warpmeld-pact",
-      "flowing-flesh-warpmeld-pact"
+      "warpmeld-dagger-warpmeld-pact-thousand-sons",
+      "diamond-of-distortion-warpmeld-pact-thousand-sons",
+      "bray-lord-warpmeld-pact-thousand-sons",
+      "flowing-flesh-warpmeld-pact-thousand-sons"
     ],
     "stratagem_ids": [
-      "gift-of-change-warpmeld-pact",
-      "warped-vicissitude-warpmeld-pact",
-      "deranged-ferocity-warpmeld-pact",
-      "blessed-transmutations-warpmeld-pact",
-      "touched-by-tzeentch-warpmeld-pact",
-      "twisted-mirage-warpmeld-pact"
+      "gift-of-change-warpmeld-pact-thousand-sons",
+      "warped-vicissitude-warpmeld-pact-thousand-sons",
+      "deranged-ferocity-warpmeld-pact-thousand-sons",
+      "blessed-transmutations-warpmeld-pact-thousand-sons",
+      "touched-by-tzeentch-warpmeld-pact-thousand-sons",
+      "twisted-mirage-warpmeld-pact-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -176,20 +176,20 @@
     "id": "rubricae-phalanx",
     "name": "Rubricae Phalanx",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "all-is-dust",
+    "detachment_rule_id": "all-is-dust-thousand-sons",
     "enhancement_ids": [
-      "risen-rubricae-rubricae-phalanx",
-      "arcane-thralls-aura-rubricae-phalanx",
-      "lord-of-the-rubricae-rubricae-phalanx",
-      "stave-abominus-rubricae-phalanx"
+      "risen-rubricae-rubricae-phalanx-thousand-sons",
+      "arcane-thralls-aura-rubricae-phalanx-thousand-sons",
+      "lord-of-the-rubricae-rubricae-phalanx-thousand-sons",
+      "stave-abominus-rubricae-phalanx-thousand-sons"
     ],
     "stratagem_ids": [
-      "unwavering-phalanx-rubricae-phalanx",
-      "ardent-automata-rubricae-phalanx",
-      "inexorable-advance-rubricae-phalanx",
-      "revenge-of-the-rubricae-rubricae-phalanx",
-      "implacable-guardians-rubricae-phalanx",
-      "infernal-fusillade-rubricae-phalanx"
+      "unwavering-phalanx-rubricae-phalanx-thousand-sons",
+      "ardent-automata-rubricae-phalanx-thousand-sons",
+      "inexorable-advance-rubricae-phalanx-thousand-sons",
+      "revenge-of-the-rubricae-rubricae-phalanx-thousand-sons",
+      "implacable-guardians-rubricae-phalanx-thousand-sons",
+      "infernal-fusillade-rubricae-phalanx-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -210,15 +210,15 @@
     "id": "ritual-of-regeneration",
     "name": "Ritual of Regeneration",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "sorcerous-invigoration",
+    "detachment_rule_id": "sorcerous-invigoration-thousand-sons",
     "enhancement_ids": [
-      "eruption-of-vitality-ritual-of-regeneration",
-      "curse-of-life-ritual-of-regeneration"
+      "eruption-of-vitality-ritual-of-regeneration-thousand-sons",
+      "curse-of-life-ritual-of-regeneration-thousand-sons"
     ],
     "stratagem_ids": [
-      "relentless-rebirth-ritual-of-regeneration",
-      "mutagenic-magicks-ritual-of-regeneration",
-      "multitudinous-limbs-ritual-of-regeneration"
+      "relentless-rebirth-ritual-of-regeneration-thousand-sons",
+      "mutagenic-magicks-ritual-of-regeneration-thousand-sons",
+      "multitudinous-limbs-ritual-of-regeneration-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -239,15 +239,15 @@
     "id": "sekhetar-cohort",
     "name": "Sekhetar Cohort",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "ensorcelled-animus",
+    "detachment_rule_id": "ensorcelled-animus-thousand-sons",
     "enhancement_ids": [
-      "walking-rampart-sekhetar-cohort",
-      "occulus-infernum-sekhetar-cohort"
+      "walking-rampart-sekhetar-cohort-thousand-sons",
+      "occulus-infernum-sekhetar-cohort-thousand-sons"
     ],
     "stratagem_ids": [
-      "arcane-venting-sekhetar-cohort",
-      "ectoplasmic-extrusion-sekhetar-cohort",
-      "warp-fields-sekhetar-cohort"
+      "arcane-venting-sekhetar-cohort-thousand-sons",
+      "ectoplasmic-extrusion-sekhetar-cohort-thousand-sons",
+      "warp-fields-sekhetar-cohort-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -269,15 +269,15 @@
     "id": "servants-of-change",
     "name": "Servants of Change",
     "faction_id": "thousand-sons",
-    "detachment_rule_id": "all-seeing-mutant-hordes",
+    "detachment_rule_id": "all-seeing-mutant-hordes-thousand-sons",
     "enhancement_ids": [
-      "unravelled-fates-servants-of-change",
-      "thicket-of-bladed-bone-upgrade-servants-of-change"
+      "unravelled-fates-servants-of-change-thousand-sons",
+      "thicket-of-bladed-bone-upgrade-servants-of-change-thousand-sons"
     ],
     "stratagem_ids": [
-      "prismatic-displacement-servants-of-change",
-      "temporal-instability-servants-of-change",
-      "the-land-writhes-servants-of-change"
+      "prismatic-displacement-servants-of-change-thousand-sons",
+      "temporal-instability-servants-of-change-thousand-sons",
+      "the-land-writhes-servants-of-change-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -310,8 +310,8 @@
     "name": "Prism of Zadophon",
     "faction_id": "thousand-sons",
     "enhancement_ids": [
-      "foresight-of-the-changer-prism-of-zadophon",
-      "warp-tainted-shells-prism-of-zadophon"
+      "foresight-of-the-changer-prism-of-zadophon-thousand-sons",
+      "warp-tainted-shells-prism-of-zadophon-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -329,6 +329,9 @@
         "namespace": "mfm",
         "id": "7f2a8706-db85-4fe3-837b-f8e95980f4a7"
       }
+    ],
+    "detachment_rule_ids": [
+      "committed-to-the-ritual-thousand-sons"
     ]
   }
 ]

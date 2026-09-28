@@ -1,6 +1,6 @@
 [
   {
-    "id": "armour-of-contempt-spearpoint-task-force",
+    "id": "armour-of-contempt-spearpoint-task-force-adeptus-astartes",
     "name": "Armour of Contempt",
     "category": "detachment",
     "type": "battle-tactic",
@@ -13,7 +13,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "armour-of-contempt-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -30,7 +30,7 @@
     ]
   },
   {
-    "id": "hunters-instincts-spearpoint-task-force",
+    "id": "hunters-instincts-spearpoint-task-force-adeptus-astartes",
     "name": "Hunter’s Instincts",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -42,7 +42,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hunters-instincts-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "id": "spear-thrust-and-sabre-swing-spearpoint-task-force",
+    "id": "spear-thrust-and-sabre-swing-spearpoint-task-force-adeptus-astartes",
     "name": "Spear Thrust and Sabre Swing",
     "category": "detachment",
     "type": "battle-tactic",
@@ -71,7 +71,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spear-thrust-and-sabre-swing-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "evasive-manoeuvres-spearpoint-task-force",
+    "id": "evasive-manoeuvres-spearpoint-task-force-adeptus-astartes",
     "name": "Evasive Manoeuvres",
     "category": "detachment",
     "type": "battle-tactic",
@@ -100,7 +100,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "evasive-manoeuvres-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "withdraw-and-regroup-spearpoint-task-force",
+    "id": "withdraw-and-regroup-spearpoint-task-force-adeptus-astartes",
     "name": "Withdraw and Regroup",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -129,7 +129,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "withdraw-and-regroup-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "id": "mobile-lethality-spearpoint-task-force",
+    "id": "mobile-lethality-spearpoint-task-force-adeptus-astartes",
     "name": "Mobile Lethality",
     "category": "detachment",
     "type": "battle-tactic",
@@ -158,7 +158,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mobile-lethality-spearpoint-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "id": "heroes-of-the-chapter-1st-company-task-force",
+    "id": "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
     "name": "HEROES OF THE CHAPTER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -188,7 +188,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "heroes-of-the-chapter-1st-company-task-force",
+    "ability_id": "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -205,7 +205,7 @@
     ]
   },
   {
-    "id": "legendary-fortitude-1st-company-task-force",
+    "id": "legendary-fortitude-1st-company-task-force-adeptus-astartes",
     "name": "LEGENDARY FORTITUDE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -217,7 +217,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "legendary-fortitude-1st-company-task-force",
+    "ability_id": "legendary-fortitude-1st-company-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "id": "terrifying-proficiency-1st-company-task-force",
+    "id": "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
     "name": "TERRIFYING PROFICIENCY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -246,7 +246,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "terrifying-proficiency-1st-company-task-force",
+    "ability_id": "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -263,7 +263,7 @@
     ]
   },
   {
-    "id": "duty-and-honour-1st-company-task-force",
+    "id": "duty-and-honour-1st-company-task-force-adeptus-astartes",
     "name": "DUTY AND HONOUR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -275,7 +275,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "duty-and-honour-1st-company-task-force",
+    "ability_id": "duty-and-honour-1st-company-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -292,7 +292,7 @@
     ]
   },
   {
-    "id": "orbital-teleportarium-1st-company-task-force",
+    "id": "orbital-teleportarium-1st-company-task-force-adeptus-astartes",
     "name": "ORBITAL TELEPORTARIUM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -304,7 +304,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "orbital-teleportarium-1st-company-task-force",
+    "ability_id": "orbital-teleportarium-1st-company-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -321,7 +321,7 @@
     ]
   },
   {
-    "id": "honour-the-chapter-gladius-task-force",
+    "id": "honour-the-chapter-gladius-task-force-adeptus-astartes",
     "name": "HONOUR THE CHAPTER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -333,7 +333,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "honour-the-chapter-gladius-task-force",
+    "ability_id": "honour-the-chapter-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -350,7 +350,7 @@
     ]
   },
   {
-    "id": "storm-of-fire-gladius-task-force",
+    "id": "storm-of-fire-gladius-task-force-adeptus-astartes",
     "name": "STORM OF FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -362,7 +362,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "storm-of-fire-gladius-task-force",
+    "ability_id": "storm-of-fire-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -379,7 +379,7 @@
     ]
   },
   {
-    "id": "only-in-death-does-duty-end-gladius-task-force",
+    "id": "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
     "name": "ONLY IN DEATH DOES DUTY END",
     "category": "detachment",
     "type": "epic-deed",
@@ -391,7 +391,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "only-in-death-does-duty-end-gladius-task-force",
+    "ability_id": "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -408,7 +408,7 @@
     ]
   },
   {
-    "id": "adaptive-strategy-gladius-task-force",
+    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "name": "ADAPTIVE STRATEGY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -420,7 +420,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adaptive-strategy-gladius-task-force",
+    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -437,7 +437,7 @@
     ]
   },
   {
-    "id": "squad-tactics-gladius-task-force",
+    "id": "squad-tactics-gladius-task-force-adeptus-astartes",
     "name": "SQUAD TACTICS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -449,7 +449,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "squad-tactics-gladius-task-force",
+    "ability_id": "squad-tactics-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -466,7 +466,7 @@
     ]
   },
   {
-    "id": "blitzing-fusillade-stormlance-task-force",
+    "id": "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
     "name": "BLITZING FUSILLADE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -478,7 +478,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "blitzing-fusillade-stormlance-task-force",
+    "ability_id": "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -495,7 +495,7 @@
     ]
   },
   {
-    "id": "shock-assault-stormlance-task-force",
+    "id": "shock-assault-stormlance-task-force-adeptus-astartes",
     "name": "SHOCK ASSAULT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -507,7 +507,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shock-assault-stormlance-task-force",
+    "ability_id": "shock-assault-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -524,7 +524,7 @@
     ]
   },
   {
-    "id": "ride-hard-ride-fast-stormlance-task-force",
+    "id": "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
     "name": "RIDE HARD, RIDE FAST",
     "category": "detachment",
     "type": "battle-tactic",
@@ -536,7 +536,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ride-hard-ride-fast-stormlance-task-force",
+    "ability_id": "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -553,7 +553,7 @@
     ]
   },
   {
-    "id": "wind-swift-evasion-stormlance-task-force",
+    "id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "name": "WIND-SWIFT EVASION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -565,7 +565,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "wind-swift-evasion-stormlance-task-force",
+    "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -582,7 +582,7 @@
     ]
   },
   {
-    "id": "full-throttle-stormlance-task-force",
+    "id": "full-throttle-stormlance-task-force-adeptus-astartes",
     "name": "FULL THROTTLE",
     "category": "detachment",
     "type": "wargear",
@@ -594,7 +594,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "full-throttle-stormlance-task-force",
+    "ability_id": "full-throttle-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -611,7 +611,7 @@
     ]
   },
   {
-    "id": "strike-from-the-shadows-vanguard-spearhead",
+    "id": "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
     "name": "STRIKE FROM THE SHADOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -623,7 +623,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "strike-from-the-shadows-vanguard-spearhead",
+    "ability_id": "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -640,7 +640,7 @@
     ]
   },
   {
-    "id": "surgical-strikes-vanguard-spearhead",
+    "id": "surgical-strikes-vanguard-spearhead-adeptus-astartes",
     "name": "SURGICAL STRIKES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -652,7 +652,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "surgical-strikes-vanguard-spearhead",
+    "ability_id": "surgical-strikes-vanguard-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -669,7 +669,7 @@
     ]
   },
   {
-    "id": "calculated-feint-vanguard-spearhead",
+    "id": "calculated-feint-vanguard-spearhead-adeptus-astartes",
     "name": "CALCULATED FEINT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -681,7 +681,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "calculated-feint-vanguard-spearhead",
+    "ability_id": "calculated-feint-vanguard-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -698,7 +698,7 @@
     ]
   },
   {
-    "id": "guerrilla-tactics-vanguard-spearhead",
+    "id": "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
     "name": "GUERRILLA TACTICS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -710,7 +710,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "guerrilla-tactics-vanguard-spearhead",
+    "ability_id": "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -727,7 +727,7 @@
     ]
   },
   {
-    "id": "a-deadly-prize-vanguard-spearhead",
+    "id": "a-deadly-prize-vanguard-spearhead-adeptus-astartes",
     "name": "A DEADLY PRIZE",
     "category": "detachment",
     "type": "wargear",
@@ -739,7 +739,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "a-deadly-prize-vanguard-spearhead",
+    "ability_id": "a-deadly-prize-vanguard-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +756,7 @@
     ]
   },
   {
-    "id": "suppression-strafing-orbital-assault-force",
+    "id": "suppression-strafing-orbital-assault-force-adeptus-astartes",
     "name": "Suppression Strafing",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -768,7 +768,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "suppression-strafing-orbital-assault-force",
+    "ability_id": "suppression-strafing-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -785,7 +785,7 @@
     ]
   },
   {
-    "id": "blind-screen-orbital-assault-force",
+    "id": "blind-screen-orbital-assault-force-adeptus-astartes",
     "name": "Blind Screen",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -797,7 +797,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "blind-screen-orbital-assault-force",
+    "ability_id": "blind-screen-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -814,7 +814,7 @@
     ]
   },
   {
-    "id": "tactical-decapitation-orbital-assault-force",
+    "id": "tactical-decapitation-orbital-assault-force-adeptus-astartes",
     "name": "Tactical Decapitation",
     "category": "detachment",
     "type": "battle-tactic",
@@ -827,7 +827,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "tactical-decapitation-orbital-assault-force",
+    "ability_id": "tactical-decapitation-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -844,7 +844,7 @@
     ]
   },
   {
-    "id": "shock-onslaught-orbital-assault-force",
+    "id": "shock-onslaught-orbital-assault-force-adeptus-astartes",
     "name": "Shock Onslaught",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -856,7 +856,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shock-onslaught-orbital-assault-force",
+    "ability_id": "shock-onslaught-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -873,7 +873,7 @@
     ]
   },
   {
-    "id": "onward-for-the-emperor-orbital-assault-force",
+    "id": "onward-for-the-emperor-orbital-assault-force-adeptus-astartes",
     "name": "Onward for the Emperor",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -885,7 +885,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "onward-for-the-emperor-orbital-assault-force",
+    "ability_id": "onward-for-the-emperor-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -902,7 +902,7 @@
     ]
   },
   {
-    "id": "battle-drill-recall-anvil-siege-force",
+    "id": "battle-drill-recall-anvil-siege-force-adeptus-astartes",
     "name": "BATTLE DRILL RECALL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -914,7 +914,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "battle-drill-recall-anvil-siege-force",
+    "ability_id": "battle-drill-recall-anvil-siege-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -931,7 +931,7 @@
     ]
   },
   {
-    "id": "no-threat-too-great-anvil-siege-force",
+    "id": "no-threat-too-great-anvil-siege-force-adeptus-astartes",
     "name": "NO THREAT TOO GREAT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -943,7 +943,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "no-threat-too-great-anvil-siege-force",
+    "ability_id": "no-threat-too-great-anvil-siege-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -960,7 +960,7 @@
     ]
   },
   {
-    "id": "rigid-discipline-anvil-siege-force",
+    "id": "rigid-discipline-anvil-siege-force-adeptus-astartes",
     "name": "RIGID DISCIPLINE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -972,7 +972,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "rigid-discipline-anvil-siege-force",
+    "ability_id": "rigid-discipline-anvil-siege-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -989,7 +989,7 @@
     ]
   },
   {
-    "id": "not-one-backwards-step-anvil-siege-force",
+    "id": "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
     "name": "NOT ONE BACKWARDS STEP",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1001,7 +1001,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "not-one-backwards-step-anvil-siege-force",
+    "ability_id": "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1018,7 +1018,7 @@
     ]
   },
   {
-    "id": "hail-of-vengeance-anvil-siege-force",
+    "id": "hail-of-vengeance-anvil-siege-force-adeptus-astartes",
     "name": "HAIL OF VENGEANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1030,7 +1030,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hail-of-vengeance-anvil-siege-force",
+    "ability_id": "hail-of-vengeance-anvil-siege-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1047,7 +1047,7 @@
     ]
   },
   {
-    "id": "crucible-of-battle-firestorm-assault-force",
+    "id": "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
     "name": "CRUCIBLE OF BATTLE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1060,7 +1060,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "crucible-of-battle-firestorm-assault-force",
+    "ability_id": "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1077,7 +1077,7 @@
     ]
   },
   {
-    "id": "onslaught-of-fire-firestorm-assault-force",
+    "id": "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
     "name": "ONSLAUGHT OF FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1089,7 +1089,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "onslaught-of-fire-firestorm-assault-force",
+    "ability_id": "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1106,7 +1106,7 @@
     ]
   },
   {
-    "id": "burning-vengeance-firestorm-assault-force",
+    "id": "burning-vengeance-firestorm-assault-force-adeptus-astartes",
     "name": "BURNING VENGEANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1118,7 +1118,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "burning-vengeance-firestorm-assault-force",
+    "ability_id": "burning-vengeance-firestorm-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1135,7 +1135,7 @@
     ]
   },
   {
-    "id": "immolation-protocols-firestorm-assault-force",
+    "id": "immolation-protocols-firestorm-assault-force-adeptus-astartes",
     "name": "IMMOLATION PROTOCOLS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1147,7 +1147,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "immolation-protocols-firestorm-assault-force",
+    "ability_id": "immolation-protocols-firestorm-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1164,7 +1164,7 @@
     ]
   },
   {
-    "id": "rapid-embarkation-firestorm-assault-force",
+    "id": "rapid-embarkation-firestorm-assault-force-adeptus-astartes",
     "name": "RAPID EMBARKATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1176,7 +1176,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "rapid-embarkation-firestorm-assault-force",
+    "ability_id": "rapid-embarkation-firestorm-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1193,7 +1193,7 @@
     ]
   },
   {
-    "id": "unbowed-conviction-ironstorm-spearhead",
+    "id": "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
     "name": "UNBOWED CONVICTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1205,7 +1205,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unbowed-conviction-ironstorm-spearhead",
+    "ability_id": "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1222,7 +1222,7 @@
     ]
   },
   {
-    "id": "mercy-is-weakness-ironstorm-spearhead",
+    "id": "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
     "name": "MERCY IS WEAKNESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1235,7 +1235,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "mercy-is-weakness-ironstorm-spearhead",
+    "ability_id": "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1252,7 +1252,7 @@
     ]
   },
   {
-    "id": "vengeful-animus-ironstorm-spearhead",
+    "id": "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
     "name": "VENGEFUL ANIMUS",
     "category": "detachment",
     "type": "epic-deed",
@@ -1268,7 +1268,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vengeful-animus-ironstorm-spearhead",
+    "ability_id": "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1285,7 +1285,7 @@
     ]
   },
   {
-    "id": "ancient-fury-ironstorm-spearhead",
+    "id": "ancient-fury-ironstorm-spearhead-adeptus-astartes",
     "name": "ANCIENT FURY",
     "category": "detachment",
     "type": "epic-deed",
@@ -1297,7 +1297,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ancient-fury-ironstorm-spearhead",
+    "ability_id": "ancient-fury-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1314,7 +1314,7 @@
     ]
   },
   {
-    "id": "power-of-the-machine-spirit-ironstorm-spearhead",
+    "id": "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "name": "POWER OF THE MACHINE SPIRIT",
     "category": "detachment",
     "type": "epic-deed",
@@ -1326,7 +1326,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "power-of-the-machine-spirit-ironstorm-spearhead",
+    "ability_id": "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1343,7 +1343,7 @@
     ]
   },
   {
-    "id": "data-link-augury-fulguris-task-force",
+    "id": "data-link-augury-fulguris-task-force-adeptus-astartes",
     "name": "Data-link Augury",
     "category": "detachment",
     "detachment_id": "fulguris-task-force",
@@ -1354,7 +1354,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "data-link-augury-fulguris-task-force",
+    "ability_id": "data-link-augury-fulguris-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1371,7 +1371,7 @@
     ]
   },
   {
-    "id": "reactive-evasion-fulguris-task-force",
+    "id": "reactive-evasion-fulguris-task-force-adeptus-astartes",
     "name": "Reactive Evasion",
     "category": "detachment",
     "detachment_id": "fulguris-task-force",
@@ -1382,7 +1382,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "reactive-evasion-fulguris-task-force",
+    "ability_id": "reactive-evasion-fulguris-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1399,7 +1399,7 @@
     ]
   },
   {
-    "id": "anti-grav-surge-fulguris-task-force",
+    "id": "anti-grav-surge-fulguris-task-force-adeptus-astartes",
     "name": "Anti-grav Surge",
     "category": "detachment",
     "detachment_id": "fulguris-task-force",
@@ -1410,7 +1410,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "anti-grav-surge-fulguris-task-force",
+    "ability_id": "anti-grav-surge-fulguris-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1427,7 +1427,7 @@
     ]
   },
   {
-    "id": "adaptive-operations-subversion-assets",
+    "id": "adaptive-operations-subversion-assets-adeptus-astartes",
     "name": "Adaptive Operations",
     "category": "detachment",
     "detachment_id": "subversion-assets",
@@ -1438,7 +1438,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adaptive-operations-subversion-assets",
+    "ability_id": "adaptive-operations-subversion-assets-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1455,7 +1455,7 @@
     ]
   },
   {
-    "id": "cloaked-position-subversion-assets",
+    "id": "cloaked-position-subversion-assets-adeptus-astartes",
     "name": "Cloaked Position",
     "category": "detachment",
     "detachment_id": "subversion-assets",
@@ -1466,7 +1466,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cloaked-position-subversion-assets",
+    "ability_id": "cloaked-position-subversion-assets-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1483,7 +1483,7 @@
     ]
   },
   {
-    "id": "machine-wrath-armoured-speartip",
+    "id": "machine-wrath-armoured-speartip-adeptus-astartes",
     "name": "Machine Wrath",
     "category": "detachment",
     "type": "epic-deed",
@@ -1499,7 +1499,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "machine-wrath-armoured-speartip",
+    "ability_id": "machine-wrath-armoured-speartip-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1516,7 +1516,7 @@
     ]
   },
   {
-    "id": "ceramite-sledgehammer-armoured-speartip",
+    "id": "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
     "name": "Ceramite Sledgehammer",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1528,7 +1528,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ceramite-sledgehammer-armoured-speartip",
+    "ability_id": "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1545,7 +1545,7 @@
     ]
   },
   {
-    "id": "advanced-deployment-armoured-speartip",
+    "id": "advanced-deployment-armoured-speartip-adeptus-astartes",
     "name": "Advanced Deployment",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1557,7 +1557,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "advanced-deployment-armoured-speartip",
+    "ability_id": "advanced-deployment-armoured-speartip-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1574,7 +1574,7 @@
     ]
   },
   {
-    "id": "purgation-doctrine-armoured-speartip",
+    "id": "purgation-doctrine-armoured-speartip-adeptus-astartes",
     "name": "Purgation Doctrine",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1586,7 +1586,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "purgation-doctrine-armoured-speartip",
+    "ability_id": "purgation-doctrine-armoured-speartip-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1603,7 +1603,7 @@
     ]
   },
   {
-    "id": "codex-discipline-bastion-task-force",
+    "id": "codex-discipline-bastion-task-force-adeptus-astartes",
     "name": "Codex Discipline",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1616,7 +1616,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "codex-discipline-bastion-task-force",
+    "ability_id": "codex-discipline-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1633,7 +1633,7 @@
     ]
   },
   {
-    "id": "shock-bombardment-bastion-task-force",
+    "id": "shock-bombardment-bastion-task-force-adeptus-astartes",
     "name": "Shock Bombardment",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1646,7 +1646,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shock-bombardment-bastion-task-force",
+    "ability_id": "shock-bombardment-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1663,7 +1663,7 @@
     ]
   },
   {
-    "id": "guided-disruption-bastion-task-force",
+    "id": "guided-disruption-bastion-task-force-adeptus-astartes",
     "name": "Guided Disruption",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1676,7 +1676,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "guided-disruption-bastion-task-force",
+    "ability_id": "guided-disruption-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1693,7 +1693,7 @@
     ]
   },
   {
-    "id": "angels-defiant-bastion-task-force",
+    "id": "angels-defiant-bastion-task-force-adeptus-astartes",
     "name": "Angels Defiant",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1706,7 +1706,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "angels-defiant-bastion-task-force",
+    "ability_id": "angels-defiant-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1723,7 +1723,7 @@
     ]
   },
   {
-    "id": "light-of-vengeance-bastion-task-force",
+    "id": "light-of-vengeance-bastion-task-force-adeptus-astartes",
     "name": "Light of Vengeance",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1736,7 +1736,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "light-of-vengeance-bastion-task-force",
+    "ability_id": "light-of-vengeance-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1753,7 +1753,7 @@
     ]
   },
   {
-    "id": "heresy-undone-bastion-task-force",
+    "id": "heresy-undone-bastion-task-force-adeptus-astartes",
     "name": "Heresy Undone",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1766,7 +1766,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "heresy-undone-bastion-task-force",
+    "ability_id": "heresy-undone-bastion-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1783,7 +1783,7 @@
     ]
   },
   {
-    "id": "unyielding-might-ceramite-sentinels",
+    "id": "unyielding-might-ceramite-sentinels-adeptus-astartes",
     "name": "Unyielding Might",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1795,7 +1795,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unyielding-might-ceramite-sentinels",
+    "ability_id": "unyielding-might-ceramite-sentinels-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1812,7 +1812,7 @@
     ]
   },
   {
-    "id": "stand-to-the-end-ceramite-sentinels",
+    "id": "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
     "name": "Stand to the End",
     "category": "detachment",
     "type": "epic-deed",
@@ -1824,7 +1824,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "stand-to-the-end-ceramite-sentinels",
+    "ability_id": "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1841,7 +1841,7 @@
     ]
   },
   {
-    "id": "priority-strike-ceramite-sentinels",
+    "id": "priority-strike-ceramite-sentinels-adeptus-astartes",
     "name": "Priority Strike",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1854,7 +1854,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "priority-strike-ceramite-sentinels",
+    "ability_id": "priority-strike-ceramite-sentinels-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1871,7 +1871,7 @@
     ]
   },
   {
-    "id": "augmented-targeting-ceramite-sentinels",
+    "id": "augmented-targeting-ceramite-sentinels-adeptus-astartes",
     "name": "Augmented Targeting",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1883,7 +1883,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "augmented-targeting-ceramite-sentinels",
+    "ability_id": "augmented-targeting-ceramite-sentinels-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1900,7 +1900,7 @@
     ]
   },
   {
-    "id": "evasive-repositioning-ceramite-sentinels",
+    "id": "evasive-repositioning-ceramite-sentinels-adeptus-astartes",
     "name": "Evasive Repositioning",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1912,7 +1912,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "evasive-repositioning-ceramite-sentinels",
+    "ability_id": "evasive-repositioning-ceramite-sentinels-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1929,7 +1929,7 @@
     ]
   },
   {
-    "id": "rapid-gunnery-headhunter-task-force",
+    "id": "rapid-gunnery-headhunter-task-force-adeptus-astartes",
     "name": "Rapid Gunnery",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1941,7 +1941,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "rapid-gunnery-headhunter-task-force",
+    "ability_id": "rapid-gunnery-headhunter-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1958,7 +1958,7 @@
     ]
   },
   {
-    "id": "reactive-repositioning-headhunter-task-force",
+    "id": "reactive-repositioning-headhunter-task-force-adeptus-astartes",
     "name": "Reactive Repositioning",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1970,7 +1970,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "reactive-repositioning-headhunter-task-force",
+    "ability_id": "reactive-repositioning-headhunter-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1987,7 +1987,7 @@
     ]
   },
   {
-    "id": "target-weak-point-headhunter-task-force",
+    "id": "target-weak-point-headhunter-task-force-adeptus-astartes",
     "name": "Target Weak Point",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1999,7 +1999,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "target-weak-point-headhunter-task-force",
+    "ability_id": "target-weak-point-headhunter-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2016,7 +2016,7 @@
     ]
   },
   {
-    "id": "kill-shot-headhunter-task-force",
+    "id": "kill-shot-headhunter-task-force-adeptus-astartes",
     "name": "Kill Shot",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2028,7 +2028,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "kill-shot-headhunter-task-force",
+    "ability_id": "kill-shot-headhunter-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2045,7 +2045,7 @@
     ]
   },
   {
-    "id": "machine-vengeance-headhunter-task-force",
+    "id": "machine-vengeance-headhunter-task-force-adeptus-astartes",
     "name": "Machine Vengeance",
     "category": "detachment",
     "type": "epic-deed",
@@ -2057,7 +2057,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "machine-vengeance-headhunter-task-force",
+    "ability_id": "machine-vengeance-headhunter-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

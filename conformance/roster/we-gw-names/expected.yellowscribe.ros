@@ -85,14 +85,14 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                 <characteristic name="OC">1</characteristic>
               </characteristics>
             </profile>
-            <profile name="Feel No Pain 5+" typeName="Abilities">
+            <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When damage is allocated, this model has the Feel No Pain 5+ ability.</characteristic>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 8&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit gains the Scouts 8" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="To Slake its Rage" typeName="Abilities">
@@ -144,15 +144,15 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play, until the end of the phase:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+                <characteristic name="Description">Before this model is removed from play:
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Firing Deck 2" typeName="Abilities">
+            <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit is selected to shoot during your Shooting phase, you may use this ability, the unit gains the Firing Deck 2 ability.</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Meet Any Challenge" typeName="Abilities">

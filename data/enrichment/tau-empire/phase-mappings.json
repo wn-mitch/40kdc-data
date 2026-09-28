@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "scouts-7",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -12,7 +12,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "kroot-linebreakers",
+    "source_id": "kroot-linebreakers-tau-empire",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -24,7 +24,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-3d6",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -49,7 +49,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aggressive-deployment",
+    "source_id": "aggressive-deployment-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -63,7 +63,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "air-caste-colossus",
+    "source_id": "air-caste-colossus-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -87,7 +87,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fireknife",
+    "source_id": "fireknife-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -99,7 +99,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "weapon-support-systems",
+    "source_id": "weapon-support-systems-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -111,7 +111,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "gun-drone",
+    "source_id": "gun-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -123,7 +123,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "marker-drone",
+    "source_id": "marker-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -135,32 +135,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scouts-9",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "drone-harassment-tactics",
+    "source_id": "drone-harassment-tactics-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -184,7 +159,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "forward-observers",
+    "source_id": "forward-observers-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -196,7 +171,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "homing-beacon",
+    "source_id": "homing-beacon-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -208,20 +183,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pulse-bombs",
+    "source_id": "pulse-bombs-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -233,7 +195,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bounty-hunters",
+    "source_id": "bounty-hunters-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -246,32 +208,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pechra",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6-3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coordinated-strike",
+    "source_id": "coordinated-strike-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -296,7 +233,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "target-uploaded",
+    "source_id": "target-uploaded-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -309,7 +246,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pulse-accelerator-drone",
+    "source_id": "pulse-accelerator-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -321,7 +258,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "recon-drone",
+    "source_id": "recon-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -333,7 +270,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "suppression-volley",
+    "source_id": "suppression-volley-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -346,7 +283,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ds8-support-turret",
+    "source_id": "ds8-support-turret-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -358,7 +295,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "guardian-drone",
+    "source_id": "guardian-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -370,32 +307,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-8",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exemplars-of-montka",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "retro-thrusters",
+    "source_id": "retro-thrusters-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -408,7 +320,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "starscythe",
+    "source_id": "starscythe-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -420,7 +332,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "battlesuit-support-systems",
+    "source_id": "battlesuit-support-systems-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -432,20 +344,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6-2",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strafing-run",
+    "source_id": "strafing-run-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -457,7 +356,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "transport-bay",
+    "source_id": "transport-bay-tau-empire",
     "source_type": "ability",
     "phases": [
       "command",
@@ -470,7 +369,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "breach-and-clear",
+    "source_id": "breach-and-clear-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -482,7 +381,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "heavy-walker",
+    "source_id": "heavy-walker-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -494,7 +393,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "support-system",
+    "source_id": "support-system-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -506,7 +405,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titan-killer",
+    "source_id": "titan-killer-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -518,7 +417,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-11",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -531,7 +430,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fortification",
+    "source_id": "fortification-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -543,7 +442,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tidewall-cover",
+    "source_id": "tidewall-cover-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -555,7 +454,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "loping-pounce",
+    "source_id": "loping-pounce-tau-empire",
     "source_type": "ability",
     "phases": [
       "command",
@@ -569,7 +468,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hunting-hounds",
+    "source_id": "hunting-hounds-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -581,7 +480,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "coordinated-leadership",
+    "source_id": "coordinated-leadership-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -593,7 +492,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hover-drone",
+    "source_id": "hover-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -605,7 +504,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
+    "source_id": "battlesuit-support-system-riptide-battlesuit-tau-empire",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "nova-charge-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -618,7 +529,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "battlesuit-support-system",
+    "source_id": "weapon-support-system-riptide-battlesuit-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -630,7 +541,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "nova-charge",
+    "source_id": "missile-drone-tau-empire",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "way-of-the-short-blade-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -643,56 +566,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "weapon-support-system",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "missile-drone",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "way-of-the-short-blade",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "puretides-teachings",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kroot-packmates",
+    "source_id": "kroot-packmates-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -716,7 +590,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "agile-combatant",
+    "source_id": "agile-combatant-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -728,7 +602,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hero-of-the-empire-aura",
+    "source_id": "hero-of-the-empire-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -740,7 +614,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "advanced-guardian-drone",
+    "source_id": "advanced-guardian-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -752,7 +626,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "command-link-drone-aura",
+    "source_id": "command-link-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -764,7 +638,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "stealth-drones",
+    "source_id": "stealth-drones-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -777,7 +651,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titan-hunter",
+    "source_id": "titan-hunter-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -789,7 +663,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "velocity-tracker",
+    "source_id": "velocity-tracker-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -801,7 +675,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "targeting-array",
+    "source_id": "targeting-array-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -814,7 +688,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "airborne-agility",
+    "source_id": "airborne-agility-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -826,7 +700,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "oversight-drone",
+    "source_id": "oversight-drone-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -838,7 +712,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "coldstar-commander",
+    "source_id": "coldstar-commander-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -851,7 +725,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "trail-finding",
+    "source_id": "trail-finding-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -863,7 +737,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "kroot-ambush",
+    "source_id": "kroot-ambush-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -875,20 +749,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-20",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enforcer-commander",
+    "source_id": "enforcer-commander-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -900,7 +761,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "volley-fire",
+    "source_id": "volley-fire-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -912,7 +773,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crack-shot",
+    "source_id": "crack-shot-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -924,7 +785,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ground-strike-fighter",
+    "source_id": "ground-strike-fighter-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -936,7 +797,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-deployment",
+    "source_id": "rapid-deployment-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -949,7 +810,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "structural-analyser",
+    "source_id": "structural-analyser-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -961,7 +822,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "jammer-array",
+    "source_id": "jammer-array-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -973,7 +834,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "armour-hunter",
+    "source_id": "armour-hunter-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -986,7 +847,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "droneport",
+    "source_id": "droneport-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -998,7 +859,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sunforge",
+    "source_id": "sunforge-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1010,7 +871,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "precise-targeting",
+    "source_id": "precise-targeting-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1023,7 +884,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fieldcraft",
+    "source_id": "fieldcraft-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1035,7 +896,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "war-leader",
+    "source_id": "war-leader-tau-empire",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1047,7 +908,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "root-of-honour",
+    "source_id": "root-of-honour-tau-empire",
     "source_type": "ability",
     "phases": [
       "command",
@@ -1063,7 +924,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "advanced-scouting",
+    "source_id": "advanced-scouting-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1076,7 +937,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fire-and-fade",
+    "source_id": "fire-and-fade-tau-empire",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1090,7 +951,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ritual-butchery",
+    "source_id": "ritual-butchery-tau-empire",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1103,7 +964,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rites-of-feasting",
+    "source_id": "rites-of-feasting-tau-empire",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -1115,765 +976,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "assassin",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blacklight-marker-drones",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-arrokon-protocol",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "focused-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combat-debarkation",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pinpoint-counter-offensive",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggressive-mobility",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-trap-well-laid",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reactive-impact-dampeners",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "experimental-weaponry",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-tempting-trap",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "point-blank-ambush",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coordinate-to-engage",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wall-of-mirrors",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "multisensory-scanning",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "alien-expertise",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guided-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "join-the-hunt",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fail-safe-detonator",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-torchstar-gambit",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grav-inhibitor-field",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-grisly-feast",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guerrilla-warriors",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hidden-hunters",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "automated-repair-drones",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "experimental-modifications",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "interlocking-manouevres",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pheromone-waypoints",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-shortened-blade",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pulse-onslaught",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stimm-injectors",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "emp-grenades",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "experimental-ammunition",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "threat-assessment-analyser",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "neuroweb-system-jammer",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combat-embarkation",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "photon-grenades",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "counterfire-defence-systems",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exemplar-of-the-kauyon",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "precision-of-the-patient-hunter",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "solid-image-projection-unit",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "through-unity-devastation",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exemplar-of-the-montka",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strategic-conqueror",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coordinated-exploitation",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "puretide-engram-neurochip",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "starflare-ignition-system",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "internal-grenade-racks",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prototype-weapon-system",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kroothawk-flock",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nomadic-hunter",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "root-carved-weapons",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "borthrod-gland",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "student-of-kauyon",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "admired-leader",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fanatical-convert",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "transponder-lock-module",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "supernova-launcher",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "thermoneutronic-projector",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "plasma-accelerator-rifle",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fusion-blades",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bonded-heroes",
+    "source_id": "bonded-heroes-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1885,7 +988,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "killing-blow",
+    "source_id": "killing-blow-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1897,7 +1000,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hunters-instincts",
+    "source_id": "hunters-instincts-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1910,7 +1013,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "skirmish-fighters",
+    "source_id": "skirmish-fighters-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1923,7 +1026,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "superior-craftsmanship",
+    "source_id": "superior-craftsmanship-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1935,7 +1038,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "patient-hunter",
+    "source_id": "patient-hunter-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1948,7 +1051,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "integrated-command-structure",
+    "source_id": "integrated-command-structure-tau-empire",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"

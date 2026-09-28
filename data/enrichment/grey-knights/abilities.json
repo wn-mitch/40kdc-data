@@ -1,57 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "land-raider-redeemer",
-      "land-raider"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "assault-ramp",
+    "ability_id": "assault-ramp-grey-knights",
     "name": "Assault Ramp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -101,90 +50,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "land-raider-redeemer",
-      "land-raider"
+      "land-raider",
+      "land-raider-crusader",
+      "land-raider-redeemer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grand-master-in-nemesis-dreadknight"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grand-master-in-nemesis-dreadknight"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "surge-of-wrath-psychic",
+    "ability_id": "surge-of-wrath-grey-knights",
     "name": "Surge of Wrath (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -245,10 +120,11 @@
       "grand-master-in-nemesis-dreadknight"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "warrior-strategist",
+    "ability_id": "warrior-strategist-grey-knights",
     "name": "Warrior Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -271,8 +147,7 @@
       "duration": "resolution"
     },
     "unit_ids": [
-      "grand-master",
-      "grand-master-in-nemesis-dreadknight"
+      "grand-master"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
@@ -290,86 +165,11 @@
     "usage": {
       "frequency": "once-per-battle-round",
       "per": "army"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "legacy-of-jerulas",
-    "name": "Legacy of Jerulas",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "16387755d00ab25c2fac4d165940703ee2332e62da3ba9400977bdd7afb37411",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "land-raider-crusader"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
-  },
-  {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grand-master"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "might-of-titan-psychic",
+    "ability_id": "might-of-titan-grey-knights",
     "name": "Might of Titan (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -425,10 +225,11 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "model"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "fire-focus",
+    "ability_id": "fire-focus-grey-knights",
     "name": "Fire Focus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -462,46 +263,11 @@
       "razorback"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "fire-support",
-    "name": "Fire Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "21befcdcfa5408e5c9b73d909e9fbccae6401784786c3c7d57de348a340ddd39",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "razorback"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "sanctity-of-purpose",
+    "ability_id": "sanctity-of-purpose-grey-knights",
     "name": "Sanctity of Purpose",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -569,10 +335,11 @@
       "purifier-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "indomitable-spirit-psychic",
+    "ability_id": "indomitable-spirit-grey-knights",
     "name": "Indomitable Spirit (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -641,86 +408,11 @@
       "nemesis-dreadknight"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grey-knights-thunderhawk-gunship"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "grey-knights-thunderhawk-gunship"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "aerial-assault",
+    "ability_id": "aerial-assault-grey-knights",
     "name": "Aerial Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -785,10 +477,11 @@
       "grey-knights-thunderhawk-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "thunderhawk-cluster-bombs",
+    "ability_id": "thunderhawk-cluster-bombs-grey-knights",
     "name": "Thunderhawk Cluster Bombs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -811,37 +504,11 @@
       "grey-knights-thunderhawk-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rhino"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "truesilver-aegis-aura",
+    "ability_id": "truesilver-aegis-grey-knights",
     "name": "Truesilver Aegis (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -875,36 +542,11 @@
       "rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "self-repair",
-    "name": "Self Repair",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ee555d45e9499738d4ae837ce9afff7635f875ae64ac94a3d376def7f91e1915",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "rhino"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "hammerhand-psychic",
+    "ability_id": "hammerhand-grey-knights",
     "name": "Hammerhand (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -939,10 +581,11 @@
       "brother-captain"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "eye-of-judgement-psychic",
+    "ability_id": "eye-of-judgement-grey-knights",
     "name": "Eye of Judgement (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -966,60 +609,11 @@
       "brother-captain"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venerable-dreadnought"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "guidance-of-the-ancients-psychic",
+    "ability_id": "guidance-of-the-ancients-grey-knights",
     "name": "Guidance of the Ancients (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1096,10 +690,11 @@
         ]
       },
       "binds_event_variable": "guidance-shooting"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "guidance-of-the-ancients-psychic-crowes-sanctifiers",
+    "ability_id": "guidance-of-the-ancients-crowes-sanctifiers-venerable-dreadnought-grey-knights",
     "name": "Guidance of the Ancients (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1178,10 +773,11 @@
       },
       "optional": true,
       "binds_event_variable": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "champion-of-the-order-of-purifiers-psychic",
+    "ability_id": "champion-of-the-order-of-purifiers-grey-knights",
     "name": "Champion of the Order of Purifiers (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1217,10 +813,11 @@
       "castellan-crowe"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "foesight-psychic",
+    "ability_id": "foesight-grey-knights",
     "name": "Foesight (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1256,37 +853,11 @@
       "castellan-crowe"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "strike-squad"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "sanctifying-ritual-psychic",
+    "ability_id": "sanctifying-ritual-grey-knights",
     "name": "Sanctifying Ritual (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1340,10 +911,11 @@
           }
         ]
       }
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "techmarine",
+    "ability_id": "techmarine-grey-knights",
     "name": "Techmarine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1385,10 +957,11 @@
       "brotherhood-techmarine"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "blessing-of-the-omnissiah",
+    "ability_id": "blessing-of-the-omnissiah-grey-knights",
     "name": "Blessing of the Omnissiah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1466,10 +1039,11 @@
     "usage": {
       "frequency": "once-per-command-phase",
       "per": "model"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "guardians-of-the-machine",
+    "ability_id": "guardians-of-the-machine-grey-knights",
     "name": "Guardians of the Machine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1559,10 +1133,11 @@
         }
       },
       "optional": true
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "sanctic-hood",
+    "ability_id": "sanctic-hood-grey-knights",
     "name": "Sanctic Hood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1595,10 +1170,11 @@
       "brotherhood-librarian"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "haloed-in-soulfire-psychic",
+    "ability_id": "haloed-in-soulfire-grey-knights",
     "name": "Haloed in Soulfire (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1638,10 +1214,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "clarion-of-haste-psychic",
+    "ability_id": "clarion-of-haste-grey-knights",
     "name": "Clarion of Haste (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1678,10 +1255,11 @@
       "brotherhood-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "inspiring-exemplar",
+    "ability_id": "inspiring-exemplar-grey-knights",
     "name": "Inspiring Exemplar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1715,10 +1293,11 @@
       "brotherhood-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "righteous-persecution",
+    "ability_id": "righteous-persecution-grey-knights",
     "name": "Righteous Persecution",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1847,10 +1426,11 @@
         ]
       },
       "binds_event_variable": "persecution-shooting"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "strafing-run",
+    "ability_id": "strafing-run-grey-knights",
     "name": "Strafing Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1903,10 +1483,11 @@
       "stormtalon-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "personal-teleporters",
+    "ability_id": "personal-teleporters-grey-knights",
     "name": "Personal Teleporters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2012,10 +1593,11 @@
         ]
       },
       "optional": true
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "zealous-path",
+    "ability_id": "zealous-path-grey-knights",
     "name": "Zealous Path",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2049,10 +1631,11 @@
       "brotherhood-chaplain"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "litanies-of-sanctity",
+    "ability_id": "litanies-of-sanctity-grey-knights",
     "name": "Litanies of Sanctity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2103,10 +1686,11 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "model"
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "attuned-onslaught-psychic",
+    "ability_id": "attuned-onslaught-grey-knights",
     "name": "Attuned Onslaught (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2151,10 +1735,11 @@
           "charge"
         ]
       }
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "apothecary-s-narthecium",
+    "ability_id": "apothecarys-narthecium-grey-knights",
     "name": "Apothecary’s Narthecium",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2174,13 +1759,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "brotherhood-terminator-squad",
       "paladin-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "ancient-s-banner",
+    "ability_id": "ancients-banner-grey-knights",
     "name": "Ancient’s Banner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2202,13 +1789,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "brotherhood-terminator-squad",
       "paladin-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "sanctuary-psychic",
+    "ability_id": "sanctuary-grey-knights",
     "name": "Sanctuary (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2246,10 +1835,11 @@
       "grand-master-voldus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "hammer-aflame-psychic",
+    "ability_id": "hammer-aflame-grey-knights",
     "name": "Hammer Aflame (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2334,10 +1924,11 @@
         "to": "fight"
       },
       "optional": true
-    }
+    },
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "force-edge-psychic",
+    "ability_id": "force-edge-grey-knights",
     "name": "Force Edge (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2399,10 +1990,11 @@
       "brotherhood-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "interceptor",
+    "ability_id": "interceptor-grey-knights",
     "name": "Interceptor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2450,10 +2042,11 @@
       "stormhawk-interceptor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "armoured-resilience",
+    "ability_id": "armoured-resilience-grey-knights",
     "name": "Armoured Resilience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2476,10 +2069,11 @@
       "stormraven-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "grey-knights"
   },
   {
-    "ability_id": "gate-of-infinity",
+    "ability_id": "gate-of-infinity-grey-knights",
     "name": "Gate of Infinity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2539,7 +2133,7 @@
     }
   },
   {
-    "ability_id": "prescient-redeployment",
+    "ability_id": "prescient-redeployment-grey-knights",
     "name": "Prescient Redeployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2578,7 +2172,7 @@
                 "subject": "selected-unit",
                 "to": "be-selected",
                 "source_ability": {
-                  "ability_id": "gate-of-infinity",
+                  "ability_id": "gate-of-infinity-grey-knights",
                   "owner": "friendly"
                 },
                 "at": "opponents-previous-turn-end"
@@ -2627,7 +2221,7 @@
               "pool": "ability-selections",
               "below_max": true,
               "source_ability": {
-                "ability_id": "gate-of-infinity",
+                "ability_id": "gate-of-infinity-grey-knights",
                 "owner": "friendly"
               },
               "at": "opponents-previous-turn-end"
@@ -2639,7 +2233,7 @@
     }
   },
   {
-    "ability_id": "channelled-force",
+    "ability_id": "channelled-force-grey-knights",
     "name": "Channelled Force",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2714,7 +2308,7 @@
     }
   },
   {
-    "ability_id": "hallowed-ground",
+    "ability_id": "hallowed-ground-grey-knights",
     "name": "Hallowed Ground",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2950,7 +2544,7 @@
     }
   },
   {
-    "ability_id": "fury-of-titan",
+    "ability_id": "fury-of-titan-grey-knights",
     "name": "Fury of Titan",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3000,7 +2594,7 @@
     }
   },
   {
-    "ability_id": "duty-before-all",
+    "ability_id": "duty-before-all-grey-knights",
     "name": "Duty Before All",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3072,7 +2666,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "mailed-fist",
+    "ability_id": "mailed-fist-grey-knights",
     "name": "Mailed Fist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3127,7 +2721,7 @@
     "community_notes": "[APPROX] Advance is treated as a fixed 6\" (no roll). The +6\" Move lasts until end of phase while [ASSAULT] lasts until end of turn; the DSL carries a single duration. Full rule in raw-text store."
   },
   {
-    "ability_id": "dauntless-champions",
+    "ability_id": "dauntless-champions-grey-knights",
     "name": "DAUNTLESS CHAMPIONS",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3191,7 +2785,7 @@
     }
   },
   {
-    "ability_id": "searing-soulflame",
+    "ability_id": "searing-soulflame-grey-knights",
     "name": "SEARING SOULFLAME",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3226,7 +2820,7 @@
         "kind": "ability"
       },
       "source_ability": {
-        "ability_id": "righteous-persecution",
+        "ability_id": "righteous-persecution-grey-knights",
         "owner": "friendly",
         "keywords": [
           "PURGATION SQUAD"
@@ -3235,7 +2829,7 @@
     }
   },
   {
-    "ability_id": "echojump",
+    "ability_id": "echojump-grey-knights",
     "name": "ECHOJUMP",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3291,7 +2885,7 @@
             "modifier": {
               "direction": "suppressed",
               "rule_kind": "ability",
-              "rule": "personal-teleporters"
+              "rule": "personal-teleporters-grey-knights"
             }
           },
           {
@@ -3320,36 +2914,1823 @@
     }
   },
   {
-    "ability_id": "combat-squads-crowes-sanctifiers",
+    "ability_id": "a-threat-ended-argent-assault-grey-knights",
+    "name": "A Threat Ended",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "argent-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "abominus-class-targets-sanctic-spearhead-grey-knights",
+    "name": "Abominus-Class Targets",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aegis-eternal-warpbane-task-force-grey-knights",
+    "name": "Aegis Eternal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aggressive-anticipation-augurium-task-force-grey-knights",
+    "name": "Aggressive Anticipation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "appointed-hour-augurium-task-force-grey-knights",
+    "name": "Appointed Hour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "argent-wrath-sanctic-spearhead-grey-knights",
+    "name": "Argent Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "armoured-aegis-sanctic-spearhead-grey-knights",
+    "name": "Armoured Aegis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "astral-overlap-upgrade-immaterial-interdiction-grey-knights",
+    "name": "Astral Overlap (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "immaterial-interdiction",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aura-of-vengeance-argent-assault-grey-knights",
+    "name": "Aura of Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "argent-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "banishing-wave-psychic-brotherhood-strike-grey-knights",
+    "name": "Banishing Wave (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blades-from-the-beyond-immaterial-interdiction-grey-knights",
+    "name": "Blades from the Beyond",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "immaterial-interdiction",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blinding-aura-brotherhood-strike-grey-knights",
+    "name": "Blinding Aura",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "boons-of-deimos-upgrade-fires-of-purgation-grey-knights",
+    "name": "Boons of Deimos (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "fires-of-purgation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "by-thought-alone-immaterial-interdiction-grey-knights",
+    "name": "By Thought Alone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "immaterial-interdiction",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "celerity-banishers-grey-knights",
+    "name": "Celerity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chaos-bane-banishers-grey-knights",
+    "name": "Chaos Bane",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "circle-of-sanctuary-banishers-grey-knights",
+    "name": "Circle of Sanctuary",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-manifestation-brotherhood-strike-grey-knights",
+    "name": "Combat Manifestation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-squad-grey-knights",
     "name": "Combat Squad",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "source_digest": "9133cc1a77fec9635ea613ab1c91076654c9bdd5a00c823b8c0bd32708d1f703",
-    "version": "2026-q3",
-    "trigger": {
-      "event": "battle-formations-declared",
-      "optional": true
-    },
-    "effect": {
-      "type": "split-unit",
-      "target": "this-unit",
-      "modifier": {
-        "model_counts": [
-          5,
-          5
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
+    "stub": true,
     "unit_ids": [
       "crowes-sanctifiers-strike-squad"
     ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "activated"
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-grey-knights",
+    "name": "DAMAGED: 1-10 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "grey-knights-thunderhawk-gunship"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-grey-knights",
+    "name": "Damaged: 1-4 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "grand-master-in-nemesis-dreadknight",
+      "nemesis-dreadknight"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-grey-knights",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "land-raider",
+      "land-raider-crusader",
+      "land-raider-redeemer",
+      "stormraven-gunship"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "doomseers-amulet-augurium-task-force-grey-knights",
+    "name": "Doomseer’s Amulet",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "driven-by-duty-sanctic-spearhead-grey-knights",
+    "name": "Driven by Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "duty-unending-brotherhood-strike-grey-knights",
+    "name": "Duty Unending",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ephemeral-tome-banishers-grey-knights",
+    "name": "Ephemeral Tome",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exigent-assignments-crowes-sanctifiers-grey-knights",
+    "name": "Exigent Assignments",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "expeditious-exit-brotherhood-strike-grey-knights",
+    "name": "Expeditious Exit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-of-the-augurium-hallowed-conclave-grey-knights",
+    "name": "Eye of the Augurium",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fires-of-covenant-warpbane-task-force-grey-knights",
+    "name": "Fires of Covenant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flames-of-sanctity-warpbane-task-force-grey-knights",
+    "name": "Flames of Sanctity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "focused-immolation-fires-of-purgation-grey-knights",
+    "name": "Focused Immolation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "fires-of-purgation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "foesight-sanctifiers-castellan-crowe-grey-knights",
+    "name": "Foesight (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "sanctifiers-castellan-crowe"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "force-edge-crowes-sanctifiers-brotherhood-terminator-squad-grey-knights",
+    "name": "Force Edge (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "crowes-sanctifiers-brotherhood-terminator-squad"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "force-wave-sanctic-spearhead-grey-knights",
+    "name": "Force Wave",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "forewarned-evasion-augurium-task-force-grey-knights",
+    "name": "Forewarned Evasion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gate-of-infinity-crowes-sanctifiers-grey-knights",
+    "name": "Gate of Infinity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "giants-of-the-battlefield-hallowed-conclave-grey-knights",
+    "name": "Giants of the Battlefield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grimoire-of-conjunctions-augurium-task-force-grey-knights",
+    "name": "Grimoire of Conjunctions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grind-them-underfoot-hallowed-conclave-grey-knights",
+    "name": "Grind Them Underfoot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hallowed-beacon-warpbane-task-force-grey-knights",
+    "name": "Hallowed Beacon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hexwrought-reprisal-banishers-grey-knights",
+    "name": "Hexwrought Reprisal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inescapable-judgement-psychic-hallowed-conclave-grey-knights",
+    "name": "Inescapable Judgement (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mandulian-reliquary-warpbane-task-force-grey-knights",
+    "name": "Mandulian Reliquary",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mirage-of-echoes-augurium-task-force-grey-knights",
+    "name": "Mirage of Echoes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "necessary-end-augurium-task-force-grey-knights",
+    "name": "Necessary End",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nemesis-rounds-hallowed-conclave-grey-knights",
+    "name": "Nemesis Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "one-foot-in-the-future-augurium-task-force-grey-knights",
+    "name": "One Foot in the Future",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "paragon-of-sanctity-warpbane-task-force-grey-knights",
+    "name": "Paragon of Sanctity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phial-of-the-abyss-warpbane-task-force-grey-knights",
+    "name": "Phial of the Abyss",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "point-blank-purgation-hallowed-conclave-grey-knights",
+    "name": "Point-Blank Purgation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "precognicient-volleys-upgrade-fires-of-purgation-grey-knights",
+    "name": "Precognicient Volleys (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "fires-of-purgation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "precognitive-strategies-hallowed-conclave-grey-knights",
+    "name": "Precognitive Strategies",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "predestined-coordinates-upgrade-immaterial-interdiction-grey-knights",
+    "name": "Predestined Coordinates (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "immaterial-interdiction",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psi-reactive-ammunition-crowes-sanctifiers-grey-knights",
+    "name": "Psi-reactive Ammunition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-celerity-argent-assault-grey-knights",
+    "name": "Psychic Celerity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "argent-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purgation-pattern-brotherhood-strike-grey-knights",
+    "name": "Purgation Pattern",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purifying-force-crowes-sanctifiers-grey-knights",
+    "name": "Purifying Force",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purity-of-purpose-brotherhood-strike-grey-knights",
+    "name": "Purity of Purpose",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pyresoul-psychic-banishers-grey-knights",
+    "name": "Pyresoul (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quickening-foci-sanctic-spearhead-grey-knights",
+    "name": "Quickening Foci",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "radiant-champion-warpbane-task-force-grey-knights",
+    "name": "Radiant Champion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "redirected-strike-augurium-task-force-grey-knights",
+    "name": "Redirected Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "redoubled-assault-sanctic-spearhead-grey-knights",
+    "name": "Redoubled Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "refusal-to-yield-crowes-sanctifiers-grey-knights",
+    "name": "Refusal to Yield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "repelling-sphere-warpbane-task-force-grey-knights",
+    "name": "Repelling Sphere",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "responsive-displacement-immaterial-interdiction-grey-knights",
+    "name": "Responsive Displacement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "immaterial-interdiction",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctic-reaper-hallowed-conclave-grey-knights",
+    "name": "Sanctic Reaper",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctified-auspexes-crowes-sanctifiers-grey-knights",
+    "name": "Sanctified Auspexes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctified-kill-zone-warpbane-task-force-grey-knights",
+    "name": "Sanctified Kill Zone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "warpbane-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctifying-ritual-crowes-sanctifiers-strike-squad-grey-knights",
+    "name": "Sanctifying Ritual (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "crowes-sanctifiers-strike-squad"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shadow-of-anarch-banishers-grey-knights",
+    "name": "Shadow of Anarch",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shield-of-prophecy-augurium-task-force-grey-knights",
+    "name": "Shield of Prophecy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "augurium-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shining-resolve-hallowed-conclave-grey-knights",
+    "name": "Shining Resolve",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shining-veil-brotherhood-strike-grey-knights",
+    "name": "Shining Veil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sigil-of-exigence-sanctic-spearhead-grey-knights",
+    "name": "Sigil of Exigence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sigil-of-the-hunt-banishers-grey-knights",
+    "name": "Sigil of the Hunt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sixty-sixth-seal-banishers-grey-knights",
+    "name": "Sixty-sixth Seal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-locked-fires-of-purgation-grey-knights",
+    "name": "Soul-locked",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "fires-of-purgation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spiritsear-fires-of-purgation-grey-knights",
+    "name": "Spiritsear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "fires-of-purgation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spiritus-machina-sanctic-spearhead-grey-knights",
+    "name": "Spiritus Machina",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "strike-from-the-warp-grey-knights",
+    "name": "Strike from the Warp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "crowes-sanctifiers",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tome-of-forbidden-ways-brotherhood-strike-grey-knights",
+    "name": "Tome of Forbidden Ways",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "truesilver-aegis-argent-assault-grey-knights",
+    "name": "Truesilver Aegis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "argent-assault",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "truesilver-channelling-brotherhood-strike-grey-knights",
+    "name": "Truesilver Channelling",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "brotherhood-strike",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "truesilver-will-sanctic-spearhead-grey-knights",
+    "name": "Truesilver Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "sanctic-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unending-fidelity-hallowed-conclave-grey-knights",
+    "name": "Unending Fidelity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "hallowed-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vigilance-of-titan-argent-assault-grey-knights",
+    "name": "Vigilance of Titan",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "argent-assault",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warding-chant-banishers-grey-knights",
+    "name": "Warding Chant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "grey-knights",
+    "detachment_id": "banishers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights",
+    "name": "Warrior Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "grand-master-in-nemesis-dreadknight"
+    ],
+    "faction_id": "grey-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

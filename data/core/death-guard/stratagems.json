@@ -1,6 +1,6 @@
 [
   {
-    "id": "aggravus-spasms-paragons-of-putrescence",
+    "id": "aggravus-spasms-paragons-of-putrescence-death-guard",
     "name": "AGGRAVUS SPASMS",
     "category": "detachment",
     "detachment_id": "paragons-of-putrescence",
@@ -11,7 +11,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "aggravus-spasms-paragons-of-putrescence",
+    "ability_id": "aggravus-spasms-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "id": "all-is-rot-tallyband-summoners",
+    "id": "all-is-rot-tallyband-summoners-death-guard",
     "name": "ALL IS ROT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -40,7 +40,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "all-is-rot-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": "avatars-of-decay-tallyband-summoners",
+    "id": "avatars-of-decay-tallyband-summoners-death-guard",
     "name": "AVATARS OF DECAY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -69,7 +69,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "avatars-of-decay-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -86,7 +86,7 @@
     ]
   },
   {
-    "id": "blessings-of-filth-champions-of-contagion",
+    "id": "blessings-of-filth-champions-of-contagion-death-guard",
     "name": "BLESSINGS OF FILTH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -99,7 +99,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blessings-of-filth-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -116,7 +116,7 @@
     ]
   },
   {
-    "id": "blighted-land-mortarions-hammer",
+    "id": "blighted-land-mortarions-hammer-death-guard",
     "name": "BLIGHTED LAND",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -128,7 +128,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blighted-land-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -145,7 +145,7 @@
     ]
   },
   {
-    "id": "bloodrust-deluge-contagion-engines",
+    "id": "bloodrust-deluge-contagion-engines-death-guard",
     "name": "BLOODRUST DELUGE",
     "category": "detachment",
     "detachment_id": "contagion-engines",
@@ -156,7 +156,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "bloodrust-deluge-contagion-engines",
+    "ability_id": "bloodrust-deluge-contagion-engines-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -173,7 +173,7 @@
     ]
   },
   {
-    "id": "blooming-pestilence-death-lords-chosen",
+    "id": "blooming-pestilence-death-lords-chosen-death-guard",
     "name": "BLOOMING PESTILENCE",
     "category": "detachment",
     "type": "epic-deed",
@@ -189,7 +189,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blooming-pestilence-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -206,7 +206,7 @@
     ]
   },
   {
-    "id": "clutching-corruption-tallyband-summoners",
+    "id": "clutching-corruption-tallyband-summoners-death-guard",
     "name": "CLUTCHING CORRUPTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -218,7 +218,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "clutching-corruption-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -235,7 +235,7 @@
     ]
   },
   {
-    "id": "creeping-blight-virulent-vectorium",
+    "id": "creeping-blight-virulent-vectorium-death-guard",
     "name": "CREEPING BLIGHT",
     "category": "detachment",
     "type": "wargear",
@@ -247,7 +247,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "creeping-blight-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -264,7 +264,7 @@
     ]
   },
   {
-    "id": "deaths-heads-champions-of-contagion",
+    "id": "deaths-heads-champions-of-contagion-death-guard",
     "name": "DEATH’S HEADS",
     "category": "detachment",
     "type": "wargear",
@@ -276,7 +276,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "deaths-heads-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -293,7 +293,7 @@
     ]
   },
   {
-    "id": "disgustingly-resilient-virulent-vectorium",
+    "id": "disgustingly-resilient-virulent-vectorium-death-guard",
     "name": "DISGUSTINGLY RESILIENT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -306,7 +306,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "disgustingly-resilient-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -323,7 +323,7 @@
     ]
   },
   {
-    "id": "drawn-to-despair-mortarions-hammer",
+    "id": "drawn-to-despair-mortarions-hammer-death-guard",
     "name": "DRAWN TO DESPAIR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -335,7 +335,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "drawn-to-despair-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -352,7 +352,7 @@
     ]
   },
   {
-    "id": "droning-horror-flyblown-host",
+    "id": "droning-horror-flyblown-host-death-guard",
     "name": "DRONING HORROR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -364,7 +364,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "droning-horror-flyblown-host",
+    "ability_id": "droning-horror-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -381,7 +381,7 @@
     ]
   },
   {
-    "id": "eye-of-the-swarm-flyblown-host",
+    "id": "eye-of-the-swarm-flyblown-host-death-guard",
     "name": "EYE OF THE SWARM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -393,7 +393,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "eye-of-the-swarm-flyblown-host",
+    "ability_id": "eye-of-the-swarm-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -410,7 +410,7 @@
     ]
   },
   {
-    "id": "eyestinger-storm-mortarions-hammer",
+    "id": "eyestinger-storm-mortarions-hammer-death-guard",
     "name": "EYESTINGER STORM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -422,7 +422,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eyestinger-storm-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -439,7 +439,7 @@
     ]
   },
   {
-    "id": "fleshy-avalanche-tallyband-summoners",
+    "id": "fleshy-avalanche-tallyband-summoners-death-guard",
     "name": "FLESHY AVALANCHE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -452,7 +452,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fleshy-avalanche-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -469,7 +469,7 @@
     ]
   },
   {
-    "id": "font-of-filth-mortarions-hammer",
+    "id": "font-of-filth-mortarions-hammer-death-guard",
     "name": "FONT OF FILTH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -481,7 +481,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "font-of-filth-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -498,7 +498,7 @@
     ]
   },
   {
-    "id": "fresh-vectors-contagion-engines",
+    "id": "fresh-vectors-contagion-engines-death-guard",
     "name": "FRESH VECTORS",
     "category": "detachment",
     "detachment_id": "contagion-engines",
@@ -510,7 +510,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fresh-vectors-contagion-engines",
+    "ability_id": "fresh-vectors-contagion-engines-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -527,7 +527,7 @@
     ]
   },
   {
-    "id": "gnawing-hunger-shamblerot-vectorium",
+    "id": "gnawing-hunger-shamblerot-vectorium-death-guard",
     "name": "GNAWING HUNGER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -539,7 +539,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "gnawing-hunger-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -556,7 +556,7 @@
     ]
   },
   {
-    "id": "grim-reapers-death-lords-chosen",
+    "id": "grim-reapers-death-lords-chosen-death-guard",
     "name": "GRIM REAPERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -568,7 +568,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "grim-reapers-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -585,7 +585,7 @@
     ]
   },
   {
-    "id": "grip-of-the-walking-pox-shamblerot-vectorium",
+    "id": "grip-of-the-walking-pox-shamblerot-vectorium-death-guard",
     "name": "GRIP OF THE WALKING POX",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -597,7 +597,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "grip-of-the-walking-pox-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -614,7 +614,7 @@
     ]
   },
   {
-    "id": "grotesque-fortitude-champions-of-contagion",
+    "id": "grotesque-fortitude-champions-of-contagion-death-guard",
     "name": "GROTESQUE FORTITUDE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -627,7 +627,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "grotesque-fortitude-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -644,7 +644,7 @@
     ]
   },
   {
-    "id": "hidden-amongst-the-dead-shamblerot-vectorium",
+    "id": "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
     "name": "HIDDEN AMONGST THE DEAD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -656,7 +656,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -673,7 +673,7 @@
     ]
   },
   {
-    "id": "inexorable-executioners-maggot-lords",
+    "id": "inexorable-executioners-maggot-lords-death-guard",
     "name": "Inexorable Executioners",
     "category": "detachment",
     "detachment_id": "maggot-lords",
@@ -684,7 +684,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inexorable-executioners-maggot-lords",
+    "ability_id": "inexorable-executioners-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -697,7 +697,7 @@
     ]
   },
   {
-    "id": "leechspore-eruption-virulent-vectorium",
+    "id": "leechspore-eruption-virulent-vectorium-death-guard",
     "name": "LEECHSPORE ERUPTION",
     "category": "detachment",
     "type": "epic-deed",
@@ -709,7 +709,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "leechspore-eruption-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -726,7 +726,7 @@
     ]
   },
   {
-    "id": "malignance-magnified-champions-of-contagion",
+    "id": "malignance-magnified-champions-of-contagion-death-guard",
     "name": "MALIGNANCE MAGNIFIED",
     "category": "detachment",
     "type": "battle-tactic",
@@ -739,7 +739,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "malignance-magnified-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +756,7 @@
     ]
   },
   {
-    "id": "mireslick-tallyband-summoners",
+    "id": "mireslick-tallyband-summoners-death-guard",
     "name": "MIRESLICK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -768,7 +768,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mireslick-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -785,7 +785,7 @@
     ]
   },
   {
-    "id": "mobile-vector-champions-of-contagion",
+    "id": "mobile-vector-champions-of-contagion-death-guard",
     "name": "MOBILE VECTOR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -797,7 +797,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mobile-vector-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -814,7 +814,7 @@
     ]
   },
   {
-    "id": "mortarions-teachings-death-lords-chosen",
+    "id": "mortarions-teachings-death-lords-chosen-death-guard",
     "name": "MORTARION’S TEACHINGS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -826,7 +826,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mortarions-teachings-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -843,7 +843,7 @@
     ]
   },
   {
-    "id": "nauseating-paroxysms-flyblown-host",
+    "id": "nauseating-paroxysms-flyblown-host-death-guard",
     "name": "NAUSEATING PAROXYSMS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -855,7 +855,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "nauseating-paroxysms-flyblown-host",
+    "ability_id": "nauseating-paroxysms-flyblown-host-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -872,7 +872,7 @@
     ]
   },
   {
-    "id": "overwhelming-generosity-virulent-vectorium",
+    "id": "overwhelming-generosity-virulent-vectorium-death-guard",
     "name": "OVERWHELMING GENEROSITY",
     "category": "detachment",
     "type": "wargear",
@@ -884,7 +884,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "overwhelming-generosity-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -901,7 +901,7 @@
     ]
   },
   {
-    "id": "persistent-pests-tallyband-summoners",
+    "id": "persistent-pests-tallyband-summoners-death-guard",
     "name": "PERSISTENT PESTS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -917,7 +917,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "persistent-pests-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -934,7 +934,7 @@
     ]
   },
   {
-    "id": "plaguesurge-virulent-vectorium",
+    "id": "plaguesurge-virulent-vectorium-death-guard",
     "name": "PLAGUESURGE",
     "category": "detachment",
     "type": "epic-deed",
@@ -946,7 +946,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "plaguesurge-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -963,7 +963,7 @@
     ]
   },
   {
-    "id": "putrid-detonation-virulent-vectorium",
+    "id": "putrid-detonation-virulent-vectorium-death-guard",
     "name": "PUTRID DETONATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -979,7 +979,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "putrid-detonation-virulent-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -996,7 +996,7 @@
     ]
   },
   {
-    "id": "rabid-infusion-champions-of-contagion",
+    "id": "rabid-infusion-champions-of-contagion-death-guard",
     "name": "RABID INFUSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1008,7 +1008,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rabid-infusion-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1025,7 +1025,7 @@
     ]
   },
   {
-    "id": "relentless-grind-mortarions-hammer",
+    "id": "relentless-grind-mortarions-hammer-death-guard",
     "name": "RELENTLESS GRIND",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1038,7 +1038,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "relentless-grind-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1055,7 +1055,7 @@
     ]
   },
   {
-    "id": "shambling-wall-shamblerot-vectorium",
+    "id": "shambling-wall-shamblerot-vectorium-death-guard",
     "name": "SHAMBLING WALL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1067,7 +1067,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shambling-wall-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1084,7 +1084,7 @@
     ]
   },
   {
-    "id": "shock-and-horror-shamblerot-vectorium",
+    "id": "shock-and-horror-shamblerot-vectorium-death-guard",
     "name": "SHOCK AND HORROR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1096,7 +1096,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shock-and-horror-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1113,7 +1113,7 @@
     ]
   },
   {
-    "id": "sickening-horror-maggot-lords",
+    "id": "sickening-horror-maggot-lords-death-guard",
     "name": "Sickening Horror",
     "category": "detachment",
     "detachment_id": "maggot-lords",
@@ -1124,7 +1124,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sickening-horror-maggot-lords",
+    "ability_id": "sickening-horror-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1137,7 +1137,7 @@
     ]
   },
   {
-    "id": "sickening-impact-death-lords-chosen",
+    "id": "sickening-impact-death-lords-chosen-death-guard",
     "name": "SICKENING IMPACT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1149,7 +1149,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sickening-impact-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1166,7 +1166,7 @@
     ]
   },
   {
-    "id": "signal-pox-death-lords-chosen",
+    "id": "signal-pox-death-lords-chosen-death-guard",
     "name": "SIGNAL POX",
     "category": "detachment",
     "type": "epic-deed",
@@ -1178,7 +1178,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "signal-pox-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1195,7 +1195,7 @@
     ]
   },
   {
-    "id": "simultaneous-contamination-paragons-of-putrescence",
+    "id": "simultaneous-contamination-paragons-of-putrescence-death-guard",
     "name": "SIMULTANEOUS CONTAMINATION",
     "category": "detachment",
     "detachment_id": "paragons-of-putrescence",
@@ -1206,7 +1206,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "simultaneous-contamination-paragons-of-putrescence",
+    "ability_id": "simultaneous-contamination-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1223,7 +1223,7 @@
     ]
   },
   {
-    "id": "smeared-with-filth-shamblerot-vectorium",
+    "id": "smeared-with-filth-shamblerot-vectorium-death-guard",
     "name": "SMEARED WITH FILTH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1235,7 +1235,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "smeared-with-filth-shamblerot-vectorium-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1252,7 +1252,7 @@
     ]
   },
   {
-    "id": "soulrot-flux-contagion-engines",
+    "id": "soulrot-flux-contagion-engines-death-guard",
     "name": "SOULROT FLUX",
     "category": "detachment",
     "detachment_id": "contagion-engines",
@@ -1263,7 +1263,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "soulrot-flux-contagion-engines",
+    "ability_id": "soulrot-flux-contagion-engines-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1280,7 +1280,7 @@
     ]
   },
   {
-    "id": "stinking-mire-mortarions-hammer",
+    "id": "stinking-mire-mortarions-hammer-death-guard",
     "name": "STINKING MIRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1292,7 +1292,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stinking-mire-mortarions-hammer-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1309,7 +1309,7 @@
     ]
   },
   {
-    "id": "territorial-infection-paragons-of-putrescence",
+    "id": "territorial-infection-paragons-of-putrescence-death-guard",
     "name": "TERRITORIAL INFECTION",
     "category": "detachment",
     "detachment_id": "paragons-of-putrescence",
@@ -1320,7 +1320,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "territorial-infection-paragons-of-putrescence",
+    "ability_id": "territorial-infection-paragons-of-putrescence-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1337,7 +1337,7 @@
     ]
   },
   {
-    "id": "undying-spite-death-lords-chosen",
+    "id": "undying-spite-death-lords-chosen-death-guard",
     "name": "UNDYING SPITE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1349,7 +1349,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "undying-spite-death-lords-chosen-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1366,7 +1366,7 @@
     ]
   },
   {
-    "id": "vomitous-salvoes-maggot-lords",
+    "id": "vomitous-salvoes-maggot-lords-death-guard",
     "name": "Vomitous Salvoes",
     "category": "detachment",
     "detachment_id": "maggot-lords",
@@ -1377,7 +1377,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vomitous-salvoes-maggot-lords",
+    "ability_id": "vomitous-salvoes-maggot-lords-death-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

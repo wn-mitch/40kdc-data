@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { abilityIdsOf } from "../data/ability-refs.js";
 import { join, resolve } from "node:path";
 
 import { type AbilityRow, type AbilityRowKind, CORE_FACTION, type DumpProse, loadDumpProse, type OwnerQuery, type ProseQuery } from "../mfm/dump-prose.js";
@@ -94,7 +95,7 @@ function unitsListing(dataRoot: string): Map<string, string[]> {
   for (const faction of readdirSync(coreRoot).sort()) {
     for (const unit of readArray<CoreRecord>(join(coreRoot, faction, "units.json"))) {
       if (typeof unit.id !== "string") continue;
-      for (const abilityId of strings(unit.ability_ids)) {
+      for (const abilityId of abilityIdsOf(unit.ability_ids)) {
         const key = `${faction}\u0000${abilityId}`;
         listing.set(key, [...(listing.get(key) ?? []), unit.id]);
       }

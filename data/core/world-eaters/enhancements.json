@@ -1,13 +1,13 @@
 [
   {
-    "id": "berzerker-glaive-berzerker-warband",
+    "id": "berzerker-glaive-berzerker-warband-world-eaters",
     "name": "Berzerker Glaive",
     "detachment_id": "berzerker-warband",
     "cost": 35,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "berzerker-glaive-berzerker-warband",
+    "ability_id": "berzerker-glaive-berzerker-warband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "helm-of-brazen-ire-berzerker-warband",
+    "id": "helm-of-brazen-ire-berzerker-warband-world-eaters",
     "name": "Helm of Brazen Ire",
     "detachment_id": "berzerker-warband",
     "cost": 30,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "helm-of-brazen-ire-berzerker-warband",
+    "ability_id": "helm-of-brazen-ire-berzerker-warband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "favoured-of-khorne-berzerker-warband",
+    "id": "favoured-of-khorne-berzerker-warband-world-eaters",
     "name": "Favoured of Khorne",
     "detachment_id": "berzerker-warband",
     "cost": 20,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "favoured-of-khorne-berzerker-warband",
+    "ability_id": "favoured-of-khorne-berzerker-warband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "battle-lust-berzerker-warband",
+    "id": "battle-lust-berzerker-warband-world-eaters",
     "name": "Battle-lust",
     "detachment_id": "berzerker-warband",
     "cost": 20,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "battle-lust-berzerker-warband",
+    "ability_id": "battle-lust-berzerker-warband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "archslaughterer-vessels-of-wrath",
+    "id": "archslaughterer-vessels-of-wrath-world-eaters",
     "name": "Archslaughterer",
     "detachment_id": "vessels-of-wrath",
     "cost": 30,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "archslaughterer-vessels-of-wrath",
+    "ability_id": "archslaughterer-vessels-of-wrath-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,7 +140,7 @@
     ]
   },
   {
-    "id": "gateways-to-glory-vessels-of-wrath",
+    "id": "gateways-to-glory-vessels-of-wrath-world-eaters",
     "name": "Gateways to Glory",
     "detachment_id": "vessels-of-wrath",
     "cost": 10,
@@ -148,7 +148,7 @@
       "Daemon Prince",
       "World Eaters"
     ],
-    "ability_id": "gateways-to-glory-vessels-of-wrath",
+    "ability_id": "gateways-to-glory-vessels-of-wrath-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -169,7 +169,7 @@
     ]
   },
   {
-    "id": "chosen-of-the-blood-god-cult-of-blood",
+    "id": "chosen-of-the-blood-god-cult-of-blood-world-eaters",
     "name": "Chosen of the Blood God",
     "detachment_id": "cult-of-blood",
     "cost": 15,
@@ -177,7 +177,7 @@
       "Monster",
       "World Eaters"
     ],
-    "ability_id": "chosen-of-the-blood-god-cult-of-blood",
+    "ability_id": "chosen-of-the-blood-god-cult-of-blood-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -198,7 +198,7 @@
     ]
   },
   {
-    "id": "butcher-lord-cult-of-blood",
+    "id": "butcher-lord-cult-of-blood-world-eaters",
     "name": "Butcher Lord",
     "detachment_id": "cult-of-blood",
     "cost": 10,
@@ -206,7 +206,7 @@
       "Infantry",
       "World Eaters"
     ],
-    "ability_id": "butcher-lord-cult-of-blood",
+    "ability_id": "butcher-lord-cult-of-blood-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -231,7 +231,7 @@
     ]
   },
   {
-    "id": "brazen-form-cult-of-blood",
+    "id": "brazen-form-cult-of-blood-world-eaters",
     "name": "Brazen Form",
     "detachment_id": "cult-of-blood",
     "cost": 25,
@@ -239,7 +239,7 @@
       "Monster",
       "World Eaters"
     ],
-    "ability_id": "brazen-form-cult-of-blood",
+    "ability_id": "brazen-form-cult-of-blood-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -260,14 +260,14 @@
     ]
   },
   {
-    "id": "strategic-slaughter-cult-of-blood",
+    "id": "strategic-slaughter-cult-of-blood-world-eaters",
     "name": "Strategic Slaughter",
     "detachment_id": "cult-of-blood",
     "cost": 20,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "strategic-slaughter-cult-of-blood",
+    "ability_id": "strategic-slaughter-cult-of-blood-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -288,14 +288,14 @@
     ]
   },
   {
-    "id": "icon-of-war-khorne-daemonkin",
+    "id": "icon-of-war-khorne-daemonkin-world-eaters",
     "name": "Icon of War",
     "detachment_id": "khorne-daemonkin",
     "cost": 25,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "icon-of-war-khorne-daemonkin",
+    "ability_id": "icon-of-war-khorne-daemonkin-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -316,11 +316,11 @@
     ]
   },
   {
-    "id": "blood-forged-armour-khorne-daemonkin",
+    "id": "blood-forged-armour-khorne-daemonkin-world-eaters",
     "name": "Blood-Forged Armour",
     "detachment_id": "khorne-daemonkin",
     "cost": 20,
-    "ability_id": "blood-forged-armour-khorne-daemonkin",
+    "ability_id": "blood-forged-armour-khorne-daemonkin-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -349,14 +349,14 @@
     ]
   },
   {
-    "id": "disciple-of-khorne-khorne-daemonkin",
+    "id": "disciple-of-khorne-khorne-daemonkin-world-eaters",
     "name": "Disciple of Khorne",
     "detachment_id": "khorne-daemonkin",
     "cost": 15,
     "keyword_restrictions": [
       "Lord on Juggernaut"
     ],
-    "ability_id": "disciple-of-khorne-khorne-daemonkin",
+    "ability_id": "disciple-of-khorne-khorne-daemonkin-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -381,14 +381,14 @@
     ]
   },
   {
-    "id": "blade-of-endless-bloodshed-khorne-daemonkin",
+    "id": "blade-of-endless-bloodshed-khorne-daemonkin-world-eaters",
     "name": "Blade of Endless Bloodshed",
     "detachment_id": "khorne-daemonkin",
     "cost": 30,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "blade-of-endless-bloodshed-khorne-daemonkin",
+    "ability_id": "blade-of-endless-bloodshed-khorne-daemonkin-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -409,14 +409,14 @@
     ]
   },
   {
-    "id": "malicious-vigour-possessed-slaughterband",
+    "id": "malicious-vigour-possessed-slaughterband-world-eaters",
     "name": "Malicious Vigour",
     "detachment_id": "possessed-slaughterband",
     "cost": 30,
     "keyword_restrictions": [
       "Slaughterbound"
     ],
-    "ability_id": "malicious-vigour-possessed-slaughterband",
+    "ability_id": "malicious-vigour-possessed-slaughterband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -437,7 +437,7 @@
     ]
   },
   {
-    "id": "killing-clarity-possessed-slaughterband",
+    "id": "killing-clarity-possessed-slaughterband-world-eaters",
     "name": "Killing Clarity",
     "detachment_id": "possessed-slaughterband",
     "cost": 15,
@@ -445,7 +445,7 @@
       "Daemon",
       "World Eaters"
     ],
-    "ability_id": "killing-clarity-possessed-slaughterband",
+    "ability_id": "killing-clarity-possessed-slaughterband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -466,7 +466,7 @@
     ]
   },
   {
-    "id": "frenzied-focus-possessed-slaughterband",
+    "id": "frenzied-focus-possessed-slaughterband-world-eaters",
     "name": "Frenzied Focus",
     "detachment_id": "possessed-slaughterband",
     "cost": 20,
@@ -474,7 +474,7 @@
       "Daemon",
       "World Eaters"
     ],
-    "ability_id": "frenzied-focus-possessed-slaughterband",
+    "ability_id": "frenzied-focus-possessed-slaughterband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -495,7 +495,7 @@
     ]
   },
   {
-    "id": "violent-demise-possessed-slaughterband",
+    "id": "violent-demise-possessed-slaughterband-world-eaters",
     "name": "Violent Demise",
     "detachment_id": "possessed-slaughterband",
     "cost": 10,
@@ -503,7 +503,7 @@
       "Daemon",
       "World Eaters"
     ],
-    "ability_id": "violent-demise-possessed-slaughterband",
+    "ability_id": "violent-demise-possessed-slaughterband-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -524,14 +524,14 @@
     ]
   },
   {
-    "id": "murderous-onslaught-goretrack-onslaught",
+    "id": "murderous-onslaught-goretrack-onslaught-world-eaters",
     "name": "Murderous Onslaught",
     "detachment_id": "goretrack-onslaught",
     "cost": 5,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "murderous-onslaught-goretrack-onslaught",
+    "ability_id": "murderous-onslaught-goretrack-onslaught-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -552,14 +552,14 @@
     ]
   },
   {
-    "id": "aggressive-deployment-goretrack-onslaught",
+    "id": "aggressive-deployment-goretrack-onslaught-world-eaters",
     "name": "Aggressive Deployment",
     "detachment_id": "goretrack-onslaught",
     "cost": 20,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "aggressive-deployment-goretrack-onslaught",
+    "ability_id": "aggressive-deployment-goretrack-onslaught-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -580,14 +580,14 @@
     ]
   },
   {
-    "id": "unleash-hell-goretrack-onslaught",
+    "id": "unleash-hell-goretrack-onslaught-world-eaters",
     "name": "Unleash Hell",
     "detachment_id": "goretrack-onslaught",
     "cost": 10,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "unleash-hell-goretrack-onslaught",
+    "ability_id": "unleash-hell-goretrack-onslaught-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -608,14 +608,14 @@
     ]
   },
   {
-    "id": "infernal-infusion-goretrack-onslaught",
+    "id": "infernal-infusion-goretrack-onslaught-world-eaters",
     "name": "Infernal Infusion",
     "detachment_id": "goretrack-onslaught",
     "cost": 25,
     "keyword_restrictions": [
       "World Eaters"
     ],
-    "ability_id": "infernal-infusion-goretrack-onslaught",
+    "ability_id": "infernal-infusion-goretrack-onslaught-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -636,7 +636,7 @@
     ]
   },
   {
-    "id": "talons-of-butchery-upgrade-brazen-engines",
+    "id": "talons-of-butchery-upgrade-brazen-engines-world-eaters",
     "name": "Talons of Butchery (Upgrade)",
     "detachment_id": "brazen-engines",
     "cost": 20,
@@ -644,7 +644,7 @@
       "Maulerfiend",
       "World Eaters"
     ],
-    "ability_id": "talons-of-butchery-brazen-engines",
+    "ability_id": "talons-of-butchery-upgrade-brazen-engines-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -665,7 +665,7 @@
     ]
   },
   {
-    "id": "murder-forged-entity-upgrade-brazen-engines",
+    "id": "murder-forged-entity-upgrade-brazen-engines-world-eaters",
     "name": "Murder-forged Entity (Upgrade)",
     "detachment_id": "brazen-engines",
     "cost": 15,
@@ -673,7 +673,7 @@
       "Vehicle",
       "World Eaters"
     ],
-    "ability_id": "murder-forged-entity-brazen-engines",
+    "ability_id": "murder-forged-entity-upgrade-brazen-engines-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -694,14 +694,14 @@
     ]
   },
   {
-    "id": "sanctified-in-slaughter-upgrade-butchers-of-khorne",
+    "id": "sanctified-in-slaughter-upgrade-butchers-of-khorne-world-eaters",
     "name": "Sanctified in Slaughter (Upgrade)",
     "detachment_id": "butchers-of-khorne",
     "cost": 15,
     "keyword_restrictions": [
       "Terminator Squad"
     ],
-    "ability_id": "sanctified-in-slaughter-butchers-of-khorne",
+    "ability_id": "sanctified-in-slaughter-upgrade-butchers-of-khorne-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -722,14 +722,14 @@
     ]
   },
   {
-    "id": "gore-stained-veterans-upgrade-butchers-of-khorne",
+    "id": "gore-stained-veterans-upgrade-butchers-of-khorne-world-eaters",
     "name": "Gore-stained Veterans (Upgrade)",
     "detachment_id": "butchers-of-khorne",
     "cost": 20,
     "keyword_restrictions": [
       "Terminator Squad"
     ],
-    "ability_id": "gore-stained-veterans-butchers-of-khorne",
+    "ability_id": "gore-stained-veterans-upgrade-butchers-of-khorne-world-eaters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -750,7 +750,7 @@
     ]
   },
   {
-    "id": "bane-of-the-craven-frenzied-reavers",
+    "id": "bane-of-the-craven-frenzied-reavers-world-eaters",
     "name": "Bane of the Craven",
     "detachment_id": "frenzied-reavers",
     "cost": 0,
@@ -774,7 +774,7 @@
     ]
   },
   {
-    "id": "fearsome-presence-frenzied-reavers",
+    "id": "fearsome-presence-frenzied-reavers-world-eaters",
     "name": "Fearsome Presence",
     "detachment_id": "frenzied-reavers",
     "cost": 0,

@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-9",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "daring-recon",
+    "source_id": "daring-recon-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -38,7 +38,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "senior-officer",
+    "source_id": "senior-officer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -52,7 +52,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "get-back-in-the-fight",
+    "source_id": "get-back-in-the-fight-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -64,7 +64,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "orders",
+    "source_id": "orders-cadian-castellan-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -112,7 +112,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ogryn-bodyguard",
+    "source_id": "ogryn-bodyguard-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -124,7 +124,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "thunderous-head-butt",
+    "source_id": "thunderous-head-butt-astra-militarum",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -136,7 +136,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "loyal-protector",
+    "source_id": "loyal-protector-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -149,7 +149,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shock-troops",
+    "source_id": "shock-troops-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -161,7 +161,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vox-caster",
+    "source_id": "vox-caster-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -185,7 +185,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tempestor-prime",
+    "source_id": "tempestor-prime-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -198,7 +198,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "command-rod",
+    "source_id": "command-rod-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -210,7 +210,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "regimental-standard",
+    "source_id": "regimental-standard-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -222,7 +222,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "master-vox",
+    "source_id": "master-vox-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -234,7 +234,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "medi-pack",
+    "source_id": "medi-pack-militarum-tempestus-command-squad-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -246,7 +246,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-lord-solar",
+    "source_id": "the-lord-solar-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -258,7 +258,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-collegiate-astrolex",
+    "source_id": "the-collegiate-astrolex-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -270,7 +270,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "precision-drop",
+    "source_id": "precision-drop-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -283,7 +283,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "servo-sentry",
+    "source_id": "servo-sentry-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -296,7 +296,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "final-duty",
+    "source_id": "final-duty-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -309,7 +309,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "embarking",
+    "source_id": "embarking-krieg-heavy-weapons-squad-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -321,7 +321,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shoot-sharp-and-scarper",
+    "source_id": "shoot-sharp-and-scarper-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -335,7 +335,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "demolition-gear",
+    "source_id": "demolition-gear-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -347,7 +347,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ratling-battlemutt",
+    "source_id": "ratling-battlemutt-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -359,7 +359,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "armoured-spearhead-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -372,33 +372,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "armoured-spearhead",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6-2",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "concussive-wave",
+    "source_id": "concussive-wave-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -410,7 +384,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "transport-support",
+    "source_id": "transport-support-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -424,7 +398,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rearm-reload-fire",
+    "source_id": "rearm-reload-fire-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -438,7 +412,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "demolition-charges",
+    "source_id": "demolition-charges-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -451,7 +425,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "compact",
+    "source_id": "compact-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -463,20 +437,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vox-net",
+    "source_id": "vox-net-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -488,7 +449,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "called-shots",
+    "source_id": "called-shots-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -501,7 +462,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "withering-hail",
+    "source_id": "withering-hail-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -514,7 +475,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-barrier-psychic",
+    "source_id": "psychic-barrier-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -526,7 +487,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "covering-fire",
+    "source_id": "covering-fire-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -539,19 +500,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bring-it-down",
+    "source_id": "bring-it-down-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -563,7 +512,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "close-quarters-warfare",
+    "source_id": "close-quarters-warfare-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -575,7 +524,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "emplacement-platform",
+    "source_id": "emplacement-platform-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -587,7 +536,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "reinforced-cover",
+    "source_id": "reinforced-cover-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -599,7 +548,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fortification",
+    "source_id": "fortification-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -611,7 +560,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deployment",
+    "source_id": "deployment-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -623,7 +572,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mobile-hunter-killers",
+    "source_id": "mobile-hunter-killers-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -636,7 +585,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "summary-execution",
+    "source_id": "summary-execution-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -652,7 +601,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "political-overwatch",
+    "source_id": "political-overwatch-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -664,7 +613,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deathstrike-missile",
+    "source_id": "deathstrike-missile-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -676,7 +625,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "screening-line",
+    "source_id": "screening-line-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -688,7 +637,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "remorseless-barrage",
+    "source_id": "remorseless-barrage-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -700,7 +649,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "gung-ho-executioners",
+    "source_id": "gung-ho-executioners-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -713,7 +662,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-troopers",
+    "source_id": "storm-troopers-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -726,7 +675,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-12",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -739,7 +688,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mount-up",
+    "source_id": "mount-up-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -751,7 +700,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "warrior-elite",
+    "source_id": "warrior-elite-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -767,7 +716,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "melta-mine",
+    "source_id": "melta-mine-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -783,7 +732,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cadia-stands",
+    "source_id": "cadia-stands-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -796,7 +745,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "gung-ho-command",
+    "source_id": "gung-ho-command-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -809,7 +758,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "close-range-titan-killer",
+    "source_id": "close-range-titan-killer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -821,7 +770,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "holy-hatred",
+    "source_id": "grim-demeanour-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -834,32 +783,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "zealot",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grim-demeanour",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "death-korps-medi-pack",
+    "source_id": "death-korps-medi-pack-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -871,7 +795,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "armour-obliteration",
+    "source_id": "armour-obliteration-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -884,7 +808,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "suppression-bombardment",
+    "source_id": "suppression-bombardment-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -897,7 +821,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "horsemasters",
+    "source_id": "horsemasters-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -910,7 +834,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flush-them-out",
+    "source_id": "flush-them-out-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -922,7 +846,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mow-down-the-enemy",
+    "source_id": "mow-down-the-enemy-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -935,7 +859,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grim-determination",
+    "source_id": "grim-determination-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -947,7 +871,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "one-man-army",
+    "source_id": "one-man-army-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -959,7 +883,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "like-fighting-a-shadow",
+    "source_id": "like-fighting-a-shadow-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -973,7 +897,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "line-breaker",
+    "source_id": "line-breaker-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -985,7 +909,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-deployment",
+    "source_id": "rapid-deployment-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -998,7 +922,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "point-blank-barrage",
+    "source_id": "point-blank-barrage-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1010,7 +934,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tough-to-kill",
+    "source_id": "tough-to-kill-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1023,7 +947,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "leading-the-charge",
+    "source_id": "leading-the-charge-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1037,19 +961,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "omnissiahs-blessing",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vengeance-for-the-omnissiah",
+    "source_id": "vengeance-for-the-omnissiah-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1062,20 +974,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-6",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tremor-quake",
+    "source_id": "tremor-quake-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1087,7 +986,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "jungle-fighters",
+    "source_id": "jungle-fighters-astra-militarum",
     "source_type": "ability",
     "phases": [
       "charge",
@@ -1100,7 +999,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-befitting-an-officer",
+    "source_id": "death-befitting-an-officer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -1126,7 +1025,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "airborne-insertion",
+    "source_id": "airborne-insertion-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -1138,7 +1037,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lord-castellan",
+    "source_id": "lord-castellan-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1150,7 +1049,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tactical-genius",
+    "source_id": "tactical-genius-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1162,7 +1061,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titan-killer",
+    "source_id": "titan-killer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1175,7 +1074,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "furious-barrage",
+    "source_id": "furious-barrage-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1188,20 +1087,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mobile-command-vehicle",
+    "source_id": "mobile-command-vehicle-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command",
@@ -1214,7 +1100,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fiery-vengeance",
+    "source_id": "fiery-vengeance-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1227,7 +1113,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tank-killer",
+    "source_id": "tank-killer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1239,7 +1125,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "earthshaker-rounds",
+    "source_id": "earthshaker-rounds-astra-militarum",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1253,7 +1139,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rolling-fortress",
+    "source_id": "rolling-fortress-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1265,7 +1151,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grenadiers",
+    "source_id": "grenadiers-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1277,7 +1163,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "remote-mine",
+    "source_id": "remote-mine-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1289,7 +1175,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flak-battery",
+    "source_id": "flak-battery-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1302,7 +1188,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "urban-warfare",
+    "source_id": "urban-warfare-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1314,452 +1200,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crack-shots",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scouting-outriders",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blazing-advance",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "furious-cannonade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coordinated-action",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fields-of-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stalwart-protector",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "veteran-sharpshooters",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "purging-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mordian-minute",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "additional-armour",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "clear-and-secure",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swift-interception",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hasty-extraction",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "callous-sacrifice",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "trench-fighters",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "final-hour",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inspired-command",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "snap-to-it",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "draw-them-out",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "courageous-diversion",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tactical-withdrawal",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crash-through",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "no-retreat",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapid-dispersal",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "move-out",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "furious-fusillade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reinforcements",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flexible-command",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "over-the-top",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scramble-field",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tanglefoot-grenades",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vox-relay",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "minefield",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flare-burst",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ablative-plating",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "death-mask-of-ollanius",
+    "source_id": "grand-strategist-necrons",
     "source_type": "enhancement",
     "phases": [
       "command"
@@ -1771,21 +1212,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "drill-commander",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grand-strategist",
+    "source_id": "laud-hailer-adepta-sororitas",
     "source_type": "enhancement",
     "phases": [
       "command"
@@ -1797,261 +1224,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "reactive-command",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eager-advance",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flash-grenades",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "legacy-sidearm",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stalwarts-honours",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bold-leadership",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sacred-unguents",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "smoke-grenades",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vanguard-honours",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "calm-under-fire",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "indomitable-steed",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "regimental-banner",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "veteran-crew",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guerrilla-honours",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scare-gas-grenades",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tripwires",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "abhuman-detail",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aquilan-eye",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spec-ops-veteran",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "laud-hailer",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "iron-tread",
+    "source_id": "iron-tread-astra-militarum",
     "source_type": "detachment-rule",
     "phases": [
       "movement"
@@ -2063,7 +1236,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "born-soldiers",
+    "source_id": "born-soldiers-astra-militarum",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -2075,7 +1248,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ruthless-discipline",
+    "source_id": "ruthless-discipline-astra-militarum",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -2089,19 +1262,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "only-the-best",
-    "source_type": "detachment-rule",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "armoured-fist",
+    "source_id": "armoured-fist-astra-militarum",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -2114,7 +1275,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "artillery-support",
+    "source_id": "artillery-support-astra-militarum",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -2127,7 +1288,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "absolutist-principles",
+    "source_id": "absolutist-principles-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -2139,7 +1300,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sharp-eyes-light-fingers",
+    "source_id": "designated-targets-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -2151,14 +1312,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "exemplar-of-duty",
+    "source_id": "ceaseless-cannonade-astra-militarum",
     "source_type": "ability",
     "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
+      "shooting"
     ],
     "game_version": {
       "edition": "11th",
@@ -2167,7 +1324,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "thick-skulled-obdurance",
+    "source_id": "titan-killer-steel-hammer-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -2180,43 +1337,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "low-profile",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stirred-to-action",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "designated-targets",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "long-range-scout",
+    "source_id": "squadron-command-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -2228,67 +1349,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "recon-star",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "close-range-detection",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "triggered-alerts",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sump-smog-screen",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ceaseless-cannonade",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "battalion-commander",
+    "source_id": "grand-strategist-armoured-infantry-astra-militarum",
     "source_type": "ability",
     "phases": [
       "command"
@@ -2300,314 +1361,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titan-killer-steel-hammer",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "engine-speaker",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assault-hatches",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "engine-of-wrath",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shattering-salvo",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "imposing-arrival",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "withering-firepower",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "adamantine-behemoth",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "accuracy-under-pressure",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "squadron-command",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exemplary-officer",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-manoeuvrist",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "omnissian-unguents",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grand-strategist-armoured-infantry",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "order-the-advance",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "supporting-ordnance",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mobile-firebase",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combined-fire",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "burst-of-speed",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "opening-salvo",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-zone-purge",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bombast-class-vox-array",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "priority-drop-beacon",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "on-my-position",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-hot",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "servo-designators",
+    "source_id": "fire-zone-purge-astra-militarum",
     "source_type": "ability",
     "phases": [
       "shooting"

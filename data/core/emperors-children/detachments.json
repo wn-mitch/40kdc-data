@@ -3,20 +3,20 @@
     "id": "slaaneshs-chosen",
     "name": "Slaanesh’s Chosen",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "internal-rivalries",
+    "detachment_rule_id": "internal-rivalries-emperors-children",
     "enhancement_ids": [
-      "eager-to-prove-slaaneshs-chosen",
-      "repulsed-by-weakness-slaaneshs-chosen",
-      "proud-and-vainglorious-slaaneshs-chosen",
-      "slayer-of-champions-slaaneshs-chosen"
+      "eager-to-prove-slaaneshs-chosen-emperors-children",
+      "repulsed-by-weakness-slaaneshs-chosen-emperors-children",
+      "proud-and-vainglorious-slaaneshs-chosen-emperors-children",
+      "slayer-of-champions-slaaneshs-chosen-emperors-children"
     ],
     "stratagem_ids": [
-      "devoted-duellists-slaaneshs-chosen",
-      "heightened-jealousy-slaaneshs-chosen",
-      "refusal-to-be-outdone-slaaneshs-chosen",
-      "diabolic-majesty-slaaneshs-chosen",
-      "beautiful-death-slaaneshs-chosen",
-      "vengeful-surge-slaaneshs-chosen"
+      "devoted-duellists-slaaneshs-chosen-emperors-children",
+      "heightened-jealousy-slaaneshs-chosen-emperors-children",
+      "refusal-to-be-outdone-slaaneshs-chosen-emperors-children",
+      "diabolic-majesty-slaaneshs-chosen-emperors-children",
+      "beautiful-death-slaaneshs-chosen-emperors-children",
+      "vengeful-surge-slaaneshs-chosen-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -37,20 +37,20 @@
     "id": "carnival-of-excess",
     "name": "Carnival of Excess",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "daemonic-empowerment",
+    "detachment_rule_id": "daemonic-empowerment-emperors-children",
     "enhancement_ids": [
-      "empyric-suffusion-carnival-of-excess",
-      "dark-blessings-carnival-of-excess",
-      "possessed-blade-carnival-of-excess",
-      "warp-walker-carnival-of-excess"
+      "empyric-suffusion-carnival-of-excess-emperors-children",
+      "dark-blessings-carnival-of-excess-emperors-children",
+      "possessed-blade-carnival-of-excess-emperors-children",
+      "warp-walker-carnival-of-excess-emperors-children"
     ],
     "stratagem_ids": [
-      "sustained-by-agony-carnival-of-excess",
-      "sycophantic-surge-carnival-of-excess",
-      "uncanny-reactions-carnival-of-excess",
-      "ecstatic-slaughter-carnival-of-excess",
-      "violent-crescendo-carnival-of-excess",
-      "dark-apparitions-carnival-of-excess"
+      "sustained-by-agony-carnival-of-excess-emperors-children",
+      "sycophantic-surge-carnival-of-excess-emperors-children",
+      "uncanny-reactions-carnival-of-excess-emperors-children",
+      "ecstatic-slaughter-carnival-of-excess-emperors-children",
+      "violent-crescendo-carnival-of-excess-emperors-children",
+      "dark-apparitions-carnival-of-excess-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -71,20 +71,20 @@
     "id": "peerless-bladesmen",
     "name": "Peerless Bladesmen",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "exquisite-swordsmanship",
+    "detachment_rule_id": "exquisite-swordsmanship-emperors-children",
     "enhancement_ids": [
-      "faultless-opportunist-peerless-bladesmen",
-      "blinding-speed-peerless-bladesmen",
-      "distortion-peerless-bladesmen",
-      "rise-to-the-challenge-peerless-bladesmen"
+      "faultless-opportunist-peerless-bladesmen-emperors-children",
+      "blinding-speed-peerless-bladesmen-emperors-children",
+      "distortion-peerless-bladesmen-emperors-children",
+      "rise-to-the-challenge-peerless-bladesmen-emperors-children"
     ],
     "stratagem_ids": [
-      "cruel-bladesman-peerless-bladesmen",
-      "deft-parry-peerless-bladesmen",
-      "incessant-violence-peerless-bladesmen",
-      "terrifying-spectacle-peerless-bladesmen",
-      "cut-down-the-weak-peerless-bladesmen",
-      "death-ecstasy-peerless-bladesmen"
+      "cruel-bladesman-peerless-bladesmen-emperors-children",
+      "deft-parry-peerless-bladesmen-emperors-children",
+      "incessant-violence-peerless-bladesmen-emperors-children",
+      "terrifying-spectacle-peerless-bladesmen-emperors-children",
+      "cut-down-the-weak-peerless-bladesmen-emperors-children",
+      "death-ecstasy-peerless-bladesmen-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -105,20 +105,20 @@
     "id": "rapid-evisceration",
     "name": "Rapid Evisceration",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "mechanised-murder",
+    "detachment_rule_id": "mechanised-murder-emperors-children",
     "enhancement_ids": [
-      "sublime-prescience-rapid-evisceration",
-      "spearhead-striker-rapid-evisceration",
-      "accomplished-tactician-rapid-evisceration",
-      "heretek-adept-rapid-evisceration"
+      "sublime-prescience-rapid-evisceration-emperors-children",
+      "spearhead-striker-rapid-evisceration-emperors-children",
+      "accomplished-tactician-rapid-evisceration-emperors-children",
+      "heretek-adept-rapid-evisceration-emperors-children"
     ],
     "stratagem_ids": [
-      "dynamic-breakthrough-rapid-evisceration",
-      "on-to-the-next-rapid-evisceration",
-      "advance-and-claim-rapid-evisceration",
-      "ceaseless-onslaught-rapid-evisceration",
-      "reactive-disembarkation-rapid-evisceration",
-      "outflanking-strike-rapid-evisceration"
+      "dynamic-breakthrough-rapid-evisceration-emperors-children",
+      "on-to-the-next-rapid-evisceration-emperors-children",
+      "advance-and-claim-rapid-evisceration-emperors-children",
+      "ceaseless-onslaught-rapid-evisceration-emperors-children",
+      "reactive-disembarkation-rapid-evisceration-emperors-children",
+      "outflanking-strike-rapid-evisceration-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -139,20 +139,20 @@
     "id": "mercurial-host",
     "name": "Mercurial Host",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "quicksilver-grace",
+    "detachment_rule_id": "quicksilver-grace-emperors-children",
     "enhancement_ids": [
-      "steeped-in-suffering-mercurial-host",
-      "intoxicating-musk-mercurial-host",
-      "tactical-perfection-mercurial-host",
-      "loathsome-dexterity-mercurial-host"
+      "steeped-in-suffering-mercurial-host-emperors-children",
+      "intoxicating-musk-mercurial-host-emperors-children",
+      "tactical-perfection-mercurial-host-emperors-children",
+      "loathsome-dexterity-mercurial-host-emperors-children"
     ],
     "stratagem_ids": [
-      "violent-excess-mercurial-host",
-      "honour-the-prince-mercurial-host",
-      "capricious-reactions-mercurial-host",
-      "combat-stimms-mercurial-host",
-      "dark-vigour-mercurial-host",
-      "cruel-raiders-mercurial-host"
+      "violent-excess-mercurial-host-emperors-children",
+      "honour-the-prince-mercurial-host-emperors-children",
+      "capricious-reactions-mercurial-host-emperors-children",
+      "combat-stimms-mercurial-host-emperors-children",
+      "dark-vigour-mercurial-host-emperors-children",
+      "cruel-raiders-mercurial-host-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -175,18 +175,18 @@
     "faction_id": "emperors-children",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "tears-of-the-phoenix-court-of-the-phoenician",
-      "exalted-patron-court-of-the-phoenician",
-      "soulstain-made-manifest-court-of-the-phoenician",
-      "spiritsliver-court-of-the-phoenician"
+      "tears-of-the-phoenix-court-of-the-phoenician-emperors-children",
+      "exalted-patron-court-of-the-phoenician-emperors-children",
+      "soulstain-made-manifest-court-of-the-phoenician-emperors-children",
+      "spiritsliver-court-of-the-phoenician-emperors-children"
     ],
     "stratagem_ids": [
-      "contemptuous-disregard-court-of-the-phoenician",
-      "close-quarters-excruciation-court-of-the-phoenician",
-      "euphoric-inspiration-court-of-the-phoenician",
-      "prideful-superiority-court-of-the-phoenician",
-      "sinuous-breach-court-of-the-phoenician",
-      "catalytic-stimulus-court-of-the-phoenician"
+      "contemptuous-disregard-court-of-the-phoenician-emperors-children",
+      "close-quarters-excruciation-court-of-the-phoenician-emperors-children",
+      "euphoric-inspiration-court-of-the-phoenician-emperors-children",
+      "prideful-superiority-court-of-the-phoenician-emperors-children",
+      "sinuous-breach-court-of-the-phoenician-emperors-children",
+      "catalytic-stimulus-court-of-the-phoenician-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -197,8 +197,8 @@
       "purge-the-foe"
     ],
     "detachment_rule_ids": [
-      "sensational-performance",
-      "master-of-the-pageant"
+      "sensational-performance-emperors-children",
+      "master-of-the-pageant-emperors-children"
     ],
     "external_refs": [
       {
@@ -211,21 +211,20 @@
     "id": "coterie-of-the-conceited",
     "name": "Coterie of the Conceited",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "pledges-to-the-dark-prince",
+    "detachment_rule_id": "pledges-to-the-dark-prince-emperors-children",
     "enhancement_ids": [
-      "pledge-to-eternal-servitude-coterie-of-the-conceited",
-      "pledge-of-dark-glory-coterie-of-the-conceited",
-      "pledge-of-mortal-pain-coterie-of-the-conceited",
-      "pledge-of-unholy-fortune-coterie-of-the-conceited",
-      "pledge-of-eternal-servitude-coterie-of-the-conceited"
+      "pledge-of-dark-glory-coterie-of-the-conceited-emperors-children",
+      "pledge-of-mortal-pain-coterie-of-the-conceited-emperors-children",
+      "pledge-of-unholy-fortune-coterie-of-the-conceited-emperors-children",
+      "pledge-of-eternal-servitude-coterie-of-the-conceited-emperors-children"
     ],
     "stratagem_ids": [
-      "martial-perfection-coterie-of-the-conceited",
-      "unshakeable-opponents-coterie-of-the-conceited",
-      "unbound-arrogance-coterie-of-the-conceited",
-      "protection-of-the-dark-prince-coterie-of-the-conceited",
-      "embrace-the-pain-coterie-of-the-conceited",
-      "armour-of-abhorrence-coterie-of-the-conceited"
+      "martial-perfection-coterie-of-the-conceited-emperors-children",
+      "unshakeable-opponents-coterie-of-the-conceited-emperors-children",
+      "unbound-arrogance-coterie-of-the-conceited-emperors-children",
+      "protection-of-the-dark-prince-coterie-of-the-conceited-emperors-children",
+      "embrace-the-pain-coterie-of-the-conceited-emperors-children",
+      "armour-of-abhorrence-coterie-of-the-conceited-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -246,15 +245,15 @@
     "id": "elegant-brutes",
     "name": "Elegant Brutes",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "eager-to-kill",
+    "detachment_rule_id": "eager-to-kill-emperors-children",
     "enhancement_ids": [
-      "cacophonic-accompaniment-elegant-brutes",
-      "frenzied-ferocity-upgrade-elegant-brutes"
+      "cacophonic-accompaniment-elegant-brutes-emperors-children",
+      "frenzied-ferocity-upgrade-elegant-brutes-emperors-children"
     ],
     "stratagem_ids": [
-      "delight-in-agony-elegant-brutes",
-      "psychedelic-soulflame-elegant-brutes",
-      "warp-plunge-elegant-brutes"
+      "delight-in-agony-elegant-brutes-emperors-children",
+      "psychedelic-soulflame-elegant-brutes-emperors-children",
+      "warp-plunge-elegant-brutes-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -276,15 +275,15 @@
     "id": "frenzied-host",
     "name": "Frenzied Host",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "frantic-focus",
+    "detachment_rule_id": "frantic-focus-emperors-children",
     "enhancement_ids": [
-      "euphoric-crown-frenzied-host",
-      "howling-plate-frenzied-host"
+      "euphoric-crown-frenzied-host-emperors-children",
+      "howling-plate-frenzied-host-emperors-children"
     ],
     "stratagem_ids": [
-      "possessive-mania-frenzied-host",
-      "agonised-cacophony-frenzied-host",
-      "absolute-sensory-overload-frenzied-host"
+      "possessive-mania-frenzied-host-emperors-children",
+      "agonised-cacophony-frenzied-host-emperors-children",
+      "absolute-sensory-overload-frenzied-host-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -306,15 +305,15 @@
     "id": "spectacle-of-slaughter",
     "name": "Spectacle of Slaughter",
     "faction_id": "emperors-children",
-    "detachment_rule_id": "entitled-to-victory",
+    "detachment_rule_id": "entitled-to-victory-emperors-children",
     "enhancement_ids": [
-      "eager-patrons-upgrade-spectacle-of-slaughter",
-      "beguiling-grotesquerie-upgrade-spectacle-of-slaughter"
+      "eager-patrons-upgrade-spectacle-of-slaughter-emperors-children",
+      "beguiling-grotesquerie-upgrade-spectacle-of-slaughter-emperors-children"
     ],
     "stratagem_ids": [
-      "honour-is-for-fools-spectacle-of-slaughter",
-      "single-minded-strike-spectacle-of-slaughter",
-      "intoxicated-by-triumph-spectacle-of-slaughter"
+      "honour-is-for-fools-spectacle-of-slaughter-emperors-children",
+      "single-minded-strike-spectacle-of-slaughter-emperors-children",
+      "intoxicated-by-triumph-spectacle-of-slaughter-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -336,8 +335,8 @@
     "name": "Callous Blades",
     "faction_id": "emperors-children",
     "enhancement_ids": [
-      "invigorating-agonies-callous-blades",
-      "martial-perfection-callous-blades"
+      "invigorating-agonies-callous-blades-emperors-children",
+      "martial-perfection-callous-blades-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -355,6 +354,9 @@
         "namespace": "mfm",
         "id": "3228b035-5ffb-4238-9a53-ae82e643e2fe"
       }
+    ],
+    "detachment_rule_ids": [
+      "nimble-strikes-emperors-children"
     ]
   }
 ]

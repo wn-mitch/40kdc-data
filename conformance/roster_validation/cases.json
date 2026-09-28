@@ -231,7 +231,7 @@
           "unitId": "daemon-prince-of-khorne",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "helm-of-brazen-ire-berzerker-warband",
+          "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
           "counts": {}
         }
@@ -239,7 +239,7 @@
     },
     "expected": [
       "army|warn|disposition-invalid:purge-the-foe",
-      "u0|error|enhancement-wrong-detachment:helm-of-brazen-ire-berzerker-warband"
+      "u0|error|enhancement-wrong-detachment:helm-of-brazen-ire-berzerker-warband-world-eaters"
     ]
   },
   {
@@ -266,14 +266,14 @@
           "unitId": "chaos-spawn",
           "modelCount": 2,
           "isWarlord": false,
-          "enhancementId": "battle-lust-berzerker-warband",
+          "enhancementId": "battle-lust-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
           "counts": {}
         }
       ]
     },
     "expected": [
-      "u1|error|enhancement-on-non-character:battle-lust-berzerker-warband"
+      "u1|error|enhancement-on-non-character:battle-lust-berzerker-warband-world-eaters"
     ]
   },
   {
@@ -292,7 +292,7 @@
           "unitId": "daemon-prince-of-khorne",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "helm-of-brazen-ire-berzerker-warband",
+          "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
           "counts": {}
         },
@@ -300,14 +300,14 @@
           "unitId": "daemon-prince-of-khorne",
           "modelCount": 1,
           "isWarlord": false,
-          "enhancementId": "helm-of-brazen-ire-berzerker-warband",
+          "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
           "counts": {}
         }
       ]
     },
     "expected": [
-      "army|error|enhancement-over-max-targets:helm-of-brazen-ire-berzerker-warband"
+      "army|error|enhancement-over-max-targets:helm-of-brazen-ire-berzerker-warband-world-eaters"
     ]
   },
   {
@@ -664,7 +664,7 @@
           "unitId": "chaplain",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "gift-of-foresight-liberator-assault-group",
+          "enhancementId": "gift-of-foresight-liberator-assault-group-blood-angels",
           "leaderBodyguardId": null,
           "counts": {
             "crozius-arcanum": 1,
@@ -691,7 +691,7 @@
           "unitId": "chaplain",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "dedicated-gunship-orbital-assault-force",
+          "enhancementId": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
           "leaderBodyguardId": null,
           "counts": {
             "crozius-arcanum": 1,
@@ -701,7 +701,7 @@
       ]
     },
     "expected": [
-      "u0|error|enhancement-keyword-mismatch:dedicated-gunship-orbital-assault-force"
+      "u0|error|enhancement-keyword-mismatch:dedicated-gunship-orbital-assault-force-adeptus-astartes"
     ]
   },
   {
@@ -843,7 +843,7 @@
   },
   {
     "name": "allied-pricing-points-over-limit",
-    "note": "The 9th Vindicare totals 1125 under allied pricing vs 990 native — points-over-limit fires ONLY when the Imperium allied_points entry is applied.",
+    "note": "The 9th Vindicare totals 1125 under allied pricing vs 990 native \u2014 points-over-limit fires ONLY when the Imperium allied_points entry is applied.",
     "args": {
       "factionId": "blood-angels",
       "battleSize": "incursion",
@@ -948,7 +948,7 @@
           "unitId": "patriarch",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "predatory-instincts-biosanctic-broodsurge",
+          "enhancementId": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
           "leaderBodyguardId": null,
           "counts": {
             "patriarchs-claws": 1
@@ -974,7 +974,7 @@
           "unitId": "magus",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "predatory-instincts-biosanctic-broodsurge",
+          "enhancementId": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
           "leaderBodyguardId": null,
           "counts": {
             "force-stave": 1,
@@ -984,7 +984,7 @@
       ]
     },
     "expected": [
-      "u0|error|enhancement-keyword-mismatch:predatory-instincts-biosanctic-broodsurge"
+      "u0|error|enhancement-keyword-mismatch:predatory-instincts-biosanctic-broodsurge-genestealer-cults"
     ]
   }
 ]

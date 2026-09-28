@@ -15,30 +15,9 @@
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
-            <profile name="Assault Vehicle" typeName="Abilities">
+            <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model is eligible to disembark in a turn in which it Advanced.
--&gt; When a friendly unit disembarks from a Transport: if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Fire Support" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll a failed Wound roll.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Firing Deck 2" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck 2 ability.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Meet Any Challenge" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, while the triggering unit is within 8" of this model, friendly units that are embarked are eligible to disembark.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Self Repair" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">This model regains up to 1 lost wound.</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Sorcerous Support" typeName="Abilities">
@@ -48,10 +27,10 @@
   -&gt; The unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -119,10 +98,15 @@
                 <characteristic name="Description">-&gt; When a friendly unit disembarks from a Transport: if this model made a Normal move this turn, the triggering unit is eligible to declare a charge in a turn in which it disembarked.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D6" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-5 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>

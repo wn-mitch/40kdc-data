@@ -521,7 +521,7 @@ async function evaluateComposition(
     const correctComposition = composer.composeAtoms(correctAtoms, adjudicated.questions, adjudicated.judgments) as CompositionResult;
     const jevFidelity = compositionFidelity(selected.atoms, annotation);
     const correctFidelity = compositionFidelity(correctAtoms, annotation);
-    const anchor = ["helm-of-brazen-ire-berzerker-warband", "hack-and-slash-berzerker-warband", "relentless-rage", "deep-strike"].includes(record.ability_id);
+    const anchor = ["helm-of-brazen-ire-berzerker-warband-world-eaters", "hack-and-slash-berzerker-warband-world-eaters", "relentless-rage-world-eaters", "deep-strike"].includes(record.ability_id);
     let exactDslAgreement: boolean | null = null;
     let goldHash: string | null = null;
     if (anchor) {

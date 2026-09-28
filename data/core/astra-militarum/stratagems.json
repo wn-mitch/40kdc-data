@@ -1,6 +1,6 @@
 [
   {
-    "id": "ablative-plating-hammer-of-the-emperor",
+    "id": "ablative-plating-hammer-of-the-emperor-astra-militarum",
     "name": "ABLATIVE PLATING",
     "category": "detachment",
     "type": "wargear",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ablative-plating-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "accuracy-under-pressure-steel-hammer",
+    "id": "accuracy-under-pressure-steel-hammer-astra-militarum",
     "name": "ACCURACY UNDER PRESSURE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -41,7 +41,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "accuracy-under-pressure-steel-hammer",
+    "ability_id": "accuracy-under-pressure-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "id": "adamantine-behemoth-steel-hammer",
+    "id": "adamantine-behemoth-steel-hammer-astra-militarum",
     "name": "ADAMANTINE BEHEMOTH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -71,7 +71,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adamantine-behemoth-steel-hammer",
+    "ability_id": "adamantine-behemoth-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "additional-armour-grizzled-company",
+    "id": "additional-armour-grizzled-company-astra-militarum",
     "name": "ADDITIONAL ARMOUR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -100,7 +100,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "additional-armour-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "blazing-advance-hammer-of-the-emperor",
+    "id": "blazing-advance-hammer-of-the-emperor-astra-militarum",
     "name": "BLAZING ADVANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -129,7 +129,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blazing-advance-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "id": "burst-of-speed-armoured-infantry",
+    "id": "burst-of-speed-armoured-infantry-astra-militarum",
     "name": "BURST OF SPEED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -158,7 +158,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "burst-of-speed-armoured-infantry",
+    "ability_id": "burst-of-speed-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "id": "callous-sacrifice-siege-regiment",
+    "id": "callous-sacrifice-siege-regiment-astra-militarum",
     "name": "CALLOUS SACRIFICE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -187,7 +187,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "callous-sacrifice-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -204,7 +204,7 @@
     ]
   },
   {
-    "id": "clear-and-secure-mechanised-assault",
+    "id": "clear-and-secure-mechanised-assault-astra-militarum",
     "name": "CLEAR AND SECURE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -216,7 +216,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "clear-and-secure-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -233,7 +233,7 @@
     ]
   },
   {
-    "id": "close-range-detection-designation-force",
+    "id": "close-range-detection-designation-force-astra-militarum",
     "name": "CLOSE-RANGE DETECTION",
     "category": "detachment",
     "detachment_id": "designation-force",
@@ -244,7 +244,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "close-range-detection-designation-force",
+    "ability_id": "close-range-detection-designation-force-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -261,7 +261,7 @@
     ]
   },
   {
-    "id": "combined-fire-armoured-infantry",
+    "id": "combined-fire-armoured-infantry-astra-militarum",
     "name": "COMBINED FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -273,7 +273,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "combined-fire-armoured-infantry",
+    "ability_id": "combined-fire-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -290,7 +290,7 @@
     ]
   },
   {
-    "id": "coordinated-action-combined-arms",
+    "id": "coordinated-action-combined-arms-astra-militarum",
     "name": "COORDINATED ACTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -306,7 +306,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "coordinated-action-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -323,7 +323,7 @@
     ]
   },
   {
-    "id": "courageous-diversion-recon-element",
+    "id": "courageous-diversion-recon-element-astra-militarum",
     "name": "COURAGEOUS DIVERSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -335,7 +335,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "courageous-diversion-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -352,7 +352,7 @@
     ]
   },
   {
-    "id": "crack-shots-recon-element",
+    "id": "crack-shots-recon-element-astra-militarum",
     "name": "CRACK SHOTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -364,7 +364,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "crack-shots-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -381,7 +381,7 @@
     ]
   },
   {
-    "id": "crash-through-hammer-of-the-emperor",
+    "id": "crash-through-hammer-of-the-emperor-astra-militarum",
     "name": "CRASH THROUGH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -394,7 +394,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "crash-through-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -411,7 +411,7 @@
     ]
   },
   {
-    "id": "draw-them-out-recon-element",
+    "id": "draw-them-out-recon-element-astra-militarum",
     "name": "DRAW THEM OUT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -423,7 +423,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "draw-them-out-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -440,7 +440,7 @@
     ]
   },
   {
-    "id": "engine-of-wrath-steel-hammer",
+    "id": "engine-of-wrath-steel-hammer-astra-militarum",
     "name": "ENGINE OF WRATH",
     "category": "detachment",
     "type": "epic-deed",
@@ -452,7 +452,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "engine-of-wrath-steel-hammer",
+    "ability_id": "engine-of-wrath-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -469,7 +469,7 @@
     ]
   },
   {
-    "id": "fields-of-fire-combined-arms",
+    "id": "fields-of-fire-combined-arms-astra-militarum",
     "name": "FIELDS OF FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -481,7 +481,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fields-of-fire-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -498,7 +498,7 @@
     ]
   },
   {
-    "id": "final-hour-hammer-of-the-emperor",
+    "id": "final-hour-hammer-of-the-emperor-astra-militarum",
     "name": "FINAL HOUR",
     "category": "detachment",
     "type": "epic-deed",
@@ -510,7 +510,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "final-hour-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -527,7 +527,7 @@
     ]
   },
   {
-    "id": "firing-hot-bridgehead-strike",
+    "id": "firing-hot-bridgehead-strike-astra-militarum",
     "name": "FIRING HOT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -539,7 +539,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "firing-hot-bridgehead-strike",
+    "ability_id": "firing-hot-bridgehead-strike-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -556,7 +556,7 @@
     ]
   },
   {
-    "id": "first-wave-draydens-lance",
+    "id": "first-wave-draydens-lance-astra-militarum",
     "name": "First Wave",
     "category": "detachment",
     "detachment_id": "draydens-lance",
@@ -567,7 +567,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "first-wave-draydens-lance",
+    "ability_id": "first-wave-draydens-lance-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -580,7 +580,7 @@
     ]
   },
   {
-    "id": "flare-burst-siege-regiment",
+    "id": "flare-burst-siege-regiment-astra-militarum",
     "name": "FLARE BURST",
     "category": "detachment",
     "type": "wargear",
@@ -592,7 +592,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flare-burst-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -609,7 +609,7 @@
     ]
   },
   {
-    "id": "flexible-command-combined-arms",
+    "id": "flexible-command-combined-arms-astra-militarum",
     "name": "FLEXIBLE COMMAND",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -621,7 +621,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flexible-command-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -638,7 +638,7 @@
     ]
   },
   {
-    "id": "focus-attacks-draydens-lance",
+    "id": "focus-attacks-draydens-lance-astra-militarum",
     "name": "Focus Attacks",
     "category": "detachment",
     "detachment_id": "draydens-lance",
@@ -649,7 +649,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "focus-attacks-draydens-lance",
+    "ability_id": "focus-attacks-draydens-lance-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -662,7 +662,7 @@
     ]
   },
   {
-    "id": "furious-cannonade-hammer-of-the-emperor",
+    "id": "furious-cannonade-hammer-of-the-emperor-astra-militarum",
     "name": "FURIOUS CANNONADE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -674,7 +674,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "furious-cannonade-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -691,7 +691,7 @@
     ]
   },
   {
-    "id": "furious-fusillade-siege-regiment",
+    "id": "furious-fusillade-siege-regiment-astra-militarum",
     "name": "FURIOUS FUSILLADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -703,7 +703,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "furious-fusillade-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -720,7 +720,7 @@
     ]
   },
   {
-    "id": "hasty-extraction-mechanised-assault",
+    "id": "hasty-extraction-mechanised-assault-astra-militarum",
     "name": "HASTY EXTRACTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -732,7 +732,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hasty-extraction-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -749,7 +749,7 @@
     ]
   },
   {
-    "id": "imposing-arrival-steel-hammer",
+    "id": "imposing-arrival-steel-hammer-astra-militarum",
     "name": "IMPOSING ARRIVAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -761,7 +761,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "imposing-arrival-steel-hammer",
+    "ability_id": "imposing-arrival-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -778,7 +778,7 @@
     ]
   },
   {
-    "id": "inspired-command-combined-arms",
+    "id": "inspired-command-combined-arms-astra-militarum",
     "name": "INSPIRED COMMAND",
     "category": "detachment",
     "type": "epic-deed",
@@ -790,7 +790,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "inspired-command-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -807,7 +807,7 @@
     ]
   },
   {
-    "id": "low-profile-abhuman-auxiliaries",
+    "id": "low-profile-abhuman-auxiliaries-astra-militarum",
     "name": "LOW PROFILE",
     "category": "detachment",
     "detachment_id": "abhuman-auxiliaries",
@@ -818,7 +818,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "low-profile-abhuman-auxiliaries",
+    "ability_id": "low-profile-abhuman-auxiliaries-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -835,7 +835,7 @@
     ]
   },
   {
-    "id": "minefield-siege-regiment",
+    "id": "minefield-siege-regiment-astra-militarum",
     "name": "MINEFIELD",
     "category": "detachment",
     "type": "wargear",
@@ -847,7 +847,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "minefield-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -864,7 +864,7 @@
     ]
   },
   {
-    "id": "mobile-firebase-armoured-infantry",
+    "id": "mobile-firebase-armoured-infantry-astra-militarum",
     "name": "MOBILE FIREBASE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -876,7 +876,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "mobile-firebase-armoured-infantry",
+    "ability_id": "mobile-firebase-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -893,7 +893,7 @@
     ]
   },
   {
-    "id": "mordian-minute-grizzled-company",
+    "id": "mordian-minute-grizzled-company-astra-militarum",
     "name": "MORDIAN MINUTE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -905,7 +905,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mordian-minute-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -922,7 +922,7 @@
     ]
   },
   {
-    "id": "move-out-mechanised-assault",
+    "id": "move-out-mechanised-assault-astra-militarum",
     "name": "MOVE OUT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -934,7 +934,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "move-out-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -951,7 +951,7 @@
     ]
   },
   {
-    "id": "no-retreat-grizzled-company",
+    "id": "no-retreat-grizzled-company-astra-militarum",
     "name": "NO RETREAT!",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -963,7 +963,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "no-retreat-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -980,7 +980,7 @@
     ]
   },
   {
-    "id": "on-my-position-bridgehead-strike",
+    "id": "on-my-position-bridgehead-strike-astra-militarum",
     "name": "ON MY POSITION",
     "category": "detachment",
     "type": "epic-deed",
@@ -992,7 +992,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "on-my-position-bridgehead-strike",
+    "ability_id": "on-my-position-bridgehead-strike-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1009,7 +1009,7 @@
     ]
   },
   {
-    "id": "opening-salvo-armoured-infantry",
+    "id": "opening-salvo-armoured-infantry-astra-militarum",
     "name": "OPENING SALVO",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1021,7 +1021,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "opening-salvo-armoured-infantry",
+    "ability_id": "opening-salvo-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1038,7 +1038,7 @@
     ]
   },
   {
-    "id": "order-the-advance-armoured-infantry",
+    "id": "order-the-advance-armoured-infantry-astra-militarum",
     "name": "ORDER THE ADVANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1050,7 +1050,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "order-the-advance-armoured-infantry",
+    "ability_id": "order-the-advance-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1067,7 +1067,7 @@
     ]
   },
   {
-    "id": "over-the-top-siege-regiment",
+    "id": "over-the-top-siege-regiment-astra-militarum",
     "name": "OVER THE TOP",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1079,7 +1079,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "over-the-top-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1096,7 +1096,7 @@
     ]
   },
   {
-    "id": "purging-fire-grizzled-company",
+    "id": "purging-fire-grizzled-company-astra-militarum",
     "name": "PURGING FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1108,7 +1108,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "purging-fire-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1125,7 +1125,7 @@
     ]
   },
   {
-    "id": "rapid-dispersal-mechanised-assault",
+    "id": "rapid-dispersal-mechanised-assault-astra-militarum",
     "name": "RAPID DISPERSAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1137,7 +1137,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-dispersal-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1154,7 +1154,7 @@
     ]
   },
   {
-    "id": "reinforcements-combined-arms",
+    "id": "reinforcements-combined-arms-astra-militarum",
     "name": "REINFORCEMENTS!",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1170,7 +1170,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reinforcements-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1187,7 +1187,7 @@
     ]
   },
   {
-    "id": "scouting-outriders-recon-element",
+    "id": "scouting-outriders-recon-element-astra-militarum",
     "name": "SCOUTING OUTRIDERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1199,7 +1199,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "scouting-outriders-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1216,7 +1216,7 @@
     ]
   },
   {
-    "id": "scramble-field-recon-element",
+    "id": "scramble-field-recon-element-astra-militarum",
     "name": "SCRAMBLE FIELD",
     "category": "detachment",
     "type": "wargear",
@@ -1228,7 +1228,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "scramble-field-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1245,7 +1245,7 @@
     ]
   },
   {
-    "id": "servo-designators-bridgehead-strike",
+    "id": "servo-designators-bridgehead-strike-astra-militarum",
     "name": "SERVO-DESIGNATORS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1257,7 +1257,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "servo-designators-bridgehead-strike",
+    "ability_id": "servo-designators-bridgehead-strike-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1274,7 +1274,7 @@
     ]
   },
   {
-    "id": "shattering-salvo-steel-hammer",
+    "id": "shattering-salvo-steel-hammer-astra-militarum",
     "name": "SHATTERING SALVO",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1286,7 +1286,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shattering-salvo-steel-hammer",
+    "ability_id": "shattering-salvo-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1303,7 +1303,7 @@
     ]
   },
   {
-    "id": "snap-to-it-grizzled-company",
+    "id": "snap-to-it-grizzled-company-astra-militarum",
     "name": "SNAP TO IT",
     "category": "detachment",
     "type": "epic-deed",
@@ -1319,7 +1319,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "snap-to-it-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1336,7 +1336,7 @@
     ]
   },
   {
-    "id": "stalwart-protector-combined-arms",
+    "id": "stalwart-protector-combined-arms-astra-militarum",
     "name": "STALWART PROTECTOR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1348,7 +1348,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stalwart-protector-combined-arms-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1365,7 +1365,7 @@
     ]
   },
   {
-    "id": "stirred-to-action-abhuman-auxiliaries",
+    "id": "stirred-to-action-abhuman-auxiliaries-astra-militarum",
     "name": "STIRRED TO ACTION",
     "category": "detachment",
     "detachment_id": "abhuman-auxiliaries",
@@ -1376,7 +1376,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "stirred-to-action-abhuman-auxiliaries",
+    "ability_id": "stirred-to-action-abhuman-auxiliaries-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1393,7 +1393,7 @@
     ]
   },
   {
-    "id": "sump-smog-screen-designation-force",
+    "id": "sump-smog-screen-designation-force-astra-militarum",
     "name": "SUMP-SMOG SCREEN",
     "category": "detachment",
     "detachment_id": "designation-force",
@@ -1404,7 +1404,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sump-smog-screen-designation-force",
+    "ability_id": "sump-smog-screen-designation-force-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1421,7 +1421,7 @@
     ]
   },
   {
-    "id": "supporting-ordnance-armoured-infantry",
+    "id": "supporting-ordnance-armoured-infantry-astra-militarum",
     "name": "SUPPORTING ORDNANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1433,7 +1433,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "supporting-ordnance-armoured-infantry",
+    "ability_id": "supporting-ordnance-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1450,7 +1450,7 @@
     ]
   },
   {
-    "id": "swift-interception-mechanised-assault",
+    "id": "swift-interception-mechanised-assault-astra-militarum",
     "name": "SWIFT INTERCEPTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1462,7 +1462,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swift-interception-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1479,7 +1479,7 @@
     ]
   },
   {
-    "id": "tactical-withdrawal-hammer-of-the-emperor",
+    "id": "tactical-withdrawal-hammer-of-the-emperor-astra-militarum",
     "name": "TACTICAL WITHDRAWAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1491,7 +1491,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tactical-withdrawal-hammer-of-the-emperor-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1508,7 +1508,7 @@
     ]
   },
   {
-    "id": "tanglefoot-grenades-recon-element",
+    "id": "tanglefoot-grenades-recon-element-astra-militarum",
     "name": "TANGLEFOOT GRENADES",
     "category": "detachment",
     "type": "wargear",
@@ -1520,7 +1520,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tanglefoot-grenades-recon-element-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1537,7 +1537,7 @@
     ]
   },
   {
-    "id": "thick-skulled-obdurance-abhuman-auxiliaries",
+    "id": "thick-skulled-obdurance-abhuman-auxiliaries-astra-militarum",
     "name": "THICK-SKULLED OBDURANCE",
     "category": "detachment",
     "detachment_id": "abhuman-auxiliaries",
@@ -1549,7 +1549,7 @@
     "player_turn": "either",
     "timing": "once-per-turn",
     "target_restrictions": null,
-    "ability_id": "thick-skulled-obdurance-abhuman-auxiliaries",
+    "ability_id": "thick-skulled-obdurance-abhuman-auxiliaries-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1566,7 +1566,7 @@
     ]
   },
   {
-    "id": "trench-fighters-siege-regiment",
+    "id": "trench-fighters-siege-regiment-astra-militarum",
     "name": "TRENCH FIGHTERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1578,7 +1578,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "trench-fighters-siege-regiment-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1595,7 +1595,7 @@
     ]
   },
   {
-    "id": "triggered-alerts-designation-force",
+    "id": "triggered-alerts-designation-force-astra-militarum",
     "name": "TRIGGERED ALERTS",
     "category": "detachment",
     "detachment_id": "designation-force",
@@ -1606,7 +1606,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "triggered-alerts-designation-force",
+    "ability_id": "triggered-alerts-designation-force-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1623,7 +1623,7 @@
     ]
   },
   {
-    "id": "veteran-sharpshooters-grizzled-company",
+    "id": "veteran-sharpshooters-grizzled-company-astra-militarum",
     "name": "VETERAN SHARPSHOOTERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1635,7 +1635,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "veteran-sharpshooters-grizzled-company-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1652,7 +1652,7 @@
     ]
   },
   {
-    "id": "veteran-skirmishers-draydens-lance",
+    "id": "veteran-skirmishers-draydens-lance-astra-militarum",
     "name": "Veteran Skirmishers",
     "category": "detachment",
     "detachment_id": "draydens-lance",
@@ -1663,7 +1663,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "veteran-skirmishers-draydens-lance",
+    "ability_id": "veteran-skirmishers-draydens-lance-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1676,7 +1676,7 @@
     ]
   },
   {
-    "id": "vox-relay-mechanised-assault",
+    "id": "vox-relay-mechanised-assault-astra-militarum",
     "name": "VOX-RELAY",
     "category": "detachment",
     "type": "wargear",
@@ -1688,7 +1688,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vox-relay-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1705,7 +1705,7 @@
     ]
   },
   {
-    "id": "withering-firepower-steel-hammer",
+    "id": "withering-firepower-steel-hammer-astra-militarum",
     "name": "WITHERING FIREPOWER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1717,7 +1717,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "withering-firepower-steel-hammer",
+    "ability_id": "withering-firepower-steel-hammer-astra-militarum",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

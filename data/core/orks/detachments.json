@@ -1,476 +1,347 @@
 [
   {
-    "id": "dread-mob",
-    "name": "Dread Mob",
+    "id": "blitz-brigade",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0e5059d2-a59b-4e2f-bb95-ac173b814600"
+      }
+    ],
+    "name": "Blitz Brigade",
     "faction_id": "orks",
-    "detachment_rule_id": "try-dat-button-dread-mob",
-    "enhancement_ids": [
-      "smoky-gubbinz-dread-mob",
-      "supa-glowy-fing-dread-mob",
-      "press-it-fasta-dread-mob",
-      "gitfinder-gogglez-dread-mob",
-      "dreadherder-dread-mob",
-      "cybork-boosta-dread-mob"
-    ],
-    "stratagem_ids": [
-      "klankin-klaws-dread-mob",
-      "bigger-shells-for-bigger-gitz-dread-mob",
-      "dakka-dakka-dakka-dread-mob",
-      "extra-gubbinz-dread-mob",
-      "superfuelled-boiler-dread-mob",
-      "conniving-runts-dread-mob"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "unstoppable-momentum-orks"
+    ]
+  },
+  {
+    "id": "brute-bosses",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0f071f29-4547-4912-b020-d667768633b4"
+      }
+    ],
+    "name": "Brute Bosses",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
     ],
     "detachment_rule_ids": [
-      "try-dat-button-dread-mob"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4fa77afa-6086-4703-b2e6-0f61e2b07a04"
-      }
+      "ard-as-nails-orks"
     ]
   },
   {
-    "id": "blitz-brigade",
-    "name": "Blitz Brigade",
+    "id": "bully-boyz",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1d37b096-4033-427c-81eb-0c1f17f6e8ae"
+      }
+    ],
+    "name": "Bully Boyz",
     "faction_id": "orks",
-    "detachment_rule_id": "eager-for-the-fight",
-    "enhancement_ids": [
-      "runnin-boots-blitz-brigade",
-      "blitzkaptin-blitz-brigade",
-      "supercharged-squig-oil-blitz-brigade",
-      "tuff-git-blitz-brigade",
-      "boss-boomer-upgrade-blitz-brigade",
-      "targetin-gizmos-upgrade-blitz-brigade"
-    ],
-    "stratagem_ids": [
-      "mount-up-ladz-blitz-brigade",
-      "armoured-duellists-blitz-brigade",
-      "impervious-blitz-brigade",
-      "mekanised-brutality-blitz-brigade",
-      "run-em-down-blitz-brigade",
-      "yooz-in-trouble-now-blitz-brigade"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
-      "take-and-hold"
+      "purge-the-foe"
     ],
-    "tags": [],
     "detachment_rule_ids": [
-      "eager-for-the-fight"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "28be3515-baa7-41c1-9a46-81b27c97d722"
-      }
+      "displays-of-savagery-orks"
     ]
   },
   {
-    "id": "kult-of-speed",
-    "name": "Kult of Speed",
+    "id": "da-big-hunt",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a8c9d0d1-fb4d-456b-a7e0-5b438f11df28"
+      }
+    ],
+    "name": "Da Big Hunt",
     "faction_id": "orks",
-    "detachment_rule_id": "adrenaline-junkies-kult-of-speed",
-    "enhancement_ids": [
-      "competitive-streak-kult-of-speed",
-      "smoky-gubbinz-upgrade-kult-of-speed",
-      "speed-makes-right-kult-of-speed",
-      "squig-hide-tyres-kult-of-speed",
-      "wazblasta-kult-of-speed",
-      "fasta-than-yooz-kult-of-speed"
-    ],
-    "stratagem_ids": [
-      "dakkastorm-kult-of-speed",
-      "delicious-eating-squigs-kult-of-speed",
-      "speediest-freeks-kult-of-speed"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "da-hunt-is-on-orks"
+    ]
+  },
+  {
+    "id": "dread-mob",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "aa4d4b3d-e148-4807-9c97-cfd753a7b8ed"
+      }
+    ],
+    "name": "Dread Mob",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "try-dat-button-orks"
+    ]
+  },
+  {
+    "id": "flyboyz",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2dd2c66d-0dea-44fd-81c6-26d869796c62"
+      }
+    ],
+    "name": "Flyboyz",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "reconnaissance"
     ],
     "detachment_rule_ids": [
-      "adrenaline-junkies-kult-of-speed"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "41229cb5-ce01-4126-acdc-c658ecb9fe7e"
-      }
+      "skyborne-loons-orks"
     ]
   },
   {
-    "id": "da-big-hunt",
-    "name": "Da Big Hunt",
+    "id": "green-tide",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ba6295df-4f61-4f43-9efb-3010eb9c88c3"
+      }
+    ],
+    "name": "Green Tide",
     "faction_id": "orks",
-    "detachment_rule_id": "da-hunt-is-on-da-big-hunt",
-    "enhancement_ids": [
-      "glory-hog-da-big-hunt",
-      "it-came-from-da-drops-da-big-hunt",
-      "surly-as-a-squiggoth-da-big-hunt",
-      "proper-killy-da-big-hunt",
-      "skrag-every-stash-da-big-hunt"
-    ],
-    "stratagem_ids": [
-      "gooped-into-action-da-big-hunt",
-      "instinctive-hunters-da-big-hunt",
-      "where-dya-fink-youre-going-da-big-hunt"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "mob-handed-brutality-orks"
+    ]
+  },
+  {
+    "id": "kult-of-speed",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c84ef6c-4164-4a64-abdf-8577f64d629a"
+      }
+    ],
+    "name": "Kult of Speed",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "detachment_rule_ids": [
+      "adrenaline-junkies-orks"
+    ]
+  },
+  {
+    "id": "madcap-meks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "beaf8d96-1012-484c-abaa-afe3b0911236"
+      }
+    ],
+    "name": "Madcap Meks",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "detachment_rule_ids": [
+      "unpredictable-genius-orks"
+    ]
+  },
+  {
+    "id": "runt-swarm",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "623dee62-7c5e-4239-83a6-cb74adeb3afe"
+      }
+    ],
+    "name": "Runt Swarm",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "sneaky-little-gitz-orks"
+    ]
+  },
+  {
+    "id": "shoota-boyz",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7e37200a-f6d0-4a2b-9fc1-ad9f16cf709a"
+      }
+    ],
+    "name": "Shoota Boyz",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
     ],
     "detachment_rule_ids": [
-      "da-hunt-is-on-da-big-hunt"
-    ],
+      "dakka-dakka-dakka-orks"
+    ]
+  },
+  {
+    "id": "taktikal-brigade",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "495f699c-39b1-4ad2-9e31-624efbf8ff9a"
+        "id": "1ac21eaa-018a-4d1c-9ed3-b49532c30bed"
       }
+    ],
+    "name": "Taktikal Brigade",
+    "faction_id": "orks",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "suspiciously-well-organised-orks"
     ]
   },
   {
     "id": "war-horde",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "597e09eb-b32e-47de-bbf6-3765d43579ca"
+      }
+    ],
     "name": "War Horde",
     "faction_id": "orks",
-    "detachment_rule_id": "get-stuck-in-war-horde",
-    "enhancement_ids": [
-      "da-boss-is-watchin-war-horde",
-      "follow-me-ladz-war-horde",
-      "headwoppas-killchoppa-war-horde",
-      "kunnin-but-brutal-war-horde",
-      "supa-cybork-body-war-horde"
-    ],
-    "stratagem_ids": [
-      "breakin-heads-war-horde",
-      "close-range-dakka-war-horde",
-      "fungus-fuel-injection-war-horde",
-      "hit-em-harder-war-horde",
-      "mow-em-down-war-horde",
-      "orks-is-never-beaten-war-horde"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
     },
     "detachment_points": 3,
     "force_dispositions": [
       "take-and-hold"
     ],
     "detachment_rule_ids": [
-      "get-stuck-in-war-horde"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "7100d457-ec86-46aa-b323-934394530a9e"
-      }
-    ]
-  },
-  {
-    "id": "bully-boyz",
-    "name": "Bully Boyz",
-    "faction_id": "orks",
-    "detachment_rule_id": "displays-of-savagery-bully-boyz",
-    "enhancement_ids": [
-      "tellyporta-boss-bully-boyz",
-      "wimp-kickaz-upgrade-bully-boyz",
-      "tellyporta-bully-boyz",
-      "big-gob-bully-boyz",
-      "eadstompa-bully-boyz",
-      "da-biggest-boss-bully-boyz"
-    ],
-    "stratagem_ids": [
-      "armed-to-da-teef-bully-boyz",
-      "hulking-brutes-bully-boyz",
-      "too-arrogant-to-die-bully-boyz"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "detachment_rule_ids": [
-      "displays-of-savagery-bully-boyz"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "87313610-665a-4302-ac99-cd4b37608172"
-      }
-    ]
-  },
-  {
-    "id": "green-tide",
-    "name": "Green Tide",
-    "faction_id": "orks",
-    "detachment_rule_id": "mob-handed-brutality-green-tide",
-    "enhancement_ids": [
-      "ard-boyz-green-tide",
-      "ferocious-show-off-green-tide",
-      "brutal-but-kunnin-green-tide",
-      "raucous-warcaller-green-tide",
-      "bloodthirsty-belligerence-green-tide",
-      "ardboyz-upgrade-green-tide"
-    ],
-    "stratagem_ids": [
-      "ere-we-go-green-tide",
-      "mob-mentality-green-tide",
-      "unbridled-carnage-green-tide"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "detachment_rule_ids": [
-      "mob-handed-brutality-green-tide"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "953d5dae-75e4-4f1c-a13d-9ec75a528187"
-      }
-    ]
-  },
-  {
-    "id": "taktikal-brigade",
-    "name": "Taktikal Brigade",
-    "faction_id": "orks",
-    "detachment_rule_id": "suspiciously-well-organised-taktikal-brigade",
-    "enhancement_ids": [
-      "kill-kommando-taktikal-brigade",
-      "throat-slittas-upgrade-taktikal-brigade",
-      "slippery-git-taktikal-brigade",
-      "morks-kunnin-taktikal-brigade",
-      "kill-kommanda-taktikal-brigade"
-    ],
-    "stratagem_ids": [
-      "dubious-restraint-taktikal-brigade",
-      "mind-mostly-on-the-mission-taktikal-brigade",
-      "while-their-backs-are-turned-taktikal-brigade"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "detachment_rule_ids": [
-      "suspiciously-well-organised-taktikal-brigade"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "50193e18-32f4-42d3-b64b-9dd2395d39c2"
-      }
-    ]
-  },
-  {
-    "id": "brute-bosses",
-    "name": "Brute Bosses",
-    "faction_id": "orks",
-    "detachment_rule_id": "ard-as-nails-brute-bosses",
-    "enhancement_ids": [
-      "blitzboss-brute-bosses",
-      "brutal-but-kunnin-brute-bosses",
-      "da-gobshot-thunderbuss-brute-bosses",
-      "morgogs-finkin-cap-brute-bosses",
-      "proper-killy-brute-bosses",
-      "surly-as-a-squiggoth-brute-bosses"
-    ],
-    "stratagem_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "detachment_rule_ids": [
-      "ard-as-nails-brute-bosses"
-    ]
-  },
-  {
-    "id": "flyboyz",
-    "name": "Flyboyz",
-    "faction_id": "orks",
-    "detachment_rule_id": "skyborne-loons-flyboyz",
-    "enhancement_ids": [
-      "flyboss-upgrade-flyboyz",
-      "impulsive-recon-upgrade-flyboyz"
-    ],
-    "stratagem_ids": [
-      "flyin-headbutt-flyboyz",
-      "long-uncontrolled-bursts-flyboyz",
-      "whirligig-evasion-flyboyz"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "detachment_rule_ids": [
-      "skyborne-loons-flyboyz"
-    ]
-  },
-  {
-    "id": "madcap-meks",
-    "name": "Madcap Meks",
-    "faction_id": "orks",
-    "detachment_rule_id": "try-dat-button-madcap-meks",
-    "enhancement_ids": [
-      "enhanced-runt-maw-upgrade-madcap-meks",
-      "mekwaaagh-mastermind-madcap-meks",
-      "temperamental-shokka-upgrade-madcap-meks"
-    ],
-    "stratagem_ids": [
-      "vindictive-artillerists-madcap-meks"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "detachment_rule_ids": [
-      "try-dat-button-madcap-meks",
-      "unpredictable-genius-madcap-meks"
-    ]
-  },
-  {
-    "id": "runt-swarm",
-    "name": "Runt Swarm",
-    "faction_id": "orks",
-    "detachment_rule_id": "sneaky-little-gitz-runt-swarm",
-    "enhancement_ids": [
-      "extra-sneaky-upgrade-runt-swarm",
-      "minefield-detail-upgrade-runt-swarm"
-    ],
-    "stratagem_ids": [
-      "grot-shields-runt-swarm",
-      "infested-war-zone-runt-swarm",
-      "scarper-runt-swarm"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "detachment_rule_ids": [
-      "sneaky-little-gitz-runt-swarm"
-    ]
-  },
-  {
-    "id": "shoota-boyz",
-    "name": "Shoota Boyz",
-    "faction_id": "orks",
-    "detachment_rule_id": "dakka-dakka-dakka-shoota-boyz",
-    "enhancement_ids": [
-      "supa-glowy-fing-shoota-boyz",
-      "targetin-squigs-shoota-boyz"
-    ],
-    "stratagem_ids": [
-      "clownin-dakka-shoota-boyz",
-      "kustom-dakka-shoota-boyz",
-      "never-enough-dakka-shoota-boyz"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "detachment_rule_ids": [
-      "dakka-dakka-dakka-shoota-boyz"
+      "get-stuck-in-orks"
     ]
   },
   {
     "id": "wreckas",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "57d116b1-ecfb-40f9-bf73-a99ff5b024e8"
+      }
+    ],
     "name": "Wreckas",
     "faction_id": "orks",
-    "detachment_rule_id": "wreckin-and-lootin-wreckas",
-    "enhancement_ids": [
-      "kaptins-hat-wreckas",
-      "supa-snazz-dakka-upgrade-wreckas"
-    ],
-    "stratagem_ids": [
-      "drive-by-bustin-wreckas",
-      "grab-it-wreckas",
-      "gun-crazy-show-offs-wreckas"
-    ],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
     ],
     "detachment_rule_ids": [
-      "wreckin-and-lootin-wreckas"
+      "wreckin-and-lootin-orks"
     ]
   },
   {
     "id": "wurrband",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "89c022fe-0f5b-4ff4-9b10-a17665571fdb"
+      }
+    ],
     "name": "Wurrband",
     "faction_id": "orks",
-    "detachment_rule_id": "powers-of-da-waaagh-wurrband",
-    "enhancement_ids": [
-      "da-krunch-wurrband",
-      "eadbanger-wurrband",
-      "warphead-wurrband"
-    ],
-    "stratagem_ids": [],
+    "enhancement_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "codex-orks"
+      "dataslate": "launch"
     },
     "detachment_points": 1,
     "force_dispositions": [
       "disruption"
     ],
     "detachment_rule_ids": [
-      "powers-of-da-waaagh-wurrband"
+      "powers-of-da-waaagh-orks"
     ]
   }
 ]

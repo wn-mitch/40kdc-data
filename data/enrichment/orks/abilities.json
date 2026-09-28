@@ -1,84 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "biged-bossbunka"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beastboss"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "waaagh-energy",
+    "ability_id": "waaagh-energy-orks",
     "name": "Waaagh! Energy (Psyker level 1)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -102,7 +24,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "da-jump-psychic",
+    "ability_id": "da-jump-orks",
     "name": "Da Jump (Psychic level 1)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -185,139 +107,7 @@
     }
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deff-dread"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "drive-by-dakka",
-    "name": "Drive-by Dakka",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "4956f0d9d52c221a8a893f3d43e739f6774c39ade38b94567e8d1fe4f6a3f03c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "within",
-            "parameters": {
-              "subject": "defender",
-              "of": "this-unit",
-              "range": {
-                "inches": 9
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1,
-          "weapon_type": "ranged"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "warbikers"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deffkoptas"
-    ],
-    "ability_type": "core",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "deff-from-above",
+    "ability_id": "deff-from-above-orks",
     "name": "Deff From Above",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -374,170 +164,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dok-s-toolz",
-    "name": "Dok’s Toolz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "e4b360f0b9ab91d0441f948615317740b876b78471a5bfe72251beb31916b320",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "feel-no-pain",
-        "target": "this-unit",
-        "modifier": {
-          "threshold": 5
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "painboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "hold-still-and-say-aargh",
-    "name": "Hold Still and Say ‘Aargh!’",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "efbc1011d0cb98e1f6476f01649d74da7c1e62cc74cdacf350113c44553a7e87",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D6"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "painboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "grot-orderly",
-    "name": "Grot Orderly",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "308e1747c7fd3b4f3f75cd4b80b289ee0bf543085d48e41b0c6e059d4f37fa77",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "return-models",
-        "target": "this-unit",
-        "modifier": {
-          "count": "D3"
-        }
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "painboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "shooty-power-trip",
-    "name": "Shooty Power Trip",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d6f4799d43027f80772ccaf582847b2b78cc2562db3230276d83c325c29129d6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "mortal-wounds",
-          "target": "defender",
-          "modifier": {
-            "count": "D3"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "killa-kans"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "auto-generated, partial",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "more-dakka",
+    "ability_id": "more-dakka-orks",
     "name": "More Dakka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -594,7 +221,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "shokk-boosta",
+    "ability_id": "shokk-boosta-orks",
     "name": "Shokk-boosta",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -684,64 +311,7 @@
     }
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beastboss-on-squigosaur"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "wild-ride",
-    "name": "Wild Ride",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "21778fa666eac1f9dada23fea48d8c9f879a9c9754e708b4475d976192b094b6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ignore-modifiers",
-      "target": "this-unit",
-      "modifier": {
-        "what": "rolls",
-        "rolls": [
-          "all"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "squighog-boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "bomb-squig",
+    "ability_id": "bomb-squig-orks",
     "name": "Bomb Squig",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -761,6 +331,7 @@
       "duration": "one-use"
     },
     "unit_ids": [
+      "kommandos",
       "squighog-boyz"
     ],
     "ability_type": "unit",
@@ -768,7 +339,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "might-is-right",
+    "ability_id": "might-is-right-orks",
     "name": "Might is Right",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -829,92 +400,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dead-brutal",
-    "name": "Dead Brutal",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "0c8a398ed7a39ad0cad079e891544add67263a4a42576d73c34f5009b9e9ccf5",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "D",
-        "operation": "set",
-        "value": 3
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "warboss-in-mega-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "blastajet-attack-run",
-    "name": "Blastajet Attack Run",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "97c8ea7dd70287aed889e96ddd5a2320493b01bd61ae052b64c43b1cbec3928e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "FLY"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wazbom-blastajet"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "blastajet-force-field",
+    "ability_id": "blastajet-force-field-orks",
     "name": "Blastajet Force Field",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -956,288 +442,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "battlewagon"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "firing-deck-11",
-    "name": "Firing Deck 11",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 11
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "battlewagon"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "ramshackle-but-rugged",
-    "name": "Ramshackle but Rugged",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "a6a526491646068b4ecd0f94e673585e12dfb490e296b06a710444b7c24fda58",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "attacker",
-      "modifier": {
-        "stat": "AP",
-        "operation": "worsen",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "battlewagon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "ard-case",
-    "name": "’Ard Case",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "599438668cbaa519a6bc22dd760b8b3a9134a39d3144af4ce6cdb883ea0821a8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "T",
-            "operation": "add",
-            "value": 2
-          }
-        },
-        {
-          "type": "rule-state",
-          "target": "this-model",
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "ability",
-            "rule": "firing-deck"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "battlewagon"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "boss-snikrot"
-    ],
-    "ability_type": "core",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boss-snikrot"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boss-snikrot"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "red-skull-kommandos",
-    "name": "Red Skull Kommandos",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c6ba6789ab17acce0cb6cb080f0e6e3d7325b4f43006e7eb61c6380c73d62288",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "benefit-of-cover"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boss-snikrot"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "kunnin-infiltrator",
+    "ability_id": "kunnin-infiltrator-orks",
     "name": "Kunnin’ Infiltrator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1310,36 +515,7 @@
     }
   },
   {
-    "ability_id": "clankin-forward",
-    "name": "Clankin’ Forward",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "2f8d575a745cb7945c07196e0254b5f70bad97e0b984df8af2c3072d7bc71ed6",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "morkanaut"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "big-an-shooty",
+    "ability_id": "big-an-shooty-orks",
     "name": "Big an’ Shooty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1378,7 +554,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "prophet-of-da-great-waaagh",
+    "ability_id": "prophet-of-da-great-waaagh-orks",
     "name": "Prophet of Da Great Waaagh!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1445,7 +621,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-orks",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1473,7 +649,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "trophy-hunters",
+    "ability_id": "trophy-hunters-orks",
     "name": "Trophy Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1503,7 +679,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "bomb-squigs",
+    "ability_id": "bomb-squigs-orks",
     "name": "Bomb Squigs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1617,129 +793,7 @@
     }
   },
   {
-    "ability_id": "attached-unit",
-    "name": "Attached Unit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "f01a9ad59fbca0fa2ffaa2f81ff778004eb8d2956ee7f090724c075622f6932b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "army-rule",
-            "target": "this-unit",
-            "modifier": {
-              "rule": "attachment",
-              "led_by": "ministorum-priest"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "attachment",
-              "parameters": {
-                "subject": "this-unit",
-                "role": "led",
-                "with": {
-                  "all_of": [
-                    "MINISTORUM PRIEST"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": {
-                "level": "model",
-                "all_of": [
-                  "MINISTORUM PRIEST"
-                ]
-              },
-              "modifier": {
-                "ability": "scouts",
-                "value": 6
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "breaka-boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "deadly-demise-2d6",
-    "name": "Deadly Demise 2D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "2D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stompa"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "waaagh-effigy-aura",
+    "ability_id": "waaagh-effigy-orks",
     "name": "Waaagh! Effigy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1752,7 +806,7 @@
       "type": "ability-grant",
       "target": "this-model",
       "modifier": {
-        "ability": "riled-up",
+        "ability": "riled-up-orks",
         "rules_bundle": true
       }
     },
@@ -1768,89 +822,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "stompin-forward",
-    "name": "Stompin’ Forward",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stompa"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "tank-hunters",
-    "name": "Tank Hunters",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "8224dc2ac3fb59013cc15ca4bbc47f8d171eef8f7560f26938963d3864b7e2b3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tankbustas"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "pulsa-rokkit",
+    "ability_id": "pulsa-rokkit-orks",
     "name": "Pulsa Rokkit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1944,272 +916,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "sneaky-gitz",
-    "name": "Sneaky Gitz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d7ea9c24f8544d8b37bbd3a369df7b0c422180b9a9e64a971f77c265a32f05fa",
-    "version": "2025-q3",
-    "effect": {
-      "type": "rule-state",
-      "target": "this-model",
-      "modifier": {
-        "direction": "suppressed",
-        "rule_kind": "core-rule",
-        "rule": "fire-overwatch"
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "kommandos"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "distraction-grot",
-    "name": "Distraction Grot",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "a2e458edf17735c470e63ab21cae10467a399137c8e2af017bac431e9304dae9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "invulnerable-save",
-        "target": "this-model",
-        "modifier": {
-          "invuln_sv": 5
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "kommandos"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "patrol-squad",
-    "name": "Patrol Squad",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "34db0c52e314cee37a8714aed052a063d6ca9e292ea3eb2cea5378d3fbeb65d0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "combat-squads"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kommandos"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "get-da-good-bitz",
-    "name": "Get Da Good Bitz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
-    "version": "2025-q3",
-    "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "bodyguard",
-    "name": "Bodyguard",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "e56db2705be2b6115c2be103a3fb29a15b4ba0b7cfb41235cd86ba5dfc77499f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "attachment",
-        "max": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "firing-deck-12",
-    "name": "Firing Deck 12",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 12
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "trukk"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "grot-riggers",
-    "name": "Grot Riggers",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "4b19112f35e85157ac580964d95c0983124bc05f5573dd530567b407558b2e6c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "trukk"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "sawbonez",
-    "name": "Sawbonez",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "303aedce98dc24981dc1df03774e488cf64c49981246f1c4c76b76755f719851",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "target_kind": "model",
-          "keywords": [
-            "BEAST SNAGGA",
-            "CHARACTER"
-          ],
-          "range_inches": 3,
-          "selection_limit": {
-            "count": 1,
-            "period": "turn"
-          }
-        },
-        "effect": {
-          "type": "heal",
-          "target": "selected-unit",
-          "modifier": {
-            "amount": 3
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "painboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "big-an-stompy",
+    "ability_id": "big-an-stompy-orks",
     "name": "Big an’ Stompy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2239,181 +946,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "splat",
-    "name": "Splat!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "9df2238d459d18d647601a64b00e4d60f3e1c5bf3e0bca17cc94eea9d644dc29",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "strength",
-                "parameters": {
-                  "subject": "defender",
-                  "below": "starting"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "ones"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mek-gunz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "full-throttle-kult-of-speed",
-    "name": "Full Throttle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormboyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "gun-crazy-show-offs",
-    "name": "Gun-crazy Show-offs",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "73d8b11166522cdea8fde1446c2ade9e8af56a712b2041facfcc034097dab3d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "closest",
-        "parameters": {
-          "subject": "defender",
-          "among": "eligible-targets"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-model",
-        "modifier": {
-          "stat": "A",
-          "operation": "set",
-          "value": 4,
-          "weapon_name": "snazzgun"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "flash-gitz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "ammo-runt",
-    "name": "Ammo Runt",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "949421c089b8b49d18505828e5b39dfd3cf69d24bc928cf23ea7ae5c5e902455",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "Lethal Hits"
-        ],
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "flash-gitz"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1
-    }
-  },
-  {
-    "ability_id": "boom-bomb",
+    "ability_id": "boom-bomb-orks",
     "name": "Boom Bomb",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2523,149 +1056,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "piston-driven-brutality",
-    "name": "Piston-driven Brutality",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "299d6290bfaba067059ba85ead0d7664542bde121c33457e918beaf292a936f7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deff-dread"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beast-snagga-boyz"
-    ],
-    "ability_type": "core",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "beastboss",
-    "name": "Beastboss",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "f848efe9e045994bcd82b2a220cbe3b446ae97725e685916ae8117c0251df5e9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beastboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "ferocious-rage",
-    "name": "Ferocious Rage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "2e58742bfb08f7f3e0f82df9a6643f9a7a926a663fc096a532f8e907f2c6a702",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "attack_type": "melee"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "abilities": [
-            "Devastating Wounds"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "beastboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "dakkastorm-kult-of-speed",
+    "ability_id": "dakkastorm-kult-of-speed-orks",
     "name": "Dakkastorm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2718,7 +1109,7 @@
     }
   },
   {
-    "ability_id": "fix-dat-armour-up",
+    "ability_id": "fix-dat-armour-up-orks",
     "name": "Fix Dat Armour Up",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2766,7 +1157,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "kustom-force-field",
+    "ability_id": "kustom-force-field-orks",
     "name": "Kustom Force Field",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2795,75 +1186,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "grot-oiler",
-    "name": "Grot Oiler",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "393e9bbad80cab9497dd01950d3198696c22f4d28bfa69630d5c456b5967dcd3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": "D3"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "big-mek-in-mega-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "monster-hunters",
-    "name": "Monster Hunters",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "60eb4507751e635a3d516cf7ae9bc151b08bfed35efbc0b1b8ba039294a2c4d4",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beast-snagga-boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "speedboss",
+    "ability_id": "speedboss-orks",
     "name": "Speedboss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2905,15 +1228,13 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "deffkilla-wartrike"
-    ],
+    "unit_ids": [],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "orks"
   },
   {
-    "ability_id": "fuel-mixa-grot",
+    "ability_id": "fuel-mixa-grot-orks",
     "name": "Fuel-mixa Grot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2942,136 +1263,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "know-wotz",
-    "name": "Know-wotz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "04d64c0a6c150ec2bb14cccdf21f678d3af3c34c0587ced38092b4f0eefbc04e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ORKS",
-              "VEHICLE"
-            ]
-          },
-          "range": {
-            "inches": 3
-          }
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-model",
-        "modifier": {
-          "ability": "lone-operative"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "mek"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "mekaniak",
-    "name": "Mekaniak",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "345141a400a639ac717d073a168c3c9b14568ecbead48a476754bcadcfa45341",
-    "version": "2025-q3",
-    "effect": {
-      "type": "select-units",
-      "selector": {
-        "max_count": 1,
-        "owner": "friendly",
-        "keywords": [
-          "ORKS",
-          "VEHICLE"
-        ],
-        "target_kind": "model",
-        "range_inches": 3,
-        "selection_limit": {
-          "count": 1,
-          "period": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "heal",
-            "target": "selected-unit",
-            "modifier": {
-              "amount": "D3"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "mek"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "usage": {
-      "frequency": "once-per-turn",
-      "per": "model"
-    },
-    "community_notes": "[APPROX] the hit bonus lasts until the start of your next Movement phase; each model can only be selected once per turn",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "one-last-kill",
+    "ability_id": "one-last-kill-orks",
     "name": "One Last Kill",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3166,7 +1358,7 @@
     }
   },
   {
-    "ability_id": "da-bigger-dey-iz",
+    "ability_id": "da-bigger-dey-iz-orks",
     "name": "Da Bigger Dey Iz...",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3209,7 +1401,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "super-runts",
+    "ability_id": "super-runts-orks",
     "name": "Super Runts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3225,7 +1417,7 @@
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "riled-up",
+            "ability": "riled-up-orks",
             "rules_bundle": true
           }
         },
@@ -3274,66 +1466,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "special-dose",
-    "name": "Special Dose",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "b9148af138d53752324acb98b09fef980f38efaaeeea12416c990a32cf658000",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "M",
-        "operation": "add",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "zodgrod-wortsnagga"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "runtherd",
-    "name": "Runtherd",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "bff878392d274ce6403c093d603278cb9938caceeb5c15eeea5678e4e128ba3c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "T",
-        "operation": "set",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "gretchin"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "thievin-scavengers",
+    "ability_id": "thievin-scavengers-orks",
     "name": "Thievin’ Scavengers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3382,218 +1515,7 @@
     }
   },
   {
-    "ability_id": "deranged-snotling-assault",
-    "name": "Deranged Snotling Assault",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "7b76922f9d29bfca1cfaab985ebc9ac7e31e04664fdc6f0d71ae906fdc945662",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": "selected-unit",
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "big-mek-with-shokk-attack-gun"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "grot-assistant",
-    "name": "Grot Assistant",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "2631e08460d42c57469604c5be341e5e1b5ad7a72765ba5221679ce09297b8b7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "re-roll",
-      "target": "this-model",
-      "modifier": {
-        "roll": "attacks",
-        "result_scope": "any-result",
-        "weapon_name": "shokk attack gun"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "big-mek-with-shokk-attack-gun"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "spirit-of-gork-psychic",
-    "name": "Spirit of Gork (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "6d53da0c138d2c3b9529c3dec6e8678f8a7ad85cdccf6e7a93ad4becfbacd017",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "owner": "friendly",
-          "max_count": 1,
-          "keywords": [
-            "ORKS"
-          ],
-          "range_inches": 12
-        },
-        "effect": {
-          "type": "dice-table",
-          "dice": "D6",
-          "outcomes": [
-            {
-              "results": [
-                1
-              ],
-              "effect": {
-                "type": "mortal-wounds",
-                "target": "this-model",
-                "modifier": {
-                  "count": "D3"
-                }
-              }
-            },
-            {
-              "results": [
-                2,
-                3,
-                4,
-                5
-              ],
-              "effect": {
-                "type": "stat-modifier",
-                "target": "selected-unit",
-                "modifier": {
-                  "stat": "S",
-                  "operation": "add",
-                  "value": 1,
-                  "weapon_type": "melee"
-                }
-              }
-            },
-            {
-              "results": [
-                6
-              ],
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "stat-modifier",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "stat": "S",
-                      "operation": "add",
-                      "value": 1,
-                      "weapon_type": "melee"
-                    }
-                  },
-                  {
-                    "type": "weapon-ability-grant",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "abilities": [
-                        "Lethal Hits"
-                      ],
-                      "weapon_type": "melee"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "kill-rig"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "da-boss-ladz",
-    "name": "Da Boss’ Ladz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "b34a8875ecfc4fe3bceb6e2bcdd3c708731a41e1c042e2ef37ff4f4900ca421f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "wound",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "nobz"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "thundering-stampede",
+    "ability_id": "thundering-stampede-orks",
     "name": "Thundering Stampede (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3641,54 +1563,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "single-minded-predator",
-    "name": "Single-minded Predator",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "8d1d2843fcd7dde1d78a7c63ba0ff0e6e929102b1c3d0e347c354b787c980c4c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "fire-overwatch",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "heroic-intervention",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "beastboss-on-squigosaur"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "krumpin-time",
+    "ability_id": "krumpin-time-orks",
     "name": "Krumpin’ Time",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3739,34 +1614,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "firing-deck-20",
-    "name": "Firing Deck 20",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 20
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "gargantuan-squiggoth"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "gargantuan",
+    "ability_id": "gargantuan-orks",
     "name": "Gargantuan",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3791,10 +1639,11 @@
       "gargantuan-squiggoth"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "orks"
   },
   {
-    "ability_id": "walking-bastion",
+    "ability_id": "walking-bastion-orks",
     "name": "Walking Bastion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3840,10 +1689,11 @@
       "gargantuan-squiggoth"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "orks"
   },
   {
-    "ability_id": "burna-bomb",
+    "ability_id": "burna-bomb-orks",
     "name": "Burna Bomb",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3982,65 +1832,7 @@
     }
   },
   {
-    "ability_id": "on-da-hunt",
-    "name": "On Da Hunt",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d3c6ba2dc6fb9fe42eaa7fa7276782498d840d2032cc9caff342fe1131b6c226",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hunta-rig"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "da-biggest-and-da-best",
-    "name": "Da Biggest and da Best",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "f7dba0159cb69ccd25ca9e2e7bbf2a33a3279d6a3598d16a48221953e50c7f2d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 4
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "warboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "strafing-run",
+    "ability_id": "strafing-run-orks",
     "name": "Strafing Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4088,79 +1880,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "speed-freeks",
-    "name": "SPEED FREEKS",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ed82e48d888a880a3ba3d75fddde1cf2f23a59b1681d77dcb9a373f1dfc16c64",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "attachment",
-          "led_by": "warbikers-leaders"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wartrakks"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "outflank",
-    "name": "Outflank",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "battlefield",
-        "from": "strategic-reserves",
-        "placement": "deployment-zone"
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "warbuggies"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "set-up",
-      "filter": {
-        "from": "strategic-reserves"
-      }
-    }
-  },
-  {
-    "ability_id": "waaagh",
+    "ability_id": "waaagh-orks",
     "name": "Waaagh!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4250,12 +1970,16 @@
     "ability_type": "faction",
     "behavior": "activated",
     "unit_ids": [
-      "bannernob"
+      "bannernob",
+      "nazdreg",
+      "rukkatrukk-squigbuggies",
+      "runtherd",
+      "wartrakks"
     ],
     "community_notes": "community-authored from 10e source (provisional 11e); see #21. The source requires Army Faction ORKS; faction_id and explicit unit_ids provide the static faction and ability-possession boundary because the trigger schema has no honest Army Faction predicate."
   },
   {
-    "ability_id": "ramshackle-cover",
+    "ability_id": "ramshackle-cover-orks",
     "name": "Ramshackle Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4297,56 +2021,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "shoutin-pole-aura",
-    "name": "Shoutin’ Pole (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "1411cded056ae49afcbb8800f59f7f854bd11d467fcf12752d3c9b5598054c3b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "ORKS"
-          ]
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": {
-          "owner": "friendly",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "stat": "Ld",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "biged-bossbunka"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "fortification",
+    "ability_id": "fortification-orks",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4544,1046 +2219,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "eager-for-the-fight",
-    "name": "Eager for the Fight",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "1fdfbdd676bbf1cb12fa08c86ec5bcd92790c2c2689c56570ff73508aec81522",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "detachment",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "subject": "event-subject",
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "event-subject",
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "event-subject",
-            "modifier": {
-              "roll": "advance",
-              "result_scope": "any-result"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "event-subject",
-            "modifier": {
-              "roll": "charge",
-              "result_scope": "any-result"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "disembarked",
-      "subject": {
-        "owner": "friendly"
-      }
-    }
-  },
-  {
-    "ability_id": "mount-up-ladz-blitz-brigade",
-    "name": "Mount Up, Ladz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "f3739a739cc1cd884dff5fd247452cfe0d68c46143ecbf0993dc10c9094d740f",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
-          },
-          {
-            "type": "within",
-            "parameters": {
-              "of": "selected-unit",
-              "range": {
-                "inches": 6
-              },
-              "wholly": true
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "embark",
-          "allow": true,
-          "into": "selected-unit"
-        }
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      }
-    }
-  },
-  {
-    "ability_id": "armoured-duellists-blitz-brigade",
-    "name": "Armoured Duellists",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "02a013eaf80f33c89355dcaaf93ffa66847ab59fae62e5b41d46334b3f666daa",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-model",
-            "modifier": {
-              "roll": "hit",
-              "weapon_type": "ranged",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "this-model",
-            "modifier": {
-              "roll": "wound",
-              "weapon_type": "ranged",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "community_notes": "community-authored from 11e source"
-  },
-  {
-    "ability_id": "impervious-blitz-brigade",
-    "name": "Impervious",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "08493896375ee773c38b9c92282a87caf5ccdcba79ab0a89c9345c411d3a49cb",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
-          },
-          "comparison": "greater-than",
-          "right": {
-            "of": "defender",
-            "stat": "T"
-          }
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "defender",
-        "modifier": {
-          "roll": "wound",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "community_notes": "community-authored from 11e source"
-  },
-  {
-    "ability_id": "mekanised-brutality-blitz-brigade",
-    "name": "Mekanised Brutality",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "700895df2913861f2386f69560a060479a3f2eda2c7ca8bfe15b1322d17893d2",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "any_of": [
-                "BATTLEWAGON",
-                "KILL RIG",
-                "HUNTA RIG"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "subject": "this-unit",
-            "event": "move-ended",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "selected",
-      "filter": {
-        "to": "move"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "run-em-down-blitz-brigade",
-    "name": "Run ’em Down",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d0995f08b14dc74fbf3b4c3b5112f80cb5118b55e35d532efaf7674c113ff4de",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "any_of": [
-                "BATTLEWAGON",
-                "KILL RIG",
-                "HUNTA RIG"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "permission",
-            "target": "this-model",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": true,
-              "after": [
-                "advance"
-              ]
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "owned-by",
-                  "parameters": {
-                    "owner": "friendly"
-                  }
-                },
-                {
-                  "type": "has-keyword",
-                  "parameters": {
-                    "subject": "defender",
-                    "all_of": [
-                      "ORKS"
-                    ]
-                  }
-                },
-                {
-                  "type": "has-keyword",
-                  "parameters": {
-                    "subject": "defender",
-                    "any_of": [
-                      "VEHICLE",
-                      "MONSTER"
-                    ]
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "select-units",
-              "selector": {
-                "max_count": 2,
-                "owner": "friendly",
-                "keywords": [
-                  "ORKS"
-                ],
-                "within_inches": 6,
-                "eligibility": {
-                  "operator": "and",
-                  "operands": [
-                    {
-                      "type": "has-keyword",
-                      "parameters": {
-                        "any_of": [
-                          "VEHICLE",
-                          "MONSTER"
-                        ]
-                      }
-                    },
-                    {
-                      "operator": "not",
-                      "operands": [
-                        {
-                          "type": "same-unit",
-                          "parameters": {
-                            "as": "this-unit"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              },
-              "effect": {
-                "type": "permission",
-                "target": "selected-unit",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": true,
-                  "after": [
-                    "advance"
-                  ]
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "selected",
-      "filter": {
-        "to": "move"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "yooz-in-trouble-now-blitz-brigade",
-    "name": "Yooz in Trouble Now",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c4b1783cf586f1d0ddc81484944c48145f8536a18459af5eafb395161d3894ab",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "any_of": [
-                "BATTLEWAGON",
-                "HUNTA RIG",
-                "KILL RIG"
-              ]
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "this-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success"
-              },
-              "window": "phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "select-units",
-            "selector": {
-              "owner": "friendly",
-              "count": 1,
-              "keywords": [
-                "ORKS",
-                "INFANTRY"
-              ],
-              "eligibility": {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "embarked",
-                  "with": "this-unit"
-                }
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "move",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "move_type": "disembark"
-                  }
-                },
-                {
-                  "type": "move",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "move_type": "surge",
-                    "distance": "D6"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "type": "no-effect"
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "attacks-resolved",
-      "subject": {
-        "owner": "enemy"
-      },
-      "filter": {
-        "kind": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "runnin-boots-blitz-brigade",
-    "name": "Runnin’ Boots",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "80bae2a76a1ea710408350b2b0f099093dfa7b96a25f100fd317db47d1ef685a",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "enhancement",
-    "behavior": "passive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "CHARACTER"
-              ]
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "disembarked",
-              "window": "turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "charge",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "community_notes": "community-authored from 11e source"
-  },
-  {
-    "ability_id": "blitzkaptin-blitz-brigade",
-    "name": "Blitzkaptin",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "baea582668e4635ad918916d54b8cf9e87ec7504a654b425beca3a5da7dc66cc",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "enhancement",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "CHARACTER"
-              ]
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "on-battlefield"
-                }
-              },
-              {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "unit-state",
-                    "parameters": {
-                      "state": "embarked"
-                    }
-                  },
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "type": "unit-state",
-                        "parameters": {
-                          "state": "in-strategic-reserves"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "has-keyword",
-              "parameters": {
-                "subject": "defender",
-                "all_of": [
-                  "ORKS"
-                ]
-              }
-            },
-            {
-              "type": "has-keyword",
-              "parameters": {
-                "subject": "defender",
-                "all_of": [
-                  "VEHICLE"
-                ]
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "select-units",
-              "selector": {
-                "owner": "friendly",
-                "max_count": 3,
-                "keywords": [
-                  "ORKS",
-                  "VEHICLE"
-                ]
-              },
-              "effect": {
-                "type": "choice",
-                "options": [
-                  {
-                    "type": "set-up",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "to": "battlefield",
-                      "from": "battlefield",
-                      "placement": "deployment-zone"
-                    }
-                  },
-                  {
-                    "type": "set-up",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "to": "strategic-reserves",
-                      "from": "battlefield",
-                      "ignore_limits": true
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "type": "no-effect"
-            },
-            {
-              "type": "no-effect"
-            },
-            {
-              "type": "set-up",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "ORKS",
-                  "VEHICLE"
-                ]
-              },
-              "modifier": {
-                "to": "strategic-reserves",
-                "ignore_limits": true
-              }
-            }
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "deployment-ended"
-    }
-  },
-  {
-    "ability_id": "supercharged-squig-oil-blitz-brigade",
-    "name": "Supercharged Squig Oil",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "a88b8b2c1328e9ea0ed4db082f3f2da0bec88690546d42fc8f369ae9dd6905c6",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "enhancement",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "all_of": [
-            "MEK"
-          ]
-        }
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "has-keyword",
-          "parameters": {
-            "subject": "defender",
-            "all_of": [
-              "VEHICLE"
-            ]
-          }
-        },
-        "effect": {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "charge",
-            "result_scope": "any-result"
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "used",
-      "subject": "this-model",
-      "filter": {
-        "kind": "ability",
-        "id": "mekaniak"
-      }
-    }
-  },
-  {
-    "ability_id": "tuff-git-blitz-brigade",
-    "name": "Tuff Git",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "6764833e3bca70287adfc013ddde05f7478ba2ad3a5724236ee3ccb58661c96c",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "orks",
-    "detachment_id": "blitz-brigade",
-    "ability_type": "enhancement",
-    "behavior": "reactive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "CHARACTER"
-              ]
-            }
-          },
-          {
-            "type": "unit-state",
-            "parameters": {
-              "state": "battle-shocked"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "state-change",
-        "target": "this-unit",
-        "modifier": {
-          "state": "battle-shocked",
-          "set": false
-        }
-      }
-    },
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "disembarked",
-              "window": "turn"
-            }
-          },
-          {
-            "type": "unit-state",
-            "parameters": {
-              "state": "battle-shocked"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "community_notes": "community-authored from 11e source"
-  },
-  {
-    "ability_id": "try-dat-button-dread-mob",
+    "ability_id": "try-dat-button-orks",
     "name": "Try Dat Button!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5695,7 +2331,7 @@
     "community_notes": "[APPROX] Random D6 table (1-2 Sustained Hits 1, 3-4 Lethal Hits, 5-6 improve AP by 2 on a Critical Wound) flattened to a choice; the AP option's Critical Wound-only rider, the [HAZARDOUS] rider for deliberately selecting an option, and the two-source Hazardous fail-on-1-or-2 escalation are dropped. Full rule in raw-text store."
   },
   {
-    "ability_id": "waaagh-banner",
+    "ability_id": "waaagh-banner-orks",
     "name": "Waaagh! Banner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5725,116 +2361,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dakkablitz",
-    "name": "Dakkablitz",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "0bf6dd3d22ac4606ef9f08272ebc085f874f6be2c588580878df50eaf86f3066",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-model",
-        "modifier": {
-          "stat": "A",
-          "operation": "add",
-          "value": 6,
-          "weapon_name": "blitzkannon"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "big-mek-dakkarig"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "breakin-heads",
-    "name": "Breakin’ Heads",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "7ef6d88329c8786201ea11466bf17b3398e12fb700db2cd3e94038199841e05e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "Sustained Hits"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "bigboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "somethin-to-prove",
-    "name": "Somethin’ to Prove",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "021c079b6383a287f5d84917095d00271c7bc2057400c915a286a95b56e8fa9d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "this-model",
-      "modifier": {
-        "roll": "charge",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "bigboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "indiscriminate-detonations",
+    "ability_id": "indiscriminate-detonations-orks",
     "name": "Indiscriminate Detonations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5901,151 +2428,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "fixit-da-grot",
-    "name": "Fixit da Grot",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "7c1c2353ae70eb17f99e9182649f7532186858c88a8fd9cdaca0ccf3d1dd7287",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": "D3"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wazdakka-gutsmek"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "throttlerokkit-shokka-engine",
-    "name": "Throttlerokkit Shokka Engine",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "1463b2f4a9a3aac388ab9cf84ceeb4144565ec97c8bc9e166342ec850e84ee09",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "scope": "unit",
-        "select": "command-phase",
-        "options": [
-          {
-            "name": "Turbo Engine",
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "turbo-engine"
-              }
-            }
-          },
-          {
-            "name": "Shokk Attack Engine",
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "shokk-attack-engine"
-              }
-            }
-          },
-          {
-            "name": "Pulse Jet",
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "pulse-jet"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "unit_ids": [
-      "wazdakka-gutsmek"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "aerial-manoeuvres",
-    "name": "Aerial Manoeuvres",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "b71367d31b367e489c12795c7a2707a9e2ef4a1c2e5eb76586d717d3cb1dc5e1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move",
-      "target": "this-model",
-      "modifier": {
-        "move_type": "normal",
-        "distance": 6
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "deffkoptas"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "ammo-runts",
+    "ability_id": "ammo-runts-orks",
     "name": "Ammo Runts (Once per battle, per unit)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6135,7 +2518,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "arrogant-invulnerability",
+    "ability_id": "arrogant-invulnerability-orks",
     "name": "Arrogant Invulnerability",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6165,7 +2548,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "beast-snagga-following",
+    "ability_id": "beast-snagga-following-orks",
     "name": "Beast Snagga Following",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6237,7 +2620,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "beastscent-psychic",
+    "ability_id": "beastscent-orks",
     "name": "Beastscent",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6355,76 +2738,7 @@
     }
   },
   {
-    "ability_id": "big-spender",
-    "name": "Big Spender",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "75470ae7d60d0825dc92fede22459f19ea6ab9aa50eabea35cadaa0114122de4",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "objective": {}
-                  },
-                  "range": "objective-control"
-                }
-              },
-              {
-                "type": "within",
-                "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
-                  },
-                  "range": "objective-control"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-model",
-        "modifier": {
-          "stat": "AP",
-          "operation": "add",
-          "value": 1,
-          "weapon_type": "ranged"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "flash-gitz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "blitz-dem-gitz",
+    "ability_id": "blitz-dem-gitz-orks",
     "name": "Blitz Dem Gitz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6485,260 +2799,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "bomb-squig-kommandos",
-    "name": "Bomb Squig",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "57e774a84e90f6a76f15d76f464abaa1bd10dc865e60709540f832bdff49eb0d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "battle-started"
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "this-unit",
-            "modifier": {
-              "pool": "bomb-squig-token",
-              "amount": 1
-            }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "move-ended",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "phase-is",
-                  "parameters": {
-                    "phase": "movement"
-                  }
-                },
-                {
-                  "type": "player-turn-is",
-                  "parameters": {
-                    "turn": "your-turn"
-                  }
-                }
-              ]
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "within",
-              "parameters": {
-                "of": {
-                  "owner": "enemy",
-                  "visible": true
-                },
-                "range": {
-                  "inches": 12
-                }
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "dice-gated",
-                  "dice": "D6",
-                  "threshold": 3,
-                  "comparison": "gte",
-                  "on_success": {
-                    "type": "mortal-wounds",
-                    "target": "defender",
-                    "modifier": {
-                      "count": "D3"
-                    }
-                  }
-                },
-                {
-                  "type": "resource-spend",
-                  "target": "this-unit",
-                  "modifier": {
-                    "pool": "bomb-squig-token",
-                    "amount": 1
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "kommandos"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "unit"
-    }
-  },
-  {
-    "ability_id": "bomb-squig-squighog-boyz",
-    "name": "Bomb Squig",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "6253c016c363fc45998995c9c189d04bf0b7932190609bc3f3b4b4b5d5bfd61d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 3,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              }
-            }
-          },
-          "modifier": {
-            "count": "D3"
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "squighog-boyz"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "bombdakka-support",
-    "name": "Bombdakka Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "a94083bd50ebda093185eeb28fb526320628e6bf3f14286ae8f64daa332d8a69",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "SPEED FREEKS"
-            ],
-            "none_of": [
-              "WARTRAKK"
-            ]
-          },
-          "range": {
-            "inches": 3
-          },
-          "models": "every"
-        }
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "lone-operative"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wartrakks"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "boss-armour-runt",
-    "name": "Boss Armour Runt",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "fd16269fd50509af4035e43286d9bb8f106f4c5344e16bee38d4e36e50f5890f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-model",
-        "modifier": {
-          "roll": "hit",
-          "weapon_type": "ranged",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "warboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "boss-of-da-hunt",
+    "ability_id": "boss-of-da-hunt-orks",
     "name": "Boss of da Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6810,7 +2871,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "brutal-impact",
+    "ability_id": "brutal-impact-orks",
     "name": "Brutal Impact",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6855,7 +2916,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "bust-em",
+    "ability_id": "bust-em-orks",
     "name": "Bust 'Em",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6937,233 +2998,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "clever-know-wots",
-    "name": "Clever Know-wots",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "0a993eb0bf876b77447aa2901747dd3c309cd8eaf463e3b87b7b8d8cf11a700b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "select-units",
-      "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ORKS",
-          "VEHICLE"
-        ],
-        "range_inches": 3,
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "has-keyword",
-                  "parameters": {
-                    "subject": "recipient",
-                    "all_of": [
-                      "AIRCRAFT"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "has-keyword",
-                  "parameters": {
-                    "subject": "recipient",
-                    "all_of": [
-                      "TITANIC"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "target_kind": "model"
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "heal",
-            "target": "selected-unit",
-            "modifier": {
-              "amount": "D3"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "until-next-movement-phase"
-    },
-    "unit_ids": [
-      "mek"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": [
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "movement"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "movement"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "ability_id": "cork-dat-red-bit",
-    "name": "Cork Dat Red Bit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "4b92480b05b8ba6b2e409cdbb37f537d9331e7bf78ca74918e91b6d6a35863da",
-    "version": "2025-q3",
-    "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "battle-started"
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "this-unit",
-            "modifier": {
-              "pool": "grot-orderly-token",
-              "amount": 1
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "command"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "resource-spend",
-                "target": "this-unit",
-                "modifier": {
-                  "pool": "grot-orderly-token",
-                  "amount": 1
-                }
-              },
-              {
-                "type": "heal",
-                "target": "this-unit",
-                "modifier": {
-                  "amount": "D3",
-                  "per": "unit"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "painboy"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "unit"
-    }
-  },
-  {
-    "ability_id": "crude-surgery",
+    "ability_id": "crude-surgery-orks",
     "name": "Crude Surgery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7202,7 +3037,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dodge-dis",
+    "ability_id": "dodge-dis-orks",
     "name": "Dodge Dis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7232,7 +3067,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "downtrodden",
+    "ability_id": "downtrodden-orks",
     "name": "Downtrodden",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7269,7 +3104,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dread-ard",
+    "ability_id": "dread-ard-orks",
     "name": "Dread ’Ard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7297,7 +3132,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "drive-by-skorchin",
+    "ability_id": "drive-by-skorchin-orks",
     "name": "Drive-by Skorchin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7394,7 +3229,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "even-more-dakka",
+    "ability_id": "even-more-dakka-orks",
     "name": "Even More Dakka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7425,7 +3260,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "found-em",
+    "ability_id": "found-em-orks",
     "name": "Found ’Em!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7483,7 +3318,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "full-throttle",
+    "ability_id": "full-throttle-orks",
     "name": "Full Throttle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7505,7 +3340,6 @@
       "duration": "battle"
     },
     "unit_ids": [
-      "deffkilla-wartrike",
       "wazdakka-gutsmek"
     ],
     "ability_type": "unit",
@@ -7514,7 +3348,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "fully-loaded-butchery",
+    "ability_id": "fully-loaded-butchery-orks",
     "name": "Fully Loaded Butchery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7550,7 +3384,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "get-back-in-da-race",
+    "ability_id": "get-back-in-da-race-orks",
     "name": "Get Back in da Race!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7584,7 +3418,7 @@
             "type": "ability-grant",
             "target": "selected-unit",
             "modifier": {
-              "ability": "riled-up",
+              "ability": "riled-up-orks",
               "rules_bundle": true
             }
           }
@@ -7659,7 +3493,7 @@
     ]
   },
   {
-    "ability_id": "get-out-da-way",
+    "ability_id": "get-out-da-way-orks",
     "name": "Get Out da Way!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7700,62 +3534,7 @@
     }
   },
   {
-    "ability_id": "go-fer-da-waz-spot",
-    "name": "Go fer da Waz Spot",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c8e709581850ba8cf9aed33e8fc35a4470bf0fde20a1b90c04ac0de463d4bfdb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-model",
-        "modifier": {
-          "roll": "wound",
-          "weapon_type": "ranged",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "wazbom-blastajet"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "gut-hatch",
+    "ability_id": "gut-hatch-orks",
     "name": "Gut Hatch",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7812,7 +3591,7 @@
     }
   },
   {
-    "ability_id": "hardy-bioniks",
+    "ability_id": "hardy-bioniks-orks",
     "name": "Hardy Bioniks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7859,7 +3638,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "high-speed-carnage",
+    "ability_id": "high-speed-carnage-orks",
     "name": "High-speed Carnage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7920,7 +3699,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "idol-of-belligerence",
+    "ability_id": "idol-of-belligerence-orks",
     "name": "Idol of Belligerence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7933,7 +3712,7 @@
       "type": "ability-grant",
       "target": "event-subject",
       "modifier": {
-        "ability": "riled-up",
+        "ability": "riled-up-orks",
         "rules_bundle": true
       }
     },
@@ -7983,7 +3762,7 @@
     }
   },
   {
-    "ability_id": "intimidating-motivation",
+    "ability_id": "intimidating-motivation-orks",
     "name": "Intimidating Motivation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8126,7 +3905,7 @@
     ]
   },
   {
-    "ability_id": "keep-huntin",
+    "ability_id": "keep-huntin-orks",
     "name": "Keep Huntin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8203,8 +3982,7 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "beastboss",
-      "beastboss-on-squigosaur"
+      "beastboss"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
@@ -8268,7 +4046,7 @@
     ]
   },
   {
-    "ability_id": "krushin-impetus",
+    "ability_id": "krushin-impetus-orks",
     "name": "Krushin’ Impetus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8319,7 +4097,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "kustom-dakka",
+    "ability_id": "kustom-dakka-orks",
     "name": "Kustom Dakka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8351,7 +4129,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "madcap-artillery",
+    "ability_id": "madcap-artillery-orks",
     "name": "Madcap Artillery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8541,7 +4319,7 @@
     }
   },
   {
-    "ability_id": "mobbed",
+    "ability_id": "mobbed-orks",
     "name": "Mobbed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8674,7 +4452,7 @@
     }
   },
   {
-    "ability_id": "mobile-arsenal",
+    "ability_id": "mobile-arsenal-orks",
     "name": "Mobile Arsenal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8713,7 +4491,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "mobile-fortress",
+    "ability_id": "mobile-fortress-orks",
     "name": "Mobile Fortress",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8750,7 +4528,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "never-too-busy-to-fight",
+    "ability_id": "never-too-busy-to-fight-orks",
     "name": "Never Too Busy to Fight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8780,7 +4558,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "nowhere-to-hide",
+    "ability_id": "nowhere-to-hide-orks",
     "name": "Nowhere to Hide",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8820,75 +4598,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "out-from-da-shadows",
-    "name": "Out From da Shadows",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "b4eac012d060aeab16920a3426db776fc9921a6b8de219f9d21531d26d2713b0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "battle-round",
-            "parameters": {
-              "min": 1
-            }
-          },
-          {
-            "type": "unit-state",
-            "parameters": {
-              "state": "in-strategic-reserves"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "ingress"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "boss-snikrot"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "paired-krumpas",
+    "ability_id": "paired-krumpas-orks",
     "name": "Paired Krumpas",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8932,75 +4642,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "pillin-out",
-    "name": "Pillin’ Out!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "e982a6e8fb805152de5fe6eb187d68a9b9cf2f56566a21a438a0f3f363bf2e47",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "of": {
-            "owner": "enemy"
-          },
-          "range": {
-            "inches": 8
-          }
-        }
-      },
-      "effect": {
-        "type": "move",
-        "target": {
-          "owner": "friendly",
-          "state": "embarked"
-        },
-        "modifier": {
-          "move_type": "disembark"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "trukk"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "move-ended",
-      "subject": {
-        "owner": "enemy"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "pulse-jet",
+    "ability_id": "pulse-jet-orks",
     "name": "Pulse Jet",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9065,7 +4707,7 @@
     }
   },
   {
-    "ability_id": "push-dat-bit-back-in",
+    "ability_id": "push-dat-bit-back-in-orks",
     "name": "Push Dat Bit Back In",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9163,7 +4805,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "raucous-occupants",
+    "ability_id": "raucous-occupants-orks",
     "name": "Raucous Occupants",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9226,7 +4868,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "rokkit-barrage",
+    "ability_id": "rokkit-barrage-orks",
     "name": "Rokkit Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9293,7 +4935,7 @@
     }
   },
   {
-    "ability_id": "rokkit-charge",
+    "ability_id": "rokkit-charge-orks",
     "name": "Rokkit Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9375,7 +5017,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "runnin-wiv-da-herd",
+    "ability_id": "runnin-wiv-da-herd-orks",
     "name": "Runnin’ Wiv da Herd",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9452,7 +5094,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "shokk-attack-engine",
+    "ability_id": "shokk-attack-engine-orks",
     "name": "Shokk Attack Engine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9511,38 +5153,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "smashin-da-eads",
-    "name": "Smashin’ da ’Eads",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "6eda0919412864f41c729942fe0a6beb00df31c2878f8ca5d01c7b2556bb9431",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "this-model",
-      "modifier": {
-        "roll": "hit",
-        "weapon_type": "melee",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "bigboss"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "spiteful-power-trip",
+    "ability_id": "spiteful-power-trip-orks",
     "name": "Spiteful Power Trip",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9589,7 +5200,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "squig-barrage",
+    "ability_id": "squig-barrage-orks",
     "name": "Squig Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9682,59 +5293,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "support-bubble",
-    "name": "Support Bubble",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "3c49a4320364c3eaf5dc5af95a171447ad3c9a299f7d928bb437670a78e7a2aa",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "within",
-        "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ORKS",
-              "INFANTRY"
-            ],
-            "none_of": [
-              "BIG MEK WITH SHOKK ATTACK GUN"
-            ]
-          },
-          "range": {
-            "inches": 3
-          }
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-model",
-        "modifier": {
-          "abilities": [
-            "Lone Operative"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "big-mek-with-shokk-attack-gun"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "taktikal-know-wotz",
+    "ability_id": "taktikal-know-wotz-orks",
     "name": "Taktikal Know-wotz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9766,7 +5325,7 @@
               "modifier": {
                 "direction": "suppressed",
                 "rule_kind": "ability",
-                "rule": "found-em"
+                "rule": "found-em-orks"
               }
             },
             {
@@ -9775,7 +5334,7 @@
               "modifier": {
                 "direction": "suppressed",
                 "rule_kind": "ability",
-                "rule": "bomb-squig"
+                "rule": "bomb-squig-orks"
               }
             }
           ]
@@ -9797,7 +5356,7 @@
     }
   },
   {
-    "ability_id": "thatll-learn-ya",
+    "ability_id": "thatll-learn-ya-orks",
     "name": "That’ll Learn Ya",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9868,7 +5427,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "tide-of-muscle",
+    "ability_id": "tide-of-muscle-orks",
     "name": "Tide of Muscle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9925,7 +5484,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "tramplasquig-charge",
+    "ability_id": "tramplasquig-charge-orks",
     "name": "Tramplasquig Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -9962,7 +5521,7 @@
     }
   },
   {
-    "ability_id": "turbo-engine",
+    "ability_id": "turbo-engine-orks",
     "name": "Turbo Engine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10010,7 +5569,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "warpath-psychic-kill-rig",
+    "ability_id": "warpath-orks",
     "name": "Warpath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10086,7 +5645,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "warpath-psychic-weirdboy",
+    "ability_id": "warpath-weirdboy-orks",
     "name": "Warpath (Psychic level 1)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10170,8 +5729,8 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "wurrboy-psychic",
-    "name": "Wurrboy Psychic",
+    "ability_id": "wurrboy-orks",
+    "name": "Wurrboy (psyker level 1)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -10194,7 +5753,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "adrenaline-junkies-kult-of-speed",
+    "ability_id": "adrenaline-junkies-orks",
     "name": "Adrenaline Junkies",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10335,7 +5894,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "ard-as-nails-brute-bosses",
+    "ability_id": "ard-as-nails-orks",
     "name": "’Ard As Nails",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10426,8 +5985,8 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "ard-boyz-green-tide",
-    "name": "’Ard Boyz",
+    "ability_id": "ardboyz-upgrade-green-tide-orks",
+    "name": "'Ardboyz (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -10455,7 +6014,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "armed-to-da-teef-bully-boyz",
+    "ability_id": "armed-to-da-teef-bully-boyz-orks",
     "name": "Armed To Da Teef",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10505,7 +6064,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "blitzboss-brute-bosses",
+    "ability_id": "blitzboss-brute-bosses-orks",
     "name": "Blitzboss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10591,7 +6150,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "breakin-heads-war-horde",
+    "ability_id": "breakin-heads-war-horde-orks",
     "name": "Breakin' Heads",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10665,7 +6224,7 @@
                 "despite": [
                   "battle-shocked"
                 ],
-                "stratagem": "breakin-heads-war-horde"
+                "stratagem": "breakin-heads-war-horde-orks"
               }
             }
           }
@@ -10749,7 +6308,7 @@
     }
   },
   {
-    "ability_id": "brutal-but-kunnin-brute-bosses",
+    "ability_id": "brutal-but-kunnin-brute-bosses-orks",
     "name": "Brutal But Kunnin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10779,7 +6338,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "close-range-dakka-war-horde",
+    "ability_id": "close-range-dakka-war-horde-orks",
     "name": "Close-Range Dakka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10833,102 +6392,7 @@
     }
   },
   {
-    "ability_id": "clownin-dakka-shoota-boyz",
-    "name": "Clownin’ Dakka",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "0d35c0c809f6e3f9c70fe2170fac2f65f944ee5e82e5e76532d2157f94fd6afc",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "within",
-          "parameters": {
-            "of": "defender",
-            "range": {
-              "inches": 9
-            }
-          }
-        },
-        "effect": {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "AP",
-            "operation": "add",
-            "value": 1,
-            "weapon_type": "ranged"
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [],
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "detachment_id": "shoota-boyz",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": {
-      "event": "selected",
-      "filter": {
-        "to": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "ability_id": "competitive-streak-kult-of-speed",
+    "ability_id": "competitive-streak-kult-of-speed-orks",
     "name": "Competitive Streak",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10956,7 +6420,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "da-boss-is-watchin-war-horde",
+    "ability_id": "da-boss-is-watchin-war-horde-orks",
     "name": "Da Boss Is Watchin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -10996,7 +6460,7 @@
         "type": "ability-grant",
         "target": "this-model",
         "modifier": {
-          "ability": "riled-up",
+          "ability": "riled-up-orks",
           "rules_bundle": true
         }
       }
@@ -11017,7 +6481,7 @@
     }
   },
   {
-    "ability_id": "da-gobshot-thunderbuss-brute-bosses",
+    "ability_id": "da-gobshot-thunderbuss-brute-bosses-orks",
     "name": "Da Gobshot Thunderbuss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11073,7 +6537,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "da-hunt-is-on-da-big-hunt",
+    "ability_id": "da-hunt-is-on-orks",
     "name": "Da Hunt Is On",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11130,7 +6594,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "da-krunch-wurrband",
+    "ability_id": "da-krunch-wurrband-orks",
     "name": "Da Krunch",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11157,7 +6621,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "dakka-dakka-dakka-shoota-boyz",
+    "ability_id": "dakka-dakka-dakka-orks",
     "name": "Dakka! Dakka! Dakka!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11239,7 +6703,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "delicious-eating-squigs-kult-of-speed",
+    "ability_id": "delicious-eating-squigs-kult-of-speed-orks",
     "name": "Delicious Eating Squigs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11355,7 +6819,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "displays-of-savagery-bully-boyz",
+    "ability_id": "displays-of-savagery-orks",
     "name": "Displays of Savagery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11399,7 +6863,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "drive-by-bustin-wreckas",
+    "ability_id": "drive-by-bustin-wreckas-orks",
     "name": "Drive-by Bustin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11482,7 +6946,7 @@
     }
   },
   {
-    "ability_id": "dubious-restraint-taktikal-brigade",
+    "ability_id": "dubious-restraint-taktikal-brigade-orks",
     "name": "Dubious Restraint",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11575,7 +7039,7 @@
     ]
   },
   {
-    "ability_id": "eadbanger-wurrband",
+    "ability_id": "eadbanger-wurrband-orks",
     "name": "’Eadbanger",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11687,7 +7151,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "enhanced-runt-maw-madcap-meks",
+    "ability_id": "enhanced-runt-maw-upgrade-madcap-meks-orks",
     "name": "Enhanced Runt-Maw",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11746,7 +7210,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "ere-we-go-green-tide",
+    "ability_id": "ere-we-go-green-tide-orks",
     "name": "’Ere We Go",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11784,7 +7248,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "extra-sneaky-runt-swarm",
+    "ability_id": "extra-sneaky-upgrade-runt-swarm-orks",
     "name": "Extra Sneaky",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11824,7 +7288,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "ferocious-show-off-green-tide",
+    "ability_id": "ferocious-show-off-green-tide-orks",
     "name": "Ferocious Show-Off",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11903,7 +7367,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "flyboss-flyboyz",
+    "ability_id": "flyboss-upgrade-flyboyz-orks",
     "name": "Flyboss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -11956,7 +7420,7 @@
               }
             },
             "modifier": {
-              "ability": "riled-up",
+              "ability": "riled-up-orks",
               "rules_bundle": true
             }
           }
@@ -11974,7 +7438,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "flyin-headbutt-flyboyz",
+    "ability_id": "flyin-headbutt-flyboyz-orks",
     "name": "Flyin' Headbutt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12163,7 +7627,7 @@
     }
   },
   {
-    "ability_id": "follow-me-ladz-war-horde",
+    "ability_id": "follow-me-ladz-war-horde-orks",
     "name": "Follow Me Ladz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12203,7 +7667,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "fungus-fuel-injection-war-horde",
+    "ability_id": "fungus-fuel-injection-war-horde-orks",
     "name": "Fungus-Fuel Injection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12255,7 +7719,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "get-stuck-in-war-horde",
+    "ability_id": "get-stuck-in-ardmob-orks",
     "name": "Get Stuck In",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12298,7 +7762,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "glory-hog-da-big-hunt",
+    "ability_id": "glory-hog-da-big-hunt-orks",
     "name": "Glory Hog",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12340,120 +7804,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "gooped-into-action-da-big-hunt",
-    "name": "Gooped Into Action",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "3898a1dad88cf515d0a22f1ceb843a4134994afe3443d134c697455eeb798948",
-    "version": "2025-q3",
-    "effect": {
-      "type": "select-units",
-      "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "BEAST SNAGGA"
-        ],
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "unit-state",
-                  "parameters": {
-                    "state": "engaged"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "happened",
-              "parameters": {
-                "event": "damage-allocated",
-                "object": "this-unit",
-                "filter": {
-                  "attack_type": "ranged"
-                },
-                "window": "event"
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "move",
-            "target": "selected-unit",
-            "modifier": {
-              "move_type": "surge",
-              "distance": "D6"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "designated",
-              "parameters": {
-                "tag": "RILED UP"
-              }
-            },
-            "effect": {
-              "type": "re-roll",
-              "target": "selected-unit",
-              "modifier": {
-                "roll": "surge",
-                "result_scope": "any-result"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [],
-    "ability_type": "stratagem",
-    "behavior": "reactive",
-    "detachment_id": "da-big-hunt",
-    "community_notes": "community-authored from 11e source",
-    "trigger": {
-      "event": "attacks-resolved",
-      "subject": {
-        "owner": "enemy"
-      },
-      "filter": {
-        "kind": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      }
-    },
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "grab-it-wreckas",
+    "ability_id": "grab-it-wreckas-orks",
     "name": "Grab It",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12552,7 +7903,7 @@
     }
   },
   {
-    "ability_id": "grot-shields-runt-swarm",
+    "ability_id": "grot-shields-runt-swarm-orks",
     "name": "Grot Shields",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12720,7 +8071,7 @@
     }
   },
   {
-    "ability_id": "gun-crazy-show-offs-wreckas",
+    "ability_id": "gun-crazy-show-offs-wreckas-orks",
     "name": "Gun-Crazy Show-offs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12834,7 +8185,7 @@
     }
   },
   {
-    "ability_id": "headwoppas-killchoppa-war-horde",
+    "ability_id": "headwoppas-killchoppa-war-horde-orks",
     "name": "Headwoppa's Killchoppa",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12892,7 +8243,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "hit-em-harder-war-horde",
+    "ability_id": "hit-em-harder-war-horde-orks",
     "name": "Hit ’Em Harder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12934,7 +8285,7 @@
     }
   },
   {
-    "ability_id": "hulking-brutes-bully-boyz",
+    "ability_id": "hulking-brutes-bully-boyz-orks",
     "name": "Hulking Brutes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -12996,7 +8347,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "impulsive-recon-flyboyz",
+    "ability_id": "impulsive-recon-upgrade-flyboyz-orks",
     "name": "Impulsive Recon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13057,7 +8408,7 @@
     "community_notes": "community-authored from 11e source"
   },
   {
-    "ability_id": "infested-war-zone-runt-swarm",
+    "ability_id": "infested-war-zone-runt-swarm-orks",
     "name": "Infested War Zone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13143,7 +8494,7 @@
     }
   },
   {
-    "ability_id": "instinctive-hunters-da-big-hunt",
+    "ability_id": "instinctive-hunters-da-big-hunt-orks",
     "name": "Instinctive Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13233,7 +8584,7 @@
     }
   },
   {
-    "ability_id": "it-came-from-da-drops-da-big-hunt",
+    "ability_id": "it-came-from-da-drops-da-big-hunt-orks",
     "name": "It Came From Da Drops",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13262,7 +8613,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "kaptins-hat-wreckas",
+    "ability_id": "kaptins-hat-wreckas-orks",
     "name": "Kaptin’s Hat",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13354,47 +8705,7 @@
     }
   },
   {
-    "ability_id": "kill-kommando-taktikal-brigade",
-    "name": "Kill Kommando",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "d2b62f0058c228c603449acfe756856d5f4be7408c2b8548533ff8b0b977130f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-model",
-        "modifier": {
-          "abilities": [
-            "infiltrators",
-            "stealth"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "enhancement",
-    "behavior": "passive",
-    "detachment_id": "taktikal-brigade",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "kunnin-but-brutal-war-horde",
+    "ability_id": "kunnin-but-brutal-war-horde-orks",
     "name": "Kunnin’ But Brutal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13436,66 +8747,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "kustom-dakka-shoota-boyz",
-    "name": "Kustom Dakka",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "c59afcd1a2c44f8b1ee1778398204cdab4d71e411a59fc3b0d406584a09cda0c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "weapon_type": "ranged",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [],
-    "ability_type": "stratagem",
-    "behavior": "passive",
-    "detachment_id": "shoota-boyz",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
-  },
-  {
-    "ability_id": "long-uncontrolled-bursts-flyboyz",
+    "ability_id": "long-uncontrolled-bursts-flyboyz-orks",
     "name": "Long, Uncontrolled Bursts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13576,7 +8828,7 @@
     }
   },
   {
-    "ability_id": "mekwaaagh-mastermind-madcap-meks",
+    "ability_id": "mekwaaagh-mastermind-madcap-meks-orks",
     "name": "MEKWAAAGH! Mastermind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13589,7 +8841,7 @@
       "type": "ability-grant",
       "target": "this-model",
       "modifier": {
-        "ability": "riled-up",
+        "ability": "riled-up-orks",
         "rules_bundle": true
       }
     },
@@ -13604,7 +8856,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "mind-mostly-on-the-mission-taktikal-brigade",
+    "ability_id": "mind-mostly-on-the-mission-taktikal-brigade-orks",
     "name": "Mind Mostly On the Mission",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13692,7 +8944,7 @@
     ]
   },
   {
-    "ability_id": "minefield-detail-runt-swarm",
+    "ability_id": "minefield-detail-upgrade-runt-swarm-orks",
     "name": "Minefield Detail",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13749,7 +9001,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "mob-handed-brutality-green-tide",
+    "ability_id": "mob-handed-brutality-orks",
     "name": "Mob-Handed Brutality",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -13873,7 +9125,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "mob-mentality-green-tide",
+    "ability_id": "mob-mentality-green-tide-orks",
     "name": "Mob Mentality",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14011,7 +9263,7 @@
     }
   },
   {
-    "ability_id": "morgogs-finkin-cap-brute-bosses",
+    "ability_id": "morgogs-finkin-cap-brute-bosses-orks",
     "name": "Morgog’s Finkin’ Cap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14103,7 +9355,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "mow-em-down-war-horde",
+    "ability_id": "mow-em-down-war-horde-orks",
     "name": "Mow ’Em Down",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14201,7 +9453,7 @@
     }
   },
   {
-    "ability_id": "never-enough-dakka-shoota-boyz",
+    "ability_id": "never-enough-dakka-shoota-boyz-orks",
     "name": "Never Enough Dakka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14240,7 +9492,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "orks-is-never-beaten-war-horde",
+    "ability_id": "orks-is-never-beaten-war-horde-orks",
     "name": "Orks Is Never Beaten",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14336,7 +9588,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "powers-of-da-waaagh-wurrband",
+    "ability_id": "powers-of-da-waaagh-orks",
     "name": "Powers Of Da Waaagh!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14564,7 +9816,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "proper-killy-brute-bosses",
+    "ability_id": "proper-killy-brute-bosses-orks",
     "name": "Proper Killy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14604,7 +9856,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "scarper-runt-swarm",
+    "ability_id": "scarper-runt-swarm-orks",
     "name": "Scarper!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14731,7 +9983,7 @@
     }
   },
   {
-    "ability_id": "skyborne-loons-flyboyz",
+    "ability_id": "skyborne-loons-orks",
     "name": "Skyborne Loons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14818,7 +10070,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "smoky-gubbinz-kult-of-speed",
+    "ability_id": "smoky-gubbinz-upgrade-kult-of-speed-orks",
     "name": "Smoky Gubbinz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14888,7 +10140,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "sneaky-little-gitz-runt-swarm",
+    "ability_id": "sneaky-little-gitz-orks",
     "name": "Sneaky Little Gitz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -14944,7 +10196,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "speediest-freeks-kult-of-speed",
+    "ability_id": "speediest-freeks-kult-of-speed-orks",
     "name": "Speediest Freeks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15029,7 +10281,7 @@
     }
   },
   {
-    "ability_id": "supa-glowy-fing-shoota-boyz",
+    "ability_id": "supa-glowy-fing-shoota-boyz-orks",
     "name": "Supa-Glowy Fing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15121,8 +10373,8 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "supa-snazz-dakka-upgrade-wreckas",
-    "name": "Supa-Snazz Dakka Upgrade",
+    "ability_id": "supa-snazz-dakka-upgrade-wreckas-orks",
+    "name": "Supa-snazz Dakka (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -15151,7 +10403,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "surly-as-a-squiggoth-brute-bosses",
+    "ability_id": "surly-as-a-squiggoth-brute-bosses-orks",
     "name": "Surly As A Squiggoth",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15234,7 +10486,7 @@
     }
   },
   {
-    "ability_id": "suspiciously-well-organised-taktikal-brigade",
+    "ability_id": "suspiciously-well-organised-orks",
     "name": "Suspiciously Well Organised",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15321,7 +10573,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "targetin-squigs-shoota-boyz",
+    "ability_id": "targetin-squigs-shoota-boyz-orks",
     "name": "Targetin’ Squigs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15378,7 +10630,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "tellyporta-boss-bully-boyz",
+    "ability_id": "tellyporta-boss-bully-boyz-orks",
     "name": "Tellyporta Boss",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15421,7 +10673,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "temperamental-shokka-madcap-meks",
+    "ability_id": "temperamental-shokka-upgrade-madcap-meks-orks",
     "name": "Temperamental Shokka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15545,8 +10797,8 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "throat-slittas-upgrade-taktikal-brigade",
-    "name": "Throat-Slittas Upgrade",
+    "ability_id": "throat-slittas-upgrade-taktikal-brigade-orks",
+    "name": "Throat-slittas (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -15611,7 +10863,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "too-arrogant-to-die-bully-boyz",
+    "ability_id": "too-arrogant-to-die-bully-boyz-orks",
     "name": "Too Arrogant To Die",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -15702,262 +10954,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "try-dat-button-madcap-meks",
-    "name": "Try Dat Button!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "4a08824b55bc6cce25702f0fbbc476eaaaa75e42c55345d54267a457d67c3f2f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "shooting"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "your-turn"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              }
-            ]
-          },
-          {
-            "type": "owned-by",
-            "parameters": {
-              "owner": "friendly"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "WALKER"
-              ]
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "all_of": [
-                    "TITANIC"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "dice-count",
-        "options": [
-          {
-            "type": "dice-gated",
-            "dice": "D6",
-            "threshold": 2,
-            "comparison": "lte",
-            "on_success": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "on_fail": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 4,
-              "comparison": "lte",
-              "on_success": {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "S",
-                  "operation": "add",
-                  "value": 2
-                }
-              },
-              "on_fail": {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "AP",
-                  "operation": "add",
-                  "value": 1
-                }
-              }
-            }
-          },
-          {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "any",
-                  "result_scope": "any-result",
-                  "count": 1
-                }
-              },
-              {
-                "type": "dice-gated",
-                "dice": "D6",
-                "threshold": 2,
-                "comparison": "lte",
-                "on_success": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "A",
-                    "operation": "add",
-                    "value": 1
-                  }
-                },
-                "on_fail": {
-                  "type": "dice-gated",
-                  "dice": "D6",
-                  "threshold": 4,
-                  "comparison": "lte",
-                  "on_success": {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "S",
-                      "operation": "add",
-                      "value": 2
-                    }
-                  },
-                  "on_fail": {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "AP",
-                      "operation": "add",
-                      "value": 1
-                    }
-                  }
-                }
-              },
-              {
-                "type": "dice-gated",
-                "dice": "D6",
-                "threshold": 2,
-                "comparison": "lte",
-                "on_success": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "A",
-                    "operation": "add",
-                    "value": 1
-                  }
-                },
-                "on_fail": {
-                  "type": "dice-gated",
-                  "dice": "D6",
-                  "threshold": 4,
-                  "comparison": "lte",
-                  "on_success": {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "S",
-                      "operation": "add",
-                      "value": 2
-                    }
-                  },
-                  "on_fail": {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "AP",
-                      "operation": "add",
-                      "value": 1
-                    }
-                  }
-                }
-              },
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "attacks-resolved"
-                },
-                "effect": {
-                  "type": "test",
-                  "target": "this-unit",
-                  "modifier": {
-                    "test": "hazard"
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [],
-    "ability_type": "detachment",
-    "behavior": "reactive",
-    "detachment_id": "madcap-meks",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks",
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "to": "shoot"
-        }
-      },
-      {
-        "event": "selected",
-        "filter": {
-          "to": "fight"
-        }
-      }
-    ]
-  },
-  {
-    "ability_id": "unbridled-carnage-green-tide",
+    "ability_id": "unbridled-carnage-green-tide-orks",
     "name": "Unbridled Carnage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16013,7 +11010,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "unpredictable-genius-madcap-meks",
+    "ability_id": "unpredictable-genius-orks",
     "name": "Unpredictable Genius",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16187,7 +11184,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "vindictive-artillerists-madcap-meks",
+    "ability_id": "vindictive-artillerists-madcap-meks-orks",
     "name": "Vindictive Artillerists",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16254,7 +11251,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "warphead-wurrband",
+    "ability_id": "warphead-wurrband-orks",
     "name": "Warphead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16301,7 +11298,7 @@
             "type": "ability-grant",
             "target": "this-model",
             "modifier": {
-              "ability": "deadly-demise-d6"
+              "ability": "deadly-demise"
             }
           },
           {
@@ -16326,7 +11323,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "where-dya-fink-youre-going-da-big-hunt",
+    "ability_id": "where-dya-fink-youre-going-da-big-hunt-orks",
     "name": "Where D’ya Fink You’re Going?",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16469,7 +11466,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "while-their-backs-are-turned-taktikal-brigade",
+    "ability_id": "while-their-backs-are-turned-taktikal-brigade-orks",
     "name": "While Their Backs Are Turned",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16557,7 +11554,7 @@
     }
   },
   {
-    "ability_id": "whirligig-evasion-flyboyz",
+    "ability_id": "whirligig-evasion-flyboyz-orks",
     "name": "Whirligig Evasion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16669,7 +11666,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "wimp-kickaz-bully-boyz",
+    "ability_id": "wimp-kickaz-upgrade-bully-boyz-orks",
     "name": "Wimp-Kickaz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16757,7 +11754,7 @@
     }
   },
   {
-    "ability_id": "wreckin-and-lootin-wreckas",
+    "ability_id": "wreckin-and-lootin-orks",
     "name": "Wreckin’ and Lootin’",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16858,7 +11855,7 @@
     }
   },
   {
-    "ability_id": "riled-up",
+    "ability_id": "riled-up-orks",
     "name": "Riled Up",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -16933,7 +11930,7 @@
     "community_notes": "community-authored from 11e source"
   },
   {
-    "ability_id": "dreadherder-dread-mob",
+    "ability_id": "dreadherder-dread-mob-orks",
     "name": "Dreadherder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17018,10 +12015,11 @@
         "BIG MEK"
       ]
     },
-    "community_notes": "community-authored from 11e source"
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
   },
   {
-    "ability_id": "da-grand-warlords-ladz",
+    "ability_id": "da-grand-warlords-ladz-orks",
     "name": "Da Grand Warlord's Ladz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17068,7 +12066,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "makari-hoist-dat-banner",
+    "ability_id": "makari-hoist-dat-banner-orks",
     "name": "Makari, Hoist Dat Banner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17098,7 +12096,7 @@
           "type": "ability-grant",
           "target": "selected-unit",
           "modifier": {
-            "ability": "riled-up",
+            "ability": "riled-up-orks",
             "rules_bundle": true
           }
         }
@@ -17115,7 +12113,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "nazdregs-know-wotz",
+    "ability_id": "nazdregs-know-wotz-orks",
     "name": "Nazdreg's Know-wotz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17157,7 +12155,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "grab-dat-scrap",
+    "ability_id": "grab-dat-scrap-orks",
     "name": "Grab Dat Scrap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17196,7 +12194,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "grot-infestation-once-per-battle-per-unit",
+    "ability_id": "grot-infestation-orks",
     "name": "Grot Infestation (Once per battle per unit)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17253,7 +12251,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "smash-em-up",
+    "ability_id": "smash-em-up-orks",
     "name": "Smash 'Em Up",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17312,7 +12310,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "totem-of-mork-psychic",
+    "ability_id": "totem-of-mork-orks",
     "name": "Totem of Mork (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17360,7 +12358,7 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "supreme-kunnin",
+    "ability_id": "supreme-kunnin-orks",
     "name": "Supreme Kunnin'",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -17457,5 +12455,729 @@
       "per": "army"
     },
     "faction_id": "orks"
+  },
+  {
+    "ability_id": "aerial-manoover-orks",
+    "name": "Aerial Manoover",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "deffkoptas"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "boss-ammo-runt-orks",
+    "name": "Boss’ Ammo Runt (Once per battle, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "warboss"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "catch-dat-red-bit-orks",
+    "name": "Catch Dat Red Bit (Once per battle, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "painboy"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "clever-know-wotz-orks",
+    "name": "Clever Know-wotz",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "mek"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "da-boss-orks",
+    "name": "Da Boss",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wound-remaining-orks",
+    "name": "DAMAGED: 1-10 WOUND REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "stompa"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-orks",
+    "name": "DAMAGED: 1-10 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gargantuan-squiggoth"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-orks",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "blitza-bommer",
+      "burna-bommer",
+      "dakkajet",
+      "wazbom-blastajet"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wound-remaining-test-orks",
+    "name": "DAMAGED: 1-5 WOUND REMAINING TEST",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "hunta-rig"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-orks",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "battlewagon",
+      "gunwagon",
+      "kill-rig"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-orks",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gorkanaut",
+      "morkanaut"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deff-from-the-shadows-orks",
+    "name": "Deff from the Shadows (First battle round onwards)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "boss-snikrot"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "finderz-keeperz-orks",
+    "name": "Finderz Keeperz",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "flash-gitz"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "go-fer-da-weak-spot-orks",
+    "name": "Go fer da Weak Spot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "wazbom-blastajet"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "keep-huntin-beastboss-on-squigosaur-orks",
+    "name": "Keep Huntin’! (Once per battle round, per army)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "beastboss-on-squigosaur"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pilin-out-orks",
+    "name": "Pilin’ Out",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "trukk"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "special-move-types-orks",
+    "name": "Special Move Types",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "speednob-support-orks",
+    "name": "Speednob Support",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "wartrakks"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sumfin-to-prove-orks",
+    "name": "Sumfin’ to Prove",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bigboss"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "support-shokka-orks",
+    "name": "Support Shokka",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "big-mek-with-shokk-attack-gun"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unstable-energies-orks",
+    "name": "Unstable energies",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "waaagh-ardmob-orks",
+    "name": "Waaagh!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "waaagh-gargantuan-squiggoth-orks",
+    "name": "Waaagh!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "gargantuan-squiggoth"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crazed-rampage-dread-mob-orks",
+    "name": "Crazed Rampage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "dread-mob",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-power-dread-mob-orks",
+    "name": "Dread Power",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "dread-mob",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "get-stuck-in-orks",
+    "name": "Get Stuck In",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "war-horde",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "glowin-dakka-shoota-boyz-orks",
+    "name": "Glowin’ Dakka",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "shoota-boyz",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "goaded-into-action-da-big-hunt-orks",
+    "name": "Goaded Into Action",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "da-big-hunt",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "impending-krunch-blitz-brigade-orks",
+    "name": "Impending Krunch",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "keep-it-runnin-blitz-brigade-orks",
+    "name": "Keep It Runnin’",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "kustom-dakka-shoota-boyz-orks",
+    "name": "Kustom Dakka",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "shoota-boyz",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "readied-brawlers-blitz-brigade-orks",
+    "name": "Readied Brawlers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stomping-juggernaut-dread-mob-orks",
+    "name": "Stomping Juggernaut",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "dread-mob",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unstoppable-momentum-orks",
+    "name": "Unstoppable Momentum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

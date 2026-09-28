@@ -20,10 +20,10 @@
                 <characteristic name="Description">4+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play, until the end of the phase:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+                <characteristic name="Description">Before this model is removed from play:
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Devastating Assault" typeName="Abilities">

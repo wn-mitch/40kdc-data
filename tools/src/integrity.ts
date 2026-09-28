@@ -67,7 +67,8 @@ export const COLLISION_POLICIES: Record<string, CollisionPolicy> = {
   detachments: { policy: "faction-scoped", idKey: "id" },
   "wargear-options": { policy: "faction-scoped", idKey: "id" },
   "unit-compositions": { policy: "faction-scoped", idKey: "unit_id" },
-  abilities: { policy: "faction-scoped", idKey: "ability_id" },
+  // Ability ids carry their faction (`<name>-<faction>`) and are unique across the dataset.
+  abilities: { policy: "unique", idKey: "ability_id" },
   // Attachment records are keyed by leader; a shared leader chassis carries a
   // distinct bodyguard list per faction, and consumers scan (never collapse).
   "leader-attachments": { policy: "faction-scoped", idKey: "leader_id" },
@@ -109,7 +110,7 @@ interface PointsTierLike {
 }
 interface UnitLike {
   id?: string;
-  ability_ids?: string[];
+  ability_ids?: (string | { id: string; value?: string | number; wargear?: string })[];
   faction_keywords?: string[];
   weapon_ids?: string[];
   points?: PointsTierLike[];
@@ -560,6 +561,24 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
   loadAbilityIds(resolve(root, "enrichment/_core/abilities.json"), coreAbilities);
+  // Every ability record id (unique across dirs), and those whose DSL reads the unit's rating.
+  const abilityRecordIds = new Set<string>();
+  const ratedAbilityIds = new Set<string>();
+  // A stub awaits authoring, so a rating on a ref to it has nothing to read yet.
+  const stubAbilityIds = new Set<string>();
+  for (const f of await glob("enrichment/*/abilities.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_") && basename(dirname(f)) !== "_core") continue;
+    try {
+      for (const a of readArray<AbilityLike & { effect?: unknown }>(f)) {
+        if (!a.ability_id) continue;
+        abilityRecordIds.add(a.ability_id);
+        if (/"rating":true/.test(JSON.stringify(a.effect ?? null))) ratedAbilityIds.add(a.ability_id);
+        if ((a as { stub?: unknown }).stub === true) stubAbilityIds.add(a.ability_id);
+      }
+    } catch {
+      // unreadable file: reported by schema validation
+    }
+  }
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(
@@ -608,8 +627,6 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       });
     }
 
-    const defined = new Set<string>(coreAbilities);
-    loadAbilityIds(resolve(root, `enrichment/${faction}/abilities.json`), defined);
     const home = FACTION_HOME_KEYWORD[faction];
 
     result.totalFiles++;
@@ -618,12 +635,17 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       result.totalItems++;
       const errs: Array<{ path: string; message: string }> = [];
 
-      for (const aid of u.ability_ids ?? []) {
-        if (!defined.has(aid)) {
-          errs.push({
-            path: `/${i}/ability_ids`,
-            message: `unit "${u.id}": ability_id "${aid}" is not defined in ${faction} enrichment`,
-          });
+      // Ability ids are unique across the dataset: a ref resolves to the one record carrying it,
+      // wherever it lives (a chapter unit names the supplement's record).
+      for (const ref of u.ability_ids ?? []) {
+        const aid = typeof ref === "string" ? ref : ref.id;
+        const rated = typeof ref !== "string" && ref.value !== undefined;
+        if (!abilityRecordIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": ability_id "${aid}" resolves to no ability record` });
+        } else if (ratedAbilityIds.has(aid) && !rated) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" reads the unit's rating ({rating: true}); list it as {"id": "${aid}", "value": …}` });
+        } else if (rated && !ratedAbilityIds.has(aid) && !stubAbilityIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" carries a value but its record reads no rating` });
         }
       }
 

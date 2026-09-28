@@ -1,6 +1,6 @@
 [
   {
-    "id": "absolute-sensory-overload-frenzied-host",
+    "id": "absolute-sensory-overload-frenzied-host-emperors-children",
     "name": "ABSOLUTE SENSORY OVERLOAD",
     "category": "detachment",
     "detachment_id": "frenzied-host",
@@ -11,7 +11,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "absolute-sensory-overload-frenzied-host",
+    "ability_id": "absolute-sensory-overload-frenzied-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "id": "advance-and-claim-rapid-evisceration",
+    "id": "advance-and-claim-rapid-evisceration-emperors-children",
     "name": "ADVANCE AND CLAIM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -40,7 +40,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "advance-and-claim-rapid-evisceration",
+    "ability_id": "advance-and-claim-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": "agonised-cacophony-frenzied-host",
+    "id": "agonised-cacophony-frenzied-host-emperors-children",
     "name": "AGONISED CACOPHONY",
     "category": "detachment",
     "detachment_id": "frenzied-host",
@@ -68,7 +68,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "agonised-cacophony-frenzied-host",
+    "ability_id": "agonised-cacophony-frenzied-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -85,7 +85,7 @@
     ]
   },
   {
-    "id": "armour-of-abhorrence-coterie-of-the-conceited",
+    "id": "armour-of-abhorrence-coterie-of-the-conceited-emperors-children",
     "name": "ARMOUR OF ABHORRENCE",
     "category": "detachment",
     "type": "wargear",
@@ -98,7 +98,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "armour-of-abhorrence-coterie-of-the-conceited",
+    "ability_id": "armour-of-abhorrence-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -115,7 +115,7 @@
     ]
   },
   {
-    "id": "beautiful-death-slaaneshs-chosen",
+    "id": "beautiful-death-slaaneshs-chosen-emperors-children",
     "name": "BEAUTIFUL DEATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -127,7 +127,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "beautiful-death-slaaneshs-chosen",
+    "ability_id": "beautiful-death-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -144,7 +144,7 @@
     ]
   },
   {
-    "id": "capricious-reactions-mercurial-host",
+    "id": "capricious-reactions-mercurial-host-emperors-children",
     "name": "CAPRICIOUS REACTIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -156,7 +156,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "capricious-reactions-mercurial-host",
+    "ability_id": "capricious-reactions-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -173,7 +173,7 @@
     ]
   },
   {
-    "id": "catalytic-stimulus-court-of-the-phoenician",
+    "id": "catalytic-stimulus-court-of-the-phoenician-emperors-children",
     "name": "CATALYTIC STIMULUS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -185,7 +185,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "catalytic-stimulus-court-of-the-phoenician",
+    "ability_id": "catalytic-stimulus-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -202,7 +202,7 @@
     ]
   },
   {
-    "id": "ceaseless-onslaught-rapid-evisceration",
+    "id": "ceaseless-onslaught-rapid-evisceration-emperors-children",
     "name": "CEASELESS ONSLAUGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -214,7 +214,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ceaseless-onslaught-rapid-evisceration",
+    "ability_id": "ceaseless-onslaught-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -231,7 +231,7 @@
     ]
   },
   {
-    "id": "close-quarters-excruciation-court-of-the-phoenician",
+    "id": "close-quarters-excruciation-court-of-the-phoenician-emperors-children",
     "name": "CLOSE-QUARTERS EXCRUCIATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -243,7 +243,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "close-quarters-excruciation-court-of-the-phoenician",
+    "ability_id": "close-quarters-excruciation-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -260,7 +260,7 @@
     ]
   },
   {
-    "id": "combat-stimms-mercurial-host",
+    "id": "combat-stimms-mercurial-host-emperors-children",
     "name": "COMBAT STIMMS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -272,7 +272,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "combat-stimms-mercurial-host",
+    "ability_id": "combat-stimms-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -289,7 +289,7 @@
     ]
   },
   {
-    "id": "contemptuous-disregard-court-of-the-phoenician",
+    "id": "contemptuous-disregard-court-of-the-phoenician-emperors-children",
     "name": "CONTEMPTUOUS DISREGARD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -302,7 +302,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "contemptuous-disregard-court-of-the-phoenician",
+    "ability_id": "contemptuous-disregard-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -319,7 +319,7 @@
     ]
   },
   {
-    "id": "cruel-bladesman-peerless-bladesmen",
+    "id": "cruel-bladesman-peerless-bladesmen-emperors-children",
     "name": "CRUEL BLADESMAN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -331,7 +331,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cruel-bladesman-peerless-bladesmen",
+    "ability_id": "cruel-bladesman-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -348,7 +348,7 @@
     ]
   },
   {
-    "id": "cruel-raiders-mercurial-host",
+    "id": "cruel-raiders-mercurial-host-emperors-children",
     "name": "CRUEL RAIDERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -360,7 +360,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cruel-raiders-mercurial-host",
+    "ability_id": "cruel-raiders-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -377,7 +377,7 @@
     ]
   },
   {
-    "id": "cut-down-the-weak-peerless-bladesmen",
+    "id": "cut-down-the-weak-peerless-bladesmen-emperors-children",
     "name": "CUT DOWN THE WEAK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -389,7 +389,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cut-down-the-weak-peerless-bladesmen",
+    "ability_id": "cut-down-the-weak-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -406,7 +406,7 @@
     ]
   },
   {
-    "id": "dark-apparitions-carnival-of-excess",
+    "id": "dark-apparitions-carnival-of-excess-emperors-children",
     "name": "DARK APPARITIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -418,7 +418,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dark-apparitions-carnival-of-excess",
+    "ability_id": "dark-apparitions-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -435,7 +435,7 @@
     ]
   },
   {
-    "id": "dark-vigour-mercurial-host",
+    "id": "dark-vigour-mercurial-host-emperors-children",
     "name": "DARK VIGOUR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -447,7 +447,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dark-vigour-mercurial-host",
+    "ability_id": "dark-vigour-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -464,7 +464,7 @@
     ]
   },
   {
-    "id": "death-ecstasy-peerless-bladesmen",
+    "id": "death-ecstasy-peerless-bladesmen-emperors-children",
     "name": "DEATH ECSTASY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -476,7 +476,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "death-ecstasy-peerless-bladesmen",
+    "ability_id": "death-ecstasy-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -493,7 +493,7 @@
     ]
   },
   {
-    "id": "deft-parry-peerless-bladesmen",
+    "id": "deft-parry-peerless-bladesmen-emperors-children",
     "name": "DEFT PARRY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -505,7 +505,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "deft-parry-peerless-bladesmen",
+    "ability_id": "deft-parry-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -522,7 +522,7 @@
     ]
   },
   {
-    "id": "delight-in-agony-elegant-brutes",
+    "id": "delight-in-agony-elegant-brutes-emperors-children",
     "name": "DELIGHT IN AGONY",
     "category": "detachment",
     "detachment_id": "elegant-brutes",
@@ -534,7 +534,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "delight-in-agony-elegant-brutes",
+    "ability_id": "delight-in-agony-elegant-brutes-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -551,7 +551,7 @@
     ]
   },
   {
-    "id": "devoted-duellists-slaaneshs-chosen",
+    "id": "devoted-duellists-slaaneshs-chosen-emperors-children",
     "name": "DEVOTED DUELLISTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -563,7 +563,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "devoted-duellists-slaaneshs-chosen",
+    "ability_id": "devoted-duellists-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -580,7 +580,7 @@
     ]
   },
   {
-    "id": "diabolic-majesty-slaaneshs-chosen",
+    "id": "diabolic-majesty-slaaneshs-chosen-emperors-children",
     "name": "DIABOLIC MAJESTY",
     "category": "detachment",
     "type": "epic-deed",
@@ -593,7 +593,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "diabolic-majesty-slaaneshs-chosen",
+    "ability_id": "diabolic-majesty-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -610,7 +610,7 @@
     ]
   },
   {
-    "id": "duellists-death-callous-blades",
+    "id": "duellists-death-callous-blades-emperors-children",
     "name": "Duellist’s Death",
     "category": "detachment",
     "detachment_id": "callous-blades",
@@ -621,7 +621,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "duellists-death-callous-blades",
+    "ability_id": "duellists-death-callous-blades-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -634,7 +634,7 @@
     ]
   },
   {
-    "id": "dynamic-breakthrough-rapid-evisceration",
+    "id": "dynamic-breakthrough-rapid-evisceration-emperors-children",
     "name": "DYNAMIC BREAKTHROUGH",
     "category": "detachment",
     "type": "epic-deed",
@@ -646,7 +646,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dynamic-breakthrough-rapid-evisceration",
+    "ability_id": "dynamic-breakthrough-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -663,7 +663,7 @@
     ]
   },
   {
-    "id": "ecstatic-slaughter-carnival-of-excess",
+    "id": "ecstatic-slaughter-carnival-of-excess-emperors-children",
     "name": "ECSTATIC SLAUGHTER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -675,7 +675,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ecstatic-slaughter-carnival-of-excess",
+    "ability_id": "ecstatic-slaughter-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -692,7 +692,7 @@
     ]
   },
   {
-    "id": "embrace-the-pain-coterie-of-the-conceited",
+    "id": "embrace-the-pain-coterie-of-the-conceited-emperors-children",
     "name": "EMBRACE THE PAIN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -704,7 +704,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "embrace-the-pain-coterie-of-the-conceited",
+    "ability_id": "embrace-the-pain-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -721,7 +721,7 @@
     ]
   },
   {
-    "id": "euphoric-inspiration-court-of-the-phoenician",
+    "id": "euphoric-inspiration-court-of-the-phoenician-emperors-children",
     "name": "EUPHORIC INSPIRATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -733,7 +733,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "euphoric-inspiration-court-of-the-phoenician",
+    "ability_id": "euphoric-inspiration-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -750,7 +750,7 @@
     ]
   },
   {
-    "id": "heightened-jealousy-slaaneshs-chosen",
+    "id": "heightened-jealousy-slaaneshs-chosen-emperors-children",
     "name": "HEIGHTENED JEALOUSY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -763,7 +763,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "heightened-jealousy-slaaneshs-chosen",
+    "ability_id": "heightened-jealousy-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -780,7 +780,7 @@
     ]
   },
   {
-    "id": "honour-is-for-fools-spectacle-of-slaughter",
+    "id": "honour-is-for-fools-spectacle-of-slaughter-emperors-children",
     "name": "HONOUR IS FOR FOOLS",
     "category": "detachment",
     "detachment_id": "spectacle-of-slaughter",
@@ -791,7 +791,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "honour-is-for-fools-spectacle-of-slaughter",
+    "ability_id": "honour-is-for-fools-spectacle-of-slaughter-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -808,7 +808,7 @@
     ]
   },
   {
-    "id": "honour-the-prince-mercurial-host",
+    "id": "honour-the-prince-mercurial-host-emperors-children",
     "name": "HONOUR THE PRINCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -820,7 +820,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "honour-the-prince-mercurial-host",
+    "ability_id": "honour-the-prince-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -837,7 +837,7 @@
     ]
   },
   {
-    "id": "incessant-violence-peerless-bladesmen",
+    "id": "incessant-violence-peerless-bladesmen-emperors-children",
     "name": "INCESSANT VIOLENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -849,7 +849,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "incessant-violence-peerless-bladesmen",
+    "ability_id": "incessant-violence-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -866,7 +866,7 @@
     ]
   },
   {
-    "id": "intoxicated-by-triumph-spectacle-of-slaughter",
+    "id": "intoxicated-by-triumph-spectacle-of-slaughter-emperors-children",
     "name": "INTOXICATED BY TRIUMPH",
     "category": "detachment",
     "detachment_id": "spectacle-of-slaughter",
@@ -877,7 +877,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "intoxicated-by-triumph-spectacle-of-slaughter",
+    "ability_id": "intoxicated-by-triumph-spectacle-of-slaughter-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -894,7 +894,7 @@
     ]
   },
   {
-    "id": "martial-perfection-coterie-of-the-conceited",
+    "id": "martial-perfection-coterie-of-the-conceited-emperors-children",
     "name": "MARTIAL PERFECTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -906,7 +906,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "martial-perfection-coterie-of-the-conceited",
+    "ability_id": "martial-perfection-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -923,7 +923,7 @@
     ]
   },
   {
-    "id": "on-to-the-next-rapid-evisceration",
+    "id": "on-to-the-next-rapid-evisceration-emperors-children",
     "name": "ON TO THE NEXT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -935,7 +935,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "on-to-the-next-rapid-evisceration",
+    "ability_id": "on-to-the-next-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -952,7 +952,7 @@
     ]
   },
   {
-    "id": "outflanking-strike-rapid-evisceration",
+    "id": "outflanking-strike-rapid-evisceration-emperors-children",
     "name": "OUTFLANKING STRIKE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -964,7 +964,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "outflanking-strike-rapid-evisceration",
+    "ability_id": "outflanking-strike-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -981,7 +981,7 @@
     ]
   },
   {
-    "id": "possessive-mania-frenzied-host",
+    "id": "possessive-mania-frenzied-host-emperors-children",
     "name": "POSSESSIVE MANIA",
     "category": "detachment",
     "detachment_id": "frenzied-host",
@@ -993,7 +993,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "possessive-mania-frenzied-host",
+    "ability_id": "possessive-mania-frenzied-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1010,7 +1010,7 @@
     ]
   },
   {
-    "id": "prideful-superiority-court-of-the-phoenician",
+    "id": "prideful-superiority-court-of-the-phoenician-emperors-children",
     "name": "PRIDEFUL SUPERIORITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1022,7 +1022,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "prideful-superiority-court-of-the-phoenician",
+    "ability_id": "prideful-superiority-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1039,7 +1039,7 @@
     ]
   },
   {
-    "id": "profane-desecration-callous-blades",
+    "id": "profane-desecration-callous-blades-emperors-children",
     "name": "Profane Desecration",
     "category": "detachment",
     "detachment_id": "callous-blades",
@@ -1050,7 +1050,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "profane-desecration-callous-blades",
+    "ability_id": "profane-desecration-callous-blades-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1063,7 +1063,7 @@
     ]
   },
   {
-    "id": "protection-of-the-dark-prince-coterie-of-the-conceited",
+    "id": "protection-of-the-dark-prince-coterie-of-the-conceited-emperors-children",
     "name": "PROTECTION OF THE DARK PRINCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1079,7 +1079,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "protection-of-the-dark-prince-coterie-of-the-conceited",
+    "ability_id": "protection-of-the-dark-prince-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1096,7 +1096,7 @@
     ]
   },
   {
-    "id": "psychedelic-soulflame-elegant-brutes",
+    "id": "psychedelic-soulflame-elegant-brutes-emperors-children",
     "name": "PSYCHEDELIC SOULFLAME",
     "category": "detachment",
     "detachment_id": "elegant-brutes",
@@ -1108,7 +1108,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "psychedelic-soulflame-elegant-brutes",
+    "ability_id": "psychedelic-soulflame-elegant-brutes-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1125,7 +1125,7 @@
     ]
   },
   {
-    "id": "reactive-disembarkation-rapid-evisceration",
+    "id": "reactive-disembarkation-rapid-evisceration-emperors-children",
     "name": "REACTIVE DISEMBARKATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1137,7 +1137,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "reactive-disembarkation-rapid-evisceration",
+    "ability_id": "reactive-disembarkation-rapid-evisceration-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1154,7 +1154,7 @@
     ]
   },
   {
-    "id": "refusal-to-be-outdone-slaaneshs-chosen",
+    "id": "refusal-to-be-outdone-slaaneshs-chosen-emperors-children",
     "name": "REFUSAL TO BE OUTDONE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1166,7 +1166,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "refusal-to-be-outdone-slaaneshs-chosen",
+    "ability_id": "refusal-to-be-outdone-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1183,7 +1183,7 @@
     ]
   },
   {
-    "id": "shatter-strike-callous-blades",
+    "id": "shatter-strike-callous-blades-emperors-children",
     "name": "Shatter Strike",
     "category": "detachment",
     "detachment_id": "callous-blades",
@@ -1194,7 +1194,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shatter-strike-callous-blades",
+    "ability_id": "shatter-strike-callous-blades-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1207,7 +1207,7 @@
     ]
   },
   {
-    "id": "single-minded-strike-spectacle-of-slaughter",
+    "id": "single-minded-strike-spectacle-of-slaughter-emperors-children",
     "name": "SINGLE-MINDED STRIKE",
     "category": "detachment",
     "detachment_id": "spectacle-of-slaughter",
@@ -1218,7 +1218,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "single-minded-strike-spectacle-of-slaughter",
+    "ability_id": "single-minded-strike-spectacle-of-slaughter-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1235,7 +1235,7 @@
     ]
   },
   {
-    "id": "sinuous-breach-court-of-the-phoenician",
+    "id": "sinuous-breach-court-of-the-phoenician-emperors-children",
     "name": "SINUOUS BREACH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1248,7 +1248,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sinuous-breach-court-of-the-phoenician",
+    "ability_id": "sinuous-breach-court-of-the-phoenician-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1265,7 +1265,7 @@
     ]
   },
   {
-    "id": "sustained-by-agony-carnival-of-excess",
+    "id": "sustained-by-agony-carnival-of-excess-emperors-children",
     "name": "SUSTAINED BY AGONY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1277,7 +1277,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sustained-by-agony-carnival-of-excess",
+    "ability_id": "sustained-by-agony-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1294,7 +1294,7 @@
     ]
   },
   {
-    "id": "sycophantic-surge-carnival-of-excess",
+    "id": "sycophantic-surge-carnival-of-excess-emperors-children",
     "name": "SYCOPHANTIC SURGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1306,7 +1306,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sycophantic-surge-carnival-of-excess",
+    "ability_id": "sycophantic-surge-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1323,7 +1323,7 @@
     ]
   },
   {
-    "id": "terrifying-spectacle-peerless-bladesmen",
+    "id": "terrifying-spectacle-peerless-bladesmen-emperors-children",
     "name": "TERRIFYING SPECTACLE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1335,7 +1335,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "terrifying-spectacle-peerless-bladesmen",
+    "ability_id": "terrifying-spectacle-peerless-bladesmen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1352,7 +1352,7 @@
     ]
   },
   {
-    "id": "unbound-arrogance-coterie-of-the-conceited",
+    "id": "unbound-arrogance-coterie-of-the-conceited-emperors-children",
     "name": "UNBOUND ARROGANCE",
     "category": "detachment",
     "type": "epic-deed",
@@ -1365,7 +1365,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unbound-arrogance-coterie-of-the-conceited",
+    "ability_id": "unbound-arrogance-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1382,7 +1382,7 @@
     ]
   },
   {
-    "id": "uncanny-reactions-carnival-of-excess",
+    "id": "uncanny-reactions-carnival-of-excess-emperors-children",
     "name": "UNCANNY REACTIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1394,7 +1394,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "uncanny-reactions-carnival-of-excess",
+    "ability_id": "uncanny-reactions-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1411,7 +1411,7 @@
     ]
   },
   {
-    "id": "unshakeable-opponents-coterie-of-the-conceited",
+    "id": "unshakeable-opponents-coterie-of-the-conceited-emperors-children",
     "name": "UNSHAKEABLE OPPONENTS",
     "category": "detachment",
     "type": "epic-deed",
@@ -1423,7 +1423,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unshakeable-opponents-coterie-of-the-conceited",
+    "ability_id": "unshakeable-opponents-coterie-of-the-conceited-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1440,7 +1440,7 @@
     ]
   },
   {
-    "id": "vengeful-surge-slaaneshs-chosen",
+    "id": "vengeful-surge-slaaneshs-chosen-emperors-children",
     "name": "VENGEFUL SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1452,7 +1452,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "vengeful-surge-slaaneshs-chosen",
+    "ability_id": "vengeful-surge-slaaneshs-chosen-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1469,7 +1469,7 @@
     ]
   },
   {
-    "id": "violent-crescendo-carnival-of-excess",
+    "id": "violent-crescendo-carnival-of-excess-emperors-children",
     "name": "VIOLENT CRESCENDO",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1481,7 +1481,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "violent-crescendo-carnival-of-excess",
+    "ability_id": "violent-crescendo-carnival-of-excess-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1498,7 +1498,7 @@
     ]
   },
   {
-    "id": "violent-excess-mercurial-host",
+    "id": "violent-excess-mercurial-host-emperors-children",
     "name": "VIOLENT EXCESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1510,7 +1510,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "violent-excess-mercurial-host",
+    "ability_id": "violent-excess-mercurial-host-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1527,7 +1527,7 @@
     ]
   },
   {
-    "id": "warp-plunge-elegant-brutes",
+    "id": "warp-plunge-elegant-brutes-emperors-children",
     "name": "WARP PLUNGE",
     "category": "detachment",
     "detachment_id": "elegant-brutes",
@@ -1538,7 +1538,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-plunge-elegant-brutes",
+    "ability_id": "warp-plunge-elegant-brutes-emperors-children",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

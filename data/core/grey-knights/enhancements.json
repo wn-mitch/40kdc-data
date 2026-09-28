@@ -1,6 +1,6 @@
 [
   {
-    "id": "driven-by-duty-sanctic-spearhead",
+    "id": "driven-by-duty-sanctic-spearhead-grey-knights",
     "name": "Driven by Duty",
     "detachment_id": "sanctic-spearhead",
     "cost": 10,
@@ -8,7 +8,7 @@
       "Grey Knights",
       "Walker"
     ],
-    "ability_id": null,
+    "ability_id": "driven-by-duty-sanctic-spearhead-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -29,14 +29,14 @@
     ]
   },
   {
-    "id": "banishing-wave-psychic-brotherhood-strike",
+    "id": "banishing-wave-psychic-brotherhood-strike-grey-knights",
     "name": "Banishing Wave (Psychic)",
     "detachment_id": "brotherhood-strike",
     "cost": 20,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "banishing-wave-psychic-brotherhood-strike-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -57,14 +57,14 @@
     ]
   },
   {
-    "id": "blinding-aura-brotherhood-strike",
+    "id": "blinding-aura-brotherhood-strike-grey-knights",
     "name": "Blinding Aura",
     "detachment_id": "brotherhood-strike",
     "cost": 10,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "blinding-aura-brotherhood-strike-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -85,7 +85,7 @@
     ]
   },
   {
-    "id": "quickening-foci-sanctic-spearhead",
+    "id": "quickening-foci-sanctic-spearhead-grey-knights",
     "name": "Quickening Foci",
     "detachment_id": "sanctic-spearhead",
     "cost": 15,
@@ -93,7 +93,7 @@
       "Grey Knights",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "quickening-foci-sanctic-spearhead-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -114,14 +114,14 @@
     ]
   },
   {
-    "id": "purity-of-purpose-brotherhood-strike",
+    "id": "purity-of-purpose-brotherhood-strike-grey-knights",
     "name": "Purity of Purpose",
     "detachment_id": "brotherhood-strike",
     "cost": 15,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "purity-of-purpose-brotherhood-strike-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -142,14 +142,14 @@
     ]
   },
   {
-    "id": "sigil-of-exigence-sanctic-spearhead",
+    "id": "sigil-of-exigence-sanctic-spearhead-grey-knights",
     "name": "Sigil of Exigence",
     "detachment_id": "sanctic-spearhead",
     "cost": 30,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "sigil-of-exigence-sanctic-spearhead-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -170,14 +170,14 @@
     ]
   },
   {
-    "id": "tome-of-forbidden-ways-brotherhood-strike",
+    "id": "tome-of-forbidden-ways-brotherhood-strike-grey-knights",
     "name": "Tome of Forbidden Ways",
     "detachment_id": "brotherhood-strike",
     "cost": 25,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "tome-of-forbidden-ways-brotherhood-strike-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -198,7 +198,7 @@
     ]
   },
   {
-    "id": "spiritus-machina-sanctic-spearhead",
+    "id": "spiritus-machina-sanctic-spearhead-grey-knights",
     "name": "Spiritus Machina",
     "detachment_id": "sanctic-spearhead",
     "cost": 25,
@@ -206,7 +206,7 @@
       "Grey Knights",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "spiritus-machina-sanctic-spearhead-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -227,32 +227,14 @@
     ]
   },
   {
-    "id": "eye-of-the-augurim-hallowed-conclave",
-    "name": "Eye of the Augurim",
-    "detachment_id": "hallowed-conclave",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Grey Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "inescapable-judgement-psychic-hallowed-conclave",
+    "id": "inescapable-judgement-psychic-hallowed-conclave-grey-knights",
     "name": "Inescapable Judgement (Psychic)",
     "detachment_id": "hallowed-conclave",
     "cost": 20,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "inescapable-judgement-psychic-hallowed-conclave-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -273,7 +255,7 @@
     ]
   },
   {
-    "id": "sanctic-reaper-hallowed-conclave",
+    "id": "sanctic-reaper-hallowed-conclave-grey-knights",
     "name": "Sanctic Reaper",
     "detachment_id": "hallowed-conclave",
     "cost": 15,
@@ -281,7 +263,7 @@
       "Grey Knights",
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "sanctic-reaper-hallowed-conclave-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -302,7 +284,7 @@
     ]
   },
   {
-    "id": "nemesis-rounds-hallowed-conclave",
+    "id": "nemesis-rounds-hallowed-conclave-grey-knights",
     "name": "Nemesis Rounds",
     "detachment_id": "hallowed-conclave",
     "cost": 10,
@@ -310,7 +292,7 @@
       "Grey Knights",
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "nemesis-rounds-hallowed-conclave-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -331,14 +313,14 @@
     ]
   },
   {
-    "id": "sigil-of-the-hunt-banishers",
+    "id": "sigil-of-the-hunt-banishers-grey-knights",
     "name": "Sigil of the Hunt",
     "detachment_id": "banishers",
     "cost": 10,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "sigil-of-the-hunt-banishers-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -359,7 +341,7 @@
     ]
   },
   {
-    "id": "ephemeral-tome-banishers",
+    "id": "ephemeral-tome-banishers-grey-knights",
     "name": "Ephemeral Tome",
     "detachment_id": "banishers",
     "cost": 15,
@@ -367,7 +349,7 @@
       "Grey Knights",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "ephemeral-tome-banishers-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -388,14 +370,14 @@
     ]
   },
   {
-    "id": "sixty-sixth-seal-banishers",
+    "id": "sixty-sixth-seal-banishers-grey-knights",
     "name": "Sixty-sixth Seal",
     "detachment_id": "banishers",
     "cost": 25,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "sixty-sixth-seal-banishers-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -416,14 +398,14 @@
     ]
   },
   {
-    "id": "pyresoul-psychic-banishers",
+    "id": "pyresoul-psychic-banishers-grey-knights",
     "name": "Pyresoul (Psychic)",
     "detachment_id": "banishers",
     "cost": 20,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "pyresoul-psychic-banishers-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -444,14 +426,14 @@
     ]
   },
   {
-    "id": "grimoire-of-conjunctions-augurium-task-force",
+    "id": "grimoire-of-conjunctions-augurium-task-force-grey-knights",
     "name": "Grimoire of Conjunctions",
     "detachment_id": "augurium-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "grimoire-of-conjunctions-augurium-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -472,14 +454,14 @@
     ]
   },
   {
-    "id": "shield-of-prophecy-augurium-task-force",
+    "id": "shield-of-prophecy-augurium-task-force-grey-knights",
     "name": "Shield of Prophecy",
     "detachment_id": "augurium-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "shield-of-prophecy-augurium-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -500,14 +482,14 @@
     ]
   },
   {
-    "id": "one-foot-in-the-future-augurium-task-force",
+    "id": "one-foot-in-the-future-augurium-task-force-grey-knights",
     "name": "One Foot in the Future",
     "detachment_id": "augurium-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "one-foot-in-the-future-augurium-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -528,14 +510,14 @@
     ]
   },
   {
-    "id": "doomseers-amulet-augurium-task-force",
+    "id": "doomseers-amulet-augurium-task-force-grey-knights",
     "name": "Doomseer’s Amulet",
     "detachment_id": "augurium-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "doomseers-amulet-augurium-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -556,14 +538,14 @@
     ]
   },
   {
-    "id": "mandulian-reliquary-warpbane-task-force",
+    "id": "mandulian-reliquary-warpbane-task-force-grey-knights",
     "name": "Mandulian Reliquary",
     "detachment_id": "warpbane-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "mandulian-reliquary-warpbane-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -584,7 +566,7 @@
     ]
   },
   {
-    "id": "radiant-champion-warpbane-task-force",
+    "id": "radiant-champion-warpbane-task-force-grey-knights",
     "name": "Radiant Champion",
     "detachment_id": "warpbane-task-force",
     "cost": 15,
@@ -592,7 +574,7 @@
       "Grey Knights",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "radiant-champion-warpbane-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -613,7 +595,7 @@
     ]
   },
   {
-    "id": "phial-of-the-abyss-warpbane-task-force",
+    "id": "phial-of-the-abyss-warpbane-task-force-grey-knights",
     "name": "Phial of the Abyss",
     "detachment_id": "warpbane-task-force",
     "cost": 15,
@@ -621,7 +603,7 @@
       "Grey Knights",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "phial-of-the-abyss-warpbane-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -642,14 +624,14 @@
     ]
   },
   {
-    "id": "paragon-of-sanctity-warpbane-task-force",
+    "id": "paragon-of-sanctity-warpbane-task-force-grey-knights",
     "name": "Paragon of Sanctity",
     "detachment_id": "warpbane-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Grey Knights"
     ],
-    "ability_id": null,
+    "ability_id": "paragon-of-sanctity-warpbane-task-force-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -670,14 +652,14 @@
     ]
   },
   {
-    "id": "psychic-celerity-argent-assault",
+    "id": "psychic-celerity-argent-assault-grey-knights",
     "name": "Psychic Celerity",
     "detachment_id": "argent-assault",
     "cost": 15,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "psychic-celerity-argent-assault-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -698,14 +680,14 @@
     ]
   },
   {
-    "id": "vigilance-of-titan-argent-assault",
+    "id": "vigilance-of-titan-argent-assault-grey-knights",
     "name": "Vigilance of Titan",
     "detachment_id": "argent-assault",
     "cost": 20,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "vigilance-of-titan-argent-assault-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -726,7 +708,7 @@
     ]
   },
   {
-    "id": "precognicient-volleys-upgrade-fires-of-purgation",
+    "id": "precognicient-volleys-upgrade-fires-of-purgation-grey-knights",
     "name": "Precognicient Volleys (Upgrade)",
     "detachment_id": "fires-of-purgation",
     "cost": 10,
@@ -734,7 +716,7 @@
       "Grey Knights",
       "Purgation Squad"
     ],
-    "ability_id": null,
+    "ability_id": "precognicient-volleys-upgrade-fires-of-purgation-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -755,7 +737,7 @@
     ]
   },
   {
-    "id": "boons-of-deimos-upgrade-fires-of-purgation",
+    "id": "boons-of-deimos-upgrade-fires-of-purgation-grey-knights",
     "name": "Boons of Deimos (Upgrade)",
     "detachment_id": "fires-of-purgation",
     "cost": 20,
@@ -763,7 +745,7 @@
       "Grey Knights",
       "Purgation Squad"
     ],
-    "ability_id": null,
+    "ability_id": "boons-of-deimos-upgrade-fires-of-purgation-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -784,7 +766,7 @@
     ]
   },
   {
-    "id": "predestined-coordinates-upgrade-immaterial-interdiction",
+    "id": "predestined-coordinates-upgrade-immaterial-interdiction-grey-knights",
     "name": "Predestined Coordinates (Upgrade)",
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
@@ -792,7 +774,7 @@
       "Grey Knights",
       "Interceptor Squad"
     ],
-    "ability_id": null,
+    "ability_id": "predestined-coordinates-upgrade-immaterial-interdiction-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -813,7 +795,7 @@
     ]
   },
   {
-    "id": "astral-overlap-upgrade-immaterial-interdiction",
+    "id": "astral-overlap-upgrade-immaterial-interdiction-grey-knights",
     "name": "Astral Overlap (Upgrade)",
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
@@ -821,7 +803,7 @@
       "Grey Knights",
       "Interceptor Squad"
     ],
-    "ability_id": null,
+    "ability_id": "astral-overlap-upgrade-immaterial-interdiction-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -842,7 +824,7 @@
     ]
   },
   {
-    "id": "purifying-force-crowes-sanctifiers",
+    "id": "purifying-force-crowes-sanctifiers-grey-knights",
     "name": "Purifying Force",
     "detachment_id": "crowes-sanctifiers",
     "cost": 0,
@@ -868,7 +850,7 @@
     ]
   },
   {
-    "id": "sanctified-auspexes-crowes-sanctifiers",
+    "id": "sanctified-auspexes-crowes-sanctifiers-grey-knights",
     "name": "Sanctified Auspexes",
     "detachment_id": "crowes-sanctifiers",
     "cost": 0,
@@ -894,11 +876,11 @@
     ]
   },
   {
-    "id": "eye-of-the-augurium-hallowed-conclave",
+    "id": "eye-of-the-augurium-hallowed-conclave-grey-knights",
     "name": "Eye of the Augurium",
     "detachment_id": "hallowed-conclave",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "eye-of-the-augurium-hallowed-conclave-grey-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

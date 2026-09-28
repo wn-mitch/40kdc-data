@@ -13,6 +13,7 @@ import {
   weapons,
 } from "../src/data/index.js";
 import { RAW_DATA } from "../src/data/bundle.generated.js";
+import { SHARE_REGISTRY } from "../src/share/registry.generated.js";
 
 describe("terrain (embedded catalog + layout resolution)", () => {
   it("embeds the 11e template catalog and imported layouts", () => {
@@ -248,11 +249,13 @@ describe("Collection.find / findAll", () => {
     expect(weapons.getAny("lascannon")).toBeDefined();
   });
 
-  it("get() throws for a shared ability id resolved without a faction (dev guard)", () => {
-    expect(() => abilities.get("idol-of-blessed-blood")).toThrow(
-      /Ambiguous ability lookup/,
-    );
-    expect(abilities.getAny("idol-of-blessed-blood")).toBeDefined();
+  it("get() of an ability is exact: ids are unique, and an old bare faction id resolves to nothing", () => {
+    expect(abilities.get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")?.raw.faction_id).toBe("world-eaters");
+    // The pre-mirror bare ids carry no alias (D6): a stale reference misses rather than guessing a faction.
+    expect(abilities.get("idol-of-blessed-blood")).toBeUndefined();
+    expect(abilities.get("berzerker-frenzy")).toBeUndefined();
+    expect(abilities.get("berzerker-frenzy-world-eaters")).toBeDefined();
+    expect(abilities.get("deadly-demise-d3")).toBeUndefined();
   });
 
   it("getInFaction returns undefined when the id is absent from the faction", () => {
@@ -318,16 +321,20 @@ describe("Collection id-alias resolution (renamed ids)", () => {
   // The share-registry alias map (old id → current id) is wired into the
   // enhancements collection, so a persisted roster/share reference to a
   // since-renamed enhancement id still resolves to the current record.
-  it("resolves a renamed enhancement id via get/getAny/has", () => {
-    const renamed = "a-chink-in-their-armour"; // → …-host-of-ascension
-    const current = "a-chink-in-their-armour-host-of-ascension";
-    expect(enhancements.get(renamed)?.id).toBe(current);
-    expect(enhancements.getAny(renamed)?.id).toBe(current);
-    expect(enhancements.has(renamed)).toBe(true);
+  it("resolves a renamed enhancement id via get/getAny/has, and adds no alias for the mirror's renames", () => {
+    // Every alias whose target still exists resolves; the mirror's renames (D6) add none.
+    const live = Object.entries(SHARE_REGISTRY.aliases).find(([, to]) => enhancements.all.some((e) => e.id === to));
+    if (live) {
+      const [renamed, current] = live;
+      expect(enhancements.get(renamed)?.id).toBe(current);
+      expect(enhancements.getAny(renamed)?.id).toBe(current);
+      expect(enhancements.has(renamed)).toBe(true);
+    }
+    expect(enhancements.get("a-chink-in-their-armour-host-of-ascension")).toBeUndefined();
   });
 
   it("returns the record unchanged for a current (non-aliased) id", () => {
-    const id = "a-chink-in-their-armour-host-of-ascension";
+    const id = "a-chink-in-their-armour-host-of-ascension-genestealer-cults";
     expect(enhancements.get(id)?.id).toBe(id);
   });
 
@@ -405,10 +412,10 @@ describe("Kharn proof (the headline one-liner)", () => {
     expect(kharn!.faction?.id).toBe("world-eaters");
     expect(kharn!.weapons.length).toBe(2);
     expect(kharn!.abilities.map((a) => a.id).sort()).toEqual([
-      "berzerker-frenzy",
+      "berzerker-frenzy-world-eaters",
       "leader",
-      "legendary-killer",
-      "the-betrayer",
+      "legendary-killer-world-eaters",
+      "the-betrayer-world-eaters",
     ]);
   });
 
@@ -416,15 +423,14 @@ describe("Kharn proof (the headline one-liner)", () => {
     const shooting = kharn!.abilities.filter((a) =>
       a.phases.includes("shooting"),
     );
-    expect(shooting.map((a) => a.id)).toEqual(["berzerker-frenzy"]);
+    expect(shooting.map((a) => a.id)).toEqual(["berzerker-frenzy-world-eaters"]);
   });
 });
 
 describe("AbilityView.phases (joined via phase-mappings)", () => {
   it("unions phases across a mapping", () => {
-    // deadly-demise-d3 is a shared id (per-faction copies) — phase-mappings
-    // key on the bare ability id, so any copy carries the same phases.
-    expect(abilities.getAny("deadly-demise-d3")?.phases.sort()).toEqual([
+    // Every faction dir maps the one core Deadly Demise record; the phases union.
+    expect(abilities.get("deadly-demise")?.phases.sort()).toEqual([
       "fight",
       "shooting",
     ]);
@@ -542,7 +548,7 @@ describe("AbilityView reusable rules bundles", () => {
 
 describe("reverse links", () => {
   it("AbilityView.units lists units that have the ability", () => {
-    expect(abilities.get("berzerker-frenzy")?.units.map((u) => u.id)).toContain(
+    expect(abilities.get("berzerker-frenzy-world-eaters")?.units.map((u) => u.id)).toContain(
       "kharn-the-betrayer",
     );
   });
@@ -685,48 +691,40 @@ describe("collection integrity", () => {
   it("links every declared Tyranids faction rule to a faction ability", () => {
     const tyranids = factions.get("tyranids");
     expect(tyranids?.raw.faction_rule_ids).toEqual([
-      "shadow-in-the-warp",
-      "synapse",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids",
     ]);
 
     for (const ruleId of tyranids!.raw.faction_rule_ids) {
-      expect(abilities.getInFaction(ruleId, "tyranids")?.raw.ability_type).toBe(
+      expect(abilities.get(ruleId)?.raw.ability_type).toBe(
         "faction",
       );
     }
   });
 
-  it("deduplicates abilities by (faction_id, id) — every faction's copy retained", () => {
-    // A shared ability_id keeps one copy per faction (the copies legitimately
-    // diverge); only true within-faction duplicates collapse.
-    const keys = abilities.all.map((a) => `${a.raw.faction_id ?? ""}::${a.id}`);
-    expect(new Set(keys).size).toBe(keys.length);
-    // idol-of-blessed-blood exists under both world-eaters and
-    // chaos-space-marines — both copies must survive dedupe.
-    expect(
-      abilities.all.filter((a) => a.id === "idol-of-blessed-blood").length,
-    ).toBe(2);
+  it("keeps every ability record: ids are unique across factions, and every faction record names its faction", () => {
+    const ids = abilities.all.map((a) => a.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBe(RAW_DATA.abilities.length);
+    for (const a of abilities.all) {
+      if (a.raw.faction_id) expect(a.id === a.raw.faction_id || a.id.endsWith(`-${a.raw.faction_id}`), a.id).toBe(true);
+    }
   });
 
   it("folds shared _core abilities into the collection", () => {
     expect(abilities.get("benefit-of-cover")).toBeDefined();
   });
 
-  it("resolves a shared ability_id to the unit's own faction's copy", () => {
-    // `idol-of-blessed-blood` is authored in both world-eaters and
-    // chaos-space-marines (the Khorne Lord of Skulls is a shared datasheet).
-    // Each faction's Lord of Skulls must see its own faction's copy — the
-    // regression this guards: a CSM stub silently shadowing the authored
-    // world-eaters entry under first-wins dedupe.
-    for (const f of ["world-eaters", "chaos-space-marines"]) {
-      const unit = units.getInFaction("khorne-lord-of-skulls", f)!;
-      const idol = unit.abilities.find((a) => a.id === "idol-of-blessed-blood");
-      expect(
-        idol,
-        `idol-of-blessed-blood on ${f} lord of skulls`,
-      ).toBeDefined();
-      expect(idol!.raw.faction_id).toBe(f);
-    }
+  it("gives each faction's copy of a shared datasheet only what its own datasheet prints", () => {
+    // The World Eaters Lord of Skulls prints the Idol of Blessed Blood; the CSM one does not
+    // (its old copy of the Idol was contamination from the other datasheet).
+    const we = units.getInFaction("khorne-lord-of-skulls", "world-eaters")!;
+    const csm = units.getInFaction("khorne-lord-of-skulls", "chaos-space-marines")!;
+    expect(we.abilities.map((a) => a.id)).toContain("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters");
+    expect(csm.abilities.some((a) => a.id.startsWith("idol-of-blessed-blood"))).toBe(false);
+    // Both print Deadly Demise at the same rating, read from the unit.
+    expect(we.ratingOf("deadly-demise")).toBe("D6+2");
+    expect(csm.ratingOf("deadly-demise")).toBe("D6+2");
   });
 
   it("falls back to the faction-less _core pool for ids outside the unit's faction", () => {

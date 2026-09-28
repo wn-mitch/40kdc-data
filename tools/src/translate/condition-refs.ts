@@ -30,6 +30,27 @@ export function titleCase(s: string): string {
     .join(" ");
 }
 
+/**
+ * Faction dir slugs an ability or Stratagem id ends with (`<name>-<faction>`), longest first. The
+ * suffix is identity, not name, so it never reaches the English.
+ */
+const FACTION_SUFFIXES: readonly string[] = ["agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children", "genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars", "imperial-fists", "crimson-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves", "grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire", "deathwatch", "drukhari", "tyranids", "aeldari", "necrons", "orks"];
+
+/** An ability or Stratagem id without its faction suffix ("acts-of-faith-adepta-sororitas" → "acts-of-faith"). */
+export function withoutFactionSuffix(id: string): string {
+  for (const f of FACTION_SUFFIXES) if (id.endsWith(`-${f}`) && id.length > f.length + 1) return id.slice(0, -f.length - 1);
+  return id;
+}
+
+/** Ids whose name itself ends with the faction (the suffix was never added). */
+const WHOLE_NAMES: Readonly<Record<string, string>> = { "lord-of-the-death-guard": "Lord of the Death Guard" };
+
+/** An ability or Stratagem id as a name: its name part in Title Case. */
+export function idLabel(id: unknown): string {
+  const s = str(id);
+  return WHOLE_NAMES[s] ?? titleCase(withoutFactionSuffix(s));
+}
+
 export function str(v: unknown): string {
   if (v == null) return "?";
   return typeof v === "string" ? v : String(v);
@@ -76,8 +97,8 @@ export function unitFilterPhrase(f: P): string {
   s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
-  if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => titleCase(str(a))))} ability`;
-  if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => titleCase(str(a))))} ability`;
+  if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => idLabel(a)))} ability`;
+  if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
   if (f.member_of != null) s += ` in ${unitRefPhrase(f.member_of)}`;
   if (f.engaged_with != null) s += ` within Engagement Range of ${unitFilterPhrase(f.engaged_with as P)}`;
@@ -111,7 +132,7 @@ export function subjectOf(p: P, fallback = "the unit"): string {
   return unitRefPhrase(p.subject, fallback);
 }
 
-const AURA_RANGES: Record<string, string> = { "nurgle-s-gift-aura": "Contagion Range" };
+const AURA_RANGES: Record<string, string> = { "nurgles-gift-death-guard": "Contagion Range" };
 
 /** A range-ref as a distance phrase ("6\"", "Engagement Range", "Contagion Range"). */
 export function rangePhrase(r: unknown): string {
@@ -124,7 +145,7 @@ export function rangePhrase(r: unknown): string {
   }
   const o = r as P;
   if (o.inches != null) return `${str(o.inches)}"`;
-  if (o.aura_of != null) return AURA_RANGES[str(o.aura_of)] ?? `the ${titleCase(str(o.aura_of))} range`;
+  if (o.aura_of != null) return AURA_RANGES[str(o.aura_of)] ?? `the ${idLabel(o.aura_of)} range`;
   return '?"';
 }
 
@@ -184,7 +205,7 @@ export function moveKinds(types: unknown): string {
 
 /** A roll kind as words: "hit", or the dice a named ability rolls ("Reanimation Protocols"). */
 export function rollWord(roll: unknown): string {
-  if (roll != null && typeof roll === "object" && (roll as P).of_ability != null) return titleCase(str((roll as P).of_ability));
+  if (roll != null && typeof roll === "object" && (roll as P).of_ability != null) return idLabel((roll as P).of_ability);
   return dekebab(str(roll));
 }
 

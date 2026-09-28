@@ -110,7 +110,7 @@
             </profile>
             <profile name="Targeted Intercession" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, you can re-roll a Wound roll of 1.</characteristic>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>

@@ -57,8 +57,12 @@
       "twin-conversion-beam-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-2d6",
-      "sunderer-of-fortresses"
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "sunderer-of-fortresses-imperial-knights",
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -143,9 +147,13 @@
       "twin-incendine-combustor"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "defender-s-duty-bondsman",
-      "selfless-protector"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "selfless-protector-imperial-knights",
+      "damaged-1-9-wounds-remaining-knight-defender-imperial-knights",
+      "defenders-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -228,9 +236,13 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "acheron-s-duty-bondsman",
-      "deadly-demise-d6-2",
-      "searing-flames"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "searing-flames-imperial-knights",
+      "acherons-duty-imperial-knights",
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -313,8 +325,12 @@
       "twin-magna-lascannon"
     ],
     "ability_ids": [
-      "bastion-of-firepower",
-      "deadly-demise-2d6"
+      "bastion-of-firepower-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -396,9 +412,13 @@
       "tempest-warblade"
     ],
     "ability_ids": [
-      "castigator-s-duty-bondsman",
-      "storm-of-bolts",
-      "deadly-demise-d6-2"
+      "storm-of-bolts-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "castigators-duty-imperial-knights",
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -486,9 +506,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "paladin-s-duty-bondsman",
-      "seasoned-noble",
-      "deadly-demise-d6"
+      "seasoned-noble-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "paladins-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -576,9 +600,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "aggressive-assault",
-      "errant-s-duty-bondsman",
-      "deadly-demise-d6"
+      "aggressive-assault-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "errants-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -668,9 +696,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "crusader-s-duty-bondsman",
-      "punishing-salvoes",
-      "deadly-demise-d6"
+      "punishing-salvoes-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "crusaders-duty-imperial-knights",
+      "damaged-1-9-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -765,9 +797,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "thin-their-ranks-spearhead-at-arms",
-      "warden-s-duty-bondsman",
-      "deadly-demise-d6"
+      "thin-their-ranks-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "wardens-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -856,9 +892,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "exemplar-of-the-code",
-      "mentor-bondsman",
-      "deadly-demise-d6"
+      "exemplar-of-the-code-imperial-knights",
+      "mentor-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -938,9 +978,13 @@
       "cerastus-shock-lance"
     ],
     "ability_ids": [
-      "lancer-s-duty-bondsman",
-      "shock-charge",
-      "deadly-demise-d6-2"
+      "shock-charge-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-imperial-knights",
+      "lancers-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1022,8 +1066,12 @@
       "volkite-veuglaire"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "protection-protocols"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "protection-protocols-imperial-knights",
+      "damaged-1-5-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1116,9 +1164,13 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "gallant-s-duty-bondsman",
-      "martial-pride",
-      "deadly-demise-d6"
+      "martial-pride-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "gallants-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1188,8 +1240,12 @@
       "thermal-spear"
     ],
     "ability_ids": [
-      "impetuous-glory",
-      "deadly-demise-d3"
+      "impetuous-glory-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1281,9 +1337,13 @@
       "twin-siegebreaker-cannon"
     ],
     "ability_ids": [
-      "ion-aegis-aura",
-      "thundershock",
-      "deadly-demise-d6-2"
+      "ion-aegis-imperial-knights",
+      "thundershock-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1348,7 +1408,7 @@
     ],
     "ability_ids": [
       "lone-operative",
-      "using-sir-hekhtur"
+      "using-sir-hekhtur-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1424,9 +1484,14 @@
       "las-impulsor-canis-rex"
     ],
     "ability_ids": [
-      "chainbreaker",
-      "legendary-freeblade",
-      "deadly-demise-d6"
+      "chainbreaker-imperial-knights",
+      "legendary-freeblade-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "using-sir-hekhtur-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1516,8 +1581,13 @@
       "volcano-lance"
     ],
     "ability_ids": [
-      "titan-hunter",
-      "deadly-demise-d6-2"
+      "titan-hunter-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-imperial-knights",
+      "ion-aegis-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1588,8 +1658,12 @@
       "questoris-heavy-stubber"
     ],
     "ability_ids": [
-      "suppression-protocols",
-      "deadly-demise-d3"
+      "suppression-protocols-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1679,9 +1753,13 @@
       "twin-rad-cleanser"
     ],
     "ability_ids": [
-      "magaera-s-duty-bondsman",
-      "repair-auto-simulacra",
-      "deadly-demise-d6"
+      "repair-auto-simulacra-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "magaeras-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1765,9 +1843,13 @@
       "volkite-chierovile"
     ],
     "ability_ids": [
-      "grav-pinned",
-      "styrix-s-duty-bondsman",
-      "deadly-demise-d6"
+      "grav-pinned-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-9-wounds-remaining-imperial-knights",
+      "styrixs-duty-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1848,9 +1930,13 @@
       "graviton-singularity-cannon"
     ],
     "ability_ids": [
-      "atrapos-duty-bondsman",
-      "macro-extinction-protocols",
-      "deadly-demise-d6-2"
+      "atrapos-duty-imperial-knights",
+      "macro-extinction-protocols-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "damaged-1-10-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1936,10 +2022,14 @@
       "thundershock-spear"
     ],
     "ability_ids": [
-      "ram-jets",
-      "thundercharge",
-      "saturation-fire",
-      "deadly-demise-d6"
+      "ram-jets-imperial-knights",
+      "thundercharge-imperial-knights",
+      "saturation-fire-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-6-wounds-remaining-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",

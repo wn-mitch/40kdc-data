@@ -8,20 +8,18 @@ values are compared as sets and surfaced for review on mismatch, never overwritt
 |---|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-astartes | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| adeptus-custodes | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| adeptus-custodes | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | agents-of-the-imperium | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | astra-militarum | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | black-templars | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | blood-angels | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | chaos-knights | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| chaos-space-marines | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| chaos-space-marines | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | dark-angels | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | death-guard | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
 | deathwatch | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
-| drukhari | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
 | emperors-children | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| genestealer-cults | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | grey-knights | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | imperial-fists | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | imperial-knights | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
@@ -40,67 +38,58 @@ values are compared as sets and surfaced for review on mismatch, never overwritt
 | world-eaters | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## adeptus-astartes
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
-
-## adeptus-custodes
-- faction_rule_ids REVIEW: authored [martial-ka-tah] vs owned [martial-katah]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## black-templars
-- faction_rule_ids REVIEW: authored [templar-vows] vs owned [space-marine-chapters, templar-vows, heirs-of-sigismund]
+- faction_rule_ids REVIEW: authored [templar-vows-black-templars] vs owned [space-marine-chapters-adeptus-astartes, templar-vows-black-templars, heirs-of-sigismund-black-templars]
 
 ## blood-angels
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters, the-sons-of-sanguinius]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-blood-angels, oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes, the-sons-of-sanguinius-blood-angels]
 
 ## chaos-knights
-- faction_rule_ids REVIEW: authored [harbingers-of-dread] vs owned [harbingers-of-dread, dreadblades, super-heavy-walker]
-
-## chaos-space-marines
-- faction_rule_ids REVIEW: authored [dark-pacts] vs owned [cults-of-the-dark-gods, dark-pacts]
+- faction_rule_ids REVIEW: authored [harbingers-of-dread-chaos-knights] vs owned [harbingers-of-dread-chaos-knights, dreadblades-chaos-knights, super-heavy-walker-chaos-knights]
 
 ## dark-angels
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [the-ravenwing, oath-of-moment, space-marine-chapters, the-unforgiven, the-deathwing]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-dark-angels, oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes, the-unforgiven-dark-angels]
 
 ## death-guard
-- faction_rule_ids REVIEW: authored [nurgle-s-gift-aura] vs owned [nurgles-gift, pact-of-decay]
+- faction_rule_ids REVIEW: authored [nurgles-gift-death-guard] vs owned [nurgles-gift-death-guard, pact-of-decay-death-guard]
 
 ## deathwatch
-- faction_rule_ids REVIEW: authored [mission-tactics] vs owned [kill-teams, oath-of-moment, space-marine-chapters]
-
-## drukhari
-- faction_rule_ids REVIEW: authored [power-from-pain] vs owned [power-from-pain, corsairs-and-travelling-players]
+- faction_rule_ids REVIEW: authored [mission-tactics-deathwatch] vs owned [kill-teams-deathwatch, oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## emperors-children
-- faction_rule_ids REVIEW: authored [thrill-seekers] vs owned [thrill-seekers, pact-of-excess]
+- faction_rule_ids REVIEW: authored [thrill-seekers-emperors-children] vs owned [thrill-seekers-emperors-children, pact-of-excess-emperors-children]
 
 ## imperial-fists
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## imperial-knights
-- faction_rule_ids REVIEW: authored [code-chivalric] vs owned [bondsman, super-heavy-walker, code-chivalric, freeblades]
+- faction_rule_ids REVIEW: authored [code-chivalric-imperial-knights] vs owned [bondsman-imperial-knights, super-heavy-walker-imperial-knights, code-chivalric-imperial-knights, freeblades-imperial-knights]
 
 ## iron-hands
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## orks
-- faction_rule_ids REVIEW: authored [waaagh] vs owned [da-boss, unstable-energies]
+- faction_rule_ids REVIEW: authored [waaagh-orks] vs owned [da-boss-orks, unstable-energies-orks]
 
 ## raven-guard
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## space-wolves
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, sagas, sons-of-russ, curse-of-the-wulfen]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-space-wolves, sagas-space-wolves, sons-of-russ-space-wolves, curse-of-the-wulfen-space-wolves]
 
 ## tau-empire
-- faction_rule_ids REVIEW: authored [for-the-greater-good] vs owned [drones, for-the-greater-good]
+- faction_rule_ids REVIEW: authored [for-the-greater-good-tau-empire] vs owned [drones-tau-empire, for-the-greater-good-tau-empire]
 
 ## thousand-sons
-- faction_rule_ids REVIEW: authored [cabal-of-sorcerers] vs owned [cabal-of-sorcerers, pact-of-sorcery]
+- faction_rule_ids REVIEW: authored [cabal-of-sorcerers-thousand-sons] vs owned [cabal-of-sorcerers-thousand-sons, pact-of-sorcery-thousand-sons]
 
 ## ultramarines
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## white-scars
-- faction_rule_ids REVIEW: authored [oath-of-moment] vs owned [oath-of-moment, space-marine-chapters]
+- faction_rule_ids REVIEW: authored [combat-doctrines-assault-force-adeptus-astartes] vs owned [oath-of-moment-adeptus-astartes, space-marine-chapters-adeptus-astartes]
 
 ## Repo faction dirs with no dump faction keyword (left as-is): 3
 

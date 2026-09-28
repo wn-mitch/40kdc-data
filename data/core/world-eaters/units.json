@@ -57,8 +57,12 @@
       "forgefiend-claws"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "furious-onslaught"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "furious-onslaught-world-eaters",
+      "damaged-1-4-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -135,10 +139,10 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "berzerker-frenzy",
+      "berzerker-frenzy-world-eaters",
       "leader",
-      "legendary-killer",
-      "the-betrayer"
+      "legendary-killer-world-eaters",
+      "the-betrayer-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -209,8 +213,8 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "forwards-for-blood",
+      "a-worthy-skull-world-eaters",
+      "forwards-for-blood-world-eaters",
       "leader"
     ],
     "game_version": {
@@ -292,8 +296,11 @@
       "plasma-pistol-khorne-berzerkers"
     ],
     "ability_ids": [
-      "blood-surge",
-      "icon-of-khorne"
+      "blood-surge-world-eaters",
+      {
+        "id": "icon-of-khorne-world-eaters",
+        "wargear": "icon-of-khorne"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -377,8 +384,11 @@
       "skullsmasher-and-mangler"
     ],
     "ability_ids": [
-      "icon-of-khorne",
-      "objective-ravaged"
+      {
+        "id": "icon-of-khorne-world-eaters",
+        "wargear": "icon-of-khorne"
+      },
+      "objective-ravaged-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -455,8 +465,8 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "aggressive-advance",
-      "crush-all-who-stand-before-us",
+      "aggressive-advance-world-eaters",
+      "crush-all-who-stand-before-us-world-eaters",
       "leader"
     ],
     "game_version": {
@@ -529,10 +539,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "bloodied-terror",
-      "deadly-demise-d3",
+      "bloodied-terror-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "deep-strike",
-      "swooping-predator"
+      "swooping-predator-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -613,8 +626,12 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-world-eaters"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -696,9 +713,13 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "savage-exaltation",
-      "the-scent-of-blood"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "savage-exaltation-world-eaters",
+      "the-scent-of-blood-world-eaters",
+      "damaged-1-4-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -783,9 +804,13 @@
       "shearing-claws"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "scuttling-walker",
-      "unleash-wrath"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-world-eaters",
+      "unleash-wrath-world-eaters",
+      "damaged-1-6-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -866,9 +891,13 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "deadly-demise-d3",
-      "hover"
+      "airborne-predator-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "hover",
+      "damaged-1-4-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -938,10 +967,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "devastating-assault",
-      "direct-the-slaughter",
-      "lord-of-murder"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "devastating-assault-world-eaters",
+      "direct-the-slaughter-world-eaters",
+      "lord-of-murder-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1031,8 +1063,11 @@
       "chainblades-eightbound"
     ],
     "ability_ids": [
-      "beacons-of-rage",
-      "scouts-6"
+      "beacons-of-rage-world-eaters",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1106,11 +1141,14 @@
       "lacerator-and-daemonic-claw"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "leader",
-      "lord-of-the-eightbound",
-      "possessed-lord",
-      "rage-eternal"
+      "lord-of-the-eightbound-world-eaters",
+      "possessed-lord-world-eaters",
+      "rage-eternal-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1202,7 +1240,7 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rend-and-tear"
+      "rend-and-tear-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1278,11 +1316,14 @@
       "cowards-bane"
     ],
     "ability_ids": [
-      "bloody-stampede",
+      "bloody-stampede-world-eaters",
       "deep-strike",
-      "fire-riders",
+      "fire-riders-world-eaters",
       "leader",
-      "scouts-6"
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1364,9 +1405,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "firing-deck-2",
-      "meet-any-challenge"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "meet-any-challenge-world-eaters"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1447,9 +1494,12 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "frenzy"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-world-eaters",
+      "frenzy-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1530,8 +1580,12 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "punishing-suppression"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "punishing-suppression-world-eaters",
+      "damaged-1-4-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1603,11 +1657,15 @@
       "samniarius-and-spinegrinder"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "reborn-in-blood",
-      "supreme-commander",
-      "wrathful-presence"
+      "reborn-in-blood-world-eaters",
+      "supreme-commander-world-eaters",
+      "wrathful-presence-world-eaters",
+      "damaged-1-6-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1688,8 +1746,12 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "blood-hungry-annihilator",
-      "deadly-demise-d3"
+      "blood-hungry-annihilator-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1785,7 +1847,7 @@
       "reaper-autocannon-chaos-terminators"
     ],
     "ability_ids": [
-      "bloody-fury",
+      "bloody-fury-world-eaters",
       "deep-strike"
     ],
     "game_version": {
@@ -1899,9 +1961,13 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-plus-2",
-      "idol-of-blessed-blood",
-      "super-heavy-war-engine"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters",
+      "super-heavy-war-engine-world-eaters",
+      "damaged-1-8-wounds-remaining-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1969,9 +2035,15 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "feel-no-pain-5-plus",
-      "scouts-8",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      "to-slake-its-rage-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2046,7 +2118,7 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "loping-speed"
+      "loping-speed-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2118,8 +2190,8 @@
       "mauler-chainblade"
     ],
     "ability_ids": [
-      "icon-of-khorne",
-      "objective-ravaged"
+      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
+      "objective-ravaged-frenzied-reavers-jakhals-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2182,8 +2254,8 @@
       "khornate-eviscerator"
     ],
     "ability_ids": [
-      "blood-surge",
-      "icon-of-khorne"
+      "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
+      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2247,8 +2319,7 @@
       "axe-of-dismemberment"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "leader"
+      "a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2315,9 +2386,9 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "devastating-assault-frenzied-reavers",
-      "direct-the-slaughter-frenzied-reavers",
-      "lord-of-murder-frenzied-reavers"
+      "devastating-assault-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
+      "direct-the-slaughter-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
+      "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",

@@ -58,8 +58,12 @@
       "twin-assault-cannon"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-grey-knights"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -149,10 +153,14 @@
       "sublimator"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "deep-strike",
-      "surge-of-wrath-psychic",
-      "warrior-strategist"
+      "surge-of-wrath-grey-knights",
+      "damaged-1-4-wounds-remaining-grey-knights",
+      "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -244,9 +252,12 @@
       "twin-assault-cannon"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6",
-      "legacy-of-jerulas"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-grey-knights"
     ],
     "transport_capacity": {
       "capacity": 16
@@ -324,9 +335,9 @@
     ],
     "ability_ids": [
       "leader",
-      "might-of-titan-psychic",
+      "might-of-titan-grey-knights",
       "deep-strike",
-      "warrior-strategist"
+      "warrior-strategist-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -408,9 +419,11 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "fire-focus",
-      "fire-support",
-      "deadly-demise-d3"
+      "fire-focus-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 6
@@ -508,7 +521,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctity-of-purpose",
+      "sanctity-of-purpose-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -602,9 +615,13 @@
       "nemesis-greatsword"
     ],
     "ability_ids": [
-      "indomitable-spirit-psychic",
+      "indomitable-spirit-grey-knights",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -692,10 +709,17 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "aerial-assault",
-      "deadly-demise-d6-2",
+      "aerial-assault-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
       "hover",
-      "thunderhawk-cluster-bombs"
+      {
+        "id": "thunderhawk-cluster-bombs-grey-knights",
+        "wargear": "thunderhawk-cluster-bombs"
+      },
+      "damaged-1-10-wounds-remaining-grey-knights"
     ],
     "transport_capacity": {
       "capacity": 30
@@ -777,10 +801,15 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "self-repair",
-      "truesilver-aegis-aura",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "truesilver-aegis-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -857,8 +886,8 @@
       "storm-bolter-brother-captain"
     ],
     "ability_ids": [
-      "eye-of-judgement-psychic",
-      "hammerhand-psychic",
+      "eye-of-judgement-grey-knights",
+      "hammerhand-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -944,8 +973,11 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "guidance-of-the-ancients-psychic",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "guidance-of-the-ancients-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1018,8 +1050,8 @@
       "storm-bolter-castellan-crowe"
     ],
     "ability_ids": [
-      "champion-of-the-order-of-purifiers-psychic",
-      "foesight-psychic",
+      "champion-of-the-order-of-purifiers-grey-knights",
+      "foesight-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -1101,8 +1133,11 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctifying-ritual-psychic",
-      "scouts-6",
+      "sanctifying-ritual-grey-knights",
+      {
+        "id": "scouts",
+        "value": 6
+      },
       "deep-strike"
     ],
     "game_version": {
@@ -1187,10 +1222,10 @@
       "servo-arm"
     ],
     "ability_ids": [
-      "blessing-of-the-omnissiah",
-      "guardians-of-the-machine",
+      "blessing-of-the-omnissiah-grey-knights",
+      "guardians-of-the-machine-grey-knights",
       "leader",
-      "techmarine",
+      "techmarine-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1272,9 +1307,9 @@
       "vortex-of-doom"
     ],
     "ability_ids": [
-      "haloed-in-soulfire-psychic",
+      "haloed-in-soulfire-grey-knights",
       "leader",
-      "sanctic-hood",
+      "sanctic-hood-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1346,8 +1381,8 @@
       "storm-bolter-brotherhood-champion"
     ],
     "ability_ids": [
-      "clarion-of-haste-psychic",
-      "inspiring-exemplar",
+      "clarion-of-haste-grey-knights",
+      "inspiring-exemplar-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -1444,7 +1479,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "righteous-persecution",
+      "righteous-persecution-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1536,8 +1571,11 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "strafing-run",
-      "deadly-demise-d3"
+      "strafing-run-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1632,7 +1670,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "personal-teleporters",
+      "personal-teleporters-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1716,8 +1754,8 @@
     ],
     "ability_ids": [
       "leader",
-      "litanies-of-sanctity",
-      "zealous-path",
+      "litanies-of-sanctity-grey-knights",
+      "zealous-path-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1839,9 +1877,15 @@
       "storm-bolter-paladin-squad"
     ],
     "ability_ids": [
-      "ancient-s-banner",
-      "apothecary-s-narthecium",
-      "attuned-onslaught-psychic",
+      {
+        "id": "ancients-banner-grey-knights",
+        "wargear": "ancients-banner"
+      },
+      {
+        "id": "apothecarys-narthecium-grey-knights",
+        "wargear": "apothecarys-narthecium"
+      },
+      "attuned-onslaught-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1928,8 +1972,12 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-grey-knights"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2004,9 +2052,9 @@
       "storm-bolter-grand-master-voldus"
     ],
     "ability_ids": [
-      "hammer-aflame-psychic",
+      "hammer-aflame-grey-knights",
       "leader",
-      "sanctuary-psychic",
+      "sanctuary-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -2096,8 +2144,16 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "force-edge-psychic",
-      "deep-strike"
+      "force-edge-grey-knights",
+      "deep-strike",
+      {
+        "id": "ancients-banner-grey-knights",
+        "wargear": "ancients-banner"
+      },
+      {
+        "id": "apothecarys-narthecium-grey-knights",
+        "wargear": "apothecarys-narthecium"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2178,8 +2234,11 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "interceptor",
-      "deadly-demise-d3"
+      "interceptor-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2263,9 +2322,13 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "armoured-resilience",
+      "armoured-resilience-grey-knights",
       "hover",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-grey-knights"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2337,8 +2400,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "force-edge-psychic",
-      "gate-of-infinity"
+      "force-edge-crowes-sanctifiers-brotherhood-terminator-squad-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2406,9 +2468,8 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctifying-ritual-psychic",
-      "combat-squads-crowes-sanctifiers",
-      "gate-of-infinity"
+      "combat-squad-grey-knights",
+      "sanctifying-ritual-crowes-sanctifiers-strike-squad-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2476,8 +2537,7 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "guidance-of-the-ancients-psychic-crowes-sanctifiers",
-      "gate-of-infinity"
+      "guidance-of-the-ancients-crowes-sanctifiers-venerable-dreadnought-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2544,8 +2604,7 @@
       "storm-bolter-castellan-crowe"
     ],
     "ability_ids": [
-      "foesight-psychic",
-      "gate-of-infinity"
+      "foesight-sanctifiers-castellan-crowe-grey-knights"
     ],
     "game_version": {
       "edition": "11th",

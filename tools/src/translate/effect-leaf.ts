@@ -10,6 +10,7 @@ import {
   abilityLabel, andList, bracketKeyword, dekebab, diceCase, effectSubject, hasWeapon, isPlural, jstr, ofOrPossessive, orList, pronoun,
   movedPhrase, noneOf, rangePhrase, regionPhrase, rollName, signed, statName, titleCase, v, weaponHolder, weaponLabel, weaponNoun,
   weaponRollScope, type Ctx,
+  isRatingRef,
 } from "./effect-words.js";
 import type { P } from "./condition-refs.js";
 
@@ -159,9 +160,10 @@ function abilityGrant(m: Record<string, unknown>, subj: string): string {
   // Cover is a state a unit has, not an ability it gains.
   if (m.ability === "benefit-of-cover") return `${subj} ${v(subj, "has")} the Benefit of Cover`;
   const inch = m.ability === "scouts" || m.ability === "deep-strike" ? '"' : "";
-  const value = m.value != null ? ` ${jstr(m.value)}${inch}` : "";
+  const rated = isRatingRef(m.value);
+  const value = m.value != null ? ` ${rated ? "X" : jstr(m.value)}${inch}` : "";
   const noun = m.rules_bundle === true ? "rules" : "ability";
-  return `${subj} ${v(subj, "gains")} the ${abilityLabel(m.ability)}${value} ${noun}`;
+  return `${subj} ${v(subj, "gains")} the ${abilityLabel(m.ability)}${value} ${noun}${rated ? ", X being its rating" : ""}`;
 }
 
 function keywordGrant(m: Record<string, unknown>, subj: string): string {
@@ -258,7 +260,7 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
   const it = subj.startsWith("all ") || / units\b/.test(subj) ? "they" : "it";
   const act =
     m.activity === "use-stratagem" && m.stratagem != null
-      ? `be targeted with the ${titleCase(jstr(m.stratagem))} Stratagem`
+      ? `be targeted with the ${abilityLabel(m.stratagem)} Stratagem`
       : ACTIVITIES[jstr(m.activity)] ?? jstr(m.activity);
   const into = m.into != null ? ` ${m.activity === "shoot" ? "at" : m.activity === "declare-charge" ? "against" : "into"} ${noneOf(effectSubject(m.into, ctx))}` : "";
   const reach = m.reach != null ? ` from up to ${jstr(m.reach)}" away` : "";
@@ -292,7 +294,7 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const verb = m.may === "cannot-target" ? "cannot target" : m.may === "must-target" ? "must target" : "can target";
   const kind =
     m.kind === "stratagem" && m.stratagem != null
-      ? ` with the ${titleCase(jstr(m.stratagem))} Stratagem`
+      ? ` with the ${abilityLabel(m.stratagem)} Stratagem`
       : hasWeapon(m) ? ` with ${weaponNoun(m)}` : TARGET_KINDS[jstr(m.kind)] ?? "";
   const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
   const unless = m.only_if_none != null ? `, unless there is no other eligible ${effectSubject(m.only_if_none, ctx).replace(/^all /, "").replace(/ units\b/, " unit")}` : "";
@@ -330,7 +332,7 @@ const CORE_RULES: Record<string, [string, string]> = {
 function ruleState(m: Record<string, unknown>, subj: string): string {
   const granted = m.direction === "granted";
   const rule = jstr(m.rule);
-  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${titleCase(rule)}` : `${subj} cannot use ${titleCase(rule)}`;
+  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(rule)}` : `${subj} cannot use ${abilityLabel(rule)}`;
   if (rule === "overwatch-against-bearer") return `your opponent ${granted ? "can" : "cannot"} target ${subj} with Overwatch`;
   const core = CORE_RULES[rule];
   if (m.rule_kind === "core-rule" && core) {
@@ -340,7 +342,8 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
     return `${subj} ${isPlural(subj) ? agreed.replace(/\bits\b/g, "their") : agreed}`;
   }
   const noun = m.rule_kind === "keyword" ? "keyword" : m.rule_kind === "core-rule" ? "rule" : "ability";
-  return granted ? `${subj} ${v(subj, "gains")} the ${titleCase(rule)} ${noun}` : `${subj} ${v(subj, "loses")} the ${titleCase(rule)} ${noun}`;
+  const label = m.rule_kind === "ability" ? abilityLabel(rule) : titleCase(rule);
+  return granted ? `${subj} ${v(subj, "gains")} the ${label} ${noun}` : `${subj} ${v(subj, "loses")} the ${label} ${noun}`;
 }
 
 function abilityActivate(m: Record<string, unknown>, subj: string): string {

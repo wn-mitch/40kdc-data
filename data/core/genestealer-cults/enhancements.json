@@ -1,13 +1,13 @@
 [
   {
-    "id": "prowling-agitant-host-of-ascension",
+    "id": "prowling-agitant-host-of-ascension-genestealer-cults",
     "name": "Prowling Agitant",
     "detachment_id": "host-of-ascension",
     "cost": 15,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "prowling-agitant-host-of-ascension-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "a-chink-in-their-armour-host-of-ascension",
+    "id": "a-chink-in-their-armour-host-of-ascension-genestealer-cults",
     "name": "A Chink In Their Armour",
     "detachment_id": "host-of-ascension",
     "cost": 20,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "a-chink-in-their-armour-host-of-ascension-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "our-time-is-nigh-host-of-ascension",
+    "id": "our-time-is-nigh-host-of-ascension-genestealer-cults",
     "name": "Our Time is Nigh",
     "detachment_id": "host-of-ascension",
     "cost": 20,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "our-time-is-nigh-host-of-ascension-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "assassination-edict-host-of-ascension",
+    "id": "assassination-edict-host-of-ascension-genestealer-cults",
     "name": "Assassination Edict",
     "detachment_id": "host-of-ascension",
     "cost": 15,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "assassination-edict-host-of-ascension-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,11 +112,11 @@
     ]
   },
   {
-    "id": "gene-sires-reliquant-xenocreed-congregation",
+    "id": "gene-sires-reliquant-xenocreed-congregation-genestealer-cults",
     "name": "Gene-sire’s Reliquant",
     "detachment_id": "xenocreed-congregation",
     "cost": 5,
-    "ability_id": null,
+    "ability_id": "gene-sires-reliquant-xenocreed-congregation-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -148,11 +148,11 @@
     ]
   },
   {
-    "id": "denunciator-of-tyrants-xenocreed-congregation",
+    "id": "denunciator-of-tyrants-xenocreed-congregation-genestealer-cults",
     "name": "Denunciator of Tyrants",
     "detachment_id": "xenocreed-congregation",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "denunciator-of-tyrants-xenocreed-congregation-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -184,11 +184,11 @@
     ]
   },
   {
-    "id": "deeds-that-speak-to-the-masses-xenocreed-congregation",
+    "id": "deeds-that-speak-to-the-masses-xenocreed-congregation-genestealer-cults",
     "name": "Deeds that Speak to the Masses",
     "detachment_id": "xenocreed-congregation",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "deeds-that-speak-to-the-masses-xenocreed-congregation-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -220,11 +220,11 @@
     ]
   },
   {
-    "id": "incendiary-inspiration-xenocreed-congregation",
+    "id": "incendiary-inspiration-xenocreed-congregation-genestealer-cults",
     "name": "Incendiary Inspiration",
     "detachment_id": "xenocreed-congregation",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "incendiary-inspiration-xenocreed-congregation-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -256,11 +256,11 @@
     ]
   },
   {
-    "id": "predatory-instincts-biosanctic-broodsurge",
+    "id": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
     "name": "Predatory Instincts",
     "detachment_id": "biosanctic-broodsurge",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -292,11 +292,11 @@
     ]
   },
   {
-    "id": "biomorph-adaptation-biosanctic-broodsurge",
+    "id": "biomorph-adaptation-biosanctic-broodsurge-genestealer-cults",
     "name": "Biomorph Adaptation",
     "detachment_id": "biosanctic-broodsurge",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "biomorph-adaptation-biosanctic-broodsurge-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -325,11 +325,11 @@
     ]
   },
   {
-    "id": "mutagenic-regeneration-biosanctic-broodsurge",
+    "id": "mutagenic-regeneration-biosanctic-broodsurge-genestealer-cults",
     "name": "Mutagenic Regeneration",
     "detachment_id": "biosanctic-broodsurge",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "mutagenic-regeneration-biosanctic-broodsurge-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -361,11 +361,11 @@
     ]
   },
   {
-    "id": "alien-majesty-biosanctic-broodsurge",
+    "id": "alien-majesty-biosanctic-broodsurge-genestealer-cults",
     "name": "Alien Majesty",
     "detachment_id": "biosanctic-broodsurge",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "alien-majesty-biosanctic-broodsurge-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -397,7 +397,7 @@
     ]
   },
   {
-    "id": "serpentine-tactics-outlander-claw",
+    "id": "serpentine-tactics-outlander-claw-genestealer-cults",
     "name": "Serpentine Tactics",
     "detachment_id": "outlander-claw",
     "cost": 10,
@@ -405,7 +405,7 @@
       "Genestealer Cults",
       "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "serpentine-tactics-outlander-claw-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -426,14 +426,14 @@
     ]
   },
   {
-    "id": "cartographic-data-leech-outlander-claw",
+    "id": "cartographic-data-leech-outlander-claw-genestealer-cults",
     "name": "Cartographic Data-leech",
     "detachment_id": "outlander-claw",
     "cost": 10,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "cartographic-data-leech-outlander-claw-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -454,7 +454,7 @@
     ]
   },
   {
-    "id": "starfall-shells-outlander-claw",
+    "id": "starfall-shells-outlander-claw-genestealer-cults",
     "name": "Starfall Shells",
     "detachment_id": "outlander-claw",
     "cost": 10,
@@ -462,7 +462,7 @@
       "Genestealer Cults",
       "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "starfall-shells-outlander-claw-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -483,14 +483,14 @@
     ]
   },
   {
-    "id": "assault-commando-outlander-claw",
+    "id": "assault-commando-outlander-claw-genestealer-cults",
     "name": "Assault Commando",
     "detachment_id": "outlander-claw",
     "cost": 15,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "assault-commando-outlander-claw-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -511,7 +511,7 @@
     ]
   },
   {
-    "id": "martial-espionage-brood-brothers-auxilia",
+    "id": "martial-espionage-brood-brothers-auxilia-genestealer-cults",
     "name": "Martial Espionage",
     "detachment_id": "brood-brothers-auxilia",
     "cost": 25,
@@ -519,7 +519,7 @@
       "Genestealer Cults",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "martial-espionage-brood-brothers-auxilia-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -540,7 +540,7 @@
     ]
   },
   {
-    "id": "adaptive-reprisal-brood-brothers-auxilia",
+    "id": "adaptive-reprisal-brood-brothers-auxilia-genestealer-cults",
     "name": "Adaptive Reprisal",
     "detachment_id": "brood-brothers-auxilia",
     "cost": 15,
@@ -548,7 +548,7 @@
       "Genestealer Cults",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "adaptive-reprisal-brood-brothers-auxilia-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -569,7 +569,7 @@
     ]
   },
   {
-    "id": "the-hero-returned-brood-brothers-auxilia",
+    "id": "the-hero-returned-brood-brothers-auxilia-genestealer-cults",
     "name": "The Hero Returned",
     "detachment_id": "brood-brothers-auxilia",
     "cost": 20,
@@ -577,7 +577,7 @@
       "Genestealer Cults",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "the-hero-returned-brood-brothers-auxilia-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -598,7 +598,7 @@
     ]
   },
   {
-    "id": "fire-point-commander-brood-brothers-auxilia",
+    "id": "fire-point-commander-brood-brothers-auxilia-genestealer-cults",
     "name": "Fire-point Commander",
     "detachment_id": "brood-brothers-auxilia",
     "cost": 10,
@@ -606,7 +606,7 @@
       "Genestealer Cults",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "fire-point-commander-brood-brothers-auxilia-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -627,14 +627,14 @@
     ]
   },
   {
-    "id": "synaptic-auger-final-day",
+    "id": "synaptic-auger-final-day-genestealer-cults",
     "name": "Synaptic Auger",
     "detachment_id": "final-day",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "synaptic-auger-final-day-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -655,14 +655,14 @@
     ]
   },
   {
-    "id": "enraptured-damnation-final-day",
+    "id": "enraptured-damnation-final-day-genestealer-cults",
     "name": "Enraptured Damnation",
     "detachment_id": "final-day",
     "cost": 10,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "enraptured-damnation-final-day-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -683,14 +683,14 @@
     ]
   },
   {
-    "id": "vanguard-tyrant-final-day",
+    "id": "vanguard-tyrant-final-day-genestealer-cults",
     "name": "Vanguard Tyrant",
     "detachment_id": "final-day",
     "cost": 25,
     "keyword_restrictions": [
       "Winged Hive Tyrant"
     ],
-    "ability_id": null,
+    "ability_id": "vanguard-tyrant-final-day-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -711,14 +711,14 @@
     ]
   },
   {
-    "id": "inhuman-integration-final-day",
+    "id": "inhuman-integration-final-day-genestealer-cults",
     "name": "Inhuman Integration",
     "detachment_id": "final-day",
     "cost": 20,
     "keyword_restrictions": [
       "Genestealer Cults"
     ],
-    "ability_id": null,
+    "ability_id": "inhuman-integration-final-day-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -739,11 +739,11 @@
     ]
   },
   {
-    "id": "gene-tailored-toxins-heroes-of-the-uprising",
+    "id": "gene-tailored-toxins-heroes-of-the-uprising-genestealer-cults",
     "name": "Gene-tailored Toxins",
     "detachment_id": "heroes-of-the-uprising",
     "cost": 35,
-    "ability_id": "gene-tailored-toxins-heroes-of-the-uprising",
+    "ability_id": "gene-tailored-toxins-heroes-of-the-uprising-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -774,11 +774,11 @@
     ]
   },
   {
-    "id": "contraband-munitions-heroes-of-the-uprising",
+    "id": "contraband-munitions-heroes-of-the-uprising-genestealer-cults",
     "name": "Contraband Munitions",
     "detachment_id": "heroes-of-the-uprising",
     "cost": 20,
-    "ability_id": "contraband-munitions-heroes-of-the-uprising",
+    "ability_id": "contraband-munitions-heroes-of-the-uprising-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -809,7 +809,7 @@
     ]
   },
   {
-    "id": "mark-of-the-star-children-upgrade-purestrain-broodswarm",
+    "id": "mark-of-the-star-children-upgrade-purestrain-broodswarm-genestealer-cults",
     "name": "Mark of the Star Children (Upgrade)",
     "detachment_id": "purestrain-broodswarm",
     "cost": 30,
@@ -817,7 +817,7 @@
       "Genestealer Cults",
       "Purestrain Genestealers"
     ],
-    "ability_id": "mark-of-the-star-children-purestrain-broodswarm",
+    "ability_id": "mark-of-the-star-children-upgrade-purestrain-broodswarm-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -838,7 +838,7 @@
     ]
   },
   {
-    "id": "talons-of-the-sire-purestrain-broodswarm",
+    "id": "talons-of-the-sire-purestrain-broodswarm-genestealer-cults",
     "name": "Talons of the Sire",
     "detachment_id": "purestrain-broodswarm",
     "cost": 15,
@@ -846,7 +846,7 @@
       "Genestealer Cults",
       "Patriarch"
     ],
-    "ability_id": "talons-of-the-sire-purestrain-broodswarm",
+    "ability_id": "talons-of-the-sire-purestrain-broodswarm-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -867,11 +867,11 @@
     ]
   },
   {
-    "id": "inspired-to-greatness-xenocult-masses",
+    "id": "inspired-to-greatness-xenocult-masses-genestealer-cults",
     "name": "Inspired to Greatness",
     "detachment_id": "xenocult-masses",
     "cost": 15,
-    "ability_id": "inspired-to-greatness-xenocult-masses",
+    "ability_id": "inspired-to-greatness-xenocult-masses-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -902,7 +902,7 @@
     ]
   },
   {
-    "id": "devious-disguises-upgrade-xenocult-masses",
+    "id": "devious-disguises-upgrade-xenocult-masses-genestealer-cults",
     "name": "Devious Disguises (Upgrade)",
     "detachment_id": "xenocult-masses",
     "cost": 15,
@@ -910,7 +910,7 @@
       "Genestealer Cults",
       "Neophyte Hybrids"
     ],
-    "ability_id": "devious-disguises-xenocult-masses",
+    "ability_id": "devious-disguises-upgrade-xenocult-masses-genestealer-cults",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -931,7 +931,7 @@
     ]
   },
   {
-    "id": "heavy-munitions-claw-of-ascension",
+    "id": "heavy-munitions-claw-of-ascension-genestealer-cults",
     "name": "Heavy Munitions",
     "detachment_id": "claw-of-ascension",
     "cost": 0,
@@ -956,7 +956,7 @@
     ]
   },
   {
-    "id": "practiced-eye-claw-of-ascension",
+    "id": "practiced-eye-claw-of-ascension-genestealer-cults",
     "name": "Practiced Eye",
     "detachment_id": "claw-of-ascension",
     "cost": 0,

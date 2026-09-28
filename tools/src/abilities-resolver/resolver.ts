@@ -58,6 +58,8 @@ export type EligibleAbility = {
   source: EligibleAbilitySource;
   /** The subset of `ability.phases` that intersect the requested phase. */
   phases: Phase[];
+  /** The rating the owning unit prints for a rated rule (Feel No Pain 5+ → 5). */
+  rating?: string | number;
 };
 
 /** Compute the sorted-by-source eligible-ability list for one (unit, phase). */
@@ -113,11 +115,8 @@ export function resolveEligibleAbilities(
         if (!stratagemPhaseMatches(stratagem, phase)) continue;
         const ability =
           stratagem.ability_id !== null && stratagem.ability_id !== undefined
-            ? // Stratagem ability ids are detachment-qualified but the ability
-              // copies are still replicated per faction (SM chapters) — prefer
-              // the resolving faction's copy, falling back for shared pools.
-              (dataset.abilities.getInFaction(stratagem.ability_id, factionId) ??
-              dataset.abilities.getAny(stratagem.ability_id))
+            ? // Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
+              dataset.abilities.get(stratagem.ability_id)
             : undefined;
         if (!ability) continue;
         pushUnique(out, seen, {
@@ -140,6 +139,7 @@ export function resolveEligibleAbilities(
       ability,
       source: { kind: "unit", unitId: input.unitId },
       phases: intersect(ability.phases, phase),
+      ...rated(unit.ratingOf(ability.id)),
     });
   }
 
@@ -155,6 +155,7 @@ export function resolveEligibleAbilities(
         ability,
         source: { kind: "attached", unitId: memberId },
         phases: intersect(ability.phases, phase),
+        ...rated(member.ratingOf(ability.id)),
       });
     }
   }
@@ -171,6 +172,7 @@ export function resolveEligibleAbilities(
         ability,
         source: { kind: "support", sourceUnitId: supportId },
         phases: intersect(ability.phases, phase),
+        ...rated(supporter.ratingOf(ability.id)),
       });
     }
   }
@@ -181,6 +183,8 @@ export function resolveEligibleAbilities(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+const rated = (rating: string | number | undefined): { rating?: string | number } => (rating === undefined ? {} : { rating });
 
 function phaseMatches(ability: AbilityView, phase: Phase): boolean {
   const phases = ability.phases;

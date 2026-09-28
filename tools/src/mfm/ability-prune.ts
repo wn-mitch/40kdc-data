@@ -16,6 +16,7 @@
  * Edits are spliced into each file's original text, so escape style and layout
  * survive (the tree mixes `\uXXXX` and literal UTF-8; see `scanAbilityRecordSpans`).
  */
+import { abilityIdsOf } from "../data/ability-refs.js";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -105,7 +106,7 @@ export function pruneAbilities(
   for (const units of unitsByDir.values()) {
     for (const u of units) {
       liveUnits.add(u.id);
-      for (const a of u.ability_ids ?? []) usedAnywhere.add(a);
+      for (const a of abilityIdsOf(u.ability_ids)) usedAnywhere.add(a);
     }
   }
   const dirs: AbilityPrune[] = [];
@@ -114,7 +115,7 @@ export function pruneAbilities(
     const file = path.join(enrichmentRoot, dir, "abilities.json");
     if (!fs.existsSync(file)) continue;
     const used =
-      dir === "_core" ? usedAnywhere : new Set((unitsByDir.get(dir) ?? []).flatMap((u) => u.ability_ids ?? []));
+      dir === "_core" ? usedAnywhere : new Set((unitsByDir.get(dir) ?? []).flatMap((u) => abilityIdsOf(u.ability_ids)));
     const text = fs.readFileSync(file, "utf8");
     const records = JSON.parse(text) as AbilityRecord[];
     const spans = scanAbilityRecordSpans(text);

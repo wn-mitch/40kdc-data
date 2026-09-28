@@ -1,6 +1,6 @@
 [
   {
-    "ability_id": "blessings-of-khorne",
+    "ability_id": "blessings-of-khorne-world-eaters",
     "name": "Blessings of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -226,7 +226,7 @@
     }
   },
   {
-    "ability_id": "legendary-killer",
+    "ability_id": "legendary-killer-world-eaters",
     "name": "Legendary Killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -239,7 +239,7 @@
     "unit_ids": [
       "kharn-the-betrayer"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -297,7 +297,7 @@
     }
   },
   {
-    "ability_id": "the-betrayer",
+    "ability_id": "the-betrayer-world-eaters",
     "name": "The Betrayer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -310,7 +310,7 @@
     "unit_ids": [
       "kharn-the-betrayer"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -381,7 +381,7 @@
     }
   },
   {
-    "ability_id": "berzerker-frenzy",
+    "ability_id": "berzerker-frenzy-world-eaters",
     "name": "Berzerker Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -394,7 +394,7 @@
     "unit_ids": [
       "kharn-the-betrayer"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -423,489 +423,7 @@
     }
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deadly-demise-d6-plus-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "feel-no-pain-5-plus",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-model",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "damage-allocated",
-      "object": "this-unit"
-    }
-  },
-  {
-    "ability_id": "feel-no-pain-6-plus",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-model",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "damage-allocated",
-      "object": "this-unit"
-    }
-  },
-  {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "passive",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "attachment"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    }
-  },
-  {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    }
-  },
-  {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    }
-  },
-  {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": null,
-    "detachment_id": null,
-    "ability_type": "core",
-    "behavior": "reactive",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "selected",
-      "filter": {
-        "to": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "optional": true
-    }
-  },
-  {
-    "ability_id": "icon-of-khorne",
+    "ability_id": "icon-of-khorne-world-eaters",
     "name": "Icon of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -962,7 +480,7 @@
     "community_notes": "Wargear ability (shared by units with an Icon of Khorne, e.g. Khorne Berzerkers): each enemy unit the bearer's unit destroys banks 1 Bloodshed point; every Blessings of Khorne roll adds one rolled D6 per banked point, then all Bloodshed points are lost."
   },
   {
-    "ability_id": "to-slake-its-rage",
+    "ability_id": "to-slake-its-rage-world-eaters",
     "name": "To Slake its Rage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -975,7 +493,7 @@
     "unit_ids": [
       "chaos-spawn"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -995,7 +513,7 @@
     }
   },
   {
-    "ability_id": "assault-ramp",
+    "ability_id": "assault-ramp-world-eaters",
     "name": "Assault Ramp",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1008,7 +526,7 @@
     "unit_ids": [
       "chaos-land-raider"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -1044,7 +562,7 @@
     }
   },
   {
-    "ability_id": "airborne-predator",
+    "ability_id": "airborne-predator-world-eaters",
     "name": "Airborne Predator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1057,7 +575,7 @@
     "unit_ids": [
       "heldrake"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1094,7 +612,7 @@
     }
   },
   {
-    "ability_id": "objective-ravaged",
+    "ability_id": "objective-ravaged-world-eaters",
     "name": "Objective Ravaged",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1107,7 +625,7 @@
     "unit_ids": [
       "jakhals"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1152,7 +670,7 @@
     }
   },
   {
-    "ability_id": "scuttling-walker",
+    "ability_id": "scuttling-walker-world-eaters",
     "name": "Scuttling Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1165,7 +683,7 @@
     "unit_ids": [
       "defiler"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -1212,7 +730,7 @@
     }
   },
   {
-    "ability_id": "rend-and-tear",
+    "ability_id": "rend-and-tear-world-eaters",
     "name": "Rend and Tear",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1225,7 +743,7 @@
     "unit_ids": [
       "exalted-eightbound"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1263,7 +781,7 @@
     }
   },
   {
-    "ability_id": "furious-onslaught",
+    "ability_id": "furious-onslaught-world-eaters",
     "name": "Furious Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1276,7 +794,7 @@
     "unit_ids": [
       "forgefiend"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1314,7 +832,7 @@
     }
   },
   {
-    "ability_id": "loping-speed",
+    "ability_id": "loping-speed-world-eaters",
     "name": "Loping Speed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1327,7 +845,7 @@
     "unit_ids": [
       "goremongers"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1401,7 +919,7 @@
     }
   },
   {
-    "ability_id": "devoted-to-destruction",
+    "ability_id": "devoted-to-destruction-world-eaters",
     "name": "Devoted to Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1414,7 +932,7 @@
     "unit_ids": [
       "helbrute"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1451,7 +969,7 @@
     }
   },
   {
-    "ability_id": "lord-of-murder",
+    "ability_id": "lord-of-murder-world-eaters",
     "name": "Lord of Murder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1464,7 +982,7 @@
     "unit_ids": [
       "daemon-prince-of-khorne"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -1498,7 +1016,7 @@
     }
   },
   {
-    "ability_id": "devastating-assault",
+    "ability_id": "devastating-assault-world-eaters",
     "name": "Devastating Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1511,7 +1029,7 @@
     "unit_ids": [
       "daemon-prince-of-khorne"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1555,7 +1073,7 @@
     }
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-world-eaters",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1568,7 +1086,7 @@
     "unit_ids": [
       "angron"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -1584,7 +1102,7 @@
     }
   },
   {
-    "ability_id": "idol-of-blessed-blood",
+    "ability_id": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters",
     "name": "Idol of Blessed Blood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1597,7 +1115,7 @@
     "unit_ids": [
       "khorne-lord-of-skulls"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1620,7 +1138,7 @@
     }
   },
   {
-    "ability_id": "blood-hungry-annihilator",
+    "ability_id": "blood-hungry-annihilator-world-eaters",
     "name": "Blood-hungry Annihilator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1633,7 +1151,7 @@
     "unit_ids": [
       "chaos-predator-annihilator"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1704,7 +1222,7 @@
     }
   },
   {
-    "ability_id": "punishing-suppression",
+    "ability_id": "punishing-suppression-world-eaters",
     "name": "Punishing Suppression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1717,7 +1235,7 @@
     "unit_ids": [
       "chaos-predator-destructor"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "activated",
@@ -1749,7 +1267,7 @@
     "community_notes": "MONSTER and VEHICLE units cannot be suppressed."
   },
   {
-    "ability_id": "blood-surge",
+    "ability_id": "blood-surge-world-eaters",
     "name": "Blood Surge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1762,7 +1280,7 @@
     "unit_ids": [
       "khorne-berzerkers"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1813,7 +1331,7 @@
     }
   },
   {
-    "ability_id": "bloody-fury",
+    "ability_id": "bloody-fury-world-eaters",
     "name": "Bloody Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1826,7 +1344,7 @@
     "unit_ids": [
       "chaos-terminators"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1896,7 +1414,7 @@
     }
   },
   {
-    "ability_id": "bloodied-terror",
+    "ability_id": "bloodied-terror-world-eaters",
     "name": "Bloodied Terror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1909,7 +1427,7 @@
     "unit_ids": [
       "daemon-prince-of-khorne-with-wings"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -1940,7 +1458,7 @@
     }
   },
   {
-    "ability_id": "swooping-predator",
+    "ability_id": "swooping-predator-world-eaters",
     "name": "Swooping Predator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1953,7 +1471,7 @@
     "unit_ids": [
       "daemon-prince-of-khorne-with-wings"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "activated",
@@ -1981,7 +1499,7 @@
     }
   },
   {
-    "ability_id": "beacons-of-rage",
+    "ability_id": "beacons-of-rage-world-eaters",
     "name": "Beacons of Rage (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1994,7 +1512,7 @@
     "unit_ids": [
       "eightbound"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "aura",
@@ -2105,7 +1623,7 @@
     }
   },
   {
-    "ability_id": "frenzy",
+    "ability_id": "frenzy-world-eaters",
     "name": "Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2118,7 +1636,7 @@
     "unit_ids": [
       "helbrute"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2204,7 +1722,7 @@
     ]
   },
   {
-    "ability_id": "super-heavy-war-engine",
+    "ability_id": "super-heavy-war-engine-world-eaters",
     "name": "Super-heavy War Engine",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2217,7 +1735,7 @@
     "unit_ids": [
       "khorne-lord-of-skulls"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -2309,7 +1827,7 @@
     "community_notes": "community-authored provisional 11e; mirrors the Imperial Knights Super-heavy Walker mechanic on the Khorne Lord of Skulls."
   },
   {
-    "ability_id": "the-scent-of-blood",
+    "ability_id": "the-scent-of-blood-world-eaters",
     "name": "The Scent of Blood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2322,7 +1840,7 @@
     "unit_ids": [
       "maulerfiend"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2421,7 +1939,7 @@
     }
   },
   {
-    "ability_id": "savage-exaltation",
+    "ability_id": "savage-exaltation-world-eaters",
     "name": "Savage Exaltation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2434,7 +1952,7 @@
     "unit_ids": [
       "maulerfiend"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2501,7 +2019,7 @@
     }
   },
   {
-    "ability_id": "aggressive-advance",
+    "ability_id": "aggressive-advance-world-eaters",
     "name": "Aggressive Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2514,7 +2032,7 @@
     "unit_ids": [
       "lord-on-juggernaut"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -2556,7 +2074,7 @@
     }
   },
   {
-    "ability_id": "forwards-for-blood",
+    "ability_id": "forwards-for-blood-world-eaters",
     "name": "Forwards, for Blood!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2569,7 +2087,7 @@
     "unit_ids": [
       "master-of-executions"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2617,7 +2135,7 @@
     }
   },
   {
-    "ability_id": "a-worthy-skull",
+    "ability_id": "a-worthy-skull-world-eaters",
     "name": "A Worthy Skull",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2630,7 +2148,7 @@
     "unit_ids": [
       "master-of-executions"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -2713,7 +2231,7 @@
     }
   },
   {
-    "ability_id": "meet-any-challenge",
+    "ability_id": "meet-any-challenge-world-eaters",
     "name": "Meet Any Challenge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2726,7 +2244,7 @@
     "unit_ids": [
       "chaos-rhino"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2798,7 +2316,7 @@
     ]
   },
   {
-    "ability_id": "unleash-wrath",
+    "ability_id": "unleash-wrath-world-eaters",
     "name": "Unleash Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2811,7 +2329,7 @@
     "unit_ids": [
       "defiler"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2908,7 +2426,7 @@
     }
   },
   {
-    "ability_id": "bloody-stampede",
+    "ability_id": "bloody-stampede-world-eaters",
     "name": "Bloody Stampede",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2921,7 +2439,7 @@
     "unit_ids": [
       "lord-invocatus"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -2999,7 +2517,7 @@
     }
   },
   {
-    "ability_id": "fire-riders",
+    "ability_id": "fire-riders-world-eaters",
     "name": "Fire Riders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3012,7 +2530,7 @@
     "unit_ids": [
       "lord-invocatus"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -3053,7 +2571,7 @@
     }
   },
   {
-    "ability_id": "crush-all-who-stand-before-us",
+    "ability_id": "crush-all-who-stand-before-us-world-eaters",
     "name": "Crush All Who Stand Before Us",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3066,7 +2584,7 @@
     "unit_ids": [
       "lord-on-juggernaut"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3090,7 +2608,7 @@
     }
   },
   {
-    "ability_id": "direct-the-slaughter",
+    "ability_id": "direct-the-slaughter-world-eaters",
     "name": "Direct the Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3103,7 +2621,7 @@
     "unit_ids": [
       "daemon-prince-of-khorne"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3161,7 +2679,7 @@
     }
   },
   {
-    "ability_id": "reborn-in-blood",
+    "ability_id": "reborn-in-blood-world-eaters",
     "name": "Reborn in Blood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3174,7 +2692,7 @@
     "unit_ids": [
       "angron"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3186,7 +2704,7 @@
           {
             "type": "rule-active",
             "parameters": {
-              "rule": "blessings-of-khorne"
+              "rule": "blessings-of-khorne-world-eaters"
             }
           },
           {
@@ -3224,7 +2742,7 @@
                 "modifier": {
                   "direction": "suppressed",
                   "rule_kind": "faction-rule",
-                  "rule": "blessings-of-khorne"
+                  "rule": "blessings-of-khorne-world-eaters"
                 }
               }
             ]
@@ -3263,7 +2781,7 @@
     }
   },
   {
-    "ability_id": "wrathful-presence",
+    "ability_id": "wrathful-presence-world-eaters",
     "name": "Wrathful Presence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3276,7 +2794,7 @@
     "unit_ids": [
       "angron"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3441,7 +2959,7 @@
     }
   },
   {
-    "ability_id": "rage-eternal",
+    "ability_id": "rage-eternal-world-eaters",
     "name": "Rage Eternal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3454,7 +2972,7 @@
     "unit_ids": [
       "slaughterbound"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "activated",
@@ -3497,7 +3015,7 @@
     }
   },
   {
-    "ability_id": "possessed-lord",
+    "ability_id": "possessed-lord-world-eaters",
     "name": "Possessed Lord",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3510,7 +3028,7 @@
     "unit_ids": [
       "slaughterbound"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3554,7 +3072,7 @@
     }
   },
   {
-    "ability_id": "lord-of-the-eightbound",
+    "ability_id": "lord-of-the-eightbound-world-eaters",
     "name": "Lord of the Eightbound",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3567,7 +3085,7 @@
     "unit_ids": [
       "slaughterbound"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -3614,7 +3132,7 @@
     }
   },
   {
-    "ability_id": "relentless-rage",
+    "ability_id": "relentless-rage-world-eaters",
     "name": "Relentless Rage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3682,7 +3200,7 @@
     }
   },
   {
-    "ability_id": "brazen-fury",
+    "ability_id": "brazen-fury-world-eaters",
     "name": "Brazen Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3767,7 +3285,7 @@
     }
   },
   {
-    "ability_id": "wrath-of-khorne",
+    "ability_id": "wrath-of-khorne-world-eaters",
     "name": "Wrath of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3845,7 +3363,7 @@
     }
   },
   {
-    "ability_id": "blood-tithe",
+    "ability_id": "blood-tithe-world-eaters",
     "name": "Blood Tithe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4002,7 +3520,7 @@
                       ]
                     },
                     "modifier": {
-                      "ability": "blessings-of-khorne"
+                      "ability": "blessings-of-khorne-world-eaters"
                     }
                   }
                 ]
@@ -4018,7 +3536,7 @@
     "community_notes": "Earn side: 1 BTP on a 3+ each time an enemy unit is destroyed by a Blood Legions/World Eaters unit. Spend side (start of your Command phase, effects last until end of battle) references the four detachment abilities by id: enraged-abjuration (2), daemonic-rage (3), boon-of-blood (4), might-of-khorne (5)."
   },
   {
-    "ability_id": "enraged-abjuration",
+    "ability_id": "enraged-abjuration-world-eaters",
     "name": "Enraged Abjuration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4072,7 +3590,7 @@
     "community_notes": "[APPROX] Applies to BLOOD LEGIONS and WORLD EATERS models only; modeled as all friendly units (keyword-OR gate not expressible). Blood Tithe spend (2 BTP): the start-of-Command-phase activation timing and until-end-of-battle duration come from the parent Blood Tithe rule ('At the start of the Command phase, you can spend... to activate one of the following abilities until the end of the battle'), not from this option's own text."
   },
   {
-    "ability_id": "daemonic-rage",
+    "ability_id": "daemonic-rage-world-eaters",
     "name": "Daemonic Rage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4133,7 +3651,7 @@
     "community_notes": "Blood Tithe spend (3 BTP), activated at the start of your Command phase, lasting until end of battle: melee weapons equipped by Blood Legions units gain [LANCE]."
   },
   {
-    "ability_id": "boon-of-blood",
+    "ability_id": "boon-of-blood-world-eaters",
     "name": "Boon of Blood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4191,7 +3709,7 @@
     "community_notes": "Blood Tithe spend (4 BTP), activated at the start of your Command phase, lasting until end of battle: Blood Legions units have a 4+ invulnerable save. Referenced by blessing-of-burning-blood as the 'Boon of Blood active' condition."
   },
   {
-    "ability_id": "might-of-khorne",
+    "ability_id": "might-of-khorne-world-eaters",
     "name": "Might of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4225,7 +3743,7 @@
           "modifier": {
             "direction": "granted",
             "rule_kind": "faction-rule",
-            "rule": "blessings-of-khorne"
+            "rule": "blessings-of-khorne-world-eaters"
           }
         }
       ]
@@ -4251,7 +3769,7 @@
     "community_notes": "Blood Tithe spend (5 BTP), activated at the start of your Command phase, lasting until end of battle: Blood Legions units gain the Blessings of Khorne ability."
   },
   {
-    "ability_id": "idols-of-khorne",
+    "ability_id": "idols-of-khorne-world-eaters",
     "name": "Idols of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4418,7 +3936,7 @@
     }
   },
   {
-    "ability_id": "rush-to-the-fray",
+    "ability_id": "rush-to-the-fray-world-eaters",
     "name": "Rush to the Fray",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4471,7 +3989,7 @@
     }
   },
   {
-    "ability_id": "berzerker-glaive-berzerker-warband",
+    "ability_id": "berzerker-glaive-berzerker-warband-world-eaters",
     "name": "Berzerker Glaive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4522,7 +4040,7 @@
     "community_notes": "excludes Extra Attacks weapons"
   },
   {
-    "ability_id": "helm-of-brazen-ire-berzerker-warband",
+    "ability_id": "helm-of-brazen-ire-berzerker-warband-world-eaters",
     "name": "Helm of Brazen Ire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4554,7 +4072,7 @@
     }
   },
   {
-    "ability_id": "favoured-of-khorne-berzerker-warband",
+    "ability_id": "favoured-of-khorne-berzerker-warband-world-eaters",
     "name": "Favoured of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4588,7 +4106,7 @@
     }
   },
   {
-    "ability_id": "battle-lust-berzerker-warband",
+    "ability_id": "battle-lust-berzerker-warband-world-eaters",
     "name": "Battle-lust",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4644,7 +4162,7 @@
     }
   },
   {
-    "ability_id": "chosen-of-the-blood-god-cult-of-blood",
+    "ability_id": "chosen-of-the-blood-god-cult-of-blood-world-eaters",
     "name": "Chosen of the Blood God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4678,7 +4196,7 @@
     }
   },
   {
-    "ability_id": "butcher-lord-cult-of-blood",
+    "ability_id": "butcher-lord-cult-of-blood-world-eaters",
     "name": "Butcher Lord",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4739,7 +4257,7 @@
     "community_notes": "[APPROX] may only be attached to a JAKHALS or GOREMONGERS unit"
   },
   {
-    "ability_id": "brazen-form-cult-of-blood",
+    "ability_id": "brazen-form-cult-of-blood-world-eaters",
     "name": "Brazen Form",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4786,7 +4304,7 @@
     }
   },
   {
-    "ability_id": "strategic-slaughter-cult-of-blood",
+    "ability_id": "strategic-slaughter-cult-of-blood-world-eaters",
     "name": "Strategic Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4832,7 +4350,7 @@
     }
   },
   {
-    "ability_id": "murderous-onslaught-goretrack-onslaught",
+    "ability_id": "murderous-onslaught-goretrack-onslaught-world-eaters",
     "name": "Murderous Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4871,7 +4389,7 @@
     }
   },
   {
-    "ability_id": "aggressive-deployment-goretrack-onslaught",
+    "ability_id": "aggressive-deployment-goretrack-onslaught-world-eaters",
     "name": "Aggressive Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4917,7 +4435,7 @@
     }
   },
   {
-    "ability_id": "unleash-hell-goretrack-onslaught",
+    "ability_id": "unleash-hell-goretrack-onslaught-world-eaters",
     "name": "Unleash Hell",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4997,7 +4515,7 @@
     }
   },
   {
-    "ability_id": "infernal-infusion-goretrack-onslaught",
+    "ability_id": "infernal-infusion-goretrack-onslaught-world-eaters",
     "name": "Infernal Infusion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5042,7 +4560,7 @@
     }
   },
   {
-    "ability_id": "icon-of-war-khorne-daemonkin",
+    "ability_id": "icon-of-war-khorne-daemonkin-world-eaters",
     "name": "Icon of War",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5090,7 +4608,7 @@
               }
             },
             "modifier": {
-              "ability": "blessings-of-khorne"
+              "ability": "blessings-of-khorne-world-eaters"
             }
           },
           {
@@ -5098,7 +4616,7 @@
             "condition": {
               "type": "rule-active",
               "parameters": {
-                "rule": "might-of-khorne"
+                "rule": "might-of-khorne-world-eaters"
               }
             },
             "effect": {
@@ -5128,7 +4646,7 @@
     }
   },
   {
-    "ability_id": "blood-forged-armour-khorne-daemonkin",
+    "ability_id": "blood-forged-armour-khorne-daemonkin-world-eaters",
     "name": "Blood-Forged Armour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5177,7 +4695,7 @@
     }
   },
   {
-    "ability_id": "disciple-of-khorne-khorne-daemonkin",
+    "ability_id": "disciple-of-khorne-khorne-daemonkin-world-eaters",
     "name": "Disciple of Khorne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5246,7 +4764,7 @@
     "community_notes": "[APPROX] may only be attached to a BLOODCRUSHERS or FLESH HOUNDS unit; the BLOOD LEGIONS Faction keyword replaces WORLD EATERS while leading"
   },
   {
-    "ability_id": "blade-of-endless-bloodshed-khorne-daemonkin",
+    "ability_id": "blade-of-endless-bloodshed-khorne-daemonkin-world-eaters",
     "name": "Blade of Endless Bloodshed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5327,7 +4845,7 @@
     }
   },
   {
-    "ability_id": "malicious-vigour-possessed-slaughterband",
+    "ability_id": "malicious-vigour-possessed-slaughterband-world-eaters",
     "name": "Malicious Vigour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5351,7 +4869,7 @@
           "subject": "this-unit",
           "filter": {
             "kind": "ability",
-            "id": "brazen-fury"
+            "id": "brazen-fury-world-eaters"
           },
           "window": "event"
         }
@@ -5376,7 +4894,7 @@
     "community_notes": "Each Brazen Fury move made by the bearer's unit counts as having rolled a 6 for its distance."
   },
   {
-    "ability_id": "killing-clarity-possessed-slaughterband",
+    "ability_id": "killing-clarity-possessed-slaughterband-world-eaters",
     "name": "Killing Clarity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5414,7 +4932,7 @@
     }
   },
   {
-    "ability_id": "frenzied-focus-possessed-slaughterband",
+    "ability_id": "frenzied-focus-possessed-slaughterband-world-eaters",
     "name": "Frenzied Focus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5448,7 +4966,7 @@
     }
   },
   {
-    "ability_id": "violent-demise-possessed-slaughterband",
+    "ability_id": "violent-demise-possessed-slaughterband-world-eaters",
     "name": "Violent Demise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5494,7 +5012,7 @@
     }
   },
   {
-    "ability_id": "archslaughterer-vessels-of-wrath",
+    "ability_id": "archslaughterer-vessels-of-wrath-world-eaters",
     "name": "Archslaughterer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5535,7 +5053,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Unbridled Bloodlust"
             }
           },
@@ -5543,7 +5061,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Rage-Fuelled Invigoration"
             }
           },
@@ -5551,7 +5069,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Total Carnage"
             }
           },
@@ -5559,7 +5077,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Martial Excellence"
             }
           },
@@ -5567,7 +5085,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Warp Blades"
             }
           },
@@ -5575,7 +5093,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "option": "Decapitating Strikes"
             }
           }
@@ -5588,7 +5106,7 @@
     "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn."
   },
   {
-    "ability_id": "gateways-to-glory-vessels-of-wrath",
+    "ability_id": "gateways-to-glory-vessels-of-wrath-world-eaters",
     "name": "Gateways to Glory",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5638,7 +5156,7 @@
     }
   },
   {
-    "ability_id": "hack-and-slash-berzerker-warband",
+    "ability_id": "hack-and-slash-berzerker-warband-world-eaters",
     "name": "Hack and Slash",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5683,7 +5201,7 @@
     "community_notes": "[APPROX] The unit must have made a Charge move this turn and must not yet have been selected to fight this phase; both preconditions are left out of the effect tree so the stratagem stays a toggleable lever for the cruncher."
   },
   {
-    "ability_id": "frenzied-resilience-berzerker-warband",
+    "ability_id": "frenzied-resilience-berzerker-warband-world-eaters",
     "name": "Frenzied Resilience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5720,7 +5238,7 @@
     "community_notes": "reactive: used just after an enemy unit selects your unit as a target in the Fight phase"
   },
   {
-    "ability_id": "blood-offering-berzerker-warband",
+    "ability_id": "blood-offering-berzerker-warband-world-eaters",
     "name": "Blood Offering",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5760,7 +5278,7 @@
     }
   },
   {
-    "ability_id": "skulls-for-the-skull-throne-berzerker-warband",
+    "ability_id": "skulls-for-the-skull-throne-berzerker-warband-world-eaters",
     "name": "Skulls for the Skull Throne!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5805,7 +5323,7 @@
             "type": "ability-modifier",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne",
+              "ability": "blessings-of-khorne-world-eaters",
               "aspect": "concurrent",
               "operation": "add",
               "value": 1
@@ -5815,7 +5333,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "blessings-of-khorne"
+              "ability": "blessings-of-khorne-world-eaters"
             }
           }
         ]
@@ -5827,7 +5345,7 @@
     "community_notes": "used just after your unit destroys a CHARACTER or MONSTER model; the extra Blessing is active in addition to any currently active Blessings"
   },
   {
-    "ability_id": "apoplectic-frenzy-berzerker-warband",
+    "ability_id": "apoplectic-frenzy-berzerker-warband-world-eaters",
     "name": "Apoplectic Frenzy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5892,7 +5410,7 @@
     }
   },
   {
-    "ability_id": "berzerkers-wrath-berzerker-warband",
+    "ability_id": "berzerkers-wrath-berzerker-warband-world-eaters",
     "name": "Berzerker's Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5947,7 +5465,7 @@
     "community_notes": "replaces the D6 surge-move roll: models move up to 8\" instead"
   },
   {
-    "ability_id": "bloodthirsty-horde-cult-of-blood",
+    "ability_id": "bloodthirsty-horde-cult-of-blood-world-eaters",
     "name": "Bloodthirsty Horde",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5986,7 +5504,7 @@
     "community_notes": "[APPROX] Targets one JAKHALS or GOREMONGERS unit that has not been selected to fight this phase and is within Engagement Range (the keyword-OR target and the not-yet-fought precondition are not modeled)."
   },
   {
-    "ability_id": "bloody-vengeance-cult-of-blood",
+    "ability_id": "bloody-vengeance-cult-of-blood-world-eaters",
     "name": "Bloody Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6054,7 +5572,7 @@
     }
   },
   {
-    "ability_id": "brazen-idol-cult-of-blood",
+    "ability_id": "brazen-idol-cult-of-blood-world-eaters",
     "name": "Brazen Idol",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6105,7 +5623,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "idols-of-khorne",
+              "ability": "idols-of-khorne-world-eaters",
               "option": "idol-of-infinite-rage",
               "exclusive": true
             }
@@ -6114,7 +5632,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "idols-of-khorne",
+              "ability": "idols-of-khorne-world-eaters",
               "option": "idol-of-burning-wrath",
               "exclusive": true
             }
@@ -6123,7 +5641,7 @@
             "type": "ability-activate",
             "target": "this-unit",
             "modifier": {
-              "ability": "idols-of-khorne",
+              "ability": "idols-of-khorne-world-eaters",
               "option": "idol-of-blessed-blood",
               "exclusive": true
             }
@@ -6146,7 +5664,7 @@
     }
   },
   {
-    "ability_id": "in-the-shadow-of-brass-idols-cult-of-blood",
+    "ability_id": "in-the-shadow-of-brass-idols-cult-of-blood-world-eaters",
     "name": "In the Shadow of Brass Idols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6227,7 +5745,7 @@
     "community_notes": "[APPROX] the 5+ also applies within 9\" of a friendly WORLD EATERS TITANIC unit; usable in your opponent's Shooting phase or the Fight phase, just after an enemy unit selects your JAKHALS or GOREMONGERS unit as a target"
   },
   {
-    "ability_id": "fail-not-the-blood-god-cult-of-blood",
+    "ability_id": "fail-not-the-blood-god-cult-of-blood-world-eaters",
     "name": "Fail Not the Blood God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6296,7 +5814,7 @@
     }
   },
   {
-    "ability_id": "drawn-to-the-slaughter-cult-of-blood",
+    "ability_id": "drawn-to-the-slaughter-cult-of-blood-world-eaters",
     "name": "Drawn to the Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6334,7 +5852,7 @@
     }
   },
   {
-    "ability_id": "endless-pursuit-of-violence-goretrack-onslaught",
+    "ability_id": "endless-pursuit-of-violence-goretrack-onslaught-world-eaters",
     "name": "Endless Pursuit of Violence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6395,7 +5913,7 @@
     "community_notes": "[APPROX] The unit must be WHOLLY within 6\" of the selected transport (modeled as within 6\"), and the transport must be one it is able to embark within."
   },
   {
-    "ability_id": "smash-through-goretrack-onslaught",
+    "ability_id": "smash-through-goretrack-onslaught-world-eaters",
     "name": "Smash Through",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6454,7 +5972,7 @@
     }
   },
   {
-    "ability_id": "aggressive-disembarkation-goretrack-onslaught",
+    "ability_id": "aggressive-disembarkation-goretrack-onslaught-world-eaters",
     "name": "Aggressive Disembarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6532,7 +6050,7 @@
     }
   },
   {
-    "ability_id": "full-throttle-assault-goretrack-onslaught",
+    "ability_id": "full-throttle-assault-goretrack-onslaught-world-eaters",
     "name": "Full-Throttle Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6599,7 +6117,7 @@
     }
   },
   {
-    "ability_id": "unrelenting-advance-goretrack-onslaught",
+    "ability_id": "unrelenting-advance-goretrack-onslaught-world-eaters",
     "name": "Unrelenting Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6671,7 +6189,7 @@
     "community_notes": "cannot be combined with the Fury Unleashed Stratagem in the same phase"
   },
   {
-    "ability_id": "fury-unleashed-goretrack-onslaught",
+    "ability_id": "fury-unleashed-goretrack-onslaught-world-eaters",
     "name": "Fury Unleashed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6754,7 +6272,7 @@
     "community_notes": "[APPROX] used just after an enemy unit shoots a WORLD EATERS RHINO with wounds remaining: one embarked KHORNE BERZERKERS unit makes the disembark move then the surge move; cannot be combined with Unrelenting Advance in the same phase"
   },
   {
-    "ability_id": "daemonic-fury-khorne-daemonkin",
+    "ability_id": "daemonic-fury-khorne-daemonkin-world-eaters",
     "name": "Daemonic Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6798,7 +6316,7 @@
             "condition": {
               "type": "rule-active",
               "parameters": {
-                "rule": "daemonic-rage"
+                "rule": "daemonic-rage-world-eaters"
               }
             },
             "effect": {
@@ -6845,7 +6363,7 @@
     }
   },
   {
-    "ability_id": "blessing-of-burning-blood-khorne-daemonkin",
+    "ability_id": "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
     "name": "Blessing of Burning Blood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6875,7 +6393,7 @@
           "condition": {
             "type": "rule-active",
             "parameters": {
-              "rule": "boon-of-blood"
+              "rule": "boon-of-blood-world-eaters"
             }
           },
           "effect": {
@@ -6941,7 +6459,7 @@
     "community_notes": "5+ invulnerable save until end of phase, improving to 4+ while the Boon of Blood ability (Blood Tithe, Khorne Daemonkin) is active. The source targets a Blood Legions unit within 6\" of the attacked World Eaters unit but buffs that World Eaters unit; the DSL target vocabulary can't express that relay, so target is the unit the ability resolves on."
   },
   {
-    "ability_id": "a-worthy-skull-khorne-daemonkin",
+    "ability_id": "a-worthy-skull-khorne-daemonkin-world-eaters",
     "name": "A Worthy Skull",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7038,7 +6556,7 @@
     "community_notes": "[APPROX] The follow-on 'spend one or more BTP to activate one of the Blood Tithe abilities' is modeled as an unquantified resource-spend without naming the activated ability."
   },
   {
-    "ability_id": "summoned-by-slaughter-khorne-daemonkin",
+    "ability_id": "summoned-by-slaughter-khorne-daemonkin-world-eaters",
     "name": "Summoned by Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7074,7 +6592,7 @@
     "community_notes": "Set up a Bloodletters unit from Reserves wholly within 9\" of the destroyed model and more than 6\" from enemy units, once per battle round. Modeled with resurrection — the local blood-legions summon pattern (cf. daemontide); the Reserves origin, 9\"/>6\" placement, and once-per-battle-round limit are recorded here rather than in the effect shape."
   },
   {
-    "ability_id": "daemontide-khorne-daemonkin",
+    "ability_id": "daemontide-khorne-daemonkin-world-eaters",
     "name": "Daemontide",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7200,7 +6718,7 @@
     "community_notes": "[APPROX] Destroyed CHARACTER models cannot be returned to Attached units (restriction not modeled). Returned models go to one BLOOD LEGIONS unit within 6\" of the stratagem's target."
   },
   {
-    "ability_id": "murder-call-khorne-daemonkin",
+    "ability_id": "murder-call-khorne-daemonkin-world-eaters",
     "name": "Murder-call",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7253,7 +6771,7 @@
     }
   },
   {
-    "ability_id": "daemonic-strength-possessed-slaughterband",
+    "ability_id": "daemonic-strength-possessed-slaughterband-world-eaters",
     "name": "Daemonic Strength",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7336,7 +6854,7 @@
     "community_notes": "[APPROX] EIGHTBOUND get the bonus against targets that are not MONSTERS or VEHICLES; EXALTED EIGHTBOUND get it against MONSTERS and VEHICLES instead"
   },
   {
-    "ability_id": "daemonic-resistance-possessed-slaughterband",
+    "ability_id": "daemonic-resistance-possessed-slaughterband-world-eaters",
     "name": "Daemonic Resistance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7366,7 +6884,7 @@
     "community_notes": "Defensive: each time an attack targets the unit, subtract 1 from the attacker's Wound roll (modeled attacker-side, as icon-of-obstinacy / rugged-resilience do). Reactive stratagem, used just after an enemy selects targets in the opponent's Shooting or Fight phase."
   },
   {
-    "ability_id": "immortal-fury-possessed-slaughterband",
+    "ability_id": "immortal-fury-possessed-slaughterband-world-eaters",
     "name": "Immortal Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7409,7 +6927,7 @@
     "community_notes": "used just after an enemy unit selects your unit as a target; only models that have not fought this phase fight after the attacking unit finishes its attacks"
   },
   {
-    "ability_id": "rapid-manifestation-possessed-slaughterband",
+    "ability_id": "rapid-manifestation-possessed-slaughterband-world-eaters",
     "name": "Rapid Manifestation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7458,7 +6976,7 @@
     }
   },
   {
-    "ability_id": "warp-stalkers-possessed-slaughterband",
+    "ability_id": "warp-stalkers-possessed-slaughterband-world-eaters",
     "name": "Warp Stalkers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7528,7 +7046,7 @@
     "community_notes": "[APPROX] Move-through excludes enemy MONSTER and VEHICLE models, and a Charge move may end within Engagement Range (both nuances not modeled). Applies to Normal, Advance, Fall Back and Charge moves; the unit must not have been selected to move or declare a charge this phase."
   },
   {
-    "ability_id": "horrifying-violence-possessed-slaughterband",
+    "ability_id": "horrifying-violence-possessed-slaughterband-world-eaters",
     "name": "Horrifying Violence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7605,7 +7123,7 @@
     }
   },
   {
-    "ability_id": "aspire-to-infamy-vessels-of-wrath",
+    "ability_id": "aspire-to-infamy-vessels-of-wrath-world-eaters",
     "name": "Aspire to Infamy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7683,7 +7201,7 @@
     "community_notes": "[APPROX] Only the unit's CHARACTER models' melee attacks gain +1 A / +2 S; modeled unit-wide."
   },
   {
-    "ability_id": "punish-the-craven-vessels-of-wrath",
+    "ability_id": "punish-the-craven-vessels-of-wrath-world-eaters",
     "name": "Punish the Craven",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7770,7 +7288,7 @@
     }
   },
   {
-    "ability_id": "rampaging-terrors",
+    "ability_id": "rampaging-terrors-world-eaters",
     "name": "Rampaging Terrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7851,7 +7369,7 @@
     "community_notes": "[APPROX] The same enemy unit cannot be selected for this effect more than once per phase (cap not modeled). Grants friendly DAEMON VEHICLE units the Terror of Khorne ability; BRAZEN ENGINES is an onslaught detachment and cannot be combined with another onslaught detachment."
   },
   {
-    "ability_id": "talons-of-butchery-brazen-engines",
+    "ability_id": "talons-of-butchery-upgrade-brazen-engines-world-eaters",
     "name": "Talons of Butchery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7882,7 +7400,7 @@
     "community_notes": "MAULERFIEND unit only. This unit's Maulerfiend Fists have [CLEAVE 2]."
   },
   {
-    "ability_id": "murder-forged-entity-brazen-engines",
+    "ability_id": "murder-forged-entity-upgrade-brazen-engines-world-eaters",
     "name": "Murder-Forged Entity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7918,7 +7436,7 @@
     }
   },
   {
-    "ability_id": "apoplectic-clarity-brazen-engines",
+    "ability_id": "apoplectic-clarity-brazen-engines-world-eaters",
     "name": "Apoplectic Clarity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7991,7 +7509,7 @@
     }
   },
   {
-    "ability_id": "trail-of-destruction-brazen-engines",
+    "ability_id": "trail-of-destruction-brazen-engines-world-eaters",
     "name": "Trail of Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8046,7 +7564,7 @@
     }
   },
   {
-    "ability_id": "goaded-to-fury-brazen-engines",
+    "ability_id": "goaded-to-fury-brazen-engines-world-eaters",
     "name": "Goaded to Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8095,7 +7613,7 @@
     "community_notes": "When an enemy unit that targeted a friendly unengaged DAEMON VEHICLE (excluding TITANIC) has shot, that unit can make a surge move of up to D6\"."
   },
   {
-    "ability_id": "adamantine-avalanche",
+    "ability_id": "adamantine-avalanche-world-eaters",
     "name": "Adamantine Avalanche",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8133,7 +7651,7 @@
           ]
         },
         "modifier": {
-          "ability": "blessings-of-khorne"
+          "ability": "blessings-of-khorne-world-eaters"
         }
       }
     },
@@ -8157,7 +7675,7 @@
     }
   },
   {
-    "ability_id": "sanctified-in-slaughter-butchers-of-khorne",
+    "ability_id": "sanctified-in-slaughter-upgrade-butchers-of-khorne-world-eaters",
     "name": "Sanctified in Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8191,7 +7709,7 @@
     }
   },
   {
-    "ability_id": "gore-stained-veterans-butchers-of-khorne",
+    "ability_id": "gore-stained-veterans-upgrade-butchers-of-khorne-world-eaters",
     "name": "Gore-Stained Veterans",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8227,7 +7745,7 @@
     }
   },
   {
-    "ability_id": "focused-ferocity-butchers-of-khorne",
+    "ability_id": "focused-ferocity-butchers-of-khorne-world-eaters",
     "name": "Focused Ferocity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8257,7 +7775,7 @@
     }
   },
   {
-    "ability_id": "a-trophy-for-the-throne-butchers-of-khorne",
+    "ability_id": "a-trophy-for-the-throne-butchers-of-khorne-world-eaters",
     "name": "A Trophy for the Throne",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8299,7 +7817,7 @@
     }
   },
   {
-    "ability_id": "wrath-beyond-reason-butchers-of-khorne",
+    "ability_id": "wrath-beyond-reason-butchers-of-khorne-world-eaters",
     "name": "Wrath Beyond Reason",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8353,7 +7871,7 @@
     }
   },
   {
-    "ability_id": "scorn-the-witch-vessels-of-wrath",
+    "ability_id": "scorn-the-witch-vessels-of-wrath-world-eaters",
     "name": "Scorn the Witch",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8382,7 +7900,7 @@
     "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound."
   },
   {
-    "ability_id": "lord-of-murder-frenzied-reavers",
+    "ability_id": "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
     "name": "Lord of Murder",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8395,7 +7913,7 @@
     "unit_ids": [
       "vorrakh-lord-of-the-frenzied-reavers"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "passive",
@@ -8429,7 +7947,7 @@
     }
   },
   {
-    "ability_id": "devastating-assault-frenzied-reavers",
+    "ability_id": "devastating-assault-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
     "name": "Devastating Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8442,7 +7960,7 @@
     "unit_ids": [
       "vorrakh-lord-of-the-frenzied-reavers"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "reactive",
@@ -8482,7 +8000,7 @@
     }
   },
   {
-    "ability_id": "direct-the-slaughter-frenzied-reavers",
+    "ability_id": "direct-the-slaughter-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
     "name": "Direct the Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8495,7 +8013,7 @@
     "unit_ids": [
       "vorrakh-lord-of-the-frenzied-reavers"
     ],
-    "faction_id": null,
+    "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
     "behavior": "activated",
@@ -8539,6 +8057,348 @@
       "required_keywords": [
         "FRENZIED REAVERS"
       ]
+    }
+  },
+  {
+    "ability_id": "a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters",
+    "name": "A Worthy Skull",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "frenzied-reavers-master-of-executions"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bane-of-the-craven-frenzied-reavers-world-eaters",
+    "name": "Bane of the Craven",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "berserk-resilience-frenzied-reavers-world-eaters",
+    "name": "Berserk Resilience",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "berzerker-charge-world-eaters",
+    "name": "Berzerker Charge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blessings-of-khorne-frenzied-reavers-world-eaters",
+    "name": "Blessings of Khorne",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
+    "name": "Blood Surge (Once per turn, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "frenzied-reavers-khorne-berzerkers"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-world-eaters",
+    "name": "Damaged: 1-4 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-predator-annihilator",
+      "chaos-predator-destructor",
+      "forgefiend",
+      "heldrake",
+      "maulerfiend"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-world-eaters",
+    "name": "Damaged: 1-5 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-land-raider"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-world-eaters",
+    "name": "Damaged: 1-6 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "angron",
+      "defiler"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-8-wounds-remaining-world-eaters",
+    "name": "Damaged: 1-8 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "khorne-lord-of-skulls"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fearsome-presence-frenzied-reavers-world-eaters",
+    "name": "Fearsome Presence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "horrifying-butchery-frenzied-reavers-world-eaters",
+    "name": "Horrifying Butchery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
+    "name": "Icon of Khorne",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "frenzied-reavers-jakhals",
+      "frenzied-reavers-khorne-berzerkers"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "objective-ravaged-frenzied-reavers-jakhals-world-eaters",
+    "name": "Objective Ravaged",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "frenzied-reavers-jakhals"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pact-of-blood-world-eaters",
+    "name": "Pact of Blood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rabid-response-frenzied-reavers-world-eaters",
+    "name": "Rabid Response",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "frenzied-reavers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

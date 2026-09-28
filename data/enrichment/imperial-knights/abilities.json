@@ -1,56 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-2d6",
-    "name": "Deadly Demise 2D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c3968bd4398a410f750deb54657d058b7f10a96c94eff67ab216be8d22cba28f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "2D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "acastus-knight-asterius"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "sunderer-of-fortresses",
+    "ability_id": "sunderer-of-fortresses-imperial-knights",
     "name": "Sunderer of Fortresses",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -90,86 +40,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-defender"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "defender-s-duty-bondsman",
-    "name": "Defender’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f72a094307b21dfab4245c320732c85204ec3dddf12cc9b6d6b8588dc973aa12",
-    "version": "2025-q3",
-    "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
-      "modifier": {
-        "reduction": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-defender"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "selfless-protector",
+    "ability_id": "selfless-protector-imperial-knights",
     "name": "Selfless Protector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -202,100 +77,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0e650a77c0484b924782d92ba2b9f0074e7c18a13459ccb796dcc2cf420b9c74",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cerastus-knight-acheron"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "acheron-s-duty-bondsman",
-    "name": "Acheron’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b7f8835228f6ca6b8f3282fc28f24b821deb8cbcddb97cddce8eab8380cb1332",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": "engagement"
-          }
-        },
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cerastus-knight-acheron"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "searing-flames",
+    "ability_id": "searing-flames-imperial-knights",
     "name": "Searing Flames",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -327,10 +113,11 @@
       "cerastus-knight-acheron"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "bastion-of-firepower",
+    "ability_id": "bastion-of-firepower-imperial-knights",
     "name": "Bastion of Firepower",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -355,38 +142,11 @@
       "acastus-knight-porphyrion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "castigator-s-duty-bondsman",
-    "name": "Castigator’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1dab1b55db6e3f4412778b21fd65b03209f0e945bf07d1502667d62404f56fb1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cerastus-knight-castigator"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "storm-of-bolts",
+    "ability_id": "storm-of-bolts-imperial-knights",
     "name": "Storm of Bolts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -420,38 +180,11 @@
       "cerastus-knight-castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "paladin-s-duty-bondsman",
-    "name": "Paladin’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "42ce5c6f039c19842f52b6fa608bc47c051b670f71ebf41825e2394782703873",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "Lethal Hits"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-paladin"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "seasoned-noble",
+    "ability_id": "seasoned-noble-imperial-knights",
     "name": "Seasoned Noble",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -485,38 +218,11 @@
       "knight-paladin"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "errant-s-duty-bondsman",
-    "name": "Errant’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5d0666579fd032a31e073f1b9288238ce6a6640a3b3691d87ff86a8dbb9acea3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "Assault"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-errant"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "aggressive-assault",
+    "ability_id": "aggressive-assault-imperial-knights",
     "name": "Aggressive Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -550,47 +256,11 @@
       "knight-errant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "crusader-s-duty-bondsman",
-    "name": "Crusader’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a40df2f585fb45eb40bc32f08f32ac859b588f01f05c5d08b07ac0644345c3f5",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-crusader"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "punishing-salvoes",
+    "ability_id": "punishing-salvoes-imperial-knights",
     "name": "Punishing Salvoes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -630,53 +300,11 @@
       "knight-crusader"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "warden-s-duty-bondsman",
-    "name": "Warden’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "e7836603aba8b76b68b1f1a441ff3761d53549951b274ac3f53988efbde515cf",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ]
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-warden"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "thin-their-ranks-spearhead-at-arms",
+    "ability_id": "thin-their-ranks-imperial-knights",
     "name": "Thin Their Ranks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -710,10 +338,11 @@
       "knight-warden"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "mentor-bondsman",
+    "ability_id": "mentor-imperial-knights",
     "name": "Mentor (Bondsman)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -737,10 +366,11 @@
       "knight-preceptor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "exemplar-of-the-code",
+    "ability_id": "exemplar-of-the-code-imperial-knights",
     "name": "Exemplar of the Code",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -764,40 +394,11 @@
       "knight-preceptor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "lancer-s-duty-bondsman",
-    "name": "Lancer’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d313b9bfba3c25b134fb1a52774794fe02068537f0af6ad3e61a2e666a5df67a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "advance"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cerastus-knight-lancer"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "shock-charge",
+    "ability_id": "shock-charge-imperial-knights",
     "name": "Shock Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -839,60 +440,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "armiger-moirax"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "protection-protocols",
+    "ability_id": "protection-protocols-imperial-knights",
     "name": "Protection Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -935,60 +487,11 @@
       "armiger-moirax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "gallant-s-duty-bondsman",
-    "name": "Gallant’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f121c81afbcdeded4621841479807869ba0377ae36b37210d994bc9dd174438d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "knight-gallant"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "martial-pride",
+    "ability_id": "martial-pride-imperial-knights",
     "name": "Martial Pride",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1012,10 +515,11 @@
       "knight-gallant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "impetuous-glory",
+    "ability_id": "impetuous-glory-imperial-knights",
     "name": "Impetuous Glory",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1040,10 +544,11 @@
       "armiger-warglaive"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "ion-aegis-aura",
+    "ability_id": "ion-aegis-imperial-knights",
     "name": "Ion Aegis (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1083,13 +588,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "knight-castellan",
       "knight-valiant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "thundershock",
+    "ability_id": "thundershock-imperial-knights",
     "name": "Thundershock",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1121,44 +628,11 @@
       "knight-valiant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sir-hekhtur"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "using-sir-hekhtur",
+    "ability_id": "using-sir-hekhtur-imperial-knights",
     "name": "Using Sir Hekhtur",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1220,13 +694,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "canis-rex",
       "sir-hekhtur"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "legendary-freeblade",
+    "ability_id": "legendary-freeblade-imperial-knights",
     "name": "Legendary Freeblade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1255,10 +731,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "chainbreaker",
+    "ability_id": "chainbreaker-imperial-knights",
     "name": "Chainbreaker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1300,10 +777,11 @@
       "canis-rex"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "titan-hunter",
+    "ability_id": "titan-hunter-imperial-knights",
     "name": "Titan Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1336,10 +814,11 @@
       "knight-castellan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "suppression-protocols",
+    "ability_id": "suppression-protocols-imperial-knights",
     "name": "Suppression Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1378,47 +857,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Applied via an Armiger autocannon; MONSTER and VEHICLE units cannot be suppressed."
+    "community_notes": "Applied via an Armiger autocannon; MONSTER and VEHICLE units cannot be suppressed.",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "magaera-s-duty-bondsman",
-    "name": "Magaera’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "059cbdbae43a04b669670f61944487d8b4d62d06a1f685984982efab7e0183ae",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "AP",
-          "operation": "improve",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "questoris-knight-magaera"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "repair-auto-simulacra",
+    "ability_id": "repair-auto-simulacra-imperial-knights",
     "name": "Repair Auto-simulacra",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1441,36 +884,11 @@
       "questoris-knight-magaera"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "styrix-s-duty-bondsman",
-    "name": "Styrix’s Duty (Bondsman)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a59b3c5ee50120048e81726dce901f37c834056892e1a66b555f58289c561301",
-    "version": "2025-q3",
-    "effect": {
-      "type": "test",
-      "target": "selected-unit",
-      "modifier": {
-        "test": "battle-shock"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "questoris-knight-styrix"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "grav-pinned",
+    "ability_id": "grav-pinned-imperial-knights",
     "name": "Grav-pinned",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1549,10 +967,11 @@
           "phase": "shooting"
         }
       }
-    }
+    },
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "atrapos-duty-bondsman",
+    "ability_id": "atrapos-duty-imperial-knights",
     "name": "Atrapos’ Duty (Bondsman)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1590,10 +1009,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "macro-extinction-protocols",
+    "ability_id": "macro-extinction-protocols-imperial-knights",
     "name": "Macro-extinction Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1633,10 +1053,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "super-heavy-walker",
+    "ability_id": "super-heavy-walker-imperial-knights",
     "name": "Super-heavy Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1735,108 +1156,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "dreadblades",
-    "name": "Dreadblades",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b19367b77c35028fc3d960180df48828ab90218fbc7fac36041fcb485bf93f39",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "subject": {
-            "owner": "friendly"
-          },
-          "all_of": [
-            "CHAOS"
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "choice",
-            "options": [
-              {
-                "type": "army-rule",
-                "target": {
-                  "owner": "friendly"
-                },
-                "modifier": {
-                  "rule": "composition",
-                  "with": {
-                    "all_of": [
-                      "TITANIC",
-                      "CHAOS KNIGHTS"
-                    ]
-                  },
-                  "max": 1
-                }
-              },
-              {
-                "type": "army-rule",
-                "target": {
-                  "owner": "friendly"
-                },
-                "modifier": {
-                  "rule": "composition",
-                  "with": {
-                    "all_of": [
-                      "WAR DOG"
-                    ]
-                  },
-                  "max": 3
-                }
-              }
-            ]
-          },
-          {
-            "type": "army-rule",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "rule": "warlord-forbidden",
-              "with": {
-                "all_of": [
-                  "CHAOS KNIGHTS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "army-rule",
-            "target": {
-              "owner": "friendly"
-            },
-            "modifier": {
-              "rule": "enhancement-forbidden",
-              "with": {
-                "all_of": [
-                  "CHAOS KNIGHTS"
-                ]
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "faction_id": "imperial-knights",
-    "ability_type": "faction",
-    "behavior": "passive",
-    "unit_ids": []
-  },
-  {
-    "ability_id": "rain-of-devastation",
+    "ability_id": "rain-of-devastation-imperial-knights",
     "name": "Rain of Devastation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1881,7 +1201,7 @@
     "community_notes": "terrain-area target qualifier carried as prose; no target-in-terrain condition node, gated on shooting phase"
   },
   {
-    "ability_id": "blessed-plate-dominus-foebreakers",
+    "ability_id": "blessed-plate-dominus-foebreakers-imperial-knights",
     "name": "Blessed Plate",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1916,7 +1236,7 @@
     }
   },
   {
-    "ability_id": "archeotech-autoloaders-dominus-foebreakers",
+    "ability_id": "archeotech-autoloaders-dominus-foebreakers-imperial-knights",
     "name": "Archeotech Autoloaders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1951,7 +1271,7 @@
     "community_notes": "re-roll the dice that determine weapon Attacks characteristic (random A); encoded as re-roll all-failures over a weapon-attacks roll"
   },
   {
-    "ability_id": "ground-shaking-strides-dominus-foebreakers",
+    "ability_id": "ground-shaking-strides-dominus-foebreakers-imperial-knights",
     "name": "Ground-shaking Strides",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1986,7 +1306,7 @@
     }
   },
   {
-    "ability_id": "foebreaker-firestorm-dominus-foebreakers",
+    "ability_id": "foebreaker-firestorm-dominus-foebreakers-imperial-knights",
     "name": "Foebreaker Firestorm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2022,7 +1342,7 @@
     "community_notes": "BLAST removal from the unit's [BLAST] ranged attacks carried as prose; modeled buff is +1 A"
   },
   {
-    "ability_id": "fire-shocked-dominus-foebreakers",
+    "ability_id": "fire-shocked-dominus-foebreakers-imperial-knights",
     "name": "Fire Shocked",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2051,7 +1371,7 @@
     }
   },
   {
-    "ability_id": "driven-from-their-lairs",
+    "ability_id": "driven-from-their-lairs-imperial-knights",
     "name": "Driven from Their Lairs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2088,7 +1408,7 @@
     "community_notes": "applies while the ARMIGER unit is affected by a Bondsman ability; bondsman gating carried as prose"
   },
   {
-    "ability_id": "gyro-optimised-actuators-throne-bonded-outriders",
+    "ability_id": "gyro-optimised-actuators-upgrade-throne-bonded-outriders-imperial-knights",
     "name": "Gyro-optimised Actuators",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2123,7 +1443,7 @@
     }
   },
   {
-    "ability_id": "ancestral-overbleed-throne-bonded-outriders",
+    "ability_id": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights",
     "name": "Ancestral Overbleed",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2177,7 +1497,7 @@
     "community_notes": "-1 CP when targeting bearer with Fire Overwatch/Heroic Intervention stratagem"
   },
   {
-    "ability_id": "neural-lash-throne-bonded-outriders",
+    "ability_id": "neural-lash-throne-bonded-outriders-imperial-knights",
     "name": "Neural Lash",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2223,7 +1543,7 @@
     }
   },
   {
-    "ability_id": "helm-conditioning-throne-bonded-outriders",
+    "ability_id": "helm-conditioning-throne-bonded-outriders-imperial-knights",
     "name": "Helm Conditioning",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2258,7 +1578,7 @@
     }
   },
   {
-    "ability_id": "honoured-to-serve-throne-bonded-outriders",
+    "ability_id": "honoured-to-serve-throne-bonded-outriders-imperial-knights",
     "name": "Honoured to Serve",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2296,7 +1616,7 @@
     "community_notes": "shooting does not prevent the ARMIGER unit from being eligible to start an action"
   },
   {
-    "ability_id": "knights-of-legend",
+    "ability_id": "knights-of-legend-imperial-knights",
     "name": "Knights of Legend",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2344,7 +1664,7 @@
     }
   },
   {
-    "ability_id": "mysterious-guardian-freeblade-company",
+    "ability_id": "mysterious-guardian-freeblade-company-imperial-knights",
     "name": "Mysterious Guardian",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2377,7 +1697,7 @@
     "community_notes": "grants Deep Strike; once-per-battle redeploy (remove and set up >9\" away) carried as prose"
   },
   {
-    "ability_id": "sanctuary-freeblade-company",
+    "ability_id": "sanctuary-freeblade-company-imperial-knights",
     "name": "Sanctuary",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2409,7 +1729,7 @@
     }
   },
   {
-    "ability_id": "bringer-of-justice-freeblade-company",
+    "ability_id": "bringer-of-justice-freeblade-company-imperial-knights",
     "name": "Bringer of Justice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2459,7 +1779,7 @@
     }
   },
   {
-    "ability_id": "hunters-eye-freeblade-company",
+    "ability_id": "hunters-eye-freeblade-company-imperial-knights",
     "name": "Hunter’s Eye",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2494,7 +1814,7 @@
     }
   },
   {
-    "ability_id": "noble-sacrifice-freeblade-company",
+    "ability_id": "noble-sacrifice-freeblade-company-imperial-knights",
     "name": "Noble Sacrifice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2555,7 +1875,7 @@
     "community_notes": "Deadly Demise triggers on 4+ (Armiger adds 1 to the result) instead of only 6; threshold lowered to 4"
   },
   {
-    "ability_id": "point-blank-barrage-freeblade-company",
+    "ability_id": "point-blank-barrage-freeblade-company-imperial-knights",
     "name": "Point-blank Barrage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2597,7 +1917,7 @@
     "community_notes": "Blast weapons may target units in Engagement Range and ignore the engaged hit penalty; self-inflicted MW on unmodified 1 carried as prose"
   },
   {
-    "ability_id": "strength-from-exile-freeblade-company",
+    "ability_id": "strength-from-exile-freeblade-company-imperial-knights",
     "name": "Strength from Exile",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2644,7 +1964,7 @@
     "community_notes": "applies only if no other friendly units are within 9\"; isolation condition carried as prose"
   },
   {
-    "ability_id": "survivor-of-strife-freeblade-company",
+    "ability_id": "survivor-of-strife-freeblade-company-imperial-knights",
     "name": "Survivor of Strife",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2679,7 +1999,7 @@
     "community_notes": "-1 to Wound only when attack Strength exceeds the unit's Toughness; S>T gate carried as prose"
   },
   {
-    "ability_id": "full-tilt-freeblade-company",
+    "ability_id": "full-tilt-freeblade-company-imperial-knights",
     "name": "Full Tilt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2712,7 +2032,7 @@
     "community_notes": "on Advance, no Advance roll; +6\" M (or +9\" if Armiger/Destrier). Armiger variant carried as prose"
   },
   {
-    "ability_id": "flanking-manoeuvres-freeblade-company",
+    "ability_id": "flanking-manoeuvres-freeblade-company-imperial-knights",
     "name": "Flanking Manoeuvres",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2746,7 +2066,7 @@
     }
   },
   {
-    "ability_id": "bold-gallantry",
+    "ability_id": "bold-gallantry-imperial-knights",
     "name": "Bold Gallantry",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2794,7 +2114,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "cogbound-alliance",
+    "ability_id": "cogbound-alliance-imperial-knights",
     "name": "Cogbound Alliance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2920,7 +2240,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "dauntless-defenders",
+    "ability_id": "dauntless-defenders-imperial-knights",
     "name": "Dauntless Defenders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2979,7 +2299,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "knightly-teachings",
+    "ability_id": "knightly-teachings-imperial-knights",
     "name": "Knightly Teachings",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3085,7 +2405,7 @@
     }
   },
   {
-    "ability_id": "heroes-of-legend",
+    "ability_id": "heroes-of-legend-imperial-knights",
     "name": "Heroes of Legend",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3113,7 +2433,7 @@
         "type": "ability-activate",
         "target": "this-unit",
         "modifier": {
-          "ability": "code-chivalric",
+          "ability": "code-chivalric-imperial-knights",
           "option": "additional-oath"
         }
       }
@@ -3124,7 +2444,7 @@
     "community_notes": "[APPROX] Detachment rule extending the Oath army rule: at the start of your turn, if your current Oath is fulfilled, determine an additional Oath (no repeated Deed/Quality; Qualities from fulfilled Oaths keep applying to Code Chivalric models; completing an additional Oath's Deed grants 1CP instead). This army-rule interaction is not expressible in the effect vocabulary and is modeled as an opaque ability grant. Full rule in raw-text store."
   },
   {
-    "ability_id": "valours-reward",
+    "ability_id": "valours-reward-imperial-knights",
     "name": "Valour’s Reward",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3184,7 +2504,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "ram-jets",
+    "ability_id": "ram-jets-imperial-knights",
     "name": "Ram Jets",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3210,10 +2530,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Each time this model makes a Normal or Advance move, add D3\" to its Move characteristic for that move."
+    "community_notes": "Each time this model makes a Normal or Advance move, add D3\" to its Move characteristic for that move.",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "thundercharge",
+    "ability_id": "thundercharge-imperial-knights",
     "name": "Thundercharge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3239,10 +2560,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "While this model is equipped with both a thundershock spear and a bellatus reaper chainsword, add 2 to the Attacks characteristic of its melee weapons."
+    "community_notes": "While this model is equipped with both a thundershock spear and a bellatus reaper chainsword, add 2 to the Attacks characteristic of its melee weapons.",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "saturation-fire",
+    "ability_id": "saturation-fire-imperial-knights",
     "name": "Saturation Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3280,10 +2602,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "In the Shooting phase, each time this model makes a ranged attack that targets a unit within range of an objective marker, that attack has the [IGNORES COVER] ability."
+    "community_notes": "In the Shooting phase, each time this model makes a ranged attack that targets a unit within range of an objective marker, that attack has the [IGNORES COVER] ability.",
+    "faction_id": "imperial-knights"
   },
   {
-    "ability_id": "code-chivalric",
+    "ability_id": "code-chivalric-imperial-knights",
     "name": "Code Chivalric",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3518,5 +2841,1314 @@
       "duration": "permanent"
     },
     "community_notes": "Code Chivalric represents the mandatory Oath system for Imperial Knights armies. Players select (or randomly roll) one Deed and one Quality at the start of the battle. The Deed's condition must be met for the Oath to be fulfilled and grant Command Points. This DSL approximation models the three Quality bonuses and the three Deed conditions; random selection is represented as choice options. The CP grant mechanic (2/3 CP when fulfilled) is represented as an oath-fulfilled ability-grant placeholder."
+  },
+  {
+    "ability_id": "acherons-duty-imperial-knights",
+    "name": "Acheron’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cerastus-knight-acheron"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "acquisitor-at-arms-gate-warden-lance-imperial-knights",
+    "name": "Acquisitor-at-Arms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "augury-halo-gate-warden-lance-imperial-knights",
+    "name": "Augury Halo",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bearer-of-the-evanescent-ion-valourstrike-lance-imperial-knights",
+    "name": "Bearer of the Evanescent Ion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights",
+    "name": "Bearer of the Iron Chalice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bearer-of-the-judicants-helm-valourstrike-lance-imperial-knights",
+    "name": "Bearer of the Judicant’s Helm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bearer-of-the-lancers-sigil-valourstrike-lance-imperial-knights",
+    "name": "Bearer of the Lancer’s Sigil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bondsman-imperial-knights",
+    "name": "Bondsman",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "castigators-duty-imperial-knights",
+    "name": "Castigator’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cerastus-knight-castigator"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "courageous-stand-questoris-companions-imperial-knights",
+    "name": "Courageous Stand",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crusaders-duty-imperial-knights",
+    "name": "Crusader’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-crusader"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crushing-condemnation-questoris-companions-imperial-knights",
+    "name": "Crushing Condemnation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-imperial-knights",
+    "name": "DAMAGED: 1-10 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "acastus-knight-asterius",
+      "acastus-knight-porphyrion",
+      "cerastus-knight-acheron",
+      "cerastus-knight-atrapos",
+      "cerastus-knight-castigator",
+      "cerastus-knight-lancer",
+      "knight-castellan",
+      "knight-valiant"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-imperial-knights",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "armiger-helverin",
+      "armiger-moirax",
+      "armiger-warglaive"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-imperial-knights",
+    "name": "DAMAGED: 1‑6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-destrier"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-9-wounds-remaining-imperial-knights",
+    "name": "DAMAGED: 1-9 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "canis-rex",
+      "knight-crusader",
+      "knight-errant",
+      "knight-gallant",
+      "knight-paladin",
+      "knight-preceptor",
+      "knight-warden",
+      "questoris-knight-magaera",
+      "questoris-knight-styrix"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-9-wounds-remaining-knight-defender-imperial-knights",
+    "name": "DAMAGED: 1‑9 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-defender"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "defenders-duty-imperial-knights",
+    "name": "Defender’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-defender"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "drive-them-out-gate-warden-lance-imperial-knights",
+    "name": "Drive Them Out!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "driven-by-the-past-questoris-companions-imperial-knights",
+    "name": "Driven By The Past",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "errants-duty-imperial-knights",
+    "name": "Errant’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-errant"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exemplars-wisdom-spearhead-at-arms-imperial-knights",
+    "name": "Exemplar’s Wisdom",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fables-of-nightmare-spearhead-at-arms-imperial-knights",
+    "name": "Fables of Nightmare",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fortress-of-intimidation-gate-warden-lance-imperial-knights",
+    "name": "Fortress of Intimidation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "freeblades-imperial-knights",
+    "name": "Freeblades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "full-tilt-valourstrike-lance-imperial-knights",
+    "name": "Full Tilt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gallants-duty-imperial-knights",
+    "name": "Gallant’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-gallant"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "herald-of-triumph-questoris-companions-imperial-knights",
+    "name": "Herald of Triumph",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heros-tread-questoris-companions-imperial-knights",
+    "name": "Hero’s Tread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "in-the-shadow-of-giants-questor-forgepact-imperial-knights",
+    "name": "In the Shadow of Giants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questor-forgepact",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "knight-of-the-opus-machina-aura-questor-forgepact-imperial-knights",
+    "name": "Knight of the Opus Machina (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questor-forgepact",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lancebreaker-gate-warden-lance-imperial-knights",
+    "name": "Lancebreaker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lancers-duty-imperial-knights",
+    "name": "Lancer’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cerastus-knight-lancer"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "let-duty-be-your-shield-spearhead-at-arms-imperial-knights",
+    "name": "Let Duty Be Your Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "magaeras-duty-imperial-knights",
+    "name": "Magaera’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "questoris-knight-magaera"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "magos-questoris-questor-forgepact-imperial-knights",
+    "name": "Magos Questoris",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questor-forgepact",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
+    "name": "Mantle of the Mentor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "marshal-the-defence-gate-warden-lance-imperial-knights",
+    "name": "Marshal the Defence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "martial-tuition-spearhead-at-arms-imperial-knights",
+    "name": "Martial Tuition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mentors-pride-spearhead-at-arms-imperial-knights",
+    "name": "Mentor’s Pride",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "moment-of-glory-questoris-companions-imperial-knights",
+    "name": "Moment of Glory",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "omnissiahs-grace-questor-forgepact-imperial-knights",
+    "name": "Omnissiah’s Grace",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questor-forgepact",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "paladins-duty-imperial-knights",
+    "name": "Paladin’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-paladin"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pennant-of-silvered-fury-questoris-companions-imperial-knights",
+    "name": "Pennant of Silvered Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purgations-hand-gate-warden-lance-imperial-knights",
+    "name": "Purgation’s Hand",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rotate-ion-shields-valourstrike-lance-imperial-knights",
+    "name": "Rotate Ion Shields",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "run-them-through-valourstrike-lance-imperial-knights",
+    "name": "Run Them Through!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "squires-of-the-hunt-spearhead-at-arms-imperial-knights",
+    "name": "Squires of the Hunt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "steadfast-superiority-gate-warden-lance-imperial-knights",
+    "name": "Steadfast Superiority",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "styrixs-duty-imperial-knights",
+    "name": "Styrix’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "questoris-knight-styrix"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tactical-foil-valourstrike-lance-imperial-knights",
+    "name": "Tactical Foil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tales-of-heroism-spearhead-at-arms-imperial-knights",
+    "name": "Tales of Heroism",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "thin-their-ranks-spearhead-at-arms-imperial-knights",
+    "name": "Thin Their Ranks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "thunderstomp-valourstrike-lance-imperial-knights",
+    "name": "Thunderstomp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "titanic-bombardment-gate-warden-lance-imperial-knights",
+    "name": "Titanic Bombardment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "titanic-duel-questoris-companions-imperial-knights",
+    "name": "Titanic Duel",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unstoppable-warrior-questoris-companions-imperial-knights",
+    "name": "Unstoppable Warrior",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeance-of-the-machine-cult-questor-forgepact-imperial-knights",
+    "name": "Vengeance of the Machine Cult",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questor-forgepact",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeful-tread-gate-warden-lance-imperial-knights",
+    "name": "Vengeful Tread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "gate-warden-lance",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "virtue-of-courage-spearhead-at-arms-imperial-knights",
+    "name": "Virtue of Courage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "spearhead-at-arms",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vow-of-retribution-valourstrike-lance-imperial-knights",
+    "name": "Vow of Retribution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "valourstrike-lance",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wardens-duty-imperial-knights",
+    "name": "Warden’s Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "knight-warden"
+    ],
+    "faction_id": "imperial-knights",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wyrmslayer-divination-questoris-companions-imperial-knights",
+    "name": "Wyrmslayer Divination",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-knights",
+    "detachment_id": "questoris-companions",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

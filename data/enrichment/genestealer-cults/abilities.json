@@ -1,61 +1,6 @@
 [
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "atalan-jackals"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "atalan-jackals"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "outrider-gangs",
+    "ability_id": "outrider-gangs-genestealer-cults",
     "name": "Outrider Gangs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -113,10 +58,11 @@
       "filter": {
         "from": "strategic-reserves"
       }
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "demolition-run",
+    "ability_id": "demolition-run-genestealer-cults",
     "name": "Demolition Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -142,70 +88,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kelermorph"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kelermorph"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "heroic-fusillade",
+    "ability_id": "heroic-fusillade-genestealer-cults",
     "name": "Heroic Fusillade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -231,10 +118,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "hypersensory-abilities",
+    "ability_id": "hypersensory-abilities-genestealer-cults",
     "name": "Hypersensory Abilities",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -321,10 +209,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "a-plan-generations-in-the-making",
+    "ability_id": "a-plan-generations-in-the-making-genestealer-cults",
     "name": "A Plan Generations in the Making",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -344,10 +233,11 @@
       "neophyte-hybrids"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cult-icon",
+    "ability_id": "cult-icon-neophyte-hybrids-genestealer-cults",
     "name": "Cult Icon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -370,36 +260,11 @@
       "neophyte-hybrids"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "clamavus"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "voice-of-new-truths",
+    "ability_id": "voice-of-new-truths-genestealer-cults",
     "name": "Voice of New Truths",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -429,10 +294,11 @@
       "clamavus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "scrambler-array",
+    "ability_id": "scrambler-array-genestealer-cults",
     "name": "Scrambler Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -465,36 +331,11 @@
       "clamavus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "reductus-saboteur"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "primed-and-ready",
+    "ability_id": "primed-and-ready-genestealer-cults",
     "name": "Primed and Ready",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -530,10 +371,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "planted-explosives",
+    "ability_id": "planted-explosives-genestealer-cults",
     "name": "Planted Explosives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -582,10 +424,11 @@
         "owner": "enemy"
       },
       "optional": true
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "might-from-beyond",
+    "ability_id": "might-from-beyond-genestealer-cults",
     "name": "Might From Beyond",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -620,10 +463,11 @@
       "patriarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cosmic-horror-psychic",
+    "ability_id": "cosmic-horror-genestealer-cults",
     "name": "Cosmic Horror (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -662,10 +506,11 @@
       "patriarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "psychic-familiar",
+    "ability_id": "psychic-familiar-patriarch-genestealer-cults",
     "name": "Psychic Familiar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -686,7 +531,7 @@
         "type": "ability-modifier",
         "target": "this-model",
         "modifier": {
-          "ability": "cosmic-horror-psychic",
+          "ability": "cosmic-horror-genestealer-cults",
           "aspect": "range",
           "operation": "add",
           "value": 6
@@ -700,10 +545,11 @@
       "patriarch"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-genestealer-cults",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -726,87 +572,11 @@
       "patriarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "goliath-truck"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "firing-deck-6",
-    "name": "Firing Deck 6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "goliath-truck"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fire-support",
+    "ability_id": "fire-support-genestealer-cults",
     "name": "Fire Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -839,10 +609,11 @@
       "goliath-truck"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "twisted-science",
+    "ability_id": "twisted-science-genestealer-cults",
     "name": "Twisted Science",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -877,10 +648,11 @@
       "biophagus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "biological-warfare",
+    "ability_id": "biological-warfare-genestealer-cults",
     "name": "Biological Warfare",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -921,10 +693,11 @@
       "biophagus"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "alchemicus-familiar",
+    "ability_id": "alchemicus-familiar-genestealer-cults",
     "name": "Alchemicus Familiar",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -961,37 +734,11 @@
       "biophagus"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "acolyte-iconward"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "nexus-of-devotion",
+    "ability_id": "nexus-of-devotion-genestealer-cults",
     "ability_type": "unit",
     "authored_by": "40kdc-community",
     "behavior": "passive",
@@ -1063,10 +810,11 @@
     "unit_ids": [
       "acolyte-iconward"
     ],
-    "version": "2025-q3"
+    "version": "2025-q3",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "summon-the-cult",
+    "ability_id": "summon-the-cult-genestealer-cults",
     "name": "Summon the Cult",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1092,60 +840,11 @@
       "acolyte-iconward"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "achilles-ridgerunners"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "crossfire",
+    "ability_id": "crossfire-genestealer-cults",
     "name": "Crossfire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1179,10 +878,11 @@
       "achilles-ridgerunners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "flare-launcher",
+    "ability_id": "flare-launcher-genestealer-cults",
     "name": "Flare launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1233,10 +933,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "spotter",
+    "ability_id": "spotter-genestealer-cults",
     "name": "Spotter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1263,10 +964,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "survey-augur",
+    "ability_id": "survey-augur-genestealer-cults",
     "name": "Survey Augur",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1291,10 +993,11 @@
       "achilles-ridgerunners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cult-demagogue",
+    "ability_id": "cult-demagogue-genestealer-cults",
     "name": "Cult Demagogue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1329,10 +1032,11 @@
       "primus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "decoys-and-misdirection",
+    "ability_id": "decoys-and-misdirection-genestealer-cults",
     "name": "Decoys and Misdirection",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1367,36 +1071,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] After deployment, select up to 3 GENESTEALER CULTS units and redeploy them; the option to place redeployed units into Strategic Reserves regardless of the reserves cap is unmodeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After deployment, select up to 3 GENESTEALER CULTS units and redeploy them; the option to place redeployed units into Strategic Reserves regardless of the reserves cap is unmodeled. Full rule in raw-text store.",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "abominant"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "the-chosen-one",
+    "ability_id": "the-chosen-one-genestealer-cults",
     "name": "The Chosen One",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1440,10 +1119,11 @@
       "abominant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "regenerating-gene-mass",
+    "ability_id": "regenerating-gene-mass-genestealer-cults",
     "name": "Regenerating Gene-mass",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1475,10 +1155,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "battlefield-analysis",
+    "ability_id": "battlefield-analysis-genestealer-cults",
     "name": "Battlefield Analysis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1501,10 +1182,11 @@
       "nexos"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cult-infiltration",
+    "ability_id": "cult-infiltration-genestealer-cults",
     "name": "Cult Infiltration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1542,10 +1224,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "creeping-shadow",
+    "ability_id": "creeping-shadow-genestealer-cults",
     "name": "Creeping Shadow",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1605,10 +1288,11 @@
         "owner": "enemy"
       },
       "optional": true
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cloaked-assassin",
+    "ability_id": "cloaked-assassin-genestealer-cults",
     "name": "Cloaked Assassin",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1634,10 +1318,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "psychic-spoor",
+    "ability_id": "psychic-spoor-genestealer-cults",
     "name": "Psychic Spoor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1675,10 +1360,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "priority-target",
+    "ability_id": "priority-target-genestealer-cults",
     "name": "Priority Target",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1716,10 +1402,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Selected via cult sniper rifle hits; only friendly Genestealer Cults models' attacks against the marked unit benefit."
+    "community_notes": "Selected via cult sniper rifle hits; only friendly Genestealer Cults models' attacks against the marked unit benefit.",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "master-outrider",
+    "ability_id": "master-outrider-genestealer-cults",
     "name": "Master Outrider",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1751,10 +1438,11 @@
       "jackal-alphus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "hulking-bodyguards",
+    "ability_id": "hulking-bodyguards-genestealer-cults",
     "name": "Hulking Bodyguards",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1789,10 +1477,11 @@
       "aberrants"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "claimed-for-the-cult",
+    "ability_id": "claimed-for-the-cult-genestealer-cults",
     "name": "Claimed for the Cult",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1815,10 +1504,11 @@
       "acolyte-hybrids-with-autopistols"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "brood-surge",
+    "ability_id": "brood-surge-genestealer-cults",
     "name": "Brood Surge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1841,10 +1531,11 @@
       "hybrid-metamorphs"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "industrialised-destruction",
+    "ability_id": "industrialised-destruction-genestealer-cults",
     "name": "Industrialised Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1868,36 +1559,11 @@
       "acolyte-hybrids-with-hand-flamers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "locus"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "sudden-assault",
+    "ability_id": "sudden-assault-genestealer-cults",
     "name": "Sudden Assault",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1930,10 +1596,11 @@
       "locus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "bodyguard",
+    "ability_id": "bodyguard-genestealer-cults",
     "name": "Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1966,10 +1633,11 @@
       "locus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "grinding-line-breaker",
+    "ability_id": "grinding-line-breaker-genestealer-cults",
     "name": "Grinding Line-breaker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2003,10 +1671,11 @@
       "goliath-rockgrinder"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "bio-horror-disruption-psychic",
+    "ability_id": "bio-horror-disruption-genestealer-cults",
     "name": "Bio‐horror Disruption (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2041,10 +1710,11 @@
       "benefictus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "psionic-shield-psychic",
+    "ability_id": "psionic-shield-genestealer-cults",
     "name": "Psionic Shield (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2071,10 +1741,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "swift-and-deadly",
+    "ability_id": "swift-and-deadly-genestealer-cults",
     "name": "Swift and Deadly",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2101,10 +1772,11 @@
       "purestrain-genestealers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "spiritual-leader",
+    "ability_id": "spiritual-leader-genestealer-cults",
     "name": "Spiritual Leader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2146,10 +1818,11 @@
       "magus"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "mind-control-psychic",
+    "ability_id": "mind-control-genestealer-cults",
     "name": "Mind Control (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2182,10 +1855,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "genestealer-cults"
   },
   {
-    "ability_id": "cult-ambush",
+    "ability_id": "cult-ambush-genestealer-cults",
     "name": "Cult Ambush",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2267,7 +1941,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "killer-reputation",
+    "ability_id": "killer-reputation-genestealer-cults",
     "name": "Killer Reputation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2348,7 +2022,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "living-up-to-legend-heroes-of-the-uprising",
+    "ability_id": "living-up-to-legend-heroes-of-the-uprising-genestealer-cults",
     "name": "Living Up to Legend",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2384,7 +2058,7 @@
     "community_notes": "[APPROX] After a friendly KILLER unit's attacks destroy an enemy unit or CHARACTER, each visible battle-shocked GENESTEALER CULTS unit within 12\" is no longer battle-shocked; the kill trigger and the battle-shocked/visibility filter are captured as an opaque grant, as no remove-battle-shock effect exists. Full rule in raw-text store."
   },
   {
-    "ability_id": "surging-broodworship-heroes-of-the-uprising",
+    "ability_id": "surging-broodworship-heroes-of-the-uprising-genestealer-cults",
     "name": "Surging Broodworship",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2461,7 +2135,7 @@
     ]
   },
   {
-    "ability_id": "loyal-to-the-end-heroes-of-the-uprising",
+    "ability_id": "loyal-to-the-end-heroes-of-the-uprising-genestealer-cults",
     "name": "Loyal to the End",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2531,7 +2205,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "gene-tailored-toxins-heroes-of-the-uprising",
+    "ability_id": "gene-tailored-toxins-heroes-of-the-uprising-genestealer-cults",
     "name": "Gene-tailored Toxins",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2562,7 +2236,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "contraband-munitions-heroes-of-the-uprising",
+    "ability_id": "contraband-munitions-heroes-of-the-uprising-genestealer-cults",
     "name": "Contraband Munitions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2593,7 +2267,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "enemy-within",
+    "ability_id": "enemy-within-genestealer-cults",
     "name": "Enemy Within",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2655,7 +2329,7 @@
     }
   },
   {
-    "ability_id": "lurk-and-strike-purestrain-broodswarm",
+    "ability_id": "lurk-and-strike-purestrain-broodswarm-genestealer-cults",
     "name": "Lurk and Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2702,7 +2376,7 @@
     }
   },
   {
-    "ability_id": "crawling-horror-purestrain-broodswarm",
+    "ability_id": "crawling-horror-purestrain-broodswarm-genestealer-cults",
     "name": "Crawling Horror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2752,7 +2426,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "inhuman-reactions-purestrain-broodswarm",
+    "ability_id": "inhuman-reactions-purestrain-broodswarm-genestealer-cults",
     "name": "Inhuman Reactions",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2788,7 +2462,7 @@
     "community_notes": "When an enemy unit ends a move within 8\" of an unengaged PURESTRAIN GENESTEALERS unit, that unit can make a Normal move of up to D3+3\"."
   },
   {
-    "ability_id": "mark-of-the-star-children-purestrain-broodswarm",
+    "ability_id": "mark-of-the-star-children-upgrade-purestrain-broodswarm-genestealer-cults",
     "name": "Mark of the Star Children",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2842,7 +2516,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "talons-of-the-sire-purestrain-broodswarm",
+    "ability_id": "talons-of-the-sire-purestrain-broodswarm-genestealer-cults",
     "name": "Talons of the Sire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2871,7 +2545,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hordes-of-the-faithful",
+    "ability_id": "hordes-of-the-faithful-genestealer-cults",
     "name": "Hordes of the Faithful",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2933,7 +2607,7 @@
     }
   },
   {
-    "ability_id": "eyes-of-the-cult-xenocult-masses",
+    "ability_id": "eyes-of-the-cult-xenocult-masses-genestealer-cults",
     "name": "Eyes of the Cult",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2986,7 +2660,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "fanatical-hail-xenocult-masses",
+    "ability_id": "fanatical-hail-xenocult-masses-genestealer-cults",
     "name": "Fanatical Hail",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3024,7 +2698,7 @@
     "community_notes": "[APPROX] When a NEOPHYTE HYBRIDS unit is selected to shoot, its ranged attacks may re-roll hit rolls against one selected enemy unit; modeled as a re-roll of failed hits, not restricted to the single chosen target. Full rule in raw-text store."
   },
   {
-    "ability_id": "slunk-from-the-underbelly-xenocult-masses",
+    "ability_id": "slunk-from-the-underbelly-xenocult-masses-genestealer-cults",
     "name": "Slunk From the Underbelly",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3063,7 +2737,7 @@
     "community_notes": "[APPROX] While a NEOPHYTE HYBRIDS unit with every model in a terrain area is targeted in your opponent's Shooting phase, ranged attacks against it have -1 AP (modeled as +1 to the attacker's AP characteristic) until that unit has attacked. The terrain-area and 'until it has attacked' conditions are simplified. Full rule in raw-text store."
   },
   {
-    "ability_id": "inspired-to-greatness-xenocult-masses",
+    "ability_id": "inspired-to-greatness-xenocult-masses-genestealer-cults",
     "name": "Inspired to Greatness",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3092,7 +2766,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "devious-disguises-xenocult-masses",
+    "ability_id": "devious-disguises-upgrade-xenocult-masses-genestealer-cults",
     "name": "Devious Disguises",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3122,7 +2796,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "integrated-tactics",
+    "ability_id": "integrated-tactics-genestealer-cults",
     "name": "Integrated Tactics",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3174,7 +2848,7 @@
     "community_notes": "[APPROX] When an ASTRA MILITARUM unit is selected to shoot, mark one enemy unit within 18\" of and visible to it; GENESTEALER CULTS ranged attacks against the marked unit get +1 to Hit. Unmodeled: the ASTRA MILITARUM unit being locked to only target the marked unit, and the 18\" selection range. Full rule in raw-text store."
   },
   {
-    "ability_id": "brood-brothers",
+    "ability_id": "brood-brothers-genestealer-cults",
     "name": "Brood Brothers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3237,7 +2911,7 @@
           "modifier": {
             "direction": "suppressed",
             "rule_kind": "ability",
-            "rule": "voice-of-command"
+            "rule": "voice-of-command-astra-militarum"
           }
         }
       ]
@@ -3248,7 +2922,7 @@
     "community_notes": "[APPROX] Army-construction rule — permits including ASTRA MILITARUM allied units up to a points cap, with keyword exclusions, a GENESTEALER CULTS Warlord requirement, and loss of the Voice of Command ability. The build restrictions are unmodeled by design. Full rule in raw-text store."
   },
   {
-    "ability_id": "hypermorphic-fury",
+    "ability_id": "hypermorphic-fury-genestealer-cults",
     "name": "Hypermorphic Fury",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3321,7 +2995,7 @@
     "community_notes": "ABERRANTS, BIOPHAGUS and PURESTRAIN GENESTEALERS units get +1 to Charge rolls; if such a unit made a Charge move this turn, melee weapons get +1 Attack until the end of the Fight phase."
   },
   {
-    "ability_id": "rapid-takeover",
+    "ability_id": "rapid-takeover-genestealer-cults",
     "name": "Rapid Takeover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3414,7 +3088,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "psionic-parasitism",
+    "ability_id": "psionic-parasitism-genestealer-cults",
     "name": "Psionic Parasitism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3555,7 +3229,7 @@
     "community_notes": "[APPROX] At the end of your Movement phase, for each TYRANIDS SYNAPSE unit, a friendly TYRANIDS unit within 9\" heals up to D3+1 lost wounds and gets +1 to Hit until your next Movement phase. Unmodeled: the per-Synapse repetition, the D3+1 mortal wounds inflicted on the paired GENESTEALER CULTS unit, and the Catalyst aura the rule grants to TYRANIDS units. Full rule in raw-text store."
   },
   {
-    "ability_id": "unquestioning-fanaticism",
+    "ability_id": "unquestioning-fanaticism-genestealer-cults",
     "name": "Unquestioning Fanaticism",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3627,7 +3301,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "a-perfect-ambush",
+    "ability_id": "a-perfect-ambush-genestealer-cults",
     "name": "A Perfect Ambush",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3677,348 +3351,1521 @@
     }
   },
   {
-    "ability_id": "claw-of-ascension-survey-augur",
-    "name": "Survey Augur",
+    "ability_id": "a-chink-in-their-armour-host-of-ascension-genestealer-cults",
+    "name": "A Chink In Their Armour",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
-    "unit_ids": [
-      "claw-of-ascension-achilles-ridgerunner"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "enhancement",
     "effect": {
-      "type": "designate-target",
-      "designation": "claw-of-ascension-survey-augur-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "by": {
-                "event_var": "claw-of-ascension-survey-augur-shooting"
-              }
-            },
-            "window": "event"
-          }
-        }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "attacker_keywords": [
-          "GENESTEALER CULTS"
-        ],
-        "effect": {
-          "type": "weapon-ability-grant",
-          "target": "attacker",
-          "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ]
-          }
-        }
-      },
-      "duration": "phase"
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "binds_event_variable": "claw-of-ascension-survey-augur-shooting"
+      "duration": "permanent"
     }
   },
   {
-    "ability_id": "claw-of-ascension-crossfire",
-    "name": "Crossfire",
+    "ability_id": "a-dark-network-brood-brothers-auxilia-genestealer-cults",
+    "name": "A Dark Network",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
-    "unit_ids": [
-      "claw-of-ascension-achilles-ridgerunner"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
     "effect": {
-      "type": "designate-target",
-      "designation": "claw-of-ascension-crossfire-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "by": {
-                "event_var": "claw-of-ascension-crossfire-shooting"
-              }
-            },
-            "window": "event"
-          }
-        }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "attacker_keywords": [
-          "GENESTEALER CULTS"
-        ],
-        "effect": {
-          "type": "stat-modifier",
-          "target": "attacker",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1
-          }
-        }
-      },
-      "duration": "turn"
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "turn"
-    },
-    "trigger": {
-      "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "binds_event_variable": "claw-of-ascension-crossfire-shooting"
+      "duration": "permanent"
     }
   },
   {
-    "ability_id": "claw-of-ascension-adaptable-fighters",
+    "ability_id": "a-deadly-snare-host-of-ascension-genestealer-cults",
+    "name": "A Deadly Snare",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "acceptable-losses-brood-brothers-auxilia-genestealer-cults",
+    "name": "Acceptable Losses",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adaptable-fighters-genestealer-cults",
     "name": "Adaptable Fighters",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
+    "stub": true,
     "unit_ids": [
       "claw-of-ascension-atalan-jackals"
     ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
     "effect": {
-      "type": "choice",
-      "choice_label": "adaptable-fighters-attack-keyword",
-      "options": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ]
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-model",
-          "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ]
-          }
-        }
-      ]
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "phase"
-    },
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "to": "shoot"
-        }
-      },
-      {
-        "event": "selected",
-        "filter": {
-          "to": "fight"
-        }
-      }
-    ]
+      "duration": "permanent"
+    }
   },
   {
-    "ability_id": "claw-of-ascension-brood-claim",
-    "name": "Brood Claim",
+    "ability_id": "adaptive-reprisal-brood-brothers-auxilia-genestealer-cults",
+    "name": "Adaptive Reprisal",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
-    "unit_ids": [
-      "claw-of-ascension-hybrid-metamorphs"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "enhancement",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "controls"
-      },
-      "effect": {
-        "type": "objective-sticky",
-        "target": "this-model"
-      }
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "battle"
-    },
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "movement"
-        }
-      }
+      "duration": "permanent"
     }
   },
   {
-    "ability_id": "claw-of-ascension-priority-target",
-    "name": "Priority Target",
+    "ability_id": "alien-majesty-biosanctic-broodsurge-genestealer-cults",
+    "name": "Alien Majesty",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
-    "unit_ids": [
-      "shanus-daskovian"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "enhancement",
     "effect": {
-      "type": "designate-target",
-      "designation": "claw-of-ascension-priority-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "attack_type": "ranged",
-              "weapon_name": "Cult Sniper Rifle",
-              "by": {
-                "event_var": "claw-of-ascension-priority-target-shooting"
-              }
-            },
-            "window": "event"
-          }
-        }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "attacker_keywords": [
-          "GENESTEALER CULTS"
-        ],
-        "effect": {
-          "type": "re-roll",
-          "target": "attacker",
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones"
-          }
-        }
-      },
-      "duration": "phase"
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "binds_event_variable": "claw-of-ascension-priority-target-shooting"
+      "duration": "permanent"
     }
   },
   {
-    "ability_id": "claw-of-ascension-master-outrider",
+    "ability_id": "along-shadowed-trails-outlander-claw-genestealer-cults",
+    "name": "Along Shadowed Trails",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assassination-edict-host-of-ascension-genestealer-cults",
+    "name": "Assassination Edict",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assault-commando-outlander-claw-genestealer-cults",
+    "name": "Assault Commando",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "avenge-the-star-children-final-day-genestealer-cults",
+    "name": "Avenge the Star Children",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bio-horror-revelation-biosanctic-broodsurge-genestealer-cults",
+    "name": "Bio-horror Revelation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "biomorph-adaptation-biosanctic-broodsurge-genestealer-cults",
+    "name": "Biomorph Adaptation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cartographic-data-leech-outlander-claw-genestealer-cults",
+    "name": "Cartographic Data-leech",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "close-range-shoot-out-outlander-claw-genestealer-cults",
+    "name": "Close-range Shoot-out",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "coordinated-trap-host-of-ascension-genestealer-cults",
+    "name": "Coordinated Trap",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crossfire-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
+    "name": "Crossfire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "claw-of-ascension-achilles-ridgerunner"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cult-ambush-claw-of-ascension-genestealer-cults",
+    "name": "Cult Ambush",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cult-icon-genestealer-cults",
+    "name": "Cult Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "acolyte-hybrids-with-autopistols",
+      "acolyte-hybrids-with-hand-flamers",
+      "hybrid-metamorphs"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cult-zealotry-claw-of-ascension-genestealer-cults",
+    "name": "Cult Zealotry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-3-wounds-remaining-genestealer-cults",
+    "name": "DAMAGED: 1-3 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "goliath-rockgrinder"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "darting-attacks-final-day-genestealer-cults",
+    "name": "Darting Attacks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dedicated-to-the-end-claw-of-ascension-genestealer-cults",
+    "name": "Dedicated to the End",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deeds-that-speak-to-the-masses-xenocreed-congregation-genestealer-cults",
+    "name": "Deeds that Speak to the Masses",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deft-manoeuvring-outlander-claw-genestealer-cults",
+    "name": "Deft Manoeuvring",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "denunciator-of-tyrants-xenocreed-congregation-genestealer-cults",
+    "name": "Denunciator of Tyrants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "devoted-crew-outlander-claw-genestealer-cults",
+    "name": "Devoted Crew",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "divine-imperative-final-day-genestealer-cults",
+    "name": "Divine Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "encircling-the-prey-outlander-claw-genestealer-cults",
+    "name": "Encircling the Prey",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enraptured-damnation-final-day-genestealer-cults",
+    "name": "Enraptured Damnation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "evasive-vanguard-biosanctic-broodsurge-genestealer-cults",
+    "name": "Evasive Vanguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fire-point-commander-brood-brothers-auxilia-genestealer-cults",
+    "name": "Fire-point Commander",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "frenzied-devotion-xenocreed-congregation-genestealer-cults",
+    "name": "Frenzied Devotion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gene-sires-reliquant-xenocreed-congregation-genestealer-cults",
+    "name": "Gene-sire’s Reliquant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gene-twisted-muscle-biosanctic-broodsurge-genestealer-cults",
+    "name": "Gene-twisted Muscle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guerrilla-warriors-claw-of-ascension-genestealer-cults",
+    "name": "Guerrilla Warriors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heavy-munitions-claw-of-ascension-genestealer-cults",
+    "name": "Heavy Munitions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hyper-metabolic-vigour-biosanctic-broodsurge-genestealer-cults",
+    "name": "Hyper-metabolic Vigour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hyperferocity-final-day-genestealer-cults",
+    "name": "Hyperferocity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "in-the-shadow-of-iron-brood-brothers-auxilia-genestealer-cults",
+    "name": "In the Shadow of Iron",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "incendiary-inspiration-xenocreed-congregation-genestealer-cults",
+    "name": "Incendiary Inspiration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inhuman-integration-final-day-genestealer-cults",
+    "name": "Inhuman Integration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lying-in-wait-host-of-ascension-genestealer-cults",
+    "name": "Lying in Wait",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "martial-espionage-brood-brothers-auxilia-genestealer-cults",
+    "name": "Martial Espionage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-outrider-shanus-daskovian-genestealer-cults",
     "name": "Master Outrider",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "version": "2025-q3",
+    "stub": true,
     "unit_ids": [
       "shanus-daskovian"
     ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "this-model",
-          "modifier": {
-            "move_type": "normal",
-            "distance": 6
-          }
-        },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": false
-          }
-        }
-      ]
+      "type": "no-effect"
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mutagenic-regeneration-biosanctic-broodsurge-genestealer-cults",
+    "name": "Mutagenic Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     },
-    "trigger": {
-      "event": "attacks-resolved",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      }
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "our-time-is-nigh-host-of-ascension-genestealer-cults",
+    "name": "Our Time is Nigh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "practiced-eye-claw-of-ascension-genestealer-cults",
+    "name": "Practiced Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
+    "name": "Predatory Instincts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "primed-and-readied-host-of-ascension-genestealer-cults",
+    "name": "Primed and Readied",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "priority-target-shanus-daskovian-genestealer-cults",
+    "name": "Priority Target",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "shanus-daskovian"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "prowling-agitant-host-of-ascension-genestealer-cults",
+    "name": "Prowling Agitant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psi-surge-final-day-genestealer-cults",
+    "name": "Psi Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-familiar-genestealer-cults",
+    "name": "Psychic Familiar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "magus"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapid-feint-outlander-claw-genestealer-cults",
+    "name": "Rapid Feint",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "regimental-reinforcements-brood-brothers-auxilia-genestealer-cults",
+    "name": "Regimental Reinforcements",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "resistance-tunnels-final-day-genestealer-cults",
+    "name": "Resistance Tunnels",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "return-to-the-shadows-host-of-ascension-genestealer-cults",
+    "name": "Return to the Shadows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
+    "name": "Saintly Paroxysm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "serpentine-tactics-outlander-claw-genestealer-cults",
+    "name": "Serpentine Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "starfall-shells-outlander-claw-genestealer-cults",
+    "name": "Starfall Shells",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "outlander-claw",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stimulated-bio-surge-biosanctic-broodsurge-genestealer-cults",
+    "name": "Stimulated Bio-surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "biosanctic-broodsurge",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "suppress-and-overwhelm-brood-brothers-auxilia-genestealer-cults",
+    "name": "Suppress and Overwhelm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "survey-augur-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
+    "name": "Survey Augur",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "claw-of-ascension-achilles-ridgerunner"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",
+    "name": "Symbiotic Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synaptic-auger-final-day-genestealer-cults",
+    "name": "Synaptic Auger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-downtrodden-rise-xenocreed-congregation-genestealer-cults",
+    "name": "The Downtrodden Rise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-hero-returned-brood-brothers-auxilia-genestealer-cults",
+    "name": "The Hero Returned",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "brood-brothers-auxilia",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-path-of-anguish-xenocreed-congregation-genestealer-cults",
+    "name": "The Path of Anguish",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tireless-fervour-xenocreed-congregation-genestealer-cults",
+    "name": "Tireless Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transcendent-celerity-xenocreed-congregation-genestealer-cults",
+    "name": "Transcendent Celerity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tunnel-crawlers-host-of-ascension-genestealer-cults",
+    "name": "Tunnel Crawlers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "host-of-ascension",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vanguard-tyrant-final-day-genestealer-cults",
+    "name": "Vanguard Tyrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "final-day",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults",
+    "name": "Vengeance for the Martyr!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "xenocreed-congregation",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "xenos-resilience-genestealer-cults",
+    "name": "Xenos Resilience",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "genestealer-cults",
+    "detachment_id": "claw-of-ascension",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

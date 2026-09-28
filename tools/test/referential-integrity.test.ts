@@ -37,7 +37,7 @@ describe("referential integrity", () => {
     expect(result.passed).toBe(1);
 
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
-    expect(messages.some((m) => m.includes('ability_id "sorcerous-support"'))).toBe(true);
+    expect(messages.some((m) => m.includes('ability_id "sorcerous-support-thousand-sons"'))).toBe(true);
     expect(messages.some((m) => m.includes('faction_keyword "Emperor’s Children"'))).toBe(true);
     // The legal "World Eaters" keyword on the same unit must NOT be flagged.
     expect(messages.some((m) => m.includes('faction_keyword "World Eaters"'))).toBe(false);

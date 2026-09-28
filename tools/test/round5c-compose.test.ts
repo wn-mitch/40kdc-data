@@ -12,7 +12,7 @@ import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
 const base = (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abilities.json"), "utf8")) as Array<Record<string, unknown>>)
-  .find((entry) => entry.ability_id === "control-edict")!;
+  .find((entry) => entry.ability_id === "control-edict-adeptus-mechanicus")!;
 
 type Piece = [phrase: string, role: string, family: string, parameters: Record<string, unknown>];
 

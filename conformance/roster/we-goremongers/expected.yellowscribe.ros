@@ -17,7 +17,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Loping Speed" typeName="Abilities">

@@ -20,10 +20,10 @@
                 <characteristic name="Description">4+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D6" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deluge of Nurgle (Aura)" typeName="Abilities">
@@ -32,9 +32,9 @@
 Subtract 1 from the Objective Control characteristic of enemy units within 6".</characteristic>
               </characteristics>
             </profile>
-            <profile name="Feel No Pain 6+" typeName="Abilities">
+            <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 6+ ability.</characteristic>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
@@ -51,6 +51,11 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-7 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -145,15 +150,25 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
                 <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Feel No Pain 6+" typeName="Abilities">
+            <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 6+ ability.</characteristic>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D6" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D6 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED: 1-7 WOUNDS REMAINING" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" count as being within The Shadow of Chaos.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -324,6 +339,16 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Daemonic Icon" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Set this model's Leadership characteristic to 6.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Instrument of Chaos" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle, the unit gets +1 to Charge rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

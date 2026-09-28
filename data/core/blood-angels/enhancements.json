@@ -1,13 +1,13 @@
 [
   {
-    "id": "sanguinius-grace-the-lost-brethren",
+    "id": "sanguinius-grace-the-lost-brethren-blood-angels",
     "name": "Sanguinius’ Grace",
     "detachment_id": "the-lost-brethren",
     "cost": 20,
     "keyword_restrictions": [
       "Death Company"
     ],
-    "ability_id": "sanguinius-grace-the-lost-brethren",
+    "ability_id": "sanguinius-grace-the-lost-brethren-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "blood-shard-the-lost-brethren",
+    "id": "blood-shard-the-lost-brethren-blood-angels",
     "name": "Blood Shard",
     "detachment_id": "the-lost-brethren",
     "cost": 25,
     "keyword_restrictions": [
       "Death Company"
     ],
-    "ability_id": "blood-shard-the-lost-brethren",
+    "ability_id": "blood-shard-the-lost-brethren-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "to-slay-the-warmaster-the-lost-brethren",
+    "id": "to-slay-the-warmaster-the-lost-brethren-blood-angels",
     "name": "To Slay The Warmaster",
     "detachment_id": "the-lost-brethren",
     "cost": 15,
     "keyword_restrictions": [
       "Death Company"
     ],
-    "ability_id": "to-slay-the-warmaster-the-lost-brethren",
+    "ability_id": "to-slay-the-warmaster-the-lost-brethren-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "vengeful-onslaught-the-lost-brethren",
+    "id": "vengeful-onslaught-the-lost-brethren-blood-angels",
     "name": "Vengeful Onslaught",
     "detachment_id": "the-lost-brethren",
     "cost": 10,
     "keyword_restrictions": [
       "Death Company"
     ],
-    "ability_id": "vengeful-onslaught-the-lost-brethren",
+    "ability_id": "vengeful-onslaught-the-lost-brethren-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,7 +112,7 @@
     ]
   },
   {
-    "id": "artisan-of-war-the-angelic-host",
+    "id": "artisan-of-war-the-angelic-host-blood-angels",
     "name": "Artisan of War",
     "detachment_id": "the-angelic-host",
     "cost": 20,
@@ -120,7 +120,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "artisan-of-war-the-angelic-host",
+    "ability_id": "artisan-of-war-the-angelic-host-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -141,7 +141,7 @@
     ]
   },
   {
-    "id": "visage-of-death-the-angelic-host",
+    "id": "visage-of-death-the-angelic-host-blood-angels",
     "name": "Visage of Death",
     "detachment_id": "the-angelic-host",
     "cost": 15,
@@ -149,7 +149,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "visage-of-death-the-angelic-host",
+    "ability_id": "visage-of-death-the-angelic-host-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -170,7 +170,7 @@
     ]
   },
   {
-    "id": "archangels-shard-the-angelic-host",
+    "id": "archangels-shard-the-angelic-host-blood-angels",
     "name": "Archangel’s Shard",
     "detachment_id": "the-angelic-host",
     "cost": 15,
@@ -178,7 +178,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "archangels-shard-the-angelic-host",
+    "ability_id": "archangels-shard-the-angelic-host-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -199,7 +199,7 @@
     ]
   },
   {
-    "id": "gleaming-pinions-the-angelic-host",
+    "id": "gleaming-pinions-the-angelic-host-blood-angels",
     "name": "Gleaming Pinions",
     "detachment_id": "the-angelic-host",
     "cost": 25,
@@ -207,7 +207,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "gleaming-pinions-the-angelic-host",
+    "ability_id": "gleaming-pinions-the-angelic-host-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -228,14 +228,14 @@
     ]
   },
   {
-    "id": "prescient-flash-angelic-inheritors",
+    "id": "prescient-flash-angelic-inheritors-blood-angels",
     "name": "Prescient Flash",
     "detachment_id": "angelic-inheritors",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "prescient-flash-angelic-inheritors",
+    "ability_id": "prescient-flash-angelic-inheritors-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -256,14 +256,14 @@
     ]
   },
   {
-    "id": "troubling-visions-angelic-inheritors",
+    "id": "troubling-visions-angelic-inheritors-blood-angels",
     "name": "Troubling Visions",
     "detachment_id": "angelic-inheritors",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "troubling-visions-angelic-inheritors",
+    "ability_id": "troubling-visions-angelic-inheritors-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -284,7 +284,7 @@
     ]
   },
   {
-    "id": "blazing-icon-angelic-inheritors",
+    "id": "blazing-icon-angelic-inheritors-blood-angels",
     "name": "Blazing Icon",
     "detachment_id": "angelic-inheritors",
     "cost": 20,
@@ -292,7 +292,7 @@
       "Adeptus Astartes",
       "Infantry"
     ],
-    "ability_id": "blazing-icon-angelic-inheritors",
+    "ability_id": "blazing-icon-angelic-inheritors-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -313,14 +313,14 @@
     ]
   },
   {
-    "id": "ordained-sacrifice-angelic-inheritors",
+    "id": "ordained-sacrifice-angelic-inheritors-blood-angels",
     "name": "Ordained Sacrifice",
     "detachment_id": "angelic-inheritors",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "ordained-sacrifice-angelic-inheritors",
+    "ability_id": "ordained-sacrifice-angelic-inheritors-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -341,14 +341,14 @@
     ]
   },
   {
-    "id": "carmine-reliquary-rage-cursed-onslaught",
+    "id": "carmine-reliquary-rage-cursed-onslaught-blood-angels",
     "name": "Carmine Reliquary",
     "detachment_id": "rage-cursed-onslaught",
     "cost": 30,
     "keyword_restrictions": [
       "Chaplain"
     ],
-    "ability_id": "carmine-reliquary-rage-cursed-onslaught",
+    "ability_id": "carmine-reliquary-rage-cursed-onslaught-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -369,14 +369,14 @@
     ]
   },
   {
-    "id": "master-of-the-red-thirst-rage-cursed-onslaught",
+    "id": "master-of-the-red-thirst-rage-cursed-onslaught-blood-angels",
     "name": "Master of the Red Thirst",
     "detachment_id": "rage-cursed-onslaught",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "master-of-the-red-thirst-rage-cursed-onslaught",
+    "ability_id": "master-of-the-red-thirst-rage-cursed-onslaught-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -397,14 +397,14 @@
     ]
   },
   {
-    "id": "sanguinary-tear-aura-rage-cursed-onslaught",
+    "id": "sanguinary-tear-aura-rage-cursed-onslaught-blood-angels",
     "name": "Sanguinary Tear (Aura)",
     "detachment_id": "rage-cursed-onslaught",
     "cost": 35,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "sanguinary-tear-aura-rage-cursed-onslaught",
+    "ability_id": "sanguinary-tear-aura-rage-cursed-onslaught-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -425,14 +425,14 @@
     ]
   },
   {
-    "id": "angels-fang-rage-cursed-onslaught",
+    "id": "angels-fang-rage-cursed-onslaught-blood-angels",
     "name": "Angel’s Fang",
     "detachment_id": "rage-cursed-onslaught",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "angels-fang-rage-cursed-onslaught",
+    "ability_id": "angels-fang-rage-cursed-onslaught-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -453,7 +453,7 @@
     ]
   },
   {
-    "id": "angelic-executioner-encarmine-speartip",
+    "id": "angelic-executioner-encarmine-speartip-blood-angels",
     "name": "Angelic Executioner",
     "detachment_id": "encarmine-speartip",
     "cost": 25,
@@ -461,7 +461,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "angelic-executioner-encarmine-speartip",
+    "ability_id": "angelic-executioner-encarmine-speartip-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -482,7 +482,7 @@
     ]
   },
   {
-    "id": "shadow-of-abomination-encarmine-speartip",
+    "id": "shadow-of-abomination-encarmine-speartip-blood-angels",
     "name": "Shadow of Abomination",
     "detachment_id": "encarmine-speartip",
     "cost": 25,
@@ -490,7 +490,7 @@
       "Adeptus Astartes",
       "Jump Pack"
     ],
-    "ability_id": "shadow-of-abomination-encarmine-speartip",
+    "ability_id": "shadow-of-abomination-encarmine-speartip-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -511,7 +511,7 @@
     ]
   },
   {
-    "id": "blood-boil-legacy-of-grace",
+    "id": "blood-boil-legacy-of-grace-blood-angels",
     "name": "Blood Boil",
     "detachment_id": "legacy-of-grace",
     "cost": 10,
@@ -519,7 +519,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "blood-boil-legacy-of-grace",
+    "ability_id": "blood-boil-legacy-of-grace-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -540,14 +540,14 @@
     ]
   },
   {
-    "id": "aureole-of-the-angel-legacy-of-grace",
+    "id": "aureole-of-the-angel-legacy-of-grace-blood-angels",
     "name": "Aureole of the Angel",
     "detachment_id": "legacy-of-grace",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "aureole-of-the-angel-legacy-of-grace",
+    "ability_id": "aureole-of-the-angel-legacy-of-grace-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -568,14 +568,14 @@
     ]
   },
   {
-    "id": "instinctive-interception-wrath-of-the-doomed",
+    "id": "instinctive-interception-wrath-of-the-doomed-blood-angels",
     "name": "Instinctive Interception",
     "detachment_id": "wrath-of-the-doomed",
     "cost": 10,
     "keyword_restrictions": [
       "Death Company"
     ],
-    "ability_id": "instinctive-interception-wrath-of-the-doomed",
+    "ability_id": "instinctive-interception-wrath-of-the-doomed-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -596,14 +596,14 @@
     ]
   },
   {
-    "id": "speed-of-the-primarch-liberator-assault-group",
+    "id": "speed-of-the-primarch-liberator-assault-group-blood-angels",
     "name": "Speed of the Primarch",
     "detachment_id": "liberator-assault-group",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "speed-of-the-primarch-liberator-assault-group",
+    "ability_id": "speed-of-the-primarch-liberator-assault-group-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -624,14 +624,14 @@
     ]
   },
   {
-    "id": "rage-fuelled-warrior-liberator-assault-group",
+    "id": "rage-fuelled-warrior-liberator-assault-group-blood-angels",
     "name": "Rage-fuelled Warrior",
     "detachment_id": "liberator-assault-group",
     "cost": 35,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "rage-fuelled-warrior-liberator-assault-group",
+    "ability_id": "rage-fuelled-warrior-liberator-assault-group-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -652,14 +652,14 @@
     ]
   },
   {
-    "id": "icon-of-the-angel-liberator-assault-group",
+    "id": "icon-of-the-angel-liberator-assault-group-blood-angels",
     "name": "Icon of the Angel",
     "detachment_id": "liberator-assault-group",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "icon-of-the-angel-liberator-assault-group",
+    "ability_id": "icon-of-the-angel-liberator-assault-group-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -680,14 +680,14 @@
     ]
   },
   {
-    "id": "gift-of-foresight-liberator-assault-group",
+    "id": "gift-of-foresight-liberator-assault-group-blood-angels",
     "name": "Gift of Foresight",
     "detachment_id": "liberator-assault-group",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "gift-of-foresight-liberator-assault-group",
+    "ability_id": "gift-of-foresight-liberator-assault-group-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -708,14 +708,14 @@
     ]
   },
   {
-    "id": "the-imperiums-sword-1st-company-task-force",
+    "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
     "name": "The Imperium’s Sword",
     "detachment_id": "1st-company-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-imperiums-sword-1st-company-task-force",
+    "ability_id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -736,14 +736,14 @@
     ]
   },
   {
-    "id": "fear-made-manifest-aura-1st-company-task-force",
+    "id": "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
     "name": "Fear Made Manifest (Aura)",
     "detachment_id": "1st-company-task-force",
     "cost": 30,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "fear-made-manifest-aura-1st-company-task-force",
+    "ability_id": "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -764,7 +764,7 @@
     ]
   },
   {
-    "id": "rites-of-war-1st-company-task-force",
+    "id": "rites-of-war-1st-company-task-force-adeptus-astartes",
     "name": "Rites of War",
     "detachment_id": "1st-company-task-force",
     "cost": 10,
@@ -772,7 +772,7 @@
       "Adeptus Astartes",
       "Terminator"
     ],
-    "ability_id": "rites-of-war-1st-company-task-force",
+    "ability_id": "rites-of-war-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -793,7 +793,7 @@
     ]
   },
   {
-    "id": "iron-resolve-1st-company-task-force",
+    "id": "iron-resolve-1st-company-task-force-adeptus-astartes",
     "name": "Iron Resolve",
     "detachment_id": "1st-company-task-force",
     "cost": 15,
@@ -801,7 +801,7 @@
       "Adeptus Astartes",
       "Terminator"
     ],
-    "ability_id": "iron-resolve-1st-company-task-force",
+    "ability_id": "iron-resolve-1st-company-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -822,14 +822,14 @@
     ]
   },
   {
-    "id": "artificer-armour-gladius-task-force",
+    "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "artificer-armour-gladius-task-force",
+    "ability_id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -850,14 +850,14 @@
     ]
   },
   {
-    "id": "the-honour-vehement-gladius-task-force",
+    "id": "the-honour-vehement-gladius-task-force-adeptus-astartes",
     "name": "The Honour Vehement",
     "detachment_id": "gladius-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-honour-vehement-gladius-task-force",
+    "ability_id": "the-honour-vehement-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -878,14 +878,14 @@
     ]
   },
   {
-    "id": "adept-of-the-codex-gladius-task-force",
+    "id": "adept-of-the-codex-gladius-task-force-adeptus-astartes",
     "name": "Adept of the Codex",
     "detachment_id": "gladius-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Captain"
     ],
-    "ability_id": "adept-of-the-codex-gladius-task-force",
+    "ability_id": "adept-of-the-codex-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -906,14 +906,14 @@
     ]
   },
   {
-    "id": "fire-discipline-gladius-task-force",
+    "id": "fire-discipline-gladius-task-force-adeptus-astartes",
     "name": "Fire Discipline",
     "detachment_id": "gladius-task-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "fire-discipline-gladius-task-force",
+    "ability_id": "fire-discipline-gladius-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -934,7 +934,7 @@
     ]
   },
   {
-    "id": "fury-of-the-storm-stormlance-task-force",
+    "id": "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
     "name": "Fury of the Storm",
     "detachment_id": "stormlance-task-force",
     "cost": 25,
@@ -942,7 +942,7 @@
       "Adeptus Astartes",
       "Mounted"
     ],
-    "ability_id": "fury-of-the-storm-stormlance-task-force",
+    "ability_id": "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -963,14 +963,14 @@
     ]
   },
   {
-    "id": "portents-of-wisdom-stormlance-task-force",
+    "id": "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
     "name": "Portents of Wisdom",
     "detachment_id": "stormlance-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "portents-of-wisdom-stormlance-task-force",
+    "ability_id": "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -991,14 +991,14 @@
     ]
   },
   {
-    "id": "feinting-withdrawal-stormlance-task-force",
+    "id": "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
     "name": "Feinting Withdrawal",
     "detachment_id": "stormlance-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "feinting-withdrawal-stormlance-task-force",
+    "ability_id": "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1019,7 +1019,7 @@
     ]
   },
   {
-    "id": "hunters-instincts-stormlance-task-force",
+    "id": "hunters-instincts-stormlance-task-force-adeptus-astartes",
     "name": "Hunter’s Instincts",
     "detachment_id": "stormlance-task-force",
     "cost": 25,
@@ -1027,7 +1027,7 @@
       "Adeptus Astartes",
       "Mounted"
     ],
-    "ability_id": "hunters-instincts-stormlance-task-force",
+    "ability_id": "hunters-instincts-stormlance-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1048,7 +1048,7 @@
     ]
   },
   {
-    "id": "celerity-librarius-conclave",
+    "id": "celerity-librarius-conclave-adeptus-astartes",
     "name": "Celerity",
     "detachment_id": "librarius-conclave",
     "cost": 35,
@@ -1056,7 +1056,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "celerity-librarius-conclave",
+    "ability_id": "celerity-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1077,7 +1077,7 @@
     ]
   },
   {
-    "id": "prescience-librarius-conclave",
+    "id": "prescience-librarius-conclave-adeptus-astartes",
     "name": "Prescience",
     "detachment_id": "librarius-conclave",
     "cost": 20,
@@ -1085,7 +1085,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "prescience-librarius-conclave",
+    "ability_id": "prescience-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1106,7 +1106,7 @@
     ]
   },
   {
-    "id": "obfuscation-librarius-conclave",
+    "id": "obfuscation-librarius-conclave-adeptus-astartes",
     "name": "Obfuscation",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1114,7 +1114,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "obfuscation-librarius-conclave",
+    "ability_id": "obfuscation-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1135,7 +1135,7 @@
     ]
   },
   {
-    "id": "temporal-corridor-librarius-conclave",
+    "id": "temporal-corridor-librarius-conclave-adeptus-astartes",
     "name": "Temporal Corridor",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1143,7 +1143,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "temporal-corridor-librarius-conclave",
+    "ability_id": "temporal-corridor-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1164,7 +1164,7 @@
     ]
   },
   {
-    "id": "fusillade-librarius-conclave",
+    "id": "fusillade-librarius-conclave-adeptus-astartes",
     "name": "Fusillade",
     "detachment_id": "librarius-conclave",
     "cost": 25,
@@ -1172,7 +1172,7 @@
       "Adeptus Astartes",
       "Psyker"
     ],
-    "ability_id": "fusillade-librarius-conclave",
+    "ability_id": "fusillade-librarius-conclave-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1193,7 +1193,7 @@
     ]
   },
   {
-    "id": "the-blade-driven-deep-vanguard-spearhead",
+    "id": "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
     "name": "The Blade Driven Deep",
     "detachment_id": "vanguard-spearhead",
     "cost": 25,
@@ -1201,7 +1201,7 @@
       "Adeptus Astartes",
       "Infantry"
     ],
-    "ability_id": "the-blade-driven-deep-vanguard-spearhead",
+    "ability_id": "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1222,14 +1222,14 @@
     ]
   },
   {
-    "id": "ghostweave-cloak-vanguard-spearhead",
+    "id": "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
     "name": "Ghostweave Cloak",
     "detachment_id": "vanguard-spearhead",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "ghostweave-cloak-vanguard-spearhead",
+    "ability_id": "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1250,14 +1250,14 @@
     ]
   },
   {
-    "id": "execute-and-redeploy-vanguard-spearhead",
+    "id": "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
     "name": "Execute and Redeploy",
     "detachment_id": "vanguard-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "execute-and-redeploy-vanguard-spearhead",
+    "ability_id": "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1278,14 +1278,14 @@
     ]
   },
   {
-    "id": "shadow-war-veteran-vanguard-spearhead",
+    "id": "shadow-war-veteran-vanguard-spearhead-adeptus-astartes",
     "name": "Shadow War Veteran",
     "detachment_id": "vanguard-spearhead",
     "cost": 30,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "shadow-war-veteran-vanguard-spearhead",
+    "ability_id": "shadow-war-veteran-vanguard-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1306,14 +1306,14 @@
     ]
   },
   {
-    "id": "laurels-of-thunder-orbital-assault-force",
+    "id": "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
     "name": "Laurels of Thunder",
     "detachment_id": "orbital-assault-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "laurels-of-thunder-orbital-assault-force",
+    "ability_id": "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1334,14 +1334,14 @@
     ]
   },
   {
-    "id": "veteran-of-the-vanguard-orbital-assault-force",
+    "id": "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
     "name": "Veteran of the Vanguard",
     "detachment_id": "orbital-assault-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "veteran-of-the-vanguard-orbital-assault-force",
+    "ability_id": "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1362,14 +1362,14 @@
     ]
   },
   {
-    "id": "orbital-uplink-reliquary-orbital-assault-force",
+    "id": "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
     "name": "Orbital Uplink Reliquary",
     "detachment_id": "orbital-assault-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "orbital-uplink-reliquary-orbital-assault-force",
+    "ability_id": "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1390,14 +1390,14 @@
     ]
   },
   {
-    "id": "indomitable-fury-anvil-siege-force",
+    "id": "indomitable-fury-anvil-siege-force-adeptus-astartes",
     "name": "Indomitable Fury",
     "detachment_id": "anvil-siege-force",
     "cost": 20,
     "keyword_restrictions": [
       "Gravis"
     ],
-    "ability_id": "indomitable-fury-anvil-siege-force",
+    "ability_id": "indomitable-fury-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1418,14 +1418,14 @@
     ]
   },
   {
-    "id": "fleet-commander-anvil-siege-force",
+    "id": "fleet-commander-anvil-siege-force-adeptus-astartes",
     "name": "Fleet Commander",
     "detachment_id": "anvil-siege-force",
     "cost": 15,
     "keyword_restrictions": [
       "Captain"
     ],
-    "ability_id": "fleet-commander-anvil-siege-force",
+    "ability_id": "fleet-commander-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1446,14 +1446,14 @@
     ]
   },
   {
-    "id": "stoic-defender-anvil-siege-force",
+    "id": "stoic-defender-anvil-siege-force-adeptus-astartes",
     "name": "Stoic Defender",
     "detachment_id": "anvil-siege-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "stoic-defender-anvil-siege-force",
+    "ability_id": "stoic-defender-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1474,14 +1474,14 @@
     ]
   },
   {
-    "id": "architect-of-war-anvil-siege-force",
+    "id": "architect-of-war-anvil-siege-force-adeptus-astartes",
     "name": "Architect of War",
     "detachment_id": "anvil-siege-force",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "architect-of-war-anvil-siege-force",
+    "ability_id": "architect-of-war-anvil-siege-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1502,14 +1502,14 @@
     ]
   },
   {
-    "id": "champion-of-humanity-firestorm-assault-force",
+    "id": "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
     "name": "Champion of Humanity",
     "detachment_id": "firestorm-assault-force",
     "cost": 10,
     "keyword_restrictions": [
       "Tacticus"
     ],
-    "ability_id": "champion-of-humanity-firestorm-assault-force",
+    "ability_id": "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1530,7 +1530,7 @@
     ]
   },
   {
-    "id": "war-tempered-artifice-firestorm-assault-force",
+    "id": "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
     "name": "War-tempered Artifice",
     "detachment_id": "firestorm-assault-force",
     "cost": 25,
@@ -1538,7 +1538,7 @@
       "Adeptus Astartes",
       "Infantry"
     ],
-    "ability_id": "war-tempered-artifice-firestorm-assault-force",
+    "ability_id": "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1559,14 +1559,14 @@
     ]
   },
   {
-    "id": "forged-in-battle-firestorm-assault-force",
+    "id": "forged-in-battle-firestorm-assault-force-adeptus-astartes",
     "name": "Forged in Battle",
     "detachment_id": "firestorm-assault-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "forged-in-battle-firestorm-assault-force",
+    "ability_id": "forged-in-battle-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1587,14 +1587,14 @@
     ]
   },
   {
-    "id": "adamantine-mantle-firestorm-assault-force",
+    "id": "adamantine-mantle-firestorm-assault-force-adeptus-astartes",
     "name": "Adamantine Mantle",
     "detachment_id": "firestorm-assault-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "adamantine-mantle-firestorm-assault-force",
+    "ability_id": "adamantine-mantle-firestorm-assault-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1615,14 +1615,14 @@
     ]
   },
   {
-    "id": "target-augury-web-ironstorm-spearhead",
+    "id": "target-augury-web-ironstorm-spearhead-adeptus-astartes",
     "name": "Target Augury Web",
     "detachment_id": "ironstorm-spearhead",
     "cost": 30,
     "keyword_restrictions": [
       "Techmarine"
     ],
-    "ability_id": "target-augury-web-ironstorm-spearhead",
+    "ability_id": "target-augury-web-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1643,14 +1643,14 @@
     ]
   },
   {
-    "id": "the-flesh-is-weak-ironstorm-spearhead",
+    "id": "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
     "name": "The Flesh Is Weak",
     "detachment_id": "ironstorm-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "the-flesh-is-weak-ironstorm-spearhead",
+    "ability_id": "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1671,14 +1671,14 @@
     ]
   },
   {
-    "id": "adept-of-the-omnissiah-ironstorm-spearhead",
+    "id": "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
     "name": "Adept of the Omnissiah",
     "detachment_id": "ironstorm-spearhead",
     "cost": 35,
     "keyword_restrictions": [
       "Techmarine"
     ],
-    "ability_id": "adept-of-the-omnissiah-ironstorm-spearhead",
+    "ability_id": "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1699,14 +1699,14 @@
     ]
   },
   {
-    "id": "master-of-machine-war-ironstorm-spearhead",
+    "id": "master-of-machine-war-ironstorm-spearhead-adeptus-astartes",
     "name": "Master of Machine War",
     "detachment_id": "ironstorm-spearhead",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "master-of-machine-war-ironstorm-spearhead",
+    "ability_id": "master-of-machine-war-ironstorm-spearhead-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1727,14 +1727,14 @@
     ]
   },
   {
-    "id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
+    "id": "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
     "name": "Bellicose Weapon Spirits (Upgrade)",
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Speeder"
     ],
-    "ability_id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
+    "ability_id": "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1755,14 +1755,14 @@
     ]
   },
   {
-    "id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
+    "id": "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes",
     "name": "Raptorial Cogitator Core (Upgrade)",
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Speeder"
     ],
-    "ability_id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
+    "ability_id": "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1783,14 +1783,14 @@
     ]
   },
   {
-    "id": "shroud-field-subversion-assets",
+    "id": "shroud-field-subversion-assets-adeptus-astartes",
     "name": "Shroud Field",
     "detachment_id": "subversion-assets",
     "cost": 20,
     "keyword_restrictions": [
       "Phobos"
     ],
-    "ability_id": "shroud-field-subversion-assets",
+    "ability_id": "shroud-field-subversion-assets-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1811,7 +1811,7 @@
     ]
   },
   {
-    "id": "death-in-the-dark-upgrade-subversion-assets",
+    "id": "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes",
     "name": "Death in the Dark (Upgrade)",
     "detachment_id": "subversion-assets",
     "cost": 15,
@@ -1819,7 +1819,7 @@
       "Infantry",
       "Phobos"
     ],
-    "ability_id": "death-in-the-dark-upgrade-subversion-assets",
+    "ability_id": "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1840,14 +1840,14 @@
     ]
   },
   {
-    "id": "liberator-armoured-speartip",
+    "id": "liberator-armoured-speartip-adeptus-astartes",
     "name": "Liberator",
     "detachment_id": "armoured-speartip",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "liberator-armoured-speartip",
+    "ability_id": "liberator-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1868,14 +1868,14 @@
     ]
   },
   {
-    "id": "tip-of-the-spear-armoured-speartip",
+    "id": "tip-of-the-spear-armoured-speartip-adeptus-astartes",
     "name": "Tip of the Spear",
     "detachment_id": "armoured-speartip",
     "cost": 40,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "tip-of-the-spear-armoured-speartip",
+    "ability_id": "tip-of-the-spear-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1896,11 +1896,11 @@
     ]
   },
   {
-    "id": "shock-deployment-armoured-speartip",
+    "id": "shock-deployment-armoured-speartip-adeptus-astartes",
     "name": "Shock Deployment",
     "detachment_id": "armoured-speartip",
     "cost": 20,
-    "ability_id": "shock-deployment-armoured-speartip",
+    "ability_id": "shock-deployment-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1931,14 +1931,14 @@
     ]
   },
   {
-    "id": "armoured-commander-armoured-speartip",
+    "id": "armoured-commander-armoured-speartip-adeptus-astartes",
     "name": "Armoured Commander",
     "detachment_id": "armoured-speartip",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "armoured-commander-armoured-speartip",
+    "ability_id": "armoured-commander-armoured-speartip-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1959,14 +1959,14 @@
     ]
   },
   {
-    "id": "eye-of-the-primarch-bastion-task-force",
+    "id": "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
     "name": "Eye of the Primarch",
     "detachment_id": "bastion-task-force",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "eye-of-the-primarch-bastion-task-force",
+    "ability_id": "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1987,14 +1987,14 @@
     ]
   },
   {
-    "id": "hero-of-the-chapter-bastion-task-force",
+    "id": "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
     "name": "Hero of the Chapter",
     "detachment_id": "bastion-task-force",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "hero-of-the-chapter-bastion-task-force",
+    "ability_id": "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2015,14 +2015,14 @@
     ]
   },
   {
-    "id": "blades-of-valour-bastion-task-force",
+    "id": "blades-of-valour-bastion-task-force-adeptus-astartes",
     "name": "Blades of Valour",
     "detachment_id": "bastion-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "blades-of-valour-bastion-task-force",
+    "ability_id": "blades-of-valour-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2043,14 +2043,14 @@
     ]
   },
   {
-    "id": "bombast-omnivox-bastion-task-force",
+    "id": "bombast-omnivox-bastion-task-force-adeptus-astartes",
     "name": "Bombast Omnivox",
     "detachment_id": "bastion-task-force",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "bombast-omnivox-bastion-task-force",
+    "ability_id": "bombast-omnivox-bastion-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2071,14 +2071,14 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels",
+    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
     "cost": 25,
     "keyword_restrictions": [
       "Gravis"
     ],
-    "ability_id": "honour-indefatigable-ceramite-sentinels",
+    "ability_id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2099,14 +2099,14 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels",
+    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "castellum-omnivox-ceramite-sentinels",
+    "ability_id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2127,14 +2127,14 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels",
+    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": "defensive-mastery-ceramite-sentinels",
+    "ability_id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2155,7 +2155,7 @@
     ]
   },
   {
-    "id": "redoubtable-machine-spirit-headhunter-task-force",
+    "id": "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
     "name": "Redoubtable Machine Spirit",
     "detachment_id": "headhunter-task-force",
     "cost": 25,
@@ -2163,7 +2163,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "redoubtable-machine-spirit-headhunter-task-force",
+    "ability_id": "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2184,7 +2184,7 @@
     ]
   },
   {
-    "id": "gunnery-honours-headhunter-task-force",
+    "id": "gunnery-honours-headhunter-task-force-adeptus-astartes",
     "name": "Gunnery Honours",
     "detachment_id": "headhunter-task-force",
     "cost": 20,
@@ -2192,7 +2192,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "gunnery-honours-headhunter-task-force",
+    "ability_id": "gunnery-honours-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2213,7 +2213,7 @@
     ]
   },
   {
-    "id": "firestorm-coordinators-headhunter-task-force",
+    "id": "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
     "name": "Firestorm Coordinators",
     "detachment_id": "headhunter-task-force",
     "cost": 20,
@@ -2221,7 +2221,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "firestorm-coordinators-headhunter-task-force",
+    "ability_id": "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2242,7 +2242,7 @@
     ]
   },
   {
-    "id": "astartes-tank-ace-aura-headhunter-task-force",
+    "id": "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes",
     "name": "Astartes Tank Ace (Aura)",
     "detachment_id": "headhunter-task-force",
     "cost": 40,
@@ -2250,7 +2250,7 @@
       "Adeptus Astartes",
       "Vehicle"
     ],
-    "ability_id": "astartes-tank-ace-aura-headhunter-task-force",
+    "ability_id": "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -2271,11 +2271,11 @@
     ]
   },
   {
-    "id": "dedicated-gunship-orbital-assault-force",
+    "id": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
     "name": "Dedicated Gunship",
     "detachment_id": "orbital-assault-force",
     "cost": 15,
-    "ability_id": "dedicated-gunship-orbital-assault-force",
+    "ability_id": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2297,7 +2297,7 @@
     ]
   },
   {
-    "id": "masterful-fighter-sanguinary-spearhead",
+    "id": "masterful-fighter-sanguinary-spearhead-blood-angels",
     "name": "Masterful Fighter",
     "detachment_id": "sanguinary-spearhead",
     "cost": 0,
@@ -2314,7 +2314,7 @@
       "Captain",
       "Sanguinary Spearhead"
     ],
-    "ability_id": "masterful-fighter-sanguinary-spearhead",
+    "ability_id": "masterful-fighter-sanguinary-spearhead-blood-angels",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -2323,7 +2323,7 @@
     ]
   },
   {
-    "id": "overwhelming-charge-sanguinary-spearhead",
+    "id": "overwhelming-charge-sanguinary-spearhead-blood-angels",
     "name": "Overwhelming Charge",
     "detachment_id": "sanguinary-spearhead",
     "cost": 0,
@@ -2340,7 +2340,7 @@
       "Sanguinary Spearhead Assault Intercessor Squad"
     ],
     "upgrade_tag": true,
-    "ability_id": "overwhelming-charge-sanguinary-spearhead",
+    "ability_id": "overwhelming-charge-sanguinary-spearhead-blood-angels",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -2349,11 +2349,11 @@
     ]
   },
   {
-    "id": "on-the-archtraitors-bridge-wrath-of-the-doomed",
+    "id": "on-the-archtraitors-bridge-wrath-of-the-doomed-blood-angels",
     "name": "On the Archtraitor's Bridge",
     "detachment_id": "wrath-of-the-doomed",
     "cost": 20,
-    "ability_id": "on-the-archtraitors-bridge-wrath-of-the-doomed",
+    "ability_id": "on-the-archtraitors-bridge-wrath-of-the-doomed-blood-angels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

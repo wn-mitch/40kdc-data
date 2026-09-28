@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "huntsman",
+    "source_id": "huntsman-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -26,7 +26,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "brigand",
+    "source_id": "brigand-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -38,7 +38,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "executioner",
+    "source_id": "executioner-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -51,7 +51,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -63,7 +63,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "stalker",
+    "source_id": "stalker-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -76,7 +76,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "protection-protocols",
+    "source_id": "protection-protocols-chaos-knights",
     "source_type": "ability",
     "phases": [
       "command",
@@ -89,7 +89,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "karnivore",
+    "source_id": "karnivore-chaos-knights",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -102,20 +102,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dread-dominion-aura",
+    "source_id": "dread-dominion-chaos-knights",
     "source_type": "ability",
     "phases": [
       "command"
@@ -127,7 +114,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "seething-hatred",
+    "source_id": "seething-hatred-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -139,20 +126,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6-2",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "searing-flames",
+    "source_id": "searing-flames-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -164,7 +138,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unrestrained-terror-aura",
+    "source_id": "unrestrained-terror-chaos-knights",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -176,7 +150,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "methodical-destruction",
+    "source_id": "methodical-destruction-chaos-knights",
     "source_type": "ability",
     "phases": [
       "command",
@@ -190,7 +164,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "close-range-killers-aura",
+    "source_id": "close-range-killers-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -203,7 +177,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "obsessive-ruthlessness",
+    "source_id": "obsessive-ruthlessness-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -216,7 +190,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "taskmaster-aura",
+    "source_id": "taskmaster-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -228,20 +202,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-2d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bastion-of-firepower",
+    "source_id": "bastion-of-firepower-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -253,7 +214,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "macro-extinction-protocols",
+    "source_id": "macro-extinction-protocols-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -266,7 +227,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "consumed-with-hunger-aura",
+    "source_id": "consumed-with-hunger-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -279,7 +240,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sunderer-of-fortresses",
+    "source_id": "sunderer-of-fortresses-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -292,7 +253,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-of-bolts",
+    "source_id": "storm-of-bolts-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -305,7 +266,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "offerings-for-the-dark-gods-aura",
+    "source_id": "offerings-for-the-dark-gods-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -318,7 +279,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shock-charge",
+    "source_id": "shock-charge-chaos-knights",
     "source_type": "ability",
     "phases": [
       "command"
@@ -330,7 +291,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dark-fervour-aura",
+    "source_id": "dark-fervour-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -342,7 +303,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bloodlust",
+    "source_id": "bloodlust-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -356,7 +317,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "frenzied-rampage-aura",
+    "source_id": "frenzied-rampage-chaos-knights",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -368,7 +329,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "huntmaster-aura",
+    "source_id": "huntmaster-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -380,7 +341,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "repair-auto-simulacra",
+    "source_id": "repair-auto-simulacra-chaos-knights",
     "source_type": "ability",
     "phases": [
       "command"
@@ -392,7 +353,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vortex-terrors-psychic",
+    "source_id": "vortex-terrors-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -404,7 +365,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "warp-storms-psychic",
+    "source_id": "warp-storms-chaos-knights",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -416,7 +377,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "preysight-aura",
+    "source_id": "preysight-chaos-knights",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -428,7 +389,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grav-pinned",
+    "source_id": "grav-pinned-chaos-knights",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -441,478 +402,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "profane-symbiosis",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hellforged-construction",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hungry-for-combat",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "animalistic-rage",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "conquerors-without-mercy",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vox-howl",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "claimed-for-the-dark-gods",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spiteful-demise",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "titanic-duel",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "trophy-hunter",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crushed-like-vermin",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "corrupting-taint",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "imperious-advance",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "runes-of-disdain",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "avenge-the-masters",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cunning-hunter",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "harrying-hounds",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "encircling-pack",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "disdain-for-the-weak",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-long-leash",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "storm-of-darkness",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unleash-balefire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warp-vision",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "diabolic-bulwark",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pterrorshades",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nightmares-master",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tyrants-shadow",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "veil-of-medrengard",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "knight-diabolus",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bestial-aspect",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "throne-mechanicum-of-skulls",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blade-of-celerity",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warp-borne-stalker",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mirror-of-fates",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "final-howl-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "loping-predator",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dreaded-masters",
-    "source_type": "detachment-rule",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tyrannical-court",
+    "source_id": "tyrannical-court-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -924,7 +414,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "malefic-surge",
+    "source_id": "malefic-surge-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -939,7 +429,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "marked-prey",
+    "source_id": "marked-prey-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -953,7 +443,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "paragons-of-terror",
+    "source_id": "paragons-of-terror-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -965,7 +455,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "annihilate-the-unworthy",
+    "source_id": "annihilate-the-unworthy-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -978,72 +468,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pterrorshade-rookery",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hate-filled-dominion",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rune-cursed-stronghold",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pitiless-focus",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "intimidating-reminder",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scenting-fear",
+    "source_id": "scenting-fear-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1055,67 +480,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "soul-spoor-auspicator",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "snarling-rivalry",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "insensate-bloodthirst",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "leash-of-the-masters",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stalking-focus",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wretched-thralls",
+    "source_id": "wretched-thralls-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -1127,55 +492,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cruel-lashmaster",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "iconoclast-idol",
-    "source_type": "enhancement",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dark-sacrifice",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "coursing-thralls",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "masters-of-the-pack",
+    "source_id": "masters-of-the-pack-chaos-knights",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1183,220 +500,6 @@
       "shooting",
       "charge",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hunters-helm",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "octagram-of-conjuration",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "throne-tyrannicus",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aspect-of-the-beast",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "feral-arrogance",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "merciless-fusillade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "beasthide-manifestation",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flush-the-quarry",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "contemptuous-volleys",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "goaded-beast",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blasphemous-engine",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blessing-of-the-dark-master",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fleshmetal-fusion",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "malevolent-heraldry",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "panoply-of-the-cursed-knights",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "preyslayers-mantle",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "putrid-carapace",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",

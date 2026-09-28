@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "counter-offensive",
+    "id": "counteroffensive",
     "name": "COUNTER-OFFENSIVE",
     "category": "core",
     "type": "strategic-ploy",
@@ -41,7 +41,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "counter-offensive",
+    "ability_id": "counteroffensive",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

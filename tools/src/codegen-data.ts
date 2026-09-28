@@ -84,9 +84,9 @@ const ID_KEY: Partial<Record<keyof RawData, string>> = {
  * Mirrored by the Rust bundler (`xtask bundle-data`), which Python and Go
  * copy byte-for-byte — keep the two tables in sync.
  */
+// Abilities are not stamped: their ids are unique and every faction record names its faction.
 const STAMP_FACTION: Partial<Record<keyof RawData, "absent" | "absent-or-null">> = {
   weapons: "absent",
-  abilities: "absent-or-null",
 };
 
 /** Recursively collect bundleable `.json` files, skipping excluded dirs/examples. */

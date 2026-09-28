@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "anguish-of-the-unredeemed",
+    "source_id": "anguish-of-the-unredeemed-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "anchorite-sarcophagus",
+    "source_id": "anchorite-sarcophagus-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -49,7 +49,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sacred-command",
+    "source_id": "sacred-command-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -61,7 +61,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "divine-deliverance",
+    "source_id": "divine-deliverance-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -74,7 +74,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fury-of-the-righteous",
+    "source_id": "fury-of-the-righteous-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -87,7 +87,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapturous-blows",
+    "source_id": "rapturous-blows-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -103,7 +103,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -115,7 +115,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ministorum-sermon",
+    "source_id": "ministorum-sermon-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -128,7 +128,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cherub",
+    "source_id": "cherub-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -144,7 +144,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "salvationist-medikit",
+    "source_id": "salvationist-medikit-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -156,7 +156,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "simulacrum-imperialis",
+    "source_id": "simulacrum-imperialis-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -172,7 +172,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "attached-unit",
+    "source_id": "attached-unit-sanctifiers-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -184,7 +184,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "extremis-trigger-word",
+    "source_id": "extremis-trigger-word-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -196,7 +196,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "virtue-of-intolerance",
+    "source_id": "virtue-of-intolerance-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -210,7 +210,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "litany-of-deeds",
+    "source_id": "litany-of-deeds-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -226,7 +226,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "relics-of-the-matriarchs",
+    "source_id": "relics-of-the-matriarchs-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -238,7 +238,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "solemn-procession",
+    "source_id": "solemn-procession-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -254,7 +254,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "angelic-ascent",
+    "source_id": "angelic-ascent-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -268,7 +268,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "overseer-of-redemption",
+    "source_id": "overseer-of-redemption-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -280,23 +280,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "laud-hailer",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stirring-rhetoric",
+    "source_id": "laud-hailer-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -312,7 +296,23 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "executioner-of-heretics-aura",
+    "source_id": "stirring-rhetoric-adepta-sororitas",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "executioner-of-heretics-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -324,7 +324,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unflinching-determination",
+    "source_id": "unflinching-determination-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -336,20 +336,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "purge-and-cleanse",
+    "source_id": "purge-and-cleanse-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -361,7 +348,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sacred-healing",
+    "source_id": "sacred-healing-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -377,7 +364,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "abbess-sanctorum",
+    "source_id": "abbess-sanctorum-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -390,23 +377,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "righteous-repugnance",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cherubs",
+    "source_id": "righteous-repugnance-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -422,7 +393,23 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-of-retribution",
+    "source_id": "cherubs-adepta-sororitas",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "storm-of-retribution-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -434,7 +421,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "impetuous-fervour",
+    "source_id": "impetuous-fervour-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -447,7 +434,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sacred-banner",
+    "source_id": "sacred-banner-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -484,7 +471,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "holy-judgement",
+    "source_id": "holy-judgement-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -496,7 +483,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mysterious-saviours",
+    "source_id": "mysterious-saviours-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -509,7 +496,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -522,7 +509,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "self-repair",
+    "source_id": "self-repair-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -534,7 +521,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "righteous-paragons",
+    "source_id": "righteous-paragons-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -547,7 +534,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rites-of-castigation",
+    "source_id": "rites-of-castigation-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -559,7 +546,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "devastating-refrain",
+    "source_id": "devastating-refrain-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -572,7 +559,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "endless-suffering",
+    "source_id": "endless-suffering-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -585,7 +572,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fiery-conviction",
+    "source_id": "fiery-conviction-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command",
@@ -601,7 +588,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "righteous-smiting",
+    "source_id": "righteous-smiting-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -613,7 +600,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "zealot",
+    "source_id": "zealot-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -625,58 +612,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "holy-mission",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "embodied-prophecy",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "righteous-awareness",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "holy-vanguard",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "healing-tears",
+    "source_id": "holy-mission-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -688,10 +624,11 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "miraculous-intervention",
+    "source_id": "embodied-prophecy-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
+      "charge",
       "fight"
     ],
     "game_version": {
@@ -701,7 +638,32 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "defenders-of-the-faith",
+    "source_id": "righteous-awareness-adepta-sororitas",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "holy-vanguard-adepta-sororitas",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "healing-tears-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
@@ -713,23 +675,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-emperors-grace",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rod-of-office",
+    "source_id": "miraculous-intervention-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -742,191 +688,8 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "auto-tapestry-of-the-emperors-judgement",
+    "source_id": "defenders-of-the-faith-adepta-sororitas",
     "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "recount-the-deeds-of-the-saints",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "passion-of-the-penitent",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lash-of-guilt",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "purity-of-suffering",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "righteous-vengeance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shield-of-aversion",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "righteous-blows",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rites-of-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shield-of-denial",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "to-the-heart-of-heresy",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "path-of-the-righteous",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bastion-of-faith",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shield-of-faith",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "light-of-the-emperor",
-    "source_type": "stratagem",
     "phases": [
       "command"
     ],
@@ -937,9 +700,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "faith-and-fury",
-    "source_type": "stratagem",
+    "source_id": "rod-of-office-adepta-sororitas",
+    "source_type": "ability",
     "phases": [
+      "shooting",
       "fight"
     ],
     "game_version": {
@@ -949,45 +713,8 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "divine-guidance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cleansing-flames",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blazing-ire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "final-redemption",
-    "source_type": "stratagem",
+    "source_id": "recount-the-deeds-of-the-saints-adepta-sororitas",
+    "source_type": "ability",
     "phases": [
       "command",
       "movement",
@@ -1002,404 +729,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "divine-intervention",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "boundless-zeal",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "devout-fanaticism",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "suffering-and-sacrifice",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sanctified-immolation",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "praise-the-fallen",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "carry-forth-the-faithful",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "suffer-not-the-unfaithful",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "indefatigable-dedication",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blinding-radiance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "angelic-descent",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spirit-of-the-martyr",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "saintly-example",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "through-suffering-strength",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chaplet-of-sacrifice",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psalm-of-righteous-judgement",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "verse-of-holy-piety",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "catechism-of-divine-penitence",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "righteous-rage",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "manual-of-saint-griselda",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-and-fury",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "litanies-of-faith",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blade-of-saint-ellynor",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "divine-aspect",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "triptych-of-the-macharian-crusade",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "triptych-of-judgement",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mark-of-devotion",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eyes-of-the-oracle",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sanctified-amulet",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "desperate-for-redemption",
+    "source_id": "desperate-for-redemption-adepta-sororitas",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1414,7 +744,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-blood-of-martyrs",
+    "source_id": "the-blood-of-martyrs-adepta-sororitas",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1427,7 +757,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fervent-purgation",
+    "source_id": "fervent-purgation-adepta-sororitas",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1439,7 +769,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "righteous-purpose",
+    "source_id": "righteous-purpose-adepta-sororitas",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1452,7 +782,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sacred-rites",
+    "source_id": "sacred-rites-adepta-sororitas",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1468,7 +798,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "angelic-judgement",
+    "source_id": "angelic-judgement-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1480,67 +810,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "clarion-of-urgency",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "symphonic-payload",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inspirational-battle-cantics",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "harmonised-exorcism",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "devastating-reprise",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "holy-quest",
+    "source_id": "holy-quest-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1553,59 +823,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "writ-of-compunction",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "perfervid-haste",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sanctified-blows",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "faithful-fortitude",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unflinching-determination-sacred-champions",
+    "source_id": "unflinching-determination-sacred-champions-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1619,26 +837,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hymns-of-battle",
+    "source_id": "hymns-of-battle-adepta-sororitas",
     "source_type": "ability",
     "phases": [
       "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hagiomnifex",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
     ],
     "game_version": {
       "edition": "11th",

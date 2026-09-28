@@ -5,19 +5,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "incendiary-animus-companions-of-vehemence",
-      "oathbound-examplar-companions-of-vehemence",
-      "merciless-denunciation-companions-of-vehemence",
-      "zealous-vanguard-companions-of-vehemence",
-      "oathbound-exemplar-companions-of-vehemence"
+      "incendiary-animus-companions-of-vehemence-black-templars",
+      "merciless-denunciation-companions-of-vehemence-black-templars",
+      "zealous-vanguard-companions-of-vehemence-black-templars",
+      "oathbound-exemplar-companions-of-vehemence-black-templars"
     ],
     "stratagem_ids": [
-      "devout-push-companions-of-vehemence",
-      "for-the-emperors-honour-companions-of-vehemence",
-      "pious-enmity-companions-of-vehemence",
-      "hearts-hardened-to-duty-companions-of-vehemence",
-      "heresy-begets-retribution-companions-of-vehemence",
-      "dread-crusaders-companions-of-vehemence"
+      "devout-push-companions-of-vehemence-black-templars",
+      "for-the-emperors-honour-companions-of-vehemence-black-templars",
+      "pious-enmity-companions-of-vehemence-black-templars",
+      "hearts-hardened-to-duty-companions-of-vehemence-black-templars",
+      "heresy-begets-retribution-companions-of-vehemence-black-templars",
+      "dread-crusaders-companions-of-vehemence-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -32,6 +31,9 @@
         "namespace": "mfm",
         "id": "88882c56-6492-4cd0-8b73-34e1c80e55ae"
       }
+    ],
+    "detachment_rule_ids": [
+      "righteous-fervour-black-templars"
     ]
   },
   {
@@ -40,18 +42,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "imperialis-of-the-eternal-crusade-vindication-task-force",
-      "consecrating-aura-vindication-task-force",
-      "orb-of-the-emperors-aegis-vindication-task-force",
-      "warden-of-honour-vindication-task-force"
+      "imperialis-of-the-eternal-crusade-vindication-task-force-black-templars",
+      "consecrating-aura-vindication-task-force-black-templars",
+      "orb-of-the-emperors-aegis-vindication-task-force-black-templars",
+      "warden-of-honour-vindication-task-force-black-templars"
     ],
     "stratagem_ids": [
-      "litanies-of-purgation-vindication-task-force",
-      "spoor-of-the-unholy-vindication-task-force",
-      "refusal-to-yield-vindication-task-force",
-      "reclaim-our-honour-vindication-task-force",
-      "recitation-of-the-revered-vindication-task-force",
-      "perfervid-intervention-vindication-task-force"
+      "litanies-of-purgation-vindication-task-force-black-templars",
+      "spoor-of-the-unholy-vindication-task-force-black-templars",
+      "refusal-to-yield-vindication-task-force-black-templars",
+      "reclaim-our-honour-vindication-task-force-black-templars",
+      "recitation-of-the-revered-vindication-task-force-black-templars",
+      "perfervid-intervention-vindication-task-force-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -66,6 +68,9 @@
         "namespace": "mfm",
         "id": "b22f1234-d890-401a-b6cb-cf03bc1b5505"
       }
+    ],
+    "detachment_rule_ids": [
+      "purge-and-sanctify-black-templars"
     ]
   },
   {
@@ -74,13 +79,13 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "benediction-of-fury-wrathful-procession",
-      "adaptable-executioner-wrathful-procession"
+      "benediction-of-fury-wrathful-procession-black-templars",
+      "adaptable-executioner-wrathful-procession-black-templars"
     ],
     "stratagem_ids": [
-      "fuelled-by-faith-wrathful-procession",
-      "castigate-the-demagogues-wrathful-procession",
-      "rite-of-perfervid-wrath-wrathful-procession"
+      "fuelled-by-faith-wrathful-procession-black-templars",
+      "castigate-the-demagogues-wrathful-procession-black-templars",
+      "rite-of-perfervid-wrath-wrathful-procession-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -95,6 +100,9 @@
         "namespace": "mfm",
         "id": "aab75a4c-d486-47e0-b800-caf0028b62c8"
       }
+    ],
+    "detachment_rule_ids": [
+      "chant-of-deathless-devotion-black-templars"
     ]
   },
   {
@@ -103,18 +111,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "paragon-of-fury-godhammer-assault-force",
-      "battle-psalm-precentor-godhammer-assault-force",
-      "augury-servo-host-godhammer-assault-force",
-      "herald-of-sacred-slaughter-godhammer-assault-force"
+      "paragon-of-fury-godhammer-assault-force-black-templars",
+      "battle-psalm-precentor-godhammer-assault-force-black-templars",
+      "augury-servo-host-godhammer-assault-force-black-templars",
+      "herald-of-sacred-slaughter-godhammer-assault-force-black-templars"
     ],
     "stratagem_ids": [
-      "condemnatory-info-screed-godhammer-assault-force",
-      "blessed-hull-godhammer-assault-force",
-      "a-ceaseless-cause-godhammer-assault-force",
-      "uncompromising-egress-godhammer-assault-force",
-      "gauntlet-of-the-god-emperor-godhammer-assault-force",
-      "focused-hatred-godhammer-assault-force"
+      "condemnatory-info-screed-godhammer-assault-force-black-templars",
+      "blessed-hull-godhammer-assault-force-black-templars",
+      "a-ceaseless-cause-godhammer-assault-force-black-templars",
+      "uncompromising-egress-godhammer-assault-force-black-templars",
+      "gauntlet-of-the-god-emperor-godhammer-assault-force-black-templars",
+      "focused-hatred-godhammer-assault-force-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -129,6 +137,9 @@
         "namespace": "mfm",
         "id": "d8ec92c4-5d86-4e48-a27e-fab751c097ac"
       }
+    ],
+    "detachment_rule_ids": [
+      "shock-and-awe-black-templars"
     ]
   },
   {
@@ -137,13 +148,13 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "fervent-exemplars-upgrade-marshals-household",
-      "inheritors-of-sigismund-upgrade-marshals-household"
+      "fervent-exemplars-upgrade-marshals-household-black-templars",
+      "inheritors-of-sigismund-upgrade-marshals-household-black-templars"
     ],
     "stratagem_ids": [
-      "blade-of-detestation-marshals-household",
-      "slayers-of-abominations-marshals-household",
-      "unsparing-execution-marshals-household"
+      "blade-of-detestation-marshals-household-black-templars",
+      "slayers-of-abominations-marshals-household-black-templars",
+      "unsparing-execution-marshals-household-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -158,6 +169,9 @@
         "namespace": "mfm",
         "id": "b78cbc68-a012-494f-bd72-91873b382204"
       }
+    ],
+    "detachment_rule_ids": [
+      "faith-fuelled-resolve-black-templars"
     ]
   },
   {
@@ -166,7 +180,7 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "guiding-omens-the-living-miracle"
+      "guiding-omens-the-living-miracle-black-templars"
     ],
     "stratagem_ids": [],
     "game_version": {
@@ -182,6 +196,9 @@
         "namespace": "mfm",
         "id": "287d753d-cc67-40da-a7f4-9d2db2abdb67"
       }
+    ],
+    "detachment_rule_ids": [
+      "anointed-champion-black-templars"
     ]
   },
   {
@@ -190,18 +207,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force",
-      "fear-made-manifest-aura-1st-company-task-force",
-      "rites-of-war-1st-company-task-force",
-      "iron-resolve-1st-company-task-force"
+      "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
+      "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
+      "rites-of-war-1st-company-task-force-adeptus-astartes",
+      "iron-resolve-1st-company-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "heroes-of-the-chapter-1st-company-task-force",
-      "legendary-fortitude-1st-company-task-force",
-      "terrifying-proficiency-1st-company-task-force",
-      "duty-and-honour-1st-company-task-force",
-      "orbital-teleportarium-1st-company-task-force"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
+      "legendary-fortitude-1st-company-task-force-adeptus-astartes",
+      "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
+      "duty-and-honour-1st-company-task-force-adeptus-astartes",
+      "orbital-teleportarium-1st-company-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -218,18 +235,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "artificer-armour-gladius-task-force",
-      "the-honour-vehement-gladius-task-force",
-      "adept-of-the-codex-gladius-task-force",
-      "fire-discipline-gladius-task-force"
+      "artificer-armour-gladius-task-force-adeptus-astartes",
+      "the-honour-vehement-gladius-task-force-adeptus-astartes",
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
+      "fire-discipline-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "honour-the-chapter-gladius-task-force",
-      "storm-of-fire-gladius-task-force",
-      "only-in-death-does-duty-end-gladius-task-force",
-      "adaptive-strategy-gladius-task-force",
-      "squad-tactics-gladius-task-force"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "honour-the-chapter-gladius-task-force-adeptus-astartes",
+      "storm-of-fire-gladius-task-force-adeptus-astartes",
+      "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
+      "adaptive-strategy-gladius-task-force-adeptus-astartes",
+      "squad-tactics-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -252,18 +269,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force",
-      "portents-of-wisdom-stormlance-task-force",
-      "feinting-withdrawal-stormlance-task-force",
-      "hunters-instincts-stormlance-task-force"
+      "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
+      "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
+      "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
+      "hunters-instincts-stormlance-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "blitzing-fusillade-stormlance-task-force",
-      "shock-assault-stormlance-task-force",
-      "ride-hard-ride-fast-stormlance-task-force",
-      "wind-swift-evasion-stormlance-task-force",
-      "full-throttle-stormlance-task-force"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
+      "shock-assault-stormlance-task-force-adeptus-astartes",
+      "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
+      "full-throttle-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -286,11 +303,11 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "celerity-librarius-conclave",
-      "prescience-librarius-conclave",
-      "obfuscation-librarius-conclave",
-      "temporal-corridor-librarius-conclave",
-      "fusillade-librarius-conclave"
+      "celerity-librarius-conclave-adeptus-astartes",
+      "prescience-librarius-conclave-adeptus-astartes",
+      "obfuscation-librarius-conclave-adeptus-astartes",
+      "temporal-corridor-librarius-conclave-adeptus-astartes",
+      "fusillade-librarius-conclave-adeptus-astartes"
     ],
     "stratagem_ids": [],
     "game_version": {
@@ -308,18 +325,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead",
-      "ghostweave-cloak-vanguard-spearhead",
-      "execute-and-redeploy-vanguard-spearhead",
-      "shadow-war-veteran-vanguard-spearhead"
+      "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
+      "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
+      "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
+      "shadow-war-veteran-vanguard-spearhead-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "surgical-strikes-vanguard-spearhead",
-      "calculated-feint-vanguard-spearhead",
-      "guerrilla-tactics-vanguard-spearhead",
-      "a-deadly-prize-vanguard-spearhead"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
+      "surgical-strikes-vanguard-spearhead-adeptus-astartes",
+      "calculated-feint-vanguard-spearhead-adeptus-astartes",
+      "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
+      "a-deadly-prize-vanguard-spearhead-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -342,17 +359,17 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force",
-      "veteran-of-the-vanguard-orbital-assault-force",
-      "orbital-uplink-reliquary-orbital-assault-force",
-      "dedicated-gunship-orbital-assault-force"
+      "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
+      "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
+      "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
+      "dedicated-gunship-orbital-assault-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force",
-      "blind-screen-orbital-assault-force",
-      "tactical-decapitation-orbital-assault-force",
-      "shock-onslaught-orbital-assault-force",
-      "onward-for-the-emperor-orbital-assault-force"
+      "suppression-strafing-orbital-assault-force-adeptus-astartes",
+      "blind-screen-orbital-assault-force-adeptus-astartes",
+      "tactical-decapitation-orbital-assault-force-adeptus-astartes",
+      "shock-onslaught-orbital-assault-force-adeptus-astartes",
+      "onward-for-the-emperor-orbital-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -375,18 +392,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force",
-      "fleet-commander-anvil-siege-force",
-      "stoic-defender-anvil-siege-force",
-      "architect-of-war-anvil-siege-force"
+      "indomitable-fury-anvil-siege-force-adeptus-astartes",
+      "fleet-commander-anvil-siege-force-adeptus-astartes",
+      "stoic-defender-anvil-siege-force-adeptus-astartes",
+      "architect-of-war-anvil-siege-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force",
-      "armour-of-contempt-1st-company-task-force",
-      "no-threat-too-great-anvil-siege-force",
-      "rigid-discipline-anvil-siege-force",
-      "not-one-backwards-step-anvil-siege-force",
-      "hail-of-vengeance-anvil-siege-force"
+      "battle-drill-recall-anvil-siege-force-adeptus-astartes",
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "no-threat-too-great-anvil-siege-force-adeptus-astartes",
+      "rigid-discipline-anvil-siege-force-adeptus-astartes",
+      "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
+      "hail-of-vengeance-anvil-siege-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -409,18 +426,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force",
-      "war-tempered-artifice-firestorm-assault-force",
-      "forged-in-battle-firestorm-assault-force",
-      "adamantine-mantle-firestorm-assault-force"
+      "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
+      "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
+      "forged-in-battle-firestorm-assault-force-adeptus-astartes",
+      "adamantine-mantle-firestorm-assault-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "crucible-of-battle-firestorm-assault-force",
-      "onslaught-of-fire-firestorm-assault-force",
-      "burning-vengeance-firestorm-assault-force",
-      "immolation-protocols-firestorm-assault-force",
-      "rapid-embarkation-firestorm-assault-force"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
+      "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
+      "burning-vengeance-firestorm-assault-force-adeptus-astartes",
+      "immolation-protocols-firestorm-assault-force-adeptus-astartes",
+      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -443,18 +460,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead",
-      "the-flesh-is-weak-ironstorm-spearhead",
-      "adept-of-the-omnissiah-ironstorm-spearhead",
-      "master-of-machine-war-ironstorm-spearhead"
+      "target-augury-web-ironstorm-spearhead-adeptus-astartes",
+      "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
+      "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
+      "master-of-machine-war-ironstorm-spearhead-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead",
-      "armour-of-contempt-1st-company-task-force",
-      "mercy-is-weakness-ironstorm-spearhead",
-      "vengeful-animus-ironstorm-spearhead",
-      "ancient-fury-ironstorm-spearhead",
-      "power-of-the-machine-spirit-ironstorm-spearhead"
+      "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
+      "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
+      "ancient-fury-ironstorm-spearhead-adeptus-astartes",
+      "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -477,13 +494,13 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force"
+      "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
+      "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "data-link-augury-fulguris-task-force",
-      "reactive-evasion-fulguris-task-force",
-      "anti-grav-surge-fulguris-task-force"
+      "data-link-augury-fulguris-task-force-adeptus-astartes",
+      "reactive-evasion-fulguris-task-force-adeptus-astartes",
+      "anti-grav-surge-fulguris-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -506,13 +523,13 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "shroud-field-subversion-assets",
-      "death-in-the-dark-upgrade-subversion-assets"
+      "shroud-field-subversion-assets-adeptus-astartes",
+      "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "adaptive-operations-subversion-assets",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "cloaked-position-subversion-assets"
+      "adaptive-operations-subversion-assets-adeptus-astartes",
+      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
+      "cloaked-position-subversion-assets-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -535,18 +552,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "liberator-armoured-speartip",
-      "tip-of-the-spear-armoured-speartip",
-      "shock-deployment-armoured-speartip",
-      "armoured-commander-armoured-speartip"
+      "liberator-armoured-speartip-adeptus-astartes",
+      "tip-of-the-spear-armoured-speartip-adeptus-astartes",
+      "shock-deployment-armoured-speartip-adeptus-astartes",
+      "armoured-commander-armoured-speartip-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "machine-wrath-armoured-speartip",
-      "ceramite-sledgehammer-armoured-speartip",
-      "advanced-deployment-armoured-speartip",
-      "armour-of-contempt-1st-company-task-force",
-      "purgation-doctrine-armoured-speartip",
-      "rapid-embarkation-firestorm-assault-force"
+      "machine-wrath-armoured-speartip-adeptus-astartes",
+      "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
+      "advanced-deployment-armoured-speartip-adeptus-astartes",
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "purgation-doctrine-armoured-speartip-adeptus-astartes",
+      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -569,18 +586,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force",
-      "hero-of-the-chapter-bastion-task-force",
-      "blades-of-valour-bastion-task-force",
-      "bombast-omnivox-bastion-task-force"
+      "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
+      "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
+      "blades-of-valour-bastion-task-force-adeptus-astartes",
+      "bombast-omnivox-bastion-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "codex-discipline-bastion-task-force",
-      "shock-bombardment-bastion-task-force",
-      "guided-disruption-bastion-task-force",
-      "angels-defiant-bastion-task-force",
-      "light-of-vengeance-bastion-task-force",
-      "heresy-undone-bastion-task-force"
+      "codex-discipline-bastion-task-force-adeptus-astartes",
+      "shock-bombardment-bastion-task-force-adeptus-astartes",
+      "guided-disruption-bastion-task-force-adeptus-astartes",
+      "angels-defiant-bastion-task-force-adeptus-astartes",
+      "light-of-vengeance-bastion-task-force-adeptus-astartes",
+      "heresy-undone-bastion-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -603,17 +620,17 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "honour-indefatigable-ceramite-sentinels",
-      "castellum-omnivox-ceramite-sentinels",
-      "defensive-mastery-ceramite-sentinels"
+      "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+      "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+      "defensive-mastery-ceramite-sentinels-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels",
-      "stand-to-the-end-ceramite-sentinels",
-      "priority-strike-ceramite-sentinels",
-      "augmented-targeting-ceramite-sentinels",
-      "armour-of-contempt-1st-company-task-force",
-      "evasive-repositioning-ceramite-sentinels"
+      "unyielding-might-ceramite-sentinels-adeptus-astartes",
+      "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
+      "priority-strike-ceramite-sentinels-adeptus-astartes",
+      "augmented-targeting-ceramite-sentinels-adeptus-astartes",
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "evasive-repositioning-ceramite-sentinels-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -636,18 +653,18 @@
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force",
-      "gunnery-honours-headhunter-task-force",
-      "firestorm-coordinators-headhunter-task-force",
-      "astartes-tank-ace-aura-headhunter-task-force"
+      "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
+      "gunnery-honours-headhunter-task-force-adeptus-astartes",
+      "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
+      "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force",
-      "rapid-gunnery-headhunter-task-force",
-      "reactive-repositioning-headhunter-task-force",
-      "target-weak-point-headhunter-task-force",
-      "kill-shot-headhunter-task-force",
-      "machine-vengeance-headhunter-task-force"
+      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
+      "rapid-gunnery-headhunter-task-force-adeptus-astartes",
+      "reactive-repositioning-headhunter-task-force-adeptus-astartes",
+      "target-weak-point-headhunter-task-force-adeptus-astartes",
+      "kill-shot-headhunter-task-force-adeptus-astartes",
+      "machine-vengeance-headhunter-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -669,8 +686,8 @@
     "name": "Vow-Sworn of Vedrenn",
     "faction_id": "black-templars",
     "enhancement_ids": [
-      "divine-endurance-vow-sworn-of-vedrenn",
-      "divine-protection-vow-sworn-of-vedrenn"
+      "divine-endurance-vow-sworn-of-vedrenn-black-templars",
+      "divine-protection-vow-sworn-of-vedrenn-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -688,6 +705,9 @@
         "namespace": "mfm",
         "id": "e7953cf2-eb05-483d-a194-62a4abb73764"
       }
+    ],
+    "detachment_rule_ids": [
+      "close-range-destruction-black-templars"
     ]
   },
   {

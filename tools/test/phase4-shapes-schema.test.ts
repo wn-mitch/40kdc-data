@@ -119,7 +119,7 @@ describe("dice", () => {
   });
 
   it("accepts an ability's own dice, manoeuvre and Channel the Warp rolls", () => {
-    expect(effectOk(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols" }, operation: "add", value: 1 }))).toBe(true);
+    expect(effectOk(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe(true);
     expect(effectOk(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1 }))).toBe(true);
     expect(effectOk(leaf("re-roll", { roll: "channelling", result_scope: "any-result", count: 1, mandatory: true }))).toBe(true);
   });

@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "furious-onslaught",
+    "source_id": "furious-onslaught-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "legendary-killer",
+    "source_id": "legendary-killer-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -37,7 +37,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "berzerker-frenzy",
+    "source_id": "berzerker-frenzy-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -50,7 +50,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "forwards-for-blood",
+    "source_id": "forwards-for-blood-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -62,7 +62,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "a-worthy-skull",
+    "source_id": "a-worthy-skull-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -74,7 +74,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blood-surge",
+    "source_id": "blood-surge-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -86,7 +86,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "icon-of-khorne",
+    "source_id": "icon-of-khorne-world-eaters",
     "source_type": "ability",
     "phases": [
       "command",
@@ -100,7 +100,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "objective-ravaged",
+    "source_id": "objective-ravaged-world-eaters",
     "source_type": "ability",
     "phases": [
       "command"
@@ -112,7 +112,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aggressive-advance",
+    "source_id": "aggressive-advance-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -125,7 +125,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crush-all-who-stand-before-us",
+    "source_id": "crush-all-who-stand-before-us-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -149,7 +149,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bloodied-terror",
+    "source_id": "bloodied-terror-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -161,7 +161,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "swooping-predator",
+    "source_id": "swooping-predator-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -173,20 +173,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assault-ramp",
+    "source_id": "assault-ramp-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -199,7 +186,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "savage-exaltation",
+    "source_id": "savage-exaltation-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -211,7 +198,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scuttling-walker",
+    "source_id": "scuttling-walker-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -223,7 +210,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unleash-wrath",
+    "source_id": "unleash-wrath-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -248,7 +235,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "airborne-predator",
+    "source_id": "airborne-predator-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -261,7 +248,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "devastating-assault",
+    "source_id": "devastating-assault-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -275,7 +262,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "direct-the-slaughter",
+    "source_id": "direct-the-slaughter-world-eaters",
     "source_type": "ability",
     "phases": [
       "command"
@@ -287,7 +274,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-6",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -299,19 +286,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "beacons-of-rage-aura",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rage-eternal",
+    "source_id": "rage-eternal-world-eaters",
     "source_type": "ability",
     "phases": [
       "command"
@@ -323,7 +298,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "possessed-lord",
+    "source_id": "possessed-lord-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -336,7 +311,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lord-of-the-eightbound",
+    "source_id": "lord-of-the-eightbound-world-eaters",
     "source_type": "ability",
     "phases": [
       "command",
@@ -349,7 +324,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rend-and-tear",
+    "source_id": "rend-and-tear-world-eaters",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -361,7 +336,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fire-riders",
+    "source_id": "fire-riders-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -374,7 +349,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bloody-stampede",
+    "source_id": "bloody-stampede-world-eaters",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -386,7 +361,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -399,7 +374,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "meet-any-challenge",
+    "source_id": "meet-any-challenge-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -411,7 +386,31 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "devoted-to-destruction-world-eaters",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "frenzy-world-eaters",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "punishing-suppression-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -424,44 +423,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "devoted-to-destruction",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "frenzy",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "punishing-suppression",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reborn-in-blood",
+    "source_id": "reborn-in-blood-world-eaters",
     "source_type": "ability",
     "phases": [
       "command",
@@ -476,7 +438,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "wrathful-presence",
+    "source_id": "wrathful-presence-world-eaters",
     "source_type": "ability",
     "phases": [
       "command"
@@ -488,7 +450,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blood-hungry-annihilator",
+    "source_id": "blood-hungry-annihilator-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -500,7 +462,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bloody-fury",
+    "source_id": "bloody-fury-world-eaters",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -513,20 +475,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6-2",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "idol-of-blessed-blood",
+    "source_id": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters",
     "source_type": "ability",
     "phases": [
       "command"
@@ -538,7 +487,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "super-heavy-war-engine",
+    "source_id": "super-heavy-war-engine-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -550,19 +499,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-8",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "to-slake-its-rage",
+    "source_id": "to-slake-its-rage-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -575,7 +512,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "loping-speed",
+    "source_id": "loping-speed-world-eaters",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -587,7 +524,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hack-and-slash",
+    "source_id": "a-worthy-skull-world-eaters",
     "source_type": "stratagem",
     "phases": [
       "fight"
@@ -599,423 +536,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "daemonic-strength",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aspire-to-infamy",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daemonic-fury",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blessing-of-burning-blood",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bloodthirsty-horde",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "frenzied-resilience",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daemonic-resistance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "immortal-fury",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blood-offering",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-worthy-skull",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bloody-vengeance",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "brazen-idol",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skulls-for-the-skull-throne",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "apoplectic-frenzy",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "berzerkers-wrath",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapid-manifestation",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warp-stalkers",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "horrifying-violence",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "punish-the-craven",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "summoned-by-slaughter",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daemontide",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "murder-call",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "in-the-shadow-of-brass-idols",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fail-not-the-blood-god",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "endless-pursuit-of-violence",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "smash-through",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggressive-disembarkation",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "full-throttle-assault",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unrelenting-advance",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fury-unleashed",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "drawn-to-the-slaughter",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "berzerker-glaive",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "favoured-of-khorne",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "battle-lust",
+    "source_id": "battle-lust-space-wolves",
     "source_type": "enhancement",
     "phases": [
       "charge"
@@ -1027,68 +548,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "archslaughterer",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gateways-to-glory",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "butcher-lord",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strategic-slaughter",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "icon-of-war",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "disciple-of-khorne",
+    "source_id": "aggressive-deployment-tau-empire",
     "source_type": "enhancement",
     "phases": [
       "command",
@@ -1101,99 +561,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blade-of-endless-bloodshed",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "killing-clarity",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "frenzied-focus",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "murderous-onslaught",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aggressive-deployment",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unleash-hell",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infernal-infusion",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "relentless-rage",
+    "source_id": "relentless-rage-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1207,7 +575,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "brazen-fury",
+    "source_id": "brazen-fury-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1219,7 +587,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "wrath-of-khorne",
+    "source_id": "wrath-of-khorne-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "fight"
@@ -1231,7 +599,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blood-tithe",
+    "source_id": "blood-tithe-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1245,7 +613,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "idols-of-khorne",
+    "source_id": "idols-of-khorne-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1261,7 +629,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rush-to-the-fray",
+    "source_id": "rush-to-the-fray-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -1275,7 +643,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rampaging-terrors",
+    "source_id": "rampaging-terrors-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "fight"
@@ -1287,7 +655,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "adamantine-avalanche",
+    "source_id": "adamantine-avalanche-world-eaters",
     "source_type": "detachment-rule",
     "phases": [
       "fight"
@@ -1299,132 +667,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "talons-of-butchery",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sanctified-in-slaughter",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gore-stained-veterans",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "apoplectic-clarity",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "trail-of-destruction",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "goaded-to-fury",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "focused-ferocity",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-trophy-for-the-throne",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wrath-beyond-reason",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scorn-the-witch",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-scent-of-blood",
+    "source_id": "the-scent-of-blood-world-eaters",
     "source_type": "ability",
     "phases": [
       "charge"

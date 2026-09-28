@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-tempting-trap-kauyon",
+    "id": "a-tempting-trap-kauyon-tau-empire",
     "name": "A TEMPTING TRAP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -12,7 +12,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "a-tempting-trap-kauyon",
+    "ability_id": "a-tempting-trap-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "a-trap-well-laid-kroot-hunting-pack",
+    "id": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
     "name": "A TRAP WELL LAID",
     "category": "detachment",
     "type": "battle-tactic",
@@ -42,7 +42,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "a-trap-well-laid-kroot-hunting-pack",
+    "ability_id": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "id": "aggressive-mobility-montka",
+    "id": "aggressive-mobility-montka-tau-empire",
     "name": "AGGRESSIVE MOBILITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -71,7 +71,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "aggressive-mobility-montka",
+    "ability_id": "aggressive-mobility-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "alien-expertise-auxiliary-cadre",
+    "id": "alien-expertise-auxiliary-cadre-tau-empire",
     "name": "ALIEN EXPERTISE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -100,7 +100,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "alien-expertise-auxiliary-cadre",
+    "ability_id": "alien-expertise-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,26 +117,7 @@
     ]
   },
   {
-    "id": "automated-repair-drones-experimental-prototype-cadre",
-    "name": "AUTOMATED REPAIR DRONES",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "experimental-prototype-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "command"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "autoreactive-camouflage-advanced-acquisition-cadre",
+    "id": "autoreactive-camouflage-advanced-acquisition-cadre-tau-empire",
     "name": "Autoreactive Camouflage",
     "category": "detachment",
     "detachment_id": "advanced-acquisition-cadre",
@@ -147,7 +128,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "autoreactive-camouflage-advanced-acquisition-cadre",
+    "ability_id": "autoreactive-camouflage-advanced-acquisition-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -164,7 +145,7 @@
     ]
   },
   {
-    "id": "combat-debarkation-montka",
+    "id": "combat-debarkation-montka-tau-empire",
     "name": "COMBAT DEBARKATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -176,7 +157,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "combat-debarkation-montka",
+    "ability_id": "combat-debarkation-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -193,7 +174,7 @@
     ]
   },
   {
-    "id": "combat-embarkation-kauyon",
+    "id": "combat-embarkation-kauyon-tau-empire",
     "name": "COMBAT EMBARKATION",
     "category": "detachment",
     "type": "wargear",
@@ -205,7 +186,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "combat-embarkation-kauyon",
+    "ability_id": "combat-embarkation-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -222,7 +203,7 @@
     ]
   },
   {
-    "id": "coordinate-to-engage-kauyon",
+    "id": "coordinate-to-engage-kauyon-tau-empire",
     "name": "COORDINATE TO ENGAGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -234,7 +215,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "coordinate-to-engage-kauyon",
+    "ability_id": "coordinate-to-engage-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -251,7 +232,7 @@
     ]
   },
   {
-    "id": "counterfire-defence-systems-montka",
+    "id": "counterfire-defence-systems-montka-tau-empire",
     "name": "COUNTERFIRE DEFENCE SYSTEMS",
     "category": "detachment",
     "type": "wargear",
@@ -263,7 +244,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "counterfire-defence-systems-montka",
+    "ability_id": "counterfire-defence-systems-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -280,7 +261,7 @@
     ]
   },
   {
-    "id": "emp-grenades-kroot-hunting-pack",
+    "id": "emp-grenades-kroot-hunting-pack-tau-empire",
     "name": "EMP GRENADES",
     "category": "detachment",
     "type": "wargear",
@@ -293,7 +274,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "emp-grenades-kroot-hunting-pack",
+    "ability_id": "emp-grenades-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -310,7 +291,7 @@
     ]
   },
   {
-    "id": "experimental-ammunition-experimental-prototype-cadre",
+    "id": "experimental-ammunition-experimental-prototype-cadre-tau-empire",
     "name": "EXPERIMENTAL AMMUNITION",
     "category": "detachment",
     "type": "wargear",
@@ -322,7 +303,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "experimental-ammunition-experimental-prototype-cadre",
+    "ability_id": "experimental-ammunition-experimental-prototype-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -339,7 +320,7 @@
     ]
   },
   {
-    "id": "experimental-modifications-auxiliary-cadre",
+    "id": "experimental-modifications-auxiliary-cadre-tau-empire",
     "name": "EXPERIMENTAL MODIFICATIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -352,7 +333,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "experimental-modifications-auxiliary-cadre",
+    "ability_id": "experimental-modifications-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -369,26 +350,7 @@
     ]
   },
   {
-    "id": "experimental-weaponry-experimental-prototype-cadre",
-    "name": "EXPERIMENTAL WEAPONRY",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "experimental-prototype-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "fail-safe-detonator-retaliation-cadre",
+    "id": "fail-safe-detonator-retaliation-cadre-tau-empire",
     "name": "FAIL-SAFE DETONATOR",
     "category": "detachment",
     "type": "epic-deed",
@@ -404,7 +366,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fail-safe-detonator-retaliation-cadre",
+    "ability_id": "fail-safe-detonator-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -421,7 +383,7 @@
     ]
   },
   {
-    "id": "focused-fire-montka",
+    "id": "focused-fire-montka-tau-empire",
     "name": "FOCUSED FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -433,7 +395,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "focused-fire-montka",
+    "ability_id": "focused-fire-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -450,7 +412,7 @@
     ]
   },
   {
-    "id": "grav-inhibitor-field-retaliation-cadre",
+    "id": "grav-inhibitor-field-retaliation-cadre-tau-empire",
     "name": "GRAV-INHIBITOR FIELD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -462,7 +424,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "grav-inhibitor-field-retaliation-cadre",
+    "ability_id": "grav-inhibitor-field-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -479,7 +441,7 @@
     ]
   },
   {
-    "id": "guerrilla-warriors-kroot-hunting-pack",
+    "id": "guerrilla-warriors-kroot-hunting-pack-tau-empire",
     "name": "GUERRILLA WARRIORS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -491,7 +453,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "guerrilla-warriors-kroot-hunting-pack",
+    "ability_id": "guerrilla-warriors-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -508,7 +470,7 @@
     ]
   },
   {
-    "id": "guided-by-unity-auxiliary-cadre",
+    "id": "guided-by-unity-auxiliary-cadre-tau-empire",
     "name": "Guided By Unity",
     "category": "detachment",
     "detachment_id": "auxiliary-cadre",
@@ -519,7 +481,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "guided-by-unity-auxiliary-cadre",
+    "ability_id": "guided-by-unity-auxiliary-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -536,26 +498,7 @@
     ]
   },
   {
-    "id": "guided-fire-auxiliary-cadre",
-    "name": "GUIDED FIRE",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "auxiliary-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "hidden-hunters-kroot-hunting-pack",
+    "id": "hidden-hunters-kroot-hunting-pack-tau-empire",
     "name": "HIDDEN HUNTERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -567,7 +510,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hidden-hunters-kroot-hunting-pack",
+    "ability_id": "hidden-hunters-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -584,26 +527,7 @@
     ]
   },
   {
-    "id": "interlocking-manouevres-auxiliary-cadre",
-    "name": "INTERLOCKING MANOUEVRES",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "auxiliary-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "join-the-hunt-kroot-hunting-pack",
+    "id": "join-the-hunt-kroot-hunting-pack-tau-empire",
     "name": "JOIN THE HUNT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -619,7 +543,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "join-the-hunt-kroot-hunting-pack",
+    "ability_id": "join-the-hunt-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -636,7 +560,7 @@
     ]
   },
   {
-    "id": "marker-beacon-advanced-acquisition-cadre",
+    "id": "marker-beacon-advanced-acquisition-cadre-tau-empire",
     "name": "Marker Beacon",
     "category": "detachment",
     "detachment_id": "advanced-acquisition-cadre",
@@ -647,7 +571,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "marker-beacon-advanced-acquisition-cadre",
+    "ability_id": "marker-beacon-advanced-acquisition-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -664,7 +588,7 @@
     ]
   },
   {
-    "id": "microdrone-support-advanced-acquisition-cadre",
+    "id": "microdrone-support-advanced-acquisition-cadre-tau-empire",
     "name": "Microdrone Support",
     "category": "detachment",
     "detachment_id": "advanced-acquisition-cadre",
@@ -675,7 +599,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "microdrone-support-advanced-acquisition-cadre",
+    "ability_id": "microdrone-support-advanced-acquisition-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -692,65 +616,7 @@
     ]
   },
   {
-    "id": "multisensory-scanning-auxiliary-cadre",
-    "name": "MULTISENSORY SCANNING",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "auxiliary-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "neuroweb-system-jammer-experimental-prototype-cadre",
-    "name": "NEUROWEB SYSTEM JAMMER",
-    "category": "detachment",
-    "type": "wargear",
-    "detachment_id": "experimental-prototype-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "pheromone-waypoints-auxiliary-cadre",
-    "name": "PHEROMONE WAYPOINTS",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "auxiliary-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "photon-grenades-kauyon",
+    "id": "photon-grenades-kauyon-tau-empire",
     "name": "PHOTON GRENADES",
     "category": "detachment",
     "type": "wargear",
@@ -762,7 +628,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "photon-grenades-kauyon",
+    "ability_id": "photon-grenades-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -779,7 +645,7 @@
     ]
   },
   {
-    "id": "pinpoint-counter-offensive-montka",
+    "id": "pinpoint-counter-offensive-montka-tau-empire",
     "name": "PINPOINT COUNTER-OFFENSIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -795,7 +661,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "pinpoint-counter-offensive-montka",
+    "ability_id": "pinpoint-counter-offensive-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -812,7 +678,7 @@
     ]
   },
   {
-    "id": "point-blank-ambush-kauyon",
+    "id": "point-blank-ambush-kauyon-tau-empire",
     "name": "POINT-BLANK AMBUSH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -824,7 +690,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "point-blank-ambush-kauyon",
+    "ability_id": "point-blank-ambush-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -841,7 +707,7 @@
     ]
   },
   {
-    "id": "pulse-onslaught-montka",
+    "id": "pulse-onslaught-montka-tau-empire",
     "name": "PULSE ONSLAUGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -853,7 +719,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "pulse-onslaught-montka",
+    "ability_id": "pulse-onslaught-montka-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -870,7 +736,7 @@
     ]
   },
   {
-    "id": "rapid-acquisition-sudden-dawn-cadre",
+    "id": "rapid-acquisition-sudden-dawn-cadre-tau-empire",
     "name": "Rapid Acquisition",
     "category": "detachment",
     "detachment_id": "sudden-dawn-cadre",
@@ -881,7 +747,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "rapid-acquisition-sudden-dawn-cadre",
+    "ability_id": "rapid-acquisition-sudden-dawn-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -894,27 +760,7 @@
     ]
   },
   {
-    "id": "reactive-impact-dampeners-experimental-prototype-cadre",
-    "name": "REACTIVE IMPACT DAMPENERS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "experimental-prototype-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "stimm-injectors-retaliation-cadre",
+    "id": "stimm-injectors-retaliation-cadre-tau-empire",
     "name": "STIMM INJECTORS",
     "category": "detachment",
     "type": "wargear",
@@ -927,7 +773,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "stimm-injectors-retaliation-cadre",
+    "ability_id": "stimm-injectors-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -944,7 +790,7 @@
     ]
   },
   {
-    "id": "suppressing-fire-sudden-dawn-cadre",
+    "id": "suppressing-fire-sudden-dawn-cadre-tau-empire",
     "name": "Suppressing Fire",
     "category": "detachment",
     "detachment_id": "sudden-dawn-cadre",
@@ -955,7 +801,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "suppressing-fire-sudden-dawn-cadre",
+    "ability_id": "suppressing-fire-sudden-dawn-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -968,7 +814,7 @@
     ]
   },
   {
-    "id": "swift-embarkation-sudden-dawn-cadre",
+    "id": "swift-embarkation-sudden-dawn-cadre-tau-empire",
     "name": "Swift Embarkation",
     "category": "detachment",
     "detachment_id": "sudden-dawn-cadre",
@@ -979,7 +825,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "swift-embarkation-sudden-dawn-cadre",
+    "ability_id": "swift-embarkation-sudden-dawn-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -992,7 +838,7 @@
     ]
   },
   {
-    "id": "the-arrokon-protocol-retaliation-cadre",
+    "id": "the-arrokon-protocol-retaliation-cadre-tau-empire",
     "name": "THE ARRO’KON PROTOCOL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1004,7 +850,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "the-arrokon-protocol-retaliation-cadre",
+    "ability_id": "the-arrokon-protocol-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1021,7 +867,7 @@
     ]
   },
   {
-    "id": "the-grisly-feast-kroot-hunting-pack",
+    "id": "the-grisly-feast-kroot-hunting-pack-tau-empire",
     "name": "THE GRISLY FEAST",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1033,7 +879,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "the-grisly-feast-kroot-hunting-pack",
+    "ability_id": "the-grisly-feast-kroot-hunting-pack-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1050,7 +896,7 @@
     ]
   },
   {
-    "id": "the-shortened-blade-retaliation-cadre",
+    "id": "the-shortened-blade-retaliation-cadre-tau-empire",
     "name": "THE SHORTENED BLADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1062,7 +908,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "the-shortened-blade-retaliation-cadre",
+    "ability_id": "the-shortened-blade-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1079,7 +925,7 @@
     ]
   },
   {
-    "id": "the-torchstar-gambit-retaliation-cadre",
+    "id": "the-torchstar-gambit-retaliation-cadre-tau-empire",
     "name": "THE TORCHSTAR GAMBIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1091,7 +937,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "the-torchstar-gambit-retaliation-cadre",
+    "ability_id": "the-torchstar-gambit-retaliation-cadre-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1108,26 +954,7 @@
     ]
   },
   {
-    "id": "threat-assessment-analyser-experimental-prototype-cadre",
-    "name": "THREAT ASSESSMENT ANALYSER",
-    "category": "detachment",
-    "type": "wargear",
-    "detachment_id": "experimental-prototype-cadre",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "wall-of-mirrors-kauyon",
+    "id": "wall-of-mirrors-kauyon-tau-empire",
     "name": "WALL OF MIRRORS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1139,7 +966,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "wall-of-mirrors-kauyon",
+    "ability_id": "wall-of-mirrors-kauyon-tau-empire",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

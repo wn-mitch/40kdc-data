@@ -17,7 +17,7 @@
     {
       "source": {
         "kind": "ability",
-        "abilityId": "furious-onslaught",
+        "abilityId": "furious-onslaught-world-eaters",
         "abilityKind": "unit"
       },
       "applicableWhen": {

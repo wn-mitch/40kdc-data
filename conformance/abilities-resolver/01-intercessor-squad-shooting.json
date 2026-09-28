@@ -7,21 +7,13 @@
   "phase": "shooting",
   "expected": {
     "army": [
-      "combat-doctrines",
-      "curse-of-the-wulfen",
-      "heirs-of-sigismund",
-      "kill-teams",
-      "sagas",
-      "sons-of-russ",
-      "templar-vows",
-      "the-deathwing",
-      "the-ravenwing",
-      "the-sons-of-sanguinius",
-      "the-unforgiven"
+      "combat-doctrines-assault-force-adeptus-astartes",
+      "oath-of-moment-adeptus-astartes",
+      "space-marine-chapters-adeptus-astartes"
     ],
     "unit": [
-      "bolter-discipline",
-      "tactical-mainstay"
+      "hail-of-bolts-adeptus-astartes",
+      "objective-secured-adeptus-astartes"
     ]
   }
 }

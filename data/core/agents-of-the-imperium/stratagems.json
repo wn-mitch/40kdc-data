@@ -1,6 +1,6 @@
 [
   {
-    "id": "adaptive-tactics-ordo-xenos-alien-hunters",
+    "id": "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "ADAPTIVE TACTICS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -12,7 +12,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "armour-of-contempt-ordo-xenos-alien-hunters",
+    "id": "armour-of-contempt-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "ARMOUR OF CONTEMPT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -42,7 +42,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "armour-of-contempt-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "id": "blind-grenades-veiled-blade-elimination-force",
+    "id": "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "BLIND GRENADES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -71,7 +71,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "close-quarters-barrage-imperialis-fleet",
+    "id": "close-quarters-barrage-imperialis-fleet-agents-of-the-imperium",
     "name": "CLOSE-QUARTERS BARRAGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -100,7 +100,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "close-quarters-barrage-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "dispense-justice-ordo-hereticus-purgation-force",
+    "id": "dispense-justice-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "DISPENSE JUSTICE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -130,7 +130,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dispense-justice-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "id": "displacer-field-imperialis-fleet",
+    "id": "displacer-field-imperialis-fleet-agents-of-the-imperium",
     "name": "DISPLACER FIELD",
     "category": "detachment",
     "type": "wargear",
@@ -159,7 +159,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "displacer-field-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -176,7 +176,7 @@
     ]
   },
   {
-    "id": "dragonfire-rounds-ordo-xenos-alien-hunters",
+    "id": "dragonfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "DRAGONFIRE ROUNDS",
     "category": "detachment",
     "type": "wargear",
@@ -188,7 +188,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dragonfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -205,7 +205,7 @@
     ]
   },
   {
-    "id": "emperors-will-imperialis-fleet",
+    "id": "emperors-will-imperialis-fleet-agents-of-the-imperium",
     "name": "EMPEROR’S WILL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -217,7 +217,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "emperors-will-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "id": "ensnaring-trap-veiled-blade-elimination-force",
+    "id": "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "ENSNARING TRAP",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -246,7 +246,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -263,7 +263,7 @@
     ]
   },
   {
-    "id": "exact-punishment-ordo-hereticus-purgation-force",
+    "id": "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "EXACT PUNISHMENT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -275,7 +275,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -292,7 +292,7 @@
     ]
   },
   {
-    "id": "execution-order-ordo-hereticus-purgation-force",
+    "id": "execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "EXECUTION ORDER",
     "category": "detachment",
     "type": "epic-deed",
@@ -304,7 +304,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -321,7 +321,7 @@
     ]
   },
   {
-    "id": "hellfire-rounds-ordo-xenos-alien-hunters",
+    "id": "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "HELLFIRE ROUNDS",
     "category": "detachment",
     "type": "wargear",
@@ -333,7 +333,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -350,7 +350,7 @@
     ]
   },
   {
-    "id": "hexagrammic-wards-ordo-malleus-daemon-hunters",
+    "id": "hexagrammic-wards-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "HEXAGRAMMIC WARDS",
     "category": "detachment",
     "type": "wargear",
@@ -363,7 +363,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hexagrammic-wards-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -380,7 +380,7 @@
     ]
   },
   {
-    "id": "hyperstimms-veiled-blade-elimination-force",
+    "id": "hyperstimms-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "HYPERSTIMMS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -393,7 +393,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hyperstimms-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -410,7 +410,7 @@
     ]
   },
   {
-    "id": "inquisitorial-mandate-inquisitors-hand",
+    "id": "inquisitorial-mandate-inquisitors-hand-agents-of-the-imperium",
     "name": "Inquisitorial Mandate",
     "category": "detachment",
     "detachment_id": "inquisitors-hand",
@@ -421,7 +421,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inquisitorial-mandate-inquisitors-hand",
+    "ability_id": "inquisitorial-mandate-inquisitors-hand-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -434,7 +434,7 @@
     ]
   },
   {
-    "id": "inviolate-jurisdiction-ordo-hereticus-purgation-force",
+    "id": "inviolate-jurisdiction-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "INVIOLATE JURISDICTION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -447,7 +447,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "inviolate-jurisdiction-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -464,7 +464,7 @@
     ]
   },
   {
-    "id": "kraken-rounds-ordo-xenos-alien-hunters",
+    "id": "kraken-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "KRAKEN ROUNDS",
     "category": "detachment",
     "type": "wargear",
@@ -476,7 +476,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "kraken-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -493,7 +493,7 @@
     ]
   },
   {
-    "id": "line-of-fire-ordo-hereticus-purgation-force",
+    "id": "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "LINE OF FIRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -505,7 +505,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -522,7 +522,7 @@
     ]
   },
   {
-    "id": "masters-of-the-void-imperialis-fleet",
+    "id": "masters-of-the-void-imperialis-fleet-agents-of-the-imperium",
     "name": "MASTERS OF THE VOID",
     "category": "detachment",
     "type": "epic-deed",
@@ -534,7 +534,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "masters-of-the-void-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -551,7 +551,7 @@
     ]
   },
   {
-    "id": "orbital-oversight-veiled-blade-elimination-force",
+    "id": "orbital-oversight-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "ORBITAL OVERSIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -563,7 +563,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "orbital-oversight-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -580,7 +580,7 @@
     ]
   },
   {
-    "id": "prime-target-veiled-blade-elimination-force",
+    "id": "prime-target-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "PRIME TARGET",
     "category": "detachment",
     "type": "battle-tactic",
@@ -593,7 +593,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "prime-target-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -610,7 +610,7 @@
     ]
   },
   {
-    "id": "psybolt-ammunition-ordo-malleus-daemon-hunters",
+    "id": "psybolt-ammunition-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "PSYBOLT AMMUNITION",
     "category": "detachment",
     "type": "wargear",
@@ -622,7 +622,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "psybolt-ammunition-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -639,7 +639,7 @@
     ]
   },
   {
-    "id": "rapid-tactical-relocation-ordo-xenos-alien-hunters",
+    "id": "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "RAPID TACTICAL RELOCATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -651,7 +651,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -668,7 +668,7 @@
     ]
   },
   {
-    "id": "rites-of-exorcism-ordo-malleus-daemon-hunters",
+    "id": "rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "RITES OF EXORCISM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -681,7 +681,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -698,7 +698,7 @@
     ]
   },
   {
-    "id": "ritual-of-warding-ordo-malleus-daemon-hunters",
+    "id": "ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "RITUAL OF WARDING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -710,7 +710,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -727,7 +727,7 @@
     ]
   },
   {
-    "id": "selfless-bodyguard-imperialis-fleet",
+    "id": "selfless-bodyguard-imperialis-fleet-agents-of-the-imperium",
     "name": "SELFLESS BODYGUARD",
     "category": "detachment",
     "type": "epic-deed",
@@ -740,7 +740,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "selfless-bodyguard-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -757,7 +757,7 @@
     ]
   },
   {
-    "id": "steel-heart-ordo-malleus-daemon-hunters",
+    "id": "steel-heart-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "STEEL HEART",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -769,7 +769,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "steel-heart-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -786,7 +786,7 @@
     ]
   },
   {
-    "id": "stun-grenades-ordo-hereticus-purgation-force",
+    "id": "stun-grenades-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "STUN GRENADES",
     "category": "detachment",
     "type": "wargear",
@@ -801,7 +801,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stun-grenades-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -818,7 +818,7 @@
     ]
   },
   {
-    "id": "superior-weaponry-inquisitors-hand",
+    "id": "superior-weaponry-inquisitors-hand-agents-of-the-imperium",
     "name": "Superior Weaponry",
     "category": "detachment",
     "detachment_id": "inquisitors-hand",
@@ -830,7 +830,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "superior-weaponry-inquisitors-hand",
+    "ability_id": "superior-weaponry-inquisitors-hand-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -843,7 +843,7 @@
     ]
   },
   {
-    "id": "truesilver-armour-ordo-malleus-daemon-hunters",
+    "id": "truesilver-armour-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "TRUESILVER ARMOUR",
     "category": "detachment",
     "type": "wargear",
@@ -856,7 +856,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "truesilver-armour-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -873,7 +873,7 @@
     ]
   },
   {
-    "id": "urban-enforcers-inquisitors-hand",
+    "id": "urban-enforcers-inquisitors-hand-agents-of-the-imperium",
     "name": "Urban Enforcers",
     "category": "detachment",
     "detachment_id": "inquisitors-hand",
@@ -885,7 +885,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "urban-enforcers-inquisitors-hand",
+    "ability_id": "urban-enforcers-inquisitors-hand-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -898,7 +898,7 @@
     ]
   },
   {
-    "id": "violent-acquisition-imperialis-fleet",
+    "id": "violent-acquisition-imperialis-fleet-agents-of-the-imperium",
     "name": "VIOLENT ACQUISITION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -911,7 +911,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "violent-acquisition-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -928,7 +928,7 @@
     ]
   },
   {
-    "id": "will-sapping-salvo-veiled-blade-elimination-force",
+    "id": "will-sapping-salvo-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "WILL-SAPPING SALVO",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -940,7 +940,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "will-sapping-salvo-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

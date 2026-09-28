@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "deadly-demise-2d6",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -13,7 +13,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titanic-advance",
+    "source_id": "titanic-advance-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -25,7 +25,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "towering-wraith-construct",
+    "source_id": "towering-wraith-construct-revenant-titan-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -37,7 +37,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "revenant-jet-pack",
+    "source_id": "revenant-jet-pack-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -49,7 +49,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "monofilament-snare",
+    "source_id": "monofilament-snare-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -62,7 +62,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "support-artillery",
+    "source_id": "support-artillery-aeldari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -75,7 +75,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-7",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -99,7 +99,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mandiblasters",
+    "source_id": "mandiblasters-aeldari",
     "source_type": "ability",
     "phases": [
       "charge",
@@ -112,7 +112,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "diviner-of-futures",
+    "source_id": "diviner-of-futures-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -124,7 +124,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "doom-psychic",
+    "source_id": "doom-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -138,20 +138,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psychic-guidance",
+    "source_id": "psychic-guidance-wraithlord-aeldari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -165,7 +152,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fated-hero",
+    "source_id": "fated-hero-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -178,20 +165,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wave-serpent-shield",
+    "source_id": "wave-serpent-shield-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -203,7 +177,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "word-of-the-phoenix-psychic",
+    "source_id": "word-of-the-phoenix-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -215,7 +189,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "herald-of-ynnead",
+    "source_id": "herald-of-ynnead-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -228,7 +202,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "faolchu",
+    "source_id": "faolchu-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -240,7 +214,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crystal-matrix",
+    "source_id": "crystal-matrix-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -252,7 +226,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "path-of-command",
+    "source_id": "path-of-command-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -264,7 +238,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aspect-training",
+    "source_id": "aspect-training-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -276,7 +250,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tormentors",
+    "source_id": "tormentors-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -288,7 +262,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "assured-destruction",
+    "source_id": "assured-destruction-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -300,7 +274,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tactical-acumen",
+    "source_id": "tactical-acumen-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -314,7 +288,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hand-of-asuryan",
+    "source_id": "hand-of-asuryan-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -327,7 +301,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "stormblades",
+    "source_id": "stormblades-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -339,7 +313,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crewed-platform",
+    "source_id": "crewed-platform-storm-guardians-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -351,7 +325,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "structural-collapse",
+    "source_id": "structural-collapse-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -364,7 +338,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-communion-psychic",
+    "source_id": "psychic-communion-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -388,7 +362,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "empyric-ambush",
+    "source_id": "empyric-ambush-aeldari",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -400,7 +374,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "whispering-web",
+    "source_id": "whispering-web-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -425,7 +399,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-is-not-enough",
+    "source_id": "death-is-not-enough-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -437,7 +411,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cruel-amusement",
+    "source_id": "cruel-amusement-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -450,7 +424,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flip-belt",
+    "source_id": "flip-belt-aeldari",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -462,7 +436,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "piratical-hero",
+    "source_id": "piratical-hero-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -475,7 +449,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "prince-of-corsairs",
+    "source_id": "prince-of-corsairs-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -487,7 +461,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ethereal-form",
+    "source_id": "ethereal-form-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -500,7 +474,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "misfortune-psychic",
+    "source_id": "misfortune-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -526,7 +500,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blitz",
+    "source_id": "blitz-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -538,7 +512,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blur-of-movement",
+    "source_id": "blur-of-movement-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -551,7 +525,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "harvester-of-souls",
+    "source_id": "harvester-of-souls-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -563,7 +537,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "face-of-death",
+    "source_id": "face-of-death-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -575,7 +549,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "raid-and-run",
+    "source_id": "raid-and-run-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -588,20 +562,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6-6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "flawless-poise",
+    "source_id": "flawless-poise-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -614,7 +575,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-bloody-handed-aura",
+    "source_id": "the-bloody-handed-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -627,7 +588,45 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-9",
+    "source_id": "crystalline-targeting-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "aethersense-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fury-of-the-void-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mindshock-pod-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -639,20 +638,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "crystalline-targeting",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aethersense-psychic",
+    "source_id": "titanic-strides-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -664,57 +650,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fury-of-the-void-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mindshock-pod-aura-psychic",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "titanic-strides",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "point-blank-devastation",
+    "source_id": "point-blank-devastation-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -726,7 +662,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "eviscerating-fly-by",
+    "source_id": "eviscerating-fly-by-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -738,7 +674,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grav-talon",
+    "source_id": "grav-talon-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -750,7 +686,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cluster-caltrops",
+    "source_id": "cluster-caltrops-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -762,7 +698,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grenade-pack-flyover",
+    "source_id": "grenade-pack-flyover-aeldari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -775,7 +711,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "war-construct",
+    "source_id": "war-construct-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -787,7 +723,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "burning-lance",
+    "source_id": "burning-lance-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -799,7 +735,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unquenchable-resolve",
+    "source_id": "unquenchable-resolve-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -812,7 +748,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-of-blades",
+    "source_id": "storm-of-blades-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -825,7 +761,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "empowered-by-death",
+    "source_id": "empowered-by-death-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -837,7 +773,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "extreme-mobility",
+    "source_id": "extreme-mobility-aeldari",
     "source_type": "ability",
     "phases": [
       "charge"
@@ -849,7 +785,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "way-of-the-blade",
+    "source_id": "way-of-the-blade-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -861,20 +797,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "reavers-of-the-void",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sonic-destruction",
+    "source_id": "reavers-of-the-void-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -887,7 +810,20 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fog-of-dreams-psychic",
+    "source_id": "sonic-destruction-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fog-of-dreams-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -899,7 +835,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "treacherous-illusion-psychic",
+    "source_id": "treacherous-illusion-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -911,7 +847,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "whirling-death",
+    "source_id": "whirling-death-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -923,7 +859,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-of-silence",
+    "source_id": "storm-of-silence-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -936,7 +872,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "flickerjump",
+    "source_id": "flickerjump-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -949,7 +885,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "inescapable-accuracy",
+    "source_id": "inescapable-accuracy-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -961,7 +897,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sadistic-raiders",
+    "source_id": "sadistic-raiders-aeldari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -974,7 +910,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "phantasm-grenade-launcher",
+    "source_id": "phantasm-grenade-launcher-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -986,7 +922,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "polychromatic-camouflage",
+    "source_id": "polychromatic-camouflage-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -998,7 +934,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "target-acquisition",
+    "source_id": "target-acquisition-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1010,7 +946,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "titanic-agility",
+    "source_id": "titanic-agility-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -1022,7 +958,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "no-escape",
+    "source_id": "no-escape-aeldari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -1034,7 +970,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "guide-psychic",
+    "source_id": "guide-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1048,7 +984,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "monofilament-web",
+    "source_id": "monofilament-web-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1061,7 +997,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bladestorm",
+    "source_id": "bladestorm-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1074,156 +1010,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "acrobatic",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-support",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swift-demise",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "choreographer-of-war",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cegorachs-favour",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "path-of-the-outcast",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skyhunter",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-deck-11",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aethersails",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hallucinogen-grenades",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "overlord",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reborn-mastermind",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cloudstrider",
+    "source_id": "acrobatic-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1236,7 +1023,21 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cry-of-the-wind",
+    "source_id": "fire-support-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "swift-demise-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -1248,7 +1049,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "malevolent-souls",
+    "source_id": "choreographer-of-war-aeldari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -1260,11 +1061,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dance-of-death",
+    "source_id": "path-of-the-outcast-aeldari",
     "source_type": "ability",
     "phases": [
-      "shooting",
-      "fight"
+      "movement"
     ],
     "game_version": {
       "edition": "11th",
@@ -1273,7 +1073,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-6",
+    "source_id": "skyhunter-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -1286,11 +1098,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lithe-embarkation",
+    "source_id": "aethersails-aeldari",
     "source_type": "ability",
     "phases": [
-      "movement",
-      "fight"
+      "movement"
     ],
     "game_version": {
       "edition": "11th",
@@ -1299,7 +1110,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "harassment-fire",
+    "source_id": "hallucinogen-grenades-aeldari",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "overlord-aeldari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -1312,21 +1135,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "spirit-mark",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tears-of-isha-psychic",
+    "source_id": "reborn-mastermind-aeldari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -1338,71 +1147,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-embarkation",
+    "source_id": "cloudstrider-aeldari",
     "source_type": "ability",
     "phases": [
       "movement",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "death-from-on-high",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "focused-firepower",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spiralling-evasion",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fangs-of-the-brood",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crushing-strides",
-    "source_type": "stratagem",
-    "phases": [
       "charge"
     ],
     "game_version": {
@@ -1412,10 +1160,9 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "seers-eye",
-    "source_type": "stratagem",
+    "source_id": "cry-of-the-wind-aeldari",
+    "source_type": "ability",
     "phases": [
-      "fight",
       "shooting"
     ],
     "game_version": {
@@ -1425,21 +1172,8 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "wraithbone-armour",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blades-from-beyond",
-    "source_type": "stratagem",
+    "source_id": "malevolent-souls-aeldari",
+    "source_type": "ability",
     "phases": [
       "fight"
     ],
@@ -1450,22 +1184,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "macabre-resilience",
-    "source_type": "stratagem",
+    "source_id": "dance-of-death-aeldari",
+    "source_type": "ability",
     "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "emissaries-of-ynnead",
-    "source_type": "stratagem",
-    "phases": [
+      "shooting",
       "fight"
     ],
     "game_version": {
@@ -1475,72 +1197,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "soulsight",
-    "source_type": "stratagem",
+    "source_id": "lithe-embarkation-aeldari",
+    "source_type": "ability",
     "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warding-salvoes",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shield-nodes",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vauls-vengeance",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blades-of-asuryan",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pirates-due",
-    "source_type": "stratagem",
-    "phases": [
+      "movement",
       "fight"
     ],
     "game_version": {
@@ -1550,95 +1210,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "no-prey-too-big",
-    "source_type": "stratagem",
+    "source_id": "harassment-fire-aeldari",
+    "source_type": "ability",
     "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fate-inescapable",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lightning-fast-reactions",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blitzing-firepower",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warrior-focus",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "doom-inescapable",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "preternatural-precision",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "yriels-example",
-    "source_type": "stratagem",
-    "phases": [
+      "shooting",
       "fight"
     ],
     "game_version": {
@@ -1648,25 +1223,11 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ishas-fury",
-    "source_type": "stratagem",
+    "source_id": "spirit-mark-aeldari",
+    "source_type": "ability",
     "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "staged-death",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
       "movement",
       "shooting",
-      "charge",
       "fight"
     ],
     "game_version": {
@@ -1676,165 +1237,8 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "heroes-fall",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mocking-flight",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tricksters-retort",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bloody-dance",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exit-the-stage",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "overflight",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wind-of-blades",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daring-riders",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "venomous-wrath",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "striking-stride",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "weavers-coils",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "weaving-stride",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skyward-lunge",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "soul-bridge",
-    "source_type": "stratagem",
+    "source_id": "tears-of-isha-aeldari",
+    "source_type": "ability",
     "phases": [
       "command"
     ],
@@ -1845,25 +1249,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "spirit-token",
-    "source_type": "stratagem",
+    "source_id": "rapid-embarkation-aeldari",
+    "source_type": "ability",
     "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pall-of-dread",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
       "movement",
-      "shooting",
-      "charge",
       "fight"
     ],
     "game_version": {
@@ -1873,7 +1262,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-answers-death",
+    "source_id": "fire-and-fade-tau-empire",
     "source_type": "stratagem",
     "phases": [
       "shooting"
@@ -1885,805 +1274,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "time-to-strike",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cost-of-victory",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cloudstrike",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "anti-grav-repulsion",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "layered-wards",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swift-deployment",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vectored-engines",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lethal-ruse",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "outcast-ambush",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "into-the-breach",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cloak-and-shadow",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vengeful-sorrow",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "raiders-spoils",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ruthless-killers",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "withdraw-and-reinforce",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "presentiment-of-dread",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "forewarned",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unshrouded-truth",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psychic-shield",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skyborne-sanctuary",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "feigned-retreat",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-and-fade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "webway-tunnel",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "to-their-final-breath",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "khaines-vengeance",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "parting-the-veil",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "impeding-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "seersight-strike",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "echoes-of-ulthanesh",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guiding-presence",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "light-of-clarity",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stave-of-kurnos",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "harmonisation-matrix",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rune-of-mists",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spirit-stone-of-raelyth",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "guileful-strategist",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "higher-duty",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "cegorachs-coil",
-    "source_type": "enhancement",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "murders-jest",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "timeless-strategist",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gift-of-foresight",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psychic-destroyer",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "craftworlds-champion",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "protector-of-the-paths",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "breath-of-vaul",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gaze-of-ynnead",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "storm-of-whispers",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "borrowed-vigour",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "morbid-might",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lucid-eye",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "runes-of-warding",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stone-of-eldritch-fury",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "torc-of-morai-heg",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "aspect-of-murder",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mantle-of-wisdom",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shimmerstone",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strategic-savant",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "weavers-wail",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fanged-leer",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shedskin-raiment",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "alacritous-assault",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exotic-munitions",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infamy-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "webway-pathstone",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "archraider",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "acrobatic-onslaught",
+    "source_id": "acrobatic-onslaught-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "charge"
@@ -2695,7 +1286,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ride-the-wind",
+    "source_id": "ride-the-wind-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -2708,7 +1299,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "boons-of-the-brood",
+    "source_id": "boons-of-the-brood-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -2722,7 +1313,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shepherds-of-the-dead",
+    "source_id": "shepherds-of-the-dead-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -2735,7 +1326,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strength-from-death",
+    "source_id": "strength-from-death-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -2749,7 +1340,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "defend-at-all-costs",
+    "source_id": "defend-at-all-costs-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -2762,7 +1353,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "skilled-crews",
+    "source_id": "skilled-crews-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -2774,7 +1365,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "relentless-raiders",
+    "source_id": "relentless-raiders-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "charge"
@@ -2786,7 +1377,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "yriels-own",
+    "source_id": "yriels-own-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "charge"
@@ -2798,7 +1389,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strands-of-fate",
+    "source_id": "strands-of-fate-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "command"
@@ -2810,7 +1401,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "martial-grace",
+    "source_id": "martial-grace-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -2823,7 +1414,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "path-of-the-warrior",
+    "source_id": "path-of-the-warrior-aeldari",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",

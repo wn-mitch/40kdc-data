@@ -35,9 +35,9 @@
                 <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 7&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 7" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -119,9 +119,25 @@ The unit gains the Infiltrators ability.</characteristic>
                 <characteristic name="Description">The unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 7&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 7" ability.</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Gun Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Marker Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit's weapons gain [MARKERLIGHT].
+The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Shield Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -333,6 +349,22 @@ The unit gains the Infiltrators ability.</characteristic>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Gun Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Marker Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit's weapons gain [MARKERLIGHT].
+The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Shield Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>

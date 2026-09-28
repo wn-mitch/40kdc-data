@@ -73,7 +73,7 @@ export interface StratSeedReport {
   /** Coreless (no detachment) dump stratagems, held for manual review — the 12
    *  universal core stratagems are already complete in the repo, so a coreless
    *  "new-in-dump" is a spelling/scoping mismatch with an existing core entity
-   *  (e.g. dump "Counteroffensive" vs repo "counter-offensive"), not a real gap. */
+   *  (e.g. dump "Counteroffensive" vs repo counter-offensive), not a real gap. */
   skippedCoreless: string[];
 }
 

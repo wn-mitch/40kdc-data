@@ -25,9 +25,9 @@ const stagedGold = join(inputRoot, "gold");
 const bundlePath = join(appRoot, "evaluate.mjs");
 
 const anchors = [
-  "helm-of-brazen-ire-berzerker-warband",
-  "hack-and-slash-berzerker-warband",
-  "relentless-rage",
+  "helm-of-brazen-ire-berzerker-warband-world-eaters",
+  "hack-and-slash-berzerker-warband-world-eaters",
+  "relentless-rage-world-eaters",
   "deep-strike",
 ];
 const evaluatorArtifacts = [

@@ -2,10 +2,9 @@
  * stratagems.ts — Phase 6: reconcile stratagem numeric/structural fields against
  * the GW MFM dump.
  *
- * The repo stratagem id is `detachmentScopedId(name, detachment-name)` (bare
- * `nameToId(name)` for the 11 core stratagems with no detachment), which is how
- * the dump's (stratagem, detachment) pair slugs — so matching is a direct id
- * lookup, mirroring enhancements (Phase 3A).
+ * The repo stratagem id is the one `mfm:mirror` derives from the dump row
+ * (`<name>-<detachment>-<faction>`, bare for the core stratagems), so matching is
+ * a direct id lookup, mirroring enhancements (Phase 3A).
  *
  * APPLIED from the dump — only fields backed by a reliable FIRST-CLASS column:
  *   - cp_cost   ← `cpCost`   (authoritative numeric).
@@ -43,7 +42,7 @@
  */
 import * as fs from "fs";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow, type StratagemRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs, repoDirForFactionName } from "./faction-map.js";
@@ -147,22 +146,11 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   return { phases: phases.length ? phases : null, player_turn };
 }
 
-/** Repo id for a dump stratagem: `detachmentScopedId` when detachment-scoped, bare
- *  `nameToId` for the coreless few. Null if the name can't be slugged. The single
- *  id rule shared by {@link buildStratCanon} and {@link stratagemInventory}. */
+/** Repo id for a dump stratagem: the id `mfm:mirror` gives the row (`<name>-<detachment>-<faction>`,
+ *  bare for a core stratagem). Null for a row no faction or detachment owns. The single id rule
+ *  shared by {@link buildStratCanon}, {@link stratagemInventory} and the seed. */
 export function stratagemRepoId(dump: MfmDump, s: StratagemRow): string | null {
-  const name = dump.enName(s);
-  if (!name) return null;
-  try {
-    if (s.detachmentId) {
-      const dn = dump.enName(dump.byId("detachment").get(s.detachmentId));
-      if (!dn) return null;
-      return detachmentScopedId(name, dn);
-    }
-    return nameToId(name);
-  } catch {
-    return null;
-  }
+  return mirrorIds(dump).idOf("stratagem", s.id) ?? null;
 }
 
 /** Stratagem repo-id → canon fields from the dump: cp_cost + first-class

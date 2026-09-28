@@ -21,17 +21,17 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
 
   it("gives each Chaos legion's Rhino and Helbrute only the abilities its own datasheet prints", () => {
     // Meet Any Challenge is the World Eaters Rhino's; Sorcerous Support the Thousand Sons'.
-    const wagon = refs(unit("world-eaters", "chaos-rhino", "meet-any-challenge"));
+    const wagon = refs(unit("world-eaters", "chaos-rhino", "meet-any-challenge-world-eaters"));
     expect(wagon).toHaveLength(1);
     expect(wagon?.[0]).toMatch(/^75ce5f78/);
-    expect(refs(unit("thousand-sons", "chaos-rhino", "meet-any-challenge"))).toBeNull();
-    expect(refs(unit("death-guard", "chaos-rhino", "meet-any-challenge"))).toBeNull();
-    expect(refs(unit("thousand-sons", "chaos-rhino", "sorcerous-support"))?.[0]).toMatch(/^12fdfa99/);
-    expect(refs(unit("emperors-children", "chaos-rhino", "sorcerous-support"))).toBeNull();
+    expect(refs(unit("thousand-sons", "chaos-rhino", "meet-any-challenge-world-eaters"))).toBeNull();
+    expect(refs(unit("death-guard", "chaos-rhino", "meet-any-challenge-world-eaters"))).toBeNull();
+    expect(refs(unit("thousand-sons", "chaos-rhino", "sorcerous-support-thousand-sons"))?.[0]).toMatch(/^12fdfa99/);
+    expect(refs(unit("emperors-children", "chaos-rhino", "sorcerous-support-thousand-sons"))).toBeNull();
     expect(refs(unit("world-eaters", "helbrute", "frenzy"))?.[0]).toMatch(/^ae69f232/);
     expect(refs(unit("thousand-sons", "helbrute", "frenzy"))).toBeNull();
-    expect(refs(unit("death-guard", "helbrute", "diseased-malice"))?.[0]).toMatch(/^bf2dd24a/);
-    expect(refs(unit("chaos-space-marines", "helbrute", "diseased-malice"))).toBeNull();
+    expect(refs(unit("death-guard", "helbrute", "diseased-malice-death-guard"))?.[0]).toMatch(/^bf2dd24a/);
+    expect(refs(unit("chaos-space-marines", "helbrute", "diseased-malice-death-guard"))).toBeNull();
   });
 
   it.skipIf(!fs.existsSync(COVERAGE))("returns none of the 109 foreign-faction texts the global name index returned", () => {
@@ -71,7 +71,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
     expect(at.every((i) => i >= 0)).toBe(true);
     expect([...at].sort((a, b) => a - b)).toEqual(at);
     // The repo's stub id resolves through the datasheet stub to the same codex text.
-    expect(prose.lookup({ ...q, ability: "nurgle-s-gift-aura", kinds: undefined, combatPatrol: false })?.text).toBe(codex.text);
+    expect(prose.lookup({ ...q, ability: "nurgles-gift-death-guard", kinds: undefined, combatPatrol: false })?.text).toBe(codex.text);
   });
 
   it("emits Battle Focus's battle-size image altText", () => {
@@ -88,7 +88,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
   });
 
   it("finds Counteroffensive under the repo's counter-offensive spelling", () => {
-    const hit = prose.lookup({ faction: "_core", owner: { kind: "core" }, ability: "counter-offensive" })!;
+    const hit = prose.lookup({ faction: "_core", owner: { kind: "core" }, ability: "counteroffensive" })!;
     expect(hit.rows.map((r) => [r.kind, r.name, r.slug])).toEqual([["stratagem", "Counteroffensive", "counteroffensive"]]);
     expect(hit.ref).toBe("dump.json#33bd61f7-4741-4c27-a8d8-2e13b20ca121");
   });

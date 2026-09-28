@@ -12,7 +12,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "subterranean-tunnels",
+    "source_id": "subterranean-tunnels-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -26,7 +26,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "terror-from-the-deep",
+    "source_id": "terror-from-the-deep-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -38,7 +38,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "adaptable-predators",
+    "source_id": "adaptable-predators-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -51,7 +51,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -64,7 +64,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "will-of-the-hive-mind",
+    "source_id": "will-of-the-hive-mind-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -76,20 +76,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "paroxysm-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-2d6",
+    "source_id": "paroxysm-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -114,7 +101,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "frenzied-metabolism",
+    "source_id": "frenzied-metabolism-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -127,20 +114,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "singular-purpose",
+    "source_id": "singular-purpose-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -154,7 +128,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "alpha-warrior",
+    "source_id": "alpha-warrior-winged-tyranid-prime-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -167,7 +141,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-blow",
+    "source_id": "death-blow-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -204,7 +178,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pouncing-leap",
+    "source_id": "pouncing-leap-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -217,7 +191,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "apex-beast",
+    "source_id": "apex-beast-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -230,7 +204,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "stalking-forward",
+    "source_id": "stalking-forward-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -242,7 +216,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hive-commander",
+    "source_id": "hive-commander-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -254,7 +228,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "malign-presence-aura",
+    "source_id": "malign-presence-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -266,7 +240,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "domination-of-the-hive-mind-aura",
+    "source_id": "domination-of-the-hive-mind-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -279,7 +253,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "symbiotic-targeting",
+    "source_id": "symbiotic-targeting-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -292,7 +266,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "foul-spores-aura",
+    "source_id": "foul-spores-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -304,7 +278,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "adaptive-instincts",
+    "source_id": "adaptive-instincts-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -317,7 +291,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bio-minefield",
+    "source_id": "bio-minefield-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -329,7 +303,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "floating-death",
+    "source_id": "floating-death-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -341,7 +315,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aerial-seeding",
+    "source_id": "aerial-seeding-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -353,7 +327,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "chitinous-horrors-aura",
+    "source_id": "chitinous-horrors-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -365,20 +339,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "seed-spore-mines",
+    "source_id": "seed-spore-mines-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -402,7 +363,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "feeder-tendrils",
+    "source_id": "feeder-tendrils-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -415,7 +376,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fear-of-the-unseen-aura",
+    "source_id": "fear-of-the-unseen-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -427,7 +388,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "alpha-invader",
+    "source_id": "alpha-invader-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -440,7 +401,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypersensory-array",
+    "source_id": "hypersensory-array-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -453,7 +414,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "harpoon-barbs",
+    "source_id": "harpoon-barbs-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -465,7 +426,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "seed-mucolids",
+    "source_id": "seed-mucolids-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -477,7 +438,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hive-defences",
+    "source_id": "hive-defences-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -490,7 +451,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "neural-disruption",
+    "source_id": "neural-disruption-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -502,7 +463,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychological-saboteur-aura",
+    "source_id": "psychological-saboteur-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -515,7 +476,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bio-stimulus-aura",
+    "source_id": "bio-stimulus-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -528,7 +489,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "feeding-frenzy",
+    "source_id": "feeding-frenzy-tyranids",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -540,7 +501,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-8",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -552,7 +513,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vicious-insight",
+    "source_id": "vicious-insight-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -565,7 +526,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypnotic-gaze-psychic",
+    "source_id": "hypnotic-gaze-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -578,7 +539,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "spore-mine-cysts",
+    "source_id": "spore-mine-cysts-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -590,7 +551,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "parasitic-infection",
+    "source_id": "parasitic-infection-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -603,7 +564,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "it-itches",
+    "source_id": "it-itches-tyranids",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -615,7 +576,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-scream",
+    "source_id": "death-scream-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -627,7 +588,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bounding-leap",
+    "source_id": "bounding-leap-tyranids",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -640,7 +601,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vanguard-predator",
+    "source_id": "vanguard-predator-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -653,7 +614,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grasping-tendrils",
+    "source_id": "grasping-tendrils-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -665,7 +626,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hypertoxic-miasma-aura",
+    "source_id": "hypertoxic-miasma-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -677,7 +638,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "burning-spray",
+    "source_id": "burning-spray-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -689,7 +650,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "node-lash-psychic",
+    "source_id": "node-lash-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -702,7 +663,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-terror-psychic",
+    "source_id": "psychic-terror-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -714,7 +675,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "neuroloids",
+    "source_id": "neuroloids-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -727,7 +688,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "skulking-horrors",
+    "source_id": "skulking-horrors-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -739,7 +700,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aggressive-leader-beast",
+    "source_id": "aggressive-leader-beast-tyranids",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -751,7 +712,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "defensive-stance",
+    "source_id": "defensive-stance-tyranids",
     "source_type": "ability",
     "phases": [
       "command",
@@ -764,120 +725,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "disruption-bombardment",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "neurocytes",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "airborne-predator",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spawn-termagants",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "brood-progenitor-aura-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "alpha-leader",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "encephalic-diffusion-aura-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blistering-assault",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "onslaught-aura-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "winged-swarm",
+    "source_id": "disruption-bombardment-tyranids",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -891,7 +739,120 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grisly-spectacle",
+    "source_id": "neurocytes-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "airborne-predator-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "spawn-termagants-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "brood-progenitor-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "alpha-leader-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "encephalic-diffusion-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "blistering-assault-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "onslaught-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "winged-swarm-tyranids",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "grisly-spectacle-tyranids",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -903,7 +864,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pheromone-trail",
+    "source_id": "pheromone-trail-tyranids",
     "source_type": "ability",
     "phases": [
       "command"
@@ -915,7 +876,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-from-below",
+    "source_id": "death-from-below-tyranids",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -927,19 +888,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "synaptic-channelling",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "irresistible-will",
+    "source_id": "surprise-assault-tyranids",
     "source_type": "stratagem",
     "phases": [
       "fight",
@@ -952,689 +901,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "reinforced-hive-node",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swarm-guided-salvoes",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rampaging-monstrosities",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "savage-roar",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "teeming-masses",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swarming-masses",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bounding-advance",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "surprise-assault",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assassin-beasts",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapid-regeneration",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapacious-hunger",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "adrenal-surge",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "massive-impact",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "broodguard-impulse",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ablative-carapace",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-smothering-shadow",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "imperative-dominance",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "override-instincts",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enfilading-emergence",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tunnel-network",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swarming-assault",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "retreat-below",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-amplification",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "restorative-impulse",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-micronodes",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "parasitic-payload",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-shield",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "untrammelled-ferocity",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "corrosive-viscera",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-goading",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "preservation-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "seeded-broods",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unseen-lurkers",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "invisible-hunter",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "death-frenzy",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "overrun",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "predatory-imperative",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "endless-swarm",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "reclaim-biomass",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tyrannoformed",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "secure-biomass",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unending-waves",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hypersensory-scillia",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "adaptive-optimisation",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "replenishing-swarms",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spontaneous-hypercorrosion",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "alien-cunning",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "perfectly-adapted",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-lynchpin",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ominous-presence",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enraged-reserves",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "monstrous-nemesis",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "relentless-hunger",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "naturalised-camouflage",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "piercing-talons",
+    "source_id": "stalker-chaos-knights",
     "source_type": "enhancement",
     "phases": [
       "shooting",
@@ -1647,234 +914,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "instinctive-defence",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "biophagic-flow-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "parasitic-biomorphology",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hunting-grounds",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chameleonic",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stalker",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "neuronode",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "power-of-the-hive-mind",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psychostatic-disruption",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-control",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "the-dirgeheart-of-kharis-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-tyrant",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ocular-adaptation",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "elevated-might",
-    "source_type": "enhancement",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-strategy",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tremor-senses",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vanguard-intellect",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "trygon-prime",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "synaptic-imperatives",
+    "source_id": "synaptic-imperatives-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1889,7 +929,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "surprise-assault",
+    "source_id": "surprise-assault-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -1903,7 +943,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "enraged-behemoths",
+    "source_id": "enraged-behemoths-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1917,7 +957,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "insurmountable-odds",
+    "source_id": "insurmountable-odds-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -1929,7 +969,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hyper-adaptations",
+    "source_id": "hyper-adaptations-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1943,7 +983,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "feed-the-swarm",
+    "source_id": "feed-the-swarm-tyranids",
     "source_type": "detachment-rule",
     "phases": [
       "command"

@@ -124,10 +124,12 @@ describe("authoritative detachment field reconciliation", () => {
 
 
 describe("detachment-rule id derivation (synthetic)", () => {
-  it("slugs each dump rule display name to a sorted, de-duplicated bare id", () => {
+  it("gives each dump rule the mirrored id (<name>-<faction>), sorted and de-duplicated", () => {
     const dump = new MfmDump({
       data: {
-        detachment: [{ id: "d", localisations: { en: { name: "X" } } }],
+        faction_keyword: [{ id: "fk", parentFactionKeywordId: null, localisations: { en: { name: "Legiones Daemonica" } } }],
+        publication: [{ id: "p", factionKeywordId: "fk", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
+        detachment: [{ id: "d", publicationId: "p", localisations: { en: { name: "X" } } }],
         detachment_rule: [
           { id: "r1", detachmentId: "d", displayOrder: 1, localisations: { en: { name: "Warp Rifts" } } },
           { id: "r2", detachmentId: "d", displayOrder: 0, localisations: { en: { name: "Prey on the Weak" } } },
@@ -136,7 +138,7 @@ describe("detachment-rule id derivation (synthetic)", () => {
         ],
       },
     });
-    expect(ruleIdsForDetachment(dump, "d")).toEqual(["prey-on-the-weak", "vulkans-quest", "warp-rifts"]);
+    expect(ruleIdsForDetachment(dump, "d")).toEqual(["prey-on-the-weak-chaos-daemons", "vulkans-quest-chaos-daemons", "warp-rifts-chaos-daemons"]);
   });
 
   it("returns an empty list when the detachment has no dump rule", () => {
@@ -192,8 +194,8 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
     const reviews = report.dirs.flatMap((d) => d.ruleReview);
     // Armoured Infantry: the dump lists a second rule (order) the repo has not linked.
     const armoured = reviews.find((r) => r.id === "armoured-infantry");
-    expect(armoured?.derived).toEqual(["order", "squadron-command"]);
-    expect(armoured?.authored).toEqual(["squadron-command"]);
+    expect(armoured?.derived).toEqual(["order-astra-militarum", "squadron-command-astra-militarum"]);
+    expect(armoured?.authored).toEqual(["squadron-command-astra-militarum"]);
     // The authored value on disk is untouched (surfaced, not overwritten).
     const rec = JSON.parse(
       fs.readFileSync(path.join(CORE_DIR, "astra-militarum", "detachments.json"), "utf8"),
@@ -201,10 +203,12 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
       detachment_rule_id?: string;
       detachment_rule_ids?: string[];
     };
-    expect(rec.detachment_rule_id ?? rec.detachment_rule_ids?.join()).not.toContain("order");
-    // Current scoped-vs-bare id-form drift is surfaced; retired detachments are not.
-    expect(reviews.some((r) => r.id === "murdertalon-raiders")).toBe(true);
-    expect(reviews.some((r) => r.id === "more-dakka")).toBe(false);
+    expect(rec.detachment_rule_id ?? rec.detachment_rule_ids?.join()).not.toContain("order-astra-militarum");
+    // Ids come from one rule now, so a scoped-vs-bare id-form drift no longer surfaces; a
+    // record that mirrors a different dump variant of the rule does.
+    expect(reviews.some((r) => r.id === "murdertalon-raiders")).toBe(false);
+    expect(reviews.find((r) => r.id === "ghosts-of-the-webway")?.derived).toEqual(["acrobatic-onslaught-ghosts-of-the-webway-aeldari"]);
+    expect(reviews.some((r) => r.id === "more-dakka-orks")).toBe(false);
   });
 
   it("surfaces detachments whose dump rule has no authored ability as a worklist", () => {

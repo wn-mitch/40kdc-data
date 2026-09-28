@@ -3,10 +3,10 @@
   "cases": [
     {
       "_comment": "Combat Doctrines is the Codex army rule. Only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group; Assault (charge after Advancing) and Tactical (shoot and charge after Falling Back) grant move-then-act eligibility, which carries no buff.",
-      "abilityId": "combat-doctrines",
+      "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
       "source": {
         "kind": "ability",
-        "abilityId": "combat-doctrines",
+        "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
         "abilityKind": "army"
       },
       "context": {
@@ -17,10 +17,10 @@
         "unsupportedReasons": [],
         "activatable": [
           {
-            "id": "combat-doctrines#Devastator Doctrine",
+            "id": "combat-doctrines-assault-force-adeptus-astartes#Devastator Doctrine",
             "label": "Devastator Doctrine",
             "group": {
-              "id": "combat-doctrines?stance",
+              "id": "combat-doctrines-assault-force-adeptus-astartes?stance",
               "maxActivations": 1
             },
             "buffs": [
@@ -36,10 +36,10 @@
       }
     },
     {
-      "abilityId": "templar-vows",
+      "abilityId": "templar-vows-black-templars",
       "source": {
         "kind": "ability",
-        "abilityId": "templar-vows",
+        "abilityId": "templar-vows-black-templars",
         "abilityKind": "army"
       },
       "context": {
@@ -64,10 +64,10 @@
       }
     },
     {
-      "abilityId": "berzerker-frenzy",
+      "abilityId": "berzerker-frenzy-world-eaters",
       "source": {
         "kind": "ability",
-        "abilityId": "berzerker-frenzy",
+        "abilityId": "berzerker-frenzy-world-eaters",
         "abilityKind": "unit"
       },
       "context": {
@@ -82,10 +82,10 @@
       }
     },
     {
-      "abilityId": "blessings-of-khorne",
+      "abilityId": "blessings-of-khorne-world-eaters",
       "source": {
         "kind": "ability",
-        "abilityId": "blessings-of-khorne",
+        "abilityId": "blessings-of-khorne-world-eaters",
         "abilityKind": "army"
       },
       "context": {
@@ -96,10 +96,10 @@
         "unsupportedReasons": [],
         "activatable": [
           {
-            "id": "blessings-of-khorne#Martial Excellence",
+            "id": "blessings-of-khorne-world-eaters#Martial Excellence",
             "label": "Martial Excellence",
             "group": {
-              "id": "blessings-of-khorne",
+              "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
             "buffs": [
@@ -115,10 +115,10 @@
             ]
           },
           {
-            "id": "blessings-of-khorne#Warp Blades",
+            "id": "blessings-of-khorne-world-eaters#Warp Blades",
             "label": "Warp Blades",
             "group": {
-              "id": "blessings-of-khorne",
+              "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
             "buffs": [
@@ -131,10 +131,10 @@
             ]
           },
           {
-            "id": "blessings-of-khorne#Decapitating Strikes",
+            "id": "blessings-of-khorne-world-eaters#Decapitating Strikes",
             "label": "Decapitating Strikes",
             "group": {
-              "id": "blessings-of-khorne",
+              "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
             "buffs": [
@@ -151,10 +151,10 @@
     },
     {
       "_comment": "Core rule 19.04, attacker side: a model-scoped keyword grant ('the bearer has the Psyker keyword') applies when the bearer is the unit being crunched.",
-      "abilityId": "psychic-gifts",
+      "abilityId": "psychic-gifts-agents-of-the-imperium",
       "source": {
         "kind": "ability",
-        "abilityId": "psychic-gifts",
+        "abilityId": "psychic-gifts-agents-of-the-imperium",
         "abilityKind": "unit"
       },
       "context": {
@@ -174,10 +174,10 @@
     },
     {
       "_comment": "…and stays on that model when pooled in from an attached member — the gate is perspective-independent, so an attached character's personal grant never rides the squad's weapons.",
-      "abilityId": "psychic-gifts",
+      "abilityId": "psychic-gifts-agents-of-the-imperium",
       "source": {
         "kind": "ability",
-        "abilityId": "psychic-gifts",
+        "abilityId": "psychic-gifts-agents-of-the-imperium",
         "abilityKind": "attached",
         "sourceUnitId": "inquisitor"
       },
@@ -192,34 +192,10 @@
       }
     },
     {
-      "_comment": "The counterpart: a unit-scoped grant ('this unit's melee weapons have [SUSTAINED HITS 1]') still reaches the combined unit from an attached source.",
-      "abilityId": "breakin-heads",
+      "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
       "source": {
         "kind": "ability",
-        "abilityId": "breakin-heads",
-        "abilityKind": "attached",
-        "sourceUnitId": "bigboss"
-      },
-      "context": {
-        "phase": "fight"
-      },
-      "expected": {
-        "applied": [
-          {
-            "type": "extra-keyword",
-            "keywordRef": {
-              "keyword_id": "sustained-hits"
-            }
-          }
-        ],
-        "unsupportedReasons": []
-      }
-    },
-    {
-      "abilityId": "the-imperiums-sword-1st-company-task-force",
-      "source": {
-        "kind": "ability",
-        "abilityId": "the-imperiums-sword-1st-company-task-force",
+        "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
         "abilityKind": "enhancement"
       },
       "context": {
@@ -235,7 +211,7 @@
         "unsupportedReasons": [],
         "activatable": [
           {
-            "id": "the-imperiums-sword-1st-company-task-force@phase-started",
+            "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes@phase-started",
             "label": "+1 attacks",
             "group": null,
             "buffs": [
@@ -249,10 +225,10 @@
       }
     },
     {
-      "abilityId": "battle-focus",
+      "abilityId": "battle-focus-aeldari",
       "source": {
         "kind": "ability",
-        "abilityId": "battle-focus",
+        "abilityId": "battle-focus-aeldari",
         "abilityKind": "faction"
       },
       "context": {
@@ -266,7 +242,7 @@
         ],
         "activatable": [
           {
-            "id": "battle-focus#star-engines",
+            "id": "battle-focus-aeldari#star-engines",
             "label": "Star Engines",
             "group": null,
             "buffs": [
@@ -282,10 +258,10 @@
       }
     },
     {
-      "abilityId": "ammo-runts",
+      "abilityId": "ammo-runts-orks",
       "source": {
         "kind": "ability",
-        "abilityId": "ammo-runts",
+        "abilityId": "ammo-runts-orks",
         "abilityKind": "unit"
       },
       "context": {
@@ -299,7 +275,7 @@
         ],
         "activatable": [
           {
-            "id": "ammo-runts@selected:shoot",
+            "id": "ammo-runts-orks@selected:shoot",
             "label": "+1 to hit",
             "group": null,
             "buffs": [

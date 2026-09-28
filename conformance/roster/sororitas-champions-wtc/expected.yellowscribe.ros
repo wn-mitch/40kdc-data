@@ -26,14 +26,14 @@
   -&gt; Select one friendly ADEPTA SORORITAS unit within 12" that is Battle-shocked: that unit is no longer Battle-shocked.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Leader" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Stirring Rhetoric" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When an Act of Faith is performed, while this model is leading a unit, until the end of the phase, discard a die from your Miracle dice and use its value in place of a dice roll.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Support" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -98,11 +98,6 @@
                 <characteristic name="Description">4+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Leader" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Litany of Deeds" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">If 1+ friendly units destroyed, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
@@ -111,6 +106,11 @@
             <profile name="Stanchion of Holy Martyrs" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While this model is leading a unit, set the unit's Save characteristic to 2.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Support" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -213,10 +213,10 @@
                 <characteristic name="Description">This model must be your Warlord.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise 1" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -412,6 +412,17 @@
             <profile name="Defenders of the Faith" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Cherub" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Once per battle, you gain 1 Miracle die.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Simulacrum Imperialis" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of the Command phase, if you control 1+ objectives, while the unit is within range of an objective marker, until the end of the phase:
+  -&gt; Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
               </characteristics>
             </profile>
           </profiles>

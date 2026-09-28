@@ -3,20 +3,20 @@
     "id": "spectacle-of-spite",
     "name": "Spectacle of Spite",
     "faction_id": "drukhari",
-    "detachment_rule_id": "combat-drugs",
+    "detachment_rule_id": "combat-drugs-drukhari",
     "enhancement_ids": [
-      "pharmacophex-spectacle-of-spite",
-      "chronoshard-spectacle-of-spite",
-      "periapt-of-torments-spectacle-of-spite",
-      "morghennas-curse-spectacle-of-spite"
+      "pharmacophex-spectacle-of-spite-drukhari",
+      "chronoshard-spectacle-of-spite-drukhari",
+      "periapt-of-torments-spectacle-of-spite-drukhari",
+      "morghennas-curse-spectacle-of-spite-drukhari"
     ],
     "stratagem_ids": [
-      "deadly-debut-spectacle-of-spite",
-      "acrobatic-display-spectacle-of-spite",
-      "a-challenge-met-spectacle-of-spite",
-      "feigned-weakness-spectacle-of-spite",
-      "preternatural-agility-spectacle-of-spite",
-      "berserk-fugue-spectacle-of-spite"
+      "deadly-debut-spectacle-of-spite-drukhari",
+      "acrobatic-display-spectacle-of-spite-drukhari",
+      "a-challenge-met-spectacle-of-spite-drukhari",
+      "feigned-weakness-spectacle-of-spite-drukhari",
+      "preternatural-agility-spectacle-of-spite-drukhari",
+      "berserk-fugue-spectacle-of-spite-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -40,20 +40,20 @@
     "id": "kabalite-cartel",
     "name": "Kabalite Cartel",
     "faction_id": "drukhari",
-    "detachment_rule_id": "murderous-agenda",
+    "detachment_rule_id": "murderous-agenda-drukhari",
     "enhancement_ids": [
-      "leechbite-plate-kabalite-cartel",
-      "webway-awl-kabalite-cartel",
-      "informant-network-kabalite-cartel",
-      "towering-arrogance-kabalite-cartel"
+      "leechbite-plate-kabalite-cartel-drukhari",
+      "webway-awl-kabalite-cartel-drukhari",
+      "informant-network-kabalite-cartel-drukhari",
+      "towering-arrogance-kabalite-cartel-drukhari"
     ],
     "stratagem_ids": [
-      "taken-alive-kabalite-cartel",
-      "making-a-point-kabalite-cartel",
-      "tailored-toxins-kabalite-cartel",
-      "enemies-without-number-kabalite-cartel",
-      "double-cross-kabalite-cartel",
-      "deadly-deceivers-kabalite-cartel"
+      "taken-alive-kabalite-cartel-drukhari",
+      "making-a-point-kabalite-cartel-drukhari",
+      "tailored-toxins-kabalite-cartel-drukhari",
+      "enemies-without-number-kabalite-cartel-drukhari",
+      "double-cross-kabalite-cartel-drukhari",
+      "deadly-deceivers-kabalite-cartel-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -77,20 +77,20 @@
     "id": "skysplinter-assault",
     "name": "Skysplinter Assault",
     "faction_id": "drukhari",
-    "detachment_rule_id": "rain-of-cruelty",
+    "detachment_rule_id": "rain-of-cruelty-drukhari",
     "enhancement_ids": [
-      "phantasmal-smoke-skysplinter-assault",
-      "sadistic-fulcrum-skysplinter-assault",
-      "spiteful-raider-skysplinter-assault",
-      "nightmare-shroud-skysplinter-assault"
+      "phantasmal-smoke-skysplinter-assault-drukhari",
+      "sadistic-fulcrum-skysplinter-assault-drukhari",
+      "spiteful-raider-skysplinter-assault-drukhari",
+      "nightmare-shroud-skysplinter-assault-drukhari"
     ],
     "stratagem_ids": [
-      "skyborne-annihilation-skysplinter-assault",
-      "vicious-blades-skysplinter-assault",
-      "wraithlike-retreat-skysplinter-assault",
-      "pounce-on-the-prey-skysplinter-assault",
-      "swooping-mockery-skysplinter-assault",
-      "night-shield-skysplinter-assault"
+      "skyborne-annihilation-skysplinter-assault-drukhari",
+      "vicious-blades-skysplinter-assault-drukhari",
+      "wraithlike-retreat-skysplinter-assault-drukhari",
+      "pounce-on-the-prey-skysplinter-assault-drukhari",
+      "swooping-mockery-skysplinter-assault-drukhari",
+      "night-shield-skysplinter-assault-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -111,20 +111,20 @@
     "id": "reapers-wager",
     "name": "Reaper’s Wager",
     "faction_id": "drukhari",
-    "detachment_rule_id": "callous-competition",
+    "detachment_rule_id": "callous-competition-drukhari",
     "enhancement_ids": [
-      "archraider-reapers-wager",
-      "webway-walker-reapers-wager",
-      "reapers-cowl-reapers-wager",
-      "conductor-of-torment-reapers-wager"
+      "archraider-reapers-wager-drukhari",
+      "webway-walker-reapers-wager-drukhari",
+      "reapers-cowl-reapers-wager-drukhari",
+      "conductor-of-torment-reapers-wager-drukhari"
     ],
     "stratagem_ids": [
-      "malicious-frenzy-reapers-wager",
-      "murderers-circus-reapers-wager",
-      "shorten-the-odds-reapers-wager",
-      "scintillating-tempo-reapers-wager",
-      "fateful-role-reapers-wager",
-      "dance-macabre-reapers-wager"
+      "malicious-frenzy-reapers-wager-drukhari",
+      "murderers-circus-reapers-wager-drukhari",
+      "shorten-the-odds-reapers-wager-drukhari",
+      "scintillating-tempo-reapers-wager-drukhari",
+      "fateful-role-reapers-wager-drukhari",
+      "dance-macabre-reapers-wager-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -145,20 +145,20 @@
     "id": "realspace-raiders",
     "name": "Realspace Raiders",
     "faction_id": "drukhari",
-    "detachment_rule_id": "alliance-of-agony",
+    "detachment_rule_id": "alliance-of-agony-drukhari",
     "enhancement_ids": [
-      "dark-vitality-realspace-raiders",
-      "labyrinthine-cunning-realspace-raiders",
-      "eye-of-spite-realspace-raiders",
-      "crucible-of-malediction-realspace-raiders"
+      "dark-vitality-realspace-raiders-drukhari",
+      "labyrinthine-cunning-realspace-raiders-drukhari",
+      "eye-of-spite-realspace-raiders-drukhari",
+      "crucible-of-malediction-realspace-raiders-drukhari"
     ],
     "stratagem_ids": [
-      "fighting-shadows-realspace-raiders",
-      "instinctive-spite-realspace-raiders",
-      "eager-for-the-kill-realspace-raiders",
-      "insensible-to-pain-realspace-raiders",
-      "dark-harvest-realspace-raiders",
-      "raid-and-fade-realspace-raiders"
+      "fighting-shadows-realspace-raiders-drukhari",
+      "instinctive-spite-realspace-raiders-drukhari",
+      "eager-for-the-kill-realspace-raiders-drukhari",
+      "insensible-to-pain-realspace-raiders-drukhari",
+      "dark-harvest-realspace-raiders-drukhari",
+      "raid-and-fade-realspace-raiders-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -179,20 +179,20 @@
     "id": "covenite-coterie",
     "name": "Covenite Coterie",
     "faction_id": "drukhari",
-    "detachment_rule_id": "stitchflesh-abominations",
+    "detachment_rule_id": "stitchflesh-abominations-drukhari",
     "enhancement_ids": [
-      "master-regenesist-covenite-coterie",
-      "master-nemesine-covenite-coterie",
-      "master-artisan-covenite-coterie",
-      "master-repugnomancer-aura-covenite-coterie"
+      "master-regenesist-covenite-coterie-drukhari",
+      "master-nemesine-covenite-coterie-drukhari",
+      "master-artisan-covenite-coterie-drukhari",
+      "master-repugnomancer-aura-covenite-coterie-drukhari"
     ],
     "stratagem_ids": [
-      "connoisseurs-of-pain-covenite-coterie",
-      "postmortality-covenite-coterie",
-      "symphony-of-suffering-covenite-coterie",
-      "poisoners-art-covenite-coterie",
-      "enfolding-nightmare-covenite-coterie",
-      "distillers-of-fear-covenite-coterie"
+      "connoisseurs-of-pain-covenite-coterie-drukhari",
+      "postmortality-covenite-coterie-drukhari",
+      "symphony-of-suffering-covenite-coterie-drukhari",
+      "poisoners-art-covenite-coterie-drukhari",
+      "enfolding-nightmare-covenite-coterie-drukhari",
+      "distillers-of-fear-covenite-coterie-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -216,15 +216,15 @@
     "id": "exhibition-of-slaughter",
     "name": "Exhibition of Slaughter",
     "faction_id": "drukhari",
-    "detachment_rule_id": "exacting-cruelty",
+    "detachment_rule_id": "exacting-cruelty-drukhari",
     "enhancement_ids": [
-      "periapt-of-torments-exhibition-of-slaughter",
-      "hyperstimm-trafficker-exhibition-of-slaughter"
+      "periapt-of-torments-exhibition-of-slaughter-drukhari",
+      "hyperstimm-trafficker-exhibition-of-slaughter-drukhari"
     ],
     "stratagem_ids": [
-      "planned-strikes-exhibition-of-slaughter",
-      "sculpting-the-stage-exhibition-of-slaughter",
-      "acrobatic-display-exhibition-of-slaughter"
+      "planned-strikes-exhibition-of-slaughter-drukhari",
+      "sculpting-the-stage-exhibition-of-slaughter-drukhari",
+      "acrobatic-display-exhibition-of-slaughter-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -248,15 +248,15 @@
     "id": "kabalite-agonysts",
     "name": "Kabalite Agonysts",
     "faction_id": "drukhari",
-    "detachment_rule_id": "contracted-harvest",
+    "detachment_rule_id": "contracted-harvest-drukhari",
     "enhancement_ids": [
-      "towering-arrogance-kabalite-agonysts",
-      "contempt-for-rivals-kabalite-agonysts"
+      "towering-arrogance-kabalite-agonysts-drukhari",
+      "contempt-for-rivals-kabalite-agonysts-drukhari"
     ],
     "stratagem_ids": [
-      "prioritised-victim-kabalite-agonysts",
-      "shadows-reach-kabalite-agonysts",
-      "killers-from-the-dark-spires-kabalite-agonysts"
+      "prioritised-victim-kabalite-agonysts-drukhari",
+      "shadows-reach-kabalite-agonysts-drukhari",
+      "killers-from-the-dark-spires-kabalite-agonysts-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -280,15 +280,15 @@
     "id": "tools-of-torment",
     "name": "Tools of Torment",
     "faction_id": "drukhari",
-    "detachment_rule_id": "darkest-artifice",
+    "detachment_rule_id": "darkest-artifice-drukhari",
     "enhancement_ids": [
-      "gnarlskin-experimentor-tools-of-torment",
-      "elixir-of-the-corpse-courts-upgrade-tools-of-torment"
+      "gnarlskin-experimentor-tools-of-torment-drukhari",
+      "elixir-of-the-corpse-courts-upgrade-tools-of-torment-drukhari"
     ],
     "stratagem_ids": [
-      "salting-the-wound-tools-of-torment",
-      "dividends-of-agony-tools-of-torment",
-      "urgent-metamorphosis-tools-of-torment"
+      "salting-the-wound-tools-of-torment-drukhari",
+      "dividends-of-agony-tools-of-torment-drukhari",
+      "urgent-metamorphosis-tools-of-torment-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -313,8 +313,8 @@
     "name": "Coven of Agonies",
     "faction_id": "drukhari",
     "enhancement_ids": [
-      "superior-soulcraft-coven-of-agonies",
-      "toxin-laced-blades-coven-of-agonies"
+      "superior-soulcraft-coven-of-agonies-drukhari",
+      "toxin-laced-blades-coven-of-agonies-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -332,6 +332,9 @@
         "namespace": "mfm",
         "id": "36b5f175-31ab-4b69-bc7f-af93606adbbe"
       }
+    ],
+    "detachment_rule_ids": [
+      "pain-enlivens-drukhari"
     ]
   }
 ]

@@ -1,9 +1,20 @@
 {
   "name": "Khârn the Betrayer in fight phase",
-  "input": { "unitId": "kharn-the-betrayer" },
+  "input": {
+    "unitId": "kharn-the-betrayer"
+  },
   "phase": "fight",
   "expected": {
-    "army": ["blessings-of-khorne"],
-    "unit": ["berzerker-frenzy", "leader", "legendary-killer", "the-betrayer"]
+    "army": [
+      "blessings-of-khorne-frenzied-reavers-world-eaters",
+      "blessings-of-khorne-world-eaters",
+      "pact-of-blood-world-eaters"
+    ],
+    "unit": [
+      "berzerker-frenzy-world-eaters",
+      "leader",
+      "legendary-killer-world-eaters",
+      "the-betrayer-world-eaters"
+    ]
   }
 }

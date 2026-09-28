@@ -1,34 +1,6 @@
 [
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sanctifiers",
-      "inquisitor-kroyle"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "ministorum-sermon",
+    "ability_id": "ministorum-sermon-agents-of-the-imperium",
     "name": "Ministorum Sermon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -62,10 +34,11 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "cherub",
+    "ability_id": "cherub-agents-of-the-imperium",
     "name": "Cherub",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -109,10 +82,11 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "salvationist-medikit",
+    "ability_id": "salvationist-medikit-agents-of-the-imperium",
     "name": "Salvationist Medikit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -135,10 +109,11 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "simulacrum-imperialis",
+    "ability_id": "simulacrum-imperialis-agents-of-the-imperium",
     "name": "Simulacrum Imperialis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -160,14 +135,16 @@
       "duration": "battle"
     },
     "unit_ids": [
-      "sanctifiers"
+      "sanctifiers",
+      "sisters-of-battle-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "attached-unit",
+    "ability_id": "attached-unit-agents-of-the-imperium",
     "name": "Attached Unit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -230,66 +207,13 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "sanctifiers"
-    ],
+    "unit_ids": [],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "watch-captain-artemis"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "watch-captain-artemis"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "tactical-instinct",
+    "ability_id": "tactical-instinct-agents-of-the-imperium",
     "name": "Tactical Instinct",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -324,10 +248,11 @@
       "watch-captain-artemis"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "unstoppable-champion",
+    "ability_id": "unstoppable-champion-agents-of-the-imperium",
     "name": "Unstoppable Champion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -370,87 +295,11 @@
       "filter": {
         "first": true
       }
-    }
+    },
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitorial-chimera"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitorial-chimera"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "rapid-deployment",
+    "ability_id": "rapid-deployment-agents-of-the-imperium",
     "name": "Rapid Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -516,123 +365,11 @@
       "inquisitorial-chimera"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "callidus-assassin"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "callidus-assassin"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "callidus-assassin"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "callidus-assassin",
-      "inquisitor-kroyle"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "acrobatic-escape",
+    "ability_id": "acrobatic-escape-agents-of-the-imperium",
     "name": "Acrobatic Escape",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -668,46 +405,11 @@
       "callidus-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "lord-of-deceit-aura",
-    "name": "Lord of Deceit (Aura)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "bb997d685e6754857d062919db29188f7b209b60d02ad4dd6a7a0db4297cf1d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "cost-modifier",
-      "target": {
-        "owner": "enemy",
-        "within": {
-          "range": {
-            "inches": 12
-          }
-        }
-      },
-      "modifier": {
-        "of": "stratagem",
-        "operation": "increase",
-        "amount": 1,
-        "applies_to": "targeting-this-unit"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "callidus-assassin"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "shadow-assignment",
+    "ability_id": "shadow-assignment-agents-of-the-imperium",
     "name": "Shadow Assignment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -747,13 +449,17 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "callidus-assassin"
+      "callidus-assassin",
+      "culexus-assassin",
+      "eversor-assassin",
+      "vindicare-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "authority-of-the-inquisition",
+    "ability_id": "authority-of-the-inquisition-agents-of-the-imperium",
     "name": "Authority of the Inquisition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -790,13 +496,17 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "inquisitor",
+      "inquisitor-coteaz",
+      "inquisitor-draxus",
       "inquisitor-greyfax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "psyoculum",
+    "ability_id": "psyoculum-agents-of-the-imperium",
     "name": "Psyoculum",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -831,10 +541,11 @@
       "inquisitor-greyfax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "no-mercy",
+    "ability_id": "no-mercy-agents-of-the-imperium",
     "name": "No Mercy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -880,10 +591,11 @@
       "inquisitor-greyfax"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "purge-and-cleanse",
+    "ability_id": "purge-and-cleanse-agents-of-the-imperium",
     "name": "Purge and Cleanse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -906,10 +618,11 @@
       "sisters-of-battle-immolator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "loyal-henchmen",
+    "ability_id": "loyal-henchmen-agents-of-the-imperium",
     "name": "Loyal Henchmen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -944,10 +657,11 @@
       "inquisitorial-agents"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "tome-skull",
+    "ability_id": "tome-skull-agents-of-the-imperium",
     "name": "Tome\u2010skull",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -977,10 +691,11 @@
       "inquisitorial-agents"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "inquisitorial-henchmen",
+    "ability_id": "inquisitorial-henchmen-agents-of-the-imperium",
     "name": "Inquisitorial Henchmen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1010,10 +725,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "power-of-the-rosette",
+    "ability_id": "power-of-the-rosette-agents-of-the-imperium",
     "name": "Power of the Rosette",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1036,10 +752,11 @@
       "inquisitor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "blessed-wardings",
+    "ability_id": "blessed-wardings-agents-of-the-imperium",
     "name": "Blessed Wardings",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1072,10 +789,11 @@
       "inquisitor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "psychic-gifts",
+    "ability_id": "psychic-gifts-agents-of-the-imperium",
     "name": "Psychic Gifts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1100,10 +818,11 @@
       "inquisitor"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "hammerhand-psychic",
+    "ability_id": "hammerhand-agents-of-the-imperium",
     "name": "Hammerhand (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1128,10 +847,11 @@
       "grey-knights-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "ancient-s-banner",
+    "ability_id": "ancients-banner-agents-of-the-imperium",
     "name": "Ancient\u2019s Banner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1156,10 +876,11 @@
       "grey-knights-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "narthecium",
+    "ability_id": "narthecium-agents-of-the-imperium",
     "name": "Narthecium",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1182,10 +903,11 @@
       "grey-knights-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "rites-of-teleportation",
+    "ability_id": "rites-of-teleportation-agents-of-the-imperium",
     "name": "Rites of Teleportation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1218,10 +940,11 @@
       "grey-knights-terminator-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "masters-of-close-confines",
+    "ability_id": "masters-of-close-confines-agents-of-the-imperium",
     "name": "Masters of Close Confines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1255,10 +978,11 @@
       "voidsmen-at-arms"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "navy-bodyguard",
+    "ability_id": "navy-bodyguard-agents-of-the-imperium",
     "name": "Navy Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1288,10 +1012,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "death-to-the-alien",
+    "ability_id": "death-to-the-alien-agents-of-the-imperium",
     "name": "Death to the Alien",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1316,10 +1041,11 @@
       "aquila-kill-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "astartes-shield",
+    "ability_id": "astartes-shield-agents-of-the-imperium",
     "name": "Astartes shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1343,37 +1069,11 @@
       "aquila-kill-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "eversor-assassin"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "frenzon",
+    "ability_id": "frenzon-agents-of-the-imperium",
     "name": "Frenzon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1432,10 +1132,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "overkill",
+    "ability_id": "overkill-agents-of-the-imperium",
     "name": "Overkill",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1460,10 +1161,11 @@
       "eversor-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "self-repair",
+    "ability_id": "self-repair-agents-of-the-imperium",
     "name": "Self Repair",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1486,10 +1188,11 @@
       "imperial-rhino"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "kill-team",
+    "ability_id": "kill-team-agents-of-the-imperium",
     "name": "Kill Team",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1516,38 +1219,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "vindicare-assassin"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "dead-shot",
+    "ability_id": "dead-shot-agents-of-the-imperium",
     "name": "Dead\u2010shot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1582,10 +1258,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "shieldbreaker",
+    "ability_id": "shieldbreaker-agents-of-the-imperium",
     "name": "Shieldbreaker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1610,10 +1287,11 @@
       "vindicare-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "imperial-law",
+    "ability_id": "imperial-law-agents-of-the-imperium",
     "name": "Imperial Law",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1653,10 +1331,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "nuncio-acquila",
+    "ability_id": "nuncio-acquila-agents-of-the-imperium",
     "name": "Nuncio-acquila",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1682,13 +1361,16 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "exaction-squad"
+      "exaction-squad",
+      "subductor-squad",
+      "vigilant-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "arbites-medi-kit",
+    "ability_id": "arbites-medi-kit-agents-of-the-imperium",
     "name": "Arbites Medi-kit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1720,10 +1402,11 @@
       "exaction-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "soulguilt-scanner",
+    "ability_id": "soulguilt-scanner-agents-of-the-imperium",
     "name": "Soulguilt Scanner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1748,10 +1431,11 @@
       "exaction-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "breaching-team",
+    "ability_id": "breaching-team-agents-of-the-imperium",
     "name": "Breaching Team",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1775,10 +1459,11 @@
       "imperial-navy-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "gheistskull",
+    "ability_id": "gheistskull-agents-of-the-imperium",
     "name": "Gheistskull",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1817,10 +1502,11 @@
       "imperial-navy-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "cat-unit",
+    "ability_id": "cat-unit-agents-of-the-imperium",
     "name": "CAT Unit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1845,10 +1531,11 @@
       "imperial-navy-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "endurant-shield",
+    "ability_id": "endurant-shield-agents-of-the-imperium",
     "name": "Endurant Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1871,10 +1558,11 @@
       "imperial-navy-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "etheric-emergence",
+    "ability_id": "etheric-emergence-agents-of-the-imperium",
     "name": "Etheric Emergence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1947,10 +1635,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "abomination",
+    "ability_id": "abomination-agents-of-the-imperium",
     "name": "Abomination",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1974,10 +1663,11 @@
       "culexus-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "soulless-horror-aura",
+    "ability_id": "soulless-horror-agents-of-the-imperium",
     "name": "Soulless Horror (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2007,10 +1697,11 @@
       "culexus-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "merciless-judgement",
+    "ability_id": "merciless-judgement-agents-of-the-imperium",
     "name": "Merciless Judgement",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2055,10 +1746,11 @@
       "vigilant-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "dedication-to-duty",
+    "ability_id": "dedication-to-duty-agents-of-the-imperium",
     "name": "Dedication to Duty",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2090,10 +1782,11 @@
       "subductor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "gaze-into-the-empyrean-psychic",
+    "ability_id": "gaze-into-the-empyrean-agents-of-the-imperium",
     "name": "Gaze into the Empyrean  (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2126,10 +1819,11 @@
       "navigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "third-eye-psychic",
+    "ability_id": "third-eye-agents-of-the-imperium",
     "name": "Third Eye (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2161,10 +1855,11 @@
       "navigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "xenos-hunter",
+    "ability_id": "xenos-hunter-agents-of-the-imperium",
     "name": "Xenos Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2199,10 +1894,11 @@
       "inquisitor-draxus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "psychic-veil-psychic",
+    "ability_id": "psychic-veil-agents-of-the-imperium",
     "name": "Psychic Veil (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2234,10 +1930,11 @@
       "inquisitor-draxus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "strategic-knowledge",
+    "ability_id": "strategic-knowledge-agents-of-the-imperium",
     "name": "Strategic Knowledge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2274,10 +1971,11 @@
       "watch-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "rites-of-battle",
+    "ability_id": "rites-of-battle-agents-of-the-imperium",
     "name": "Rites of Battle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2300,35 +1998,11 @@
       "watch-master"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "watch-master",
-    "name": "Watch Master",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "watch-master"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "malefic-wardings-psychic",
+    "ability_id": "malefic-wardings-agents-of-the-imperium",
     "name": "Malefic Wardings (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2361,10 +2035,11 @@
       "inquisitor-coteaz"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "spy-network",
+    "ability_id": "spy-network-agents-of-the-imperium",
     "name": "Spy Network",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2387,10 +2062,11 @@
       "inquisitor-coteaz"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "glovodan-psyber-eagle",
+    "ability_id": "glovodan-psyber-eagle-agents-of-the-imperium",
     "name": "Glovodan Psyber\u2010eagle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2413,10 +2089,11 @@
       "inquisitor-coteaz"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "defenders-of-the-faith",
+    "ability_id": "defenders-of-the-faith-agents-of-the-imperium",
     "name": "Defenders of the Faith",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2436,10 +2113,11 @@
       "sisters-of-battle-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "incensor-cherub",
+    "ability_id": "incensor-cherub-agents-of-the-imperium",
     "name": "Incensor Cherub",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2465,86 +2143,11 @@
       "sisters-of-battle-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "blackstar-cluster-launcher",
+    "ability_id": "blackstar-cluster-launcher-agents-of-the-imperium",
     "name": "Blackstar Cluster Launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2567,10 +2170,11 @@
       "corvus-blackstar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "auspex-array",
+    "ability_id": "auspex-array-agents-of-the-imperium",
     "name": "Auspex Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2595,10 +2199,11 @@
       "corvus-blackstar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "infernum-halo-launcher",
+    "ability_id": "infernum-halo-launcher-agents-of-the-imperium",
     "name": "Infernum Halo-launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2623,59 +2228,11 @@
       "corvus-blackstar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "righteous-smiting",
-    "name": "Righteous Smiting",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f9996ab2d7695592b072c2025bf75cd9c71696144512fb0c054611ab11dfe887",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "zealot",
+    "ability_id": "zealot-agents-of-the-imperium",
     "name": "Zealot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2723,89 +2280,11 @@
       "ministorum-priest"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "holy-mission",
-    "name": "Holy Mission",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "51abd9145f5aa949fd9ae789ef3e66c7dec8bdf2567726a932b56e9e5594795c",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "attachment",
-              "parameters": {
-                "subject": "this-model",
-                "role": "leading",
-                "with": {
-                  "all_of": [
-                    "DOMINION SQUAD"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "scouts",
-                "value": 6
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "attachment",
-              "parameters": {
-                "subject": "this-model",
-                "role": "leading",
-                "with": {
-                  "all_of": [
-                    "SISTERS NOVITIATE SQUAD"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "ability-grant",
-              "target": "this-model",
-              "modifier": {
-                "ability": "infiltrators"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "holy-hatred",
+    "ability_id": "holy-hatred-agents-of-the-imperium",
     "name": "Holy Hatred",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2840,84 +2319,11 @@
       "ministorum-priest"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "war-hymns",
-    "name": "War Hymns",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "62076bb0a3c6d5d3200f25ba9badf1a70e18607ed29341ad54eef65dbc382b38",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "holy-piety",
-    "name": "Holy Piety",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "5008701954158a429caa28c3939f3fe8cd069d2383039f4e0df0b80b40a6edeb",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ministorum-priest"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "backroom-deals",
+    "ability_id": "backroom-deals-agents-of-the-imperium",
     "name": "Backroom Deals",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2951,10 +2357,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] While the selected unit is leading a unit, models in that unit gain Infiltrators; the Declare Battle Formations 'select one of those units' pick is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] While the selected unit is leading a unit, models in that unit gain Infiltrators; the Declare Battle Formations 'select one of those units' pick is not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "warrant-of-trade",
+    "ability_id": "warrant-of-trade-agents-of-the-imperium",
     "name": "Warrant of Trade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2990,10 +2397,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 — the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 — the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "healing-serum",
+    "ability_id": "healing-serum-agents-of-the-imperium",
     "name": "Healing serum",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3025,10 +2433,11 @@
       "rogue-trader-entourage"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "assigned-agents",
+    "ability_id": "assigned-agents-agents-of-the-imperium",
     "name": "Assigned Agents",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3060,11 +2469,11 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": [
-      "inquisitor-kroyle"
+      "inquisitors-hand-vigilant-squad"
     ]
   },
   {
-    "ability_id": "extremis-sanction",
+    "ability_id": "extremis-sanction-agents-of-the-imperium",
     "name": "Extremis Sanction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3085,7 +2494,7 @@
             ]
           },
           "modifier": {
-            "ability": "overkill",
+            "ability": "overkill-agents-of-the-imperium",
             "aspect": "uses",
             "operation": "set",
             "value": 2
@@ -3100,7 +2509,7 @@
             ]
           },
           "modifier": {
-            "ability": "soulless-horror-aura",
+            "ability": "soulless-horror-agents-of-the-imperium",
             "aspect": "uses",
             "operation": "set",
             "value": 2
@@ -3115,7 +2524,7 @@
             ]
           },
           "modifier": {
-            "ability": "shieldbreaker",
+            "ability": "shieldbreaker-agents-of-the-imperium",
             "aspect": "uses",
             "operation": "set",
             "value": 2
@@ -3130,10 +2539,11 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Officio Assassinorum units may use Overkill, Soulless Horror and Shieldbreaker twice per battle instead of once (still max once per battle round); the per-army points surcharge and Extremis mustering rules are army-build effects. Usage-limit change is not directly expressible. Full rule in raw-text store."
+    "community_notes": "[APPROX] Officio Assassinorum units may use Overkill, Soulless Horror and Shieldbreaker twice per battle instead of once (still max once per battle round); the per-army points surcharge and Extremis mustering rules are army-build effects. Usage-limit change is not directly expressible. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "decoy-targets",
+    "ability_id": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Decoy Targets",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3195,9 +2605,7 @@
     "scope": {
       "duration": "battle"
     },
-    "unit_ids": [
-      "callidus-assassin"
-    ],
+    "unit_ids": [],
     "ability_type": "enhancement",
     "behavior": "activated",
     "detachment_id": "veiled-blade-elimination-force",
@@ -3205,10 +2613,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 2
-    }
+    },
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "esoteric-explosives",
+    "ability_id": "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Esoteric Explosives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3230,16 +2639,15 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "culexus-assassin"
-    ],
+    "unit_ids": [],
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ \u2014 a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store."
+    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ \u2014 a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "intraneural-biotech",
+    "ability_id": "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Intraneural Biotech",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3292,7 +2700,7 @@
             "despite": [
               "stratagem-used-this-phase"
             ],
-            "stratagem": "counter-offensive"
+            "stratagem": "counteroffensive"
           }
         }
       ]
@@ -3300,16 +2708,15 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "eversor-assassin"
-    ],
+    "unit_ids": [],
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the \u22121 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Encodes the \u22121 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "micromelta-rounds",
+    "ability_id": "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Micromelta Rounds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3332,16 +2739,15 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "vindicare-assassin"
-    ],
+    "unit_ids": [],
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
+    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "prime-target-veiled-blade-elimination-force",
+    "ability_id": "prime-target-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Prime Target",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3377,10 +2783,11 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Until end of phase, the selected unit's attacks against Character units re-roll Wound rolls of 1; the upgrade whereby an Officio Assassinorum model attacking the enemy Warlord re-rolls the Wound roll entirely (not just 1s) is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Until end of phase, the selected unit's attacks against Character units re-roll Wound rolls of 1; the upgrade whereby an Officio Assassinorum model attacking the enemy Warlord re-rolls the Wound roll entirely (not just 1s) is not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "hyperstimms-veiled-blade-elimination-force",
+    "ability_id": "hyperstimms-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Hyperstimms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3428,11 +2835,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
+    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "willsapping-salvo",
-    "name": "Willsapping Salvo",
+    "ability_id": "will-sapping-salvo-veiled-blade-elimination-force-agents-of-the-imperium",
+    "name": "Will-sapping Salvo",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3483,10 +2891,11 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
+    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "orbital-oversight-veiled-blade-elimination-force",
+    "ability_id": "orbital-oversight-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Orbital Oversight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3560,10 +2969,11 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
+    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "blind-grenades-veiled-blade-elimination-force",
+    "ability_id": "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Blind Grenades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3588,10 +2998,11 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the base \u22121 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is \u22122 instead, which is not separately modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Encodes the base \u22121 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is \u22122 instead, which is not separately modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "ensnaring-trap-veiled-blade-elimination-force",
+    "ability_id": "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Ensnaring Trap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3640,10 +3051,11 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Grants an out-of-phase charge and the Callidus Assassin +1 to Wound roll; the 'does not receive a Charge bonus' clause and the melee-only narrowing of the Callidus bonus are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Grants an out-of-phase charge and the Callidus Assassin +1 to Wound roll; the 'does not receive a Charge bonus' clause and the melee-only narrowing of the Callidus bonus are not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "on-my-signal-fire",
+    "ability_id": "on-my-signal-fire-agents-of-the-imperium",
     "name": "On My Signal, Fire!",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3681,10 +3093,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] After this unit shoots, marks one enemy unit it hit so attacks against it re-roll Hit rolls; the restriction that only AGENTS OF THE IMPERIUM or IMPERIUM INFANTRY BATTLELINE models benefit is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After this unit shoots, marks one enemy unit it hit so attacks against it re-roll Hit rolls; the restriction that only AGENTS OF THE IMPERIUM or IMPERIUM INFANTRY BATTLELINE models benefit is not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "tox-cycler",
+    "ability_id": "tox-cycler-agents-of-the-imperium",
     "name": "Tox-cycler",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3742,303 +3155,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] After this unit shoots, if the Jindarii tox-cycler scored a hit, that weapon gains +2 Strength and +2 Damage for the rest of the battle; the maximum Damage cap of 6 is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After this unit shoots, if the Jindarii tox-cycler scored a hit, that weapon gains +2 Strength and +2 Damage for the rest of the battle; the maximum Damage cap of 6 is not modeled. Full rule in raw-text store.",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "terminatus-assault",
-    "name": "Terminatus Assault",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "947ede668a665a11056185344f52b434585d975b9ba752860add3b461261f9d8",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "move-ended",
-          "filter": {
-            "move_types": [
-              "charge"
-            ]
-          },
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "test",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": "engagement"
-          }
-        },
-        "modifier": {
-          "test": "battle-shock"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "deathwatch-terminator-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Each time this unit ends a Charge move, every enemy unit within Engagement Range must take a Battle-shock test (encoded following world-eaters/bloodied-terror)."
-  },
-  {
-    "ability_id": "teleport-homer",
-    "name": "Teleport Homer",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "42c5b803fe096b3cf99b8d1ae9b880383d13266dc4d7484ee73d0390a4222e55",
-    "version": "2025-q3",
-    "effect": {
-      "type": "cost-modifier",
-      "target": "this-model",
-      "modifier": {
-        "of": "stratagem",
-        "operation": "set",
-        "amount": 0,
-        "applies_to": "targeting-this-unit"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "deathwatch-terminator-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] Kept consistent with adeptus-astartes/teleport-homer: once per battle, target this unit with the Rapid Ingress Stratagem for 0CP. The Teleport Homer token set up at the start of the battle, and the requirement to arrive within 3\" of that token and not within 8\" of enemy models, are not modeled. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "storm-shield",
-    "name": "Storm Shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ed2bdb0beba967ce3364c78b380aa5f780b3f4e8b25b67f7e9fa429299301031",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "this-model",
-      "modifier": {
-        "stat": "W",
-        "operation": "set",
-        "value": 4
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deathwatch-terminator-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "fortis-doctrines",
-    "name": "Fortis Doctrines",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "f9553c2703cb089c7670b95f773c65024ea6d19e87b6245655ad4143d4e5f09b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "strength",
-        "parameters": {
-          "below": "half"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "operation": "add",
-          "roll": "hit",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "fortis-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "indomitor-doctrines",
-    "name": "Indomitor Doctrines",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a3c23fd4080f28710defc9c68687b2cbc8e726d3c081a34d78ee378d75240658",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "below": "starting"
-            }
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "strength",
-            "parameters": {
-              "below": "half"
-            }
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "indomitor-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "spectrus-doctrines",
-    "name": "Spectrus Doctrines",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "da8ff923ac4182f1eb7f735da2e0fafd36d40f0bc3ed9eb1371dfb42e19f1a81",
-    "version": "2025-q3",
-    "effect": {
-      "type": "set-up",
-      "target": "this-unit",
-      "modifier": {
-        "to": "strategic-reserves"
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "spectrus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] At the end of your opponent's turn, this unit may remove itself from the battlefield and go into Strategic Reserves; the requirement that it be more than 6\" from all enemy units, and the end-of-opponent-turn timing, are not modeled. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "helix-gauntlet",
-    "name": "Helix Gauntlet",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3a375167eccdc3e71908e50e68a2c22443878aa5d67f2cc684a7f01a8a7ad988",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "spectrus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21"
-  },
-  {
-    "ability_id": "infiltrator-comms-array",
-    "name": "Infiltrator Comms Array",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "58fbcb829e38e968ccd5a3a462c7626738cebe80e9cfa53f54fa3e96bbed4888",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 5,
-      "comparison": "gte",
-      "on_success": {
-        "type": "cp-gain",
-        "target": "this-model",
-        "modifier": {
-          "amount": 1
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "spectrus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Triggered each time the bearer's unit is targeted with a Stratagem."
-  },
-  {
-    "ability_id": "at-all-costs",
+    "ability_id": "at-all-costs-agents-of-the-imperium",
     "name": "At All Costs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4137,7 +3258,7 @@
     "community_notes": "[APPROX] At the start of your Command phase, pick one option. Eliminate marks one enemy unit (Agents attacks against it +1 Hit); Acquire selects one objective marker and buffs Agents units within range of THAT marker (+1 Ld, +1 OC, 5+ invuln) \u2014 the objective-marker selection is generalized to any controlled/within-range objective. Full rule in raw-text store."
   },
   {
-    "ability_id": "root-out-heresy",
+    "ability_id": "root-out-heresy-agents-of-the-imperium",
     "name": "Root out Heresy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4195,7 +3316,7 @@
     "community_notes": "[APPROX] Ranged weapons gain [IGNORES COVER], and gain [SUSTAINED HITS 1] against Chaos units; the restriction to Adeptus Arbites, Inquisitor, Inquisitorial Agents and Ordo Hereticus models, and the target threshold of Chaos units containing 5 or more models, are not modeled. Full rule in raw-text store."
   },
   {
-    "ability_id": "deathwatch-mission-tactics",
+    "ability_id": "deathwatch-mission-tactics-agents-of-the-imperium",
     "name": "Deathwatch Mission Tactics",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4260,7 +3381,7 @@
     "community_notes": "[APPROX] At the start of your Command phase select one Mission Tactic, active until your next Command phase, applied to all Deathwatch units; each tactic usable once per battle (consumable). Purgatus Tactics' Critical-Wound-gated [PRECISION] is modeled as a flat Precision grant. Full rule in raw-text store."
   },
   {
-    "ability_id": "destroy-the-daemonic",
+    "ability_id": "destroy-the-daemonic-agents-of-the-imperium",
     "name": "Destroy the Daemonic",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4314,7 +3435,7 @@
     "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies to Inquisitor, Inquisitorial Agents and Ordo Malleus models from your army."
   },
   {
-    "ability_id": "overkill-inquisitors-hand",
+    "ability_id": "overkill-inquisitors-hand-eversor-assassin-agents-of-the-imperium",
     "name": "Overkill",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4351,10 +3472,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "tome-skull-inquisitors-hand",
+    "ability_id": "tome-skull-inquisitors-hand-inquisitorial-agents-agents-of-the-imperium",
     "name": "Tome Skull",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4424,10 +3546,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "loyal-to-the-cause-inquisitors-hand",
+    "ability_id": "loyal-to-the-cause-agents-of-the-imperium",
     "name": "Loyal To The Cause",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4464,60 +3587,11 @@
       "inquisitors-hand-inquisitorial-agents"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "merciless-judgement-inquisitors-hand",
-    "name": "Merciless Judgement",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "source_digest": "2c1d44ec20fb8067bf02f072b8918aa3e95b0405d834fdc60b396067dc728a3c",
-    "version": "2026-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "strength",
-            "parameters": {
-              "subject": "defender",
-              "below": "half"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "weapon_type": "ranged",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "inquisitors-hand-vigilant-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "zealot-preacher-teguen",
+    "ability_id": "zealot-preacher-teguen-agents-of-the-imperium",
     "name": "Zealot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4570,10 +3644,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "holy-hatred-preacher-teguen",
+    "ability_id": "holy-hatred-preacher-teguen-agents-of-the-imperium",
     "name": "Holy Hatred",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4609,6 +3684,1013 @@
       "preacher-teguen"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "agents-of-the-imperium"
+  },
+  {
+    "ability_id": "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Adaptive Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Amulet of Auto-chastisement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "armour-of-contempt-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Armour of Contempt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assigned-agents-inquisitors-hand-agents-of-the-imperium",
+    "name": "Assigned Agents",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "atttached-unit-agents-of-the-imperium",
+    "name": "Atttached Unit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "sanctifiers"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "beacon-angelis-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Beacon Angelis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blackweave-shroud-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Blackweave Shroud",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "clandestine-operation-imperialis-fleet-agents-of-the-imperium",
+    "name": "Clandestine Operation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "close-quarters-barrage-imperialis-fleet-agents-of-the-imperium",
+    "name": "Close-quarters Barrage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-landers-imperialis-fleet-agents-of-the-imperium",
+    "name": "Combat Landers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemon-slayer-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Daemon Slayer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-agents-of-the-imperium",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "digital-weapons-imperialis-fleet-agents-of-the-imperium",
+    "name": "Digital Weapons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dispense-justice-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Dispense Justice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "displacer-field-imperialis-fleet-agents-of-the-imperium",
+    "name": "Displacer Field",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dragonfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Dragonfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "emperors-will-imperialis-fleet-agents-of-the-imperium",
+    "name": "Emperor’s Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Exact Punishment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Execution Order",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fleetmaster-imperialis-fleet-agents-of-the-imperium",
+    "name": "Fleetmaster",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "formidable-resolve-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Formidable Resolve",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gift-of-the-prescient-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Gift of the Prescient",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Grimoire of True Names (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Hellfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hexagrammic-wards-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Hexagrammic Wards",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ignis-judicium-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Ignis Judicium",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inquisitorial-mandate-inquisitors-hand-agents-of-the-imperium",
+    "name": "Inquisitorial Mandate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inviolate-jurisdiction-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Inviolate Jurisdiction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "killer-reflexes-inquisitors-hand-agents-of-the-imperium",
+    "name": "Killer Reflexes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "kraken-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Kraken Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "liber-heresius-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Liber Heresius",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Line of Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "marked-for-death-agents-of-the-imperium",
+    "name": "Marked for Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "masters-of-the-void-imperialis-fleet-agents-of-the-imperium",
+    "name": "Masters of the Void",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "no-escape-aura-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "No Escape (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psybolt-ammunition-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Psybolt Ammunition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Rapid Tactical Relocation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reign-of-confusion-agents-of-the-imperium",
+    "name": "Reign of Confusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "callidus-assassin"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Rites of Exorcism",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Ritual of Warding",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctic-slayers-inquisitors-hand-agents-of-the-imperium",
+    "name": "Sanctic Slayers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "selfless-bodyguard-imperialis-fleet-agents-of-the-imperium",
+    "name": "Selfless Bodyguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "steel-heart-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Steel Heart",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stun-grenades-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Stun Grenades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "superior-weaponry-inquisitors-hand-agents-of-the-imperium",
+    "name": "Superior Weaponry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "truesilver-armour-ordo-malleus-daemon-hunters-agents-of-the-imperium",
+    "name": "Truesilver Armour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "universal-anathema-ordo-xenos-alien-hunters-agents-of-the-imperium",
+    "name": "Universal Anathema",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "urban-enforcers-inquisitors-hand-agents-of-the-imperium",
+    "name": "Urban Enforcers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "inquisitors-hand",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "violent-acquisition-imperialis-fleet-agents-of-the-imperium",
+    "name": "Violent Acquisition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "imperialis-fleet",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "witch-hunter-ordo-hereticus-purgation-force-agents-of-the-imperium",
+    "name": "Witch Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

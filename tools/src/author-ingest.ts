@@ -34,6 +34,7 @@
  * Usage:
  *   npx tsx tools/src/author-ingest.ts <manifest.json> [--dry-run]
  */
+import { suffixed } from "./mfm/mirror/identity.js";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,7 +65,7 @@ export interface IngestRecord {
   name: string;
   /** Raw GW rule text. Goes ONLY to git-ignored author-input. */
   raw_text: string;
-  /** Explicit ability_id override; defaults to kebab(name). */
+  /** Explicit ability_id override; defaults to `<kebab(name)>-<faction>`. */
   ability_id?: string;
   unit_ids?: string[];
   ability_type?: string;
@@ -152,7 +153,7 @@ export function ingestFaction(
   };
 
   for (const rec of records) {
-    const id = rec.ability_id ?? kebab(rec.name);
+    const id = ingestRecordId(rec);
     if (!id) {
       result.unresolved.push({ ability_id: "", name: rec.name, reason: "name has no sluggable characters" });
       continue;
@@ -215,7 +216,7 @@ export function ingestSnapshot(
   const { replace_scope: scope, records } = manifest;
   const coveredUnits = new Set(scope.unit_ids);
   const coveredDetachments = new Set(scope.detachment_ids);
-  const incomingIds = new Set(records.map((record) => record.ability_id ?? kebab(record.name)));
+  const incomingIds = new Set(records.map((record) => ingestRecordId(record)));
   const deleted = new Set<string>();
   const retained = existingAbilities.flatMap((ability) => {
     const unitIds = (ability.unit_ids ?? []).filter((id: string) => !coveredUnits.has(id));
@@ -242,7 +243,7 @@ export function ingestSnapshot(
   const abilities = new Map(result.abilities.map((ability) => [ability.ability_id, ability]));
   const authorInputById = new Map(result.authorInput.map((entry) => [entry.ability_id, entry]));
   for (const record of records) {
-    const id = record.ability_id ?? kebab(record.name);
+    const id = ingestRecordId(record);
     const ability = abilities.get(id);
     if (!ability) continue;
     ability.name = record.name;
@@ -267,8 +268,16 @@ export function ingestSnapshot(
 
 const PHASE_IDS = new Set(["command", "movement", "shooting", "charge", "fight"]);
 
+/**
+ * A record's ability id: its explicit `ability_id`, else the one identity rule (`mfm:mirror`):
+ * the name slug with its faction suffix (`<name>-<faction>`, bare in `_core`). Empty when the name
+ * has no sluggable characters.
+ */
 function ingestRecordId(record: IngestRecord): string {
-  return record.ability_id ?? kebab(record.name);
+  if (record.ability_id) return record.ability_id;
+  const slug = kebab(record.name);
+  // A core ability is one `_core` record under its bare id.
+  return slug ? suffixed(slug, record.ability_type === "core" ? "_core" : record.faction) : slug;
 }
 
 export function projectPhaseMappings(

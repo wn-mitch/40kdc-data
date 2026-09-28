@@ -21,37 +21,15 @@
 -&gt; When a friendly unit disembarks from a Transport: if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Fire Support" typeName="Abilities">
+            <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll a failed Wound roll.</characteristic>
+                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Firing Deck 2" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck 2 ability.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Meet Any Challenge" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, while the triggering unit is within 8" of this model, friendly units that are embarked are eligible to disembark.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Self Repair" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">This model regains up to 1 lost wound.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Sorcerous Support" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -114,50 +92,14 @@
                 <characteristic name="OC">1</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise 1" typeName="Abilities">
+            <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer 1 mortal wound.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Feel No Pain 5+" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 5+ ability.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Lethal Ichor" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">During the Fight phase, the target suffers 1 mortal wound.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Mind-breaking Mutations (Aura)" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Subtract 1 from the Objective Control characteristic of enemy units (excluding VEHICLE units) within 3".</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Regenerating Monstrosities" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">This model regains up to 3 lost wounds.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 6" ability.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Scouts 8&quot;" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit gains the Scouts 8" ability.</characteristic>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scuttling Horrors" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, once per turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="To Slake its Rage" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
           </profiles>

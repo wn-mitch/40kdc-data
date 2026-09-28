@@ -48,8 +48,8 @@
     "community_notes": "Re-roll one Advance, Charge, Damage, Hazard, Hit, Save or Wound roll, or a roll determining a weapon's number of attacks, just after making it; for multi-dice rolls re-roll one chosen die, except Charge rolls which are re-rolled in full"
   },
   {
-    "ability_id": "counter-offensive",
-    "name": "Counter-Offensive",
+    "ability_id": "counteroffensive",
+    "name": "Counteroffensive",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -380,5 +380,418 @@
       "duration": "phase"
     },
     "community_notes": "At the start of the opponent's Shooting phase, one friendly Smoke unit: attacks targeting it — or targeting units not fully visible because of its models — have the target benefiting from cover"
+  },
+  {
+    "ability_id": "deadly-demise",
+    "name": "Deadly Demise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
+        "modifier": {
+          "count": {
+            "rating": true
+          },
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    }
+  },
+  {
+    "ability_id": "deep-strike",
+    "name": "Deep Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "deep-strike"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "feel-no-pain",
+    "name": "Feel No Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "fights-first",
+    "name": "Fights First",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "firing-deck",
+    "name": "Firing Deck",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "firing-deck",
+        "value": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "hover",
+    "name": "Hover",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "ability": "hover"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "infiltrators",
+    "name": "Infiltrators",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "infiltrators"
+      }
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "leader",
+    "name": "Leader",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "leader"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "lone-operative",
+    "name": "Lone Operative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "targeting",
+      "target": {
+        "owner": "enemy"
+      },
+      "modifier": {
+        "may": "cannot-target",
+        "target": "this-model",
+        "kind": "shoot",
+        "range": {
+          "inches": 12
+        },
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "scouts",
+    "name": "Scouts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "scouts",
+        "value": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "stealth",
+    "name": "Stealth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
+    "version": "2025-q3",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "attacker",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "super-heavy-walker",
+    "name": "Super-heavy Walker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ],
+            "passthrough": [
+              "models-excluding-titanic",
+              "terrain"
+            ],
+            "no_end_in_engagement": true
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "subject": "this-model",
+              "filter": {
+                "through": "tall-terrain"
+              },
+              "window": "event"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 1,
+            "comparison": "eq",
+            "on_success": {
+              "type": "state-change",
+              "target": "this-unit",
+              "modifier": {
+                "state": "battle-shocked",
+                "set": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "damaged",
+    "name": "Damaged",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "support",
+    "name": "Support",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

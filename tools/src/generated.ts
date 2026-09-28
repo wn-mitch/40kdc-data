@@ -337,12 +337,12 @@ export type ScalingSource =
   | "wounds-lost"
   | "battle-round";
 /**
- * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.
+ * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "quantity".
  */
-export type Quantity = number | string | BattleSizeValue | RollReference | CountOf;
+export type Quantity = number | string | BattleSizeValue | RollReference | CountOf | UnitRating;
 /**
  * A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation.
  *
@@ -834,6 +834,9 @@ export type AbilityEffect1 =
   | NoEffectEffect
   | RollEffect
   | SelectObjectiveEffect;
+export type UnitAbilityRef = {
+  [k: string]: unknown;
+};
 /**
  * Game modes this unit is legal or authored for; absent implies matched-play.
  *
@@ -1702,6 +1705,15 @@ export interface CountOf {
   keyword?: Keyword;
   wargear?: EntityId;
   within_inches?: number;
+}
+/**
+ * The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "unit-rating".
+ */
+export interface UnitRating {
+  rating: true;
 }
 /**
  * Set up within `range` of `of` (wholly within, if set).
@@ -3220,7 +3232,7 @@ export interface AbilityGrantEffect {
   target: UnitRef;
   modifier: {
     ability: EntityId;
-    value?: number;
+    value?: number | UnitRating;
     rules_bundle?: true;
   };
   scaling?: Scaling;
@@ -4592,7 +4604,7 @@ export interface FeelNoPainEffect {
   type: "feel-no-pain";
   target: UnitRef;
   modifier: {
-    threshold: number;
+    threshold: number | UnitRating;
     against?: "all" | "mortal" | "psychic" | "psychic-and-mortal";
   };
   scaling?: Scaling;
@@ -6598,7 +6610,10 @@ export interface Unit {
     [k: string]: unknown;
   };
   weapon_ids?: EntityId[];
-  ability_ids?: EntityId[];
+  /**
+   * The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).
+   */
+  ability_ids?: (EntityId | UnitAbilityRef)[];
   /**
    * Limited-wargear squad allowances the per-weapon bounds cannot express: a GW `limited_wargear_choice_set` that is either (a) SHARED across several weapons (a 'for every N models, one model can take one of A/B/C' line) or (b) a FLAT per-unit cap ('up to 1 per unit'). A loadout is legal only if the summed count of a budget's items is at most the cap: `floor(model_count * count / per_models)` for a ratio, or just `count` when `per_models` is 0 (a flat per-unit cap). Single-weapon per-N allowances are NOT budgets — the per-weapon bounds already model them (they correctly sum a weapon's capacity across the model types that may take it).
    */

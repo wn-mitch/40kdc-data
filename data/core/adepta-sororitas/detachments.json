@@ -3,20 +3,20 @@
     "id": "penitent-host",
     "name": "Penitent Host",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "desperate-for-redemption",
+    "detachment_rule_id": "desperate-for-redemption-adepta-sororitas",
     "enhancement_ids": [
-      "psalm-of-righteous-judgement-penitent-host",
-      "verse-of-holy-piety-penitent-host",
-      "refrain-of-enduring-faith-penitent-host",
-      "catechism-of-divine-penitence-penitent-host"
+      "psalm-of-righteous-judgement-penitent-host-adepta-sororitas",
+      "verse-of-holy-piety-penitent-host-adepta-sororitas",
+      "refrain-of-enduring-faith-penitent-host-adepta-sororitas",
+      "catechism-of-divine-penitence-penitent-host-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "passion-of-the-penitent-penitent-host",
-      "lash-of-guilt-penitent-host",
-      "purity-of-suffering-penitent-host",
-      "final-redemption-penitent-host",
-      "boundless-zeal-penitent-host",
-      "devout-fanaticism-penitent-host"
+      "passion-of-the-penitent-penitent-host-adepta-sororitas",
+      "lash-of-guilt-penitent-host-adepta-sororitas",
+      "purity-of-suffering-penitent-host-adepta-sororitas",
+      "final-redemption-penitent-host-adepta-sororitas",
+      "boundless-zeal-penitent-host-adepta-sororitas",
+      "devout-fanaticism-penitent-host-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -27,7 +27,7 @@
       "purge-the-foe"
     ],
     "detachment_rule_ids": [
-      "desperate-for-redemption"
+      "desperate-for-redemption-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -40,20 +40,20 @@
     "id": "hallowed-martyrs",
     "name": "Hallowed Martyrs",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "the-blood-of-martyrs",
+    "detachment_rule_id": "the-blood-of-martyrs-adepta-sororitas",
     "enhancement_ids": [
-      "saintly-example-hallowed-martyrs",
-      "through-suffering-strength-hallowed-martyrs",
-      "chaplet-of-sacrifice-hallowed-martyrs",
-      "mantle-of-ophelia-hallowed-martyrs"
+      "saintly-example-hallowed-martyrs-adepta-sororitas",
+      "through-suffering-strength-hallowed-martyrs-adepta-sororitas",
+      "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas",
+      "mantle-of-ophelia-hallowed-martyrs-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "righteous-vengeance-hallowed-martyrs",
-      "divine-intervention-hallowed-martyrs",
-      "suffering-and-sacrifice-hallowed-martyrs",
-      "sanctified-immolation-hallowed-martyrs",
-      "praise-the-fallen-hallowed-martyrs",
-      "spirit-of-the-martyr-hallowed-martyrs"
+      "righteous-vengeance-hallowed-martyrs-adepta-sororitas",
+      "divine-intervention-hallowed-martyrs-adepta-sororitas",
+      "suffering-and-sacrifice-hallowed-martyrs-adepta-sororitas",
+      "sanctified-immolation-hallowed-martyrs-adepta-sororitas",
+      "praise-the-fallen-hallowed-martyrs-adepta-sororitas",
+      "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -64,7 +64,7 @@
       "priority-assets"
     ],
     "detachment_rule_ids": [
-      "the-blood-of-martyrs"
+      "the-blood-of-martyrs-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -77,20 +77,20 @@
     "id": "bringers-of-flame",
     "name": "Bringers of Flame",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "fervent-purgation",
+    "detachment_rule_id": "fervent-purgation-adepta-sororitas",
     "enhancement_ids": [
-      "righteous-rage-bringers-of-flame",
-      "manual-of-saint-griselda-bringers-of-flame",
-      "fire-and-fury-bringers-of-flame",
-      "iron-surplice-of-saint-istalela-bringers-of-flame"
+      "righteous-rage-bringers-of-flame-adepta-sororitas",
+      "manual-of-saint-griselda-bringers-of-flame-adepta-sororitas",
+      "fire-and-fury-bringers-of-flame-adepta-sororitas",
+      "iron-surplice-of-saint-istalela-bringers-of-flame-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "shield-of-aversion-bringers-of-flame",
-      "righteous-blows-bringers-of-flame",
-      "rites-of-fire-bringers-of-flame",
-      "cleansing-flames-bringers-of-flame",
-      "blazing-ire-bringers-of-flame",
-      "carry-forth-the-faithful-bringers-of-flame"
+      "shield-of-aversion-bringers-of-flame-adepta-sororitas",
+      "righteous-blows-bringers-of-flame-adepta-sororitas",
+      "rites-of-fire-bringers-of-flame-adepta-sororitas",
+      "cleansing-flames-bringers-of-flame-adepta-sororitas",
+      "blazing-ire-bringers-of-flame-adepta-sororitas",
+      "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -101,7 +101,7 @@
       "priority-assets"
     ],
     "detachment_rule_ids": [
-      "fervent-purgation"
+      "fervent-purgation-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -114,20 +114,20 @@
     "id": "champions-of-faith",
     "name": "Champions of Faith",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "righteous-purpose",
+    "detachment_rule_id": "righteous-purpose-adepta-sororitas",
     "enhancement_ids": [
-      "triptych-of-judgement-champions-of-faith",
-      "mark-of-devotion-champions-of-faith",
-      "eyes-of-the-oracle-champions-of-faith",
-      "sanctified-amulet-champions-of-faith"
+      "triptych-of-judgement-champions-of-faith-adepta-sororitas",
+      "mark-of-devotion-champions-of-faith-adepta-sororitas",
+      "eyes-of-the-oracle-champions-of-faith-adepta-sororitas",
+      "sanctified-amulet-champions-of-faith-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "shield-of-denial-champions-of-faith",
-      "to-the-heart-of-heresy-champions-of-faith",
-      "path-of-the-righteous-champions-of-faith",
-      "bastion-of-faith-champions-of-faith",
-      "suffer-not-the-unfaithful-champions-of-faith",
-      "indefatigable-dedication-champions-of-faith"
+      "shield-of-denial-champions-of-faith-adepta-sororitas",
+      "to-the-heart-of-heresy-champions-of-faith-adepta-sororitas",
+      "path-of-the-righteous-champions-of-faith-adepta-sororitas",
+      "bastion-of-faith-champions-of-faith-adepta-sororitas",
+      "suffer-not-the-unfaithful-champions-of-faith-adepta-sororitas",
+      "indefatigable-dedication-champions-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -138,7 +138,7 @@
       "disruption"
     ],
     "detachment_rule_ids": [
-      "righteous-purpose"
+      "righteous-purpose-adepta-sororitas"
     ],
     "tags": [
       "reverend"
@@ -154,20 +154,20 @@
     "id": "army-of-faith",
     "name": "Army of Faith",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "sacred-rites",
+    "detachment_rule_id": "sacred-rites-adepta-sororitas",
     "enhancement_ids": [
-      "litanies-of-faith-army-of-faith",
-      "blade-of-saint-ellynor-army-of-faith",
-      "divine-aspect-army-of-faith",
-      "triptych-of-the-macharian-crusade-army-of-faith"
+      "litanies-of-faith-army-of-faith-adepta-sororitas",
+      "blade-of-saint-ellynor-army-of-faith-adepta-sororitas",
+      "divine-aspect-army-of-faith-adepta-sororitas",
+      "triptych-of-the-macharian-crusade-army-of-faith-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "shield-of-faith-army-of-faith",
-      "light-of-the-emperor-army-of-faith",
-      "faith-and-fury-army-of-faith",
-      "divine-guidance-army-of-faith",
-      "blinding-radiance-army-of-faith",
-      "angelic-descent-army-of-faith"
+      "shield-of-faith-army-of-faith-adepta-sororitas",
+      "light-of-the-emperor-army-of-faith-adepta-sororitas",
+      "faith-and-fury-army-of-faith-adepta-sororitas",
+      "divine-guidance-army-of-faith-adepta-sororitas",
+      "blinding-radiance-army-of-faith-adepta-sororitas",
+      "angelic-descent-army-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -178,7 +178,7 @@
       "take-and-hold"
     ],
     "detachment_rule_ids": [
-      "sacred-rites"
+      "sacred-rites-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -191,15 +191,15 @@
     "id": "chorus-of-condemnation",
     "name": "Chorus of Condemnation",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "angelic-judgement",
+    "detachment_rule_id": "angelic-judgement-adepta-sororitas",
     "enhancement_ids": [
-      "clarion-of-urgency-chorus-of-condemnation",
-      "symphonic-payload-upgrade-chorus-of-condemnation"
+      "clarion-of-urgency-chorus-of-condemnation-adepta-sororitas",
+      "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "inspirational-battle-canticles-chorus-of-condemnation",
-      "harmonised-exorcism-chorus-of-condemnation",
-      "devastating-reprise-chorus-of-condemnation"
+      "inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas",
+      "harmonised-exorcism-chorus-of-condemnation-adepta-sororitas",
+      "devastating-reprise-chorus-of-condemnation-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -211,7 +211,7 @@
     ],
     "tags": [],
     "detachment_rule_ids": [
-      "angelic-judgement"
+      "angelic-judgement-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -224,15 +224,15 @@
     "id": "sacred-champions",
     "name": "Sacred Champions",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "holy-quest",
+    "detachment_rule_id": "holy-quest-adepta-sororitas",
     "enhancement_ids": [
-      "writ-of-compunction-upgrade-sacred-champions",
-      "perfervid-haste-sacred-champions"
+      "writ-of-compunction-upgrade-sacred-champions-adepta-sororitas",
+      "perfervid-haste-sacred-champions-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "sanctified-blows-sacred-champions",
-      "faithful-fortitude-sacred-champions",
-      "unflinching-determination-sacred-champions"
+      "sanctified-blows-sacred-champions-adepta-sororitas",
+      "faithful-fortitude-sacred-champions-adepta-sororitas",
+      "unflinching-determination-sacred-champions-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -246,7 +246,7 @@
       "reverend"
     ],
     "detachment_rule_ids": [
-      "holy-quest"
+      "holy-quest-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -259,9 +259,9 @@
     "id": "sanctified-orators",
     "name": "Sanctified Orators",
     "faction_id": "adepta-sororitas",
-    "detachment_rule_id": "hymns-of-battle",
+    "detachment_rule_id": "hymns-of-battle-adepta-sororitas",
     "enhancement_ids": [
-      "hagiomnifex-upgrade-sanctified-orators"
+      "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas"
     ],
     "stratagem_ids": [],
     "game_version": {
@@ -273,7 +273,7 @@
       "disruption"
     ],
     "detachment_rule_ids": [
-      "hymns-of-battle"
+      "hymns-of-battle-adepta-sororitas"
     ],
     "external_refs": [
       {
@@ -287,8 +287,8 @@
     "name": "Sanctuary Guardians",
     "faction_id": "adepta-sororitas",
     "enhancement_ids": [
-      "divine-miracle-sanctuary-guardians",
-      "righteous-fervour-sanctuary-guardians"
+      "divine-miracle-sanctuary-guardians-adepta-sororitas",
+      "righteous-fervour-sanctuary-guardians-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -306,6 +306,9 @@
         "namespace": "mfm",
         "id": "9da49913-6ad9-4bfe-85dc-771f1c9758d4"
       }
+    ],
+    "detachment_rule_ids": [
+      "blessed-believers-adepta-sororitas"
     ]
   }
 ]

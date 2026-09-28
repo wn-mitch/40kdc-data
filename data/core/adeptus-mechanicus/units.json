@@ -48,11 +48,19 @@
       "twin-cognis-lascannon"
     ],
     "ability_ids": [
-      "chaff-launcher",
-      "command-uplink",
-      "deadly-demise-d3",
-      "hover",
-      "strafing-run"
+      {
+        "id": "chaff-launcher-adeptus-mechanicus",
+        "wargear": "chaff-launcher"
+      },
+      {
+        "id": "command-uplink-adeptus-mechanicus",
+        "wargear": "command-uplink"
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "strafing-run-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -126,10 +134,17 @@
       "twin-onager-heavy-phosphor-blaster"
     ],
     "ability_ids": [
-      "broad-spectrum-data-tether",
-      "emanatus-force-field-aura",
-      "scuttling-walker",
-      "deadly-demise-d3"
+      {
+        "id": "broad-spectrum-data-tether-onager-dunecrawler-adeptus-mechanicus",
+        "wargear": "broad-spectrum-data-tether"
+      },
+      "emanatus-force-field-adeptus-mechanicus",
+      "scuttling-walker-adeptus-mechanicus",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -205,7 +220,7 @@
       "phosphor-blaster"
     ],
     "ability_ids": [
-      "sentinel-directives"
+      "sentinel-directives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -275,8 +290,9 @@
       "power-fist"
     ],
     "ability_ids": [
-      "battle-protocols",
-      "leader"
+      "battle-protocols-adeptus-mechanicus",
+      "data-severed-adeptus-mechanicus",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -380,8 +396,12 @@
       "twin-cognis-lascannon-ironstrider-ballistarii"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "elevated-strider"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "elevated-strider-adeptus-mechanicus",
+      "broad-spectrum-data-tether-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -458,8 +478,8 @@
       "transonic-cannon"
     ],
     "ability_ids": [
-      "defend-the-divine-work",
-      "galvanic-field",
+      "defend-the-divine-work-adeptus-mechanicus",
+      "galvanic-field-adeptus-mechanicus",
       "leader"
     ],
     "game_version": {
@@ -541,9 +561,13 @@
       "radium-jezzail"
     ],
     "ability_ids": [
-      "focused-hunters",
+      "focused-hunters-adeptus-mechanicus",
       "stealth",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "broad-spectrum-data-tether-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -617,10 +641,10 @@
       "solar-atomiser"
     ],
     "ability_ids": [
-      "canticles-of-the-omnissiah",
-      "mechanicus-bodyguard",
-      "self-repair-mechanisms",
-      "supreme-commander"
+      "canticles-of-the-omnissiah-adeptus-mechanicus",
+      "mechanicus-bodyguard-adeptus-mechanicus",
+      "self-repair-mechanisms-adeptus-mechanicus",
+      "supreme-commander-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -712,8 +736,8 @@
       "servo-claw"
     ],
     "ability_ids": [
-      "attached-unit",
-      "network-override"
+      "attached-unit-servitor-battleclade-adeptus-mechanicus",
+      "network-override-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -801,8 +825,11 @@
       "electroleech-stave"
     ],
     "ability_ids": [
-      "electro-infusion",
-      "feel-no-pain-5"
+      "electro-infusion-adeptus-mechanicus",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -877,8 +904,13 @@
       "ferrumite-cannon"
     ],
     "ability_ids": [
-      "blistering-salvoes",
-      "deadly-demise-d3"
+      "blistering-salvoes-adeptus-mechanicus",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus",
+      "damaged-1-4-wounds-remaining-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -956,10 +988,10 @@
       "sydonian-feet"
     ],
     "ability_ids": [
-      "achillan-eye",
-      "dread-snipers",
+      "achillan-eye-adeptus-mechanicus",
+      "dread-snipers-adeptus-mechanicus",
       "lone-operative",
-      "sydonian-sentinel",
+      "sydonian-sentinel-adeptus-mechanicus",
       "stealth"
     ],
     "game_version": {
@@ -1053,8 +1085,8 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "neurostatic-interference-aura",
-      "voices-in-the-code",
+      "neurostatic-interference-adeptus-mechanicus",
+      "voices-in-the-code-adeptus-mechanicus",
       "stealth"
     ],
     "game_version": {
@@ -1126,10 +1158,21 @@
       "cognis-heavy-stubber-array"
     ],
     "ability_ids": [
-      "aerial-deployment",
+      "aerial-deployment-adeptus-mechanicus",
       "deep-strike",
-      "deadly-demise-d3",
-      "hover"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "hover",
+      {
+        "id": "chaff-launcher-adeptus-mechanicus",
+        "wargear": "chaff-launcher"
+      },
+      {
+        "id": "command-uplink-adeptus-mechanicus",
+        "wargear": "command-uplink"
+      }
     ],
     "transport_capacity": {
       "capacity": 11,
@@ -1209,9 +1252,15 @@
       "transuranic-arquebus"
     ],
     "ability_ids": [
-      "enhanced-data-tether",
-      "omnispex",
-      "rad-saturation-aura"
+      {
+        "id": "enhanced-data-tether-adeptus-mechanicus",
+        "wargear": "enhanced-data-tether"
+      },
+      {
+        "id": "omnispex-adeptus-mechanicus",
+        "wargear": "omnispex"
+      },
+      "rad-saturation-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1315,9 +1364,9 @@
       "volkite-blaster"
     ],
     "ability_ids": [
-      "dataspike",
+      "dataspike-adeptus-mechanicus",
       "leader",
-      "lord-of-the-machine-cult"
+      "lord-of-the-machine-cult-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1413,7 +1462,7 @@
       "taser-goad-pteraxii-skystalkers"
     ],
     "ability_ids": [
-      "ride-the-thermals",
+      "ride-the-thermals-adeptus-mechanicus",
       "deep-strike"
     ],
     "game_version": {
@@ -1493,7 +1542,7 @@
       "torsion-cannon"
     ],
     "ability_ids": [
-      "breaching-command"
+      "breaching-command-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1584,7 +1633,7 @@
       "transonic-razor-and-chordclaw"
     ],
     "ability_ids": [
-      "optimised-gait",
+      "optimised-gait-adeptus-mechanicus",
       "stealth"
     ],
     "game_version": {
@@ -1655,9 +1704,9 @@
       "servo-arc-claw"
     ],
     "ability_ids": [
-      "cogitative-instincts",
-      "leader",
-      "seekers-of-divine-arcana"
+      "cogitative-instincts-adeptus-mechanicus",
+      "seekers-of-divine-arcana-adeptus-mechanicus",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -1730,8 +1779,11 @@
       "electrostatic-gauntlets"
     ],
     "ability_ids": [
-      "electro-shock",
-      "feel-no-pain-5"
+      "electro-shock-adeptus-mechanicus",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1809,8 +1861,15 @@
       "mechanicus-pistol-serberys-raiders"
     ],
     "ability_ids": [
-      "scouts-9",
-      "tactica-obliqua"
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      "tactica-obliqua-adeptus-mechanicus",
+      {
+        "id": "enhanced-data-tether-adeptus-mechanicus",
+        "wargear": "enhanced-data-tether"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1898,9 +1957,13 @@
       "taser-lance"
     ],
     "ability_ids": [
-      "dynamic-efficiency",
+      "dynamic-efficiency-adeptus-mechanicus",
       "stealth",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "broad-spectrum-data-tether-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1977,7 +2040,7 @@
       "sulphur-breath"
     ],
     "ability_ids": [
-      "line-breakers"
+      "line-breakers-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2048,10 +2111,10 @@
       "servo-arm"
     ],
     "ability_ids": [
-      "enginseer",
+      "enginseer-adeptus-mechanicus",
       "leader",
-      "omnissiah-s-blessing",
-      "vengeance-for-the-omnissiah"
+      "omnissiahs-blessing-adeptus-mechanicus",
+      "vengeance-for-the-omnissiah-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2121,9 +2184,9 @@
       "mechanicus-pistol"
     ],
     "ability_ids": [
-      "control-edict",
-      "leader",
-      "servo-skull-uplink"
+      "control-edict-adeptus-mechanicus",
+      "servo-skull-uplink-adeptus-mechanicus",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -2203,9 +2266,16 @@
       "cognis-heavy-stubber-array"
     ],
     "ability_ids": [
-      "fire-support",
-      "firing-deck-2",
-      "deadly-demise-d3"
+      "fire-support-adeptus-mechanicus",
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -2306,9 +2376,12 @@
       "twin-kastelan-phosphor-blaster"
     ],
     "ability_ids": [
-      "repulsor-grid",
-      "robotic-bodyguard",
-      "deadly-demise-1"
+      "repulsor-grid-adeptus-mechanicus",
+      "robotic-bodyguard-adeptus-mechanicus",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2402,7 +2475,7 @@
       "taser-goad-pteraxii-sterylizors"
     ],
     "ability_ids": [
-      "searing-conflagration",
+      "searing-conflagration-adeptus-mechanicus",
       "deep-strike"
     ],
     "game_version": {
@@ -2477,8 +2550,19 @@
       "cognis-heavy-stubber-array"
     ],
     "ability_ids": [
-      "bomb-rack",
-      "deadly-demise-d3"
+      "bomb-rack-adeptus-mechanicus",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "chaff-launcher-adeptus-mechanicus",
+        "wargear": "chaff-launcher"
+      },
+      {
+        "id": "command-uplink-adeptus-mechanicus",
+        "wargear": "command-uplink"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2552,8 +2636,19 @@
       "transuranic-arquebus"
     ],
     "ability_ids": [
-      "objective-scouted",
-      "scouts-6"
+      "objective-scouted-adeptus-mechanicus",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "enhanced-data-tether-adeptus-mechanicus",
+        "wargear": "enhanced-data-tether"
+      },
+      {
+        "id": "omnispex-adeptus-mechanicus",
+        "wargear": "omnispex"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2680,6 +2775,9 @@
         "namespace": "mfm",
         "id": "ff48d13a-5ef5-4ef4-83b3-d0afd8899290"
       }
+    ],
+    "ability_ids": [
+      "broad-spectrum-targeting-augurs-adeptus-mechanicus"
     ]
   },
   {
@@ -2755,6 +2853,9 @@
         "namespace": "mfm",
         "id": "aacdff0d-7c5b-4dea-b4cb-9e06aed7db4e"
       }
+    ],
+    "ability_ids": [
+      "monocular-targeting-helms-adeptus-mechanicus"
     ]
   },
   {
@@ -2823,6 +2924,12 @@
         "namespace": "mfm",
         "id": "681fcb1a-b0aa-4344-8353-ca1050efdcba"
       }
+    ],
+    "ability_ids": [
+      "mechanicus-bodyguard-adeptus-mechanicus",
+      "rod-of-the-war-forge-adeptus-mechanicus",
+      "secutor-of-olympus-adeptus-mechanicus",
+      "supreme-commander-adeptus-mechanicus"
     ]
   },
   {
@@ -2869,8 +2976,8 @@
       "transonic-cannon"
     ],
     "ability_ids": [
-      "defend-the-divine-work-manipulus-skand",
-      "doctrina-imperatives"
+      "defend-the-divine-work-manipulus-skand-adeptus-mechanicus",
+      "mechanical-guidance-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2936,8 +3043,7 @@
       "taser-goad-pteraxii-sterylizors"
     ],
     "ability_ids": [
-      "doctrina-imperatives",
-      "searing-conflagration-purge-corps-pteraxii-sterylizors"
+      "searing-conflagration-purge-corps-pteraxii-sterylizors-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -3022,6 +3128,9 @@
         "namespace": "mfm",
         "id": "130bfd98-5479-49af-838a-c002f683a987"
       }
+    ],
+    "ability_ids": [
+      "pinning-fire-adeptus-mechanicus"
     ]
   },
   {
@@ -3070,9 +3179,8 @@
       "radium-carbine"
     ],
     "ability_ids": [
-      "doctrina-imperatives",
-      "omnispex-purge-corps-skitarii-vanguard",
-      "rad-saturation-aura-purge-corps-skitarii-vanguard"
+      "omnispex-purge-corps-skitarii-vanguard-adeptus-mechanicus",
+      "rad-saturation-purge-corps-skitarii-vanguard-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",

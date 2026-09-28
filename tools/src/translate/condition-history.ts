@@ -1,5 +1,5 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { dekebab, designationPhrase, moveKinds, objectivePhrase, pastOf, rollWord, subjectOf, str, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow, type P } from "./condition-refs.js";
+import { dekebab, designationPhrase, idLabel, moveKinds, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
 
 export function describeHappened(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
@@ -76,7 +76,7 @@ export function describeHappened(p: P, negated: boolean): string {
       }
       const which = usedAbilityPhrase(f);
       if (which != null) return `${neg}${withWindow(`${who} used ${which}`, p.window)}`;
-      return `${neg}${withWindow(`${who} used ${f.id != null ? `the ${titleCase(str(f.id))} ` : "a "}${dekebab(str(f.kind ?? "ability"))}`, p.window)}`;
+      return `${neg}${withWindow(`${who} used ${f.id != null ? `the ${idLabel(f.id)} ` : "a "}${dekebab(str(f.kind ?? "ability"))}`, p.window)}`;
     }
     case "objective-gained":
       return `${neg}you newly control ${n}+ objectives ${windowPhrase(p.window)}`.trimEnd();

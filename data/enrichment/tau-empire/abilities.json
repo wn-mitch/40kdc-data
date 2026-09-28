@@ -1,33 +1,6 @@
 [
   {
-    "ability_id": "scouts-7",
-    "name": "Scouts 7\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 7
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "krootox-rampagers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "kroot-linebreakers",
+    "ability_id": "kroot-linebreakers-tau-empire",
     "name": "Kroot Linebreakers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -50,86 +23,11 @@
       "krootox-rampagers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deadly-demise-3d6",
-    "name": "Deadly Demise 3D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "3D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "manta"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "manta"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "aggressive-deployment",
+    "ability_id": "aggressive-deployment-tau-empire",
     "name": "Aggressive Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -162,10 +60,11 @@
       "manta"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "air-caste-colossus",
+    "ability_id": "air-caste-colossus-tau-empire",
     "name": "Air Caste Colossus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -201,36 +100,11 @@
       "filter": {
         "kind": "stratagem"
       }
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "crisis-fireknife-battlesuits"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "fireknife",
+    "ability_id": "fireknife-tau-empire",
     "name": "Fireknife",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -291,10 +165,11 @@
       "crisis-fireknife-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "weapon-support-systems",
+    "ability_id": "weapon-support-systems-tau-empire",
     "name": "Weapon Support Systems",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -329,10 +204,11 @@
       "crisis-fireknife-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "gun-drone",
+    "ability_id": "gun-drone-tau-empire",
     "name": "Gun Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -353,14 +229,26 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "crisis-fireknife-battlesuits"
+      "breacher-team",
+      "broadside-battlesuits",
+      "cadre-fireblade",
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit",
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits",
+      "ethereal",
+      "pathfinder-team",
+      "stealth-battlesuits",
+      "strike-team"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "marker-drone",
+    "ability_id": "marker-drone-tau-empire",
     "name": "Marker Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -398,14 +286,26 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "crisis-fireknife-battlesuits"
+      "breacher-team",
+      "broadside-battlesuits",
+      "cadre-fireblade",
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit",
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits",
+      "ethereal",
+      "pathfinder-team",
+      "stealth-battlesuits",
+      "strike-team"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "shield-drone",
+    "ability_id": "shield-drone-tau-empire",
     "name": "Shield Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -427,90 +327,24 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "crisis-fireknife-battlesuits"
+      "breacher-team",
+      "broadside-battlesuits",
+      "cadre-fireblade",
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit",
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits",
+      "ethereal",
+      "pathfinder-team",
+      "strike-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "piranhas"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "piranhas"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "drone-harassment-tactics",
+    "ability_id": "drone-harassment-tactics-tau-empire",
     "name": "Drone Harassment Tactics",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -540,73 +374,11 @@
       "piranhas"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "stealth-battlesuits"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attack-is",
-        "parameters": {
-          "attack_type": "ranged"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stealth-battlesuits"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "forward-observers",
+    "ability_id": "forward-observers-tau-empire",
     "name": "Forward Observers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -671,10 +443,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "homing-beacon",
+    "ability_id": "homing-beacon-tau-empire",
     "name": "Homing Beacon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -700,61 +473,11 @@
       "stealth-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c0684fec5c22e056a0f6f599e6af4e174ca2f9b6c88ff5b08db5b3ff831574e0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sun-shark-bomber",
-      "tidewall-shieldline"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "pulse-bombs",
+    "ability_id": "pulse-bombs-tau-empire",
     "name": "Pulse Bombs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -777,10 +500,11 @@
       "sun-shark-bomber"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "bounty-hunters",
+    "ability_id": "bounty-hunters-tau-empire",
     "name": "Bounty Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -820,10 +544,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "pech-ra",
+    "ability_id": "pechra-tau-empire",
     "name": "Pech\u2019ra",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -848,10 +573,11 @@
       "kroot-farstalkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "target-uploaded",
+    "ability_id": "target-uploaded-tau-empire",
     "name": "Target Uploaded",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -876,10 +602,11 @@
       "pathfinder-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "grav-inhibitor-drone",
+    "ability_id": "grav-inhibitor-drone-tau-empire",
     "name": "Grav-inhibitor Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -905,10 +632,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "pulse-accelerator-drone",
+    "ability_id": "pulse-accelerator-drone-tau-empire",
     "name": "Pulse Accelerator Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -935,10 +663,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "recon-drone",
+    "ability_id": "recon-drone-tau-empire",
     "name": "Recon Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -975,10 +704,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "suppression-volley",
+    "ability_id": "suppression-volley-tau-empire",
     "name": "Suppression Volley",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1017,10 +747,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Only enemy INFANTRY units can be suppressed."
+    "community_notes": "Only enemy INFANTRY units can be suppressed.",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "ds8-support-turret",
+    "ability_id": "ds8-support-turret-tau-empire",
     "name": "DS8 Support Turret",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1067,14 +798,16 @@
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
+      "breacher-team",
       "strike-team"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] the Shas'ui model is equipped with the support turret weapon until the start of your next turn"
+    "community_notes": "[APPROX] the Shas'ui model is equipped with the support turret weapon until the start of your next turn",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "guardian-drone",
+    "ability_id": "guardian-drone-tau-empire",
     "name": "Guardian Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1105,40 +838,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "breacher-team",
       "strike-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-twin-lance"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "exemplars-of-mont-ka",
+    "ability_id": "exemplars-of-montka-tau-empire",
     "name": "Exemplars of Mont\u2019ka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1199,10 +907,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "neocapacitor-shields",
+    "ability_id": "neocapacitor-shields-tau-empire",
     "name": "Neocapacitor Shields",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1232,10 +941,11 @@
       "the-twin-lance"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "retro-thrusters",
+    "ability_id": "retro-thrusters-tau-empire",
     "name": "Retro-thrusters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1271,10 +981,11 @@
       "the-twin-lance"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "mv15-gun-drone",
+    "ability_id": "mv15-gun-drone-tau-empire",
     "name": "MV15 Gun Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1299,10 +1010,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "starscythe",
+    "ability_id": "starscythe-tau-empire",
     "name": "Starscythe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1336,10 +1048,11 @@
       "crisis-starscythe-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "battlesuit-support-systems",
+    "ability_id": "battlesuit-support-systems-tau-empire",
     "name": "Battlesuit Support Systems",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1366,60 +1079,11 @@
       "crisis-starscythe-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tiger-shark"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "strafing-run",
+    "ability_id": "strafing-run-tau-empire",
     "name": "Strafing Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1451,10 +1115,11 @@
       "tiger-shark"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "transport-bay",
+    "ability_id": "transport-bay-tau-empire",
     "name": "Transport Bay",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1479,10 +1144,11 @@
       "tiger-shark"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "breach-and-clear",
+    "ability_id": "breach-and-clear-tau-empire",
     "name": "Breach and Clear",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1515,10 +1181,11 @@
       "breacher-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "heavy-walker",
+    "ability_id": "heavy-walker-tau-empire",
     "name": "Heavy Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1543,10 +1210,11 @@
       "stormsurge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "support-system",
+    "ability_id": "support-system-tau-empire",
     "name": "Support System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1581,10 +1249,11 @@
       "stormsurge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "titan-killer",
+    "ability_id": "titan-killer-tau-empire",
     "name": "Titan-killer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1617,37 +1286,11 @@
       "stormsurge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "firing-deck-11",
-    "name": "Firing Deck 11",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 11
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tidewall-gunrig"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fortification",
+    "ability_id": "fortification-tau-empire",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1678,14 +1321,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "tidewall-droneport",
       "tidewall-gunrig",
       "tidewall-shieldline"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "tidewall-cover",
+    "ability_id": "tidewall-cover-tau-empire",
     "name": "Tidewall Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1714,14 +1359,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "tidewall-droneport",
       "tidewall-gunrig",
       "tidewall-shieldline"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "loping-pounce",
+    "ability_id": "loping-pounce-tau-empire",
     "name": "Loping Pounce",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1766,10 +1413,11 @@
       "kroot-hounds"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "hunting-hounds",
+    "ability_id": "hunting-hounds-tau-empire",
     "name": "Hunting Hounds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1813,36 +1461,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ethereal"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "failure-is-not-an-option",
+    "ability_id": "failure-is-not-an-option-tau-empire",
     "name": "Failure Is Not an Option",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1875,10 +1498,11 @@
       "ethereal"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "coordinated-leadership",
+    "ability_id": "coordinated-leadership-tau-empire",
     "name": "Coordinated Leadership",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1901,10 +1525,11 @@
       "ethereal"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "hover-drone",
+    "ability_id": "hover-drone-tau-empire",
     "name": "Hover Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1929,60 +1554,11 @@
       "ethereal"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "riptide-battlesuit"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "battlesuit-support-system",
+    "ability_id": "battlesuit-support-system-riptide-battlesuit-tau-empire",
     "name": "Battlesuit Support System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2009,10 +1585,11 @@
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "nova-charge",
+    "ability_id": "nova-charge-tau-empire",
     "name": "Nova Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2046,10 +1623,11 @@
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "weapon-support-system",
+    "ability_id": "weapon-support-system-riptide-battlesuit-tau-empire",
     "name": "Weapon Support System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2084,10 +1662,11 @@
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "missile-drone",
+    "ability_id": "missile-drone-tau-empire",
     "name": "Missile Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2108,14 +1687,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "broadside-battlesuits",
       "riptide-battlesuit"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "way-of-the-short-blade",
+    "ability_id": "way-of-the-short-blade-tau-empire",
     "name": "Way of the Short Blade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2165,10 +1746,11 @@
       "commander-farsight"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "puretide-s-teachings",
+    "ability_id": "puretides-teachings-tau-empire",
     "name": "Puretide\u2019s Teachings",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2191,10 +1773,11 @@
       "commander-farsight"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "independent-power",
+    "ability_id": "independent-power-tau-empire",
     "name": "Independent Power",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2225,10 +1808,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "kroot-packmates",
+    "ability_id": "kroot-packmates-tau-empire",
     "name": "Kroot Packmates",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2316,44 +1900,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "commander-shadowsun"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "agile-combatant",
+    "ability_id": "agile-combatant-tau-empire",
     "name": "Agile Combatant",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2380,10 +1931,11 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "hero-of-the-empire-aura",
+    "ability_id": "hero-of-the-empire-tau-empire",
     "name": "Hero of the Empire (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2428,10 +1980,11 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "advanced-guardian-drone",
+    "ability_id": "advanced-guardian-drone-tau-empire",
     "name": "Advanced Guardian Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2465,10 +2018,11 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "command-link-drone-aura",
+    "ability_id": "command-link-drone-tau-empire",
     "name": "Command-link Drone (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2532,10 +2086,11 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-tau-empire",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2558,10 +2113,11 @@
       "commander-shadowsun"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "stealth-drones",
+    "ability_id": "stealth-drones-tau-empire",
     "name": "Stealth Drones",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2589,10 +2145,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 2
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "titan-hunter",
+    "ability_id": "titan-hunter-tau-empire",
     "name": "Titan Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2631,10 +2188,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "velocity-tracker",
+    "ability_id": "velocity-tracker-tau-empire",
     "name": "Velocity Tracker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2681,10 +2239,11 @@
       "sky-ray-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "targeting-array",
+    "ability_id": "targeting-array-tau-empire",
     "name": "Targeting Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2722,13 +2281,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "hammerhead-gunship",
       "sky-ray-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "airborne-agility",
+    "ability_id": "airborne-agility-tau-empire",
     "name": "Airborne Agility",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2751,10 +2312,11 @@
       "vespid-stingwings"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "oversight-drone",
+    "ability_id": "oversight-drone-tau-empire",
     "name": "Oversight Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2779,10 +2341,11 @@
       "vespid-stingwings"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "coldstar-commander",
+    "ability_id": "coldstar-commander-tau-empire",
     "name": "Coldstar Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2817,10 +2380,11 @@
       "commander-in-coldstar-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "shield-generator",
+    "ability_id": "shield-generator-tau-empire",
     "name": "Shield Generator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2840,13 +2404,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "commander-in-coldstar-battlesuit"
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "trail-finding",
+    "ability_id": "trail-finding-tau-empire",
     "name": "Trail Finding",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2909,10 +2475,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "kroot-ambush",
+    "ability_id": "kroot-ambush-tau-empire",
     "name": "Kroot Ambush",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3002,37 +2569,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "firing-deck-20",
-    "name": "Firing Deck 20",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 20
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tidewall-shieldline"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "tidewall-defence-platform",
+    "ability_id": "tidewall-defence-platform-tau-empire",
     "name": "Tidewall Defence Platform",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3057,10 +2598,11 @@
       "tidewall-shieldline"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "advanced-armour",
+    "ability_id": "advanced-armour-tau-empire",
     "name": "Advanced Armour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3084,10 +2626,11 @@
       "broadside-battlesuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "enforcer-commander",
+    "ability_id": "enforcer-commander-tau-empire",
     "name": "Enforcer Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3134,10 +2677,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "volley-fire",
+    "ability_id": "volley-fire-tau-empire",
     "name": "Volley Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3172,10 +2716,11 @@
       "cadre-fireblade"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "crack-shot",
+    "ability_id": "crack-shot-tau-empire",
     "name": "Crack Shot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3220,10 +2765,11 @@
       "cadre-fireblade"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "ground-strike-fighter",
+    "ability_id": "ground-strike-fighter-tau-empire",
     "name": "Ground Strike Fighter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3257,10 +2803,11 @@
       "razorshark-strike-fighter"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "rapid-deployment",
+    "ability_id": "rapid-deployment-tau-empire",
     "name": "Rapid Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3326,10 +2873,11 @@
       "devilfish"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "structural-analyser",
+    "ability_id": "structural-analyser-tau-empire",
     "name": "Structural Analyser",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3375,10 +2923,11 @@
       "darkstrider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "jammer-array",
+    "ability_id": "jammer-array-tau-empire",
     "name": "Jammer Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3428,10 +2977,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "armour-hunter",
+    "ability_id": "armour-hunter-tau-empire",
     "name": "Armour Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3456,10 +3006,11 @@
       "hammerhead-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "droneport",
+    "ability_id": "droneport-tau-empire",
     "name": "Droneport",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3496,10 +3047,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "sunforge",
+    "ability_id": "sunforge-tau-empire",
     "name": "Sunforge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3561,10 +3113,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "precise-targeting",
+    "ability_id": "precise-targeting-tau-empire",
     "name": "Precise Targeting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3598,10 +3151,11 @@
       "firesight-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "fieldcraft",
+    "ability_id": "fieldcraft-tau-empire",
     "name": "Fieldcraft",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3621,10 +3175,11 @@
       "kroot-carnivores"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "bodyguard",
+    "ability_id": "bodyguard-tau-empire",
     "name": "Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3649,10 +3204,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] Leader-attachment/army-construction rule: a unit with Starting Strength 20 may have up to two (non-duplicate) Leaders attached instead of one, and if it is destroyed the attached Leaders become separate units at their original Starting Strengths. The attachment-capacity change is out of scope and unmodeled by design. Full rule in raw-text store."
+    "community_notes": "[APPROX] Leader-attachment/army-construction rule: a unit with Starting Strength 20 may have up to two (non-duplicate) Leaders attached instead of one, and if it is destroyed the attached Leaders become separate units at their original Starting Strengths. The attachment-capacity change is out of scope and unmodeled by design. Full rule in raw-text store.",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "war-leader",
+    "ability_id": "war-leader-tau-empire",
     "name": "War Leader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3675,10 +3231,11 @@
       "kroot-war-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "root-of-honour",
+    "ability_id": "root-of-honour-tau-empire",
     "name": "Root of Honour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3720,10 +3277,11 @@
       "kroot-war-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "advanced-scouting",
+    "ability_id": "advanced-scouting-tau-empire",
     "name": "Advanced Scouting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3756,10 +3314,11 @@
       "kroot-lone-spear"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "fire-and-fade",
+    "ability_id": "fire-and-fade-tau-empire",
     "name": "Fire and Fade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3791,10 +3350,11 @@
       "kroot-lone-spear"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "ritual-butchery",
+    "ability_id": "ritual-butchery-tau-empire",
     "name": "Ritual Butchery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3829,10 +3389,11 @@
       "kroot-flesh-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "rites-of-feasting",
+    "ability_id": "rites-of-feasting-tau-empire",
     "name": "Rites of Feasting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3876,10 +3437,11 @@
       "kroot-flesh-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "drones",
+    "ability_id": "drones-tau-empire",
     "name": "Drones",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3915,7 +3477,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "for-the-greater-good",
+    "ability_id": "for-the-greater-good-tau-empire",
     "name": "For the Greater Good",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3980,73 +3542,7 @@
     ]
   },
   {
-    "ability_id": "deadly-demise-d6-3",
-    "name": "Deadly Demise D6+3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "eq",
-      "on_success": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "mortal-wounds",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "count": "D6+3"
-            }
-          },
-          {
-            "type": "mortal-wounds",
-            "target": {
-              "owner": "friendly",
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "count": "D6+3"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "taunar-supremacy-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "coordinated-strike",
+    "ability_id": "coordinated-strike-tau-empire",
     "name": "Coordinated Strike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4092,79 +3588,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "super-heavy-walker",
-    "name": "Super-heavy Walker",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move-modifier",
-          "target": "this-model",
-          "modifier": {
-            "applies_to_moves": [
-              "normal",
-              "advance",
-              "fall-back"
-            ],
-            "passthrough": [
-              "models-excluding-titanic",
-              "terrain"
-            ],
-            "no_end_in_engagement": true
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "subject": "this-model",
-              "filter": {
-                "through": "tall-terrain"
-              },
-              "window": "event"
-            }
-          },
-          "effect": {
-            "type": "dice-gated",
-            "dice": "D6",
-            "threshold": 1,
-            "comparison": "eq",
-            "on_success": {
-              "type": "state-change",
-              "target": "this-unit",
-              "modifier": {
-                "state": "battle-shocked",
-                "set": true
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "taunar-supremacy-armour"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
-  },
-  {
-    "ability_id": "expert-fieldcraft",
+    "ability_id": "expert-fieldcraft-tau-empire",
     "name": "Expert Fieldcraft",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4212,7 +3640,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "marker-beacon-advanced-acquisition-cadre",
+    "ability_id": "marker-beacon-advanced-acquisition-cadre-tau-empire",
     "name": "Marker Beacon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4246,7 +3674,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "microdrone-support-advanced-acquisition-cadre",
+    "ability_id": "microdrone-support-advanced-acquisition-cadre-tau-empire",
     "name": "Microdrone Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4287,7 +3715,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "autoreactive-camouflage-advanced-acquisition-cadre",
+    "ability_id": "autoreactive-camouflage-advanced-acquisition-cadre-tau-empire",
     "name": "Autoreactive Camouflage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4337,7 +3765,7 @@
     "community_notes": "[APPROX] When a hidden PATHFINDER TEAM or STEALTH BATTLESUITS unit is targeted in your opponent's Shooting phase, it gets +1 to its Save characteristic. The 'hidden' precondition is not gated here. Full rule in raw-text store."
   },
   {
-    "ability_id": "negation-emitters-advanced-acquisition-cadre",
+    "ability_id": "negation-emitters-upgrade-advanced-acquisition-cadre-tau-empire",
     "name": "Negation Emitters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4367,7 +3795,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "unmasking-suite-advanced-acquisition-cadre",
+    "ability_id": "unmasking-suite-upgrade-advanced-acquisition-cadre-tau-empire",
     "name": "Unmasking Suite",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4410,7 +3838,7 @@
     "community_notes": "When the bearer's unit is selected to shoot, mark one enemy unit within 24\"; that enemy unit has +9\" detection range until this unit has shot."
   },
   {
-    "ability_id": "bonded-heroes",
+    "ability_id": "bonded-heroes-tau-empire",
     "name": "Bonded Heroes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4484,7 +3912,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "killing-blow",
+    "ability_id": "killing-blow-tau-empire",
     "name": "Killing Blow",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4559,7 +3987,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hunters-instincts",
+    "ability_id": "hunters-instincts-tau-empire",
     "name": "Hunter\u2019s Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4621,7 +4049,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "skirmish-fighters",
+    "ability_id": "skirmish-fighters-tau-empire",
     "name": "Skirmish Fighters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4679,7 +4107,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "superior-craftsmanship",
+    "ability_id": "superior-craftsmanship-tau-empire",
     "name": "Superior Craftsmanship",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4710,7 +4138,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "patient-hunter",
+    "ability_id": "patient-hunter-tau-empire",
     "name": "Patient Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4815,7 +4243,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "integrated-command-structure",
+    "ability_id": "integrated-command-structure-tau-empire",
     "name": "Integrated Command Structure",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4962,7 +4390,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "fail-safe-detonator-retaliation-cadre",
+    "ability_id": "fail-safe-detonator-retaliation-cadre-tau-empire",
     "name": "Fail-safe Detonator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5058,7 +4486,7 @@
     "community_notes": "[APPROX] Used when a Battlesuit model is destroyed: if it has Deadly Demise, choose the roll result to be 1 or 6 instead of rolling; otherwise roll one D6 per unit within 6\" and on a 4+ that unit suffers D3 mortal wounds. Encoded as an opaque grant."
   },
   {
-    "ability_id": "grav-inhibitor-field-retaliation-cadre",
+    "ability_id": "grav-inhibitor-field-retaliation-cadre-tau-empire",
     "name": "Grav-Inhibitor Field",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5110,7 +4538,7 @@
     "community_notes": "Used just after an enemy unit declares a charge against the Battlesuit unit: that enemy unit takes a Battle-shock test and you roll one D6 per model in it, suffering 1 mortal wound per 6."
   },
   {
-    "ability_id": "stimm-injectors-retaliation-cadre",
+    "ability_id": "stimm-injectors-retaliation-cadre-tau-empire",
     "name": "Stimm Injectors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5143,7 +4571,7 @@
     }
   },
   {
-    "ability_id": "the-arrokon-protocol-retaliation-cadre",
+    "ability_id": "the-arrokon-protocol-retaliation-cadre-tau-empire",
     "name": "The Arro'kon Protocol",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5180,7 +4608,7 @@
     "community_notes": "Applies only against enemy units containing 6 or more models; against units of 11 or more models the attacks gain [SUSTAINED HITS 2] instead. The model-count scaling is not encoded."
   },
   {
-    "ability_id": "the-shortened-blade-retaliation-cadre",
+    "ability_id": "the-shortened-blade-retaliation-cadre-tau-empire",
     "name": "The Shortened Blade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5230,7 +4658,7 @@
     "community_notes": "A unit arriving via Deep Strike can be set up more than 6\" horizontally from all enemy models; it cannot declare a charge this turn."
   },
   {
-    "ability_id": "the-torchstar-gambit-retaliation-cadre",
+    "ability_id": "the-torchstar-gambit-retaliation-cadre-tau-empire",
     "name": "The Torchstar Gambit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5278,7 +4706,7 @@
     "community_notes": "After its attacks are resolved, an unengaged unit can make a Normal move but cannot declare a charge this turn."
   },
   {
-    "ability_id": "aggressive-mobility-montka",
+    "ability_id": "aggressive-mobility-montka-tau-empire",
     "name": "Aggressive Mobility",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5311,7 +4739,7 @@
     "community_notes": "If the unit Advances, no Advance roll is made; instead add 6\" to the Move characteristic of its models until the end of the phase."
   },
   {
-    "ability_id": "combat-debarkation-montka",
+    "ability_id": "combat-debarkation-montka-tau-empire",
     "name": "Combat Debarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5356,7 +4784,7 @@
     "community_notes": "Applies only to attacks that target the closest enemy unit; the closest-target gate is not encoded."
   },
   {
-    "ability_id": "counterfire-defence-systems-montka",
+    "ability_id": "counterfire-defence-systems-montka-tau-empire",
     "name": "Counterfire Defence Systems",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5388,7 +4816,7 @@
     }
   },
   {
-    "ability_id": "focused-fire-montka",
+    "ability_id": "focused-fire-montka-tau-empire",
     "name": "Focused Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5423,7 +4851,7 @@
     "community_notes": "Targets two T'au Empire units and one enemy unit: both units can only attack that enemy unit this phase, with AP improved by 1. Cannot be used in the fourth or fifth battle rounds."
   },
   {
-    "ability_id": "pinpoint-counter-offensive-montka",
+    "ability_id": "pinpoint-counter-offensive-montka-tau-empire",
     "name": "Pinpoint Counter-Offensive",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5464,7 +4892,7 @@
     "community_notes": "Used on a just-destroyed T'au Empire unit (excluding Kroot): for the rest of the battle, T'au Empire units (excluding Kroot) re-roll Hit rolls against the enemy unit that destroyed it."
   },
   {
-    "ability_id": "pulse-onslaught-montka",
+    "ability_id": "pulse-onslaught-montka-tau-empire",
     "name": "Pulse Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5536,7 +4964,7 @@
     "community_notes": "The selected enemy unit (excluding Monsters and Vehicles) hit by this unit's attacks is shaken until the end of your opponent's next turn."
   },
   {
-    "ability_id": "a-trap-well-laid-kroot-hunting-pack",
+    "ability_id": "a-trap-well-laid-kroot-hunting-pack-tau-empire",
     "name": "A Trap Well Laid",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5584,7 +5012,7 @@
     "community_notes": "Applies to attacks made by Kroot models against the selected unit, unless the attacking unit is Battle-shocked."
   },
   {
-    "ability_id": "emp-grenades-kroot-hunting-pack",
+    "ability_id": "emp-grenades-kroot-hunting-pack-tau-empire",
     "name": "EMP Grenades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5634,7 +5062,7 @@
     "community_notes": "Worsens the Weapon Skill and Ballistic Skill characteristics of the selected enemy Vehicle unit's weapons by 1 (higher is worse)."
   },
   {
-    "ability_id": "guerrilla-warriors-kroot-hunting-pack",
+    "ability_id": "guerrilla-warriors-kroot-hunting-pack-tau-empire",
     "name": "Guerrilla Warriors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5670,7 +5098,7 @@
     }
   },
   {
-    "ability_id": "hidden-hunters-kroot-hunting-pack",
+    "ability_id": "hidden-hunters-kroot-hunting-pack-tau-empire",
     "name": "Hidden Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5711,7 +5139,7 @@
     "community_notes": "The unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
   },
   {
-    "ability_id": "join-the-hunt-kroot-hunting-pack",
+    "ability_id": "join-the-hunt-kroot-hunting-pack-tau-empire",
     "name": "Join the Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5750,7 +5178,7 @@
     "community_notes": "[APPROX] Used on a just-destroyed Kroot Infantry or Kroot Hounds unit: add an identical unit to your army in Strategic Reserves at Starting Strength. Cannot return destroyed Character units to Attached units. Encoded as an opaque grant."
   },
   {
-    "ability_id": "the-grisly-feast-kroot-hunting-pack",
+    "ability_id": "the-grisly-feast-kroot-hunting-pack-tau-empire",
     "name": "The Grisly Feast",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5790,7 +5218,7 @@
     "community_notes": "Used on a unit that destroyed an enemy unit this Fight phase: in the opponent's next Command phase each enemy unit within 6\" takes a Battle-shock test (-1 if Below Half-strength) and skips its other Battle-shock tests that phase."
   },
   {
-    "ability_id": "experimental-ammunition-experimental-prototype-cadre",
+    "ability_id": "experimental-ammunition-experimental-prototype-cadre-tau-empire",
     "name": "Experimental Ammunition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5867,7 +5295,7 @@
     }
   },
   {
-    "ability_id": "a-tempting-trap-kauyon",
+    "ability_id": "a-tempting-trap-kauyon-tau-empire",
     "name": "A Tempting Trap",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5903,7 +5331,7 @@
     "community_notes": "The first use designates one objective marker outside the opponent's deployment zone as your Trap objective; the bonus applies only to ranged attacks against enemy units within range of it. Cannot be used in the first or second battle rounds."
   },
   {
-    "ability_id": "combat-embarkation-kauyon",
+    "ability_id": "combat-embarkation-kauyon-tau-empire",
     "name": "Combat Embarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5956,7 +5384,7 @@
     "community_notes": "[APPROX] Used just after an enemy unit declares a charge against this unit: the unit embarks within a friendly Transport if every model is within 3\" of it and capacity suffices. Encoded as an opaque grant."
   },
   {
-    "ability_id": "coordinate-to-engage-kauyon",
+    "ability_id": "coordinate-to-engage-kauyon-tau-empire",
     "name": "Coordinate to Engage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6027,7 +5455,7 @@
     "community_notes": "Used on a unit just selected as an Observer: its attacks against their Spotted unit have Ballistic Skill improved by 1 and, if the unit has Markerlight, [IGNORES COVER]."
   },
   {
-    "ability_id": "photon-grenades-kauyon",
+    "ability_id": "photon-grenades-kauyon-tau-empire",
     "name": "Photon Grenades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6075,7 +5503,7 @@
     "community_notes": "Used just after an enemy unit declares a charge against this unengaged unit: the charging unit takes a Battle-shock test and has -2 to Charge rolls this phase."
   },
   {
-    "ability_id": "point-blank-ambush-kauyon",
+    "ability_id": "point-blank-ambush-kauyon-tau-empire",
     "name": "Point-Blank Ambush",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6111,7 +5539,7 @@
     "community_notes": "Applies only to ranged attacks against enemy units within 9\"; cannot be used in the first or second battle rounds."
   },
   {
-    "ability_id": "wall-of-mirrors-kauyon",
+    "ability_id": "wall-of-mirrors-kauyon-tau-empire",
     "name": "Wall of Mirrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6144,7 +5572,7 @@
     "community_notes": "At the end of the opponent's Fight phase, one unengaged Stealth, Ghostkeel or Commander Shadowsun unit is placed into Strategic Reserves."
   },
   {
-    "ability_id": "alien-expertise-auxiliary-cadre",
+    "ability_id": "alien-expertise-auxiliary-cadre-tau-empire",
     "name": "Alien Expertise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6176,7 +5604,7 @@
     "community_notes": "Kroot or Vespid Stingwings unit only; the Advance move does not prevent the unit from being eligible to declare a charge."
   },
   {
-    "ability_id": "experimental-modifications-auxiliary-cadre",
+    "ability_id": "experimental-modifications-auxiliary-cadre-tau-empire",
     "name": "Experimental Modifications",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6206,7 +5634,7 @@
     "community_notes": "Kroot or Vespid Stingwings unit only; applies to the unit's attacks when selected to attack in the Shooting or Fight phase."
   },
   {
-    "ability_id": "guided-by-unity-auxiliary-cadre",
+    "ability_id": "guided-by-unity-auxiliary-cadre-tau-empire",
     "name": "Guided By Unity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6242,7 +5670,7 @@
     "community_notes": "Applies only to ranged attacks against units within 9\" of a friendly Kroot or Vespid Stingwings unit; the proximity gate is not encoded. Cannot target Kroot or Vespid Stingwings units."
   },
   {
-    "ability_id": "rapid-acquisition-sudden-dawn-cadre",
+    "ability_id": "rapid-acquisition-sudden-dawn-cadre-tau-empire",
     "name": "Rapid Acquisition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6272,7 +5700,7 @@
     "community_notes": "At the end of your Movement phase, one objective the unit controls becomes secured."
   },
   {
-    "ability_id": "suppressing-fire-sudden-dawn-cadre",
+    "ability_id": "suppressing-fire-sudden-dawn-cadre-tau-empire",
     "name": "Suppressing Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6321,7 +5749,7 @@
     "community_notes": "One enemy unit hit by this unit's attacks is pinned (-2\" Move) until the start of your next Command phase."
   },
   {
-    "ability_id": "swift-embarkation-sudden-dawn-cadre",
+    "ability_id": "swift-embarkation-sudden-dawn-cadre-tau-empire",
     "name": "Swift Embarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6355,7 +5783,7 @@
     "community_notes": "At the end of the opponent's Fight phase, an unengaged unit that was eligible to fight, wholly within 6\" of a friendly Sudden Dawn Cadre Transport it can embark within, embarks within it."
   },
   {
-    "ability_id": "puretide-engram-neurochip-retaliation-cadre",
+    "ability_id": "puretide-engram-neurochip-retaliation-cadre-tau-empire",
     "name": "Puretide Engram Neurochip",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6395,7 +5823,7 @@
     "community_notes": "Each time you target the bearer's unit with a Stratagem, roll one D6: on a 4+ you gain 1 CP."
   },
   {
-    "ability_id": "starflare-ignition-system-retaliation-cadre",
+    "ability_id": "starflare-ignition-system-retaliation-cadre-tau-empire",
     "name": "Starflare Ignition System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6429,7 +5857,7 @@
     "community_notes": "At the end of the opponent's turn, if the bearer's unit is unengaged, it can be removed from the battlefield and placed into Strategic Reserves."
   },
   {
-    "ability_id": "internal-grenade-racks-retaliation-cadre",
+    "ability_id": "internal-grenade-racks-retaliation-cadre-tau-empire",
     "name": "Internal Grenade Racks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6489,7 +5917,7 @@
     "community_notes": "The mortal wounds trigger each time the bearer ends a Normal move, against one enemy unit it moved over: roll six D6, 1 mortal wound per 4+."
   },
   {
-    "ability_id": "prototype-weapon-system-retaliation-cadre",
+    "ability_id": "prototype-weapon-system-retaliation-cadre-tau-empire",
     "name": "Prototype Weapon System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6542,7 +5970,7 @@
     "community_notes": "Selected each time the bearer is selected to shoot; applies to the bearer's ranged weapons until those attacks are resolved."
   },
   {
-    "ability_id": "exemplar-of-the-montka-montka",
+    "ability_id": "exemplar-of-the-montka-montka-tau-empire",
     "name": "Exemplar of the Mont'ka",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6570,7 +5998,7 @@
         "type": "ability-modifier",
         "target": "this-unit",
         "modifier": {
-          "ability": "killing-blow",
+          "ability": "killing-blow-tau-empire",
           "aspect": "duration",
           "operation": "add",
           "value": 1
@@ -6587,14 +6015,14 @@
     },
     "interactions": [
       {
-        "ability_ref": "killing-blow",
+        "ability_ref": "killing-blow-tau-empire",
         "type": "combos-with"
       }
     ],
     "community_notes": "While the bearer is leading a unit, the Killing Blow detachment rule applies to that unit during the fourth battle round as well. Kroot Shaper models cannot take this."
   },
   {
-    "ability_id": "strike-swiftly-montka",
+    "ability_id": "strike-swiftly-montka-tau-empire",
     "name": "Strike Swiftly",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6635,7 +6063,7 @@
     "community_notes": "In the Resolve Pre-battle Abilities step, up to two friendly T'au Empire units within 6\" that lack Scouts gain the Scouts 6\" ability."
   },
   {
-    "ability_id": "strategic-conqueror-montka",
+    "ability_id": "strategic-conqueror-montka-tau-empire",
     "name": "Strategic Conqueror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6718,7 +6146,7 @@
     "community_notes": "[APPROX] At the start of the first battle round select one objective marker; while the bearer is on the battlefield, friendly T'au Empire models within range of it get +1 Objective Control. Encoded as an opaque grant."
   },
   {
-    "ability_id": "coordinated-exploitation-montka",
+    "ability_id": "coordinated-exploitation-montka-tau-empire",
     "name": "Coordinated Exploitation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6789,14 +6217,14 @@
     },
     "interactions": [
       {
-        "ability_ref": "for-the-greater-good",
+        "ability_ref": "for-the-greater-good-tau-empire",
         "type": "combos-with"
       }
     ],
     "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [SUSTAINED HITS 1] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this."
   },
   {
-    "ability_id": "kroothawk-flock-kroot-hunting-pack",
+    "ability_id": "kroothawk-flock-kroot-hunting-pack-tau-empire",
     "name": "Kroothawk Flock",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6854,7 +6282,7 @@
     "community_notes": "Enemy units arriving as Reinforcements cannot be set up within 12\" horizontally of the bearer; encoded as an opaque grant."
   },
   {
-    "ability_id": "nomadic-hunter-kroot-hunting-pack",
+    "ability_id": "nomadic-hunter-kroot-hunting-pack-tau-empire",
     "name": "Nomadic Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6914,7 +6342,7 @@
     }
   },
   {
-    "ability_id": "root-carved-weapons-kroot-hunting-pack",
+    "ability_id": "root-carved-weapons-kroot-hunting-pack-tau-empire",
     "name": "Root-carved Weapons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6951,7 +6379,7 @@
     "community_notes": "Applies to all weapons equipped by the bearer."
   },
   {
-    "ability_id": "borthrod-gland-kroot-hunting-pack",
+    "ability_id": "borthrod-gland-kroot-hunting-pack-tau-empire",
     "name": "Borthrod Gland",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6997,7 +6425,7 @@
     "community_notes": "While the bearer is leading a unit, melee attacks made by models in that unit score Critical Hits on unmodified Hit rolls of 5+."
   },
   {
-    "ability_id": "supernova-launcher-experimental-prototype-cadre",
+    "ability_id": "supernova-launcher-experimental-prototype-cadre-tau-empire",
     "name": "Supernova Launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7058,7 +6486,7 @@
     "community_notes": "Applies to one Airbursting Fragmentation Projector selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
   },
   {
-    "ability_id": "thermoneutronic-projector-experimental-prototype-cadre",
+    "ability_id": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
     "name": "Thermoneutronic Projector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7119,7 +6547,7 @@
     "community_notes": "Applies to one T'au Flamer selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
   },
   {
-    "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre",
+    "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
     "name": "Plasma Accelerator Rifle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7190,7 +6618,7 @@
     "community_notes": "Applies to one Plasma Rifle selected in the Declare Battle Formations step; the weapon-name scoping is not encoded."
   },
   {
-    "ability_id": "exemplar-of-the-kauyon-kauyon",
+    "ability_id": "exemplar-of-the-kauyon-kauyon-tau-empire",
     "name": "Exemplar of the Kauyon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7218,7 +6646,7 @@
         "type": "ability-modifier",
         "target": "this-unit",
         "modifier": {
-          "ability": "patient-hunter",
+          "ability": "patient-hunter-tau-empire",
           "aspect": "start-round",
           "operation": "set",
           "value": 2
@@ -7235,14 +6663,14 @@
     },
     "interactions": [
       {
-        "ability_ref": "patient-hunter",
+        "ability_ref": "patient-hunter-tau-empire",
         "type": "combos-with"
       }
     ],
     "community_notes": "While the bearer is leading a unit, the Patient Hunter detachment rule applies to that unit from the second battle round instead of the third. Kroot Shaper models cannot take this."
   },
   {
-    "ability_id": "precision-of-the-patient-hunter-kauyon",
+    "ability_id": "precision-of-the-patient-hunter-kauyon-tau-empire",
     "name": "Precision of the Patient Hunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7278,7 +6706,7 @@
     "community_notes": "From the third battle round onwards, also add 1 to the Wound roll; the round-gated wound bonus is not encoded."
   },
   {
-    "ability_id": "solid-image-projection-unit-kauyon",
+    "ability_id": "solid-image-projection-unit-kauyon-tau-empire",
     "name": "Solid-image Projection Unit",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7324,7 +6752,7 @@
     "community_notes": "After deployment, redeploy up to three T'au Empire units, optionally into Strategic Reserves regardless of the usual limits."
   },
   {
-    "ability_id": "through-unity-devastation-kauyon",
+    "ability_id": "through-unity-devastation-kauyon-tau-empire",
     "name": "Through Unity, Devastation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7395,14 +6823,14 @@
     },
     "interactions": [
       {
-        "ability_ref": "for-the-greater-good",
+        "ability_ref": "for-the-greater-good-tau-empire",
         "type": "combos-with"
       }
     ],
     "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [LETHAL HITS] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this."
   },
   {
-    "ability_id": "student-of-kauyon-auxiliary-cadre",
+    "ability_id": "student-of-kauyon-auxiliary-cadre-tau-empire",
     "name": "Student of Kauyon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7455,7 +6883,7 @@
     "community_notes": "[APPROX] In the Declare Battle Formations step, up to three friendly Kroot Carnivores or Farstalker Kinband units gain Deep Strike. Encoded as an opaque grant."
   },
   {
-    "ability_id": "admired-leader-auxiliary-cadre",
+    "ability_id": "admired-leader-auxiliary-cadre-tau-empire",
     "name": "Admired Leader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7514,7 +6942,7 @@
     "community_notes": "In your Command phase, one Kroot or Vespid Stingwings unit within 12\" gets improved Leadership (encoded as -1, lower is better) and +1 Objective Control until the start of your next Command phase. Kroot models cannot take this."
   },
   {
-    "ability_id": "earth-caste-modifications-sudden-dawn-cadre",
+    "ability_id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
     "name": "Earth Caste Modifications",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7610,7 +7038,7 @@
     "community_notes": "[APPROX] After this unit shoots, one enemy unit hit is suppressed (-1 to Hit rolls) until the start of your next turn; and this unit's ingress moves can be set up more than 6\" (instead of 8\") from enemies at the cost of not charging that turn. Both encoded as opaque grants."
   },
   {
-    "ability_id": "proximity-scanners-sudden-dawn-cadre",
+    "ability_id": "proximity-scanners-sudden-dawn-cadre-tau-empire",
     "name": "Proximity Scanners",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7662,7 +7090,7 @@
     "community_notes": "[APPROX] Unit Upgrade (Devilfish unit, not a Character Enhancement): when a friendly unit disembarks from this unit, its pulse blaster and pulse carbine weapons get +1 Attacks. Encoded as an opaque grant."
   },
   {
-    "ability_id": "shield-drone-commander-cloudspear",
+    "ability_id": "shield-drone-commander-cloudspear-tau-empire",
     "name": "Shield Drone",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7686,10 +7114,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "superior-weapon-support-system-commander-cloudspear",
+    "ability_id": "superior-weapon-support-system-tau-empire",
     "name": "Superior Weapon Support System",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7738,10 +7167,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "breach-and-clear-sudden-dawn-cadre",
+    "ability_id": "breach-and-clear-sudden-dawn-cadre-breacher-team-tau-empire",
     "name": "Breach and Clear",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7778,10 +7208,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "tau-empire"
   },
   {
-    "ability_id": "target-uploaded-sudden-dawn-cadre",
+    "ability_id": "target-uploaded-sudden-dawn-cadre-pathfinder-team-tau-empire",
     "name": "Target Uploaded",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7845,6 +7276,317 @@
           }
         ]
       }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "faction_id": "tau-empire"
+  },
+  {
+    "ability_id": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire",
+    "name": "Battlesuit Support System",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ghostkeel-battlesuit"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "battlesuit-support-system-tau-empire",
+    "name": "Battlesuit Support System",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "co-ordinated-eradication-tau-empire",
+    "name": "Co-ordinated Eradication",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tau-empire",
+    "detachment_id": "sudden-dawn-cadre",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-tau-empire",
+    "name": "Damaged: 1-10 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "taunar-supremacy-armour"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-20-wounds-remaining-tau-empire",
+    "name": "Damaged: 1-20 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "manta"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-tau-empire",
+    "name": "Damaged: 1-4 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ghostkeel-battlesuit",
+      "razorshark-strike-fighter",
+      "riptide-battlesuit",
+      "sun-shark-bomber"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-stormsurge-tau-empire",
+    "name": "Damaged: 1-5 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "stormsurge"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-tau-empire",
+    "name": "Damaged: 1-5 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "hammerhead-gunship",
+      "sky-ray-gunship"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-tau-empire",
+    "name": "Damaged: 1-6 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ax-1-0-tiger-shark",
+      "tiger-shark"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "drones-sudden-dawn-cadre-tau-empire",
+    "name": "Drones",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "for-the-greater-good-sudden-dawn-cadre-tau-empire",
+    "name": "For the Greater Good",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire",
+    "name": "Grav-inhibitor Drone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "sudden-dawn-cadre-pathfinder-team"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rapid-disembark-tau-empire",
+    "name": "Rapid Disembark",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "sudden-dawn-cadre-devilfish"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weapon-support-system-tau-empire",
+    "name": "Weapon Support System",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "broadside-battlesuits",
+      "commander-in-coldstar-battlesuit",
+      "commander-in-enforcer-battlesuit"
+    ],
+    "faction_id": "tau-empire",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"

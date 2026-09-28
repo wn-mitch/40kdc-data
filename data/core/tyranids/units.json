@@ -45,7 +45,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "subterranean-tunnels"
+      "subterranean-tunnels-tyranids",
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -119,8 +120,9 @@
       "mawloc-scything-talons"
     ],
     "ability_ids": [
-      "terror-from-the-deep",
-      "deep-strike"
+      "terror-from-the-deep-tyranids",
+      "deep-strike",
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -202,7 +204,7 @@
       "venom-cannon"
     ],
     "ability_ids": [
-      "adaptable-predators"
+      "adaptable-predators-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -300,9 +302,12 @@
       "tyrant-talons"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "paroxysm-psychic",
-      "will-of-the-hive-mind",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "paroxysm-tyranids",
+      "will-of-the-hive-mind-tyranids",
       "deep-strike"
     ],
     "game_version": {
@@ -381,9 +386,13 @@
       "gargantuan-scything-talons"
     ],
     "ability_ids": [
-      "deadly-demise-2d6",
-      "frenzied-metabolism",
-      "hover"
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "frenzied-metabolism-tyranids",
+      "hover",
+      "damaged-1-10-wounds-remaining-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -463,9 +472,13 @@
       "psychic-tendril"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "singular-purpose",
-      "unnatural-resilience"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "singular-purpose-tyranids",
+      "unnatural-resilience-tyranids",
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -535,8 +548,8 @@
       "prime-talons"
     ],
     "ability_ids": [
-      "alpha-warrior",
-      "death-blow",
+      "alpha-warrior-winged-tyranid-prime-tyranids",
+      "death-blow-tyranids",
       "leader",
       "deep-strike"
     ],
@@ -612,9 +625,9 @@
     "ability_ids": [
       "fights-first",
       "infiltrators",
-      "pouncing-leap",
+      "pouncing-leap-tyranids",
       "stealth",
-      "synapse"
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -693,9 +706,13 @@
       "titanic-scything-talons"
     ],
     "ability_ids": [
-      "apex-beast",
-      "stalking-forward",
-      "deadly-demise-2d6"
+      "apex-beast-tyranids",
+      "stalking-forward-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "damaged-1-10-wounds-remaining-hierophant-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -770,11 +787,14 @@
       "synaptic-pulse"
     ],
     "ability_ids": [
-      "domination-of-the-hive-mind-aura",
-      "hive-commander",
+      "domination-of-the-hive-mind-tyranids",
+      "hive-commander-tyranids",
       "leader",
-      "malign-presence-aura",
-      "deadly-demise-d3"
+      "malign-presence-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -850,8 +870,12 @@
       "powerful-limbs"
     ],
     "ability_ids": [
-      "symbiotic-targeting",
-      "deadly-demise-d3"
+      "symbiotic-targeting-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -922,7 +946,7 @@
       "toxic-lashes"
     ],
     "ability_ids": [
-      "foul-spores-aura",
+      "foul-spores-tyranids",
       "stealth"
     ],
     "game_version": {
@@ -994,7 +1018,7 @@
       "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons"
     ],
     "ability_ids": [
-      "adaptive-instincts"
+      "adaptive-instincts-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1069,9 +1093,9 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "bio-minefield",
-      "floating-death",
-      "deep-strike"
+      "bio-minefield-tyranids",
+      "deep-strike",
+      "floating-death-spore-mines-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1150,9 +1174,12 @@
       "tyrannocyte-bio-weapons"
     ],
     "ability_ids": [
-      "aerial-seeding",
+      "aerial-seeding-tyranids",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 20
@@ -1230,7 +1257,7 @@
       "spinemaws"
     ],
     "ability_ids": [
-      "chitinous-horrors-aura",
+      "chitinous-horrors-tyranids",
       "deep-strike"
     ],
     "game_version": {
@@ -1305,8 +1332,11 @@
       "spore-mine-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "seed-spore-mines"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "seed-spore-mines-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1375,10 +1405,10 @@
       "lictor-claws-and-talons"
     ],
     "ability_ids": [
-      "fear-of-the-unseen-aura",
-      "feeder-tendrils",
+      "fear-of-the-unseen-tyranids",
+      "feeder-tendrils-tyranids",
       "fights-first",
-      "hunter-organism",
+      "hunter-organism-tyranids",
       "infiltrators",
       "lone-operative",
       "stealth"
@@ -1471,9 +1501,10 @@
       "venom-bolt"
     ],
     "ability_ids": [
-      "alpha-invader",
-      "hypersensory-array",
-      "deep-strike"
+      "alpha-invader-tyranids",
+      "hypersensory-array-tyranids",
+      "deep-strike",
+      "leader"
     ],
     "game_version": {
       "edition": "11th",
@@ -1550,8 +1581,13 @@
       "toxinjector-harpoon"
     ],
     "ability_ids": [
-      "harpoon-barbs",
-      "deadly-demise-d6"
+      "harpoon-barbs-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-tyranids",
+      "singular-purpose-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1617,9 +1653,12 @@
       "sporocyst-bio-weapons"
     ],
     "ability_ids": [
-      "hive-defences",
-      "seed-mucolids",
-      "deadly-demise-d3"
+      "hive-defences-tyranids",
+      "seed-mucolids-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1697,8 +1736,12 @@
       "stinger-salvoes"
     ],
     "ability_ids": [
-      "resilient-organism",
-      "deadly-demise-d6"
+      "resilient-organism-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1783,11 +1826,12 @@
       "piercing-claws-and-talons"
     ],
     "ability_ids": [
-      "neural-disruption",
-      "psychological-saboteur-aura",
+      "neural-disruption-tyranids",
+      "psychological-saboteur-tyranids",
       "stealth",
       "infiltrators",
-      "lone-operative"
+      "lone-operative",
+      "feeder-tendrils-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1856,10 +1900,16 @@
       "talons-and-betentacled-maw"
     ],
     "ability_ids": [
-      "bio-stimulus-aura",
-      "feeding-frenzy",
-      "feel-no-pain-5",
-      "deadly-demise-1"
+      "bio-stimulus-tyranids",
+      "feeding-frenzy-tyranids",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1933,8 +1983,8 @@
       "warp-blast"
     ],
     "ability_ids": [
-      "spirit-leech-aura-psychic",
-      "warp-field-aura-psychic"
+      "spirit-leech-tyranids",
+      "warp-field-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2005,10 +2055,13 @@
       "broodlord-claws-and-talons"
     ],
     "ability_ids": [
-      "hypnotic-gaze-psychic",
+      "hypnotic-gaze-tyranids",
       "leader",
-      "scouts-8",
-      "vicious-insight"
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      "vicious-insight-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2081,8 +2134,12 @@
       "twin-stranglethorn-cannon"
     ],
     "ability_ids": [
-      "spore-mine-cysts",
-      "deadly-demise-d3"
+      "spore-mine-cysts-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2153,8 +2210,8 @@
       "clawed-limbs"
     ],
     "ability_ids": [
-      "it-itches",
-      "parasitic-infection",
+      "it-itches-tyranids",
+      "parasitic-infection-tyranids",
       "deep-strike",
       "stealth",
       "lone-operative"
@@ -2229,7 +2286,7 @@
       "scything-talons-and-rending-claws"
     ],
     "ability_ids": [
-      "guardian-organism"
+      "guardian-organism-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2307,8 +2364,11 @@
       "scream-killer-talons"
     ],
     "ability_ids": [
-      "death-scream",
-      "deadly-demise-1"
+      "death-scream-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2376,10 +2436,10 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "bio-minefield",
+      "bio-minefield-tyranids",
       "deep-strike",
-      "floating-death",
-      "synapse"
+      "floating-death-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2452,7 +2512,7 @@
       "hormagaunt-talons"
     ],
     "ability_ids": [
-      "bounding-leap"
+      "bounding-leap-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2544,8 +2604,11 @@
       "genestealers-claws-and-talons"
     ],
     "ability_ids": [
-      "vanguard-predator",
-      "scouts-8"
+      "vanguard-predator-tyranids",
+      {
+        "id": "scouts",
+        "value": 8
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2611,9 +2674,12 @@
       "massive-toxic-lashes"
     ],
     "ability_ids": [
-      "grasping-tendrils",
-      "hypertoxic-miasma-aura",
-      "deadly-demise-d3"
+      "grasping-tendrils-tyranids",
+      "hypertoxic-miasma-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2712,8 +2778,11 @@
       "flamespurt"
     ],
     "ability_ids": [
-      "burning-spray",
-      "deadly-demise-1"
+      "burning-spray-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2785,9 +2854,9 @@
     ],
     "ability_ids": [
       "leader",
-      "neuroloids",
-      "node-lash-psychic",
-      "psychic-terror-psychic"
+      "neuroloids-tyranids",
+      "node-lash-tyranids",
+      "psychic-terror-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2867,7 +2936,7 @@
       "termagant-spinefists"
     ],
     "ability_ids": [
-      "skulking-horrors"
+      "skulking-horrors-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2941,8 +3010,9 @@
       "scything-talons"
     ],
     "ability_ids": [
-      "aggressive-leader-beast",
-      "leader"
+      "aggressive-leader-beast-tyranids",
+      "leader",
+      "alpha-warrior-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3032,7 +3102,7 @@
       "shockcannon"
     ],
     "ability_ids": [
-      "defensive-stance"
+      "defensive-stance-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3103,7 +3173,7 @@
       "chitinous-claws-and-teeth-barbgaunts"
     ],
     "ability_ids": [
-      "disruption-bombardment"
+      "disruption-bombardment-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3178,7 +3248,7 @@
       "chitinous-claws-and-teeth-neurogaunts"
     ],
     "ability_ids": [
-      "neurocytes"
+      "neurocytes-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3251,8 +3321,12 @@
       "thorax-spur"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "deadly-demise-d3"
+      "airborne-predator-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-4-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3324,9 +3398,13 @@
       "stinger-salvoes"
     ],
     "ability_ids": [
-      "brood-progenitor-aura-psychic",
-      "spawn-termagants",
-      "deadly-demise-d6"
+      "brood-progenitor-tyranids",
+      "spawn-termagants-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3395,10 +3473,13 @@
       "old-one-eyes-claws-and-talons"
     ],
     "ability_ids": [
-      "alpha-leader",
+      "alpha-leader-tyranids",
       "leader",
-      "unstoppable-monster",
-      "feel-no-pain-5"
+      "unstoppable-monster-tyranids",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3476,8 +3557,12 @@
       "psychic-overload"
     ],
     "ability_ids": [
-      "encephalic-diffusion-aura-psychic",
-      "deadly-demise-d3"
+      "encephalic-diffusion-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3556,8 +3641,11 @@
       "stranglethorn-cannon-carnifexes"
     ],
     "ability_ids": [
-      "blistering-assault",
-      "deadly-demise-1"
+      "blistering-assault-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3630,8 +3718,12 @@
     ],
     "ability_ids": [
       "leader",
-      "onslaught-aura-psychic",
-      "deadly-demise-d3"
+      "onslaught-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "will-of-the-hive-mind-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3709,7 +3801,7 @@
       "fleshborer"
     ],
     "ability_ids": [
-      "winged-swarm",
+      "winged-swarm-tyranids",
       "deep-strike"
     ],
     "game_version": {
@@ -3791,8 +3883,12 @@
       "shovelling-claws"
     ],
     "ability_ids": [
-      "grisly-spectacle",
-      "deadly-demise-d3"
+      "grisly-spectacle-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "damaged-1-5-wounds-remaining-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3858,11 +3954,12 @@
       "lictor-claws-and-talons"
     ],
     "ability_ids": [
-      "pheromone-trail",
+      "pheromone-trail-tyranids",
       "stealth",
       "infiltrators",
       "lone-operative",
-      "fights-first"
+      "fights-first",
+      "feeder-tendrils-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3937,7 +4034,7 @@
       "ravener-claws-and-talons"
     ],
     "ability_ids": [
-      "death-from-below",
+      "death-from-below-tyranids",
       "deep-strike"
     ],
     "game_version": {
@@ -4027,6 +4124,11 @@
         "namespace": "mfm",
         "id": "657c1613-454f-49a9-9619-ba906aac38ce"
       }
+    ],
+    "ability_ids": [
+      "deep-strike",
+      "subterranean-hunter-tyranids",
+      "swallow-whole-tyranids"
     ]
   },
   {
@@ -4085,8 +4187,10 @@
       "prime-talons"
     ],
     "ability_ids": [
-      "shadow-in-the-warp",
-      "synapse"
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids",
+      "bio-reserves-tyranids",
+      "death-blow-terror-of-vardenghast-tyranids"
     ],
     "external_refs": [
       {
@@ -4146,9 +4250,9 @@
       "chitinous-claws-and-teeth-barbgaunts"
     ],
     "ability_ids": [
-      "disruption-bombardment-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "disruption-bombardment-vardenghast-swarm-barbgaunts-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4211,10 +4315,10 @@
       "talons-and-betentacled-maw"
     ],
     "ability_ids": [
-      "feeding-frenzy-vardenghast-swarm",
-      "bio-stimulus-aura-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "feeding-frenzy-vardenghast-swarm-psychophage-tyranids",
+      "bio-stimulus-vardenghast-swarm-psychophage-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4277,9 +4381,9 @@
       "fleshborer"
     ],
     "ability_ids": [
-      "skulking-horrors-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "skulking-horrors-vardenghast-swarm-termagants-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4343,9 +4447,9 @@
       "leapers-talons"
     ],
     "ability_ids": [
-      "pouncing-leap-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "pouncing-leap-vardenghast-swarm-von-ryans-leapers-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {

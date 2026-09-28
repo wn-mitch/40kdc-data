@@ -1,13 +1,13 @@
 [
   {
-    "id": "radiant-mantle-talons-of-the-emperor",
+    "id": "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
     "name": "Radiant Mantle",
     "detachment_id": "talons-of-the-emperor",
     "cost": 30,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "radiant-mantle-talons-of-the-emperor",
+    "ability_id": "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "gift-of-terran-artifice-talons-of-the-emperor",
+    "id": "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
     "name": "Gift of Terran Artifice",
     "detachment_id": "talons-of-the-emperor",
     "cost": 15,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "gift-of-terran-artifice-talons-of-the-emperor",
+    "ability_id": "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "champion-of-the-imperium-talons-of-the-emperor",
+    "id": "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
     "name": "Champion of the Imperium",
     "detachment_id": "talons-of-the-emperor",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "champion-of-the-imperium-talons-of-the-emperor",
+    "ability_id": "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "aegis-projector-talons-of-the-emperor",
+    "id": "aegis-projector-talons-of-the-emperor-adeptus-custodes",
     "name": "Aegis Projector",
     "detachment_id": "talons-of-the-emperor",
     "cost": 20,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "aegis-projector-talons-of-the-emperor",
+    "ability_id": "aegis-projector-talons-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "from-the-hall-of-armouries-shield-host",
+    "id": "from-the-hall-of-armouries-shield-host-adeptus-custodes",
     "name": "From the Hall of Armouries",
     "detachment_id": "shield-host",
     "cost": 20,
     "keyword_restrictions": [
       "Shield-Captain"
     ],
-    "ability_id": "from-the-hall-of-armouries-shield-host",
+    "ability_id": "from-the-hall-of-armouries-shield-host-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "castellans-mark-shield-host",
+    "id": "castellans-mark-shield-host-adeptus-custodes",
     "name": "Castellan’s Mark",
     "detachment_id": "shield-host",
     "cost": 20,
     "keyword_restrictions": [
       "Shield-Captain"
     ],
-    "ability_id": "castellans-mark-shield-host",
+    "ability_id": "castellans-mark-shield-host-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,11 +168,11 @@
     ]
   },
   {
-    "id": "auric-mantle-shield-host",
+    "id": "auric-mantle-shield-host-adeptus-custodes",
     "name": "Auric Mantle",
     "detachment_id": "shield-host",
     "cost": 15,
-    "ability_id": "auric-mantle-shield-host",
+    "ability_id": "auric-mantle-shield-host-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -201,11 +201,11 @@
     ]
   },
   {
-    "id": "panoptispex-shield-host",
+    "id": "panoptispex-shield-host-adeptus-custodes",
     "name": "Panoptispex",
     "detachment_id": "shield-host",
     "cost": 5,
-    "ability_id": "panoptispex-shield-host",
+    "ability_id": "panoptispex-shield-host-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "id": "raptor-blade-null-maiden-vigil",
+    "id": "raptor-blade-null-maiden-vigil-adeptus-custodes",
     "name": "Raptor Blade",
     "detachment_id": "null-maiden-vigil",
     "cost": 5,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "raptor-blade-null-maiden-vigil",
+    "ability_id": "raptor-blade-null-maiden-vigil-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -262,14 +262,14 @@
     ]
   },
   {
-    "id": "enhanced-voidsheen-cloak-null-maiden-vigil",
+    "id": "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
     "name": "Enhanced Voidsheen Cloak",
     "detachment_id": "null-maiden-vigil",
     "cost": 10,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "enhanced-voidsheen-cloak-null-maiden-vigil",
+    "ability_id": "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -290,14 +290,14 @@
     ]
   },
   {
-    "id": "huntress-eye-null-maiden-vigil",
+    "id": "huntress-eye-null-maiden-vigil-adeptus-custodes",
     "name": "Huntress’ Eye",
     "detachment_id": "null-maiden-vigil",
     "cost": 15,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "huntress-eye-null-maiden-vigil",
+    "ability_id": "huntress-eye-null-maiden-vigil-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -318,14 +318,14 @@
     ]
   },
   {
-    "id": "oblivion-knight-null-maiden-vigil",
+    "id": "oblivion-knight-null-maiden-vigil-adeptus-custodes",
     "name": "Oblivion Knight",
     "detachment_id": "null-maiden-vigil",
     "cost": 25,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "oblivion-knight-null-maiden-vigil",
+    "ability_id": "oblivion-knight-null-maiden-vigil-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -346,14 +346,14 @@
     ]
   },
   {
-    "id": "blade-imperator-auric-champions",
+    "id": "blade-imperator-auric-champions-adeptus-custodes",
     "name": "Blade Imperator",
     "detachment_id": "auric-champions",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "blade-imperator-auric-champions",
+    "ability_id": "blade-imperator-auric-champions-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -374,14 +374,14 @@
     ]
   },
   {
-    "id": "inspirational-exemplar-auric-champions",
+    "id": "inspirational-exemplar-auric-champions-adeptus-custodes",
     "name": "Inspirational Exemplar",
     "detachment_id": "auric-champions",
     "cost": 10,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "inspirational-exemplar-auric-champions",
+    "ability_id": "inspirational-exemplar-auric-champions-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -402,14 +402,14 @@
     ]
   },
   {
-    "id": "veiled-blade-auric-champions",
+    "id": "veiled-blade-auric-champions-adeptus-custodes",
     "name": "Veiled Blade",
     "detachment_id": "auric-champions",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "veiled-blade-auric-champions",
+    "ability_id": "veiled-blade-auric-champions-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -430,14 +430,14 @@
     ]
   },
   {
-    "id": "martial-philosopher-auric-champions",
+    "id": "martial-philosopher-auric-champions-adeptus-custodes",
     "name": "Martial Philosopher",
     "detachment_id": "auric-champions",
     "cost": 30,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "martial-philosopher-auric-champions",
+    "ability_id": "martial-philosopher-auric-champions-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -458,14 +458,14 @@
     ]
   },
   {
-    "id": "adamantine-talisman-solar-spearhead",
+    "id": "adamantine-talisman-solar-spearhead-adeptus-custodes",
     "name": "Adamantine Talisman",
     "detachment_id": "solar-spearhead",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "adamantine-talisman-solar-spearhead",
+    "ability_id": "adamantine-talisman-solar-spearhead-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -486,14 +486,14 @@
     ]
   },
   {
-    "id": "augury-uplink-solar-spearhead",
+    "id": "augury-uplink-solar-spearhead-adeptus-custodes",
     "name": "Augury Uplink",
     "detachment_id": "solar-spearhead",
     "cost": 35,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "augury-uplink-solar-spearhead",
+    "ability_id": "augury-uplink-solar-spearhead-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -514,7 +514,7 @@
     ]
   },
   {
-    "id": "honoured-fallen-aura-solar-spearhead",
+    "id": "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
     "name": "Honoured Fallen (Aura)",
     "detachment_id": "solar-spearhead",
     "cost": 15,
@@ -522,7 +522,7 @@
       "Adeptus Custodes",
       "Vehicle"
     ],
-    "ability_id": "honoured-fallen-aura-solar-spearhead",
+    "ability_id": "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -543,11 +543,11 @@
     ]
   },
   {
-    "id": "veteran-of-the-kataphraktoi-solar-spearhead",
+    "id": "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes",
     "name": "Veteran of the Kataphraktoi",
     "detachment_id": "solar-spearhead",
     "cost": 10,
-    "ability_id": "veteran-of-the-kataphraktoi-solar-spearhead",
+    "ability_id": "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -578,7 +578,7 @@
     ]
   },
   {
-    "id": "superior-creation-lions-of-the-emperor",
+    "id": "superior-creation-lions-of-the-emperor-adeptus-custodes",
     "name": "Superior Creation",
     "detachment_id": "lions-of-the-emperor",
     "cost": 25,
@@ -586,7 +586,7 @@
       "Adeptus Custodes",
       "Infantry"
     ],
-    "ability_id": "superior-creation-lions-of-the-emperor",
+    "ability_id": "superior-creation-lions-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -607,14 +607,14 @@
     ]
   },
   {
-    "id": "praesidius-lions-of-the-emperor",
+    "id": "praesidius-lions-of-the-emperor-adeptus-custodes",
     "name": "Praesidius",
     "detachment_id": "lions-of-the-emperor",
     "cost": 25,
     "keyword_restrictions": [
       "Adeptus Custodes"
     ],
-    "ability_id": "praesidius-lions-of-the-emperor",
+    "ability_id": "praesidius-lions-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -635,14 +635,14 @@
     ]
   },
   {
-    "id": "fierce-conqueror-lions-of-the-emperor",
+    "id": "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
     "name": "Fierce Conqueror",
     "detachment_id": "lions-of-the-emperor",
     "cost": 15,
     "keyword_restrictions": [
       "Shield-Captain"
     ],
-    "ability_id": "fierce-conqueror-lions-of-the-emperor",
+    "ability_id": "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -663,14 +663,14 @@
     ]
   },
   {
-    "id": "admonimortis-lions-of-the-emperor",
+    "id": "admonimortis-lions-of-the-emperor-adeptus-custodes",
     "name": "Admonimortis",
     "detachment_id": "lions-of-the-emperor",
     "cost": 30,
     "keyword_restrictions": [
       "Shield-Captain"
     ],
-    "ability_id": "admonimortis-lions-of-the-emperor",
+    "ability_id": "admonimortis-lions-of-the-emperor-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -691,7 +691,7 @@
     ]
   },
   {
-    "id": "interred-expertise-upgrade-might-of-the-moritoi",
+    "id": "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
     "name": "Interred Expertise (Upgrade)",
     "detachment_id": "might-of-the-moritoi",
     "cost": 25,
@@ -699,7 +699,7 @@
       "Adeptus Custodes",
       "Walker"
     ],
-    "ability_id": "interred-expertise-might-of-the-moritoi",
+    "ability_id": "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -720,7 +720,7 @@
     ]
   },
   {
-    "id": "auramite-sarcophagus-upgrade-might-of-the-moritoi",
+    "id": "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes",
     "name": "Auramite Sarcophagus (Upgrade)",
     "detachment_id": "might-of-the-moritoi",
     "cost": 15,
@@ -728,7 +728,7 @@
       "Adeptus Custodes",
       "Walker"
     ],
-    "ability_id": "auramite-sarcophagus-might-of-the-moritoi",
+    "ability_id": "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -749,14 +749,14 @@
     ]
   },
   {
-    "id": "encircling-hunter-silent-hunters",
+    "id": "encircling-hunter-silent-hunters-adeptus-custodes",
     "name": "Encircling Hunter",
     "detachment_id": "silent-hunters",
     "cost": 15,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "encircling-hunter-silent-hunters",
+    "ability_id": "encircling-hunter-silent-hunters-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -777,14 +777,14 @@
     ]
   },
   {
-    "id": "psyk-out-grenades-upgrade-silent-hunters",
+    "id": "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes",
     "name": "Psyk-out Grenades (Upgrade)",
     "detachment_id": "silent-hunters",
     "cost": 10,
     "keyword_restrictions": [
       "Anathema Psykana"
     ],
-    "ability_id": "psyk-out-grenades-silent-hunters",
+    "ability_id": "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -805,7 +805,7 @@
     ]
   },
   {
-    "id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow",
+    "id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Mnemo-locked Shrine Cipher",
     "detachment_id": "tharanatoi-hammerblow",
     "cost": 25,
@@ -813,7 +813,7 @@
       "Adeptus Custodes",
       "Terminator"
     ],
-    "ability_id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow",
+    "ability_id": "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -834,7 +834,7 @@
     ]
   },
   {
-    "id": "efficient-aggression-tharanatoi-hammerblow",
+    "id": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes",
     "name": "Efficient Aggression",
     "detachment_id": "tharanatoi-hammerblow",
     "cost": 25,
@@ -842,7 +842,7 @@
       "Adeptus Custodes",
       "Terminator"
     ],
-    "ability_id": "efficient-aggression-tharanatoi-hammerblow",
+    "ability_id": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -863,7 +863,7 @@
     ]
   },
   {
-    "id": "comrades-in-wrath-tristraens-gilded-blades",
+    "id": "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
     "name": "Comrades in Wrath",
     "detachment_id": "tristraens-gilded-blades",
     "cost": 0,
@@ -881,7 +881,7 @@
       "Gilded Blades Allarus Custodians"
     ],
     "upgrade_tag": true,
-    "ability_id": "comrades-in-wrath-tristraens-gilded-blades",
+    "ability_id": "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -890,7 +890,7 @@
     ]
   },
   {
-    "id": "shattering-charge-tristraens-gilded-blades",
+    "id": "shattering-charge-tristraens-gilded-blades-adeptus-custodes",
     "name": "Shattering Charge",
     "detachment_id": "tristraens-gilded-blades",
     "cost": 0,
@@ -907,7 +907,7 @@
       "Adeptus Custodes",
       "Tristraen of the Gilded Blades"
     ],
-    "ability_id": "shattering-charge-tristraens-gilded-blades",
+    "ability_id": "shattering-charge-tristraens-gilded-blades-adeptus-custodes",
     "external_refs": [
       {
         "namespace": "mfm",

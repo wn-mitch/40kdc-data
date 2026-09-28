@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "matchless-swiftness",
+    "source_id": "matchless-swiftness-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -16,7 +16,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "eviscerating-fly-by",
+    "source_id": "eviscerating-fly-by-drukhari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -28,7 +28,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cluster-caltrops",
+    "source_id": "cluster-caltrops-drukhari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -40,7 +40,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grav-talon",
+    "source_id": "grav-talon-drukhari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -52,7 +52,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-1",
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -65,7 +65,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pain-parasite",
+    "source_id": "pain-parasite-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -81,7 +81,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pain-engine-aura",
+    "source_id": "pain-engine-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -97,7 +97,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lithe-agility",
+    "source_id": "lithe-agility-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -113,7 +113,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "storm-of-blades",
+    "source_id": "storm-of-blades-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -126,7 +126,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "bloody-spectacle",
+    "source_id": "bloody-spectacle-drukhari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -150,7 +150,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "battlefield-butchery",
+    "source_id": "battlefield-butchery-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -166,7 +166,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "skyboard-evasion",
+    "source_id": "skyboard-evasion-drukhari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -178,7 +178,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "phantasm-grenade-launcher",
+    "source_id": "phantasm-grenade-launcher-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -190,7 +190,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "firing-deck-6",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -215,7 +215,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-deployment",
+    "source_id": "rapid-deployment-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -231,7 +231,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "aerialists",
+    "source_id": "aerialists-drukhari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -244,7 +244,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "swooping-descent",
+    "source_id": "swooping-descent-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -260,7 +260,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "murderous-crossfire",
+    "source_id": "murderous-crossfire-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -272,7 +272,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "sadistic-raiders",
+    "source_id": "sadistic-raiders-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -288,7 +288,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cruel-enforcers",
+    "source_id": "cruel-enforcers-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -300,7 +300,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "kabalite-icon",
+    "source_id": "kabalite-icon-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -312,33 +312,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-deck-11",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "splinter-racks",
+    "source_id": "splinter-racks-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -354,7 +328,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "vanguard-of-the-dark-city",
+    "source_id": "vanguard-of-the-dark-city-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -378,7 +352,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "brides-of-death",
+    "source_id": "brides-of-death-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -394,7 +368,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blur-of-blades",
+    "source_id": "blur-of-blades-drukhari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -406,7 +380,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "thrilling-spectacle",
+    "source_id": "thrilling-spectacle-drukhari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -418,7 +392,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "nowhere-to-run",
+    "source_id": "nowhere-to-run-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -434,7 +408,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ground-attack-craft",
+    "source_id": "ground-attack-craft-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -446,7 +420,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "winged-strike",
+    "source_id": "winged-strike-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -462,7 +436,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "airborne-evasion",
+    "source_id": "airborne-evasion-drukhari",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -476,7 +450,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mindless-killing-machines",
+    "source_id": "mindless-killing-machines-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -492,7 +466,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "torture-device",
+    "source_id": "torture-device-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -508,7 +482,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "experimental-enhancements",
+    "source_id": "experimental-enhancements-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -524,19 +498,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "torturers-craft",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fleshcraft",
+    "source_id": "fleshcraft-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -552,7 +514,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fear-incarnate-aura",
+    "source_id": "fear-incarnate-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -564,7 +526,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "pain-adept",
+    "source_id": "pain-adept-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -580,7 +542,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hatred-eternal",
+    "source_id": "hatred-eternal-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -596,7 +558,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "overlord",
+    "source_id": "overlord-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -612,7 +574,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "devious-mastermind",
+    "source_id": "devious-mastermind-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -624,7 +586,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "soul-trap",
+    "source_id": "soul-trap-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -637,7 +599,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "archon-of-the-poisoned-tongue",
+    "source_id": "archon-of-the-poisoned-tongue-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -653,7 +615,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "precognisant",
+    "source_id": "precognisant-drukhari",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -665,7 +627,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mind-like-a-steel-trap-aura",
+    "source_id": "mind-like-a-steel-trap-drukhari",
     "source_type": "ability",
     "phases": [
       "command"
@@ -677,7 +639,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "agonising-suppression",
+    "source_id": "agonising-suppression-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -693,7 +655,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "eradicate-the-foe",
+    "source_id": "eradicate-the-foe-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -706,7 +668,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "acrobatic-gladiators",
+    "source_id": "acrobatic-gladiators-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -722,35 +684,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-7",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "assassins-poisons",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "archons-will",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -762,19 +696,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "archons-retinue",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nowhere-to-hide",
+    "source_id": "assassins-poisons-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -790,19 +712,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "void-mine",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-of-blades",
+    "source_id": "nowhere-to-hide-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -818,10 +728,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "onslaught",
+    "source_id": "void-mine-drukhari",
     "source_type": "ability",
     "phases": [
-      "fight"
+      "movement"
     ],
     "game_version": {
       "edition": "11th",
@@ -830,20 +740,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "silent-executioner",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "decapitating-strikes",
+    "source_id": "master-of-blades-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -859,7 +756,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tormentors",
+    "source_id": "onslaught-drukhari",
     "source_type": "ability",
     "phases": [
       "fight"
@@ -871,7 +768,20 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fade-away",
+    "source_id": "silent-executioner-drukhari",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "decapitating-strikes-drukhari",
     "source_type": "ability",
     "phases": [
       "command",
@@ -887,7 +797,35 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shade-weavers",
+    "source_id": "tormentors-drukhari",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fade-away-drukhari",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "shade-weavers-drukhari",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -899,732 +837,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-debut",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "acrobatic-display",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "taken-alive",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "making-a-point",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "skyborne-annihilation",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "malicious-frenzy",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "murderers-circus",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fighting-shadows",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "instinctive-spite",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eager-for-the-kill",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "connoisseurs-of-pain",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "a-challenge-met",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "insensible-to-pain",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tailored-toxins",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enemies-without-number",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "postmortality",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "symphony-of-suffering",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "poisoners-art",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "feigned-weakness",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "preternatural-agility",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "double-cross",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-deceivers",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vicious-blades",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wraithlike-retreat",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pounce-on-the-prey",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "swooping-mockery",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shorten-the-odds",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "scintillating-tempo",
-    "source_type": "stratagem",
-    "phases": [
-      "charge",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fateful-role",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dark-harvest",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enfolding-nightmare",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "berserk-fugue",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dance-macabre",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "raid-and-fade",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "distillers-of-fear",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "night-shield",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "phantasmal-smoke",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dark-vitality",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sadistic-fulcrum",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "labyrinthine-cunning",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spiteful-raider",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "eye-of-spite",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "nightmare-shroud",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crucible-of-malediction",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "archraider",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "webway-walker",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "conductor-of-torment",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pharmacophex",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "chronoshard",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "periapt-of-torments",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "morghennas-curse",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-repugnomancer-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "leechbite-plate",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "webway-awl",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "informant-network",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "towering-arrogance",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combat-drugs",
+    "source_id": "combat-drugs-drukhari",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1639,7 +852,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "murderous-agenda",
+    "source_id": "murderous-agenda-drukhari",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1655,7 +868,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rain-of-cruelty",
+    "source_id": "rain-of-cruelty-drukhari",
     "source_type": "detachment-rule",
     "phases": [
       "movement",
@@ -1669,7 +882,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "callous-competition",
+    "source_id": "callous-competition-drukhari",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1682,7 +895,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "alliance-of-agony",
+    "source_id": "alliance-of-agony-drukhari",
     "source_type": "detachment-rule",
     "phases": [
       "command",

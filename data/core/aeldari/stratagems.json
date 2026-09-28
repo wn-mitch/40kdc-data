@@ -1,25 +1,6 @@
 [
   {
-    "id": "anti-grav-repulsion-armoured-warhost",
-    "name": "ANTI-GRAV REPULSION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "armoured-warhost",
-    "cp_cost": 1,
-    "phases": [
-      "charge"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "blades-from-beyond-spirit-conclave",
+    "id": "blades-from-beyond-spirit-conclave-aeldari",
     "name": "BLADES FROM BEYOND",
     "category": "detachment",
     "type": "battle-tactic",
@@ -31,7 +12,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blades-from-beyond-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -48,7 +29,7 @@
     ]
   },
   {
-    "id": "blades-of-asuryan-guardian-battlehost",
+    "id": "blades-of-asuryan-guardian-battlehost-aeldari",
     "name": "BLADES OF ASURYAN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -60,7 +41,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blades-of-asuryan-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -77,7 +58,7 @@
     ]
   },
   {
-    "id": "blitzing-firepower-warhost",
+    "id": "blitzing-firepower-warhost-aeldari",
     "name": "BLITZING FIREPOWER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -89,7 +70,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blitzing-firepower-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -106,7 +87,7 @@
     ]
   },
   {
-    "id": "bloody-dance-ghosts-of-the-webway",
+    "id": "bloody-dance-ghosts-of-the-webway-aeldari",
     "name": "BLOODY DANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -118,7 +99,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bloody-dance-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -135,7 +116,7 @@
     ]
   },
   {
-    "id": "captivating-performance-twilight-flickers",
+    "id": "captivating-performance-twilight-flickers-aeldari",
     "name": "Captivating Performance",
     "category": "detachment",
     "detachment_id": "twilight-flickers",
@@ -146,7 +127,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "captivating-performance-twilight-flickers",
+    "ability_id": "captivating-performance-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -163,7 +144,7 @@
     ]
   },
   {
-    "id": "casting-back-the-veil-path-of-the-outcast",
+    "id": "casting-back-the-veil-path-of-the-outcast-aeldari",
     "name": "Casting Back the Veil",
     "category": "detachment",
     "detachment_id": "path-of-the-outcast",
@@ -174,7 +155,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "casting-back-the-veil-path-of-the-outcast",
+    "ability_id": "casting-back-the-veil-path-of-the-outcast-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -191,7 +172,7 @@
     ]
   },
   {
-    "id": "cloak-and-shadow-corsair-coterie",
+    "id": "cloak-and-shadow-corsair-coterie-aeldari",
     "name": "CLOAK AND SHADOW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -203,7 +184,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cloak-and-shadow-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -220,26 +201,7 @@
     ]
   },
   {
-    "id": "cloudstrike-armoured-warhost",
-    "name": "CLOUDSTRIKE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "armoured-warhost",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "cost-of-victory-guardian-battlehost",
+    "id": "cost-of-victory-guardian-battlehost-aeldari",
     "name": "COST OF VICTORY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -251,7 +213,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cost-of-victory-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -268,7 +230,7 @@
     ]
   },
   {
-    "id": "crushing-strides-spirit-conclave",
+    "id": "crushing-strides-spirit-conclave-aeldari",
     "name": "CRUSHING STRIDES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -280,7 +242,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "crushing-strides-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -297,7 +259,7 @@
     ]
   },
   {
-    "id": "daring-riders-windrider-host",
+    "id": "daring-riders-windrider-host-aeldari",
     "name": "DARING RIDERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -309,7 +271,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "daring-riders-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -326,7 +288,7 @@
     ]
   },
   {
-    "id": "death-answers-death-devoted-of-ynnead",
+    "id": "death-answers-death-devoted-of-ynnead-aeldari",
     "name": "DEATH ANSWERS DEATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -338,7 +300,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "death-answers-death-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -355,7 +317,7 @@
     ]
   },
   {
-    "id": "death-from-on-high-windrider-host",
+    "id": "death-from-on-high-windrider-host-aeldari",
     "name": "DEATH FROM ON HIGH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -368,7 +330,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "death-from-on-high-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -385,7 +347,7 @@
     ]
   },
   {
-    "id": "deceptive-feint-fateful-performance",
+    "id": "deceptive-feint-fateful-performance-aeldari",
     "name": "Deceptive Feint",
     "category": "detachment",
     "detachment_id": "fateful-performance",
@@ -396,7 +358,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "deceptive-feint-fateful-performance",
+    "ability_id": "deceptive-feint-fateful-performance-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -413,7 +375,7 @@
     ]
   },
   {
-    "id": "doom-inescapable-aspect-host",
+    "id": "doom-inescapable-aspect-host-aeldari",
     "name": "DOOM INESCAPABLE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -425,7 +387,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "doom-inescapable-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -442,7 +404,7 @@
     ]
   },
   {
-    "id": "eldritch-suppression-path-of-the-outcast",
+    "id": "eldritch-suppression-path-of-the-outcast-aeldari",
     "name": "Eldritch Suppression",
     "category": "detachment",
     "detachment_id": "path-of-the-outcast",
@@ -453,7 +415,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "eldritch-suppression-path-of-the-outcast",
+    "ability_id": "eldritch-suppression-path-of-the-outcast-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -470,7 +432,7 @@
     ]
   },
   {
-    "id": "emissaries-of-ynnead-devoted-of-ynnead",
+    "id": "emissaries-of-ynnead-devoted-of-ynnead-aeldari",
     "name": "EMISSARIES OF YNNEAD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -482,7 +444,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "emissaries-of-ynnead-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -499,7 +461,7 @@
     ]
   },
   {
-    "id": "exit-the-stage-fateful-performance",
+    "id": "exit-the-stage-fateful-performance-aeldari",
     "name": "Exit the Stage",
     "category": "detachment",
     "detachment_id": "fateful-performance",
@@ -510,7 +472,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "exit-the-stage-fateful-performance",
+    "ability_id": "exit-the-stage-fateful-performance-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -527,7 +489,7 @@
     ]
   },
   {
-    "id": "exit-the-stage-ghosts-of-the-webway",
+    "id": "exit-the-stage-ghosts-of-the-webway-aeldari",
     "name": "EXIT THE STAGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -539,7 +501,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "exit-the-stage-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -556,7 +518,7 @@
     ]
   },
   {
-    "id": "fading-fusillade-kygharils-protectors",
+    "id": "fading-fusillade-kygharils-protectors-aeldari",
     "name": "Fading Fusillade",
     "category": "detachment",
     "detachment_id": "kygharils-protectors",
@@ -567,7 +529,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fading-fusillade-kygharils-protectors",
+    "ability_id": "fading-fusillade-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -580,7 +542,7 @@
     ]
   },
   {
-    "id": "fangs-of-the-brood-serpents-brood",
+    "id": "fangs-of-the-brood-serpents-brood-aeldari",
     "name": "FANGS OF THE BROOD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -592,7 +554,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fangs-of-the-brood-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -609,7 +571,7 @@
     ]
   },
   {
-    "id": "fate-inescapable-seer-council",
+    "id": "fate-inescapable-seer-council-aeldari",
     "name": "FATE INESCAPABLE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -621,7 +583,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fate-inescapable-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -638,7 +600,7 @@
     ]
   },
   {
-    "id": "feigned-retreat-warhost",
+    "id": "feigned-retreat-warhost-aeldari",
     "name": "FEIGNED RETREAT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -650,7 +612,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "feigned-retreat-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -667,7 +629,7 @@
     ]
   },
   {
-    "id": "fire-and-fade-warhost",
+    "id": "fire-and-fade-warhost-aeldari",
     "name": "FIRE AND FADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -679,7 +641,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fire-and-fade-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -696,7 +658,7 @@
     ]
   },
   {
-    "id": "focused-firepower-windrider-host",
+    "id": "focused-firepower-windrider-host-aeldari",
     "name": "FOCUSED FIREPOWER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -708,7 +670,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "focused-firepower-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -725,7 +687,7 @@
     ]
   },
   {
-    "id": "focused-strikes-kygharils-protectors",
+    "id": "focused-strikes-kygharils-protectors-aeldari",
     "name": "Focused Strikes",
     "category": "detachment",
     "detachment_id": "kygharils-protectors",
@@ -736,7 +698,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "focused-strikes-kygharils-protectors",
+    "ability_id": "focused-strikes-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -749,7 +711,7 @@
     ]
   },
   {
-    "id": "forewarned-seer-council",
+    "id": "forewarned-seer-council-aeldari",
     "name": "FOREWARNED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -761,7 +723,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "forewarned-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -778,7 +740,7 @@
     ]
   },
   {
-    "id": "heroes-fall-fateful-performance",
+    "id": "heroes-fall-fateful-performance-aeldari",
     "name": "Heroes’ Fall",
     "category": "detachment",
     "detachment_id": "fateful-performance",
@@ -789,7 +751,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "heroes-fall-fateful-performance",
+    "ability_id": "heroes-fall-fateful-performance-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -806,7 +768,7 @@
     ]
   },
   {
-    "id": "heroes-fall-ghosts-of-the-webway",
+    "id": "heroes-fall-ghosts-of-the-webway-aeldari",
     "name": "HEROES’ FALL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -818,7 +780,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "heroes-fall-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -835,7 +797,7 @@
     ]
   },
   {
-    "id": "impeding-fire-eldritch-raiders",
+    "id": "impeding-fire-eldritch-raiders-aeldari",
     "name": "IMPEDING FIRE",
     "category": "detachment",
     "type": "wargear",
@@ -847,7 +809,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "impeding-fire-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -864,7 +826,7 @@
     ]
   },
   {
-    "id": "into-the-breach-corsair-coterie",
+    "id": "into-the-breach-corsair-coterie-aeldari",
     "name": "INTO THE BREACH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -876,7 +838,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "into-the-breach-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -893,7 +855,7 @@
     ]
   },
   {
-    "id": "ishas-fury-seer-council",
+    "id": "ishas-fury-seer-council-aeldari",
     "name": "ISHA’S FURY",
     "category": "detachment",
     "type": "epic-deed",
@@ -905,7 +867,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ishas-fury-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -922,7 +884,7 @@
     ]
   },
   {
-    "id": "khaines-vengeance-aspect-host",
+    "id": "khaines-vengeance-aspect-host-aeldari",
     "name": "KHAINE’S VENGEANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -934,7 +896,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "khaines-vengeance-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -951,7 +913,7 @@
     ]
   },
   {
-    "id": "layered-wards-armoured-warhost",
+    "id": "layered-wards-armoured-warhost-aeldari",
     "name": "LAYERED WARDS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -967,7 +929,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "layered-wards-armoured-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -984,7 +946,7 @@
     ]
   },
   {
-    "id": "lethal-ruse-corsair-coterie",
+    "id": "lethal-ruse-corsair-coterie-aeldari",
     "name": "LETHAL RUSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -996,7 +958,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "lethal-ruse-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1013,7 +975,7 @@
     ]
   },
   {
-    "id": "lightning-fast-reactions-warhost",
+    "id": "lightning-fast-reactions-warhost-aeldari",
     "name": "LIGHTNING-FAST REACTIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1026,7 +988,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "lightning-fast-reactions-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1043,7 +1005,7 @@
     ]
   },
   {
-    "id": "macabre-resilience-devoted-of-ynnead",
+    "id": "macabre-resilience-devoted-of-ynnead-aeldari",
     "name": "MACABRE RESILIENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1056,7 +1018,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "macabre-resilience-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1073,7 +1035,7 @@
     ]
   },
   {
-    "id": "mocking-flight-ghosts-of-the-webway",
+    "id": "mocking-flight-ghosts-of-the-webway-aeldari",
     "name": "MOCKING FLIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1085,7 +1047,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mocking-flight-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1102,7 +1064,7 @@
     ]
   },
   {
-    "id": "no-prey-too-big-eldritch-raiders",
+    "id": "no-prey-too-big-eldritch-raiders-aeldari",
     "name": "NO PREY TOO BIG",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1114,7 +1076,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "no-prey-too-big-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1131,7 +1093,7 @@
     ]
   },
   {
-    "id": "nomads-of-the-hidden-way-path-of-the-outcast",
+    "id": "nomads-of-the-hidden-way-path-of-the-outcast-aeldari",
     "name": "Nomads of the Hidden Way",
     "category": "detachment",
     "detachment_id": "path-of-the-outcast",
@@ -1142,7 +1104,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "nomads-of-the-hidden-way-path-of-the-outcast",
+    "ability_id": "nomads-of-the-hidden-way-path-of-the-outcast-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1159,7 +1121,7 @@
     ]
   },
   {
-    "id": "outcast-ambush-corsair-coterie",
+    "id": "outcast-ambush-corsair-coterie-aeldari",
     "name": "OUTCAST AMBUSH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1171,7 +1133,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "outcast-ambush-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1188,7 +1150,7 @@
     ]
   },
   {
-    "id": "overflight-windrider-host",
+    "id": "overflight-windrider-host-aeldari",
     "name": "OVERFLIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1201,7 +1163,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "overflight-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1218,7 +1180,7 @@
     ]
   },
   {
-    "id": "pall-of-dread-devoted-of-ynnead",
+    "id": "pall-of-dread-devoted-of-ynnead-aeldari",
     "name": "PALL OF DREAD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1234,7 +1196,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pall-of-dread-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1251,7 +1213,7 @@
     ]
   },
   {
-    "id": "parting-the-veil-devoted-of-ynnead",
+    "id": "parting-the-veil-devoted-of-ynnead-aeldari",
     "name": "PARTING THE VEIL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1263,7 +1225,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "parting-the-veil-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1280,7 +1242,7 @@
     ]
   },
   {
-    "id": "phantasmal-mirage-twilight-flickers",
+    "id": "phantasmal-mirage-twilight-flickers-aeldari",
     "name": "Phantasmal Mirage",
     "category": "detachment",
     "detachment_id": "twilight-flickers",
@@ -1291,7 +1253,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "phantasmal-mirage-twilight-flickers",
+    "ability_id": "phantasmal-mirage-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1308,7 +1270,7 @@
     ]
   },
   {
-    "id": "pirates-due-corsair-coterie",
+    "id": "pirates-due-corsair-coterie-aeldari",
     "name": "PIRATES’ DUE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1320,7 +1282,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pirates-due-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1337,7 +1299,7 @@
     ]
   },
   {
-    "id": "presaged-rehearsal-twilight-flickers",
+    "id": "presaged-rehearsal-twilight-flickers-aeldari",
     "name": "Presaged Rehearsal",
     "category": "detachment",
     "detachment_id": "twilight-flickers",
@@ -1348,7 +1310,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "presaged-rehearsal-twilight-flickers",
+    "ability_id": "presaged-rehearsal-twilight-flickers-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1365,7 +1327,7 @@
     ]
   },
   {
-    "id": "presentiment-of-dread-seer-council",
+    "id": "presentiment-of-dread-seer-council-aeldari",
     "name": "PRESENTIMENT OF DREAD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1377,7 +1339,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "presentiment-of-dread-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1394,7 +1356,7 @@
     ]
   },
   {
-    "id": "preternatural-precision-aspect-host",
+    "id": "preternatural-precision-aspect-host-aeldari",
     "name": "PRETERNATURAL PRECISION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1406,7 +1368,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "preternatural-precision-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1423,7 +1385,7 @@
     ]
   },
   {
-    "id": "psychic-shield-seer-council",
+    "id": "psychic-shield-seer-council-aeldari",
     "name": "PSYCHIC SHIELD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1435,7 +1397,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "psychic-shield-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1452,7 +1414,7 @@
     ]
   },
   {
-    "id": "raiders-spoils-eldritch-raiders",
+    "id": "raiders-spoils-eldritch-raiders-aeldari",
     "name": "RAIDER’S SPOILS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1464,7 +1426,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "raiders-spoils-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1481,7 +1443,7 @@
     ]
   },
   {
-    "id": "ruthless-killers-eldritch-raiders",
+    "id": "ruthless-killers-eldritch-raiders-aeldari",
     "name": "RUTHLESS KILLERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1494,7 +1456,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ruthless-killers-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1511,7 +1473,7 @@
     ]
   },
   {
-    "id": "seers-eye-spirit-conclave",
+    "id": "seers-eye-spirit-conclave-aeldari",
     "name": "SEER’S EYE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1524,7 +1486,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "seers-eye-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1541,7 +1503,7 @@
     ]
   },
   {
-    "id": "shield-nodes-guardian-battlehost",
+    "id": "shield-nodes-guardian-battlehost-aeldari",
     "name": "SHIELD NODES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1554,7 +1516,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shield-nodes-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1571,7 +1533,7 @@
     ]
   },
   {
-    "id": "skyborne-sanctuary-aspect-host",
+    "id": "skyborne-sanctuary-aspect-host-aeldari",
     "name": "SKYBORNE SANCTUARY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1583,7 +1545,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skyborne-sanctuary-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1600,7 +1562,7 @@
     ]
   },
   {
-    "id": "skyborne-sanctuary-warhost",
+    "id": "skyborne-sanctuary-warhost-aeldari",
     "name": "SKYBORNE SANCTUARY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1612,7 +1574,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skyborne-sanctuary-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1629,7 +1591,7 @@
     ]
   },
   {
-    "id": "skyward-lunge-serpents-brood",
+    "id": "skyward-lunge-serpents-brood-aeldari",
     "name": "SKYWARD LUNGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1641,7 +1603,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skyward-lunge-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1658,7 +1620,7 @@
     ]
   },
   {
-    "id": "soul-bridge-spirit-conclave",
+    "id": "soul-bridge-spirit-conclave-aeldari",
     "name": "SOUL BRIDGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1670,7 +1632,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "soul-bridge-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1687,7 +1649,7 @@
     ]
   },
   {
-    "id": "soulsight-armoured-warhost",
+    "id": "soulsight-armoured-warhost-aeldari",
     "name": "SOULSIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1699,7 +1661,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "soulsight-armoured-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1716,7 +1678,7 @@
     ]
   },
   {
-    "id": "soulsight-devoted-of-ynnead",
+    "id": "soulsight-devoted-of-ynnead-aeldari",
     "name": "SOULSIGHT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1728,7 +1690,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "soulsight-devoted-of-ynnead-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1745,7 +1707,7 @@
     ]
   },
   {
-    "id": "spiralling-evasion-windrider-host",
+    "id": "spiralling-evasion-windrider-host-aeldari",
     "name": "SPIRALLING EVASION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1757,7 +1719,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spiralling-evasion-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1774,7 +1736,7 @@
     ]
   },
   {
-    "id": "spirit-token-spirit-conclave",
+    "id": "spirit-token-spirit-conclave-aeldari",
     "name": "SPIRIT TOKEN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1786,7 +1748,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spirit-token-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1803,7 +1765,7 @@
     ]
   },
   {
-    "id": "staged-death-ghosts-of-the-webway",
+    "id": "staged-death-ghosts-of-the-webway-aeldari",
     "name": "STAGED DEATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1819,7 +1781,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "staged-death-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1836,7 +1798,7 @@
     ]
   },
   {
-    "id": "striking-stride-serpents-brood",
+    "id": "striking-stride-serpents-brood-aeldari",
     "name": "STRIKING STRIDE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1848,7 +1810,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "striking-stride-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1865,7 +1827,7 @@
     ]
   },
   {
-    "id": "suppressing-storm-kygharils-protectors",
+    "id": "suppressing-storm-kygharils-protectors-aeldari",
     "name": "Suppressing Storm",
     "category": "detachment",
     "detachment_id": "kygharils-protectors",
@@ -1876,7 +1838,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "suppressing-storm-kygharils-protectors",
+    "ability_id": "suppressing-storm-kygharils-protectors-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1889,26 +1851,7 @@
     ]
   },
   {
-    "id": "swift-deployment-armoured-warhost",
-    "name": "SWIFT DEPLOYMENT",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "armoured-warhost",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "time-to-strike-guardian-battlehost",
+    "id": "time-to-strike-guardian-battlehost-aeldari",
     "name": "TIME TO STRIKE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1920,7 +1863,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "time-to-strike-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1937,7 +1880,7 @@
     ]
   },
   {
-    "id": "to-their-final-breath-aspect-host",
+    "id": "to-their-final-breath-aspect-host-aeldari",
     "name": "TO THEIR FINAL BREATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1949,7 +1892,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "to-their-final-breath-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1966,7 +1909,7 @@
     ]
   },
   {
-    "id": "tricksters-retort-ghosts-of-the-webway",
+    "id": "tricksters-retort-ghosts-of-the-webway-aeldari",
     "name": "TRICKSTERS’ RETORT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1978,7 +1921,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tricksters-retort-ghosts-of-the-webway-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1995,7 +1938,7 @@
     ]
   },
   {
-    "id": "unshrouded-truth-seer-council",
+    "id": "unshrouded-truth-seer-council-aeldari",
     "name": "UNSHROUDED TRUTH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2007,7 +1950,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unshrouded-truth-seer-council-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2024,7 +1967,7 @@
     ]
   },
   {
-    "id": "vauls-vengeance-guardian-battlehost",
+    "id": "vauls-vengeance-guardian-battlehost-aeldari",
     "name": "VAUL’S VENGEANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2037,7 +1980,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vauls-vengeance-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2054,7 +1997,7 @@
     ]
   },
   {
-    "id": "vectored-engines-armoured-warhost",
+    "id": "vectored-engines-armoured-warhost-aeldari",
     "name": "VECTORED ENGINES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2066,7 +2009,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vectored-engines-armoured-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2083,7 +2026,7 @@
     ]
   },
   {
-    "id": "vengeful-sorrow-corsair-coterie",
+    "id": "vengeful-sorrow-corsair-coterie-aeldari",
     "name": "VENGEFUL SORROW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2095,7 +2038,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeful-sorrow-corsair-coterie-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2112,7 +2055,7 @@
     ]
   },
   {
-    "id": "venomous-wrath-serpents-brood",
+    "id": "venomous-wrath-serpents-brood-aeldari",
     "name": "VENOMOUS WRATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2124,7 +2067,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "venomous-wrath-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2141,7 +2084,7 @@
     ]
   },
   {
-    "id": "warding-salvoes-guardian-battlehost",
+    "id": "warding-salvoes-guardian-battlehost-aeldari",
     "name": "WARDING SALVOES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2154,7 +2097,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "warding-salvoes-guardian-battlehost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2171,7 +2114,7 @@
     ]
   },
   {
-    "id": "warrior-focus-aspect-host",
+    "id": "warrior-focus-aspect-host-aeldari",
     "name": "WARRIOR FOCUS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2184,7 +2127,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "warrior-focus-aspect-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2201,7 +2144,7 @@
     ]
   },
   {
-    "id": "weavers-coils-serpents-brood",
+    "id": "weavers-coils-serpents-brood-aeldari",
     "name": "WEAVER’S COILS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2213,7 +2156,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "weavers-coils-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2230,7 +2173,7 @@
     ]
   },
   {
-    "id": "weaving-stride-serpents-brood",
+    "id": "weaving-stride-serpents-brood-aeldari",
     "name": "WEAVING STRIDE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2242,7 +2185,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "weaving-stride-serpents-brood-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2259,7 +2202,7 @@
     ]
   },
   {
-    "id": "webway-tunnel-warhost",
+    "id": "webway-tunnel-warhost-aeldari",
     "name": "WEBWAY TUNNEL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2271,7 +2214,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "webway-tunnel-warhost-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2288,7 +2231,7 @@
     ]
   },
   {
-    "id": "wind-of-blades-windrider-host",
+    "id": "wind-of-blades-windrider-host-aeldari",
     "name": "WIND OF BLADES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2300,7 +2243,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wind-of-blades-windrider-host-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2317,7 +2260,7 @@
     ]
   },
   {
-    "id": "withdraw-and-reinforce-eldritch-raiders",
+    "id": "withdraw-and-reinforce-eldritch-raiders-aeldari",
     "name": "WITHDRAW AND REINFORCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -2329,7 +2272,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "withdraw-and-reinforce-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2346,7 +2289,7 @@
     ]
   },
   {
-    "id": "wraithbone-armour-spirit-conclave",
+    "id": "wraithbone-armour-spirit-conclave-aeldari",
     "name": "WRAITHBONE ARMOUR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -2359,7 +2302,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wraithbone-armour-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2376,7 +2319,7 @@
     ]
   },
   {
-    "id": "yriels-example-eldritch-raiders",
+    "id": "yriels-example-eldritch-raiders-aeldari",
     "name": "YRIEL’S EXAMPLE",
     "category": "detachment",
     "type": "epic-deed",
@@ -2388,7 +2331,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "yriels-example-eldritch-raiders-aeldari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

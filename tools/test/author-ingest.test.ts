@@ -21,7 +21,7 @@ describe("ingestFaction", () => {
     const r = ingestFaction("orks", [rec({ name: "Waaagh! Energy", unit_ids: ["weirdboy"] })], [], []);
 
     expect(r.created).toBe(1);
-    const stub = r.abilities.find((a) => a.ability_id === "waaagh-energy");
+    const stub = r.abilities.find((a) => a.ability_id === "waaagh-energy-orks");
     expect(stub).toBeDefined();
     expect(stub.unit_ids).toEqual(["weirdboy"]);
     expect(stub.effect).toEqual({ type: "no-effect" });
@@ -31,7 +31,7 @@ describe("ingestFaction", () => {
     const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json")!;
     expect(validate(stub), JSON.stringify(validate.errors)).toBe(true);
 
-    const input = r.authorInput.find((e) => e.ability_id === "waaagh-energy")!;
+    const input = r.authorInput.find((e) => e.ability_id === "waaagh-energy-orks")!;
     expect(input.resolved).toBe(true);
     expect(input.src?.description).toBe("GW TEXT — must not leak into the repo");
 
@@ -47,15 +47,15 @@ describe("ingestFaction", () => {
     const r = ingestFaction(
       "orks",
       [
-        rec({ name: "Deep Strike", unit_ids: ["trygon"] }),
-        rec({ name: "Deep Strike", unit_ids: ["mucolid-spores"] }),
+        rec({ name: "Iron Stride", unit_ids: ["trygon"] }),
+        rec({ name: "Iron Stride", unit_ids: ["mucolid-spores"] }),
       ],
       [],
       [],
     );
     expect(r.created).toBe(1);
     expect(r.mergedUnits).toBe(1);
-    const ds = r.abilities.filter((a) => a.ability_id === "deep-strike");
+    const ds = r.abilities.filter((a) => a.ability_id === "iron-stride-orks");
     expect(ds).toHaveLength(1);
     expect(ds[0].unit_ids).toEqual(["trygon", "mucolid-spores"]);
     // Merging into a seeded stub is not a merge into authored work.
@@ -65,10 +65,10 @@ describe("ingestFaction", () => {
   it("leaves a record with empty raw_text unresolved (seeded, skipped by propose)", () => {
     const r = ingestFaction("orks", [rec({ name: "Mystery Power", raw_text: "   " })], [], []);
     expect(r.created).toBe(1); // stub still seeded
-    const input = r.authorInput.find((e) => e.ability_id === "mystery-power")!;
+    const input = r.authorInput.find((e) => e.ability_id === "mystery-power-orks")!;
     expect(input.resolved).toBe(false);
     expect(input.src).toBeUndefined();
-    expect(r.unresolved).toContainEqual({ ability_id: "mystery-power", name: "Mystery Power", reason: "no raw_text provided" });
+    expect(r.unresolved).toContainEqual({ ability_id: "mystery-power-orks", name: "Mystery Power", reason: "no raw_text provided" });
   });
 
   it("honors ability_type, behavior, and faction_id on the seeded stub", () => {
@@ -78,7 +78,7 @@ describe("ingestFaction", () => {
       [],
       [],
     );
-    const stub = r.abilities.find((a) => a.ability_id === "waaagh")!;
+    const stub = r.abilities.find((a) => a.ability_id === "waaagh-orks")!;
     expect(stub.ability_type).toBe("faction");
     expect(stub.behavior).toBe("aura");
     expect(stub.faction_id).toBe("orks");
@@ -107,7 +107,8 @@ describe("ingestFaction", () => {
       },
     ];
     // An authored ability-grant carries its modifier → not an empty-modifier stub.
-    const r = ingestFaction("orks", [rec({ name: "Deep Strike", unit_ids: ["trygon"] })], existing, []);
+    // A core ability keeps its bare id, so it merges into the one core record.
+    const r = ingestFaction("orks", [rec({ name: "Deep Strike", ability_type: "core", unit_ids: ["trygon"] })], existing, []);
     expect(r.mergedIntoAuthored).toContainEqual({ ability_id: "deep-strike", unit_id: "trygon" });
     const ds = r.abilities.find((a) => a.ability_id === "deep-strike")!;
     expect(ds.unit_ids).toEqual(["curated-unit", "trygon"]); // additive
@@ -117,7 +118,7 @@ describe("ingestFaction", () => {
   it("fills missing detachment ownership without replacing authored mechanics", () => {
     const existing = [
       {
-        ability_id: "try-dat-button-dread-mob",
+        ability_id: "try-dat-button-orks",
         name: "Try Dat Button!",
         ability_type: "detachment",
         effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
@@ -130,7 +131,7 @@ describe("ingestFaction", () => {
       "orks",
       [rec({
         name: "Try Dat Button!",
-        ability_id: "try-dat-button-dread-mob",
+        ability_id: "try-dat-button-orks",
         ability_type: "detachment",
         detachment_id: "dread-mob",
         unit_ids: [],
@@ -138,15 +139,15 @@ describe("ingestFaction", () => {
       existing,
       [],
     );
-    const ability = r.abilities.find((entry) => entry.ability_id === "try-dat-button-dread-mob")!;
+    const ability = r.abilities.find((entry) => entry.ability_id === "try-dat-button-orks")!;
     expect(ability.detachment_id).toBe("dread-mob");
     expect(ability.effect).toEqual(existing[0].effect);
   });
 
   it("replaces a prior author-input entry for the same id (idempotent re-run)", () => {
-    const prior = [{ faction: "orks", ability_id: "waaagh-energy", name: "Waaagh! Energy", unit_ids: [], target: null, scope: null, faction_id: null, ability_type: null, resolved: false, reason: "stale" }];
+    const prior = [{ faction: "orks", ability_id: "waaagh-energy-orks", name: "Waaagh! Energy", unit_ids: [], target: null, scope: null, faction_id: null, ability_type: null, resolved: false, reason: "stale" }];
     const r = ingestFaction("orks", [rec({ name: "Waaagh! Energy", unit_ids: ["weirdboy"] })], [], prior);
-    const entries = r.authorInput.filter((e) => e.ability_id === "waaagh-energy");
+    const entries = r.authorInput.filter((e) => e.ability_id === "waaagh-energy-orks");
     expect(entries).toHaveLength(1);
     expect(entries[0].resolved).toBe(true);
   });
@@ -315,7 +316,7 @@ describe("reconcileFaction", () => {
         game_version: oldVersion,
       },
       {
-        ability_id: "skyborne-loons-flyboyz",
+        ability_id: "skyborne-loons-orks",
         name: "Skyborne Loons",
         ability_type: "detachment",
         detachment_id: "flyboyz",
@@ -336,7 +337,7 @@ describe("reconcileFaction", () => {
         game_version: currentVersion,
       },
       {
-        ability_id: "try-dat-button-dread-mob",
+        ability_id: "try-dat-button-orks",
         name: "Try Dat Button!",
         ability_type: "detachment",
         detachment_id: "dread-mob",
@@ -369,10 +370,10 @@ describe("reconcileFaction", () => {
 
     expect(core.units[0].ability_ids).toEqual(["curated", "old-unit-rule", "current-unit-rule"]);
     expect(core.stratagems[0].ability_id).toBe("strafe-flyboyz");
-    expect(core.detachments[0].detachment_rule_id).toBe("skyborne-loons-flyboyz");
-    expect(core.detachments[0].detachment_rule_ids).toEqual(["skyborne-loons-flyboyz"]);
-    expect(core.detachments[1].detachment_rule_id).toBe("try-dat-button-dread-mob");
-    expect(core.detachments[1].detachment_rule_ids).toEqual(["try-dat-button-dread-mob"]);
+    expect(core.detachments[0].detachment_rule_id).toBe("skyborne-loons-orks");
+    expect(core.detachments[0].detachment_rule_ids).toEqual(["skyborne-loons-orks"]);
+    expect(core.detachments[1].detachment_rule_id).toBe("try-dat-button-orks");
+    expect(core.detachments[1].detachment_rule_ids).toEqual(["try-dat-button-orks"]);
     expect(report.enhancements.alreadyLinked).toBe(1);
     expect(report.enhancements.orphanCore).toEqual([
       "wrong-type-upgrade",

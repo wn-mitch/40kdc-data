@@ -35,7 +35,7 @@ const sampleReport = {
       english: "describer english snippet",
     },
     {
-      ability_id: "legendary-killer",
+      ability_id: "legendary-killer-world-eaters",
       faction: "world-eaters",
       ability_type: "unit",
       name: "Legendary Killer",
@@ -112,7 +112,7 @@ describe("lookupScore", () => {
     abilities: [
       { ability_id: "fortification", faction: "world-eaters", score: 0.4 },
       { ability_id: "fortification", faction: "orks", score: 0.8 },
-      { ability_id: "legendary-killer", faction: "world-eaters", score: 0.71 },
+      { ability_id: "legendary-killer-world-eaters", faction: "world-eaters", score: 0.71 },
     ],
   });
 
@@ -122,7 +122,7 @@ describe("lookupScore", () => {
   });
 
   it("falls back to the scope faction when the ability carries no faction_id", () => {
-    expect(lookupScore(idx, null, "world-eaters", "legendary-killer")).toBe(0.71);
+    expect(lookupScore(idx, null, "world-eaters", "legendary-killer-world-eaters")).toBe(0.71);
   });
 
   it("returns undefined on a genuine miss or null index", () => {

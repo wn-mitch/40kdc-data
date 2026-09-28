@@ -523,7 +523,7 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   {
     name: "get_enhancement direct hit",
     query: "get_enhancement",
-    args: { id: "a-chink-in-their-armour-host-of-ascension" },
+    args: { id: "a-chink-in-their-armour-host-of-ascension-genestealer-cults" },
     comparison: "scalar",
   },
   {
@@ -568,7 +568,7 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   {
     name: "phases_of berzerker-frenzy",
     query: "phases_of",
-    args: { abilityId: "berzerker-frenzy" },
+    args: { abilityId: "berzerker-frenzy-world-eaters" },
     comparison: "set",
   },
   // faction_of(unit): scalar id or null.
@@ -2234,7 +2234,7 @@ function genEffectTranslation(): void {
           modifier: {
             direction: "suppressed",
             rule_kind: "faction-rule",
-            rule: "blessings-of-khorne",
+            rule: "blessings-of-khorne-world-eaters",
           },
         },
         duration: "battle-round",
@@ -2246,7 +2246,7 @@ function genEffectTranslation(): void {
       effect: {
         type: "rule-state",
         target: "this-model",
-        modifier: { direction: "granted", rule_kind: "faction-rule", rule: "combat-doctrines" },
+        modifier: { direction: "granted", rule_kind: "faction-rule", rule: "combat-doctrines-assault-force-adeptus-astartes" },
       },
       scope: { duration: "phase" },
     },
@@ -2752,7 +2752,7 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
-      id: "superlative-strategist",
+      id: "superlative-strategist-aeldari",
       effect: {
         type: "conditional",
         condition: {
@@ -3197,9 +3197,9 @@ function genEffectTranslation(): void {
   // Faction-scoped worklist pins: the global by-id index can resolve another
   // faction's copy of shared names such as Blessing of the Omnissiah.
   const fidelityWorklists: Array<[string, string[]]> = [
-    ["grey-knights", ["dauntless-champions","attuned-onslaught-psychic","blessing-of-the-omnissiah","guardians-of-the-machine","techmarine","force-edge-psychic","champion-of-the-order-of-purifiers-psychic","might-of-titan-psychic","warrior-strategist","surge-of-wrath-psychic","sanctuary-psychic","hammer-aflame-psychic","personal-teleporters","indomitable-spirit-psychic","righteous-persecution","sanctity-of-purpose","sanctifying-ritual-psychic","guidance-of-the-ancients-psychic","litanies-of-sanctity","prescient-redeployment","channelled-force","hallowed-ground","fury-of-titan","searing-soulflame"]],
-    ["adepta-sororitas", ["sworn-protectors","anguish-of-the-unredeemed","anchorite-sarcophagus","sacred-command","divine-deliverance","rapturous-blows","ministorum-sermon","cherub","salvationist-medikit","simulacrum-imperialis","attached-unit","extremis-trigger-word","rituale-nullificatus","virtue-of-intolerance","denuncia-oratory","litany-of-deeds","stanchion-of-holy-martyrs","relics-of-the-matriarchs","solemn-procession","overseer-of-redemption","laud-hailer","stirring-rhetoric","purge-and-cleanse","sacred-healing","righteous-repugnance","cherubs","storm-of-retribution","impetuous-fervour","sacred-banner","holy-judgement","mysterious-saviours","self-repair","righteous-paragons","rites-of-castigation","devastating-refrain","fiery-conviction","zealot","holy-mission","holy-hatred","embodied-prophecy","righteous-awareness","lifewards","defenders-of-the-faith","null-rod","judged-for-execution","angelic-judgement","clarion-of-urgency-chorus-of-condemnation","inspirational-battle-canticles-chorus-of-condemnation","harmonised-exorcism-chorus-of-condemnation","devastating-reprise-chorus-of-condemnation","holy-quest"]],
-    ["adeptus-astartes", ["techmarine", "blessing-of-the-omnissiah", "wisdom-of-the-ancients-aura"]],
+    ["grey-knights", ["dauntless-champions-grey-knights","attuned-onslaught-grey-knights","blessing-of-the-omnissiah-grey-knights","guardians-of-the-machine-grey-knights","techmarine-grey-knights","force-edge-grey-knights","champion-of-the-order-of-purifiers-grey-knights","might-of-titan-grey-knights","warrior-strategist-grey-knights","surge-of-wrath-grey-knights","sanctuary-grey-knights","hammer-aflame-grey-knights","personal-teleporters-grey-knights","indomitable-spirit-grey-knights","righteous-persecution-grey-knights","sanctity-of-purpose-grey-knights","sanctifying-ritual-grey-knights","guidance-of-the-ancients-grey-knights","litanies-of-sanctity-grey-knights","prescient-redeployment-grey-knights","channelled-force-grey-knights","hallowed-ground-grey-knights","fury-of-titan-grey-knights","searing-soulflame-grey-knights"]],
+    ["adepta-sororitas", ["sworn-protectors-adepta-sororitas","anguish-of-the-unredeemed-adepta-sororitas","anchorite-sarcophagus-adepta-sororitas","sacred-command-adepta-sororitas","divine-deliverance-adepta-sororitas","rapturous-blows-adepta-sororitas","ministorum-sermon-adepta-sororitas","cherub-adepta-sororitas","salvationist-medikit-adepta-sororitas","simulacrum-imperialis-adepta-sororitas","attached-unit-sanctifiers-adepta-sororitas","extremis-trigger-word-adepta-sororitas","rituale-nullificatus-adepta-sororitas","virtue-of-intolerance-adepta-sororitas","denuncia-oratory-adepta-sororitas","litany-of-deeds-adepta-sororitas","stanchion-of-holy-martyrs-adepta-sororitas","relics-of-the-matriarchs-adepta-sororitas","solemn-procession-adepta-sororitas","overseer-of-redemption-adepta-sororitas","laud-hailer-adepta-sororitas","stirring-rhetoric-adepta-sororitas","purge-and-cleanse-adepta-sororitas","sacred-healing-adepta-sororitas","righteous-repugnance-adepta-sororitas","cherubs-adepta-sororitas","storm-of-retribution-adepta-sororitas","impetuous-fervour-adepta-sororitas","sacred-banner-adepta-sororitas","holy-judgement-adepta-sororitas","mysterious-saviours-adepta-sororitas","self-repair-adepta-sororitas","righteous-paragons-adepta-sororitas","rites-of-castigation-adepta-sororitas","devastating-refrain-adepta-sororitas","fiery-conviction-adepta-sororitas","zealot-adepta-sororitas","holy-mission-adepta-sororitas","embodied-prophecy-adepta-sororitas","righteous-awareness-adepta-sororitas","lifewards-adepta-sororitas","defenders-of-the-faith-adepta-sororitas","null-rod-adepta-sororitas","judged-for-execution-adepta-sororitas","angelic-judgement-adepta-sororitas","clarion-of-urgency-chorus-of-condemnation-adepta-sororitas","inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas","harmonised-exorcism-chorus-of-condemnation-adepta-sororitas","devastating-reprise-chorus-of-condemnation-adepta-sororitas","holy-quest-adepta-sororitas"]],
+    ["adeptus-astartes", ["techmarine-adeptus-astartes", "blessing-of-the-omnissiah-adeptus-astartes", "wisdom-of-the-ancients-adeptus-astartes"]],
   ];
   for (const [faction, ids] of fidelityWorklists) {
     const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;
@@ -3356,7 +3356,7 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/stance-selection-capacity-fixed-option", effect: {
       type: "stance-selection-capacity",
       modifier: {
-        stance_id: "combat-doctrines",
+        stance_id: "combat-doctrines-assault-force-adeptus-astartes",
         option_id: "assault-doctrine",
         additional_selections: 1,
         allocation: "fixed-option",

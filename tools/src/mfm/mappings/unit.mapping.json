@@ -5,36 +5,124 @@
   "root_tables": ["datasheet"],
   "fields": {
     "/ability_ids": {
-      "provenance": "repo-authored",
+      "provenance": "derived",
       "coverage": "implemented",
-      "sources": [],
+      "sources": [
+        "data.datasheet_datasheet_ability.datasheetId",
+        "data.datasheet_datasheet_ability.datasheetAbilityId",
+        "data.datasheet_ability.abilityType",
+        "data.datasheet_ability.localisations.*.name"
+      ],
       "joins": [],
       "transforms": [
         {
-          "symbol": "tools/src/author-reconcile.ts#reconcileFaction",
-          "operation": "Invert authored ability unit references onto the unit record."
+          "symbol": "tools/src/mfm/mirror/units.ts#projectUnit",
+          "operation": "List the identity of every ability row the unit's own datasheets print (core abilities folded to their rule)."
         }
       ],
-      "filters": [],
+      "filters": [
+        "Codex datasheets win over Combat Patrol and Legends ones; roster-structure rules (Leader, Transport) are not abilities."
+      ],
       "precedence": [],
-      "consumers": ["tools/src/author-reconcile.ts#reconcileFaction"],
-      "reason": "Ability links come from community-authored enrichment records rather than MFM prose."
+      "consumers": [
+        "tools/src/mfm/mirror/project.ts#projectData"
+      ],
+      "reason": "A unit lists what its own datasheet prints (mfm:mirror); ids come from the dump identity rule."
     },
     "/ability_ids/*": {
-      "provenance": "repo-authored",
+      "provenance": "derived",
       "coverage": "implemented",
-      "sources": [],
+      "sources": [
+        "data.datasheet_datasheet_ability.datasheetId",
+        "data.datasheet_datasheet_ability.datasheetAbilityId",
+        "data.datasheet_ability.abilityType",
+        "data.datasheet_ability.localisations.*.name"
+      ],
       "joins": [],
       "transforms": [
         {
-          "symbol": "tools/src/author-reconcile.ts#reconcileFaction",
-          "operation": "Invert authored ability unit references onto the unit record."
+          "symbol": "tools/src/mfm/mirror/units.ts#projectUnit",
+          "operation": "List the identity of every ability row the unit's own datasheets print (core abilities folded to their rule)."
         }
       ],
-      "filters": [],
+      "filters": [
+        "Codex datasheets win over Combat Patrol and Legends ones; roster-structure rules (Leader, Transport) are not abilities."
+      ],
       "precedence": [],
-      "consumers": ["tools/src/author-reconcile.ts#reconcileFaction"],
-      "reason": "Ability links come from community-authored enrichment records rather than MFM prose."
+      "consumers": [
+        "tools/src/mfm/mirror/project.ts#projectData"
+      ],
+      "reason": "A unit lists what its own datasheet prints (mfm:mirror); ids come from the dump identity rule."
+    },
+    "/ability_ids/*/id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_datasheet_ability.datasheetId",
+        "data.datasheet_datasheet_ability.datasheetAbilityId",
+        "data.datasheet_ability.abilityType",
+        "data.datasheet_ability.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/mirror/units.ts#projectUnit",
+          "operation": "List the identity of every ability row the unit's own datasheets print (core abilities folded to their rule)."
+        }
+      ],
+      "filters": [
+        "Codex datasheets win over Combat Patrol and Legends ones; roster-structure rules (Leader, Transport) are not abilities."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/mirror/project.ts#projectData"
+      ],
+      "reason": "A unit lists what its own datasheet prints (mfm:mirror); ids come from the dump identity rule."
+    },
+    "/ability_ids/*/value": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_ability.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/mirror/units.ts#ratingValue",
+          "operation": "The rating a rated core ability's printed name ends with (Deadly Demise D3 → D3, Feel No Pain 5+ → 5)."
+        }
+      ],
+      "filters": [
+        "Codex datasheets win over Combat Patrol and Legends ones; roster-structure rules (Leader, Transport) are not abilities."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/mirror/project.ts#projectData"
+      ],
+      "reason": "A rated core rule is one _core record; the rating it prints on this datasheet rides on the unit's entry."
+    },
+    "/ability_ids/*/wargear": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.wargear_item.id",
+        "data.wargear_item.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/mirror/units.ts#projectUnit",
+          "operation": "Link a wargear-item rule the datasheet prints to the repo weapon/wargear id carrying that item's mfm ref."
+        }
+      ],
+      "filters": [
+        "Codex datasheets win over Combat Patrol and Legends ones; roster-structure rules (Leader, Transport) are not abilities."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/mirror/project.ts#projectData"
+      ],
+      "reason": "The explicit wargear → printed ability link the loadout reads, instead of an ability id equal to a wargear id."
     },
     "/aliases": {
       "provenance": "repo-authored",

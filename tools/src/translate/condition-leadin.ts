@@ -4,7 +4,7 @@
  */
 import { describeCondition, describePredicate, type Condition } from "./condition.js";
 import { describeHappened } from "./condition-history.js";
-import { andList, orList, str, titleCase, windowPhrase, type P } from "./condition-refs.js";
+import { andList, idLabel, orList, type P, str, titleCase, windowPhrase } from "./condition-refs.js";
 
 /**
  * Render a condition as a predicate on an already-named candidate unit, so selection
@@ -71,7 +71,7 @@ export function conditionLeadIn(c: Condition): string {
     case "battle-round":
       return describePredicate(c, false).replace(/^during the (\w+) battle round onward$/, "from the $1 battle round onward");
     case "rule-active":
-      return `while the ${titleCase(str(p.rule))} is active`;
+      return `while the ${idLabel(p.rule)} is active`;
     case "has-keyword":
       if (p.chosen_by != null) return `if ${describePredicate(c, false)}`;
       if (p.subject === "defender") return `against ${keywordNames(p)} targets`;

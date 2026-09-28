@@ -1,56 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-2d6",
-    "name": "Deadly Demise 2D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "2D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "revenant-titan"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "titanic-advance",
+    "ability_id": "titanic-advance-aeldari",
     "name": "Titanic Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -72,13 +22,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "phantom-titan",
       "revenant-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "towering-wraith-construct",
+    "ability_id": "towering-wraith-construct-revenant-titan-aeldari",
     "name": "Towering Wraith Construct",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -114,10 +66,11 @@
       "filter": {
         "kind": "stratagem"
       }
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "revenant-jet-pack",
+    "ability_id": "revenant-jet-pack-aeldari",
     "name": "Revenant Jet Pack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -142,10 +95,11 @@
       "revenant-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "support-weapon",
+    "ability_id": "support-weapon-aeldari",
     "name": "Support Weapon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -176,13 +130,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "shadow-weaver-platform"
+      "d-cannon-platform",
+      "shadow-weaver-platform",
+      "vibro-cannon-platform"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "monofilament-snare",
+    "ability_id": "monofilament-snare-aeldari",
     "name": "Monofilament Snare",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -214,10 +171,11 @@
       "shadow-weaver-platform"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "support-artillery",
+    "ability_id": "support-artillery-aeldari",
     "name": "Support Artillery",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -237,94 +195,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "shadow-weaver-platform"
+      "d-cannon-platform",
+      "shadow-weaver-platform",
+      "vibro-cannon-platform"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "striking-scorpions"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "scouts-7",
-    "name": "Scouts 7\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 7
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "striking-scorpions"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "striking-scorpions"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mandiblasters",
+    "ability_id": "mandiblasters-aeldari",
     "name": "Mandiblasters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -374,10 +254,11 @@
       "striking-scorpions"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "aspect-shrine-token",
+    "ability_id": "aspect-shrine-token-aeldari",
     "name": "Aspect Shrine Token",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -421,36 +302,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "Once per battle, change one Hit or Wound roll to an unmodified 6. Modeled as 1 guaranteed crit hit per activation to capture GW's pricing signal. Actual mechanic is once-per-game."
+    "community_notes": "Once per battle, change one Hit or Wound roll to an unmodified 6. Modeled as 1 guaranteed crit hit per activation to capture GW's pricing signal. Actual mechanic is once-per-game.",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "eldrad-ulthran"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "diviner-of-futures",
+    "ability_id": "diviner-of-futures-aeldari",
     "name": "Diviner of Futures",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -473,10 +329,11 @@
       "eldrad-ulthran"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "doom-psychic",
+    "ability_id": "doom-aeldari",
     "name": "Doom (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -511,60 +368,11 @@
       "eldrad-ulthran"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wraithlord"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "psychic-guidance",
+    "ability_id": "psychic-guidance-wraithlord-aeldari",
     "name": "Psychic Guidance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -632,10 +440,11 @@
       "wraithlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fated-hero",
+    "ability_id": "fated-hero-aeldari",
     "name": "Fated Hero",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -683,60 +492,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wave-serpent"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "wave-serpent-shield",
+    "ability_id": "wave-serpent-shield-aeldari",
     "name": "Wave Serpent Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -770,10 +530,11 @@
       "wave-serpent"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "word-of-the-phoenix-psychic",
+    "ability_id": "word-of-the-phoenix-aeldari",
     "name": "Word of the Phoenix (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -831,10 +592,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "herald-of-ynnead",
+    "ability_id": "herald-of-ynnead-aeldari",
     "name": "Herald of Ynnead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -868,10 +630,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "servant-of-the-whispering-god",
+    "ability_id": "servant-of-the-whispering-god-yvraine-aeldari",
     "name": "Servant of The Whispering God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -904,10 +667,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "piratical-raiders",
+    "ability_id": "piratical-raiders-aeldari",
     "name": "Piratical Raiders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -947,10 +711,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "mistshield",
+    "ability_id": "mistshield-aeldari",
     "name": "Mistshield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -970,13 +735,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "corsair-voidreavers",
       "corsair-voidscarred"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "faolchu",
+    "ability_id": "faolchu-aeldari",
     "name": "Faolch\u00fa",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1001,10 +768,11 @@
       "corsair-voidscarred"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "channeller-stones",
+    "ability_id": "channeller-stones-aeldari",
     "name": "Channeller Stones",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1031,10 +799,11 @@
     "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "crystal-matrix",
+    "ability_id": "crystal-matrix-aeldari",
     "name": "Crystal Matrix",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1075,10 +844,11 @@
       "fire-prism"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "superlative-strategist",
+    "ability_id": "superlative-strategist-aeldari",
     "name": "Superlative Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1135,10 +905,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "path-of-command",
+    "ability_id": "path-of-command-aeldari",
     "name": "Path of Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1158,13 +929,15 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "autarch"
+      "autarch",
+      "autarch-wayleaper"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "aspect-training",
+    "ability_id": "aspect-training-aeldari",
     "name": "Aspect Training",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1197,10 +970,11 @@
       "autarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "tormentors",
+    "ability_id": "tormentors-aeldari",
     "name": "Tormentors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1238,10 +1012,11 @@
     "unit_ids": [
       "ynnari-incubi"
     ],
-    "ability_type": "unit"
+    "ability_type": "unit",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "assured-destruction",
+    "ability_id": "assured-destruction-aeldari",
     "name": "Assured Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1296,10 +1071,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "tactical-acumen",
+    "ability_id": "tactical-acumen-aeldari",
     "name": "Tactical Acumen",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1343,10 +1119,11 @@
       "asurmen"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "hand-of-asuryan",
+    "ability_id": "hand-of-asuryan-aeldari",
     "name": "Hand of Asuryan",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1375,10 +1152,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "stormblades",
+    "ability_id": "stormblades-aeldari",
     "name": "Stormblades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1398,10 +1176,11 @@
       "storm-guardians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "crewed-platform",
+    "ability_id": "crewed-platform-storm-guardians-aeldari",
     "name": "Crewed Platform",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1430,10 +1209,11 @@
     "trigger": {
       "event": "model-destroyed",
       "object": "model-in-this-unit"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "serpent-shield",
+    "ability_id": "serpent-shield-aeldari",
     "name": "Serpent shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1456,10 +1236,11 @@
       "storm-guardians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "structural-collapse",
+    "ability_id": "structural-collapse-aeldari",
     "name": "Structural Collapse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1495,10 +1276,11 @@
       "d-cannon-platform"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "runes-of-battle-psychic",
+    "ability_id": "runes-of-battle-aeldari",
     "name": "Runes of Battle (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1523,10 +1305,11 @@
       "warlock-skyrunners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "psychic-communion-psychic",
+    "ability_id": "psychic-communion-aeldari",
     "name": "Psychic Communion (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1548,39 +1331,15 @@
       "duration": "phase"
     },
     "unit_ids": [
+      "warlock-conclave",
       "warlock-skyrunners"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "lhykhis"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "empyric-ambush",
+    "ability_id": "empyric-ambush-aeldari",
     "name": "Empyric Ambush",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1606,7 +1365,7 @@
             "event": "used",
             "filter": {
               "kind": "ability",
-              "id": "flickerjump"
+              "id": "flickerjump-aeldari"
             },
             "window": "turn"
           }
@@ -1629,10 +1388,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "whispering-web",
+    "ability_id": "whispering-web-aeldari",
     "name": "Whispering Web",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1715,44 +1475,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "death-jester"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "death-is-not-enough",
+    "ability_id": "death-is-not-enough-aeldari",
     "name": "Death is Not Enough",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1784,10 +1511,11 @@
       "death-jester"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "cruel-amusement",
+    "ability_id": "cruel-amusement-aeldari",
     "name": "Cruel Amusement",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1845,10 +1573,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "flip-belt",
+    "ability_id": "flip-belt-aeldari",
     "name": "Flip Belt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1868,13 +1597,18 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "death-jester"
+      "death-jester",
+      "shadowseer",
+      "solitaire",
+      "troupe",
+      "troupe-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "travelling-players",
+    "ability_id": "travelling-players-aeldari",
     "name": "Travelling Players",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1895,13 +1629,16 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "death-jester"
+      "death-jester",
+      "shadowseer",
+      "troupe-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "piratical-hero",
+    "ability_id": "piratical-hero-aeldari",
     "name": "Piratical Hero",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1951,10 +1688,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "prince-of-corsairs",
+    "ability_id": "prince-of-corsairs-aeldari",
     "name": "Prince of Corsairs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2043,10 +1781,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "deployment-ended"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "inevitable-death",
+    "ability_id": "inevitable-death-aeldari",
     "name": "Inevitable Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2126,10 +1865,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-opponent-turn"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "ethereal-form",
+    "ability_id": "ethereal-form-aeldari",
     "name": "Ethereal Form",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2152,10 +1892,11 @@
       "the-yncarne"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "avatar-of-the-whispering-god",
+    "ability_id": "avatar-of-the-whispering-god-aeldari",
     "name": "Avatar of The Whispering God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2188,10 +1929,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "branching-fates-psychic",
+    "ability_id": "branching-fates-farseer-skyrunner-aeldari",
     "name": "Branching Fates (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2246,10 +1988,11 @@
       "farseer-skyrunner"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "misfortune-psychic",
+    "ability_id": "misfortune-aeldari",
     "name": "Misfortune (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2287,36 +2030,11 @@
       "farseer-skyrunner"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "solitaire"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "blitz",
+    "ability_id": "blitz-aeldari",
     "name": "Blitz",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2341,10 +2059,11 @@
       "solitaire"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "blur-of-movement",
+    "ability_id": "blur-of-movement-aeldari",
     "name": "Blur of Movement",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2371,10 +2090,11 @@
       "solitaire"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "path-of-damnation",
+    "ability_id": "path-of-damnation-aeldari",
     "name": "Path of Damnation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2397,10 +2117,11 @@
       "solitaire"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "harvester-of-souls",
+    "ability_id": "harvester-of-souls-aeldari",
     "name": "Harvester of Souls",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2444,10 +2165,11 @@
       "maugan-ra"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "face-of-death",
+    "ability_id": "face-of-death-aeldari",
     "name": "Face of Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2479,10 +2201,11 @@
       "maugan-ra"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "raid-and-run",
+    "ability_id": "raid-and-run-aeldari",
     "name": "Raid and Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2518,10 +2241,11 @@
       "corsair-skyreavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fleet-of-foot",
+    "ability_id": "fleet-of-foot-aeldari",
     "name": "Fleet of Foot",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2547,7 +2271,7 @@
           "type": "ability-modifier",
           "target": "this-unit",
           "modifier": {
-            "ability": "battle-focus",
+            "ability": "battle-focus-aeldari",
             "aspect": "uses",
             "operation": "lift-limit",
             "value": "fade-back"
@@ -2563,60 +2287,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "deadly-demise-d6-6",
-    "name": "Deadly Demise D6+6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "phantom-titan"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "flawless-poise",
+    "ability_id": "flawless-poise-aeldari",
     "name": "Flawless Poise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2643,10 +2318,11 @@
       "phantom-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "molten-form",
+    "ability_id": "molten-form-aeldari",
     "name": "Molten Form",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2670,10 +2346,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "the-bloody-handed-aura",
+    "ability_id": "the-bloody-handed-aeldari",
     "name": "The Bloody-Handed (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2705,37 +2382,11 @@
       "avatar-of-khaine"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "war-walkers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "crystalline-targeting",
+    "ability_id": "crystalline-targeting-aeldari",
     "name": "Crystalline Targeting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2769,10 +2420,11 @@
       "war-walkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "aethersense-psychic",
+    "ability_id": "aethersense-aeldari",
     "name": "Aethersense (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2805,10 +2457,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fury-of-the-void-psychic",
+    "ability_id": "fury-of-the-void-aeldari",
     "name": "Fury of the Void (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2856,10 +2509,11 @@
       "kharseth"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "mindshock-pod-aura-psychic",
+    "ability_id": "mindshock-pod-aeldari",
     "name": "Mindshock Pod (Aura, Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2892,60 +2546,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "wraithknight"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "titanic-strides",
+    "ability_id": "titanic-strides-aeldari",
     "name": "Titanic Strides",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3034,10 +2639,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "point-blank-devastation",
+    "ability_id": "point-blank-devastation-aeldari",
     "name": "Point\u2010blank Devastation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3134,10 +2740,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] The 'within half range' gate is approximated as within-weapon-range (opponent-unit-within-range on the heavy wraithcannon / suncannon); the re-roll of the random Attacks characteristic uses subset all-failures per the codebase re-roll convention. Full rule in raw-text store."
+    "community_notes": "[APPROX] The 'within half range' gate is approximated as within-weapon-range (opponent-unit-within-range on the heavy wraithcannon / suncannon); the re-roll of the random Attacks characteristic uses subset all-failures per the codebase re-roll convention. Full rule in raw-text store.",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "scattershield",
+    "ability_id": "scattershield-aeldari",
     "name": "Scattershield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3157,13 +2764,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "wraithknight"
+      "wraithknight",
+      "wraithknight-with-ghostglaive"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "eviscerating-fly-by",
+    "ability_id": "eviscerating-fly-by-aeldari",
     "name": "Eviscerating Fly-by",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3186,10 +2795,11 @@
       "ynnari-reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "grav-talon",
+    "ability_id": "grav-talon-aeldari",
     "name": "Grav-talon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3213,10 +2823,11 @@
       "ynnari-reavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "cluster-caltrops",
+    "ability_id": "cluster-caltrops-aeldari",
     "name": "Cluster caltrops",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3242,10 +2853,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store."
+    "community_notes": "[APPROX] The rule grants one re-roll per model equipped with cluster caltrops; the per-model re-roll count is not expressible, so it is modeled as a re-roll of the Eviscerating Fly-by wound dice (subset all-failures per the codebase re-roll convention). Full rule in raw-text store.",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "grenade-pack-flyover",
+    "ability_id": "grenade-pack-flyover-aeldari",
     "name": "Grenade Pack Flyover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3271,10 +2883,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "war-construct",
+    "ability_id": "war-construct-aeldari",
     "name": "War Construct",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3301,10 +2914,11 @@
       "wraithguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "burning-lance",
+    "ability_id": "burning-lance-aeldari",
     "name": "Burning Lance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3341,10 +2955,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "unquenchable-resolve",
+    "ability_id": "unquenchable-resolve-aeldari",
     "name": "Unquenchable Resolve",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3375,10 +2990,11 @@
       "fuegan"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "storm-of-blades",
+    "ability_id": "storm-of-blades-aeldari",
     "name": "Storm of Blades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3413,10 +3029,11 @@
       "ynnari-succubus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "empowered-by-death",
+    "ability_id": "empowered-by-death-aeldari",
     "name": "Empowered by Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3459,10 +3076,11 @@
       "ynnari-succubus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "extreme-mobility",
+    "ability_id": "extreme-mobility-aeldari",
     "name": "Extreme Mobility",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3485,10 +3103,11 @@
       "shining-spears"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "shimmershield",
+    "ability_id": "shimmershield-aeldari",
     "name": "Shimmershield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3508,13 +3127,15 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "dire-avengers",
       "shining-spears"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "way-of-the-blade",
+    "ability_id": "way-of-the-blade-aeldari",
     "name": "Way of the Blade",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3547,10 +3168,11 @@
       "the-visarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "yvraine-s-champion",
+    "ability_id": "yvraines-champion-aeldari",
     "name": "Yvraine\u2019s Champion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3583,10 +3205,11 @@
       "the-visarch"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "reavers-of-the-void",
+    "ability_id": "reavers-of-the-void-aeldari",
     "name": "Reavers of the Void",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3610,10 +3233,11 @@
       "corsair-voidreavers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "sonic-destruction",
+    "ability_id": "sonic-destruction-aeldari",
     "name": "Sonic Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3647,10 +3271,11 @@
       "vibro-cannon-platform"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fog-of-dreams-psychic",
+    "ability_id": "fog-of-dreams-aeldari",
     "name": "Fog of Dreams (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3692,10 +3317,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "treacherous-illusion-psychic",
+    "ability_id": "treacherous-illusion-aeldari",
     "name": "Treacherous Illusion (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3720,10 +3346,11 @@
       "shadowseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "whirling-death",
+    "ability_id": "whirling-death-aeldari",
     "name": "Whirling Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3756,10 +3383,11 @@
       "jain-zar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "storm-of-silence",
+    "ability_id": "storm-of-silence-aeldari",
     "name": "Storm of Silence",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3795,10 +3423,11 @@
       "jain-zar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "flickerjump",
+    "ability_id": "flickerjump-aeldari",
     "name": "Flickerjump",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3821,10 +3450,11 @@
       "warp-spiders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "inescapable-accuracy",
+    "ability_id": "inescapable-accuracy-aeldari",
     "name": "Inescapable Accuracy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3859,10 +3489,11 @@
       "dark-reapers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "sadistic-raiders",
+    "ability_id": "sadistic-raiders-aeldari",
     "name": "Sadistic Raiders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3882,10 +3513,11 @@
       "ynnari-kabalite-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "phantasm-grenade-launcher",
+    "ability_id": "phantasm-grenade-launcher-aeldari",
     "name": "Phantasm grenade launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3910,10 +3542,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "polychromatic-camouflage",
+    "ability_id": "polychromatic-camouflage-aeldari",
     "name": "Polychromatic Camouflage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3945,10 +3578,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "target-acquisition",
+    "ability_id": "target-acquisition-aeldari",
     "name": "Target Acquisition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3980,10 +3614,11 @@
       "shroud-runners"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "runes-of-fortune-psychic",
+    "ability_id": "runes-of-fortune-aeldari",
     "name": "Runes of Fortune (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4024,10 +3659,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "titanic-agility",
+    "ability_id": "titanic-agility-aeldari",
     "name": "Titanic Agility",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4069,10 +3705,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "no-escape",
+    "ability_id": "no-escape-aeldari",
     "name": "No Escape",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4105,10 +3742,11 @@
       "ynnari-wyches"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "protect-psychic",
+    "ability_id": "protect-aeldari",
     "name": "Protect (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4143,10 +3781,11 @@
       "warlock-conclave"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "guide-psychic",
+    "ability_id": "guide-aeldari",
     "name": "Guide (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4185,10 +3824,11 @@
       "farseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "monofilament-web",
+    "ability_id": "monofilament-web-aeldari",
     "name": "Monofilament Web",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4264,10 +3904,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "indomitable-strength-of-will",
+    "ability_id": "indomitable-strength-of-will-aeldari",
     "name": "Indomitable Strength of Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4308,10 +3949,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] The specific trigger (spending a Battle Focus token to enable an Agile Manoeuvre) is not expressible; encodes the is-attached gate plus the D6 3+ that returns 1 Battle Focus token. Full rule in raw-text store."
+    "community_notes": "[APPROX] The specific trigger (spending a Battle Focus token to enable an Agile Manoeuvre) is not expressible; encodes the is-attached gate plus the D6 3+ that returns 1 Battle Focus token. Full rule in raw-text store.",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "bladestorm",
+    "ability_id": "bladestorm-aeldari",
     "name": "Bladestorm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4336,10 +3978,11 @@
       "dire-avengers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "acrobatic",
+    "ability_id": "acrobatic-aeldari",
     "name": "Acrobatic",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4366,10 +4009,11 @@
       "howling-banshees"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "fire-support",
+    "ability_id": "fire-support-aeldari",
     "name": "Fire Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4402,10 +4046,11 @@
       "falcon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "swift-demise",
+    "ability_id": "swift-demise-aeldari",
     "name": "Swift Demise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4438,10 +4083,11 @@
       "windriders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "choreographer-of-war",
+    "ability_id": "choreographer-of-war-aeldari",
     "name": "Choreographer of War",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4475,10 +4121,11 @@
       "troupe-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "cegorach-s-favour",
+    "ability_id": "cegorachs-favour-aeldari",
     "name": "Cegorach\u2019s Favour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4526,10 +4173,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "path-of-the-outcast",
+    "ability_id": "path-of-the-outcast-aeldari",
     "name": "Path of the Outcast",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4592,10 +4240,11 @@
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "skyhunter",
+    "ability_id": "skyhunter-aeldari",
     "name": "Skyhunter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4658,37 +4307,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "firing-deck-11",
-    "name": "Firing Deck 11",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 11
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ynnari-raider"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "aethersails",
+    "ability_id": "aethersails-aeldari",
     "name": "Aethersails",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4713,10 +4336,11 @@
       "ynnari-raider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "hallucinogen-grenades",
+    "ability_id": "hallucinogen-grenades-aeldari",
     "name": "Hallucinogen Grenades",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4754,10 +4378,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] Used at the start of your opponent's Shooting phase; the selection is MANDATORY (select exactly one eligible unit), not the optional 'up to one' the select-units selector can express, and the selected unit must be visible to and within 36\" of this unit. Neither the mandatory exactly-one count nor the visibility/36\" range gate is expressible in the selector (it carries only max_count, plus keywords/owner). The selected AELDARI INFANTRY unit gains the Stealth ability until the end of that phase. Full rule in raw-text store."
+    "community_notes": "[APPROX] Used at the start of your opponent's Shooting phase; the selection is MANDATORY (select exactly one eligible unit), not the optional 'up to one' the select-units selector can express, and the selected unit must be visible to and within 36\" of this unit. Neither the mandatory exactly-one count nor the visibility/36\" range gate is expressible in the selector (it carries only max_count, plus keywords/owner). The selected AELDARI INFANTRY unit gains the Stealth ability until the end of that phase. Full rule in raw-text store.",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "acrobatic-grace",
+    "ability_id": "acrobatic-grace-aeldari",
     "name": "Acrobatic Grace",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4782,10 +4407,11 @@
       "skyweavers"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "overlord",
+    "ability_id": "overlord-aeldari",
     "name": "Overlord",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4830,10 +4456,11 @@
       "ynnari-archon"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "reborn-mastermind",
+    "ability_id": "reborn-mastermind-aeldari",
     "name": "Reborn Mastermind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4856,10 +4483,11 @@
       "ynnari-archon"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "shadow-field",
+    "ability_id": "shadow-field-aeldari",
     "name": "Shadow Field",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4883,10 +4511,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "fragile invuln: lost on a failed save (engine reads the 4+; the breaking mechanic is not modelled)"
+    "community_notes": "fragile invuln: lost on a failed save (engine reads the 4+; the breaking mechanic is not modelled)",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "cloudstrider",
+    "ability_id": "cloudstrider-aeldari",
     "name": "Cloudstrider",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4919,10 +4548,11 @@
       "baharroth"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "cry-of-the-wind",
+    "ability_id": "cry-of-the-wind-aeldari",
     "name": "Cry of the Wind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4960,10 +4590,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "set-up"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "malevolent-souls",
+    "ability_id": "malevolent-souls-aeldari",
     "name": "Malevolent Souls",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4995,10 +4626,11 @@
       "wraithblades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "forceshield",
+    "ability_id": "forceshield-aeldari",
     "name": "Forceshield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5021,10 +4653,11 @@
       "wraithblades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "dance-of-death",
+    "ability_id": "dance-of-death-aeldari",
     "name": "Dance of Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5072,37 +4705,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "firing-deck-6",
-    "name": "Firing Deck 6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "firing-deck",
-        "value": 6
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ynnari-venom"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "lithe-embarkation",
+    "ability_id": "lithe-embarkation-aeldari",
     "name": "Lithe Embarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5173,10 +4780,11 @@
       "ynnari-venom"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "harassment-fire",
+    "ability_id": "harassment-fire-aeldari",
     "name": "Harassment Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5210,10 +4818,11 @@
       "vyper"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "spiritseer",
+    "ability_id": "spiritseer-aeldari",
     "name": "Spiritseer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5254,10 +4863,11 @@
       "spiritseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "spirit-mark",
+    "ability_id": "spirit-mark-aeldari",
     "name": "Spirit Mark",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5313,10 +4923,11 @@
     "community_notes": "Once per turn, in your Movement phase, when this model starts or ends a move. The benefit applies only to one selected friendly WRAITH CONSTRUCT unit within 6\" of this model (the shape models it as all attackers of the marked unit). Lasts until the start of your next Movement phase.",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "tears-of-isha-psychic",
+    "ability_id": "tears-of-isha-aeldari",
     "name": "Tears of Isha (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5354,10 +4965,11 @@
       "spiritseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "rapid-embarkation",
+    "ability_id": "rapid-embarkation-aeldari",
     "name": "Rapid Embarkation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5428,10 +5040,11 @@
       "starweaver"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "aeldari"
   },
   {
-    "ability_id": "battle-focus",
+    "ability_id": "battle-focus-aeldari",
     "name": "Battle Focus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5808,10 +5421,10 @@
     "ability_type": "faction",
     "behavior": "passive",
     "community_notes": "Aeldari army rule, active while the Army Faction is ASURYANI: at the start of each battle round the army gains Battle Focus tokens scaled by the current battle size (Incursion 2, Strike Force 4, Onslaught 6). Spending a token lets one eligible unit perform an Agile Manoeuvre this phase (Swift as the Wind, Flitting Shadows, Star Engines, Sudden Strike, Opportunity Seized, or Fade Back); a unit performs at most one Agile Manoeuvre per phase, and each named manoeuvre triggers at most once per phase, except Swift as the Wind, which different units may each perform. Unspent tokens are lost at the end of the battle round. Fade Back binds the enemy shooter and requires the selected friendly unit to have been hit by an attack from that shooter during its just-finished shooting sequence. Full rule in the raw-text store.",
-    "unit_ids": []
+    "unit_ids": ["clanblade","dragon-knights","leystalker","stonesinger"]
   },
   {
-    "ability_id": "acrobatic-onslaught",
+    "ability_id": "acrobatic-onslaught-aeldari",
     "name": "Acrobatic Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5844,7 +5457,7 @@
     "community_notes": "[APPROX] HARLEQUINS models may move through enemy models when making a Charge move; modeled as passthrough of non-titanic models (the prose says enemy models generally). Full rule in raw-text store."
   },
   {
-    "ability_id": "exit-the-stage-fateful-performance",
+    "ability_id": "exit-the-stage-fateful-performance-aeldari",
     "name": "Exit the Stage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5911,7 +5524,7 @@
     "community_notes": "Used at the end of your opponent's Fight phase on one friendly unengaged HARLEQUINS unit; that unit is placed into Strategic Reserves."
   },
   {
-    "ability_id": "heroes-fall-fateful-performance",
+    "ability_id": "heroes-fall-fateful-performance-aeldari",
     "name": "Heroes\u2019 Fall",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5976,7 +5589,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "deceptive-feint-fateful-performance",
+    "ability_id": "deceptive-feint-fateful-performance-aeldari",
     "name": "Deceptive Feint",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6038,7 +5651,7 @@
     "community_notes": "Reactive counter-move. Trigger gates on an enemy ending a move within 8 inches of the bearer, in the opponent's Movement phase; the bearer (a HARLEQUINS INFANTRY unit, curated via applies_to) then makes a Normal move of D3+3 inches unless it is within Engagement Range. Provisional 11e; see #21."
   },
   {
-    "ability_id": "a-foot-in-the-future-fateful-performance",
+    "ability_id": "a-foot-in-the-future-fateful-performance-aeldari",
     "name": "A Foot in the Future",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6077,7 +5690,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "mistweave-fateful-performance",
+    "ability_id": "mistweave-fateful-performance-aeldari",
     "name": "Mistweave",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6115,7 +5728,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "far-reaching-doom",
+    "ability_id": "far-reaching-doom-aeldari",
     "name": "Far-reaching Doom",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6169,7 +5782,7 @@
     }
   },
   {
-    "ability_id": "eldritch-suppression-path-of-the-outcast",
+    "ability_id": "eldritch-suppression-path-of-the-outcast-aeldari",
     "name": "Eldritch Suppression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6252,7 +5865,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "casting-back-the-veil-path-of-the-outcast",
+    "ability_id": "casting-back-the-veil-path-of-the-outcast-aeldari",
     "name": "Casting Back the Veil",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6295,7 +5908,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "nomads-of-the-hidden-way-path-of-the-outcast",
+    "ability_id": "nomads-of-the-hidden-way-path-of-the-outcast-aeldari",
     "name": "Nomads of the Hidden Way",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6366,7 +5979,7 @@
     }
   },
   {
-    "ability_id": "camouflaged-snipers-path-of-the-outcast",
+    "ability_id": "camouflaged-snipers-upgrade-path-of-the-outcast-aeldari",
     "name": "Camouflaged Snipers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6405,7 +6018,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "dance-of-distortion",
+    "ability_id": "dance-of-distortion-aeldari",
     "name": "Dance of Distortion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6440,7 +6053,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "presaged-rehearsal-twilight-flickers",
+    "ability_id": "presaged-rehearsal-twilight-flickers-aeldari",
     "name": "Presaged Rehearsal",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6483,7 +6096,7 @@
     }
   },
   {
-    "ability_id": "captivating-performance-twilight-flickers",
+    "ability_id": "captivating-performance-twilight-flickers-aeldari",
     "name": "Captivating Performance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6517,7 +6130,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "phantasmal-mirage-twilight-flickers",
+    "ability_id": "phantasmal-mirage-twilight-flickers-aeldari",
     "name": "Phantasmal Mirage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6568,7 +6181,7 @@
     }
   },
   {
-    "ability_id": "shadowfall-masks-twilight-flickers",
+    "ability_id": "shadowfall-masks-upgrade-twilight-flickers-aeldari",
     "name": "Shadowfall Masks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6598,7 +6211,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "prelude-performer-twilight-flickers",
+    "ability_id": "prelude-performer-twilight-flickers-aeldari",
     "name": "Prelude Performer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6628,7 +6241,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "ride-the-wind",
+    "ability_id": "ride-the-wind-aeldari",
     "name": "Ride the Wind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6734,7 +6347,7 @@
     "community_notes": "[APPROX] the number of units returned to Strategic Reserves at the end of your opponent's turn is capped by battle size, and units within Engagement Range of enemy units cannot be selected"
   },
   {
-    "ability_id": "boons-of-the-brood",
+    "ability_id": "boons-of-the-brood-aeldari",
     "name": "Boons of the Brood",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6826,7 +6439,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "shepherds-of-the-dead",
+    "ability_id": "shepherds-of-the-dead-aeldari",
     "name": "Shepherds of the Dead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6904,7 +6517,7 @@
             }
           },
           "modifier": {
-            "ability": "battle-focus"
+            "ability": "battle-focus-aeldari"
           }
         }
       ]
@@ -6915,7 +6528,7 @@
     "community_notes": "[APPROX] A Vengeful Dead token is placed automatically on whichever enemy destroys an ASURYANI PSYKER (not player-selected), and the +1 Hit / +1 Wound bonus applies only to WRAITH CONSTRUCT attacks against that marked unit (attacker-keyword restriction not modeled). The Spirit Guides half grants Battle Focus to WRAITHBLADES/WRAITHGUARD/WRAITHLORD units within 12\" of an ASURYANI PSYKER (the 12\" range and target-keyword restriction are not modeled). Full rule in raw-text store."
   },
   {
-    "ability_id": "strength-from-death",
+    "ability_id": "strength-from-death-aeldari",
     "name": "Strength from Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7028,7 +6641,7 @@
     "community_notes": "[APPROX] Encodes the three Ynnari rules: Lethal Intent (end of opponent's Shooting phase, if a YNNARI unit was destroyed that phase, a YNNARI INFANTRY/MOUNTED unit within 6\" of it makes a Normal move of D6+1\" — the within-6\" and INFANTRY/MOUNTED restrictions are not modeled); Lethal Surge (once per turn, a YNNARI unit performing the Fade Back Agile Manoeuvre may make a D6+1\" move that can end within Engagement Range — the Fade Back trigger, once-per-turn limit and engagement-range allowance are not modeled); Lethal Reprisal (start of the Fight phase, a below-Starting-Strength YNNARI unit excluding TITANIC gains Fights First). Full rule in raw-text store."
   },
   {
-    "ability_id": "defend-at-all-costs",
+    "ability_id": "defend-at-all-costs-aeldari",
     "name": "Defend At All Costs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7101,7 +6714,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "skilled-crews",
+    "ability_id": "skilled-crews-aeldari",
     "name": "Skilled Crews",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7137,7 +6750,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "relentless-raiders",
+    "ability_id": "relentless-raiders-aeldari",
     "name": "Relentless Raiders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7214,7 +6827,7 @@
     "community_notes": "[APPROX] The mortal-wound half triggers when an enemy ends a Normal/Advance/Fall Back/Charge move within range of an objective you control (D6, 2+ inflicts D3 mortal wounds); the enemy is modeled as enemy-within-aura and the move-ended trigger is not expressible as a condition. The Void Thieves half grants ANHRATHE units sticky objective control, modeled via objective-control-modifier sticky. Full rule in raw-text store."
   },
   {
-    "ability_id": "veterans-of-the-void",
+    "ability_id": "veterans-of-the-void-aeldari",
     "name": "Veterans of the Void",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7249,7 +6862,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "yriels-own",
+    "ability_id": "yriels-own-aeldari",
     "name": "Yriel\u2019s Own",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7307,7 +6920,7 @@
     "community_notes": "AELDARI units may declare a charge in a turn in which they Advanced; ANHRATHE, RANGERS and SHROUD RUNNERS units may additionally re-roll the Advance roll."
   },
   {
-    "ability_id": "strands-of-fate",
+    "ability_id": "strands-of-fate-aeldari",
     "name": "Strands of Fate",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7388,7 +7001,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "martial-grace",
+    "ability_id": "martial-grace-aeldari",
     "name": "Martial Grace",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7473,7 +7086,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "path-of-the-warrior",
+    "ability_id": "path-of-the-warrior-aeldari",
     "name": "Path of the Warrior",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7550,7 +7163,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "shimmershield-kygharils-protectors-dire-avengers",
+    "ability_id": "shimmershield-kygharils-protectors-dire-avengers-aeldari",
     "name": "Shimmershield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7577,7 +7190,7 @@
     }
   },
   {
-    "ability_id": "forceshield-kygharils-protectors-wraithblades",
+    "ability_id": "forceshield-kygharils-protectors-wraithblades-aeldari",
     "name": "Forceshield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7604,7 +7217,7 @@
     }
   },
   {
-    "ability_id": "blade-of-the-clans-clanblade",
+    "ability_id": "blade-of-the-clans-aeldari",
     "name": "Blade of the Clans",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7634,7 +7247,7 @@
     }
   },
   {
-    "ability_id": "aspect-shrine-token-kygharils-protectors-dire-avengers",
+    "ability_id": "aspect-shrine-token-kygharils-protectors-dire-avengers-aeldari",
     "name": "Aspect Shrine Token",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7644,53 +7257,7 @@
     "source_digest": "fd2f84cd7c865aa8ccf4c9097a773b8642d9ab368b681c5f66962f787b49e8b3",
     "version": "2026-q3",
     "unit_ids": [
-      "kygharils-protectors-dire-avengers"
-    ],
-    "faction_id": "aeldari",
-    "ability_type": "unit",
-    "behavior": "activated",
-    "effect": {
-      "type": "choice",
-      "choice_label": "Change one roll to an unmodified 6",
-      "options": [
-        {
-          "type": "roll-result",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "result": 6
-          }
-        },
-        {
-          "type": "roll-result",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "result": 6
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "unit"
-    }
-  },
-  {
-    "ability_id": "aspect-shrine-token-kygharils-protectors-warp-spiders",
-    "name": "Aspect Shrine Token",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "source_digest": "fd2f84cd7c865aa8ccf4c9097a773b8642d9ab368b681c5f66962f787b49e8b3",
-    "version": "2026-q3",
-    "unit_ids": [
+      "kygharils-protectors-dire-avengers",
       "kygharils-protectors-warp-spiders"
     ],
     "faction_id": "aeldari",
@@ -7728,7 +7295,7 @@
     }
   },
   {
-    "ability_id": "engulfing-flames-kygharils-protectors-warp-spiders",
+    "ability_id": "engulfing-flames-aeldari",
     "name": "Engulfing Flames",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7769,7 +7336,7 @@
     }
   },
   {
-    "ability_id": "spiritseer-spiritseer-kygharil",
+    "ability_id": "spiritseer-spiritseer-kygharil-aeldari",
     "name": "Spiritseer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7813,7 +7380,7 @@
     }
   },
   {
-    "ability_id": "psychic-guidance-kygharils-protectors-wraithblades",
+    "ability_id": "psychic-guidance-kygharils-protectors-wraithblades-aeldari",
     "name": "Psychic Guidance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7874,7 +7441,7 @@
     }
   },
   {
-    "ability_id": "on-the-hunt-dragon-knights",
+    "ability_id": "on-the-hunt-aeldari",
     "name": "On the Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7921,7 +7488,7 @@
     }
   },
   {
-    "ability_id": "bladestorm-kygharils-protectors-dire-avengers",
+    "ability_id": "bladestorm-kygharils-protectors-dire-avengers-aeldari",
     "name": "Bladestorm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -7962,7 +7529,7 @@
     }
   },
   {
-    "ability_id": "cornered-prey-clanblade",
+    "ability_id": "cornered-prey-aeldari",
     "name": "Cornered Prey",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -8032,6 +7599,2930 @@
           }
         }
       ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "acrobatic-onslaught-ghosts-of-the-webway-aeldari",
+    "name": "Acrobatic Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "adrenal-infusions-eldritch-raiders-aeldari",
+    "name": "Adrenal Infusions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "agile-reach-aeldari",
+    "name": "Agile Reach",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "dragon-knights"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "alacritous-assault-eldritch-raiders-aeldari",
+    "name": "Alacritous Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "archraider-corsair-coterie-aeldari",
+    "name": "Archraider",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aspect-of-murder-aspect-host-aeldari",
+    "name": "Aspect of Murder",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "assassins-eye-upgrade-path-of-the-outcast-aeldari",
+    "name": "Assassins' Eye (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "path-of-the-outcast",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "battle-focus-kygharils-protectors-aeldari",
+    "name": "Battle Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blades-from-beyond-spirit-conclave-aeldari",
+    "name": "Blades From Beyond",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blades-of-asuryan-guardian-battlehost-aeldari",
+    "name": "Blades of Asuryan",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blitzing-firepower-warhost-aeldari",
+    "name": "Blitzing Firepower",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bloody-dance-ghosts-of-the-webway-aeldari",
+    "name": "Bloody Dance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "borrowed-vigour-devoted-of-ynnead-aeldari",
+    "name": "Borrowed Vigour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "branching-fates-aeldari",
+    "name": "Branching Fates",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "farseer"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "breath-of-vaul-guardian-battlehost-aeldari",
+    "name": "Breath of Vaul",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cegorachs-coil-ghosts-of-the-webway-aeldari",
+    "name": "Cegorach’s Coil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cloak-and-shadow-corsair-coterie-aeldari",
+    "name": "Cloak and Shadow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cost-of-victory-guardian-battlehost-aeldari",
+    "name": "Cost of Victory",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "craftworlds-champion-guardian-battlehost-aeldari",
+    "name": "Craftworld’s Champion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crewed-platform-aeldari",
+    "name": "Crewed Platform",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "guardian-defenders"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "crushing-strides-spirit-conclave-aeldari",
+    "name": "Crushing Strides",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-10-wounds-remaining-aeldari",
+    "name": "DAMAGED: 1-10 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "revenant-titan"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-16-wounds-remaining-aeldari",
+    "name": "DAMAGED: 1-16 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "phantom-titan"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-aeldari",
+    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "crimson-hunter",
+      "falcon",
+      "fire-prism",
+      "hemlock-wraithfighter",
+      "night-spinner",
+      "wave-serpent"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-aeldari",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "avatar-of-khaine"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-aeldari",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "wraithknight",
+      "wraithknight-with-ghostglaive"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daring-riders-windrider-host-aeldari",
+    "name": "Daring Riders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-answers-death-devoted-of-ynnead-aeldari",
+    "name": "Death Answers Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "death-from-on-high-windrider-host-aeldari",
+    "name": "Death From On High",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "disparate-paths-aeldari",
+    "name": "Disparate Paths",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "doom-inescapable-aspect-host-aeldari",
+    "name": "Doom Inescapable",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "drakolithe-aeldari",
+    "name": "Drakolithe (Once per battle, per token)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "dragon-knights",
+      "leystalker"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "echoes-of-ulthanesh-windrider-host-aeldari",
+    "name": "Echoes of Ulthanesh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "elemental-ensnarement-aeldari",
+    "name": "Elemental Ensnarement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "stonesinger"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "emissaries-of-ynnead-devoted-of-ynnead-aeldari",
+    "name": "Emissaries of Ynnead",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ethereal-pathway-guardian-battlehost-aeldari",
+    "name": "Ethereal Pathway",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exit-the-stage-ghosts-of-the-webway-aeldari",
+    "name": "Exit the Stage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exotic-munitions-eldritch-raiders-aeldari",
+    "name": "Exotic Munitions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fading-fusillade-kygharils-protectors-aeldari",
+    "name": "Fading Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fanged-leer-serpents-brood-aeldari",
+    "name": "Fanged Leer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fangs-of-the-brood-serpents-brood-aeldari",
+    "name": "Fangs of the Brood",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fate-inescapable-seer-council-aeldari",
+    "name": "Fate Inescapable",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "feigned-retreat-warhost-aeldari",
+    "name": "Feigned Retreat",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fire-and-fade-warhost-aeldari",
+    "name": "Fire and Fade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "firstdrawn-blade-windrider-host-aeldari",
+    "name": "Firstdrawn Blade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "focused-firepower-windrider-host-aeldari",
+    "name": "Focused Firepower",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "focused-strikes-kygharils-protectors-aeldari",
+    "name": "Focused Strikes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "forewarned-seer-council-aeldari",
+    "name": "Forewarned",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gaze-of-ynnead-devoted-of-ynnead-aeldari",
+    "name": "Gaze of Ynnead",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gift-of-foresight-warhost-aeldari",
+    "name": "Gift of Foresight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "graceful-warriors-aeldari",
+    "name": "Graceful Warriors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guided-jump-kygharils-protectors-aeldari",
+    "name": "Guided Jump",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guiding-presence-armoured-warhost-aeldari",
+    "name": "Guiding Presence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "armoured-warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "heroes-fall-ghosts-of-the-webway-aeldari",
+    "name": "Heroes’ Fall",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "higher-duty-spirit-conclave-aeldari",
+    "name": "Higher Duty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "impeding-fire-eldritch-raiders-aeldari",
+    "name": "Impeding Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infamy-aura-corsair-coterie-aeldari",
+    "name": "Infamy (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "into-the-breach-corsair-coterie-aeldari",
+    "name": "Into the Breach",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ishas-fury-seer-council-aeldari",
+    "name": "Isha’s Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "key-of-ghosts-serpents-brood-aeldari",
+    "name": "Key of Ghosts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "khaines-vengeance-aspect-host-aeldari",
+    "name": "Khaine’s Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "layered-wards-armoured-warhost-aeldari",
+    "name": "Layered Wards",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "armoured-warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lethal-ruse-corsair-coterie-aeldari",
+    "name": "Lethal Ruse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "light-of-clarity-spirit-conclave-aeldari",
+    "name": "Light of Clarity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lightning-fast-reactions-warhost-aeldari",
+    "name": "Lightning-fast Reactions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lucid-eye-seer-council-aeldari",
+    "name": "Lucid Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "macabre-resilience-devoted-of-ynnead-aeldari",
+    "name": "Macabre Resilience",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malevolent-souls-kygharils-protectors-wraithblades-aeldari",
+    "name": "Malevolent Souls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kygharils-protectors-wraithblades"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mantle-of-wisdom-aspect-host-aeldari",
+    "name": "Mantle of Wisdom",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mask-of-secrets-ghosts-of-the-webway-aeldari",
+    "name": "Mask of Secrets",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mirage-field-windrider-host-aeldari",
+    "name": "Mirage Field",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mistweave-ghosts-of-the-webway-aeldari",
+    "name": "Mistweave",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mocking-flight-ghosts-of-the-webway-aeldari",
+    "name": "Mocking Flight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "morbid-might-devoted-of-ynnead-aeldari",
+    "name": "Morbid Might",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murders-jest-ghosts-of-the-webway-aeldari",
+    "name": "Murder’s Jest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "no-prey-too-big-eldritch-raiders-aeldari",
+    "name": "No Prey too Big",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "outcast-ambush-corsair-coterie-aeldari",
+    "name": "Outcast Ambush",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "overflight-windrider-host-aeldari",
+    "name": "Overflight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pall-of-dread-devoted-of-ynnead-aeldari",
+    "name": "Pall of Dread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "panicked-quarry-aeldari",
+    "name": "Panicked Quarry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "leystalker"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "parting-the-veil-devoted-of-ynnead-aeldari",
+    "name": "Parting the Veil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phoenix-gem-warhost-aeldari",
+    "name": "Phoenix Gem",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pirate-prince-eldritch-raiders-aeldari",
+    "name": "Pirate Prince",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pirates-due-corsair-coterie-aeldari",
+    "name": "Pirates’ Due",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "presentiment-of-dread-seer-council-aeldari",
+    "name": "Presentiment of Dread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "preternatural-precision-aspect-host-aeldari",
+    "name": "Preternatural Precision",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protector-of-the-paths-guardian-battlehost-aeldari",
+    "name": "Protector of the Paths",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-communion-warlock-aeldari",
+    "name": "Psychic Communion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "warlock"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-destroyer-warhost-aeldari",
+    "name": "Psychic Destroyer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-guidance-aeldari",
+    "name": "Psychic Guidance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "wraithblades",
+      "wraithguard"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-shield-seer-council-aeldari",
+    "name": "Psychic Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "raiders-spoils-eldritch-raiders-aeldari",
+    "name": "Raider’s Spoils",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rune-of-mists-spirit-conclave-aeldari",
+    "name": "Rune of Mists",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "runes-of-warding-seer-council-aeldari",
+    "name": "Runes of Warding",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ruthless-killers-eldritch-raiders-aeldari",
+    "name": "Ruthless Killers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seers-eye-spirit-conclave-aeldari",
+    "name": "Seer’s Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seers-hand-kygharils-protectors-aeldari",
+    "name": "Seer’s Hand",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "seersight-strike-windrider-host-aeldari",
+    "name": "Seersight Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "servant-of-the-whispering-god-aeldari",
+    "name": "Servant of the Whispering God",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "the-visarch"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shedskin-raiment-serpents-brood-aeldari",
+    "name": "Shedskin Raiment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shield-nodes-guardian-battlehost-aeldari",
+    "name": "Shield Nodes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shimmerstone-aspect-host-aeldari",
+    "name": "Shimmerstone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skyborne-sanctuary-aspect-host-aeldari",
+    "name": "Skyborne Sanctuary",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skyborne-sanctuary-warhost-aeldari",
+    "name": "Skyborne Sanctuary",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "skyward-lunge-serpents-brood-aeldari",
+    "name": "Skyward Lunge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soul-bridge-spirit-conclave-aeldari",
+    "name": "Soul Bridge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soulsight-armoured-warhost-aeldari",
+    "name": "Soulsight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "armoured-warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soulsight-devoted-of-ynnead-aeldari",
+    "name": "Soulsight",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spiralling-evasion-windrider-host-aeldari",
+    "name": "Spiralling Evasion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spirit-mark-psychic-aeldari",
+    "name": "Spirit Mark (Psychic) (Once per turn per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "spiritseer-kygharil"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spirit-stone-of-raelyth-armoured-warhost-aeldari",
+    "name": "Spirit Stone of Raelyth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "armoured-warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spirit-token-spirit-conclave-aeldari",
+    "name": "Spirit Token",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "staged-death-ghosts-of-the-webway-aeldari",
+    "name": "Staged Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stave-of-kurnous-spirit-conclave-aeldari",
+    "name": "Stave of Kurnous",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stone-of-eldritch-fury-seer-council-aeldari",
+    "name": "Stone of Eldritch Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "storm-of-whispers-devoted-of-ynnead-aeldari",
+    "name": "Storm of Whispers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "devoted-of-ynnead",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "strategic-savant-aspect-host-aeldari",
+    "name": "Strategic Savant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "striking-stride-serpents-brood-aeldari",
+    "name": "Striking Stride",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "suppressing-storm-kygharils-protectors-aeldari",
+    "name": "Suppressing Storm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "kygharils-protectors",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tears-of-isha-spiritseer-kygharil-aeldari",
+    "name": "Tears of Isha (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "spiritseer-kygharil"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "time-to-strike-guardian-battlehost-aeldari",
+    "name": "Time to Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "timeless-strategist-warhost-aeldari",
+    "name": "Timeless Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "to-their-final-breath-aspect-host-aeldari",
+    "name": "To Their Final Breath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "torc-of-morai-heg-seer-council-aeldari",
+    "name": "Torc of Morai-Heg",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "towering-wraith-construct-aeldari",
+    "name": "Towering Wraith Construct",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "phantom-titan"
+    ],
+    "faction_id": "aeldari",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tricksters-retort-ghosts-of-the-webway-aeldari",
+    "name": "Tricksters’ Retort",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "ghosts-of-the-webway",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unshrouded-truth-seer-council-aeldari",
+    "name": "Unshrouded Truth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "seer-council",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vauls-vengeance-guardian-battlehost-aeldari",
+    "name": "Vaul’s Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vectored-engines-armoured-warhost-aeldari",
+    "name": "Vectored Engines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "armoured-warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeful-sorrow-corsair-coterie-aeldari",
+    "name": "Vengeful Sorrow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "venomous-wrath-serpents-brood-aeldari",
+    "name": "Venomous Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veterans-of-the-void-eldritch-raiders-aeldari",
+    "name": "Veterans of the Void",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "voidstone-corsair-coterie-aeldari",
+    "name": "Voidstone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warding-salvoes-guardian-battlehost-aeldari",
+    "name": "Warding Salvoes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "guardian-battlehost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warrior-focus-aspect-host-aeldari",
+    "name": "Warrior Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "aspect-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weavers-coils-serpents-brood-aeldari",
+    "name": "Weaver’s Coils",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weavers-wail-serpents-brood-aeldari",
+    "name": "Weavers' Wail",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weaving-stride-serpents-brood-aeldari",
+    "name": "Weaving Stride",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "serpents-brood",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "webway-pathstone-corsair-coterie-aeldari",
+    "name": "Webway Pathstone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "corsair-coterie",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "webway-tunnel-warhost-aeldari",
+    "name": "Webway Tunnel",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "warhost",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wind-of-blades-windrider-host-aeldari",
+    "name": "Wind of Blades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "windrider-host",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "withdraw-and-reinforce-eldritch-raiders-aeldari",
+    "name": "Withdraw and Reinforce",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wraithbone-armour-spirit-conclave-aeldari",
+    "name": "Wraithbone Armour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "spirit-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "yriels-example-eldritch-raiders-aeldari",
+    "name": "Yriel’s Example",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "aeldari",
+    "detachment_id": "eldritch-raiders",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
     },
     "scope": {
       "duration": "permanent"

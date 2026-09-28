@@ -1,6 +1,6 @@
 [
   {
-    "id": "angelic-descent-army-of-faith",
+    "id": "angelic-descent-army-of-faith-adepta-sororitas",
     "name": "ANGELIC DESCENT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "angelic-descent-army-of-faith",
+    "ability_id": "angelic-descent-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "bastion-of-faith-champions-of-faith",
+    "id": "bastion-of-faith-champions-of-faith-adepta-sororitas",
     "name": "BASTION OF FAITH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -41,7 +41,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "bastion-of-faith-champions-of-faith",
+    "ability_id": "bastion-of-faith-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "id": "blazing-ire-bringers-of-flame",
+    "id": "blazing-ire-bringers-of-flame-adepta-sororitas",
     "name": "BLAZING IRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -70,7 +70,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "blazing-ire-bringers-of-flame",
+    "ability_id": "blazing-ire-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -87,7 +87,7 @@
     ]
   },
   {
-    "id": "blinding-radiance-army-of-faith",
+    "id": "blinding-radiance-army-of-faith-adepta-sororitas",
     "name": "BLINDING RADIANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -100,7 +100,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "blinding-radiance-army-of-faith",
+    "ability_id": "blinding-radiance-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "boundless-zeal-penitent-host",
+    "id": "boundless-zeal-penitent-host-adepta-sororitas",
     "name": "BOUNDLESS ZEAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -129,7 +129,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "boundless-zeal-penitent-host",
+    "ability_id": "boundless-zeal-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "id": "carry-forth-the-faithful-bringers-of-flame",
+    "id": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas",
     "name": "CARRY FORTH THE FAITHFUL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -158,7 +158,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "carry-forth-the-faithful-bringers-of-flame",
+    "ability_id": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "id": "cleansing-flames-bringers-of-flame",
+    "id": "cleansing-flames-bringers-of-flame-adepta-sororitas",
     "name": "CLEANSING FLAMES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -187,7 +187,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "cleansing-flames-bringers-of-flame",
+    "ability_id": "cleansing-flames-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -204,7 +204,7 @@
     ]
   },
   {
-    "id": "devastating-reprise-chorus-of-condemnation",
+    "id": "devastating-reprise-chorus-of-condemnation-adepta-sororitas",
     "name": "DEVASTATING REPRISE",
     "category": "detachment",
     "detachment_id": "chorus-of-condemnation",
@@ -215,7 +215,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "devastating-reprise-chorus-of-condemnation",
+    "ability_id": "devastating-reprise-chorus-of-condemnation-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -232,7 +232,7 @@
     ]
   },
   {
-    "id": "devout-fanaticism-penitent-host",
+    "id": "devout-fanaticism-penitent-host-adepta-sororitas",
     "name": "DEVOUT FANATICISM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -244,7 +244,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "devout-fanaticism-penitent-host",
+    "ability_id": "devout-fanaticism-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -261,7 +261,7 @@
     ]
   },
   {
-    "id": "divine-guidance-army-of-faith",
+    "id": "divine-guidance-army-of-faith-adepta-sororitas",
     "name": "DIVINE GUIDANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -274,7 +274,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "divine-guidance-army-of-faith",
+    "ability_id": "divine-guidance-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -291,7 +291,7 @@
     ]
   },
   {
-    "id": "divine-intervention-hallowed-martyrs",
+    "id": "divine-intervention-hallowed-martyrs-adepta-sororitas",
     "name": "DIVINE INTERVENTION",
     "category": "detachment",
     "type": "epic-deed",
@@ -307,7 +307,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "divine-intervention-hallowed-martyrs",
+    "ability_id": "divine-intervention-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -324,7 +324,7 @@
     ]
   },
   {
-    "id": "faith-and-fury-army-of-faith",
+    "id": "faith-and-fury-army-of-faith-adepta-sororitas",
     "name": "FAITH AND FURY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -336,7 +336,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "faith-and-fury-army-of-faith",
+    "ability_id": "faith-and-fury-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -353,7 +353,7 @@
     ]
   },
   {
-    "id": "faithful-fortitude-sacred-champions",
+    "id": "faithful-fortitude-sacred-champions-adepta-sororitas",
     "name": "FAITHFUL FORTITUDE",
     "category": "detachment",
     "detachment_id": "sacred-champions",
@@ -368,7 +368,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "faithful-fortitude-sacred-champions",
+    "ability_id": "faithful-fortitude-sacred-champions-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -385,7 +385,7 @@
     ]
   },
   {
-    "id": "fervent-devotion-sanctuary-guardians",
+    "id": "fervent-devotion-sanctuary-guardians-adepta-sororitas",
     "name": "Fervent Devotion",
     "category": "detachment",
     "detachment_id": "sanctuary-guardians",
@@ -396,7 +396,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fervent-devotion-sanctuary-guardians",
+    "ability_id": "fervent-devotion-sanctuary-guardians-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -409,7 +409,7 @@
     ]
   },
   {
-    "id": "final-redemption-penitent-host",
+    "id": "final-redemption-penitent-host-adepta-sororitas",
     "name": "FINAL REDEMPTION",
     "category": "detachment",
     "type": "epic-deed",
@@ -425,7 +425,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "final-redemption-penitent-host",
+    "ability_id": "final-redemption-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -442,7 +442,7 @@
     ]
   },
   {
-    "id": "fires-of-damnation-sanctuary-guardians",
+    "id": "fires-of-damnation-sanctuary-guardians-adepta-sororitas",
     "name": "Fires of Damnation",
     "category": "detachment",
     "detachment_id": "sanctuary-guardians",
@@ -454,7 +454,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fires-of-damnation-sanctuary-guardians",
+    "ability_id": "fires-of-damnation-sanctuary-guardians-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -467,7 +467,7 @@
     ]
   },
   {
-    "id": "harmonised-exorcism-chorus-of-condemnation",
+    "id": "harmonised-exorcism-chorus-of-condemnation-adepta-sororitas",
     "name": "HARMONISED EXORCISM",
     "category": "detachment",
     "detachment_id": "chorus-of-condemnation",
@@ -478,7 +478,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "harmonised-exorcism-chorus-of-condemnation",
+    "ability_id": "harmonised-exorcism-chorus-of-condemnation-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -495,7 +495,7 @@
     ]
   },
   {
-    "id": "indefatigable-dedication-champions-of-faith",
+    "id": "indefatigable-dedication-champions-of-faith-adepta-sororitas",
     "name": "INDEFATIGABLE DEDICATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -507,7 +507,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "indefatigable-dedication-champions-of-faith",
+    "ability_id": "indefatigable-dedication-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -524,7 +524,7 @@
     ]
   },
   {
-    "id": "inspirational-battle-canticles-chorus-of-condemnation",
+    "id": "inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas",
     "name": "INSPIRATIONAL BATTLE CANTICLES",
     "category": "detachment",
     "detachment_id": "chorus-of-condemnation",
@@ -535,7 +535,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inspirational-battle-canticles-chorus-of-condemnation",
+    "ability_id": "inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -552,7 +552,7 @@
     ]
   },
   {
-    "id": "lash-of-guilt-penitent-host",
+    "id": "lash-of-guilt-penitent-host-adepta-sororitas",
     "name": "LASH OF GUILT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -564,7 +564,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "lash-of-guilt-penitent-host",
+    "ability_id": "lash-of-guilt-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -581,7 +581,7 @@
     ]
   },
   {
-    "id": "light-of-the-emperor-army-of-faith",
+    "id": "light-of-the-emperor-army-of-faith-adepta-sororitas",
     "name": "LIGHT OF THE EMPEROR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -593,7 +593,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "light-of-the-emperor-army-of-faith",
+    "ability_id": "light-of-the-emperor-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -610,7 +610,7 @@
     ]
   },
   {
-    "id": "passion-of-the-penitent-penitent-host",
+    "id": "passion-of-the-penitent-penitent-host-adepta-sororitas",
     "name": "PASSION OF THE PENITENT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -622,7 +622,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "passion-of-the-penitent-penitent-host",
+    "ability_id": "passion-of-the-penitent-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -639,7 +639,7 @@
     ]
   },
   {
-    "id": "path-of-the-righteous-champions-of-faith",
+    "id": "path-of-the-righteous-champions-of-faith-adepta-sororitas",
     "name": "PATH OF THE RIGHTEOUS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -651,7 +651,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "path-of-the-righteous-champions-of-faith",
+    "ability_id": "path-of-the-righteous-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -668,7 +668,7 @@
     ]
   },
   {
-    "id": "praise-the-fallen-hallowed-martyrs",
+    "id": "praise-the-fallen-hallowed-martyrs-adepta-sororitas",
     "name": "PRAISE THE FALLEN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -680,7 +680,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "praise-the-fallen-hallowed-martyrs",
+    "ability_id": "praise-the-fallen-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -697,7 +697,7 @@
     ]
   },
   {
-    "id": "purity-of-suffering-penitent-host",
+    "id": "purity-of-suffering-penitent-host-adepta-sororitas",
     "name": "PURITY OF SUFFERING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -710,7 +710,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "purity-of-suffering-penitent-host",
+    "ability_id": "purity-of-suffering-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -727,7 +727,7 @@
     ]
   },
   {
-    "id": "righteous-blows-bringers-of-flame",
+    "id": "righteous-blows-bringers-of-flame-adepta-sororitas",
     "name": "RIGHTEOUS BLOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -739,7 +739,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "righteous-blows-bringers-of-flame",
+    "ability_id": "righteous-blows-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +756,7 @@
     ]
   },
   {
-    "id": "righteous-vengeance-hallowed-martyrs",
+    "id": "righteous-vengeance-hallowed-martyrs-adepta-sororitas",
     "name": "RIGHTEOUS VENGEANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -768,7 +768,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "righteous-vengeance-hallowed-martyrs",
+    "ability_id": "righteous-vengeance-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -785,7 +785,7 @@
     ]
   },
   {
-    "id": "rites-of-fire-bringers-of-flame",
+    "id": "rites-of-fire-bringers-of-flame-adepta-sororitas",
     "name": "RITES OF FIRE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -797,7 +797,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "rites-of-fire-bringers-of-flame",
+    "ability_id": "rites-of-fire-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -814,7 +814,7 @@
     ]
   },
   {
-    "id": "sanctified-blows-sacred-champions",
+    "id": "sanctified-blows-sacred-champions-adepta-sororitas",
     "name": "SANCTIFIED BLOWS",
     "category": "detachment",
     "detachment_id": "sacred-champions",
@@ -825,7 +825,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sanctified-blows-sacred-champions",
+    "ability_id": "sanctified-blows-sacred-champions-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -842,7 +842,7 @@
     ]
   },
   {
-    "id": "sanctified-immolation-hallowed-martyrs",
+    "id": "sanctified-immolation-hallowed-martyrs-adepta-sororitas",
     "name": "SANCTIFIED IMMOLATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -858,7 +858,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sanctified-immolation-hallowed-martyrs",
+    "ability_id": "sanctified-immolation-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -875,7 +875,7 @@
     ]
   },
   {
-    "id": "shield-of-aversion-bringers-of-flame",
+    "id": "shield-of-aversion-bringers-of-flame-adepta-sororitas",
     "name": "SHIELD OF AVERSION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -888,7 +888,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shield-of-aversion-bringers-of-flame",
+    "ability_id": "shield-of-aversion-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -905,7 +905,7 @@
     ]
   },
   {
-    "id": "shield-of-denial-champions-of-faith",
+    "id": "shield-of-denial-champions-of-faith-adepta-sororitas",
     "name": "SHIELD OF DENIAL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -921,7 +921,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shield-of-denial-champions-of-faith",
+    "ability_id": "shield-of-denial-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -938,7 +938,7 @@
     ]
   },
   {
-    "id": "shield-of-faith-army-of-faith",
+    "id": "shield-of-faith-army-of-faith-adepta-sororitas",
     "name": "SHIELD OF FAITH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -954,7 +954,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shield-of-faith-army-of-faith",
+    "ability_id": "shield-of-faith-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -971,7 +971,7 @@
     ]
   },
   {
-    "id": "spirit-of-the-martyr-hallowed-martyrs",
+    "id": "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas",
     "name": "SPIRIT OF THE MARTYR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -983,7 +983,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "spirit-of-the-martyr-hallowed-martyrs",
+    "ability_id": "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1000,7 +1000,7 @@
     ]
   },
   {
-    "id": "suffer-not-the-unfaithful-champions-of-faith",
+    "id": "suffer-not-the-unfaithful-champions-of-faith-adepta-sororitas",
     "name": "SUFFER NOT THE UNFAITHFUL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1013,7 +1013,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "suffer-not-the-unfaithful-champions-of-faith",
+    "ability_id": "suffer-not-the-unfaithful-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1030,7 +1030,7 @@
     ]
   },
   {
-    "id": "suffering-and-sacrifice-hallowed-martyrs",
+    "id": "suffering-and-sacrifice-hallowed-martyrs-adepta-sororitas",
     "name": "SUFFERING AND SACRIFICE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1042,7 +1042,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "suffering-and-sacrifice-hallowed-martyrs",
+    "ability_id": "suffering-and-sacrifice-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1059,7 +1059,7 @@
     ]
   },
   {
-    "id": "take-cover-sanctuary-guardians",
+    "id": "take-cover-sanctuary-guardians-adepta-sororitas",
     "name": "Take Cover",
     "category": "detachment",
     "detachment_id": "sanctuary-guardians",
@@ -1071,7 +1071,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "take-cover-sanctuary-guardians",
+    "ability_id": "take-cover-sanctuary-guardians-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1084,7 +1084,7 @@
     ]
   },
   {
-    "id": "to-the-heart-of-heresy-champions-of-faith",
+    "id": "to-the-heart-of-heresy-champions-of-faith-adepta-sororitas",
     "name": "TO THE HEART OF HERESY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1096,7 +1096,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "to-the-heart-of-heresy-champions-of-faith",
+    "ability_id": "to-the-heart-of-heresy-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1113,7 +1113,7 @@
     ]
   },
   {
-    "id": "unflinching-determination-sacred-champions",
+    "id": "unflinching-determination-sacred-champions-adepta-sororitas",
     "name": "UNFLINCHING DETERMINATION",
     "category": "detachment",
     "detachment_id": "sacred-champions",
@@ -1124,7 +1124,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unflinching-determination-sacred-champions",
+    "ability_id": "unflinching-determination-sacred-champions-adepta-sororitas",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

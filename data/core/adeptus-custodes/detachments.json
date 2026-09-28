@@ -3,20 +3,20 @@
     "id": "lions-of-the-emperor",
     "name": "Lions of the Emperor",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "against-all-odds",
+    "detachment_rule_id": "against-all-odds-adeptus-custodes",
     "enhancement_ids": [
-      "superior-creation-lions-of-the-emperor",
-      "praesidius-lions-of-the-emperor",
-      "fierce-conqueror-lions-of-the-emperor",
-      "admonimortis-lions-of-the-emperor"
+      "superior-creation-lions-of-the-emperor-adeptus-custodes",
+      "praesidius-lions-of-the-emperor-adeptus-custodes",
+      "fierce-conqueror-lions-of-the-emperor-adeptus-custodes",
+      "admonimortis-lions-of-the-emperor-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "peerless-warrior-lions-of-the-emperor",
-      "gilded-champion-lions-of-the-emperor",
-      "defiant-to-the-last-lions-of-the-emperor",
-      "unleash-the-lions-lions-of-the-emperor",
-      "manoeuvre-and-fire-lions-of-the-emperor",
-      "swift-as-the-eagle-lions-of-the-emperor"
+      "peerless-warrior-lions-of-the-emperor-adeptus-custodes",
+      "gilded-champion-lions-of-the-emperor-adeptus-custodes",
+      "defiant-to-the-last-lions-of-the-emperor-adeptus-custodes",
+      "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
+      "manoeuvre-and-fire-lions-of-the-emperor-adeptus-custodes",
+      "swift-as-the-eagle-lions-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -40,20 +40,20 @@
     "id": "auric-champions",
     "name": "Auric Champions",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "assemblage-of-might",
+    "detachment_rule_id": "assemblage-of-might-adeptus-custodes",
     "enhancement_ids": [
-      "blade-imperator-auric-champions",
-      "inspirational-exemplar-auric-champions",
-      "veiled-blade-auric-champions",
-      "martial-philosopher-auric-champions"
+      "blade-imperator-auric-champions-adeptus-custodes",
+      "inspirational-exemplar-auric-champions-adeptus-custodes",
+      "veiled-blade-auric-champions-adeptus-custodes",
+      "martial-philosopher-auric-champions-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "slayer-of-champions-auric-champions",
-      "the-emperors-auspice-auric-champions",
-      "earning-of-a-name-auric-champions",
-      "shoulder-the-mantle-auric-champions",
-      "superhuman-reserves-auric-champions",
-      "vigil-unending-auric-champions"
+      "slayer-of-champions-auric-champions-adeptus-custodes",
+      "the-emperors-auspice-auric-champions-adeptus-custodes",
+      "earning-of-a-name-auric-champions-adeptus-custodes",
+      "shoulder-the-mantle-auric-champions-adeptus-custodes",
+      "superhuman-reserves-auric-champions-adeptus-custodes",
+      "vigil-unending-auric-champions-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -76,18 +76,18 @@
     "faction_id": "adeptus-custodes",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "adamantine-talisman-solar-spearhead",
-      "augury-uplink-solar-spearhead",
-      "honoured-fallen-aura-solar-spearhead",
-      "veteran-of-the-kataphraktoi-solar-spearhead"
+      "adamantine-talisman-solar-spearhead-adeptus-custodes",
+      "augury-uplink-solar-spearhead-adeptus-custodes",
+      "honoured-fallen-aura-solar-spearhead-adeptus-custodes",
+      "veteran-of-the-kataphraktoi-solar-spearhead-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "flawless-construction-solar-spearhead",
-      "emperors-vengeance-solar-spearhead",
-      "wrathful-advance-solar-spearhead",
-      "unstoppable-solar-spearhead",
-      "relentless-persecution-solar-spearhead",
-      "punishment-inescapable-solar-spearhead"
+      "flawless-construction-solar-spearhead-adeptus-custodes",
+      "emperors-vengeance-solar-spearhead-adeptus-custodes",
+      "wrathful-advance-solar-spearhead-adeptus-custodes",
+      "unstoppable-solar-spearhead-adeptus-custodes",
+      "relentless-persecution-solar-spearhead-adeptus-custodes",
+      "punishment-inescapable-solar-spearhead-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -98,8 +98,8 @@
       "take-and-hold"
     ],
     "detachment_rule_ids": [
-      "auric-armour",
-      "moritoi-ancients"
+      "auric-armour-adeptus-custodes",
+      "moritoi-ancients-adeptus-custodes"
     ],
     "tags": [
       "armoury"
@@ -115,20 +115,20 @@
     "id": "shield-host",
     "name": "Shield Host",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "martial-mastery",
+    "detachment_rule_id": "martial-mastery-adeptus-custodes",
     "enhancement_ids": [
-      "from-the-hall-of-armouries-shield-host",
-      "castellans-mark-shield-host",
-      "auric-mantle-shield-host",
-      "panoptispex-shield-host"
+      "from-the-hall-of-armouries-shield-host-adeptus-custodes",
+      "castellans-mark-shield-host-adeptus-custodes",
+      "auric-mantle-shield-host-adeptus-custodes",
+      "panoptispex-shield-host-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "arcane-genetic-alchemy-shield-host",
-      "avenge-the-fallen-shield-host",
-      "unwavering-sentinels-shield-host",
-      "multipotentiality-shield-host",
-      "vigilance-eternal-shield-host",
-      "archeotech-munitions-shield-host"
+      "arcane-genetic-alchemy-shield-host-adeptus-custodes",
+      "avenge-the-fallen-shield-host-adeptus-custodes",
+      "unwavering-sentinels-shield-host-adeptus-custodes",
+      "multipotentiality-shield-host-adeptus-custodes",
+      "vigilance-eternal-shield-host-adeptus-custodes",
+      "archeotech-munitions-shield-host-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -149,20 +149,20 @@
     "id": "null-maiden-vigil",
     "name": "Null Maiden Vigil",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "creeping-dread-aura",
+    "detachment_rule_id": "creeping-dread-adeptus-custodes",
     "enhancement_ids": [
-      "raptor-blade-null-maiden-vigil",
-      "enhanced-voidsheen-cloak-null-maiden-vigil",
-      "huntress-eye-null-maiden-vigil",
-      "oblivion-knight-null-maiden-vigil"
+      "raptor-blade-null-maiden-vigil-adeptus-custodes",
+      "enhanced-voidsheen-cloak-null-maiden-vigil-adeptus-custodes",
+      "huntress-eye-null-maiden-vigil-adeptus-custodes",
+      "oblivion-knight-null-maiden-vigil-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "witch-hunters-null-maiden-vigil",
-      "anathema-blademastery-null-maiden-vigil",
-      "purgation-sweep-null-maiden-vigil",
-      "desperations-price-null-maiden-vigil",
-      "psy-chaff-volley-null-maiden-vigil",
-      "psychic-abominations-null-maiden-vigil"
+      "witch-hunters-null-maiden-vigil-adeptus-custodes",
+      "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
+      "purgation-sweep-null-maiden-vigil-adeptus-custodes",
+      "desperations-price-null-maiden-vigil-adeptus-custodes",
+      "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
+      "psychic-abominations-null-maiden-vigil-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -183,20 +183,20 @@
     "id": "talons-of-the-emperor",
     "name": "Talons of the Emperor",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "revered-companions",
+    "detachment_rule_id": "revered-companions-adeptus-custodes",
     "enhancement_ids": [
-      "radiant-mantle-talons-of-the-emperor",
-      "gift-of-terran-artifice-talons-of-the-emperor",
-      "champion-of-the-imperium-talons-of-the-emperor",
-      "aegis-projector-talons-of-the-emperor"
+      "radiant-mantle-talons-of-the-emperor-adeptus-custodes",
+      "gift-of-terran-artifice-talons-of-the-emperor-adeptus-custodes",
+      "champion-of-the-imperium-talons-of-the-emperor-adeptus-custodes",
+      "aegis-projector-talons-of-the-emperor-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "talons-interlocked-talons-of-the-emperor",
-      "empyric-severance-talons-of-the-emperor",
-      "taloned-pincer-talons-of-the-emperor",
-      "emperors-executioners-talons-of-the-emperor",
-      "shield-of-honour-talons-of-the-emperor",
-      "hunt-as-one-talons-of-the-emperor"
+      "talons-interlocked-talons-of-the-emperor-adeptus-custodes",
+      "empyric-severance-talons-of-the-emperor-adeptus-custodes",
+      "taloned-pincer-talons-of-the-emperor-adeptus-custodes",
+      "emperors-executioners-talons-of-the-emperor-adeptus-custodes",
+      "shield-of-honour-talons-of-the-emperor-adeptus-custodes",
+      "hunt-as-one-talons-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -217,15 +217,15 @@
     "id": "might-of-the-moritoi",
     "name": "Might of the Moritoi",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "march-of-the-honoured-dead",
+    "detachment_rule_id": "march-of-the-honoured-dead-adeptus-custodes",
     "enhancement_ids": [
-      "interred-expertise-upgrade-might-of-the-moritoi",
-      "auramite-sarcophagus-upgrade-might-of-the-moritoi"
+      "interred-expertise-upgrade-might-of-the-moritoi-adeptus-custodes",
+      "auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "flawless-construction-might-of-the-moritoi",
-      "unstoppable-advance-might-of-the-moritoi",
-      "prioritised-eradication-might-of-the-moritoi"
+      "flawless-construction-might-of-the-moritoi-adeptus-custodes",
+      "unstoppable-advance-might-of-the-moritoi-adeptus-custodes",
+      "prioritised-eradication-might-of-the-moritoi-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -249,15 +249,15 @@
     "id": "silent-hunters",
     "name": "Silent Hunters",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "skin-crawling-disorientation",
+    "detachment_rule_id": "skin-crawling-disorientation-adeptus-custodes",
     "enhancement_ids": [
-      "encircling-hunter-silent-hunters",
-      "psyk-out-grenades-upgrade-silent-hunters"
+      "encircling-hunter-silent-hunters-adeptus-custodes",
+      "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "deathsong-scythes-silent-hunters",
-      "umbral-prosecution-silent-hunters",
-      "synchronised-inferno-silent-hunters"
+      "deathsong-scythes-silent-hunters-adeptus-custodes",
+      "umbral-prosecution-silent-hunters-adeptus-custodes",
+      "synchronised-inferno-silent-hunters-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -278,15 +278,15 @@
     "id": "tharanatoi-hammerblow",
     "name": "Tharanatoi Hammerblow",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "the-hammer-falls",
+    "detachment_rule_id": "the-hammer-falls-adeptus-custodes",
     "enhancement_ids": [
-      "mnemo-locked-shrine-cipher-tharanatoi-hammerblow",
-      "efficient-aggression-tharanatoi-hammerblow"
+      "mnemo-locked-shrine-cipher-tharanatoi-hammerblow-adeptus-custodes",
+      "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "hardened-resolve-tharanatoi-hammerblow",
-      "unleash-the-lions-tharanatoi-hammerblow",
-      "electroexorcist-saturation-tharanatoi-hammerblow"
+      "hardened-resolve-tharanatoi-hammerblow-adeptus-custodes",
+      "unleash-the-lions-tharanatoi-hammerblow-adeptus-custodes",
+      "electroexorcist-saturation-tharanatoi-hammerblow-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -311,8 +311,8 @@
     "name": "Tristraen’s Gilded Blades",
     "faction_id": "adeptus-custodes",
     "enhancement_ids": [
-      "comrades-in-wrath-tristraens-gilded-blades",
-      "shattering-charge-tristraens-gilded-blades"
+      "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
+      "shattering-charge-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -330,6 +330,9 @@
         "namespace": "mfm",
         "id": "9c579f51-d8f2-461a-8a99-ec7deace8303"
       }
+    ],
+    "detachment_rule_ids": [
+      "fearless-and-unrelenting-adeptus-custodes"
     ]
   }
 ]

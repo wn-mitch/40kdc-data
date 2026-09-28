@@ -56,7 +56,7 @@ function writeCoreVocabulary(root: string): void {
   write(root, "core/weapon-keywords.json", [
     { id: "lethal-hits", name: "Lethal Hits" },
   ]);
-  write(root, "core/stratagems.json", [{ id: "counter-offensive" }]);
+  write(root, "core/stratagems.json", [{ id: "counteroffensive" }]);
   write(root, "core/alpha/stratagems.json", [{ id: "go-to-ground-alpha" }]);
   // Scratch/example directories must not widen the accepted vocabulary.
   write(root, "core/_example/units.json", [{ id: "x", keywords: ["EXAMPLE ONLY"] }]);
@@ -122,7 +122,7 @@ describe("buildReferenceVocabularies", () => {
 
   it("collects stratagem ids from the root and every faction file, exactly", async () => {
     const { stratagems } = await buildReferenceVocabularies(root);
-    expect([...stratagems].sort()).toEqual(["counter-offensive", "go-to-ground-alpha"]);
+    expect([...stratagems].sort()).toEqual(["counteroffensive", "go-to-ground-alpha"]);
     expect(stratagems.has("Counter-Offensive")).toBe(false);
   });
 
@@ -317,7 +317,7 @@ describe("collectDanglingAbilityReferences", () => {
 
   it("compares stratagem ids exactly while keyword matching normalizes", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "exact", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "counter-offensive", operation: "set", amount: 0 } } },
+      { ability_id: "exact", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "counteroffensive", operation: "set", amount: 0 } } },
       { ability_id: "wrong-case", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "Counter-Offensive", operation: "set", amount: 0 } } },
       { ability_id: "permission", effect: { type: "permission", modifier: { activity: "use-stratagem", allow: true, stratagem: "counter offensive" } } },
       // A manoeuvre's cost names no Stratagem, so its id is not audited as one.

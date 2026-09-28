@@ -53,8 +53,8 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seed-detachments over the re
     expect(fr!.dp).toBe(1);
     expect(fr!.disposition).toBe("purge-the-foe");
     expect(fr!.enhancements.map((e) => e.id).sort()).toEqual([
-      "bane-of-the-craven-frenzied-reavers",
-      "fearsome-presence-frenzied-reavers",
+      "bane-of-the-craven-frenzied-reavers-world-eaters",
+      "fearsome-presence-frenzied-reavers-world-eaters",
     ]);
   });
 
@@ -65,7 +65,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seed-detachments over the re
     expect(sg!.dir).toBe("adepta-sororitas");
     expect(sg!.dp).toBe(1);
     expect(sg!.disposition).toBe("take-and-hold");
-    expect(sg!.enhancements.map((e) => e.id)).toContain("divine-miracle-sanctuary-guardians");
+    expect(sg!.enhancements.map((e) => e.id)).toContain("divine-miracle-sanctuary-guardians-adepta-sororitas");
   });
   it("is idempotent for already-seeded Combat Patrol content", () => {
     const candidates = collect();

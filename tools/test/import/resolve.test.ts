@@ -39,7 +39,7 @@ describe("resolve (against embedded grey-knights data)", () => {
   it("resolves the enhancement scoped to the detachment", () => {
     const gm = unitById(roster, "grand-master-in-nemesis-dreadknight")!;
     expect(gm.is_warlord).toBe(true);
-    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers");
+    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers-grey-knights");
     expect(gm.enhancement?.resolved).toBe(true);
   });
 
@@ -288,7 +288,7 @@ describe("name resolution: faction-prefixed shared chassis and unit aliases", ()
 describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("resolves an Upgrade enhancement by its RAW '(Upgrade)' roster name", () => {
     const hit = ds.enhancements.find("Symphonic Payload (Upgrade)");
-    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation");
+    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas");
     // The stored display name keeps the tag (what a roster line carries).
     expect(hit?.name).toBe("Symphonic Payload (Upgrade)");
   });

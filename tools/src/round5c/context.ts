@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { abilityIdsOf } from "../data/ability-refs.js";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -164,7 +165,7 @@ export function createAbilityContextResolver(rootDir = DEFAULT_ROOT): (factionId
     const enrichmentUnitIds = new Set(enrichment ? stringArray(enrichment.unit_ids) : []);
     const linkedUnits = facts.units.filter((unit) => {
       const unitId = asString(unit.id);
-      return unitId !== null && (enrichmentUnitIds.has(unitId) || stringArray(unit.ability_ids).includes(abilityId));
+      return unitId !== null && (enrichmentUnitIds.has(unitId) || abilityIdsOf(unit.ability_ids).includes(abilityId));
     });
     const owners = linkedUnits
       .map((unit) => ({ unit_id: asString(unit.id)!, name: asString(unit.name), role: asString(unit.role) }))

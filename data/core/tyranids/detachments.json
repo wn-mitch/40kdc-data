@@ -3,20 +3,20 @@
     "id": "synaptic-nexus",
     "name": "Synaptic Nexus",
     "faction_id": "tyranids",
-    "detachment_rule_id": "synaptic-imperatives",
+    "detachment_rule_id": "synaptic-imperatives-tyranids",
     "enhancement_ids": [
-      "power-of-the-hive-mind-synaptic-nexus",
-      "psychostatic-disruption-synaptic-nexus",
-      "synaptic-control-synaptic-nexus",
-      "the-dirgeheart-of-kharis-aura-synaptic-nexus"
+      "power-of-the-hive-mind-synaptic-nexus-tyranids",
+      "psychostatic-disruption-synaptic-nexus-tyranids",
+      "synaptic-control-synaptic-nexus-tyranids",
+      "the-dirgeheart-of-kharis-aura-synaptic-nexus-tyranids"
     ],
     "stratagem_ids": [
-      "synaptic-channelling-synaptic-nexus",
-      "irresistible-will-synaptic-nexus",
-      "reinforced-hive-node-synaptic-nexus",
-      "the-smothering-shadow-synaptic-nexus",
-      "imperative-dominance-synaptic-nexus",
-      "override-instincts-synaptic-nexus"
+      "synaptic-channelling-synaptic-nexus-tyranids",
+      "irresistible-will-synaptic-nexus-tyranids",
+      "reinforced-hive-node-synaptic-nexus-tyranids",
+      "the-smothering-shadow-synaptic-nexus-tyranids",
+      "imperative-dominance-synaptic-nexus-tyranids",
+      "override-instincts-synaptic-nexus-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -37,20 +37,20 @@
     "id": "subterranean-assault",
     "name": "Subterranean Assault",
     "faction_id": "tyranids",
-    "detachment_rule_id": "surprise-assault",
+    "detachment_rule_id": "surprise-assault-tyranids",
     "enhancement_ids": [
-      "synaptic-strategy-subterranean-assault",
-      "tremor-senses-subterranean-assault",
-      "vanguard-intellect-subterranean-assault",
-      "trygon-prime-subterranean-assault"
+      "synaptic-strategy-subterranean-assault-tyranids",
+      "tremor-senses-subterranean-assault-tyranids",
+      "vanguard-intellect-subterranean-assault-tyranids",
+      "trygon-prime-subterranean-assault-tyranids"
     ],
     "stratagem_ids": [
-      "enfilading-emergence-subterranean-assault",
-      "tunnel-network-subterranean-assault",
-      "swarming-assault-subterranean-assault",
-      "retreat-below-subterranean-assault",
-      "adaptive-optimisation-subterranean-assault",
-      "replenishing-swarms-subterranean-assault"
+      "enfilading-emergence-subterranean-assault-tyranids",
+      "tunnel-network-subterranean-assault-tyranids",
+      "swarming-assault-subterranean-assault-tyranids",
+      "retreat-below-subterranean-assault-tyranids",
+      "adaptive-optimisation-subterranean-assault-tyranids",
+      "replenishing-swarms-subterranean-assault-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -71,20 +71,14 @@
     "id": "warrior-bioform-onslaught",
     "name": "Warrior Bioform Onslaught",
     "faction_id": "tyranids",
-    "detachment_rule_id": "leader-beasts",
+    "detachment_rule_id": "leader-beasts-tyranids",
     "enhancement_ids": [
-      "synaptic-tyrant-warrior-bioform-onslaught",
-      "ocular-adaptation-warrior-bioform-onslaught",
-      "sensory-assimilation-warrior-bioform-onslaught",
-      "elevated-might-warrior-bioform-onslaught"
+      "ocular-adaptation-warrior-bioform-onslaught-tyranids",
+      "elevated-might-warrior-bioform-onslaught-tyranids"
     ],
     "stratagem_ids": [
-      "synaptic-amplification-warrior-bioform-onslaught",
-      "restorative-impulse-warrior-bioform-onslaught",
-      "synaptic-micronodes-warrior-bioform-onslaught",
-      "parasitic-payload-warrior-bioform-onslaught",
-      "synaptic-shield-warrior-bioform-onslaught",
-      "spontaneous-hypercorrosion-warrior-bioform-onslaught"
+      "synaptic-micronodes-warrior-bioform-onslaught-tyranids",
+      "parasitic-payload-warrior-bioform-onslaught-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -105,20 +99,20 @@
     "id": "crusher-stampede",
     "name": "Crusher Stampede",
     "faction_id": "tyranids",
-    "detachment_rule_id": "enraged-behemoths",
+    "detachment_rule_id": "enraged-behemoths-tyranids",
     "enhancement_ids": [
-      "ominous-presence-crusher-stampede",
-      "enraged-reserves-crusher-stampede",
-      "null-nodules-crusher-stampede",
-      "monstrous-nemesis-crusher-stampede"
+      "ominous-presence-crusher-stampede-tyranids",
+      "enraged-reserves-crusher-stampede-tyranids",
+      "null-nodules-crusher-stampede-tyranids",
+      "monstrous-nemesis-crusher-stampede-tyranids"
     ],
     "stratagem_ids": [
-      "swarm-guided-salvoes-crusher-stampede",
-      "rampaging-monstrosities-crusher-stampede",
-      "savage-roar-crusher-stampede",
-      "massive-impact-crusher-stampede",
-      "untrammelled-ferocity-crusher-stampede",
-      "corrosive-viscera-crusher-stampede"
+      "swarm-guided-salvoes-crusher-stampede-tyranids",
+      "rampaging-monstrosities-crusher-stampede-tyranids",
+      "savage-roar-crusher-stampede-tyranids",
+      "massive-impact-crusher-stampede-tyranids",
+      "untrammelled-ferocity-crusher-stampede-tyranids",
+      "corrosive-viscera-crusher-stampede-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -139,20 +133,20 @@
     "id": "unending-swarm",
     "name": "Unending Swarm",
     "faction_id": "tyranids",
-    "detachment_rule_id": "insurmountable-odds",
+    "detachment_rule_id": "insurmountable-odds-tyranids",
     "enhancement_ids": [
-      "relentless-hunger-unending-swarm",
-      "naturalised-camouflage-unending-swarm",
-      "piercing-talons-unending-swarm",
-      "adrenalised-onslaught-unending-swarm"
+      "relentless-hunger-unending-swarm-tyranids",
+      "naturalised-camouflage-unending-swarm-tyranids",
+      "piercing-talons-unending-swarm-tyranids",
+      "adrenalised-onslaught-unending-swarm-tyranids"
     ],
     "stratagem_ids": [
-      "teeming-masses-unending-swarm",
-      "swarming-masses-unending-swarm",
-      "bounding-advance-unending-swarm",
-      "synaptic-goading-unending-swarm",
-      "preservation-imperative-unending-swarm",
-      "unending-waves-unending-swarm"
+      "teeming-masses-unending-swarm-tyranids",
+      "swarming-masses-unending-swarm-tyranids",
+      "bounding-advance-unending-swarm-tyranids",
+      "synaptic-goading-unending-swarm-tyranids",
+      "preservation-imperative-unending-swarm-tyranids",
+      "unending-waves-unending-swarm-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -175,18 +169,18 @@
     "faction_id": "tyranids",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "hunting-grounds-vanguard-onslaught",
-      "chameleonic-vanguard-onslaught",
-      "stalker-vanguard-onslaught",
-      "neuronode-vanguard-onslaught"
+      "hunting-grounds-vanguard-onslaught-tyranids",
+      "chameleonic-vanguard-onslaught-tyranids",
+      "stalker-vanguard-onslaught-tyranids",
+      "neuronode-vanguard-onslaught-tyranids"
     ],
     "stratagem_ids": [
-      "surprise-assault-vanguard-onslaught",
-      "assassin-beasts-vanguard-onslaught",
-      "seeded-broods-vanguard-onslaught",
-      "unseen-lurkers-vanguard-onslaught",
-      "invisible-hunter-vanguard-onslaught",
-      "hypersensory-scillia-vanguard-onslaught"
+      "surprise-assault-vanguard-onslaught-tyranids",
+      "assassin-beasts-vanguard-onslaught-tyranids",
+      "seeded-broods-vanguard-onslaught-tyranids",
+      "unseen-lurkers-vanguard-onslaught-tyranids",
+      "invisible-hunter-vanguard-onslaught-tyranids",
+      "hypersensory-scillia-vanguard-onslaught-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -197,8 +191,8 @@
       "reconnaissance"
     ],
     "detachment_rule_ids": [
-      "questing-tendrils",
-      "vanguard-prime"
+      "questing-tendrils-tyranids",
+      "vanguard-prime-tyranids"
     ],
     "external_refs": [
       {
@@ -211,21 +205,20 @@
     "id": "invasion-fleet",
     "name": "Invasion Fleet",
     "faction_id": "tyranids",
-    "detachment_rule_id": "hyper-adaptations",
+    "detachment_rule_id": "hyper-adaptations-tyranids",
     "enhancement_ids": [
-      "alien-cunning-invasion-fleet",
-      "perfectly-adapted-invasion-fleet",
-      "synaptic-lynchpin-invasion-fleet",
-      "adaptive-biology-invasion-fleet",
-      "synaptic-linchpin-invasion-fleet"
+      "alien-cunning-invasion-fleet-tyranids",
+      "perfectly-adapted-invasion-fleet-tyranids",
+      "adaptive-biology-invasion-fleet-tyranids",
+      "synaptic-linchpin-invasion-fleet-tyranids"
     ],
     "stratagem_ids": [
-      "rapid-regeneration-invasion-fleet",
-      "adrenal-surge-invasion-fleet",
-      "death-frenzy-invasion-fleet",
-      "overrun-invasion-fleet",
-      "predatory-imperative-invasion-fleet",
-      "endless-swarm-invasion-fleet"
+      "rapid-regeneration-invasion-fleet-tyranids",
+      "adrenal-surge-invasion-fleet-tyranids",
+      "death-frenzy-invasion-fleet-tyranids",
+      "overrun-invasion-fleet-tyranids",
+      "predatory-imperative-invasion-fleet-tyranids",
+      "endless-swarm-invasion-fleet-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -246,20 +239,20 @@
     "id": "assimilation-swarm",
     "name": "Assimilation Swarm",
     "faction_id": "tyranids",
-    "detachment_rule_id": "feed-the-swarm",
+    "detachment_rule_id": "feed-the-swarm-tyranids",
     "enhancement_ids": [
-      "regenerating-monstrosity-assimilation-swarm",
-      "instinctive-defence-assimilation-swarm",
-      "biophagic-flow-aura-assimilation-swarm",
-      "parasitic-biomorphology-assimilation-swarm"
+      "regenerating-monstrosity-assimilation-swarm-tyranids",
+      "instinctive-defence-assimilation-swarm-tyranids",
+      "biophagic-flow-aura-assimilation-swarm-tyranids",
+      "parasitic-biomorphology-assimilation-swarm-tyranids"
     ],
     "stratagem_ids": [
-      "rapacious-hunger-assimilation-swarm",
-      "broodguard-impulse-assimilation-swarm",
-      "ablative-carapace-assimilation-swarm",
-      "reclaim-biomass-assimilation-swarm",
-      "tyrannoformed-assimilation-swarm",
-      "secure-biomass-assimilation-swarm"
+      "rapacious-hunger-assimilation-swarm-tyranids",
+      "broodguard-impulse-assimilation-swarm-tyranids",
+      "ablative-carapace-assimilation-swarm-tyranids",
+      "reclaim-biomass-assimilation-swarm-tyranids",
+      "tyrannoformed-assimilation-swarm-tyranids",
+      "secure-biomass-assimilation-swarm-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -280,15 +273,15 @@
     "id": "ambush-predators",
     "name": "Ambush Predators",
     "faction_id": "tyranids",
-    "detachment_rule_id": "mindhunger",
+    "detachment_rule_id": "mindhunger-tyranids",
     "enhancement_ids": [
-      "encircling-horrors-upgrade-ambush-predators",
-      "cryptophotaic-camouflage-upgrade-ambush-predators"
+      "encircling-horrors-upgrade-ambush-predators-tyranids",
+      "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids"
     ],
     "stratagem_ids": [
-      "counterpredation-ambush-predators",
-      "hypersensory-adaptations-ambush-predators",
-      "scanner-gheist-ambush-predators"
+      "counterpredation-ambush-predators-tyranids",
+      "hypersensory-adaptations-ambush-predators-tyranids",
+      "scanner-gheist-ambush-predators-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -309,15 +302,15 @@
     "id": "talons-of-the-norn-queen",
     "name": "Talons of the Norn Queen",
     "faction_id": "tyranids",
-    "detachment_rule_id": "higher-imperatives",
+    "detachment_rule_id": "higher-imperatives-tyranids",
     "enhancement_ids": [
-      "destabilising-predation-upgrade-talons-of-the-norn-queen",
-      "synaptoprescience-upgrade-talons-of-the-norn-queen"
+      "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
+      "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids"
     ],
     "stratagem_ids": [
-      "catalytic-biofortification-talons-of-the-norn-queen",
-      "lesser-prey-talons-of-the-norn-queen",
-      "tanglestrike-rounds-talons-of-the-norn-queen"
+      "catalytic-biofortification-talons-of-the-norn-queen-tyranids",
+      "lesser-prey-talons-of-the-norn-queen-tyranids",
+      "tanglestrike-rounds-talons-of-the-norn-queen-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -339,8 +332,8 @@
     "name": "The Vardenghast Swarm",
     "faction_id": "tyranids",
     "enhancement_ids": [
-      "adapted-organism-the-vardenghast-swarm",
-      "psychoclastic-overload-the-vardenghast-swarm"
+      "adapted-organism-the-vardenghast-swarm-tyranids",
+      "psychoclastic-overload-the-vardenghast-swarm-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -358,6 +351,9 @@
         "namespace": "mfm",
         "id": "f8ac8c58-dd54-4a01-93a2-afee8fd1b55a"
       }
+    ],
+    "detachment_rule_ids": [
+      "skittering-hordes-tyranids"
     ]
   }
 ]

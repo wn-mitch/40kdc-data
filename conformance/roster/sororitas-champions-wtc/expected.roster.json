@@ -36,7 +36,7 @@
       "points": 40,
       "is_warlord": false,
       "enhancement": {
-        "id": "sanctified-amulet-champions-of-faith",
+        "id": "sanctified-amulet-champions-of-faith-adepta-sororitas",
         "raw_name": "Sanctified Amulet",
         "resolved": true,
         "candidates": []
@@ -84,7 +84,7 @@
       "points": 65,
       "is_warlord": false,
       "enhancement": {
-        "id": "triptych-of-judgement-champions-of-faith",
+        "id": "triptych-of-judgement-champions-of-faith-adepta-sororitas",
         "raw_name": "Triptych of Judgement",
         "resolved": true,
         "candidates": []

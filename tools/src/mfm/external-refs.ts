@@ -3,7 +3,8 @@ import {
   EXTERNAL_REF_ENTITY_FILES,
   type ExternalRefEntityType,
 } from "../core-external-refs.js";
-import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
+import { enhancementRepoId } from "./enhancements.js";
+import { nameToId } from "../converters/id-generator.js";
 import type { StagedWrite } from "./apply.js";
 import { collectSeedDetachments } from "./seed-detachments.js";
 import { effectiveDir } from "./seed-units.js";
@@ -116,12 +117,8 @@ export function runMfmExternalRefs(
       dump.byId("detachment").get(source.detachmentId),
     );
     if (!name || !detachmentName) continue;
-    let id: string;
-    try {
-      id = detachmentScopedId(name, detachmentName);
-    } catch {
-      continue;
-    }
+    const id = enhancementRepoId(dump, source);
+    if (!id) continue;
     for (const dir of detachmentDirs.get(source.detachmentId) ?? []) {
       attach("enhancement", dir, id, source.id);
     }

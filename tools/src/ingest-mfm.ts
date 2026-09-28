@@ -39,7 +39,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { nameToId, detachmentScopedId } from "./converters/id-generator.js";
+import { nameToId } from "./converters/id-generator.js";
 import {
   DEFAULT_DUMP_PATH,
   loadDump,
@@ -59,6 +59,7 @@ import {
   runEnhancements,
   buildEnhReport,
   normalizeEnhancementNames,
+  enhancementRepoId,
 } from "./mfm/enhancements.js";
 import { seedStratagems } from "./mfm/seed-stratagems.js";
 import {
@@ -265,12 +266,8 @@ function enhIdsByDir(dump: MfmDump): Map<string, Map<string, DumpEntry>> {
       const det = dump.byId("detachment").get(enh.detachmentId);
       const dn = dump.enName(det);
       if (!en || !dn) continue;
-      let id: string;
-      try {
-        id = detachmentScopedId(en, dn);
-      } catch {
-        continue; // skip
-      }
+      const id = enhancementRepoId(dump, enh);
+      if (!id) continue;
       const prev = m.get(id);
       m.set(id, {
         name: prev?.name ?? `${en} / ${dn}`,
@@ -341,11 +338,8 @@ export function coverage(dump: MfmDump): {
     const en = dump.enName(enh);
     const dn = dump.enName(dump.byId("detachment").get(enh.detachmentId));
     if (en && dn) {
-      try {
-        globalEnhIds.add(detachmentScopedId(en, dn));
-      } catch {
-        /* skip */
-      }
+      const id = enhancementRepoId(dump, enh);
+      if (id) globalEnhIds.add(id);
     }
   }
 
@@ -396,7 +390,7 @@ export function coverage(dump: MfmDump): {
       .filter((id) => !globalDetIds.has(id))
       .sort();
 
-    // enhancements — id is detachmentScopedId(enhName, detName)
+    // enhancements — id is the mirrored id (enhancementRepoId)
     const dumpEnhIds = enhsByDir.get(dir) ?? new Map<string, DumpEntry>();
     const repoEnhIds = repoIds(dir, "enhancements.json");
     const enhNew: string[] = [];

@@ -13,13 +13,14 @@
  *   - detachment id      = nameToId(name)
  *   - detachment_points  = detachmentPointsCost (+ per-faction override)
  *   - force_dispositions = detachment_force_disposition → disposition slug
- *   - CP enhancement id  = detachmentScopedId(name, detachment name)
+ *   - CP enhancement id  = its mirrored id (enhancementRepoId)
  *
  * IP: reads only numeric, identity, and localized entity-name fields. It never
  * dereferences GW rules or lore prose.
  */
+import { enhancementRepoId } from "./enhancements.js";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "../converters/id-generator.js";
+import { nameToId } from "../converters/id-generator.js";
 import {
   MfmDump,
   type DetachmentRow,
@@ -178,7 +179,8 @@ export function collectSeedDetachments(dump: MfmDump): CandidateDet[] {
         );
       // Seed the RAW GW name + id (keep any trailing " (Upgrade)"/" (Aura)" tag) —
       // the import-correct canon, matching the golden (enhIdsByDir) and buildEnhCanon.
-      const enhId = detachmentScopedId(en, name);
+      const enhId = enhancementRepoId(dump, e);
+      if (!enhId) throw new Error(`CP enhancement <${e.id}> of "${name}" has no mirrored id (no faction owns it)`);
       enhancements.push({
         id: enhId,
         name: en,

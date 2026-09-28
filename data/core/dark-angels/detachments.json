@@ -5,18 +5,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "champion-of-the-deathwing-inner-circle-task-force",
-      "eye-of-the-unseen-inner-circle-task-force",
-      "singular-will-inner-circle-task-force",
-      "deathwing-assault-inner-circle-task-force"
+      "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
+      "eye-of-the-unseen-inner-circle-task-force-dark-angels",
+      "singular-will-inner-circle-task-force-dark-angels",
+      "deathwing-assault-inner-circle-task-force-dark-angels"
     ],
     "stratagem_ids": [
-      "unmatched-fortitude-inner-circle-task-force",
-      "armour-of-contempt-inner-circle-task-force",
-      "wrath-of-the-lion-inner-circle-task-force",
-      "martial-mastery-inner-circle-task-force",
-      "relic-teleportarium-inner-circle-task-force",
-      "duty-unto-death-inner-circle-task-force"
+      "unmatched-fortitude-inner-circle-task-force-dark-angels",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "wrath-of-the-lion-inner-circle-task-force-dark-angels",
+      "martial-mastery-inner-circle-task-force-dark-angels",
+      "relic-teleportarium-inner-circle-task-force-dark-angels",
+      "duty-unto-death-inner-circle-task-force-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -39,18 +39,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "shroud-of-heroes-unforgiven-task-force",
-      "stubborn-tenacity-unforgiven-task-force",
-      "weapons-of-the-first-legion-unforgiven-task-force",
-      "pennant-of-remembrance-unforgiven-task-force"
+      "shroud-of-heroes-unforgiven-task-force-dark-angels",
+      "stubborn-tenacity-unforgiven-task-force-dark-angels",
+      "weapons-of-the-first-legion-unforgiven-task-force-dark-angels",
+      "pennant-of-remembrance-unforgiven-task-force-dark-angels"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "unforgiven-fury-unforgiven-task-force",
-      "fire-discipline-unforgiven-task-force",
-      "unbreakable-lines-unforgiven-task-force",
-      "intractable-unforgiven-task-force",
-      "grim-retribution-unforgiven-task-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "unforgiven-fury-unforgiven-task-force-dark-angels",
+      "fire-discipline-unforgiven-task-force-dark-angels",
+      "unbreakable-lines-unforgiven-task-force-dark-angels",
+      "intractable-unforgiven-task-force-dark-angels",
+      "grim-retribution-unforgiven-task-force-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -65,6 +65,9 @@
         "namespace": "mfm",
         "id": "410ea102-b63f-4b3e-b901-05c2c869c298"
       }
+    ],
+    "detachment_rule_ids": [
+      "grim-resolve-dark-angels"
     ]
   },
   {
@@ -73,18 +76,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "calibanite-armaments-lions-blade-task-force",
-      "lord-of-the-hunt-lions-blade-task-force",
-      "stalwart-champion-lions-blade-task-force",
-      "fulgus-magna-lions-blade-task-force"
+      "calibanite-armaments-lions-blade-task-force-dark-angels",
+      "lord-of-the-hunt-lions-blade-task-force-dark-angels",
+      "stalwart-champion-lions-blade-task-force-dark-angels",
+      "fulgus-magna-lions-blade-task-force-dark-angels"
     ],
     "stratagem_ids": [
-      "overpowering-exaction-lions-blade-task-force",
-      "knights-of-iron-lions-blade-task-force",
-      "illuminating-fire-lions-blade-task-force",
-      "armour-of-contempt-inner-circle-task-force",
-      "inescapable-wrath-lions-blade-task-force",
-      "strength-in-unity-lions-blade-task-force"
+      "overpowering-exaction-lions-blade-task-force-dark-angels",
+      "knights-of-iron-lions-blade-task-force-dark-angels",
+      "illuminating-fire-lions-blade-task-force-dark-angels",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "inescapable-wrath-lions-blade-task-force-dark-angels",
+      "strength-in-unity-lions-blade-task-force-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -99,6 +102,9 @@
         "namespace": "mfm",
         "id": "6040c18f-09c2-4708-8e85-912f88949221"
       }
+    ],
+    "detachment_rule_ids": [
+      "in-the-lions-claws-dark-angels"
     ]
   },
   {
@@ -107,19 +113,19 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "tempered-in-battle-aura-wrath-of-the-rock",
-      "ancient-weapons-wrath-of-the-rock",
-      "deathwing-assault-inner-circle-task-force",
-      "lord-of-the-ravenwing-wrath-of-the-rock",
-      "deathwing-assault-wrath-of-the-rock"
+      "tempered-in-battle-aura-wrath-of-the-rock-dark-angels",
+      "ancient-weapons-wrath-of-the-rock-dark-angels",
+      "deathwing-assault-inner-circle-task-force-dark-angels",
+      "lord-of-the-ravenwing-wrath-of-the-rock-dark-angels",
+      "deathwing-assault-wrath-of-the-rock-dark-angels"
     ],
     "stratagem_ids": [
-      "inescapable-justice-wrath-of-the-rock",
-      "tactical-mastery-wrath-of-the-rock",
-      "lions-will-wrath-of-the-rock",
-      "relics-of-the-dark-age-wrath-of-the-rock",
-      "leonine-aggression-wrath-of-the-rock",
-      "armour-of-contempt-inner-circle-task-force"
+      "inescapable-justice-wrath-of-the-rock-dark-angels",
+      "tactical-mastery-wrath-of-the-rock-dark-angels",
+      "lions-will-wrath-of-the-rock-dark-angels",
+      "relics-of-the-dark-age-wrath-of-the-rock-dark-angels",
+      "leonine-aggression-wrath-of-the-rock-dark-angels",
+      "armour-of-contempt-inner-circle-task-force-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -134,6 +140,9 @@
         "namespace": "mfm",
         "id": "e5a06319-a071-4bb4-aaa6-07c98c07abc6"
       }
+    ],
+    "detachment_rule_ids": [
+      "dutiful-tenacity-dark-angels"
     ]
   },
   {
@@ -142,13 +151,13 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "petition-of-stability-upgrade-dark-age-arsenal",
-      "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal"
+      "petition-of-stability-upgrade-dark-age-arsenal-dark-angels",
+      "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal-dark-angels"
     ],
     "stratagem_ids": [
-      "searing-bursts-dark-age-arsenal",
-      "no-sacrifice-too-great-dark-age-arsenal",
-      "revelation-of-guilt-dark-age-arsenal"
+      "searing-bursts-dark-age-arsenal-dark-angels",
+      "no-sacrifice-too-great-dark-age-arsenal-dark-angels",
+      "revelation-of-guilt-dark-age-arsenal-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -163,6 +172,9 @@
         "namespace": "mfm",
         "id": "2e1dbbe3-13ef-42cd-b3d8-6daae893ae82"
       }
+    ],
+    "detachment_rule_ids": [
+      "invocations-of-ancient-fury-dark-angels"
     ]
   },
   {
@@ -171,13 +183,13 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "thundercowl-turbines-upgrade-darkflight-pursuit",
-      "nightforged-battery-upgrade-darkflight-pursuit"
+      "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",
+      "nightforged-battery-upgrade-darkflight-pursuit-dark-angels"
     ],
     "stratagem_ids": [
-      "skyborne-surveillance-darkflight-pursuit",
-      "wings-of-shadow-darkflight-pursuit",
-      "we-are-vengeance-darkflight-pursuit"
+      "skyborne-surveillance-darkflight-pursuit-dark-angels",
+      "wings-of-shadow-darkflight-pursuit-dark-angels",
+      "we-are-vengeance-darkflight-pursuit-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -192,6 +204,9 @@
         "namespace": "mfm",
         "id": "0b44b0ad-420b-4b4c-af5a-27f0a735042e"
       }
+    ],
+    "detachment_rule_ids": [
+      "black-winged-vigilance-dark-angels"
     ]
   },
   {
@@ -200,13 +215,13 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "limitless-zeal-interrogation-conclave",
-      "inescapable-interrogation-interrogation-conclave"
+      "limitless-zeal-interrogation-conclave-dark-angels",
+      "inescapable-interrogation-interrogation-conclave-dark-angels"
     ],
     "stratagem_ids": [
-      "exacting-punishment-interrogation-conclave",
-      "terrifying-zeal-interrogation-conclave",
-      "wages-of-cowardice-interrogation-conclave"
+      "exacting-punishment-interrogation-conclave-dark-angels",
+      "terrifying-zeal-interrogation-conclave-dark-angels",
+      "wages-of-cowardice-interrogation-conclave-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -221,6 +236,9 @@
         "namespace": "mfm",
         "id": "2a38def8-f0d2-4f28-aeca-bc2b555172bb"
       }
+    ],
+    "detachment_rule_ids": [
+      "dread-catechism-dark-angels"
     ]
   },
   {
@@ -229,18 +247,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "master-crafted-weapon-company-of-hunters",
-      "mounted-strategist-company-of-hunters",
-      "master-of-manoeuvre-company-of-hunters",
-      "recon-hunter-company-of-hunters"
+      "master-crafted-weapon-company-of-hunters-dark-angels",
+      "mounted-strategist-company-of-hunters-dark-angels",
+      "master-of-manoeuvre-company-of-hunters-dark-angels",
+      "recon-hunter-company-of-hunters-dark-angels"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "death-on-the-wind-company-of-hunters",
-      "high-speed-focus-company-of-hunters",
-      "rapid-reappraisal-company-of-hunters",
-      "hunters-trail-company-of-hunters",
-      "talon-strike-company-of-hunters"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "death-on-the-wind-company-of-hunters-dark-angels",
+      "high-speed-focus-company-of-hunters-dark-angels",
+      "rapid-reappraisal-company-of-hunters-dark-angels",
+      "hunters-trail-company-of-hunters-dark-angels",
+      "talon-strike-company-of-hunters-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -255,6 +273,9 @@
         "namespace": "mfm",
         "id": "88060204-d25c-4ed9-95c7-a4b58d530320"
       }
+    ],
+    "detachment_rule_ids": [
+      "masters-of-manoeuvre-dark-angels"
     ]
   },
   {
@@ -263,18 +284,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force",
-      "fear-made-manifest-aura-1st-company-task-force",
-      "rites-of-war-1st-company-task-force",
-      "iron-resolve-1st-company-task-force"
+      "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
+      "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
+      "rites-of-war-1st-company-task-force-adeptus-astartes",
+      "iron-resolve-1st-company-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "heroes-of-the-chapter-1st-company-task-force",
-      "legendary-fortitude-1st-company-task-force",
-      "terrifying-proficiency-1st-company-task-force",
-      "duty-and-honour-1st-company-task-force",
-      "orbital-teleportarium-1st-company-task-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
+      "legendary-fortitude-1st-company-task-force-adeptus-astartes",
+      "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
+      "duty-and-honour-1st-company-task-force-adeptus-astartes",
+      "orbital-teleportarium-1st-company-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -297,18 +318,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "artificer-armour-gladius-task-force",
-      "the-honour-vehement-gladius-task-force",
-      "adept-of-the-codex-gladius-task-force",
-      "fire-discipline-gladius-task-force"
+      "artificer-armour-gladius-task-force-adeptus-astartes",
+      "the-honour-vehement-gladius-task-force-adeptus-astartes",
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
+      "fire-discipline-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "honour-the-chapter-gladius-task-force",
-      "storm-of-fire-gladius-task-force",
-      "only-in-death-does-duty-end-gladius-task-force",
-      "adaptive-strategy-gladius-task-force",
-      "squad-tactics-gladius-task-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "honour-the-chapter-gladius-task-force-adeptus-astartes",
+      "storm-of-fire-gladius-task-force-adeptus-astartes",
+      "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
+      "adaptive-strategy-gladius-task-force-adeptus-astartes",
+      "squad-tactics-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -331,18 +352,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force",
-      "portents-of-wisdom-stormlance-task-force",
-      "feinting-withdrawal-stormlance-task-force",
-      "hunters-instincts-stormlance-task-force"
+      "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
+      "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
+      "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
+      "hunters-instincts-stormlance-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "blitzing-fusillade-stormlance-task-force",
-      "shock-assault-stormlance-task-force",
-      "ride-hard-ride-fast-stormlance-task-force",
-      "wind-swift-evasion-stormlance-task-force",
-      "full-throttle-stormlance-task-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
+      "shock-assault-stormlance-task-force-adeptus-astartes",
+      "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
+      "full-throttle-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -365,11 +386,11 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "celerity-librarius-conclave",
-      "prescience-librarius-conclave",
-      "obfuscation-librarius-conclave",
-      "temporal-corridor-librarius-conclave",
-      "fusillade-librarius-conclave"
+      "celerity-librarius-conclave-adeptus-astartes",
+      "prescience-librarius-conclave-adeptus-astartes",
+      "obfuscation-librarius-conclave-adeptus-astartes",
+      "temporal-corridor-librarius-conclave-adeptus-astartes",
+      "fusillade-librarius-conclave-adeptus-astartes"
     ],
     "stratagem_ids": [],
     "game_version": {
@@ -393,18 +414,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead",
-      "ghostweave-cloak-vanguard-spearhead",
-      "execute-and-redeploy-vanguard-spearhead",
-      "shadow-war-veteran-vanguard-spearhead"
+      "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
+      "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
+      "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
+      "shadow-war-veteran-vanguard-spearhead-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "surgical-strikes-vanguard-spearhead",
-      "calculated-feint-vanguard-spearhead",
-      "guerrilla-tactics-vanguard-spearhead",
-      "a-deadly-prize-vanguard-spearhead"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
+      "surgical-strikes-vanguard-spearhead-adeptus-astartes",
+      "calculated-feint-vanguard-spearhead-adeptus-astartes",
+      "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
+      "a-deadly-prize-vanguard-spearhead-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -427,17 +448,17 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force",
-      "veteran-of-the-vanguard-orbital-assault-force",
-      "orbital-uplink-reliquary-orbital-assault-force",
-      "dedicated-gunship-orbital-assault-force"
+      "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
+      "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
+      "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
+      "dedicated-gunship-orbital-assault-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force",
-      "blind-screen-orbital-assault-force",
-      "tactical-decapitation-orbital-assault-force",
-      "shock-onslaught-orbital-assault-force",
-      "onward-for-the-emperor-orbital-assault-force"
+      "suppression-strafing-orbital-assault-force-adeptus-astartes",
+      "blind-screen-orbital-assault-force-adeptus-astartes",
+      "tactical-decapitation-orbital-assault-force-adeptus-astartes",
+      "shock-onslaught-orbital-assault-force-adeptus-astartes",
+      "onward-for-the-emperor-orbital-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -460,18 +481,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force",
-      "fleet-commander-anvil-siege-force",
-      "stoic-defender-anvil-siege-force",
-      "architect-of-war-anvil-siege-force"
+      "indomitable-fury-anvil-siege-force-adeptus-astartes",
+      "fleet-commander-anvil-siege-force-adeptus-astartes",
+      "stoic-defender-anvil-siege-force-adeptus-astartes",
+      "architect-of-war-anvil-siege-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force",
-      "armour-of-contempt-inner-circle-task-force",
-      "no-threat-too-great-anvil-siege-force",
-      "rigid-discipline-anvil-siege-force",
-      "not-one-backwards-step-anvil-siege-force",
-      "hail-of-vengeance-anvil-siege-force"
+      "battle-drill-recall-anvil-siege-force-adeptus-astartes",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "no-threat-too-great-anvil-siege-force-adeptus-astartes",
+      "rigid-discipline-anvil-siege-force-adeptus-astartes",
+      "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
+      "hail-of-vengeance-anvil-siege-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -494,18 +515,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force",
-      "war-tempered-artifice-firestorm-assault-force",
-      "forged-in-battle-firestorm-assault-force",
-      "adamantine-mantle-firestorm-assault-force"
+      "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
+      "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
+      "forged-in-battle-firestorm-assault-force-adeptus-astartes",
+      "adamantine-mantle-firestorm-assault-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "crucible-of-battle-firestorm-assault-force",
-      "onslaught-of-fire-firestorm-assault-force",
-      "burning-vengeance-firestorm-assault-force",
-      "immolation-protocols-firestorm-assault-force",
-      "rapid-embarkation-firestorm-assault-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
+      "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
+      "burning-vengeance-firestorm-assault-force-adeptus-astartes",
+      "immolation-protocols-firestorm-assault-force-adeptus-astartes",
+      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -528,18 +549,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead",
-      "the-flesh-is-weak-ironstorm-spearhead",
-      "adept-of-the-omnissiah-ironstorm-spearhead",
-      "master-of-machine-war-ironstorm-spearhead"
+      "target-augury-web-ironstorm-spearhead-adeptus-astartes",
+      "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
+      "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
+      "master-of-machine-war-ironstorm-spearhead-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead",
-      "armour-of-contempt-inner-circle-task-force",
-      "mercy-is-weakness-ironstorm-spearhead",
-      "vengeful-animus-ironstorm-spearhead",
-      "ancient-fury-ironstorm-spearhead",
-      "power-of-the-machine-spirit-ironstorm-spearhead"
+      "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
+      "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
+      "ancient-fury-ironstorm-spearhead-adeptus-astartes",
+      "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -562,13 +583,13 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force"
+      "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
+      "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "data-link-augury-fulguris-task-force",
-      "reactive-evasion-fulguris-task-force",
-      "anti-grav-surge-fulguris-task-force"
+      "data-link-augury-fulguris-task-force-adeptus-astartes",
+      "reactive-evasion-fulguris-task-force-adeptus-astartes",
+      "anti-grav-surge-fulguris-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -591,13 +612,13 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "shroud-field-subversion-assets",
-      "death-in-the-dark-upgrade-subversion-assets"
+      "shroud-field-subversion-assets-adeptus-astartes",
+      "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "adaptive-operations-subversion-assets",
-      "strike-from-the-shadows-vanguard-spearhead",
-      "cloaked-position-subversion-assets"
+      "adaptive-operations-subversion-assets-adeptus-astartes",
+      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
+      "cloaked-position-subversion-assets-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -620,18 +641,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "liberator-armoured-speartip",
-      "tip-of-the-spear-armoured-speartip",
-      "shock-deployment-armoured-speartip",
-      "armoured-commander-armoured-speartip"
+      "liberator-armoured-speartip-adeptus-astartes",
+      "tip-of-the-spear-armoured-speartip-adeptus-astartes",
+      "shock-deployment-armoured-speartip-adeptus-astartes",
+      "armoured-commander-armoured-speartip-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "machine-wrath-armoured-speartip",
-      "ceramite-sledgehammer-armoured-speartip",
-      "advanced-deployment-armoured-speartip",
-      "armour-of-contempt-inner-circle-task-force",
-      "purgation-doctrine-armoured-speartip",
-      "rapid-embarkation-firestorm-assault-force"
+      "machine-wrath-armoured-speartip-adeptus-astartes",
+      "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
+      "advanced-deployment-armoured-speartip-adeptus-astartes",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "purgation-doctrine-armoured-speartip-adeptus-astartes",
+      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -654,18 +675,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force",
-      "hero-of-the-chapter-bastion-task-force",
-      "blades-of-valour-bastion-task-force",
-      "bombast-omnivox-bastion-task-force"
+      "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
+      "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
+      "blades-of-valour-bastion-task-force-adeptus-astartes",
+      "bombast-omnivox-bastion-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "codex-discipline-bastion-task-force",
-      "shock-bombardment-bastion-task-force",
-      "guided-disruption-bastion-task-force",
-      "angels-defiant-bastion-task-force",
-      "light-of-vengeance-bastion-task-force",
-      "heresy-undone-bastion-task-force"
+      "codex-discipline-bastion-task-force-adeptus-astartes",
+      "shock-bombardment-bastion-task-force-adeptus-astartes",
+      "guided-disruption-bastion-task-force-adeptus-astartes",
+      "angels-defiant-bastion-task-force-adeptus-astartes",
+      "light-of-vengeance-bastion-task-force-adeptus-astartes",
+      "heresy-undone-bastion-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -688,17 +709,17 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "honour-indefatigable-ceramite-sentinels",
-      "castellum-omnivox-ceramite-sentinels",
-      "defensive-mastery-ceramite-sentinels"
+      "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+      "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+      "defensive-mastery-ceramite-sentinels-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels",
-      "stand-to-the-end-ceramite-sentinels",
-      "priority-strike-ceramite-sentinels",
-      "augmented-targeting-ceramite-sentinels",
-      "armour-of-contempt-inner-circle-task-force",
-      "evasive-repositioning-ceramite-sentinels"
+      "unyielding-might-ceramite-sentinels-adeptus-astartes",
+      "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
+      "priority-strike-ceramite-sentinels-adeptus-astartes",
+      "augmented-targeting-ceramite-sentinels-adeptus-astartes",
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "evasive-repositioning-ceramite-sentinels-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -721,18 +742,18 @@
     "faction_id": "dark-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force",
-      "gunnery-honours-headhunter-task-force",
-      "firestorm-coordinators-headhunter-task-force",
-      "astartes-tank-ace-aura-headhunter-task-force"
+      "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
+      "gunnery-honours-headhunter-task-force-adeptus-astartes",
+      "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
+      "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-inner-circle-task-force",
-      "rapid-gunnery-headhunter-task-force",
-      "reactive-repositioning-headhunter-task-force",
-      "target-weak-point-headhunter-task-force",
-      "kill-shot-headhunter-task-force",
-      "machine-vengeance-headhunter-task-force"
+      "armour-of-contempt-inner-circle-task-force-dark-angels",
+      "rapid-gunnery-headhunter-task-force-adeptus-astartes",
+      "reactive-repositioning-headhunter-task-force-adeptus-astartes",
+      "target-weak-point-headhunter-task-force-adeptus-astartes",
+      "kill-shot-headhunter-task-force-adeptus-astartes",
+      "machine-vengeance-headhunter-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -754,8 +775,8 @@
     "name": "The Vengeful Brethren",
     "faction_id": "dark-angels",
     "enhancement_ids": [
-      "dutiful-defenders-the-vengeful-brethren",
-      "supreme-combatant-the-vengeful-brethren"
+      "dutiful-defenders-the-vengeful-brethren-dark-angels",
+      "supreme-combatant-the-vengeful-brethren-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -773,6 +794,9 @@
         "namespace": "mfm",
         "id": "4514bd9f-e01e-464e-b861-2341b7b493e4"
       }
+    ],
+    "detachment_rule_ids": [
+      "honoured-knights-dark-angels"
     ]
   },
   {

@@ -65,7 +65,7 @@ describe("Codex routes", () => {
     expect(faction.kind).toBe("faction");
     if (faction.kind === "faction") {
       expect(faction.factionRules.map((rule) => rule.id)).toEqual([
-        "shadow-in-the-warp",
+        "shadow-in-the-warp-tyranids",
         "synapse",
       ]);
     }

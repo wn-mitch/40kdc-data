@@ -1,13 +1,13 @@
 [
   {
-    "id": "death-mask-of-ollanius-combined-arms",
+    "id": "death-mask-of-ollanius-combined-arms-astra-militarum",
     "name": "Death Mask of Ollanius",
     "detachment_id": "combined-arms",
     "cost": 10,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "death-mask-of-ollanius-combined-arms-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,7 +28,7 @@
     ]
   },
   {
-    "id": "bombast-class-vox-array-bridgehead-strike",
+    "id": "bombast-class-vox-array-bridgehead-strike-astra-militarum",
     "name": "Bombast-class Vox-array",
     "detachment_id": "bridgehead-strike",
     "cost": 15,
@@ -37,7 +37,7 @@
       "Militarum Tempestus",
       "Officer"
     ],
-    "ability_id": "bombast-class-vox-array-bridgehead-strike",
+    "ability_id": "bombast-class-vox-array-bridgehead-strike-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -58,14 +58,14 @@
     ]
   },
   {
-    "id": "drill-commander-combined-arms",
+    "id": "drill-commander-combined-arms-astra-militarum",
     "name": "Drill Commander",
     "detachment_id": "combined-arms",
     "cost": 20,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "drill-commander-combined-arms-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -86,7 +86,7 @@
     ]
   },
   {
-    "id": "priority-drop-beacon-bridgehead-strike",
+    "id": "priority-drop-beacon-bridgehead-strike-astra-militarum",
     "name": "Priority Drop Beacon",
     "detachment_id": "bridgehead-strike",
     "cost": 25,
@@ -95,7 +95,7 @@
       "Militarum Tempestus",
       "Officer"
     ],
-    "ability_id": "priority-drop-beacon-bridgehead-strike",
+    "ability_id": "priority-drop-beacon-bridgehead-strike-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -116,14 +116,14 @@
     ]
   },
   {
-    "id": "grand-strategist-combined-arms",
+    "id": "grand-strategist-combined-arms-astra-militarum",
     "name": "Grand Strategist",
     "detachment_id": "combined-arms",
     "cost": 15,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "grand-strategist-combined-arms-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -144,14 +144,14 @@
     ]
   },
   {
-    "id": "reactive-command-combined-arms",
+    "id": "reactive-command-combined-arms-astra-militarum",
     "name": "Reactive Command",
     "detachment_id": "combined-arms",
     "cost": 15,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "reactive-command-combined-arms-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -172,7 +172,7 @@
     ]
   },
   {
-    "id": "eager-advance-siege-regiment",
+    "id": "eager-advance-siege-regiment-astra-militarum",
     "name": "Eager Advance",
     "detachment_id": "siege-regiment",
     "cost": 20,
@@ -180,7 +180,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "eager-advance-siege-regiment-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -201,7 +201,7 @@
     ]
   },
   {
-    "id": "flash-grenades-siege-regiment",
+    "id": "flash-grenades-siege-regiment-astra-militarum",
     "name": "Flash Grenades",
     "detachment_id": "siege-regiment",
     "cost": 20,
@@ -209,7 +209,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "flash-grenades-siege-regiment-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -230,7 +230,7 @@
     ]
   },
   {
-    "id": "legacy-sidearm-siege-regiment",
+    "id": "legacy-sidearm-siege-regiment-astra-militarum",
     "name": "Legacy Sidearm",
     "detachment_id": "siege-regiment",
     "cost": 10,
@@ -238,7 +238,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "legacy-sidearm-siege-regiment-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -259,14 +259,14 @@
     ]
   },
   {
-    "id": "stalwarts-honours-siege-regiment",
+    "id": "stalwarts-honours-siege-regiment-astra-militarum",
     "name": "Stalwart’s Honours",
     "detachment_id": "siege-regiment",
     "cost": 15,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "stalwarts-honours-siege-regiment-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -287,7 +287,7 @@
     ]
   },
   {
-    "id": "bold-leadership-mechanised-assault",
+    "id": "bold-leadership-mechanised-assault-astra-militarum",
     "name": "Bold Leadership",
     "detachment_id": "mechanised-assault",
     "cost": 25,
@@ -295,7 +295,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "bold-leadership-mechanised-assault-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -316,7 +316,7 @@
     ]
   },
   {
-    "id": "sacred-unguents-mechanised-assault",
+    "id": "sacred-unguents-mechanised-assault-astra-militarum",
     "name": "Sacred Unguents",
     "detachment_id": "mechanised-assault",
     "cost": 10,
@@ -324,7 +324,7 @@
       "Astra Militarum",
       "Tech-Priest Enginseer"
     ],
-    "ability_id": null,
+    "ability_id": "sacred-unguents-mechanised-assault-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -345,7 +345,7 @@
     ]
   },
   {
-    "id": "smoke-grenades-mechanised-assault",
+    "id": "smoke-grenades-mechanised-assault-astra-militarum",
     "name": "Smoke Grenades",
     "detachment_id": "mechanised-assault",
     "cost": 10,
@@ -353,7 +353,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "smoke-grenades-mechanised-assault-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -374,7 +374,7 @@
     ]
   },
   {
-    "id": "vanguard-honours-mechanised-assault",
+    "id": "vanguard-honours-mechanised-assault-astra-militarum",
     "name": "Vanguard Honours",
     "detachment_id": "mechanised-assault",
     "cost": 15,
@@ -382,7 +382,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "vanguard-honours-mechanised-assault-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -403,7 +403,7 @@
     ]
   },
   {
-    "id": "calm-under-fire-hammer-of-the-emperor",
+    "id": "calm-under-fire-hammer-of-the-emperor-astra-militarum",
     "name": "Calm Under Fire",
     "detachment_id": "hammer-of-the-emperor",
     "cost": 15,
@@ -411,7 +411,7 @@
       "Officer",
       "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "calm-under-fire-hammer-of-the-emperor-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -432,7 +432,7 @@
     ]
   },
   {
-    "id": "indomitable-steed-hammer-of-the-emperor",
+    "id": "indomitable-steed-hammer-of-the-emperor-astra-militarum",
     "name": "Indomitable Steed",
     "detachment_id": "hammer-of-the-emperor",
     "cost": 15,
@@ -440,7 +440,7 @@
       "Officer",
       "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "indomitable-steed-hammer-of-the-emperor-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -461,7 +461,7 @@
     ]
   },
   {
-    "id": "regimental-banner-hammer-of-the-emperor",
+    "id": "regimental-banner-hammer-of-the-emperor-astra-militarum",
     "name": "Regimental Banner",
     "detachment_id": "hammer-of-the-emperor",
     "cost": 20,
@@ -469,7 +469,7 @@
       "Officer",
       "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "regimental-banner-hammer-of-the-emperor-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -490,7 +490,7 @@
     ]
   },
   {
-    "id": "veteran-crew-hammer-of-the-emperor",
+    "id": "veteran-crew-hammer-of-the-emperor-astra-militarum",
     "name": "Veteran Crew",
     "detachment_id": "hammer-of-the-emperor",
     "cost": 20,
@@ -498,7 +498,7 @@
       "Officer",
       "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "veteran-crew-hammer-of-the-emperor-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -519,7 +519,7 @@
     ]
   },
   {
-    "id": "guerrilla-honours-recon-element",
+    "id": "guerrilla-honours-recon-element-astra-militarum",
     "name": "Guerrilla Honours",
     "detachment_id": "recon-element",
     "cost": 25,
@@ -527,7 +527,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "guerrilla-honours-recon-element-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -548,7 +548,7 @@
     ]
   },
   {
-    "id": "scare-gas-grenades-recon-element",
+    "id": "scare-gas-grenades-recon-element-astra-militarum",
     "name": "Scare Gas Grenades",
     "detachment_id": "recon-element",
     "cost": 5,
@@ -556,7 +556,7 @@
       "Astra Militarum",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "scare-gas-grenades-recon-element-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -577,7 +577,7 @@
     ]
   },
   {
-    "id": "survival-gear-recon-element",
+    "id": "survival-gear-recon-element-astra-militarum",
     "name": "Survival Gear",
     "detachment_id": "recon-element",
     "cost": 5,
@@ -585,7 +585,7 @@
       "Astra Militarum",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "survival-gear-recon-element-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -606,7 +606,7 @@
     ]
   },
   {
-    "id": "tripwires-recon-element",
+    "id": "tripwires-recon-element-astra-militarum",
     "name": "Tripwires",
     "detachment_id": "recon-element",
     "cost": 20,
@@ -614,7 +614,7 @@
       "Astra Militarum",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "tripwires-recon-element-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -635,14 +635,14 @@
     ]
   },
   {
-    "id": "abhuman-detail-grizzled-company",
+    "id": "abhuman-detail-grizzled-company-astra-militarum",
     "name": "Abhuman Detail",
     "detachment_id": "grizzled-company",
     "cost": 20,
     "keyword_restrictions": [
       "Commissar"
     ],
-    "ability_id": null,
+    "ability_id": "abhuman-detail-grizzled-company-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -667,7 +667,7 @@
     ]
   },
   {
-    "id": "aquilan-eye-grizzled-company",
+    "id": "aquilan-eye-grizzled-company-astra-militarum",
     "name": "Aquilan Eye",
     "detachment_id": "grizzled-company",
     "cost": 20,
@@ -675,7 +675,7 @@
       "Astra Militarum",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "aquilan-eye-grizzled-company-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -696,7 +696,7 @@
     ]
   },
   {
-    "id": "spec-ops-veteran-grizzled-company",
+    "id": "spec-ops-veteran-grizzled-company-astra-militarum",
     "name": "Spec Ops Veteran",
     "detachment_id": "grizzled-company",
     "cost": 15,
@@ -705,7 +705,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "spec-ops-veteran-grizzled-company-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -726,7 +726,7 @@
     ]
   },
   {
-    "id": "laud-hailer-grizzled-company",
+    "id": "laud-hailer-grizzled-company-astra-militarum",
     "name": "Laud Hailer",
     "detachment_id": "grizzled-company",
     "cost": 10,
@@ -734,7 +734,7 @@
       "Astra Militarum",
       "Officer"
     ],
-    "ability_id": null,
+    "ability_id": "laud-hailer-grizzled-company-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -755,32 +755,14 @@
     ]
   },
   {
-    "id": "sharp-eyes-light-fingers-abhuman-auxiliaries",
-    "name": "Sharp Eyes, Light Fingers",
-    "detachment_id": "abhuman-auxiliaries",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Astra Militarum"
-    ],
-    "ability_id": "sharp-eyes-light-fingers-abhuman-auxiliaries",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 1
-  },
-  {
-    "id": "exemplar-of-duty-upgrade-abhuman-auxiliaries",
+    "id": "exemplar-of-duty-upgrade-abhuman-auxiliaries-astra-militarum",
     "name": "Exemplar of Duty (Upgrade)",
     "detachment_id": "abhuman-auxiliaries",
     "cost": 10,
     "keyword_restrictions": [
       "Commissar"
     ],
-    "ability_id": "exemplar-of-duty-abhuman-auxiliaries",
+    "ability_id": "exemplar-of-duty-upgrade-abhuman-auxiliaries-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -805,7 +787,7 @@
     ]
   },
   {
-    "id": "long-range-scout-upgrade-designation-force",
+    "id": "long-range-scout-upgrade-designation-force-astra-militarum",
     "name": "Long-range Scout (Upgrade)",
     "detachment_id": "designation-force",
     "cost": 10,
@@ -813,7 +795,7 @@
       "Astra Militarum",
       "Scout Sentinels"
     ],
-    "ability_id": "long-range-scout-designation-force",
+    "ability_id": "long-range-scout-upgrade-designation-force-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -834,7 +816,7 @@
     ]
   },
   {
-    "id": "recon-star-upgrade-designation-force",
+    "id": "recon-star-upgrade-designation-force-astra-militarum",
     "name": "Recon Star (Upgrade)",
     "detachment_id": "designation-force",
     "cost": 10,
@@ -843,7 +825,7 @@
       "Infantry",
       "Platoon"
     ],
-    "ability_id": "recon-star-designation-force",
+    "ability_id": "recon-star-upgrade-designation-force-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -864,7 +846,7 @@
     ]
   },
   {
-    "id": "battalion-commander-steel-hammer",
+    "id": "battalion-commander-steel-hammer-astra-militarum",
     "name": "Battalion Commander",
     "detachment_id": "steel-hammer",
     "cost": 30,
@@ -872,7 +854,7 @@
       "Astra Militarum",
       "Titanic"
     ],
-    "ability_id": "battalion-commander-steel-hammer",
+    "ability_id": "battalion-commander-steel-hammer-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -893,7 +875,7 @@
     ]
   },
   {
-    "id": "titan-killer-steel-hammer",
+    "id": "titan-killer-steel-hammer-astra-militarum",
     "name": "Titan Killer",
     "detachment_id": "steel-hammer",
     "cost": 20,
@@ -901,7 +883,7 @@
       "Astra Militarum",
       "Titanic"
     ],
-    "ability_id": "titan-killer-steel-hammer",
+    "ability_id": "titan-killer-steel-hammer-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -922,7 +904,7 @@
     ]
   },
   {
-    "id": "engine-speaker-steel-hammer",
+    "id": "engine-speaker-steel-hammer-astra-militarum",
     "name": "Engine Speaker",
     "detachment_id": "steel-hammer",
     "cost": 15,
@@ -930,7 +912,7 @@
       "Astra Militarum",
       "Tech-Priest Enginseer"
     ],
-    "ability_id": "engine-speaker-steel-hammer",
+    "ability_id": "engine-speaker-steel-hammer-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -951,7 +933,7 @@
     ]
   },
   {
-    "id": "assault-hatches-steel-hammer",
+    "id": "assault-hatches-steel-hammer-astra-militarum",
     "name": "Assault Hatches",
     "detachment_id": "steel-hammer",
     "cost": 25,
@@ -960,7 +942,7 @@
       "Titanic",
       "Transport"
     ],
-    "ability_id": "assault-hatches-steel-hammer",
+    "ability_id": "assault-hatches-steel-hammer-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -981,7 +963,7 @@
     ]
   },
   {
-    "id": "exemplary-officer-armoured-infantry",
+    "id": "exemplary-officer-armoured-infantry-astra-militarum",
     "name": "Exemplary Officer",
     "detachment_id": "armoured-infantry",
     "cost": 20,
@@ -989,7 +971,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": "exemplary-officer-armoured-infantry",
+    "ability_id": "exemplary-officer-armoured-infantry-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1010,7 +992,7 @@
     ]
   },
   {
-    "id": "master-manoeuvrist-armoured-infantry",
+    "id": "master-manoeuvrist-armoured-infantry-astra-militarum",
     "name": "Master Manoeuvrist",
     "detachment_id": "armoured-infantry",
     "cost": 15,
@@ -1018,7 +1000,7 @@
       "Infantry",
       "Officer"
     ],
-    "ability_id": "master-manoeuvrist-armoured-infantry",
+    "ability_id": "master-manoeuvrist-armoured-infantry-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1039,7 +1021,7 @@
     ]
   },
   {
-    "id": "omnissian-unguents-aura-armoured-infantry",
+    "id": "omnissian-unguents-aura-armoured-infantry-astra-militarum",
     "name": "Omnissian Unguents (Aura)",
     "detachment_id": "armoured-infantry",
     "cost": 35,
@@ -1047,7 +1029,7 @@
       "Astra Militarum",
       "Tech-Priest Enginseer"
     ],
-    "ability_id": "omnissian-unguents-armoured-infantry",
+    "ability_id": "omnissian-unguents-aura-armoured-infantry-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1068,14 +1050,14 @@
     ]
   },
   {
-    "id": "grand-strategist-armoured-infantry",
+    "id": "grand-strategist-armoured-infantry-astra-militarum",
     "name": "Grand Strategist",
     "detachment_id": "armoured-infantry",
     "cost": 25,
     "keyword_restrictions": [
       "Officer"
     ],
-    "ability_id": "grand-strategist-armoured-infantry",
+    "ability_id": "grand-strategist-armoured-infantry-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1096,7 +1078,7 @@
     ]
   },
   {
-    "id": "call-up-the-reserves-draydens-lance",
+    "id": "call-up-the-reserves-draydens-lance-astra-militarum",
     "name": "Call Up the Reserves",
     "detachment_id": "draydens-lance",
     "cost": 0,
@@ -1121,7 +1103,7 @@
     ]
   },
   {
-    "id": "draydens-drill-draydens-lance",
+    "id": "draydens-drill-draydens-lance-astra-militarum",
     "name": "Drayden’s Drill",
     "detachment_id": "draydens-lance",
     "cost": 0,
@@ -1146,11 +1128,11 @@
     ]
   },
   {
-    "id": "sharp-eyes-upgrade-abhuman-auxiliaries",
+    "id": "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum",
     "name": "Sharp Eyes (Upgrade)",
     "detachment_id": "abhuman-auxiliaries",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

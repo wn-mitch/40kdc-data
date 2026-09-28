@@ -6,7 +6,7 @@
  */
 
 import { objectivePhrase, type P } from "./condition-refs.js";
-import { capitalize, diceCase, jstr, rangePhrase, rollKindNoun, titleCase } from "./effect-words.js";
+import { abilityLabel, capitalize, diceCase, jstr, rangePhrase, rollKindNoun, titleCase } from "./effect-words.js";
 
 /** "Blessings of Khorne pool" from a pool id. */
 function poolTitle(pool: string): string {
@@ -36,7 +36,7 @@ export function objectiveSelectorPhrase(sel: P): string {
   else if (sel.range != null) s += ` within ${rangePhrase(sel.range)} of ${origin}`;
   else if (sel.range_inches != null) s += ` within ${jstr(sel.range_inches)}" of ${origin}`;
   const req = sel.requires_unit as P | undefined;
-  if (req != null) s += ` with ${req.owner === "enemy" ? "an enemy" : "a friendly"} unit with the ${titleCase(jstr(req.requires_ability))} ability within range of it`;
+  if (req != null) s += ` with ${req.owner === "enemy" ? "an enemy" : "a friendly"} unit with the ${abilityLabel(req.requires_ability)} ability within range of it`;
   return s;
 }
 

@@ -1,6 +1,6 @@
 [
   {
-    "id": "ablative-carapace-assimilation-swarm",
+    "id": "ablative-carapace-assimilation-swarm-tyranids",
     "name": "ABLATIVE CARAPACE",
     "category": "detachment",
     "type": "epic-deed",
@@ -13,7 +13,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ablative-carapace-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -30,7 +30,7 @@
     ]
   },
   {
-    "id": "adaptive-optimisation-subterranean-assault",
+    "id": "adaptive-optimisation-subterranean-assault-tyranids",
     "name": "ADAPTIVE OPTIMISATION",
     "category": "detachment",
     "type": "wargear",
@@ -42,7 +42,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adaptive-optimisation-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "id": "adrenal-surge-invasion-fleet",
+    "id": "adrenal-surge-invasion-fleet-tyranids",
     "name": "ADRENAL SURGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -71,7 +71,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adrenal-surge-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "alien-physiology-warrior-bioform-onslaught",
+    "id": "alien-physiology-warrior-bioform-onslaught-tyranids",
     "name": "Alien Physiology",
     "category": "detachment",
     "detachment_id": "warrior-bioform-onslaught",
@@ -100,7 +100,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "alien-physiology-warrior-bioform-onslaught",
+    "ability_id": "alien-physiology-warrior-bioform-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "assassin-beasts-vanguard-onslaught",
+    "id": "assassin-beasts-vanguard-onslaught-tyranids",
     "name": "ASSASSIN BEASTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -129,7 +129,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "assassin-beasts-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "id": "bounding-advance-unending-swarm",
+    "id": "bounding-advance-unending-swarm-tyranids",
     "name": "BOUNDING ADVANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -158,7 +158,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bounding-advance-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "id": "broodguard-impulse-assimilation-swarm",
+    "id": "broodguard-impulse-assimilation-swarm-tyranids",
     "name": "BROODGUARD IMPULSE",
     "category": "detachment",
     "type": "epic-deed",
@@ -191,7 +191,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "broodguard-impulse-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "id": "brute-speed-the-vardenghast-swarm",
+    "id": "brute-speed-the-vardenghast-swarm-tyranids",
     "name": "Brute Speed",
     "category": "detachment",
     "detachment_id": "the-vardenghast-swarm",
@@ -219,7 +219,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "brute-speed-the-vardenghast-swarm",
+    "ability_id": "brute-speed-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -232,7 +232,7 @@
     ]
   },
   {
-    "id": "catalytic-biofortification-talons-of-the-norn-queen",
+    "id": "catalytic-biofortification-talons-of-the-norn-queen-tyranids",
     "name": "Catalytic Biofortification",
     "category": "detachment",
     "detachment_id": "talons-of-the-norn-queen",
@@ -247,7 +247,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "catalytic-biofortification-talons-of-the-norn-queen",
+    "ability_id": "catalytic-biofortification-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -264,7 +264,7 @@
     ]
   },
   {
-    "id": "corrosive-viscera-crusher-stampede",
+    "id": "corrosive-viscera-crusher-stampede-tyranids",
     "name": "CORROSIVE VISCERA",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -277,7 +277,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "corrosive-viscera-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -294,7 +294,7 @@
     ]
   },
   {
-    "id": "counterpredation-ambush-predators",
+    "id": "counterpredation-ambush-predators-tyranids",
     "name": "Counterpredation",
     "category": "detachment",
     "detachment_id": "ambush-predators",
@@ -305,7 +305,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "counterpredation-ambush-predators",
+    "ability_id": "counterpredation-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -322,7 +322,7 @@
     ]
   },
   {
-    "id": "death-frenzy-invasion-fleet",
+    "id": "death-frenzy-invasion-fleet-tyranids",
     "name": "DEATH FRENZY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -334,7 +334,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "death-frenzy-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -351,7 +351,7 @@
     ]
   },
   {
-    "id": "endless-swarm-invasion-fleet",
+    "id": "endless-swarm-invasion-fleet-tyranids",
     "name": "ENDLESS SWARM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -363,7 +363,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "endless-swarm-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -380,7 +380,7 @@
     ]
   },
   {
-    "id": "enfilading-emergence-subterranean-assault",
+    "id": "enfilading-emergence-subterranean-assault-tyranids",
     "name": "ENFILADING EMERGENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -392,7 +392,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "enfilading-emergence-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -409,7 +409,7 @@
     ]
   },
   {
-    "id": "hypersensory-adaptations-ambush-predators",
+    "id": "hypersensory-adaptations-ambush-predators-tyranids",
     "name": "Hypersensory Adaptations",
     "category": "detachment",
     "detachment_id": "ambush-predators",
@@ -420,7 +420,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hypersensory-adaptations-ambush-predators",
+    "ability_id": "hypersensory-adaptations-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -437,7 +437,7 @@
     ]
   },
   {
-    "id": "hypersensory-scillia-vanguard-onslaught",
+    "id": "hypersensory-scillia-vanguard-onslaught-tyranids",
     "name": "HYPERSENSORY SCILLIA",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -449,7 +449,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hypersensory-scillia-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -466,7 +466,7 @@
     ]
   },
   {
-    "id": "imperative-dominance-synaptic-nexus",
+    "id": "imperative-dominance-synaptic-nexus-tyranids",
     "name": "IMPERATIVE DOMINANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -478,7 +478,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "imperative-dominance-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -495,7 +495,7 @@
     ]
   },
   {
-    "id": "invisible-hunter-vanguard-onslaught",
+    "id": "invisible-hunter-vanguard-onslaught-tyranids",
     "name": "INVISIBLE HUNTER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -507,7 +507,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "invisible-hunter-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -524,7 +524,7 @@
     ]
   },
   {
-    "id": "irresistible-will-synaptic-nexus",
+    "id": "irresistible-will-synaptic-nexus-tyranids",
     "name": "IRRESISTIBLE WILL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -537,7 +537,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "irresistible-will-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -554,7 +554,7 @@
     ]
   },
   {
-    "id": "lesser-prey-talons-of-the-norn-queen",
+    "id": "lesser-prey-talons-of-the-norn-queen-tyranids",
     "name": "Lesser Prey",
     "category": "detachment",
     "detachment_id": "talons-of-the-norn-queen",
@@ -565,7 +565,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "lesser-prey-talons-of-the-norn-queen",
+    "ability_id": "lesser-prey-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -582,7 +582,7 @@
     ]
   },
   {
-    "id": "massive-impact-crusher-stampede",
+    "id": "massive-impact-crusher-stampede-tyranids",
     "name": "MASSIVE IMPACT",
     "category": "detachment",
     "type": "epic-deed",
@@ -594,7 +594,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "massive-impact-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -611,7 +611,7 @@
     ]
   },
   {
-    "id": "override-instincts-synaptic-nexus",
+    "id": "override-instincts-synaptic-nexus-tyranids",
     "name": "OVERRIDE INSTINCTS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -623,7 +623,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "override-instincts-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -640,7 +640,7 @@
     ]
   },
   {
-    "id": "overrun-invasion-fleet",
+    "id": "overrun-invasion-fleet-tyranids",
     "name": "OVERRUN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -652,7 +652,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "overrun-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -669,7 +669,7 @@
     ]
   },
   {
-    "id": "parasitic-payload-warrior-bioform-onslaught",
+    "id": "parasitic-payload-warrior-bioform-onslaught-tyranids",
     "name": "PARASITIC PAYLOAD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -681,7 +681,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "parasitic-payload-warrior-bioform-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -698,7 +698,7 @@
     ]
   },
   {
-    "id": "predatory-imperative-invasion-fleet",
+    "id": "predatory-imperative-invasion-fleet-tyranids",
     "name": "PREDATORY IMPERATIVE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -710,7 +710,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "predatory-imperative-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -727,7 +727,7 @@
     ]
   },
   {
-    "id": "preservation-imperative-unending-swarm",
+    "id": "preservation-imperative-unending-swarm-tyranids",
     "name": "PRESERVATION IMPERATIVE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -739,7 +739,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "preservation-imperative-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +756,7 @@
     ]
   },
   {
-    "id": "rampaging-monstrosities-crusher-stampede",
+    "id": "rampaging-monstrosities-crusher-stampede-tyranids",
     "name": "RAMPAGING MONSTROSITIES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -768,7 +768,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rampaging-monstrosities-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -785,7 +785,7 @@
     ]
   },
   {
-    "id": "rapacious-hunger-assimilation-swarm",
+    "id": "rapacious-hunger-assimilation-swarm-tyranids",
     "name": "RAPACIOUS HUNGER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -797,7 +797,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapacious-hunger-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -814,7 +814,7 @@
     ]
   },
   {
-    "id": "rapid-regeneration-invasion-fleet",
+    "id": "rapid-regeneration-invasion-fleet-tyranids",
     "name": "RAPID REGENERATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -827,7 +827,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-regeneration-invasion-fleet-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -844,7 +844,7 @@
     ]
   },
   {
-    "id": "reclaim-biomass-assimilation-swarm",
+    "id": "reclaim-biomass-assimilation-swarm-tyranids",
     "name": "RECLAIM BIOMASS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -860,7 +860,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reclaim-biomass-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -877,7 +877,7 @@
     ]
   },
   {
-    "id": "reinforced-hive-node-synaptic-nexus",
+    "id": "reinforced-hive-node-synaptic-nexus-tyranids",
     "name": "REINFORCED HIVE NODE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -890,7 +890,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reinforced-hive-node-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -907,7 +907,7 @@
     ]
   },
   {
-    "id": "replenishing-swarms-subterranean-assault",
+    "id": "replenishing-swarms-subterranean-assault-tyranids",
     "name": "REPLENISHING SWARMS",
     "category": "detachment",
     "type": "wargear",
@@ -919,7 +919,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "replenishing-swarms-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -936,26 +936,7 @@
     ]
   },
   {
-    "id": "restorative-impulse-warrior-bioform-onslaught",
-    "name": "RESTORATIVE IMPULSE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cp_cost": 1,
-    "phases": [
-      "command"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "retreat-below-subterranean-assault",
+    "id": "retreat-below-subterranean-assault-tyranids",
     "name": "RETREAT BELOW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -967,7 +948,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "retreat-below-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -984,7 +965,7 @@
     ]
   },
   {
-    "id": "savage-roar-crusher-stampede",
+    "id": "savage-roar-crusher-stampede-tyranids",
     "name": "SAVAGE ROAR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -996,7 +977,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "savage-roar-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1013,7 +994,7 @@
     ]
   },
   {
-    "id": "scanner-gheist-ambush-predators",
+    "id": "scanner-gheist-ambush-predators-tyranids",
     "name": "Scanner Gheist",
     "category": "detachment",
     "detachment_id": "ambush-predators",
@@ -1024,7 +1005,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "scanner-gheist-ambush-predators",
+    "ability_id": "scanner-gheist-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1041,7 +1022,7 @@
     ]
   },
   {
-    "id": "secure-biomass-assimilation-swarm",
+    "id": "secure-biomass-assimilation-swarm-tyranids",
     "name": "SECURE BIOMASS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1053,7 +1034,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "secure-biomass-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1070,7 +1051,7 @@
     ]
   },
   {
-    "id": "seeded-broods-vanguard-onslaught",
+    "id": "seeded-broods-vanguard-onslaught-tyranids",
     "name": "SEEDED BROODS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1082,7 +1063,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "seeded-broods-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1099,7 +1080,7 @@
     ]
   },
   {
-    "id": "skulking-hunters-the-vardenghast-swarm",
+    "id": "skulking-hunters-the-vardenghast-swarm-tyranids",
     "name": "Skulking Hunters",
     "category": "detachment",
     "detachment_id": "the-vardenghast-swarm",
@@ -1110,7 +1091,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "skulking-hunters-the-vardenghast-swarm",
+    "ability_id": "skulking-hunters-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1123,27 +1104,7 @@
     ]
   },
   {
-    "id": "spontaneous-hypercorrosion-warrior-bioform-onslaught",
-    "name": "SPONTANEOUS HYPERCORROSION",
-    "category": "detachment",
-    "type": "wargear",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "surprise-assault-vanguard-onslaught",
+    "id": "surprise-assault-vanguard-onslaught-tyranids",
     "name": "SURPRISE ASSAULT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1156,7 +1117,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "surprise-assault-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1173,7 +1134,7 @@
     ]
   },
   {
-    "id": "swarm-guided-salvoes-crusher-stampede",
+    "id": "swarm-guided-salvoes-crusher-stampede-tyranids",
     "name": "SWARM-GUIDED SALVOES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1185,7 +1146,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swarm-guided-salvoes-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1202,7 +1163,7 @@
     ]
   },
   {
-    "id": "swarm-marked-the-vardenghast-swarm",
+    "id": "swarm-marked-the-vardenghast-swarm-tyranids",
     "name": "Swarm-marked",
     "category": "detachment",
     "detachment_id": "the-vardenghast-swarm",
@@ -1213,7 +1174,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "swarm-marked-the-vardenghast-swarm",
+    "ability_id": "swarm-marked-the-vardenghast-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1226,7 +1187,7 @@
     ]
   },
   {
-    "id": "swarming-assault-subterranean-assault",
+    "id": "swarming-assault-subterranean-assault-tyranids",
     "name": "SWARMING ASSAULT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1238,7 +1199,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swarming-assault-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1255,7 +1216,7 @@
     ]
   },
   {
-    "id": "swarming-masses-unending-swarm",
+    "id": "swarming-masses-unending-swarm-tyranids",
     "name": "SWARMING MASSES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1268,7 +1229,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swarming-masses-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1285,27 +1246,7 @@
     ]
   },
   {
-    "id": "synaptic-amplification-warrior-bioform-onslaught",
-    "name": "SYNAPTIC AMPLIFICATION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cp_cost": 1,
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "synaptic-channelling-synaptic-nexus",
+    "id": "synaptic-channelling-synaptic-nexus-tyranids",
     "name": "SYNAPTIC CHANNELLING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1317,7 +1258,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "synaptic-channelling-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1334,7 +1275,7 @@
     ]
   },
   {
-    "id": "synaptic-goading-unending-swarm",
+    "id": "synaptic-goading-unending-swarm-tyranids",
     "name": "SYNAPTIC GOADING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1350,7 +1291,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "synaptic-goading-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1367,7 +1308,7 @@
     ]
   },
   {
-    "id": "synaptic-micronodes-warrior-bioform-onslaught",
+    "id": "synaptic-micronodes-warrior-bioform-onslaught-tyranids",
     "name": "SYNAPTIC MICRONODES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1379,7 +1320,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "synaptic-micronodes-warrior-bioform-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1396,26 +1337,7 @@
     ]
   },
   {
-    "id": "synaptic-shield-warrior-bioform-onslaught",
-    "name": "SYNAPTIC SHIELD",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "tanglestrike-rounds-talons-of-the-norn-queen",
+    "id": "tanglestrike-rounds-talons-of-the-norn-queen-tyranids",
     "name": "Tanglestrike Rounds",
     "category": "detachment",
     "detachment_id": "talons-of-the-norn-queen",
@@ -1426,7 +1348,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "tanglestrike-rounds-talons-of-the-norn-queen",
+    "ability_id": "tanglestrike-rounds-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1443,7 +1365,7 @@
     ]
   },
   {
-    "id": "teeming-masses-unending-swarm",
+    "id": "teeming-masses-unending-swarm-tyranids",
     "name": "TEEMING MASSES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1456,7 +1378,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "teeming-masses-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1473,7 +1395,7 @@
     ]
   },
   {
-    "id": "the-smothering-shadow-synaptic-nexus",
+    "id": "the-smothering-shadow-synaptic-nexus-tyranids",
     "name": "THE SMOTHERING SHADOW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1489,7 +1411,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-smothering-shadow-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1506,7 +1428,7 @@
     ]
   },
   {
-    "id": "tunnel-network-subterranean-assault",
+    "id": "tunnel-network-subterranean-assault-tyranids",
     "name": "TUNNEL NETWORK",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1518,7 +1440,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tunnel-network-subterranean-assault-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1535,7 +1457,7 @@
     ]
   },
   {
-    "id": "tyrannoformed-assimilation-swarm",
+    "id": "tyrannoformed-assimilation-swarm-tyranids",
     "name": "TYRANNOFORMED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1547,7 +1469,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tyrannoformed-assimilation-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1564,7 +1486,7 @@
     ]
   },
   {
-    "id": "unending-waves-unending-swarm",
+    "id": "unending-waves-unending-swarm-tyranids",
     "name": "UNENDING WAVES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1580,7 +1502,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unending-waves-unending-swarm-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1597,7 +1519,7 @@
     ]
   },
   {
-    "id": "unseen-lurkers-vanguard-onslaught",
+    "id": "unseen-lurkers-vanguard-onslaught-tyranids",
     "name": "UNSEEN LURKERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1609,7 +1531,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unseen-lurkers-vanguard-onslaught-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1626,7 +1548,7 @@
     ]
   },
   {
-    "id": "untrammelled-ferocity-crusher-stampede",
+    "id": "untrammelled-ferocity-crusher-stampede-tyranids",
     "name": "UNTRAMMELLED FEROCITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1638,7 +1560,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "untrammelled-ferocity-crusher-stampede-tyranids",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

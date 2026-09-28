@@ -1,6 +1,6 @@
 [
   {
-    "id": "sheathed-in-brass-blood-legion",
+    "id": "sheathed-in-brass-blood-legion-chaos-daemons",
     "name": "SHEATHED IN BRASS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sheathed-in-brass-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "draught-of-terror-daemonic-incursion",
+    "id": "draught-of-terror-daemonic-incursion-chaos-daemons",
     "name": "DRAUGHT OF TERROR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -42,7 +42,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "draught-of-terror-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "id": "the-realm-of-chaos-daemonic-incursion",
+    "id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
     "name": "THE REALM OF CHAOS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -71,7 +71,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "id": "daemonic-invulnerability-daemonic-incursion",
+    "id": "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
     "name": "DAEMONIC INVULNERABILITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -100,7 +100,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id": "seeping-virulence-plague-legion",
+    "id": "seeping-virulence-plague-legion-chaos-daemons",
     "name": "SEEPING VIRULENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -129,7 +129,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "seeping-virulence-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "id": "fever-visions-plague-legion",
+    "id": "fever-visions-plague-legion-chaos-daemons",
     "name": "FEVER VISIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -159,7 +159,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fever-visions-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -176,7 +176,7 @@
     ]
   },
   {
-    "id": "murkshadows-plague-legion",
+    "id": "murkshadows-plague-legion-chaos-daemons",
     "name": "MURKSHADOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -188,7 +188,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "murkshadows-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -205,7 +205,7 @@
     ]
   },
   {
-    "id": "death-denied-shadow-legion",
+    "id": "death-denied-shadow-legion-chaos-daemons",
     "name": "DEATH DENIED",
     "category": "detachment",
     "type": "battle-tactic",
@@ -217,7 +217,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "death-denied-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "id": "encroaching-darkness-shadow-legion",
+    "id": "encroaching-darkness-shadow-legion-chaos-daemons",
     "name": "ENCROACHING DARKNESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -246,7 +246,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "encroaching-darkness-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -263,7 +263,7 @@
     ]
   },
   {
-    "id": "pyrogenesis-scintillating-legion",
+    "id": "pyrogenesis-scintillating-legion-chaos-daemons",
     "name": "PYROGENESIS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -276,7 +276,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pyrogenesis-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -293,7 +293,7 @@
     ]
   },
   {
-    "id": "cavalcade-of-blades-legion-of-excess",
+    "id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
     "name": "CAVALCADE OF BLADES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -305,7 +305,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -322,7 +322,7 @@
     ]
   },
   {
-    "id": "overwhelming-excess-legion-of-excess",
+    "id": "overwhelming-excess-legion-of-excess-chaos-daemons",
     "name": "OVERWHELMING EXCESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -335,7 +335,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "overwhelming-excess-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -352,7 +352,7 @@
     ]
   },
   {
-    "id": "shade-path-shadow-legion",
+    "id": "shade-path-shadow-legion-chaos-daemons",
     "name": "SHADE PATH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -364,7 +364,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shade-path-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -381,7 +381,7 @@
     ]
   },
   {
-    "id": "archagonists-legion-of-excess",
+    "id": "archagonists-legion-of-excess-chaos-daemons",
     "name": "ARCHAGONISTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -393,7 +393,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "archagonists-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -410,7 +410,7 @@
     ]
   },
   {
-    "id": "blood-begets-skulls-blood-legion",
+    "id": "blood-begets-skulls-blood-legion-chaos-daemons",
     "name": "BLOOD BEGETS SKULLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -422,7 +422,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blood-begets-skulls-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -439,7 +439,7 @@
     ]
   },
   {
-    "id": "wrath-undeniable-blood-legion",
+    "id": "wrath-undeniable-blood-legion-chaos-daemons",
     "name": "WRATH UNDENIABLE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -451,7 +451,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wrath-undeniable-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -468,7 +468,7 @@
     ]
   },
   {
-    "id": "gore-hungry-onslaught-blood-legion",
+    "id": "gore-hungry-onslaught-blood-legion-chaos-daemons",
     "name": "GORE-HUNGRY ONSLAUGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -481,7 +481,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "gore-hungry-onslaught-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -498,7 +498,7 @@
     ]
   },
   {
-    "id": "skulls-beget-blood-blood-legion",
+    "id": "skulls-beget-blood-blood-legion-chaos-daemons",
     "name": "SKULLS BEGET BLOOD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -510,7 +510,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skulls-beget-blood-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -527,7 +527,7 @@
     ]
   },
   {
-    "id": "corrupt-realspace-daemonic-incursion",
+    "id": "corrupt-realspace-daemonic-incursion-chaos-daemons",
     "name": "CORRUPT REALSPACE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -539,7 +539,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "corrupt-realspace-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -556,7 +556,7 @@
     ]
   },
   {
-    "id": "warp-surge-daemonic-incursion",
+    "id": "warp-surge-daemonic-incursion-chaos-daemons",
     "name": "WARP SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -568,7 +568,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "warp-surge-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -585,7 +585,7 @@
     ]
   },
   {
-    "id": "denizens-of-the-warp-daemonic-incursion",
+    "id": "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
     "name": "DENIZENS OF THE WARP",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -597,7 +597,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -614,7 +614,7 @@
     ]
   },
   {
-    "id": "rot-and-renewal-plague-legion",
+    "id": "rot-and-renewal-plague-legion-chaos-daemons",
     "name": "ROT AND RENEWAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -627,7 +627,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rot-and-renewal-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -644,7 +644,7 @@
     ]
   },
   {
-    "id": "plague-of-woes-plague-legion",
+    "id": "plague-of-woes-plague-legion-chaos-daemons",
     "name": "PLAGUE OF WOES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -656,7 +656,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "plague-of-woes-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -673,7 +673,7 @@
     ]
   },
   {
-    "id": "spiteful-demise-shadow-legion",
+    "id": "spiteful-demise-shadow-legion-chaos-daemons",
     "name": "SPITEFUL DEMISE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -689,7 +689,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spiteful-demise-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -706,7 +706,7 @@
     ]
   },
   {
-    "id": "channelled-wrath-shadow-legion",
+    "id": "channelled-wrath-shadow-legion-chaos-daemons",
     "name": "CHANNELLED WRATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -718,7 +718,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "channelled-wrath-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -735,7 +735,7 @@
     ]
   },
   {
-    "id": "binding-shadow-shadow-legion",
+    "id": "binding-shadow-shadow-legion-chaos-daemons",
     "name": "BINDING SHADOW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -747,7 +747,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "binding-shadow-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -764,7 +764,7 @@
     ]
   },
   {
-    "id": "impossible-eclipse-scintillating-legion",
+    "id": "impossible-eclipse-scintillating-legion-chaos-daemons",
     "name": "IMPOSSIBLE ECLIPSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -780,7 +780,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "impossible-eclipse-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -797,7 +797,7 @@
     ]
   },
   {
-    "id": "flickering-reality-scintillating-legion",
+    "id": "flickering-reality-scintillating-legion-chaos-daemons",
     "name": "FLICKERING REALITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -809,7 +809,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flickering-reality-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -826,7 +826,7 @@
     ]
   },
   {
-    "id": "fateborne-nightmares-scintillating-legion",
+    "id": "fateborne-nightmares-scintillating-legion-chaos-daemons",
     "name": "FATEBORNE NIGHTMARES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -839,7 +839,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fateborne-nightmares-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -856,7 +856,7 @@
     ]
   },
   {
-    "id": "ficklefire-scintillating-legion",
+    "id": "ficklefire-scintillating-legion-chaos-daemons",
     "name": "FICKLEFIRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -868,7 +868,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ficklefire-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -885,7 +885,7 @@
     ]
   },
   {
-    "id": "delirium-unmade-scintillating-legion",
+    "id": "delirium-unmade-scintillating-legion-chaos-daemons",
     "name": "DELIRIUM UNMADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -897,7 +897,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "delirium-unmade-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -914,7 +914,7 @@
     ]
   },
   {
-    "id": "thieves-of-pain-legion-of-excess",
+    "id": "thieves-of-pain-legion-of-excess-chaos-daemons",
     "name": "THIEVES OF PAIN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -930,7 +930,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "thieves-of-pain-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -947,7 +947,7 @@
     ]
   },
   {
-    "id": "sensory-excruciation-legion-of-excess",
+    "id": "sensory-excruciation-legion-of-excess-chaos-daemons",
     "name": "SENSORY EXCRUCIATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -959,7 +959,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sensory-excruciation-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -976,7 +976,7 @@
     ]
   },
   {
-    "id": "phantasmal-longing-legion-of-excess",
+    "id": "phantasmal-longing-legion-of-excess-chaos-daemons",
     "name": "PHANTASMAL LONGING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -989,7 +989,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "phantasmal-longing-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1006,7 +1006,7 @@
     ]
   },
   {
-    "id": "fools-flight-blood-legion",
+    "id": "fools-flight-blood-legion-chaos-daemons",
     "name": "FOOL’S FLIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1018,7 +1018,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fools-flight-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1035,7 +1035,7 @@
     ]
   },
   {
-    "id": "foetid-resurgence-plague-legion",
+    "id": "foetid-resurgence-plague-legion-chaos-daemons",
     "name": "FOETID RESURGENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1047,7 +1047,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "foetid-resurgence-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1064,7 +1064,7 @@
     ]
   },
   {
-    "id": "from-beyond-the-veil-cavalcade-of-chaos",
+    "id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
     "name": "FROM BEYOND THE VEIL",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
@@ -1075,7 +1075,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos",
+    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1092,7 +1092,7 @@
     ]
   },
   {
-    "id": "warp-riders-cavalcade-of-chaos",
+    "id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "name": "WARP-RIDERS",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
@@ -1103,7 +1103,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warp-riders-cavalcade-of-chaos",
+    "ability_id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1120,7 +1120,7 @@
     ]
   },
   {
-    "id": "inescapable-manifestations-cavalcade-of-chaos",
+    "id": "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
     "name": "INESCAPABLE MANIFESTATIONS",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
@@ -1131,7 +1131,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "inescapable-manifestations-cavalcade-of-chaos",
+    "ability_id": "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1148,7 +1148,7 @@
     ]
   },
   {
-    "id": "carnival-of-excess-lords-of-the-warp",
+    "id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",
     "name": "CARNIVAL OF EXCESS",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1159,7 +1159,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "carnival-of-excess-lords-of-the-warp",
+    "ability_id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1176,7 +1176,7 @@
     ]
   },
   {
-    "id": "call-to-murder-lords-of-the-warp",
+    "id": "call-to-murder-lords-of-the-warp-chaos-daemons",
     "name": "CALL TO MURDER",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1187,7 +1187,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "call-to-murder-lords-of-the-warp",
+    "ability_id": "call-to-murder-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1204,7 +1204,7 @@
     ]
   },
   {
-    "id": "bilious-blessing-lords-of-the-warp",
+    "id": "bilious-blessing-lords-of-the-warp-chaos-daemons",
     "name": "BILIOUS BLESSING",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1215,7 +1215,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "bilious-blessing-lords-of-the-warp",
+    "ability_id": "bilious-blessing-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1232,7 +1232,7 @@
     ]
   },
   {
-    "id": "skirling-magicks-lords-of-the-warp",
+    "id": "skirling-magicks-lords-of-the-warp-chaos-daemons",
     "name": "SKIRLING MAGICKS",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1243,7 +1243,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "skirling-magicks-lords-of-the-warp",
+    "ability_id": "skirling-magicks-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1260,7 +1260,7 @@
     ]
   },
   {
-    "id": "daemonic-infestation-warptide",
+    "id": "daemonic-infestation-warptide-chaos-daemons",
     "name": "DAEMONIC INFESTATION",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1271,7 +1271,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "daemonic-infestation-warptide",
+    "ability_id": "daemonic-infestation-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1288,7 +1288,7 @@
     ]
   },
   {
-    "id": "soulseeing-warptide",
+    "id": "soulseeing-warptide-chaos-daemons",
     "name": "SOULSEEING",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1299,7 +1299,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "soulseeing-warptide",
+    "ability_id": "soulseeing-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1316,7 +1316,7 @@
     ]
   },
   {
-    "id": "incorporeal-entities-warptide",
+    "id": "incorporeal-entities-warptide-chaos-daemons",
     "name": "INCORPOREAL ENTITIES",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1327,7 +1327,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "incorporeal-entities-warptide",
+    "ability_id": "incorporeal-entities-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

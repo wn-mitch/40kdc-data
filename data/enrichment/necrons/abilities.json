@@ -1,56 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ghost-ark"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "repair-barge",
+    "ability_id": "repair-barge-necrons",
     "name": "Repair Barge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -85,7 +35,7 @@
         "type": "ability-activate",
         "target": "selected-unit",
         "modifier": {
-          "ability": "reanimation-protocols"
+          "ability": "reanimation-protocols-necrons"
         }
       }
     },
@@ -99,60 +49,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deadly-demise-d6-2",
-    "name": "Deadly Demise D6+2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+2",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "seraptek-heavy-construct"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "terrifying-monstrosity",
+    "ability_id": "terrifying-monstrosity-necrons",
     "name": "Terrifying Monstrosity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -189,69 +90,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "titanic-walker",
-    "name": "Titanic Walker",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "seraptek-heavy-construct"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "deep-strike"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "triarch-praetorians",
-      "ctan-shard-of-the-nightbringer",
-      "ctan-shard-of-the-void-dragon",
-      "ctan-shard-of-the-deceiver",
-      "transcendent-ctan",
-      "nekrosor-ammentar"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "relentless-combatants",
+    "ability_id": "relentless-combatants-necrons",
     "name": "Relentless Combatants",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -275,10 +118,11 @@
       "triarch-praetorians"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "their-number-is-legion",
+    "ability_id": "their-number-is-legion-necrons",
     "name": "Their Number is Legion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -296,7 +140,7 @@
           "subject": "this-unit",
           "filter": {
             "kind": "ability",
-            "id": "reanimation-protocols"
+            "id": "reanimation-protocols-necrons"
           },
           "window": "event"
         }
@@ -318,37 +162,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "Each time this unit's Reanimation Protocols activate, re-roll the dice determining how many wounds are reanimated."
+    "community_notes": "Each time this unit's Reanimation Protocols activate, re-roll the dice determining how many wounds are reanimated.",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "scouts-8",
-    "name": "Scouts 8\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 8
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "canoptek-macrocytes"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "harassment-swarm-aura",
+    "ability_id": "harassment-swarm-necrons",
     "name": "Harassment Swarm (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -391,10 +209,11 @@
       "canoptek-macrocytes"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nanoscarab-projector",
+    "ability_id": "nanoscarab-projector-necrons",
     "name": "Nanoscarab Projector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -430,10 +249,11 @@
       "canoptek-macrocytes"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "accelerator-mandible",
+    "ability_id": "accelerator-mandible-necrons",
     "name": "Accelerator Mandible",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -479,36 +299,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "leader"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "technomancer"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "rites-of-reanimation",
+    "ability_id": "rites-of-reanimation-necrons",
     "name": "Rites of Reanimation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -541,10 +336,11 @@
       "technomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "technomancer",
+    "ability_id": "technomancer-necrons",
     "name": "Technomancer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -583,10 +379,11 @@
       "technomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "quantum-invader",
+    "ability_id": "quantum-invader-necrons",
     "name": "Quantum Invader",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -632,10 +429,11 @@
           "phase": "movement"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "invasion-beams",
+    "ability_id": "invasion-beams-necrons",
     "name": "Invasion Beams",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -693,10 +491,11 @@
       "night-scythe"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "my-will-be-done",
+    "ability_id": "my-will-be-done-necrons",
     "name": "My Will Be Done",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -716,13 +515,15 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "overlord"
+      "overlord",
+      "overlord-with-translocation-shroud"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "implacable-resilience",
+    "ability_id": "implacable-resilience-necrons",
     "name": "Implacable Resilience",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -745,10 +546,11 @@
       "overlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "resurrection-orb",
+    "ability_id": "resurrection-orb-necrons",
     "name": "Resurrection Orb",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -778,13 +580,16 @@
       "duration": "one-use"
     },
     "unit_ids": [
-      "overlord"
+      "lokhust-lord",
+      "overlord",
+      "overlord-with-translocation-shroud"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "adaptive-strategy",
+    "ability_id": "adaptive-strategy-necrons",
     "name": "Adaptive Strategy",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -827,10 +632,11 @@
       "royal-warden"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "engrammatic-logic",
+    "ability_id": "engrammatic-logic-necrons",
     "name": "Engrammatic Logic",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -881,10 +687,11 @@
         "NECRONS"
       ]
     },
-    "community_notes": "[APPROX] Once per battle, at the start of any phase, the bearer selects one friendly NECRONS unit that is Battle-shocked and within 12\", and that unit is no longer Battle-shocked. Battle-shock remains implicit in remove-battle-shock; full rule in raw-text store."
+    "community_notes": "[APPROX] Once per battle, at the start of any phase, the bearer selects one friendly NECRONS unit that is Battle-shocked and within 12\", and that unit is no longer Battle-shocked. Battle-shock remains implicit in remove-battle-shock; full rule in raw-text store.",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "sentinel-construct",
+    "ability_id": "sentinel-construct-necrons",
     "name": "Sentinel Construct",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -918,10 +725,11 @@
       "canoptek-doomstalker"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "implacable-eradication",
+    "ability_id": "implacable-eradication-necrons",
     "name": "Implacable Eradication",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -945,10 +753,11 @@
       "immortals"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "bound-creation",
+    "ability_id": "bound-creation-necrons",
     "name": "Bound Creation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -971,10 +780,11 @@
       "cryptothralls"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "systematic-vigour",
+    "ability_id": "systematic-vigour-necrons",
     "name": "Systematic Vigour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1006,10 +816,11 @@
       "cryptothralls"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "cryptek-retinue",
+    "ability_id": "cryptek-retinue-necrons",
     "name": "Cryptek Retinue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1033,10 +844,11 @@
       "cryptothralls"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "master-chronomancer",
+    "ability_id": "master-chronomancer-necrons",
     "name": "Master Chronomancer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1069,10 +881,11 @@
       "orikan-the-diviner"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "the-stars-are-right",
+    "ability_id": "the-stars-are-right-necrons",
     "name": "The Stars Are Right",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1120,60 +933,11 @@
       "orikan-the-diviner"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deadly-demise-d6-3",
-    "name": "Deadly Demise D6+3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6+3",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tesseract-vault"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "powers-of-the-c-tan",
+    "ability_id": "powers-of-the-ctan-necrons",
     "name": "Powers of the C’tan",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1241,37 +1005,11 @@
           "phase": "shooting"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "scouts",
-        "value": 9
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "tomb-blades"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "evasion-engrams",
+    "ability_id": "evasion-engrams-necrons",
     "name": "Evasion Engrams",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1303,10 +1041,11 @@
       "tomb-blades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "shieldvanes",
+    "ability_id": "shieldvanes-necrons",
     "name": "Shieldvanes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1331,10 +1070,11 @@
       "tomb-blades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nebuloscope",
+    "ability_id": "nebuloscope-necrons",
     "name": "Nebuloscope",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1359,10 +1099,11 @@
       "tomb-blades"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "shadowloom",
+    "ability_id": "shadowloom-necrons",
     "name": "Shadowloom",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1388,10 +1129,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nightmare-shroud-aura",
+    "ability_id": "nightmare-shroud-necrons",
     "name": "Nightmare Shroud (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1430,10 +1172,11 @@
       "psychomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "harbinger-of-despair",
+    "ability_id": "harbinger-of-despair-necrons",
     "name": "Harbinger of Despair",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1475,10 +1218,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "optimised-for-slaughter",
+    "ability_id": "optimised-for-slaughter-necrons",
     "name": "Optimised for Slaughter",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1557,10 +1301,11 @@
       "lokhust-heavy-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "whirling-onslaught",
+    "ability_id": "whirling-onslaught-necrons",
     "name": "Whirling Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1614,10 +1359,11 @@
       "skorpekh-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "plasmacyte",
+    "ability_id": "plasmacyte-necrons",
     "name": "Plasmacyte",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1639,6 +1385,7 @@
       "duration": "phase"
     },
     "unit_ids": [
+      "ophydian-destroyers",
       "skorpekh-destroyers"
     ],
     "ability_type": "unit",
@@ -1646,10 +1393,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "reanimation-nodes-aura",
+    "ability_id": "reanimation-nodes-necrons",
     "name": "Reanimation Nodes (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1683,10 +1431,11 @@
       "convergence-of-dominion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "ancient-cover",
+    "ability_id": "ancient-cover-necrons",
     "name": "Ancient Cover",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1718,10 +1467,11 @@
       "convergence-of-dominion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "fortification",
+    "ability_id": "fortification-necrons",
     "name": "Fortification",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1755,10 +1505,11 @@
       "convergence-of-dominion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deployment",
+    "ability_id": "deployment-necrons",
     "name": "Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1787,10 +1538,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "set-up"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "united-in-destruction",
+    "ability_id": "united-in-destruction-necrons",
     "name": "United In Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1825,10 +1577,11 @@
       "skorpekh-lord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "crimson-harvest",
+    "ability_id": "crimson-harvest-necrons",
     "name": "Crimson Harvest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1851,10 +1604,11 @@
       "skorpekh-lord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "hyperspace-hunters",
+    "ability_id": "hyperspace-hunters-necrons",
     "name": "Hyperspace Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1931,10 +1685,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "targeting-relay",
+    "ability_id": "targeting-relay-necrons",
     "name": "Targeting Relay",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1966,10 +1721,11 @@
       "triarch-stalker"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "grand-strategist",
+    "ability_id": "grand-strategist-necrons",
     "name": "Grand Strategist",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1992,10 +1748,11 @@
       "imotekh-the-stormlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "lord-of-the-storm",
+    "ability_id": "lord-of-the-storm-necrons",
     "name": "Lord of the Storm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2018,64 +1775,11 @@
       "imotekh-the-stormlord"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": "D6",
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "obelisk",
-      "ctan-shard-of-the-nightbringer",
-      "ctan-shard-of-the-void-dragon",
-      "ctan-shard-of-the-deceiver",
-      "transcendent-ctan"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "gravitic-pulse",
+    "ability_id": "gravitic-pulse-necrons",
     "name": "Gravitic Pulse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2098,65 +1802,11 @@
       "obelisk"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "feel-no-pain-4",
-    "name": "Feel No Pain 4+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 4
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "canoptek-reanimator"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ctan-shard-of-the-nightbringer",
-      "ctan-shard-of-the-void-dragon",
-      "ctan-shard-of-the-deceiver",
-      "transcendent-ctan"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "necrodermis",
+    "ability_id": "necrodermis-necrons",
     "name": "Necrodermis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2183,10 +1833,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive: -1 to incoming damage (floored at 1 by the engine)"
+    "community_notes": "defensive: -1 to incoming damage (floored at 1 by the engine)",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nanoscarab-reanimation-beam-aura",
+    "ability_id": "nanoscarab-reanimation-beam-necrons",
     "name": "Nanoscarab Reanimation Beam (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2233,60 +1884,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
-        },
-        "modifier": {
-          "count": 1,
-          "range": {
-            "inches": 6
-          }
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "catacomb-command-barge"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "carrier-wave-aura",
+    "ability_id": "carrier-wave-necrons",
     "name": "Carrier Wave (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2321,10 +1923,11 @@
       "catacomb-command-barge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "advanced-quantum-shielding",
+    "ability_id": "advanced-quantum-shielding-necrons",
     "name": "Advanced Quantum Shielding",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2349,10 +1952,11 @@
       "catacomb-command-barge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "hard-wired-for-destruction",
+    "ability_id": "hard-wired-for-destruction-necrons",
     "name": "Hard-wired for Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2385,10 +1989,11 @@
       "lokhust-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "guardian-protocols",
+    "ability_id": "guardian-protocols-necrons",
     "name": "Guardian Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2423,10 +2028,11 @@
       "lychguard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "dispersion-shield",
+    "ability_id": "dispersion-shield-necrons",
     "name": "Dispersion Shield",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2449,10 +2055,11 @@
       "lychguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "eternity-gate",
+    "ability_id": "eternity-gate-necrons",
     "name": "Eternity Gate",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2501,10 +2108,11 @@
           "phase": "movement"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "translocation-shroud",
+    "ability_id": "translocation-shroud-necrons",
     "name": "Translocation Shroud",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2529,10 +2137,11 @@
       "overlord-with-translocation-shroud"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "self-destruction",
+    "ability_id": "self-destruction-necrons",
     "name": "Self-destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2564,10 +2173,11 @@
       "canoptek-scarab-swarms"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "chittering-swarm",
+    "ability_id": "chittering-swarm-necrons",
     "name": "Chittering Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2630,10 +2240,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "wraith-form",
+    "ability_id": "wraith-form-necrons",
     "name": "Wraith Form",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2656,10 +2267,11 @@
       "canoptek-wraiths"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "ancient-collector",
+    "ability_id": "ancient-collector-necrons",
     "name": "Ancient Collector",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2689,10 +2301,11 @@
       "trazyn-the-infinite"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "surrogate-hosts",
+    "ability_id": "surrogate-hosts-necrons",
     "name": "Surrogate Hosts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2767,10 +2380,11 @@
           "phase": "command"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "destroyer-cult",
+    "ability_id": "destroyer-cult-necrons",
     "name": "Destroyer Cult",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2815,10 +2429,11 @@
       "lokhust-lord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "driven-by-hatred",
+    "ability_id": "driven-by-hatred-necrons",
     "name": "Driven by Hatred",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2865,10 +2480,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "community_notes": "auto-generated, partial",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nanoscarab-amulet",
+    "ability_id": "nanoscarab-amulet-necrons",
     "name": "Nanoscarab Amulet",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2891,65 +2507,11 @@
       "lokhust-lord"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "infiltrators"
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "flayed-ones"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "flayed-ones",
-      "ctan-shard-of-the-deceiver"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "flesh-hunger",
+    "ability_id": "flesh-hunger-necrons",
     "name": "Flesh Hunger",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2994,10 +2556,11 @@
       "flayed-ones"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "malevolent-arcing",
+    "ability_id": "malevolent-arcing-necrons",
     "name": "Malevolent Arcing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3029,10 +2592,11 @@
       "annihilation-barge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "illuminor",
+    "ability_id": "illuminor-necrons",
     "name": "Illuminor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3074,10 +2638,11 @@
       "illuminor-szeras"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "mechanical-augmentation-aura",
+    "ability_id": "mechanical-augmentation-necrons",
     "name": "Mechanical Augmentation (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3137,10 +2702,11 @@
         "BATTLELINE"
       ]
     },
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "atomic-energy-manipulator",
+    "ability_id": "atomic-energy-manipulator-necrons",
     "name": "Atomic Energy Manipulator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3165,7 +2731,7 @@
         "type": "ability-modifier",
         "target": "this-model",
         "modifier": {
-          "ability": "mechanical-augmentation-aura",
+          "ability": "mechanical-augmentation-necrons",
           "aspect": "range",
           "operation": "add",
           "value": 3,
@@ -3190,36 +2756,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "fights-first",
-    "name": "Fights First",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "ability": "fights-first"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "nekrosor-ammentar"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "protective-disciples",
+    "ability_id": "protective-disciples-necrons",
     "name": "Protective Disciples",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3261,10 +2802,11 @@
       "nekrosor-ammentar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "infectious-murder-madness-aura",
+    "ability_id": "infectious-murder-madness-necrons",
     "name": "Infectious Murder-Madness (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3317,10 +2859,11 @@
         "TITANIC"
       ]
     },
-    "community_notes": "[APPROX] Aura (6\"): a friendly NECRONS unit (excluding MONSTER and TITANIC) within range grants each of its attacks [SUSTAINED HITS 1] when the attacking model is DESTROYER CULT. The rules text's alternate OR-branch (an attack into the closest eligible target also qualifies) is a per-attack, per-target gate the schema has no leaf for and is not modeled here; only the DESTROYER CULT keyword branch is represented."
+    "community_notes": "[APPROX] Aura (6\"): a friendly NECRONS unit (excluding MONSTER and TITANIC) within range grants each of its attacks [SUSTAINED HITS 1] when the attacking model is DESTROYER CULT. The rules text's alternate OR-branch (an attack into the closest eligible target also qualifies) is a per-attack, per-target gate the schema has no leaf for and is not modeled here; only the DESTROYER CULT keyword branch is represented.",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "prophet-of-destruction",
+    "ability_id": "prophet-of-destruction-necrons",
     "name": "Prophet of Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3344,10 +2887,11 @@
       "nekrosor-ammentar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "nullstone-field-generator-aura",
+    "ability_id": "nullstone-field-generator-necrons",
     "name": "Nullstone Field Generator (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3381,10 +2925,11 @@
       "nekrosor-ammentar"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "weapon-sentinels",
+    "ability_id": "weapon-sentinels-necrons",
     "name": "Weapon Sentinels",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3435,10 +2980,11 @@
       "canoptek-tomb-crawlers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "canoptek-retinue",
+    "ability_id": "canoptek-retinue-necrons",
     "name": "Canoptek Retinue",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3462,10 +3008,11 @@
       "canoptek-tomb-crawlers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "tunnelling-horrors",
+    "ability_id": "tunnelling-horrors-necrons",
     "name": "Tunnelling Horrors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3512,10 +3059,11 @@
           "turn": "opponent-turn"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "harbinger-of-destruction",
+    "ability_id": "harbinger-of-destruction-necrons",
     "name": "Harbinger of Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3560,10 +3108,11 @@
       "plasmancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "living-lightning",
+    "ability_id": "living-lightning-necrons",
     "name": "Living Lightning",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3595,10 +3144,11 @@
       "plasmancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "overwhelming-obliteration",
+    "ability_id": "overwhelming-obliteration-necrons",
     "name": "Overwhelming Obliteration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3623,44 +3173,11 @@
       "doomsday-ark"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting",
-      "target": {
-        "owner": "enemy"
-      },
-      "modifier": {
-        "may": "cannot-target",
-        "target": "this-model",
-        "kind": "shoot",
-        "range": {
-          "inches": 12
-        },
-        "weapon_type": "ranged"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hexmark-destroyer"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "inescapable-death",
+    "ability_id": "inescapable-death-necrons",
     "name": "Inescapable Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3706,10 +3223,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "multi-threat-eliminator",
+    "ability_id": "multi-threat-eliminator-necrons",
     "name": "Multi-threat Eliminator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3774,10 +3292,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "atavistic-instigation",
+    "ability_id": "atavistic-instigation-necrons",
     "name": "Atavistic Instigation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3811,10 +3330,11 @@
       "doom-scythe"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "tectonic-reverberations",
+    "ability_id": "tectonic-reverberations-necrons",
     "name": "Tectonic Reverberations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3867,10 +3387,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] Selection is restricted to an enemy unit within 18\" of and visible to this model; that 18\"/visibility restriction is not encoded, and the mark's until-your-next-Movement-phase window is modeled as one battle round. Pinned debuff (\u22122 Move, \u22122 to Charge rolls) mirrors the grav-pinned encoding. Full rule in raw-text store."
+    "community_notes": "[APPROX] Selection is restricted to an enemy unit within 18\" of and visible to this model; that 18\"/visibility restriction is not encoded, and the mark's until-your-next-Movement-phase window is modeled as one battle round. Pinned debuff (\u22122 Move, \u22122 to Charge rolls) mirrors the grav-pinned encoding. Full rule in raw-text store.",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "obelisk-node-control",
+    "ability_id": "obelisk-node-control-necrons",
     "name": "Obelisk Node Control",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3924,10 +3445,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] While the bearer is within range of an objective marker it controls, the enemy Reserves-setup exclusion zone around it is pushed out to 12\"; the proximity and control conditions are modeled as an AND of two predicates rather than bound to the same objective marker ([APPROX] same-objective binding)."
+    "community_notes": "[APPROX] While the bearer is within range of an objective marker it controls, the enemy Reserves-setup exclusion zone around it is pushed out to 12\"; the proximity and control conditions are modeled as an AND of two predicates rather than bound to the same objective marker ([APPROX] same-objective binding).",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "vanguard-protocols",
+    "ability_id": "vanguard-protocols-necrons",
     "name": "Vanguard Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3971,7 +3493,7 @@
         "type": "ability-grant",
         "target": "this-model",
         "modifier": {
-          "ability": "scouts-8"
+          "ability": "scouts"
         }
       }
     },
@@ -3982,58 +3504,11 @@
       "geomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "deadly-demise-d6-3-szarekh-model-only",
-    "name": "Deadly Demise D6+3 (Szarekh model only)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 6,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "any",
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-model"
-          }
-        },
-        "modifier": {
-          "count": "D6+3"
-        }
-      },
-      "on_fail": null
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "the-silent-king"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "model-destroyed",
-      "object": "this-model",
-      "filter": {
-        "timing": "before-removal"
-      }
-    }
-  },
-  {
-    "ability_id": "triarch-abilities",
+    "ability_id": "triarch-abilities-necrons",
     "name": "Triarch Abilities",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4162,10 +3637,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "the-silent-king",
+    "ability_id": "the-silent-king-necrons",
     "name": "The Silent King",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4198,10 +3674,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "triarchal-menhirs",
+    "ability_id": "triarchal-menhirs-necrons",
     "name": "Triarchal Menhirs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4240,10 +3717,11 @@
     "trigger": {
       "event": "model-destroyed",
       "object": "model-in-this-unit"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-necrons",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4266,10 +3744,11 @@
       "the-silent-king"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "timesplinter-mantle",
+    "ability_id": "timesplinter-mantle-necrons",
     "name": "Timesplinter Mantle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4304,10 +3783,11 @@
       "chronomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "chronometron",
+    "ability_id": "chronometron-necrons",
     "name": "Chronometron",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4339,10 +3819,11 @@
       "chronomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "canoptek-swarm",
+    "ability_id": "canoptek-swarm-necrons",
     "name": "Canoptek Swarm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4396,10 +3877,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "fabricator-claw-array-aura",
+    "ability_id": "fabricator-claw-array-necrons",
     "name": "Fabricator Claw Array (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4433,10 +3915,11 @@
       "canoptek-spyders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "gloom-prism-aura",
+    "ability_id": "gloom-prism-necrons",
     "name": "Gloom Prism (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4470,10 +3953,11 @@
       "canoptek-spyders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "reanimation-protocols",
+    "ability_id": "reanimation-protocols-necrons",
     "name": "Reanimation Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4523,7 +4007,7 @@
     }
   },
   {
-    "ability_id": "drain-life",
+    "ability_id": "drain-life-necrons",
     "name": "Drain Life",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4569,10 +4053,11 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "enslaved-star-god",
+    "ability_id": "enslaved-star-god-necrons",
     "name": "Enslaved Star God",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4599,10 +4084,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "matter-absorption",
+    "ability_id": "matter-absorption-necrons",
     "name": "Matter Absorption",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4664,10 +4150,11 @@
           "phase": "shooting"
         }
       }
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "grand-illusion",
+    "ability_id": "grand-illusion-necrons",
     "name": "Grand Illusion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4720,10 +4207,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "deployment-ended"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "transdimensional-displacement",
+    "ability_id": "transdimensional-displacement-necrons",
     "name": "Transdimensional Displacement",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4773,10 +4261,11 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "ctan-shard",
+    "ability_id": "ctan-shard-necrons",
     "name": "C\u2019tan Shard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4800,10 +4289,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "hypermotility-protocols",
+    "ability_id": "hypermotility-protocols-necrons",
     "name": "Hypermotility Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4856,7 +4346,7 @@
     "community_notes": "Applies per-unit to friendly Immortals and Necron Warriors: their ranged weapons gain [Assault], and being selected to Advance does not stop them starting an Action. The detachment's DYNASTY tag / mutual-exclusion is list-construction metadata, not modeled as an effect here."
   },
   {
-    "ability_id": "transdimensional-deployment",
+    "ability_id": "transdimensional-deployment-necrons",
     "name": "Transdimensional Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4899,7 +4389,7 @@
     "community_notes": "Applies to friendly TOMB BLADES units: they gain Deep Strike, and their ranged attacks get +1 to Hit in a turn they made an ingress (Deep Strike) move."
   },
   {
-    "ability_id": "empowered-engines",
+    "ability_id": "empowered-engines-necrons",
     "name": "Empowered Engines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4935,7 +4425,7 @@
     "community_notes": "Applies to friendly NECRONS TITANIC FLY units: +6\" Move."
   },
   {
-    "ability_id": "dominance-protocols-hand-of-the-dynasty",
+    "ability_id": "dominance-protocols-hand-of-the-dynasty-necrons",
     "name": "Dominance Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4974,7 +4464,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "will-of-the-conqueror-hand-of-the-dynasty",
+    "ability_id": "will-of-the-conqueror-hand-of-the-dynasty-necrons",
     "name": "Will of the Conqueror",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5008,7 +4498,7 @@
     }
   },
   {
-    "ability_id": "nanosaturation-hand-of-the-dynasty",
+    "ability_id": "nanosaturation-hand-of-the-dynasty-necrons",
     "name": "Nanosaturation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5086,7 +4576,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "enlivened-sentinels-hand-of-the-dynasty",
+    "ability_id": "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
     "name": "Enlivened Sentinels",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5115,7 +4605,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "tools-of-dominion-hand-of-the-dynasty",
+    "ability_id": "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons",
     "name": "Tools of Dominion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5145,7 +4635,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "omnilocked-strafing-skyshroud-spearhead",
+    "ability_id": "omnilocked-strafing-skyshroud-spearhead-necrons",
     "name": "Omnilocked Strafing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5186,7 +4676,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "swift-as-death-skyshroud-spearhead",
+    "ability_id": "swift-as-death-skyshroud-spearhead-necrons",
     "name": "Swift As Death",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5257,7 +4747,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "evasive-protocols-skyshroud-spearhead",
+    "ability_id": "evasive-protocols-skyshroud-spearhead-necrons",
     "name": "Evasive Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5322,7 +4812,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "recursive-reanimation-skyshroud-spearhead",
+    "ability_id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
     "name": "Recursive Reanimation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5346,7 +4836,7 @@
           "subject": "this-unit",
           "filter": {
             "kind": "ability",
-            "id": "reanimation-protocols"
+            "id": "reanimation-protocols-necrons"
           },
           "window": "event"
         }
@@ -5367,7 +4857,7 @@
     "community_notes": "TOMB BLADES enhancement: add 1 to the roll when the bearer's unit activates its Reanimation Protocols."
   },
   {
-    "ability_id": "deepening-madness-skyshroud-spearhead",
+    "ability_id": "deepening-madness-upgrade-skyshroud-spearhead-necrons",
     "name": "Deepening Madness",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5422,7 +4912,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "subsurface-quantumweave-the-phaerons-armoury",
+    "ability_id": "subsurface-quantumweave-the-phaerons-armoury-necrons",
     "name": "Subsurface Quantumweave",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5452,7 +4942,7 @@
     "community_notes": "[APPROX] Reactive defensive stratagem used when an enemy unit targets a friendly NECRONS TITANIC FLY unit in your opponent's Shooting phase or the Fight phase: attacks that target your unit have Armour Penetration 1 until that enemy unit has finished attacking. Modeled as setting attacker AP to 1; the scoping to only the triggering enemy unit and the 'until it has attacked' window are not fully encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "particle-pulse-the-phaerons-armoury",
+    "ability_id": "particle-pulse-the-phaerons-armoury-necrons",
     "name": "Particle Pulse",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5500,7 +4990,7 @@
     }
   },
   {
-    "ability_id": "cosmic-storm-the-phaerons-armoury",
+    "ability_id": "cosmic-storm-the-phaerons-armoury-necrons",
     "name": "Cosmic Storm",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5540,7 +5030,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "prelocational-optimiser-the-phaerons-armoury",
+    "ability_id": "prelocational-optimiser-the-phaerons-armoury-necrons",
     "name": "Prelocational Optimiser",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5587,8 +5077,8 @@
     "community_notes": "[APPROX] Applies only when the bearer's unit was set up this turn using a Monolith's Eternity Gate ability; when it is then selected to shoot, its ranged attacks gain either [LETHAL HITS] or [SUSTAINED HITS 1]. The Eternity-Gate deployment precondition is not expressible in the condition set. Full rule in raw-text store."
   },
   {
-    "ability_id": "mortality-shroud-aura-the-phaerons-armoury",
-    "name": "Mortality Shroud (aura)",
+    "ability_id": "mortality-shroud-aura-upgrade-the-phaerons-armoury-necrons",
+    "name": "Mortality Shroud (Aura) (Upgrade)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -5658,7 +5148,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "technosorcerous-augmentations",
+    "ability_id": "technosorcerous-augmentations-necrons",
     "name": "Technosorcerous Augmentations",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5764,7 +5254,7 @@
     "community_notes": "Detachment rule: CRYPTEK ranged weapons gain [ASSAULT]; additionally, each time a CRYPTEK unit is selected to shoot, one listed weapon ability may be chosen for its ranged weapons until end of phase."
   },
   {
-    "ability_id": "relentless-onslaught",
+    "ability_id": "relentless-onslaught-necrons",
     "name": "Relentless Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5821,7 +5311,7 @@
     "community_notes": "[APPROX] +1 to Hit applies to NECRONS attacks (excluding MONSTER models) targeting a unit within range of an objective marker; the [ASSAULT] grant applies only to NECRONS VEHICLE and MOUNTED (excluding TITANIC) ranged weapons. Those keyword restrictions are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "cold-fervour",
+    "ability_id": "cold-fervour-necrons",
     "name": "Cold Fervour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5868,7 +5358,7 @@
     "community_notes": "[APPROX] Step 1 (+2 Strength to DESTROYER CULT weapons) is always on. Step 2 fires the first time each turn a DESTROYER CULT unit destroys an enemy unit or brackets it below half-strength, granting +2 Strength to other friendly NECRONS weapons (excluding DESTROYER CULT/MONSTER/TITANIC) until end of turn; the kill trigger, the keyword exclusions, and the until-end-of-turn window are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "annihilation-protocol",
+    "ability_id": "annihilation-protocol-necrons",
     "name": "Annihilation Protocol",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5930,7 +5420,7 @@
     "community_notes": "[APPROX] Charge re-roll and the +1 Charge (when a charge target is Below Half-strength) apply to DESTROYER CULT or FLAYED ONES units; the +1 Armour Penetration applies only to DESTROYER CULT ranged attacks that target the closest eligible target. The per-keyword scoping and the closest-target restriction are not encoded, and unit-below-half-strength approximates the target being below half. Full rule in raw-text store."
   },
   {
-    "ability_id": "hyperphasing",
+    "ability_id": "hyperphasing-necrons",
     "name": "Hyperphasing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -5968,7 +5458,7 @@
     "community_notes": "[APPROX] At the end of your opponent's turn, remove the selected NECRONS units to Strategic Reserves. The maximum selectable scales with battle size (Incursion 1 / Strike Force 2 / Onslaught 3) and is encoded at the Onslaught cap of 3; the end-of-opponent's-turn timing and the exclusion of units within Engagement Range are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "cosmic-distortion",
+    "ability_id": "cosmic-distortion-necrons",
     "name": "Cosmic Distortion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6012,7 +5502,7 @@
     "community_notes": "[APPROX] Grants NECRONS MONSTER units the Distortion Fields aura: an enemy unit within 6\" is 'unravelling', so attacks targeting it improve Armour Penetration by 1. The optional 3-mortal-wound extension of the aura to 9\" and the model-specific C'tan binding abilities in the store text are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "worthy-foes",
+    "ability_id": "worthy-foes-necrons",
     "name": "Worthy Foes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6068,7 +5558,7 @@
     "community_notes": "Detachment rule: in your Command phase mark one enemy unit; friendly NOBLE, LYCHGUARD or TRIARCH units add 1 to Wound rolls against it until the start of your next Command phase."
   },
   {
-    "ability_id": "power-matrix",
+    "ability_id": "power-matrix-necrons",
     "name": "Power Matrix",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6248,7 +5738,7 @@
     "community_notes": "The named region permanently starts as the army's deployment zone, with each other zone added for a phase only after the army controls at least half of that zone's objective markers at phase start. Eligible CRYPTEK and CANOPTEK units re-roll Hit rolls of 1, or re-roll the Hit roll instead while wholly within the region."
   },
   {
-    "ability_id": "command-protocols",
+    "ability_id": "command-protocols-necrons",
     "name": "Command Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6288,33 +5778,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "ability": "hover"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "night-scythe"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "plasmacyte-amonhotekhs-guard",
+    "ability_id": "plasmacyte-amonhotekhs-guard-skorpekh-destroyers-necrons",
     "name": "Plasmacyte",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6349,10 +5813,11 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "scarab-interference-amonhotekhs-guard",
+    "ability_id": "scarab-interference-necrons",
     "name": "Scarab Interference",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6383,10 +5848,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "damaged-1-4-wounds-remaining-amonhotekhs-guard-doomstalker",
+    "ability_id": "damaged-1-4-wounds-remaining-necrons",
     "name": "Damaged: 1-4 Wounds Remaining",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6394,7 +5860,10 @@
       "dataslate": "launch"
     },
     "unit_ids": [
-      "amonhotekhs-guard-canoptek-doomstalker"
+      "amonhotekhs-guard-canoptek-doomstalker",
+      "canoptek-doomstalker",
+      "doom-scythe",
+      "night-scythe"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -6419,10 +5888,11 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "faction_id": "necrons"
   },
   {
-    "ability_id": "iron-will-overlord-amonhotekh",
+    "ability_id": "iron-will-necrons",
     "name": "Iron Will",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -6482,6 +5952,2145 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "faction_id": "necrons"
+  },
+  {
+    "ability_id": "aggression-protocols-amonhotekhs-guard-necrons",
+    "name": "Aggression Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "animus-curse-cryptek-conclave-necrons",
+    "name": "Animus Curse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "animus-damper-pantheon-of-woe-necrons",
+    "name": "Animus Damper",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "arisen-tyrant-hypercrypt-legion-necrons",
+    "name": "Arisen Tyrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "atomic-disintegrators-cryptek-conclave-necrons",
+    "name": "Atomic Disintegrators",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "autodivinator-canoptek-court-necrons",
+    "name": "Autodivinator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blood-fuelled-cruelty-annihilation-legion-necrons",
+    "name": "Blood-fuelled Cruelty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chrono-impedance-fields-starshatter-arsenal-necrons",
+    "name": "Chrono-impedance Fields",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chronodistortion-pantheon-of-woe-necrons",
+    "name": "Chronodistortion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chronoshift-starshatter-arsenal-necrons",
+    "name": "Chronoshift",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cosmic-precision-hypercrypt-legion-necrons",
+    "name": "Cosmic Precision",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "countertemporal-shift-canoptek-court-necrons",
+    "name": "Countertemporal Shift",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "curse-of-the-cryptek-canoptek-court-necrons",
+    "name": "Curse of the Cryptek",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cursed-circlet-cursed-legion-necrons",
+    "name": "Cursed Circlet",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cynosure-of-eradication-canoptek-court-necrons",
+    "name": "Cynosure of Eradication",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-5-wounds-remaining-necrons",
+    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "doomsday-ark"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-6-wounds-remaining-necrons",
+    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "the-silent-king"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-necrons",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "monolith"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-8-wounds-remaining-necrons",
+    "name": "DAMAGED: 1-8 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "obelisk"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-8-wounds-remaining-tesseract-vault-necrons",
+    "name": "DAMAGED: 1-8 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "tesseract-vault"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-9-wounds-remaining-necrons",
+    "name": "DAMAGED: 1-9 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "seraptek-heavy-construct"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "demanding-leader-starshatter-arsenal-necrons",
+    "name": "Demanding Leader",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "destroyer-ankh-cursed-legion-necrons",
+    "name": "Destroyer Ankh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dimensional-corridor-hypercrypt-legion-necrons",
+    "name": "Dimensional Corridor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dimensional-overseer-hypercrypt-legion-necrons",
+    "name": "Dimensional Overseer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dimensional-sanctum-canoptek-court-necrons",
+    "name": "Dimensional Sanctum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dimensional-tunnel-starshatter-arsenal-necrons",
+    "name": "Dimensional Tunnel",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "disharmonisation-cascade-pantheon-of-woe-necrons",
+    "name": "Disharmonisation Cascade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dread-majesty-aura-starshatter-arsenal-necrons",
+    "name": "Dread Majesty (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "driven-to-butchery-cursed-legion-necrons",
+    "name": "Driven to Butchery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eldritch-nightmare-annihilation-legion-necrons",
+    "name": "Eldritch Nightmare",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enaegic-dermal-bond-awakened-dynasty-necrons",
+    "name": "Enaegic Dermal Bond",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "endless-servitude-starshatter-arsenal-necrons",
+    "name": "Endless Servitude",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enslaved-artifice-obeisance-phalanx-necrons",
+    "name": "Enslaved Artifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "entrophasic-aura-targeting-pantheon-of-woe-necrons",
+    "name": "Entrophasic Aura Targeting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "entropic-damping-hypercrypt-legion-necrons",
+    "name": "Entropic Damping",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eternal-conqueror-obeisance-phalanx-necrons",
+    "name": "Eternal Conqueror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eternal-madness-annihilation-legion-necrons",
+    "name": "Eternal Madness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gauntlet-of-compression-cryptek-conclave-necrons",
+    "name": "Gauntlet of Compression",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gauss-storm-amonhotekhs-guard-necrons",
+    "name": "Gauss Storm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gravitic-bolas-cryptek-conclave-necrons",
+    "name": "Gravitic Bolas",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "honourable-combatant-obeisance-phalanx-necrons",
+    "name": "Honourable Combatant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hyperphasic-fulcrum-canoptek-court-necrons",
+    "name": "Hyperphasic Fulcrum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hyperphasic-recall-hypercrypt-legion-necrons",
+    "name": "Hyperphasic Recall",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hyperspatial-transfer-node-hypercrypt-legion-necrons",
+    "name": "Hyperspatial Transfer Node",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "image-of-death-cursed-legion-necrons",
+    "name": "Image of Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ingrained-superiority-annihilation-legion-necrons",
+    "name": "Ingrained Superiority",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "insanitys-ire-annihilation-legion-necrons",
+    "name": "Insanity’s Ire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mark-of-the-nekrosor-cursed-legion-necrons",
+    "name": "Mark of the Nekrosor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "masks-of-death-annihilation-legion-necrons",
+    "name": "Masks of Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mass-transmogrification-pantheon-of-woe-necrons",
+    "name": "Mass Transmogrification",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "merciless-reclamation-starshatter-arsenal-necrons",
+    "name": "Merciless Reclamation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "metalline-might-amonhotekhs-guard-necrons",
+    "name": "Metalline Might",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "metalodermal-tesla-weave-canoptek-court-necrons",
+    "name": "Metalodermal Tesla Weave",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "methodical-murder-cursed-legion-necrons",
+    "name": "Methodical Murder",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "microscarab-swarm-cryptek-conclave-necrons",
+    "name": "Microscarab Swarm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "miniaturised-nebuloscope-starshatter-arsenal-necrons",
+    "name": "Miniaturised Nebuloscope",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "molecular-erosion-pantheon-of-woe-necrons",
+    "name": "Molecular Erosion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "molecular-targeting-cryptek-conclave-necrons",
+    "name": "Molecular Targeting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mortis-protocols-cursed-legion-necrons",
+    "name": "Mortis Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murdermind-cursed-legion-necrons",
+    "name": "Murdermind",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murderous-reanimation-annihilation-legion-necrons",
+    "name": "Murderous Reanimation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nanoassembly-protocols-obeisance-phalanx-necrons",
+    "name": "Nanoassembly Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nether-realm-casket-awakened-dynasty-necrons",
+    "name": "Nether-realm Casket",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "osteoclave-fulcrum-hypercrypt-legion-necrons",
+    "name": "Osteoclave Fulcrum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phasal-subjugator-aura-awakened-dynasty-necrons",
+    "name": "Phasal Subjugator (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "phase-melding-pantheon-of-woe-necrons",
+    "name": "Phase Melding",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pitiless-hunters-annihilation-legion-necrons",
+    "name": "Pitiless Hunters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "potentiality-syphon-cryptek-conclave-necrons",
+    "name": "Potentiality Syphon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-conquering-tyrant-awakened-dynasty-necrons",
+    "name": "Protocol of the Conquering Tyrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-eternal-revenant-awakened-dynasty-necrons",
+    "name": "Protocol of the Eternal Revenant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-hungry-void-awakened-dynasty-necrons",
+    "name": "Protocol of the Hungry Void",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-sudden-storm-awakened-dynasty-necrons",
+    "name": "Protocol of the Sudden Storm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-undying-legions-awakened-dynasty-necrons",
+    "name": "Protocol of the Undying Legions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "protocol-of-the-vengeful-stars-awakened-dynasty-necrons",
+    "name": "Protocol of the Vengeful Stars",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quantum-abacus-cryptek-conclave-necrons",
+    "name": "Quantum Abacus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quantum-deflection-hypercrypt-legion-necrons",
+    "name": "Quantum Deflection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quantum-goad-pantheon-of-woe-necrons",
+    "name": "Quantum Goad",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reactive-reposition-starshatter-arsenal-necrons",
+    "name": "Reactive Reposition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reactive-subroutines-canoptek-court-necrons",
+    "name": "Reactive Subroutines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reanimation-crypts-hypercrypt-legion-necrons",
+    "name": "Reanimation Crypts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "hypercrypt-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reanimation-protocols-amonhotekhs-guard-necrons",
+    "name": "Reanimation Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",
+    "name": "Reinforced Resilience",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reletavistic-tether-pantheon-of-woe-necrons",
+    "name": "Reletavistic Tether",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "resurrection-orb-catacomb-command-barge-necrons",
+    "name": "Resurrection Orb",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "catacomb-command-barge"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sentinels-of-eternity-obeisance-phalanx-necrons",
+    "name": "Sentinels of Eternity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "singularity-matrix-pantheon-of-woe-necrons",
+    "name": "Singularity Matrix",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "pantheon-of-woe",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "solar-pulse-canoptek-court-necrons",
+    "name": "Solar Pulse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soulless-reaper-annihilation-legion-necrons",
+    "name": "Soulless Reaper",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spreading-madness-cursed-legion-necrons",
+    "name": "Spreading Madness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "suboptimal-facade-canoptek-court-necrons",
+    "name": "Suboptimal Facade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "canoptek-court",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "suffer-no-rival-obeisance-phalanx-necrons",
+    "name": "Suffer No Rival",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "synergistic-empowerment-cryptek-conclave-necrons",
+    "name": "Synergistic Empowerment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "territorial-imperatives-necrons",
+    "name": "Territorial Imperatives",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "territorial-obsession-obeisance-phalanx-necrons",
+    "name": "Territorial Obsession",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-spoor-of-frailty-annihilation-legion-necrons",
+    "name": "The Spoor of Frailty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "annihilation-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "their-number-is-legion-amonhotekhs-guard-necron-warriors-necrons",
+    "name": "Their Number is Legion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "amonhotekhs-guard-necron-warriors"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unblemished-legions-amonhotekhs-guard-necrons",
+    "name": "Unblemished Legions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "amonhotekhs-guard",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unflinching-will-obeisance-phalanx-necrons",
+    "name": "Unflinching Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unnatural-aggression-cursed-legion-necrons",
+    "name": "Unnatural Aggression",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cursed-legion",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "untapped-power-cryptek-conclave-necrons",
+    "name": "Untapped Power",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "cryptek-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unyielding-forms-starshatter-arsenal-necrons",
+    "name": "Unyielding Forms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "starshatter-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veil-of-darkness-awakened-dynasty-necrons",
+    "name": "Veil of Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "awakened-dynasty",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "warrior-noble-obeisance-phalanx-necrons",
+    "name": "Warrior Noble",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "whirling-onslaught-amonhotekhs-guard-skorpekh-destroyers-necrons",
+    "name": "Whirling Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "amonhotekhs-guard-skorpekh-destroyers"
+    ],
+    "faction_id": "necrons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "your-time-is-nigh-obeisance-phalanx-necrons",
+    "name": "Your Time Is Nigh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "necrons",
+    "detachment_id": "obeisance-phalanx",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
     }
   }
 ]

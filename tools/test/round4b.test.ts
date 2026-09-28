@@ -21,7 +21,7 @@ function fixtureIndex(): SourceIndex {
     records[`iteration-${index}`] = { raw_text: `Each unit within range does this until the end of the turn ${index}.` };
     records[`random-${index}`] = { raw_text: `Plain source wording number ${index}.` };
   }
-  records["helm-of-brazen-ire-berzerker-warband"] = { raw_text: "Roll a D6 for excluded source." };
+  records["helm-of-brazen-ire-berzerker-warband-world-eaters"] = { raw_text: "Roll a D6 for excluded source." };
   return { "world-eaters": records };
 }
 
@@ -33,7 +33,7 @@ describe("Round 4B source-only foundation", () => {
       second.map(({ faction_id, ability_id, selection, source_hash }) => ({ faction_id, ability_id, selection, source_hash })),
     );
     expect(new Set(first.map((record) => `${record.faction_id}/${record.ability_id}`)).size).toBe(30);
-    expect(first).not.toContainEqual(expect.objectContaining({ ability_id: "helm-of-brazen-ire-berzerker-warband" }));
+    expect(first).not.toContainEqual(expect.objectContaining({ ability_id: "helm-of-brazen-ire-berzerker-warband-world-eaters" }));
     expect(Object.fromEntries(["dice-random", "attack-combat-modification", "condition-history-anaphora", "menu-choice-resource", "iteration-duration-spatial", "random-corpus-draw"].map((stratum) => [stratum, first.filter((record) => record.selection.assigned_stratum === stratum).length]))).toEqual({
       "dice-random": 5,
       "attack-combat-modification": 5,

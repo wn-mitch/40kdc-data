@@ -4,7 +4,7 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { andList, designationPhrase, dekebab, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { andList, designationPhrase, dekebab, idLabel, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
@@ -21,6 +21,11 @@ export interface Ctx {
   auraRecipient?: boolean;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
+}
+
+/** `{rating: true}`: the rating the unit's datasheet prints for this rule (substituted when a unit is known). */
+export function isRatingRef(v: unknown): boolean {
+  return v != null && typeof v === "object" && !Array.isArray(v) && (v as P).rating === true;
 }
 
 /** JS-template stringification (numbers print without trailing `.0`). */
@@ -72,6 +77,7 @@ export function scaleSource(q: P): string {
  * Literal numbers and dice go through {@link diceCase}.
  */
 export function quantityPhrase(q: P): string {
+  if (isRatingRef(q)) return "its rating";
   if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
   if (typeof q.roll_var === "string") return q.successes_on != null ? `the number of those dice that rolled a ${jstr(q.successes_on)}+` : "the result of that roll";
   if (q.count_of === "battle-round") return "the battle round number";
@@ -233,12 +239,13 @@ export function pronoun(subj: string): string {
 }
 
 const ABILITY_LABELS: Record<string, string> = {
-  "nurgle-s-gift-aura": "Nurgle's Gift (Aura)",
+  "nurgles-gift-death-guard": "Nurgle's Gift (Aura)",
   "fights-first": "Fights First",
 };
 /** The display label for an ability id: a curated override, else Title Case. */
+/** The display name for an ability or Stratagem id: a curated override, else its name part in Title Case. */
 export function abilityLabel(id: unknown): string {
-  return ABILITY_LABELS[jstr(id)] ?? titleCase(jstr(id));
+  return ABILITY_LABELS[jstr(id)] ?? idLabel(jstr(id));
 }
 
 const WEAPON_LABELS: Record<string, string> = { "imperiums-sword": "Imperium's Sword" };

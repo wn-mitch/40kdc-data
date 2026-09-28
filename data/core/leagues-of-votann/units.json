@@ -43,9 +43,9 @@
       "close-combat-weapon"
     ],
     "ability_ids": [
-      "computational-mastermind",
+      "computational-mastermind-leagues-of-votann",
       "leader",
-      "predictive-guidance"
+      "predictive-guidance-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -138,9 +138,15 @@
       "volkanite-disintegrator"
     ],
     "ability_ids": [
-      "decisive-destruction",
-      "teleport-crest",
-      "weavefield-crest"
+      "decisive-destruction-leagues-of-votann",
+      {
+        "id": "teleport-crest-einhyr-hearthguard-leagues-of-votann",
+        "wargear": "teleport-crest"
+      },
+      {
+        "id": "weavefield-crest-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -224,8 +230,8 @@
       "close-combat-weapon"
     ],
     "ability_ids": [
-      "fortify-psychic",
-      "grimnyr-s-regard",
+      "fortify-leagues-of-votann",
+      "grimnyrs-regard-leagues-of-votann",
       "leader"
     ],
     "game_version": {
@@ -326,11 +332,23 @@
       "plasma-knife"
     ],
     "ability_ids": [
-      "multiwave-comms-array",
-      "outflanking-mag-riders",
-      "panspectral-scanner",
-      "rollbar-searchlight",
-      "scouts-9"
+      {
+        "id": "multiwave-comms-array-leagues-of-votann",
+        "wargear": "multiwave-comms-array"
+      },
+      "outflanking-mag-riders-leagues-of-votann",
+      {
+        "id": "panspectral-scanner-leagues-of-votann",
+        "wargear": "panspectral-scanner"
+      },
+      {
+        "id": "rollbar-searchlight-leagues-of-votann",
+        "wargear": "rollbar-searchlight"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -430,8 +448,8 @@
       "tremor-shells"
     ],
     "ability_ids": [
-      "destabilising-quakes",
-      "geomantic-hunters"
+      "destabilising-quakes-leagues-of-votann",
+      "geomantic-hunters-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -512,11 +530,23 @@
       "twin-magna-coil-autocannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "firing-deck-5",
-      "scanner-uplinks",
-      "smoke-launcher",
-      "scouts-9"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "firing-deck",
+        "value": 5
+      },
+      "scanner-uplinks-leagues-of-votann",
+      {
+        "id": "smoke-launcher-leagues-of-votann",
+        "wargear": "smoke-launcher"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "transport_capacity": {
       "capacity": 5
@@ -609,8 +639,11 @@
       "plasma-sword"
     ],
     "ability_ids": [
-      "preymark-crest",
-      "purge-response"
+      {
+        "id": "preymark-crest-leagues-of-votann",
+        "wargear": "preymark-crest"
+      },
+      "purge-response-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -690,8 +723,16 @@
       "twin-ion-beamer"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "multicog-targeting"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "multicog-targeting-leagues-of-votann",
+      "damaged-1-5-wounds-remaining-leagues-of-votann",
+      {
+        "id": "panspectral-scanner-leagues-of-votann",
+        "wargear": "panspectral-scanner"
+      }
     ],
     "transport_capacity": {
       "capacity": 14
@@ -762,10 +803,10 @@
       "bane"
     ],
     "ability_ids": [
-      "grudge-fuelled-fortitude",
+      "grudge-fuelled-fortitude-leagues-of-votann",
       "lone-operative",
       "stealth",
-      "unhinged-vengeance"
+      "unhinged-vengeance-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -858,10 +899,10 @@
       "plasma-torch"
     ],
     "ability_ids": [
-      "brokhyr-guild-support",
-      "forgewrought-expertise",
+      "brokhyr-guild-support-leagues-of-votann",
+      "forgewrought-expertise-leagues-of-votann",
       "leader",
-      "multispectral-visor"
+      "multispectral-visor-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -935,10 +976,13 @@
       "warforge-gauntlets"
     ],
     "ability_ids": [
-      "break-the-foe",
-      "feel-no-pain-4",
+      "break-the-foe-leagues-of-votann",
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      },
       "leader",
-      "relentless-avalanche"
+      "relentless-avalanche-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1028,7 +1072,11 @@
       "plasma-sword"
     ],
     "ability_ids": [
-      "merciless-eradication"
+      "merciless-eradication-leagues-of-votann",
+      {
+        "id": "preymark-crest-leagues-of-votann",
+        "wargear": "preymark-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1097,10 +1145,13 @@
       "volkanite-disintegrator-uthar-the-destined"
     ],
     "ability_ids": [
-      "ancestral-fortune",
-      "grim-efficiency",
+      "ancestral-fortune-leagues-of-votann",
+      "grim-efficiency-leagues-of-votann",
       "leader",
-      "rampart-crest"
+      {
+        "id": "rampart-crest-uthar-the-destined-leagues-of-votann",
+        "wargear": "rampart-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1173,7 +1224,7 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "pragmatic-hunters"
+      "pragmatic-hunters-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1242,9 +1293,17 @@
       "mass-hammer"
     ],
     "ability_ids": [
-      "exemplar-of-the-einhyr",
+      "exemplar-of-the-einhyr-leagues-of-votann",
       "leader",
-      "mass-driver-accelerators"
+      "mass-driver-accelerators-leagues-of-votann",
+      {
+        "id": "teleport-crest-leagues-of-votann",
+        "wargear": "teleport-crest"
+      },
+      {
+        "id": "weavefield-crest-einhyr-champion-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1336,7 +1395,7 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire"
+      "breaching-fire-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1407,9 +1466,12 @@
       "transmatter-inverter"
     ],
     "ability_ids": [
-      "resource-transmutation",
-      "science-guild-support",
-      "deadly-demise-1"
+      "resource-transmutation-leagues-of-votann",
+      "science-guild-support-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1500,9 +1562,19 @@
       "twin-magna-coil-autocannon"
     ],
     "ability_ids": [
-      "opportunistic-manoeuvre",
-      "deadly-demise-1",
-      "scouts-9"
+      "opportunistic-manoeuvre-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      {
+        "id": "smoke-launcher-leagues-of-votann",
+        "wargear": "smoke-launcher"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1575,9 +1647,12 @@
       "twin-concussion-gauntlet"
     ],
     "ability_ids": [
-      "cyberstimms",
-      "subterranean-explosives",
-      "feel-no-pain-4"
+      "cyberstimms-leagues-of-votann",
+      "subterranean-explosives-leagues-of-votann",
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1672,8 +1747,11 @@
       "twin-bolt-cannon"
     ],
     "ability_ids": [
-      "blistering-advance",
-      "deadly-demise-1"
+      "blistering-advance-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "transport_capacity": {
       "capacity": 6
@@ -1745,9 +1823,17 @@
       "volkanite-disintegrator-kahl"
     ],
     "ability_ids": [
-      "kindred-hero",
+      "kindred-hero-leagues-of-votann",
       "leader",
-      "seized-opportunity"
+      "seized-opportunity-leagues-of-votann",
+      {
+        "id": "rampart-crest-leagues-of-votann",
+        "wargear": "rampart-crest"
+      },
+      {
+        "id": "teleport-crest-kahl-leagues-of-votann",
+        "wargear": "teleport-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1826,9 +1912,16 @@
       "theyns-pistol"
     ],
     "ability_ids": [
-      "feel-no-pain-6",
-      "luck-has-need-keeps-toil-earns",
-      "panspectral-scanning"
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "luck-has-need-keeps-toil-earns-leagues-of-votann",
+      "panspectral-scanning-leagues-of-votann",
+      {
+        "id": "weavefield-crest-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1912,7 +2005,7 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire-bane-slayers-bulwark"
+      "breaching-fire-bane-slayers-bulwark-brokhyr-thunderkyn-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1976,8 +2069,8 @@
       "volkanite-disintegrator"
     ],
     "ability_ids": [
-      "decisive-destruction-bane-slayers-bulwark",
-      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard"
+      "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2045,8 +2138,8 @@
       "theyns-pistol"
     ],
     "ability_ids": [
-      "panspectral-scanning-bane-slayers-bulwark",
-      "weavefield-crest-bane-slayers-bulwark-hearthkyn-warriors"
+      "panspectral-scanning-bane-slayers-bulwark-hearthkyn-warriors-leagues-of-votann",
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2111,9 +2204,8 @@
       "mass-hammer"
     ],
     "ability_ids": [
-      "fast-firing-targeters-vynn-bane-slayer",
-      "leader",
-      "weavefield-crest-vynn-bane-slayer"
+      "fast-firing-targeters-leagues-of-votann",
+      "weavefield-crest-vynn-bane-slayer-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",

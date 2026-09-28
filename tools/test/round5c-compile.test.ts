@@ -42,21 +42,21 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 
 describe("Round 5C leaf compiler", () => {
   it("reproduces authored leader auras exactly, condition included", () => {
-    const edict = authored("adeptus-mechanicus", "control-edict");
+    const edict = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
     const result = compiled([lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })]);
     expect(result.mechanics.effect).toEqual(edict.effect);
     expect(result.mechanics.scope).toEqual(edict.scope);
     expect(result.mechanics.behavior).toBe(edict.behavior);
     expect(rendered(edict, [lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })])).toMatch(/attached|leading/iu);
 
-    const hero = authored("aeldari", "piratical-hero");
+    const hero = authored("aeldari", "piratical-hero-aeldari");
     const two = compiled([lead(), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
       leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, 2)]);
     expect(two.mechanics.effect).toEqual(hero.effect);
   });
 
   it("gives every family one fragment that validates and renders", () => {
-    const base = authored("adeptus-mechanicus", "control-edict");
+    const base = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
     const cases: Array<[CompileLeaf, Record<string, unknown>]> = [
       [leaf("EFFECT", "reroll", { roll: "wound", subset: "ones" }), { type: "re-roll", target: "this-unit", modifier: { roll: "wound", subset: "ones" } }],
       [leaf("EFFECT", "reroll", { roll: "hit", subset: "all" }), { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } }],
@@ -120,7 +120,7 @@ describe("Round 5C leaf compiler", () => {
       trigger: { event: "phase-started" },
     });
     expect(result.signature).toBe("EVENT(event:phase-start) · CONDITION(below-starting-strength) · CONDITION(leading-unit) · EFFECT(reroll) · EFFECT(roll-modifier) · DURATION(duration)");
-    expect(rendered(authored("adeptus-mechanicus", "control-edict"), leaves).length).toBeGreaterThan(0);
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leaves).length).toBeGreaterThan(0);
   });
 
   it("gives each later moment its own part of one compound ability", () => {
@@ -153,7 +153,7 @@ describe("Round 5C leaf compiler", () => {
     ] } });
     expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "fight", turn: "opponent" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger)
       .toEqual({ event: "phase-ended", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }] } });
-    expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]))
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), [leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]))
       .toMatch(/Command phase/iu);
     expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger).toEqual({ event: "phase-ended" });
     expect(shapeSignature([leaf("EVENT", "event", { kind: "phase-start", phase: "fight", turn: "opponent" }, 3)])).toBe("EVENT(event:phase-start)");
@@ -196,7 +196,7 @@ describe("Round 5C leaf compiler", () => {
   });
 
   it("compiles each meaning to the trigger or condition form the authored data uses", () => {
-    const base = authored("adeptus-mechanicus", "control-edict");
+    const base = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
     // Leaves compile in source order, so each effect is made after its moment.
     const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2);
     // "When this model is destroyed" is the model itself, before it is removed; not any model in its unit.
@@ -215,7 +215,7 @@ describe("Round 5C leaf compiler", () => {
     const grant = leaf("EFFECT", "fights-first", { subject: "this-unit" }, 2);
     const supporting = compiled([leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "supporting" }, 2), grant]);
     expect(supporting.mechanics.effect).toEqual({ type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "attached" } }, effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } } });
-    expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "supporting" }, 2), grant]).length).toBeGreaterThan(0);
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), [leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "supporting" }, 2), grant]).length).toBeGreaterThan(0);
     // A unit is attached whether it is led or supported: a supporting unit has no DSL condition.
     const unit = compileLeaves([leaf("CONDITION", "leading-unit", { subject: "this-unit", attachment: "supporting" }, 2), grant]);
     expect(unit.ok ? [] : unit.errors).toEqual([expect.stringMatching(/leading-unit supporting .*no DSL condition/u)]);

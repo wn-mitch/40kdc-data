@@ -14,6 +14,7 @@
  *
  * @packageDocumentation
  */
+import { unitAbilityIds } from "../data/ability-refs.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import { detachmentCapForBattleSize } from "../data/battle-sizes.js";
@@ -639,9 +640,8 @@ function resolveWargearItemId(ds: Dataset, hit: UnitView | null, rawName: string
 function resolveUnitAbilityId(ds: Dataset, hit: UnitView | null, rawName: string): string | null {
   if (!hit) return null;
   const targets = lookupNameKeys(rawName);
-  for (const id of hit.raw.ability_ids ?? []) {
-    const ability =
-      ds.abilities.getInFaction(id, hit.raw.faction_id) ?? ds.abilities.getAny(id);
+  for (const id of unitAbilityIds(hit.raw.ability_ids)) {
+    const ability = ds.abilities.getAny(id);
     if (
       ability &&
       sourceNameVariants(ability.name).some((variant) => targets.has(normalizeName(variant)))
