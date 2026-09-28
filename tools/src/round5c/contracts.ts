@@ -8,6 +8,11 @@ import { EFFECT_FAMILIES, normalizeEffectParameters } from "./effect-families.js
 import { DICE_FAMILIES, normalizeDiceParameters } from "./dice-families.js";
 import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restriction-families.js";
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
+import { MOVEMENT_FAMILIES, normalizeMovementParameters } from "./movement-families.js";
+import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families.js";
+import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
+import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
+import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -43,6 +48,11 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...EFFECT_FAMILIES,
   ...RESTRICTION_FAMILIES,
   ...DICE_FAMILIES,
+  ...MOVEMENT_FAMILIES,
+  ...ECONOMY_FAMILIES,
+  ...UNIT_STATE_EFFECT_FAMILIES,
+  ...WEAPON_BUFF_FAMILIES,
+  ...ABILITY_MODIFIER_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -89,7 +99,12 @@ export function normalizeFingerprintParameters(
     ?? normalizeTargetingParameters(family, input, version)
     ?? normalizeEffectParameters(family, input, version)
     ?? normalizeRestrictionParameters(family, input, version)
-    ?? normalizeDiceParameters(family, input);
+    ?? normalizeDiceParameters(family, input, version)
+    ?? normalizeMovementParameters(family, input)
+    ?? normalizeEconomyParameters(family, input)
+    ?? normalizeUnitStateParameters(family, input)
+    ?? normalizeWeaponBuffParameters(family, input, version)
+    ?? normalizeAbilityModifierParameters(family, input, version);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

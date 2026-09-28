@@ -23,6 +23,20 @@ describe("Round 5C leaf describer audit", () => {
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // "any" and "all" rolls both read as bare "rolls"; the describer does not tell them apart.
+      "ignore-modifiers": { unrendered: [], colliding: ["rolls"], problems: 0 },
+      // "from" and the placement-limit fields only render when "to" is not strategic-reserves.
+      "set-up": { unrendered: [], colliding: ["from", "min_enemy_distance", "within_edge", "round_offset"], problems: 0 },
+      // The marker's subject (who places it) never appears in the English; distance only shows on a relocate.
+      "battlefield-marker": { unrendered: ["subject"], colliding: ["distance"], problems: 0 },
+      // value and rolls only render for a substitute; an add ignores both.
+      "resource-die": { unrendered: [], colliding: ["value", "rolls"], problems: 0 },
+      // A Stratagem's id only shows for the triggering-use wording, so other applies_to values hide it.
+      "stratagem-cost": { unrendered: [], colliding: ["id"], problems: 0 },
+      // with_keywords and max render only for the composition and enhancement-slot rules.
+      "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 0 },
+      // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
+      "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
     });
   });
 

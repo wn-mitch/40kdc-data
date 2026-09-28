@@ -61,7 +61,7 @@ const REROLL = "re-roll a hit roll of 1";
 
 function decideExamples(db: DatabaseSync) {
   confirmSurface(db, { reviewer: REVIEWER, exact_text: GRANT, family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "ranged" } });
-  confirmSurface(db, { reviewer: REVIEWER, exact_text: REROLL, family_id: "reroll", parameters: { roll: "hit", subset: "ones" } });
+  confirmSurface(db, { reviewer: REVIEWER, exact_text: REROLL, family_id: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" } });
 }
 
 const proposals = (db: DatabaseSync) => listLeafProposals(db).clusters.flatMap((cluster) => cluster.proposals);

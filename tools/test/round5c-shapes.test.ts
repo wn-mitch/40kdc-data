@@ -68,7 +68,7 @@ beforeEach(() => {
 });
 afterEach(() => db.close());
 
-const reroll = (subset: string) => confirmSurface(db, { reviewer: REVIEWER, exact_text: REROLL, family_id: "reroll", parameters: { roll: "hit", subset } });
+const reroll = (subset: string) => confirmSurface(db, { reviewer: REVIEWER, exact_text: REROLL, family_id: "reroll", parameters: { roll: "hit", subset, weapon_type: "all" } });
 const ids = () => getShape(db, SHAPE).members.flatMap((member) => member.ability_version_ids);
 
 describe("Round 5C shapes", () => {
@@ -90,7 +90,7 @@ describe("Round 5C shapes", () => {
     expect(listShapes(db).shapes[0]).toMatchObject({ approved: 3, open: 0 });
     expect(approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() }).recorded).toBe(0);
 
-    moveSurface(db, { reviewer: REVIEWER, surface_id: decision.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all" } });
+    moveSurface(db, { reviewer: REVIEWER, surface_id: decision.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
     expect(getShape(db, SHAPE).members.every((member) => member.state === "stale")).toBe(true);
     const second = approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: ids() });
     expect(db.prepare("SELECT status, count(*) AS total FROM compiled_entries GROUP BY status ORDER BY status").all())

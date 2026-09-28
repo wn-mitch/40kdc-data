@@ -5,7 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { prepareLuna } from "../src/round5c/proposal.js";
@@ -60,7 +60,7 @@ function seed(db: DatabaseSync, abilityId: string, exactText: string, familyId: 
   const target = ability(db, abilityId);
   const bytes = span(target.source_text, exactText);
   const spanId = insertSpan(db, target.id, "RAW_TEXT", bytes.start, bytes.end, exactText);
-  const fingerprintId = validateFingerprint(db, familyId, parameters, 1, exactText);
+  const fingerprintId = validateFingerprint(db, familyId, parameters, currentFamilyVersion(familyId), exactText);
   const batchId = `seed-${abilityId}-${bytes.start}`;
   db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'fixture', 'reviewer', '2026-01-01T00:00:00.000Z')").run(batchId);
   const inserted = db.prepare(`
@@ -74,7 +74,7 @@ function pendingProposal(db: DatabaseSync, abilityId: string, exactText: string,
   const target = ability(db, abilityId);
   const bytes = span(target.source_text, exactText);
   const spanId = insertSpan(db, target.id, "RAW_TEXT", bytes.start, bytes.end, exactText);
-  const fingerprintId = fingerprint ? validateFingerprint(db, fingerprint.family, fingerprint.parameters, 1, exactText) : null;
+  const fingerprintId = fingerprint ? validateFingerprint(db, fingerprint.family, fingerprint.parameters, currentFamilyVersion(fingerprint.family), exactText) : null;
   const inserted = db.prepare(`
     INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, score, created_at)
     VALUES (?, ?, ?, ?, ?, '{"kind":"fixture"}', NULL, '2026-01-01T00:00:00.000Z')
@@ -95,8 +95,8 @@ function yieldFixture(): DatabaseSync {
     { id: "zz-residue", faction_id: "zeta", raw_text: "A distinct uncovered mechanic remains." },
   ];
   const db = fixture(records);
-  seed(db, "zz-seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
-  seed(db, "aa-seed", WOUND_FAILED, "reroll", { roll: "wound", subset: "failed" });
+  seed(db, "zz-seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
+  seed(db, "aa-seed", WOUND_FAILED, "reroll", { roll: "wound", subset: "failed", weapon_type: "all" });
   proposeLexical(db);
   return db;
 }
@@ -162,7 +162,7 @@ describe("Round 5C greedy work queue", () => {
       ...Array.from({ length: 32 }, (_, index) => ({ id: `hit-${index}`, faction_id: "zeta", raw_text: `Context ${index}: ${HIT_ONES}.` })),
     ]);
     try {
-      seed(db, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
+      seed(db, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
       proposeLexical(db);
       const group = familyItems(getQueue(db).items)[0]!;
       expect(group).toMatchObject({ unlocks: 1, backlog: 32 });
@@ -188,7 +188,7 @@ describe("Round 5C greedy work queue", () => {
       { id: "other", faction_id: "zeta", raw_text: `${HIT_ONES}.` },
     ]);
     try {
-      seed(db, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
+      seed(db, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
       proposeLexical(db);
       const item = familyItems(getQueue(db, { factionId: "alpha" }).items)[0]!;
       expect(item).toMatchObject({ unlocks: 2, backlog: 2 });
@@ -220,7 +220,7 @@ describe("Round 5C greedy work queue", () => {
       { id: "other", faction_id: "zeta", raw_text: `Then ${HIT_ONES}.` },
     ]);
     try {
-      seed(single, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
+      seed(single, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
       proposeLexical(single);
       const items = getQueue(single).items;
       // The fully painted seed asks for nothing; its repeat is the first decision.
@@ -236,9 +236,9 @@ describe("Round 5C greedy work queue", () => {
     const db = yieldFixture();
     try {
       // A Luna proposal of the same role on already-confirmed seed bytes contradicts that leaf.
-      pendingProposal(db, "zz-seed", HIT_ONES, "luna", { family: "reroll", parameters: { roll: "hit", subset: "all" }, role: "EFFECT" });
+      pendingProposal(db, "zz-seed", HIT_ONES, "luna", { family: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" }, role: "EFFECT" });
       // The same fingerprint on the same bytes restates the seed and must not count.
-      pendingProposal(db, "zz-seed", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones" }, role: "EFFECT" });
+      pendingProposal(db, "zz-seed", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" }, role: "EFFECT" });
       const [first, ...rest] = getQueue(db).items;
       expect(first).toMatchObject({ kind: "conflict", unlocks: 1, target: { view: "abilities", ability_version_id: ability(db, "zz-seed").id } });
       expect(rest.some((item) => item.kind === "conflict")).toBe(false);
@@ -259,7 +259,7 @@ describe("Round 5C greedy work queue", () => {
     ]);
     try {
       const broadId = seed(db, "broad", clause, "roll-modifier", { roll: "hit", operation: "add", value: 1 });
-      const narrowId = seed(db, "narrow-seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
+      const narrowId = seed(db, "narrow-seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
       proposeLexical(db);
       const hints = getQueue(db).items.filter((item) => item.kind === "broad-seed");
       expect(hints.map((item) => item.key)).toEqual([`broad-seed:${broadId}`]);
@@ -293,14 +293,14 @@ describe("Round 5C greedy work queue", () => {
     const db = fixture([{ id: "imported", faction_id: "zeta", raw_text: `${HIT_ONES}.` }]);
     try {
       const target = ability(db, "imported");
-      const hitOnes = { family: "reroll", parameters: { roll: "hit", subset: "ones" }, role: "EFFECT" };
+      const hitOnes = { family: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" }, role: "EFFECT" };
       pendingProposal(db, "imported", HIT_ONES, "hit-train", hitOnes);
       expect(getAbility(db, target.id).progress.pending_proposals).toBe(1);
       const bytes = span(target.source_text, HIT_ONES);
       const confirmed = applyAnnotationBatch(db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: target.id, source_hash: getAbility(db, target.id).source_hash,
         fragment: "RAW_TEXT", start_byte: bytes.start, end_byte: bytes.end, exact_text: HIT_ONES, role: "EFFECT",
-        family_id: "reroll", family_version: 1, parameters: hitOnes.parameters,
+        family_id: "reroll", family_version: 2, parameters: hitOnes.parameters,
       }] });
       const view = getAbility(db, target.id);
       expect(view.proposals).toEqual([]);
@@ -308,7 +308,7 @@ describe("Round 5C greedy work queue", () => {
       expect(retrieveFamilyCandidates(db, "reroll").groups).toEqual([]);
       expect(getQueue(db).items.some((item) => item.kind === "family-group" || item.kind === "ability" || item.kind === "conflict")).toBe(false);
       // A different reading of the same bytes is still a question for a human.
-      pendingProposal(db, "imported", HIT_ONES, "luna", { ...hitOnes, parameters: { roll: "hit", subset: "all" } });
+      pendingProposal(db, "imported", HIT_ONES, "luna", { ...hitOnes, parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
       expect(getQueue(db).items[0]).toMatchObject({ kind: "conflict", unlocks: 1 });
 
       undoBatch(db, confirmed.batch_id, { reviewer: "fixture-reviewer" });
@@ -322,7 +322,7 @@ describe("Round 5C greedy work queue", () => {
   it("shows pending proposals from every origin in Family Mode", () => {
     const db = fixture([{ id: "imported", faction_id: "zeta", raw_text: `${HIT_ONES}.` }]);
     try {
-      pendingProposal(db, "imported", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones" }, role: "EFFECT" });
+      pendingProposal(db, "imported", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" }, role: "EFFECT" });
       const page = retrieveFamilyCandidates(db, "reroll");
       expect(page.groups.flatMap((group) => group.occurrences.map((item) => item.origin))).toEqual(["hit-train"]);
       expect(page.progress).toEqual({ reviewed: 0, total: 1 });
@@ -342,7 +342,7 @@ describe("Round 5C residue", () => {
       const target = ability(db, "mixed");
       const before = getAbilityCoverage(db, target.id);
       expect(before.residue).toEqual(before.uncovered);
-      pendingProposal(db, "mixed", HIT_ONES, "luna", { family: "reroll", parameters: { roll: "hit", subset: "ones" }, role: "EFFECT" });
+      pendingProposal(db, "mixed", HIT_ONES, "luna", { family: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" }, role: "EFFECT" });
       pendingProposal(db, "mixed", "gain one Command point", "luna", null);
       const after = getAbilityCoverage(db, target.id);
       expect(after.uncovered).toEqual(before.uncovered);
@@ -361,7 +361,7 @@ describe("Round 5C residue", () => {
       { id: "elsewhere", faction_id: "alpha", raw_text: `${source} And more words here.` },
     ]);
     try {
-      pendingProposal(db, "large", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones" }, role: "EFFECT" });
+      pendingProposal(db, "large", HIT_ONES, "hit-train", { family: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" }, role: "EFFECT" });
       const prepared = prepareLuna(db, { mode: "residue", faction_id: "zeta" });
       const request = prepared.request as { abilities: Array<{ ability_id: string; uncovered_regions: Array<{ text: string }> }> };
       expect(request.abilities.map((entry) => entry.ability_id)).toEqual(["large", "small"]);
@@ -380,8 +380,8 @@ describe("Round 5C leaf progress", () => {
       { id: "partial", faction_id: "zeta", raw_text: `Deploy anywhere. ${HIT_ONES}.` },
     ]);
     try {
-      seed(db, "complete", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
-      seed(db, "partial", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
+      seed(db, "complete", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
+      seed(db, "partial", HIT_ONES, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
       const complete = getAbility(db, ability(db, "complete").id);
       expect(complete.progress).toMatchObject({
         leaves: [{ family_id: "reroll", authority_kind: "human", count: 1 }],

@@ -6,6 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
+import { REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { getWorkbenchRevision, initializeWorkbench } from "../src/round5c/db.js";
 import { getFamilyCandidate, getOntology, judgeCandidate, mapCandidate, setCandidateState } from "../src/round5c/ontology.js";
 import { backfillFamilyCandidates } from "../src/round5c/ontology-store.js";
@@ -88,7 +89,7 @@ describe("Round 5C provisional family ontology", () => {
         WHERE gaps.status = 'open' AND json_extract(proposals.reason_json, '$.span_status') = 'NOVEL'
       `).get()).toEqual({ total: 2 });
       expect(db.prepare("SELECT count(*) AS total FROM annotations").get()).toEqual({ total: 0 });
-      expect(db.prepare("SELECT count(*) AS total FROM semantic_families WHERE status = 'active'").get()).toEqual({ total: 39 });
+      expect(db.prepare("SELECT count(*) AS total FROM semantic_families WHERE status = 'active'").get()).toEqual({ total: REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).length });
       // Backfill is idempotent over already-attached occurrences.
       backfillFamilyCandidates(db);
       expect(getOntology(db).candidates[0]!.current.suggested).toBe(2);

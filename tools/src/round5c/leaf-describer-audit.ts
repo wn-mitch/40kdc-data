@@ -16,7 +16,7 @@ import { previewLeaf } from "./leaf-preview.js";
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; "x-only-when"?: Record<string, readonly string[]>;
+  items?: Schema; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>;
 };
 
 export type FamilyAudit = {
@@ -31,6 +31,8 @@ export type FamilyAudit = {
 
 /** Values to try for one parameter: every listed value, or samples of an open one. */
 function domain(name: string, schema: Schema): unknown[] {
+  // A fixed-value marker (an optional flag whose only legal value is true) has one value to try.
+  if (schema.const !== undefined) return [schema.const];
   if (schema.enum) return [...schema.enum];
   if (schema.type === "boolean") return [false, true];
   if (schema.type === "array") {

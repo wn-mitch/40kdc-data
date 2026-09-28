@@ -8,20 +8,70 @@ import { normalizeEffectParameters } from "./effect-families.js";
  * models it changes.
  */
 
-const weaponGrantKeywords = [
+/** Shared with weapon-buff-families.ts, which builds weapon-ability-grant on the same vocabulary. */
+export const weaponGrantKeywords = [
   "Devastating Wounds", "Lethal Hits", "Twin-linked", "Assault", "Heavy", "Pistol", "Torrent", "Blast",
   "Ignores Cover", "Precision", "Hazardous", "Indirect Fire", "Extra Attacks", "Psychic", "One Shot", "Lance",
 ] as const;
 
 /** Weapon abilities that carry a value, written the way the DSL's keyword-grant spells them. */
-const parameterizedWeaponKeyword = /^(?:(?:Sustained Hits|Rapid Fire|Melta) (?:[1-9]|D3|D6)|Anti-[A-Z][A-Za-z -]*[A-Za-z] [2-6]\+)$/u;
+export const parameterizedWeaponKeyword = /^(?:(?:Sustained Hits|Rapid Fire|Melta) (?:[1-9]|D3|D6)|Anti-[A-Z][A-Za-z -]*[A-Za-z] [2-6]\+)$/u;
 
-const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
+export const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
 /** Version 1 subjects. "The bearer" is the model, so later versions spell it this-model. */
-const SUBJECTS_WITH_BEARER = ["this-unit", "this-model", "bearer"] as const;
-const BUFF_SUBJECTS = ["this-unit", "this-model"] as const;
+export const SUBJECTS_WITH_BEARER = ["this-unit", "this-model", "bearer"] as const;
+export const BUFF_SUBJECTS = ["this-unit", "this-model"] as const;
 const FNP_AGAINST = ["all", "mortal", "psychic", "psychic-and-mortal"] as const;
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"] as const;
+
+/** A kebab-case entity id, as core and enrichment ability/weapon records are keyed. Shared with ability-modifier-families.ts. */
+export const ENTITY_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
+/** A unit keyword as the DSL writes it: uppercase words, without markdown emphasis. */
+export const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
+
+/** Core rulebook abilities `ability-grant` can name (`data/core/unit-keywords.json`) plus Benefit of Cover. Shared with ability-modifier-families.ts. */
+export const CORE_ABILITY_GRANT_IDS = [
+  "benefit-of-cover", "deadly-demise", "deep-strike", "feel-no-pain", "fights-first", "firing-deck", "hover",
+  "infiltrators", "leader", "lone-operative", "scouts", "stealth", "support", "super-heavy-walker",
+] as const;
+/** Core abilities whose datasheet rating carries a number (Scouts 6", Firing Deck N, Deadly Demise D3/D6). */
+const VALUED_ABILITY_GRANTS = ["scouts", "deep-strike", "firing-deck", "deadly-demise"] as const;
+/** `{rating: true}`: the value is the unit's own datasheet rating for this ability, not a fixed number. Shared with ability-modifier-families.ts. */
+export const abilityRatingSchema = { type: "object", required: ["rating"], properties: { rating: { const: true } }, additionalProperties: false } as const;
+
+export function entityId(value: unknown, label: string): string {
+  if (typeof value === "string" && ENTITY_ID.test(value)) return value;
+  throw new TypeError(`${label} must be a kebab-case entity id.`);
+}
+
+export function unitKeywordArray(value: unknown, label: string): string[] {
+  if (!Array.isArray(value) || value.length === 0) throw new TypeError(`${label} must list at least one unit keyword.`);
+  for (const item of value) {
+    if (typeof item !== "string" || !UNIT_KEYWORD.test(item)) throw new TypeError(`${label} keyword ${JSON.stringify(item)} is not a unit keyword.`);
+  }
+  if (new Set(value).size !== value.length) throw new TypeError(`${label} lists a keyword twice.`);
+  return value as string[];
+}
+
+/** Shared with weapon-buff-families.ts and ability-modifier-families.ts. */
+export function nonEmptyString(value: unknown, label: string): string {
+  if (typeof value === "string" && value.length > 0) return value;
+  throw new TypeError(`${label} must be a nonempty string.`);
+}
+
+export function constTrue(value: unknown, label: string): true {
+  if (value === true) return true;
+  throw new TypeError(`${label} must be true.`);
+}
+
+/** The rated value a core ability grant carries: an integer, or the unit's own datasheet rating. Shared with ability-modifier-families.ts. */
+export function abilityGrantValue(value: unknown, label: string): number | { rating: true } {
+  if (typeof value === "number" && Number.isSafeInteger(value) && value >= 1 && value <= 36) return value;
+  if (value !== null && typeof value === "object" && !Array.isArray(value) && (value as Record<string, unknown>).rating === true && Object.keys(value as object).length === 1) {
+    return { rating: true };
+  }
+  throw new TypeError(`${label} must be an integer from 1 to 36 or {rating: true}.`);
+}
 
 export const BUFF_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
@@ -62,56 +112,74 @@ export const BUFF_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
-    id: "weapon-ability-grant",
+    id: "core-ability-grant",
     version: 1,
     role: "EFFECT",
-    label: "Give weapons an ability",
-    description: "Weapons equipped by the specified models gain a named, parameter-free weapon ability. This is not a unit keyword.",
-    starter: { subject: "this-unit", keyword: "" },
+    label: "Grant a core ability",
+    description: "Gives the target a core rulebook ability such as Scouts, Deep Strike, Firing Deck, or Benefit of Cover, with its datasheet rating when the ability carries one.",
+    starter: { subject: "this-unit", ability: "" },
     parameterSchema: {
       type: "object",
-      required: ["subject", "keyword"],
-      properties: {
-        subject: { enum: ["this-unit", "this-model", "bearer"] },
-        keyword: { enum: weaponGrantKeywords },
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "weapon-ability-grant",
-    version: 2,
-    role: "EFFECT",
-    label: "Give weapons an ability",
-    description: "Weapons equipped by the specified models gain a named weapon ability, optionally only melee or only ranged weapons. This is not a unit keyword.",
-    starter: { subject: "this-unit", keyword: "", weapon_type: "all" },
-    parameterSchema: {
-      type: "object",
-      required: ["subject", "keyword", "weapon_type"],
-      properties: {
-        subject: { enum: ["this-unit", "this-model", "bearer"] },
-        keyword: { anyOf: [{ enum: weaponGrantKeywords }, { type: "string", pattern: parameterizedWeaponKeyword.source }] },
-        weapon_type: { enum: WEAPON_TYPES },
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "weapon-ability-grant",
-    version: 3,
-    role: "EFFECT",
-    label: "Give weapons an ability",
-    description: "Weapons equipped by the specified models gain a named weapon ability, optionally only melee or only ranged weapons. This is not a unit keyword. \"The bearer\" is this model.",
-    starter: { subject: "this-unit", keyword: "", weapon_type: "all" },
-    parameterSchema: {
-      type: "object",
-      required: ["subject", "keyword", "weapon_type"],
+      required: ["subject", "ability"],
       properties: {
         subject: { enum: BUFF_SUBJECTS },
-        keyword: { anyOf: [{ enum: weaponGrantKeywords }, { type: "string", pattern: parameterizedWeaponKeyword.source }] },
-        weapon_type: { enum: WEAPON_TYPES },
+        ability: { enum: CORE_ABILITY_GRANT_IDS },
+        value: { anyOf: [{ type: "integer", minimum: 1, maximum: 36 }, abilityRatingSchema], "x-only-when": { ability: VALUED_ABILITY_GRANTS } },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "keyword-grant",
+    version: 1,
+    role: "EFFECT",
+    label: "Grant unit keywords",
+    description: "Gives the target unit keywords, optionally naming which keywords they replace.",
+    starter: { subject: "this-unit", keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "keywords"],
+      properties: {
+        subject: { enum: BUFF_SUBJECTS },
+        keywords: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 1, uniqueItems: true },
+        replaces: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 1, uniqueItems: true },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "weapon-grant",
+    version: 1,
+    role: "EFFECT",
+    label: "Equip a weapon",
+    description: "Equips the target with a named weapon, optionally more than one copy of it.",
+    starter: { subject: "this-unit", weapon_id: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "weapon_id"],
+      properties: {
+        subject: { enum: BUFF_SUBJECTS },
+        weapon_id: { type: "string", pattern: ENTITY_ID.source },
+        count: { type: "integer", minimum: 1, maximum: 10 },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "ability-activate",
+    version: 1,
+    role: "EFFECT",
+    label: "Activate an ability now",
+    description: "Makes a named ability resolve now, or activates one of its options, in addition to any already active. exclusive: only that option is active.",
+    starter: { subject: "this-unit", ability: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "ability"],
+      properties: {
+        subject: { enum: BUFF_SUBJECTS },
+        ability: { type: "string", pattern: ENTITY_ID.source },
+        option: { type: "string", minLength: 1 },
+        exclusive: { const: true },
       },
       additionalProperties: false,
     },
@@ -247,23 +315,51 @@ export function normalizeBuffParameters(
         characteristic: enumValue(input.characteristic, ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"], "characteristic-set.characteristic"),
         value: integerOrSource(input.value, "characteristic-set.value"),
       };
-    case "weapon-ability-grant": {
-      if (version === 1) {
-        exactKeys(input, ["subject", "keyword"], family);
-        return {
-          subject: enumValue(input.subject, ["this-unit", "this-model", "bearer"], "weapon-ability-grant.subject"),
-          keyword: enumValue(input.keyword, weaponGrantKeywords, "weapon-ability-grant.keyword"),
-        };
-      }
-      exactKeys(input, ["subject", "keyword", "weapon_type"], family);
-      const keyword = input.keyword;
-      if (typeof keyword !== "string" || !((weaponGrantKeywords as readonly string[]).includes(keyword) || parameterizedWeaponKeyword.test(keyword))) {
-        throw new TypeError(`weapon-ability-grant.keyword must be a named weapon ability such as Lethal Hits or Sustained Hits 1.`);
+    case "core-ability-grant": {
+      const ability = enumValue(input.ability, CORE_ABILITY_GRANT_IDS, "core-ability-grant.ability");
+      const valued = (VALUED_ABILITY_GRANTS as readonly string[]).includes(ability);
+      exactKeys(input, valued ? ["subject", "ability", "value"] : ["subject", "ability"], family);
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "core-ability-grant.subject"),
+        ability,
+        ...(valued ? { value: abilityGrantValue(input.value, "core-ability-grant.value") } : {}),
+      };
+    }
+    case "keyword-grant": {
+      const keys = Object.keys(input);
+      if (!Object.hasOwn(input, "subject") || !Object.hasOwn(input, "keywords") || !keys.every((key) => key === "subject" || key === "keywords" || key === "replaces")) {
+        throw new TypeError("keyword-grant parameters must contain subject and keywords, and optional replaces only.");
       }
       return {
-        subject: enumValue(input.subject, version === 2 ? SUBJECTS_WITH_BEARER : BUFF_SUBJECTS, "weapon-ability-grant.subject"),
-        keyword,
-        weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "weapon-ability-grant.weapon_type"),
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "keyword-grant.subject"),
+        keywords: unitKeywordArray(input.keywords, "keyword-grant.keywords"),
+        ...(Object.hasOwn(input, "replaces") ? { replaces: unitKeywordArray(input.replaces, "keyword-grant.replaces") } : {}),
+      };
+    }
+    case "weapon-grant": {
+      const keys = Object.keys(input);
+      if (!Object.hasOwn(input, "subject") || !Object.hasOwn(input, "weapon_id") || !keys.every((key) => key === "subject" || key === "weapon_id" || key === "count")) {
+        throw new TypeError("weapon-grant parameters must contain subject and weapon_id, and optional count only.");
+      }
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "weapon-grant.subject"),
+        weapon_id: entityId(input.weapon_id, "weapon-grant.weapon_id"),
+        ...(Object.hasOwn(input, "count") ? { count: boundedInteger(input.count, 1, 10, "weapon-grant.count") } : {}),
+      };
+    }
+    case "ability-activate": {
+      const keys = Object.keys(input);
+      if (!Object.hasOwn(input, "subject") || !Object.hasOwn(input, "ability") || !keys.every((key) => key === "subject" || key === "ability" || key === "option" || key === "exclusive")) {
+        throw new TypeError("ability-activate parameters must contain subject and ability, and optional option/exclusive only.");
+      }
+      if (Object.hasOwn(input, "exclusive") && !Object.hasOwn(input, "option")) {
+        throw new TypeError("ability-activate.exclusive requires option: only one option can be exclusively active.");
+      }
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "ability-activate.subject"),
+        ability: entityId(input.ability, "ability-activate.ability"),
+        ...(Object.hasOwn(input, "option") ? { option: nonEmptyString(input.option, "ability-activate.option") } : {}),
+        ...(Object.hasOwn(input, "exclusive") ? { exclusive: constTrue(input.exclusive, "ability-activate.exclusive") } : {}),
       };
     }
     case "feel-no-pain":

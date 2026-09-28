@@ -62,7 +62,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const table: Array<{ band: { from: number; to: number }; items: Planned[] }> = [];
   for (const item of banded) {
     const band = bandOf(item);
-    if (item.leaf.family_id === "fight-on-death") {
+    if (item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight") {
       if (band.to !== faces) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
       const modifier = item.node.modifier as Node;
       modifier.gate = { dice, threshold: band.from, comparison: "gte" };

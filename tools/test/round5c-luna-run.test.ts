@@ -53,7 +53,7 @@ function validResponse(prepared: PreparedLuna, overrides: Record<string, unknown
         { ...span(ability.source_text, "Each time this unit attacks"), role: "EVENT", status: "UNRESOLVED" },
         {
           ...span(ability.source_text, "re-roll a Hit roll of 1"), role: "EFFECT", status: "EXISTING",
-          family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "ones" },
+          family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
         },
         {
           ...span(ability.source_text, "gain a glimmer token"), role: "EFFECT", status: "NOVEL",
@@ -363,7 +363,7 @@ describe("Round 5C OMP Luna transport", () => {
       })).lastInsertRowid);
       const result = importLuna(db, { run_id: String(runId), response: {
         schema_version: 1, input_hash: "a".repeat(64), model: "luna", model_version: "legacy", prompt_version: "v1",
-        abilities: [{ ...ability, spans: [{ start_byte: 0, end_byte: end, exact_text: "Re-roll a Hit roll of 1", role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "ones" } }], connectives: [], unresolved_regions: [] }],
+        abilities: [{ ...ability, spans: [{ start_byte: 0, end_byte: end, exact_text: "Re-roll a Hit roll of 1", role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" } }], connectives: [], unresolved_regions: [] }],
       } });
       expect(result).toMatchObject({ proposals: 1, structural: 0 });
       expect(db.prepare("SELECT origin FROM proposals").get()).toEqual({ origin: "luna" });

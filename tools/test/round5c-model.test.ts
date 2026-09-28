@@ -134,8 +134,8 @@ function existingRerollSpan(ability: RequestAbility) {
     role: "EFFECT",
     status: "EXISTING",
     family_id: "reroll",
-    family_version: 1,
-    parameters: { roll: "hit", subset: "ones" },
+    family_version: 2,
+    parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
 
@@ -150,14 +150,19 @@ describe("Round 5C external Luna transport", () => {
     try {
       const prepared = prepareLuna(value.db);
       const request = preparedRequest(prepared);
-      expect(request.abilities).toHaveLength(12);
+      // The cap bites: some but not all of the 13 normal abilities fit, in order, each whole.
+      const sent = request.abilities.map((ability) => ability.ability_id);
+      expect(sent.length).toBeGreaterThan(0);
+      expect(sent.length).toBeLessThan(13);
+      expect(sent).toEqual(rows.slice(1, 1 + sent.length).map((row) => row.abilityId));
       expect(Buffer.byteLength(canonicalize(prepared.request), "utf8")).toBeLessThanOrEqual(48 * 1024);
       expect(readFileSync(prepared.request_path, "utf8")).toBe(canonicalize(prepared.request));
       for (const ability of request.abilities) {
         expect(ability.source_text).toBe(rows.find((row) => row.abilityId === ability.ability_id)?.source);
       }
+      // The next request resumes at the first ability the capped one left out.
       const next = prepareLuna(value.db, { limit: 12 });
-      expect(preparedRequest(next).abilities.map((ability) => ability.ability_id)).toEqual(["normal-12"]);
+      expect(preparedRequest(next).abilities[0]?.ability_id).toBe(rows[1 + sent.length]!.abilityId);
       expect(value.db.prepare("SELECT count(*) AS total FROM gaps WHERE description LIKE 'Complete ability exceeds%' ").get())
         .toEqual({ total: 1 });
     } finally {

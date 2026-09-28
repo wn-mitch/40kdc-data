@@ -6,6 +6,8 @@ import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validati
 /** Version 1 subjects (characteristic-modifier version 2). "The bearer" is the model, so later versions spell it this-model. */
 const SUBJECTS_WITH_BEARER = ["this-unit", "this-model", "bearer"] as const;
 const SUBJECTS = ["this-unit", "this-model"] as const;
+/** sticky-objective@2's optional subject; a selected unit is also allowed, unlike the other SUBJECTS lists here. */
+const STICKY_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 /** Model characteristics, then weapon characteristics; only the weapon ones can be limited to melee or ranged. */
 export const MODEL_CHARACTERISTICS = ["M", "T", "Sv", "W", "Ld", "OC"] as const;
 export const WEAPON_CHARACTERISTICS = ["A", "WS", "BS", "S", "AP", "D"] as const;
@@ -21,6 +23,9 @@ export const ACTS = ["shoot", "charge"] as const;
 
 /** Amounts as GW prints them; plain numbers become numbers in the DSL. */
 export const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
+/** Version 3 adds the D3+1 and D3+2 amounts GW also prints for healing. */
+export const WOUND_AMOUNTS_V3 = [...WOUND_AMOUNTS, "D3+1", "D3+2"] as const;
+export const HEAL_PER = ["model", "unit"] as const;
 
 export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
@@ -31,6 +36,16 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition.",
     starter: {},
     parameterSchema: { type: "object", properties: {}, additionalProperties: false },
+    deprecated: true,
+  },
+  {
+    id: "sticky-objective",
+    version: 2,
+    role: "EFFECT",
+    label: "Sticky objective",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit); a selected unit is also allowed.",
+    starter: {},
+    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS } }, additionalProperties: false },
   },
   {
     id: "no-advance-roll",
@@ -159,14 +174,38 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { subject: { enum: SUBJECTS }, amount: { enum: WOUND_AMOUNTS } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "regain-wounds",
+    version: 3,
+    role: "EFFECT",
+    label: "Regain lost wounds",
+    description: "A model, or each model in a unit, regains lost wounds (heals), including D3+1 and D3+2. Adding to the Wounds characteristic is a different leaf.",
+    starter: { subject: "", amount: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "amount"],
+      properties: { subject: { enum: SUBJECTS }, amount: { enum: WOUND_AMOUNTS_V3 }, per: { enum: HEAL_PER } },
+      additionalProperties: false,
+    },
   },
 ];
 
 export function normalizeEffectParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> | null {
   switch (family) {
-    case "sticky-objective":
+    case "sticky-objective": {
+      if (version === 1) {
+        exactKeys(input, [], family);
+        return {};
+      }
+      if ("subject" in input) {
+        exactKeys(input, ["subject"], family);
+        return { subject: enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject") };
+      }
       exactKeys(input, [], family);
       return {};
+    }
     case "no-advance-roll":
       exactKeys(input, ["subject"], family);
       return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "no-advance-roll.subject") };
@@ -185,9 +224,17 @@ export function normalizeEffectParameters(family: string, input: Record<string, 
       if (subject === "attack" && weaponType !== "all") throw new TypeError("characteristic-modifier: the attack's own leaf says melee or ranged; use weapon type all.");
       return { subject, characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"), weapon_type: weaponType };
     }
-    case "regain-wounds":
+    case "regain-wounds": {
+      if (version >= 3) {
+        const keys = ["subject", "amount", ...("per" in input ? ["per"] : [])];
+        exactKeys(input, keys, family);
+        const result: Record<string, unknown> = { subject: enumValue(input.subject, SUBJECTS, "regain-wounds.subject"), amount: enumValue(input.amount, WOUND_AMOUNTS_V3, "regain-wounds.amount") };
+        if ("per" in input) result.per = enumValue(input.per, HEAL_PER, "regain-wounds.per");
+        return result;
+      }
       exactKeys(input, ["subject", "amount"], family);
       return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "regain-wounds.subject"), amount: enumValue(input.amount, WOUND_AMOUNTS, "regain-wounds.amount") };
+    }
     default:
       return null;
   }

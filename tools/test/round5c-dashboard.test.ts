@@ -28,7 +28,7 @@ function confirmReroll(db: DatabaseSync, ability: { id: number; sourceHash: stri
   const batch = applyAnnotationBatch(db, { reviewer: "fixture-reviewer", decisions: [{
     action: "confirm", ability_version_id: ability.id, source_hash: ability.sourceHash, fragment: "RAW_TEXT",
     start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase, role: "EFFECT",
-    family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "all" },
+    family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "all", weapon_type: "all" },
   }] });
   const member = db.prepare("SELECT entity_id FROM batch_members WHERE batch_id = ? AND entity_kind = 'annotation'").get(batch.batch_id) as { entity_id: string };
   return Number(member.entity_id);

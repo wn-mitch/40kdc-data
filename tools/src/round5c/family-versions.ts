@@ -86,6 +86,10 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "characteristic-modifier", from: 2, to: 3, map: bearerIsThisModel("subject") },
   { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
   { family: "optional-use", from: 1, to: 2, map: bearerIsThisModel("who") },
+  // Version 3 only adds amounts (D3+1, D3+2) and an optional per; existing parameters still fit.
+  { family: "regain-wounds", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 2 only adds an optional subject; v1's empty parameters (always this-unit) still fit.
+  { family: "sticky-objective", from: 1, to: 2, map: (parameters) => parameters },
   {
     family: "below-starting-strength", from: 1, to_family: "unit-state", to: 1,
     map: (parameters) => {
@@ -93,6 +97,15 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       return subject ? { states: ["below-starting-strength"], subject, negated: false } : null;
     },
   },
+  // Version 2 widens the roll enum and adds count and weapon_type, defaulting to "all".
+  { family: "reroll", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
+  // Version 4 only adds independent optional filters and flags; existing parameters still fit.
+  { family: "weapon-ability-grant", from: 3, to: 4, map: (parameters) => parameters },
+  // Version 2 widens the aspect/operation enums and adds recipients/options/uses-only fields; a
+  // version 1 leaf's aspect and operation are both still in the widened enums, so it fits as is.
+  { family: "ability-modifier", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 adds act (fight/shoot); every version 1 leaf meant fighting.
+  { family: "fight-on-death", from: 1, to: 2, map: (parameters) => ({ ...parameters, act: "fight" }) },
 ];
 
 export type FamilyVersionReport = {

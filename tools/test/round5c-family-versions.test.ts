@@ -176,13 +176,15 @@ describe("Round 5C family version upgrade", () => {
       const retiredBefore = pieces(retired);
 
       const report = upgradeFamilyVersions(db);
-      expect(report).toMatchObject({ migrated_proposal_pieces: 2, unmapped_proposal_pieces: 1 });
+      // reroll also migrates now (its version 2 adds weapon_type, defaulting old leaves to "all").
+      expect(report).toMatchObject({ migrated_proposal_pieces: 3, unmapped_proposal_pieces: 1 });
       expect(pieces(open)).toEqual([
         piece("attack", 2, "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
         { text: "rest", family_id: null },
-        piece("reroll", 1, "EFFECT", { roll: "hit", subset: "ones" }),
+        piece("reroll", 2, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);
-      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 3, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
+      // weapon-ability-grant now continues 3->4 too (version 4 only adds optional filters/flags; identity map).
+      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 4, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
       // A phase start that never named its phase has no current meaning; it is left, not guessed.
       expect(pieces(retired)).toEqual(retiredBefore);
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_proposal_pieces: 0 });

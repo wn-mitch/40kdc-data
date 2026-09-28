@@ -50,7 +50,7 @@ describe("Round 5C connective coverage", () => {
       `).run(connectiveSpanId).lastInsertRowid);
 
       const effectSpanId = insertSpan(db, abilityId, "RAW_TEXT", effectStart, effectEnd, "act");
-      const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset: "ones" }, 1, "act");
+      const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2, "act");
       db.prepare(`
         INSERT INTO annotation_batches (id, operation, reviewer, created_at)
         VALUES ('human-review', 'review', 'reviewer', '2026-01-01T00:00:00.000Z')

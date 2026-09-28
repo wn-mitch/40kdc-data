@@ -152,13 +152,13 @@ describe("Round 5C leaf surfaces", () => {
       { faction_id: "alpha", ability_id: "two", raw_text: "Then re-roll the Hit roll." },
     ]);
     try {
-      const first = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed" } });
-      const moved = moveSurface(db, { reviewer: REVIEWER, surface_id: first.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all" } });
-      for (const id of ["one", "two"]) expect(leaves(db, id).map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "all" }]);
+      const first = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed", weapon_type: "all" } });
+      const moved = moveSurface(db, { reviewer: REVIEWER, surface_id: first.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
+      for (const id of ["one", "two"]) expect(leaves(db, id).map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "all", weapon_type: "all" }]);
       expect(() => moveSurface(db, { reviewer: REVIEWER, surface_id: moved.surface_id, family_id: "leading-unit", parameters: leadMeaning.parameters }))
         .toThrow(/cannot change its role/u);
       undoBatch(db, moved.batch_id, { reviewer: REVIEWER });
-      for (const id of ["one", "two"]) expect(leaves(db, id).map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "failed" }]);
+      for (const id of ["one", "two"]) expect(leaves(db, id).map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "failed", weapon_type: "all" }]);
       expect(db.prepare("SELECT status FROM leaf_surfaces WHERE id = ?").get(first.surface_id)).toEqual({ status: "active" });
     } finally {
       db.close();
@@ -172,10 +172,10 @@ describe("Round 5C leaf surfaces", () => {
       { faction_id: "alpha", ability_id: "pending", raw_text: "Now re-roll a failed Hit roll." },
     ]);
     try {
-      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed" }, 1);
-      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all" }, 1);
-      const failed = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll a failed Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed" } });
-      confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "all" } });
+      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, 2);
+      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, 2);
+      const failed = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll a failed Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed", weapon_type: "all" } });
+      confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
       expect(failed.applied).toBe(2);
       // A retired pending proposal elsewhere follows the merge.
       const extra = current(db, "all");
@@ -183,12 +183,12 @@ describe("Round 5C leaf surfaces", () => {
       const proposal = Number(db.prepare("INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, created_at) VALUES (?, ?, 'EFFECT', 'luna', 'pending', '{}', ?)")
         .run(proposalSpan, failedFingerprint, new Date().toISOString()).lastInsertRowid);
       const merged = mergeFingerprints(db, { reviewer: REVIEWER, from_fingerprint_id: failedFingerprint, to_fingerprint_id: allFingerprint });
-      expect(leaves(db, "failed").map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "all" }]);
+      expect(leaves(db, "failed").map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "all", weapon_type: "all" }]);
       expect(db.prepare("SELECT fingerprint_id FROM proposals WHERE id = ?").get(proposal)).toEqual({ fingerprint_id: allFingerprint });
       expect(db.prepare("SELECT status FROM fingerprints WHERE id = ?").get(failedFingerprint)).toEqual({ status: "superseded" });
       expect(leafBoard(db).leaves.map((leaf) => leaf.fingerprint_id)).toEqual([allFingerprint]);
       undoBatch(db, merged.batch_id, { reviewer: REVIEWER });
-      expect(leaves(db, "failed").map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "failed" }]);
+      expect(leaves(db, "failed").map((leaf) => leaf.parameters)).toEqual([{ roll: "hit", subset: "failed", weapon_type: "all" }]);
       expect(db.prepare("SELECT fingerprint_id FROM proposals WHERE id = ?").get(proposal)).toEqual({ fingerprint_id: failedFingerprint });
       expect(db.prepare("SELECT status FROM fingerprints WHERE id = ?").get(failedFingerprint)).toEqual({ status: "active" });
     } finally {
@@ -250,8 +250,8 @@ describe("Round 5C leaf surfaces", () => {
         applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ action: "confirm", ability_version_id: row.id, source_hash: row.source_hash, fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(exactText), exact_text: exactText, role: "EFFECT", family_id: familyId, parameters }] });
       };
       confirm("one", CP, "resource-action", cpMeaning.parameters);
-      confirm("two", "Re-roll the Hit roll", "reroll", { roll: "hit", subset: "all" });
-      confirm("three", "re-roll the Hit roll", "reroll", { roll: "hit", subset: "failed" });
+      confirm("two", "Re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" });
+      confirm("three", "re-roll the Hit roll", "reroll", { roll: "hit", subset: "failed", weapon_type: "all" });
       expect(backfillLeafSurfaces(db)).toEqual({ created: 1, conflicting: 1 });
       expect(db.prepare("SELECT normalized_surface FROM leaf_surfaces WHERE status = 'active'").all()).toEqual([{ normalized_surface: "gain 1cp" }]);
       expect(backfillLeafSurfaces(db)).toEqual({ created: 0, conflicting: 0 });

@@ -50,7 +50,7 @@ function buildFixture({ recognizedRecall = false, sidewaysReviewed = true }: { r
   const manifestHash = hashJson({ artifact: "fixture-manifest" });
   const rubric = "fixture-rubric/v1";
   const fingerprints = [
-    { id: "legacy-reroll", canonical_hash: hashJson({ legacy: "reroll" }), family: "reroll", version: 1, parameters: { roll: "hit", subset: "ones" } },
+    { id: "legacy-reroll", canonical_hash: hashJson({ legacy: "reroll" }), family: "reroll", version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" } },
     { id: "legacy-add", canonical_hash: hashJson({ legacy: "add" }), family: "roll-modifier", version: 1, parameters: { roll: "hit", operation: "add", value: 1 } },
     { id: "legacy-threshold", canonical_hash: hashJson({ legacy: "threshold" }), family: "critical-hit-threshold", version: 1, parameters: { value: "source" } },
   ];
@@ -172,7 +172,9 @@ function buildFixture({ recognizedRecall = false, sidewaysReviewed = true }: { r
             ? {
               span: { start: reroll.start, end: reroll.end },
               text: reroll.text,
-              fingerprint: { family: "reroll", parameters: { roll: "hit", subset: "ones" } },
+              // The recall path always validates at family version 1, so this uses a family whose
+              // version 1 is still current rather than reroll (now deprecated at version 1).
+              fingerprint: { family: "critical-hit-threshold", parameters: { value: 5 } },
             }
             : {
               span: { start: ordinary.start, end: ordinary.end },

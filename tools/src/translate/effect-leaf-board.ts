@@ -90,11 +90,12 @@ function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
   const strength = m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : "";
   // New models that join an existing unit rather than forming their own.
   if (m.join != null) return `add ${amountOf(m.model_count ?? m.count ?? 1, `${titleCase(jstr(m.datasheet))} model`, `${titleCase(jstr(m.datasheet))} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
-  const literal = isLiteral(m.count);
-  const n = literal ? Number(m.count ?? 1) : NaN;
+  // A fixed count reads as a number; a dice expression or bound quantity reads through amountOf.
+  const count = m.count ?? 1;
+  const n = typeof count === "number" ? count : null;
   const what = m.copy_of != null
-    ? `${n === 1 ? "a new unit" : literal ? `${n} new units` : amountOf(m.count, "new unit", "new units")} identical to ${effectSubject(m.copy_of, ctx)}`
-    : n === 1 ? `a ${titleCase(jstr(m.datasheet))} unit` : literal ? `${jstr(n)} ${titleCase(jstr(m.datasheet))} units` : amountOf(m.count, `${titleCase(jstr(m.datasheet))} unit`, `${titleCase(jstr(m.datasheet))} units`);
+    ? `${n === 1 ? "a new unit" : n != null ? `${n} new units` : amountOf(count, "new unit", "new units")} identical to ${effectSubject(m.copy_of, ctx)}`
+    : n === 1 ? `a ${titleCase(jstr(m.datasheet))} unit` : n != null ? `${n} ${titleCase(jstr(m.datasheet))} units` : amountOf(count, `${titleCase(jstr(m.datasheet))} unit`, `${titleCase(jstr(m.datasheet))} units`);
   return `add ${what}${models}${strength} to your army${where}${engage}`;
 }
 

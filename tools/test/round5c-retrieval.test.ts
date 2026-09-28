@@ -55,7 +55,7 @@ function confirmReroll(db: DatabaseSync, abilityId: string, subset: "ones" | "fa
   const exactText = "Re-roll a Hit roll of 1";
   const span = spanFor(target.source_text, exactText);
   const spanId = insertSpan(db, target.id, "RAW_TEXT", span.start, span.end, exactText);
-  const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset }, 1, exactText);
+  const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset, weapon_type: "all" }, 2, exactText);
   const batchId = `seed-${abilityId}`;
   db.prepare(`
     INSERT INTO annotation_batches (id, operation, reviewer, created_at)
@@ -100,7 +100,9 @@ describe("Round 5C lexical Family Mode retrieval", () => {
       expect(page.progress).toEqual({ reviewed: 0, total: 2 });
       expect(occurrences.every((occurrence) => occurrence.exact_text === "Re-roll a Hit roll of 1")).toBe(true);
       expect(occurrences.every((occurrence) => occurrence.family_id === "reroll" && occurrence.role === "EFFECT")).toBe(true);
-      expect(occurrences.map((occurrence) => occurrence.parameters)).toEqual([{ roll: "hit", subset: "ones" }, { roll: "hit", subset: "ones" }]);
+      expect(occurrences.map((occurrence) => occurrence.parameters)).toEqual([
+        { roll: "hit", subset: "ones", weapon_type: "all" }, { roll: "hit", subset: "ones", weapon_type: "all" },
+      ]);
       expect(occurrences.every((occurrence) => occurrence.fingerprint_id.length > 0)).toBe(true);
 
       const provenance = value.db.prepare(`
@@ -171,7 +173,7 @@ describe("Round 5C lexical Family Mode retrieval", () => {
       const candidate = ability(value.db, "candidate");
       const start = Buffer.byteLength(source.slice(0, source.lastIndexOf(phrase)), "utf8");
       const spanId = insertSpan(value.db, candidate.id, "RAW_TEXT", start, start + Buffer.byteLength(phrase), phrase);
-      const fingerprintId = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "ones" }, 1, phrase);
+      const fingerprintId = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2, phrase);
       value.db.prepare(`INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, score, created_at)
         VALUES (?, ?, 'EFFECT', 'retrieval', 'pending', '{}', 1, '2026-01-01T00:00:00.000Z')`).run(spanId, fingerprintId);
 
@@ -196,7 +198,7 @@ describe("Round 5C lexical Family Mode retrieval", () => {
       const exactText = "Re-roll a Hit roll of 1";
       const span = spanFor(candidate.source_text, exactText);
       const spanId = insertSpan(value.db, candidate.id, "RAW_TEXT", span.start, span.end, exactText);
-      const otherFingerprint = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "failed" }, 1, exactText);
+      const otherFingerprint = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, 2, exactText);
       value.db.prepare(`INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, score, created_at)
         VALUES (?, ?, 'EFFECT', 'retrieval', 'pending', '{}', 1, '2026-01-01T00:00:00.000Z')`).run(spanId, otherFingerprint);
       const page = retrieveFamilyCandidates(value.db, "reroll");
@@ -317,7 +319,7 @@ describe("Round 5C lexical Family Mode retrieval", () => {
       insertUnresolved(value.db, "unknown-two", "Mystery wording");
       const known = ability(value.db, "known");
       const knownSpan = spanFor(known.source_text, "Re-roll a Hit roll of 1");
-      const fingerprintId = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "ones" }, 1, "Re-roll a Hit roll of 1");
+      const fingerprintId = validateFingerprint(value.db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2, "Re-roll a Hit roll of 1");
       const spanId = insertSpan(value.db, known.id, "RAW_TEXT", knownSpan.start, knownSpan.end, "Re-roll a Hit roll of 1");
       const corrected = value.db.prepare(`
         INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, score, created_at)

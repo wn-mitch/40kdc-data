@@ -78,8 +78,8 @@ function rerollDecision(fixtureValue: Fixture, span: Span, action: "confirm" | "
     ...span,
     role: "EFFECT",
     family_id: "reroll",
-    family_version: 1,
-    parameters: { roll: "hit", subset: "ones" },
+    family_version: 2,
+    parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
 
@@ -100,8 +100,8 @@ function insertRetrievalProposal(fixtureValue: Fixture, span: Span): number {
   const fingerprint = validateFingerprint(
     fixtureValue.db,
     "reroll",
-    { roll: "hit", subset: "ones" },
-    1,
+    { roll: "hit", subset: "ones", weapon_type: "all" },
+    2,
     span.exact_text,
   );
   const proposal = fixtureValue.db.prepare(`
@@ -166,7 +166,7 @@ describe("Round 5C source-bound review ledger", () => {
       const span = sourceSpan(value.source, "models in this unit gain [Lethal Hits] on their weapons");
       const decision = {
         action: "confirm" as const, ability_version_id: value.abilityId, source_hash: value.sourceHash, ...span,
-        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 3,
+        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 4,
         parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" },
       };
       const batch = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [decision] });
@@ -348,13 +348,13 @@ describe("Round 5C source-bound review ledger", () => {
         decisions: [{
           ...rerollDecision(value, wide, "correct"),
           proposal_id: proposalId,
-          parameters: { roll: "hit", subset: "all" },
+          parameters: { roll: "hit", subset: "all", weapon_type: "all" },
         }],
       });
       expect(result.applied).toBe(1);
       expect(value.db.prepare("SELECT status FROM proposals WHERE id = ?").get(proposalId)).toEqual({ status: "corrected" });
       expect(getAbility(value.db, value.abilityId).annotations).toEqual([
-        expect.objectContaining({ start_byte: wide.start_byte, end_byte: wide.end_byte, parameters: { roll: "hit", subset: "all" } }),
+        expect.objectContaining({ start_byte: wide.start_byte, end_byte: wide.end_byte, parameters: { roll: "hit", subset: "all", weapon_type: "all" } }),
       ]);
       undoBatch(value.db, result.batch_id, { reviewer: "reviewer" });
       expect(value.db.prepare("SELECT status FROM proposals WHERE id = ?").get(proposalId)).toEqual({ status: "pending" });

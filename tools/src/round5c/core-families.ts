@@ -1,8 +1,9 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import {
-  enumOrSource, enumOrSourceSchema, enumValue, exactKeys, integerOrSource, integerOrSourceSchema, sourceQualified,
+  boundedInteger, enumOrSource, enumOrSourceSchema, enumValue, exactKeys, integerOrSource, integerOrSourceSchema, sourceQualified,
   sourceQualifiedSchema,
 } from "./family-validation.js";
+import { ROLL_KINDS, WEAPON_TYPES } from "./dice-families.js";
 
 /**
  * The original reviewed families: rolls, resources, durations, events, turn starts, army
@@ -48,6 +49,26 @@ export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: {
         roll: enumOrSourceSchema(["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage"]),
         subset: enumOrSourceSchema(["ones", "failed", "all"]),
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "reroll",
+    version: 2,
+    label: "Re-roll a roll",
+    description: "Repeats Hit, Wound, or another named roll; specify which results may be re-rolled, how many rolls (\"re-roll one Hit roll\"), and whether only melee or ranged weapons' rolls count.",
+    starter: { roll: "", subset: "", weapon_type: "all" },
+    role: "EFFECT",
+    parameterSchema: {
+      type: "object",
+      required: ["roll", "subset", "weapon_type"],
+      properties: {
+        roll: { enum: ROLL_KINDS },
+        subset: { enum: ["ones", "failed", "all"] },
+        count: { type: "integer", minimum: 1, maximum: 3 },
+        weapon_type: { enum: WEAPON_TYPES },
       },
       additionalProperties: false,
     },
@@ -332,11 +353,26 @@ export function normalizeCoreParameters(
 ): Record<string, unknown> | null {
   switch (family) {
     case "reroll":
-      exactKeys(input, ["roll", "subset"], family);
-      return {
-        roll: enumOrSource(input.roll, ["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage"], "reroll.roll"),
-        subset: enumOrSource(input.subset, ["ones", "failed", "all"], "reroll.subset"),
-      };
+      if (version === 1) {
+        exactKeys(input, ["roll", "subset"], family);
+        return {
+          roll: enumOrSource(input.roll, ["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage"], "reroll.roll"),
+          subset: enumOrSource(input.subset, ["ones", "failed", "all"], "reroll.subset"),
+        };
+      }
+      {
+        const allowed = new Set(["roll", "subset", "weapon_type", "count"]);
+        for (const key of Object.keys(input)) {
+          if (!allowed.has(key)) throw new TypeError("reroll parameters must be roll, subset, weapon_type, and optional count only.");
+        }
+        const result: Record<string, unknown> = {
+          roll: enumValue(input.roll, ROLL_KINDS, "reroll.roll"),
+          subset: enumValue(input.subset, ["ones", "failed", "all"], "reroll.subset"),
+          weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "reroll.weapon_type"),
+        };
+        if (input.count !== undefined) result.count = boundedInteger(input.count, 1, 3, "reroll.count");
+        return result;
+      }
     case "roll-modifier":
       exactKeys(input, ["roll", "operation", "value"], family);
       return {

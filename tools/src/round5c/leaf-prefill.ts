@@ -266,6 +266,34 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   if (family.id === "fight-on-death") {
     if (/after the attacking unit has finished/iu.test(exactText)) prefill.timing = "after-the-attacking-unit-finishes";
     else if (/when (?:its|that) unit (?:is selected to )?fights?/iu.test(exactText)) prefill.timing = "when-its-unit-fights";
+    if (/\bcan shoot\b/iu.test(exactText)) {
+      prefill.act = "shoot";
+      if (/\bthis unit\b/iu.test(exactText)) prefill.subject = "this-unit";
+      else if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    } else if (/\bcan fight\b/iu.test(exactText) || prefill.timing) prefill.act = "fight";
+  }
+  if (family.id === "reroll") {
+    // "re-roll one Hit roll" names how many; higher counts are spelled out or left for review.
+    if (/\bre-roll (?:one|a single)\b/iu.test(exactText)) prefill.count = 1;
+  }
+  if (family.id === "ignore-modifiers") {
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
+    else if (/\b(?:this|that|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
+    if (/\bcharacteristics?\b/iu.test(exactText) && !/\brolls?\b/iu.test(exactText)) prefill.what = "characteristics";
+    else if (/\brolls?\b/iu.test(exactText)) prefill.what = "rolls";
+    if (/\bnegative modifiers?\b|\bworsen(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "worsening";
+    else if (/\bpositive modifiers?\b|\bimprov(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "improving";
+  }
+  if (family.id === "roll-auto-result") {
+    if (/\bautomatically (?:passes?|succeeds?)\b/iu.test(exactText)) prefill.outcome = "auto-pass";
+    else {
+      const succeeds = /\bsucceeds? only on an unmodified (\d)\+/iu.exec(exactText)?.[1];
+      if (succeeds) {
+        prefill.outcome = "succeeds-on";
+        prefill.value = Number(succeeds);
+      } else if (/\bcounts? as an? (?:unmodified )?6\b/iu.test(exactText)) prefill.outcome = "counts-as-6";
+    }
   }
   if (family.id === "unit-activity") {
     const activities: Array<[RegExp, string]> = [
@@ -314,6 +342,100 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     if (amount) prefill.amount = amount.toUpperCase();
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
+  }
+  const MOVE_SUBJECT_FAMILIES = new Set(["make-move", "move-through", "set-up", "battlefield-marker", "objective-sticky", "apply-mark"]);
+  if (MOVE_SUBJECT_FAMILIES.has(family.id)) {
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
+    else if (/\bthe selected unit\b/iu.test(exactText)) prefill.subject = "selected-unit";
+    else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
+  if (family.id === "make-move") {
+    const verbs: Array<[RegExp, string]> = [
+      [/\badvanc/iu, "advance"], [/\bfall back|falls back|falling back\b/iu, "fall-back"], [/\bcharge\b/iu, "charge"],
+      [/\bpile in\b/iu, "pile-in"], [/\bconsolidat/iu, "consolidation"], [/\bsurge\b/iu, "surge"], [/\bscout\b/iu, "scout"],
+      [/\bingress\b/iu, "ingress"], [/\bdisembark/iu, "disembark"], [/\bembark/iu, "embark"], [/\bpulse jet\b/iu, "pulse-jet"],
+      [/\bnormal move\b/iu, "normal"],
+    ];
+    const kind = verbs.find(([pattern]) => pattern.test(exactText))?.[1];
+    if (kind) prefill.move_type = kind;
+    const distance = /\b(?:up to )?(\d*d(?:3|6)(?:\+\d+)?|\d+)"/iu.exec(exactText)?.[1];
+    if (distance) prefill.distance = /^\d+$/u.test(distance) ? Number(distance) : distance.toUpperCase();
+  }
+  if (family.id === "set-up") {
+    if (/strategic reserves/iu.test(exactText)) {
+      if (/\binto strategic reserves\b/iu.test(exactText)) prefill.to = "strategic-reserves";
+      else prefill.from = "strategic-reserves";
+    }
+    if (/\bon(?:to)? the battlefield\b/iu.test(exactText)) prefill.to = "battlefield";
+    if (/\bits transport\b/iu.test(exactText)) prefill.from = "transport";
+  }
+  if (family.id === "resource-gain" || family.id === "resource-spend") {
+    const cp = /\b(\d+)CP\b/u.exec(exactText);
+    if (cp) {
+      prefill.pool = "command-point";
+      prefill.amount = Number(cp[1]);
+    }
+  }
+  if (family.id === "stratagem-cost") {
+    if (/\bwaive\b|without paying|\bno CP\b/iu.test(exactText)) prefill.operation = "waive";
+    else if (/\breduce|less\b/iu.test(exactText)) prefill.operation = "decrease";
+    else if (/\bincrease|more\b/iu.test(exactText)) prefill.operation = "increase";
+    if (/\bstratagem\b/iu.test(exactText)) prefill.of = "stratagem";
+    else if (/\bmanoeuvre\b/iu.test(exactText)) prefill.of = "manoeuvre";
+    else if (/\bability\b/iu.test(exactText)) prefill.of = "ability";
+  }
+  if (family.id === "army-construction") {
+    if (/\bmust be your warlord\b/iu.test(exactText)) prefill.rule = "warlord-required";
+    else if (/\bcannot be your warlord\b/iu.test(exactText)) prefill.rule = "warlord-forbidden";
+    else if (/\bcannot be given enhancements\b/iu.test(exactText)) prefill.rule = "enhancement-forbidden";
+    else if (/\bonly one of\b/iu.test(exactText)) prefill.rule = "unique";
+  }
+  const PERMISSION_SUBJECT_FAMILIES = new Set(["eligibility-permission", "targeting-restriction", "counts-as", "rule-state", "damage-reduction", "return-models"]);
+  if (PERMISSION_SUBJECT_FAMILIES.has(family.id)) {
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
+    else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
+  if (family.id === "eligibility-permission") {
+    prefill.allow = !/\bcannot\b|\bcan't\b/iu.test(exactText);
+    const activities: Array<[RegExp, string]> = [
+      [/\bdeclare a charge\b|\bcharge\b/iu, "declare-charge"], [/\bshoot\b/iu, "shoot"], [/\bfight\b/iu, "fight"],
+      [/\bdisembark\b/iu, "disembark"], [/\bembark\b/iu, "embark"], [/\bfall back\b/iu, "fall-back"], [/\badvance\b/iu, "advance"],
+      [/\bstratagem\b/iu, "use-stratagem"], [/\bissue orders?\b/iu, "issue-order"], [/\britual\b/iu, "attempt-ritual"],
+      [/\benhancements?\b/iu, "use-enhancement"], [/\bobserver\b/iu, "observe"],
+    ];
+    const activity = activities.find(([pattern]) => pattern.test(exactText))?.[1];
+    if (activity) prefill.activity = activity;
+  }
+  if (family.id === "targeting-restriction") {
+    prefill.may = /\bmust target\b/iu.test(exactText) ? "must-target" : /\bcannot (?:be )?(?:targeted|target)\b/iu.test(exactText) ? "cannot-target" : "target";
+    if (/\bstratagems?\b/iu.test(exactText)) prefill.kind = "stratagem";
+    else if (/\bshoot|ranged\b/iu.test(exactText)) prefill.kind = "shoot";
+    else if (/\bfight|melee\b/iu.test(exactText)) prefill.kind = "fight";
+    else if (/\bcharge\b/iu.test(exactText)) prefill.kind = "charge";
+    else if (/\battack/iu.test(exactText)) prefill.kind = "attack";
+    if (/\benemy units?\b/iu.test(exactText)) prefill.subject = "enemy-units";
+  }
+  if (family.id === "rule-state") {
+    prefill.direction = /\bcannot\b|\bloses?\b|\bdoes not\b/iu.test(exactText) ? "suppressed" : "granted";
+  }
+  if (family.id === "damage-reduction") {
+    if (/\bhalve\b/iu.test(exactText)) prefill.reduction = "half";
+    else if (/\bto 0\b|\bto zero\b/iu.test(exactText)) prefill.reduction = "to-zero";
+    else {
+      const n = /\bby (\d+)\b/iu.exec(exactText)?.[1];
+      if (n) prefill.reduction = n;
+    }
+  }
+  if (family.id === "return-models" || family.id === "destroy-models") {
+    const count = /\b(\d+|d3\+3|d3\+1|d3|d6) (?:destroyed )?models?\b/iu.exec(exactText)?.[1];
+    if (count) prefill.count = count.toUpperCase();
+    else if (/\ball\b/iu.test(exactText)) prefill.count = "all";
+  }
+  if (family.id === "battle-shock-state") {
+    prefill.set = !/\bno longer\b|\bis not\b/iu.test(exactText);
+    prefill.recipient = /\bthe target\b|\btargets?\b/iu.test(exactText) ? "defender" : "this-unit";
   }
   for (const [name, property] of Object.entries(family.parameterSchema.properties ?? {})) {
     if (name in prefill) continue;
