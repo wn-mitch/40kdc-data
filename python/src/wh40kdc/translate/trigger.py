@@ -26,6 +26,7 @@ from wh40kdc.translate.condition import (
     title_case,
     unit_filter_phrase,
 )
+from wh40kdc.translate.condition_refs import roll_word, used_ability_phrase
 
 AbilityTrigger = dict[str, Any]
 
@@ -119,6 +120,8 @@ _ROLL_NOUN: dict[str, str] = {
     "desperate-escape": "Desperate Escape test",
     "dark-pact": "Dark Pact Leadership test",
     "blessings-of-khorne": "Blessings of Khorne roll",
+    "manoeuvre": "Agile Manoeuvre roll",
+    "channelling": "Channel the Warp roll",
 }
 _TEST_ROLLS = {"battle-shock", "leadership", "desperate-escape"}
 
@@ -130,8 +133,9 @@ _ATTACK_MODELS: dict[str, str] = {
 
 
 def _roll_clause(t: AbilityTrigger, f: dict[str, Any]) -> str:
-    roll = _str(f.get("roll"))
-    noun = _ROLL_NOUN.get(roll, f"{dekebab(roll)} roll")
+    # An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
+    roll = "" if isinstance(f.get("roll"), dict) else _str(f.get("roll"))
+    noun = _ROLL_NOUN.get(roll, f"{roll_word(f.get('roll'))} roll")
     subject = t.get("subject")
     anyone = isinstance(subject, dict) and subject.get("owner") == "any" and len(subject) == 1
     subject_key = _str(subject if subject is not None else "this-unit")
@@ -298,6 +302,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "when a model in the unit is destroyed"
         return f"when {_object_phrase(obj)} is destroyed"
     if event == "used":
+        which = used_ability_phrase(f)
+        if which is not None:
+            return f"each time {who} uses {which}"
         kind = f.get("kind")
         if kind == "stratagem":
             return "each time you use a Stratagem"

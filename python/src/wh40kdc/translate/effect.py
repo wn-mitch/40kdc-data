@@ -18,12 +18,13 @@ from typing import Any
 
 from wh40kdc.translate.condition import Condition, dekebab
 from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
     choice_prompt,
     describe_effect_inline,
     describe_requirement,
     designate_when,
-    dice_gated_body,
+    dice_gate,
     dice_table_result_label,
     inline,
     leader_model_ability_grant_clause,
@@ -85,6 +86,8 @@ __all__ = [
 
 _CONTAINER_TYPES = frozenset(
     {
+        "roll",
+        "select-objective",
         "sequence",
         "rules-bundle",
         "ability-part",
@@ -151,7 +154,17 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if t == "dice-gated":
         if e.get("test"):
             return f"{indent}{arrow}{capitalize(leadership_test(e, ctx))}."
-        return f"{indent}{arrow}Roll {dice_gated_body(e, ctx)}."
+        return f"{indent}{arrow}{capitalize(dice_gate(e, ctx))}."
+    if t == "roll":
+        inner = _obj(e.get("effect"))
+        head = f"{indent}{arrow}{capitalize(roll_head(e))}"
+        if _is_container(inner):
+            return f"{head}, then:\n" + describe_effect(inner, depth + 1, ctx)
+        return f"{head}; then {describe_effect_inline(inner, ctx)}."
+    if t == "select-objective":
+        inner = _obj(e.get("effect"))
+        nested = describe_effect(inner, depth + 1, ctx) if _is_container(inner) else None
+        return select_objective_block(e, indent, arrow, nested, lambda x: inline(x, ctx))
     if t == "dice-table":
         lines = [f"{indent}{arrow}Roll one {dice_case(e.get('dice'))}:"]
         for o in e.get("outcomes") or []:
@@ -350,7 +363,8 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
     # An explicit usage limit supersedes the duration's coarse "once per battle" lead.
     lead = (
         usage_clause(usage)
-        if isinstance(usage, dict) and usage.get("frequency") is not None
+        if isinstance(usage, list)
+        or (isinstance(usage, dict) and usage.get("frequency") is not None)
         else dur_lead
     )
     # When a trigger's proximity just restates a within-range condition, render the range once.

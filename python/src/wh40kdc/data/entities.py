@@ -33,7 +33,10 @@ def usage_gated(ability_type: Any, usage: Any, effect: Any) -> Any:
     Using it is the player's choice, so its buffs are an opt-in lever (``<ability>@<frequency>``).
     Called only when no trigger already gates the effect. A stratagem is already opt-in.
     """
-    frequency = usage.get("frequency") if isinstance(usage, dict) else None
+    # Several limits that all apply are still one player-chosen use; the first limit names
+    # the lever.
+    limit = (usage[0] if usage else None) if isinstance(usage, list) else usage
+    frequency = limit.get("frequency") if isinstance(limit, dict) else None
     if effect is None or not isinstance(frequency, str) or ability_type == "stratagem":
         return effect
     return {

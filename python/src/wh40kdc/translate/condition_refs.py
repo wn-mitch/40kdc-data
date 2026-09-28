@@ -10,6 +10,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from wh40kdc.translate.designations import designation_label
+
 Condition = dict[str, Any]
 P = dict[str, Any]
 
@@ -138,6 +140,8 @@ _ROLE_PHRASES: dict[str, str] = {
     "stratagem-target": "the Stratagem's target",
     "selected-unit": "the selected unit",
     "recipient": "the unit",
+    "bearer-transport": "the Transport this unit is embarked within",
+    "ability-unit": "this unit",
 }
 
 
@@ -161,8 +165,28 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
+    if isinstance(f.get("has_ability"), list):
+        s += f" with the {_and_list([title_case(_str(a)) for a in f['has_ability']])} ability"
+    if isinstance(f.get("lacks_ability"), list):
+        s += f" without the {_or_list([title_case(_str(a)) for a in f['lacks_ability']])} ability"
+    if f.get("embarked_in") is not None:
+        s += f" embarked within {unit_ref_phrase(f['embarked_in'])}"
+    if f.get("member_of") is not None:
+        s += f" in {unit_ref_phrase(f['member_of'])}"
+    if f.get("engaged_with") is not None:
+        s += f" within Engagement Range of {unit_filter_phrase(f['engaged_with'])}"
+    if f.get("not_engaged_with") is not None:
+        inner = re.sub(r"^an? ", "", unit_filter_phrase(f["not_engaged_with"]))
+        s += f" not within Engagement Range of any {inner}"
     if f.get("designated") is not None:
-        s += f" that is {_designation_phrase(_str(f['designated']))}"
+        by = (
+            f" by {unit_ref_phrase(f['designated_by'])}"
+            if f.get("designated_by") is not None
+            else ""
+        )
+        s += f" that is {_designation_phrase(_str(f['designated']))}{by}"
+    if f.get("not_designated") is not None:
+        s += f" that is not {_designation_phrase(_str(f['not_designated']))}"
     if f.get("state") is not None:
         s += f" that is {_state_phrase(_str(f['state']))}"
     if f.get("visible") is True:
@@ -171,7 +195,8 @@ def unit_filter_phrase(f: Any) -> str:
     if within is not None:
         w = _obj(within)
         of = f" of {unit_ref_phrase(w['of'])}" if w.get("of") is not None else ""
-        s += f" within {range_phrase(w.get('range'))}{of}"
+        wholly = "wholly " if w.get("wholly") is True else ""
+        s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
     if f.get("excluding") is not None:
         excl = f["excluding"]
         s += f" other than {'this unit' if excl == 'this-unit' else unit_ref_phrase(excl)}"
@@ -189,6 +214,8 @@ def unit_ref_phrase(ref: Any, fallback: str = "the unit") -> str:
             return "that unit"
         if isinstance(ref.get("selection_var"), str):
             return f"the bound {_str(ref['selection_var']).replace('_', ' ')}"
+        if isinstance(ref.get("stratagem_target"), str):
+            return f"the {dekebab(re.sub(r'^the-', '', ref['stratagem_target']))} target"
         return unit_filter_phrase(ref)
     if isinstance(ref, list):
         return unit_filter_phrase({})
@@ -269,8 +296,12 @@ def _state_phrase(state: str, negated: bool = False) -> str:
     return _STATE_PHRASES.get(state, dekebab(state))
 
 
-def _designation_phrase(tag: str) -> str:
-    """A designation: GW-printed tags stay as printed, internal state names are spelled out."""
+def _designation_phrase(tag: str, plural: bool = False) -> str:
+    """A designation: a registered id prints the rules' term, legacy upper-case tags stay
+    as printed, internal ones are spelled out."""
+    label = designation_label(tag, plural)
+    if label is not None:
+        return label
     return tag if tag == tag.upper() else f"tagged {dekebab(tag)}"
 
 
@@ -342,3 +373,20 @@ def _past_of(verb: str) -> str:
 def _cap_word(s: str) -> str:
     """Capitalize the first character and lowercase the rest (``MONSTER`` -> ``Monster``)."""
     return s if s == "" else s[0].upper() + s[1:].lower()
+
+
+def roll_word(roll: Any) -> str:
+    """A roll kind as words: "hit", or the dice a named ability rolls ("Reanimation Protocols")."""
+    if isinstance(roll, dict) and roll.get("of_ability") is not None:
+        return title_case(_str(roll["of_ability"]))
+    return dekebab(_str(roll))
+
+
+def used_ability_phrase(f: P) -> str | None:
+    """Which ability a ``used`` filter names: every ability with a bracketed keyword, or
+    the same one as a bound use."""
+    if f.get("ability_keyword") is not None:
+        return f"a {title_case(_str(f['ability_keyword']).lower())} ability"
+    if f.get("same_rule_as") is not None:
+        return f"that same {'Stratagem' if f.get('kind') == 'stratagem' else 'ability'}"
+    return None

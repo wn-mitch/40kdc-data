@@ -22,6 +22,8 @@ from wh40kdc.translate.effect_leaf_army import (
     resource_spend,
     transport_capacity,
 )
+from wh40kdc.translate.effect_placement import place_phrase, placement_limits, placement_phrase
+from wh40kdc.translate.effect_quantity import amount_of, is_literal, moved_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
     and_list,
@@ -44,6 +46,7 @@ from wh40kdc.translate.effect_words import (
     v,
     weapon_noun,
 )
+from wh40kdc.translate.expiry import expiry_trail
 
 Leaf = dict[str, Any]
 Inline = Callable[[Any, Ctx], str]
@@ -59,6 +62,11 @@ def _wounds(n: str, noun: str = "mortal wound") -> str:
 
 def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
     count = dice_case(m.get("count"))
+    suffered = (
+        f"{count} {_wounds(count)}"
+        if is_literal(m.get("count"))
+        else amount_of(m.get("count"), "mortal wound", "mortal wounds")
+    )
     psychic = " (Psychic Attack)" if m.get("psychic") is True else ""
     # A range the target filter already states is not repeated ('within 9" within 9"').
     rng = ""
@@ -80,14 +88,14 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
         return (
             f"roll {dice}{each}: for each {jstr(roll.get('threshold'))}+, {who} "
             f"{v(who, 'suffers')} "
-            f"{count} {_wounds(count)}{psychic}"
+            f"{suffered}{psychic}"
         )
     per = (
         f" for each model in {'them' if pronoun(who) == 'their' else 'it'}"
         if m.get("per") == "model"
         else ""
     )
-    return f"{who} {v(who, 'suffers')} {count} {_wounds(count)}{per}{psychic}"
+    return f"{who} {v(who, 'suffers')} {suffered}{per}{psychic}"
 
 
 _FNP_AGAINST = {
@@ -96,40 +104,43 @@ _FNP_AGAINST = {
     "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
 }
 
-_PLACEMENT = {
-    "closest-to-destruction": " as close as possible to where it was destroyed",
-    "coherency": " in Unit Coherency",
-    "unengaged": " not within Engagement Range of any enemy units",
-    "strategic-reserves": " in Strategic Reserves",
-    "anywhere": " anywhere on the battlefield",
-}
 
-
-def _placement(m: dict[str, Any]) -> str:
-    if m.get("placement") == "wholly-within":
-        return f" wholly within {range_phrase(m.get('range'))} of this model"
-    if m.get("placement") is None:
-        return ""
-    return _PLACEMENT.get(jstr(m["placement"]), f" {dekebab(jstr(m['placement']))}")
-
-
-def _return_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
+def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     wr = m.get("wounds_remaining")
-    w = (
-        "its full wounds"
-        if wr is None or wr == "full"
-        else f"{dice_case(wr)} {_wounds(dice_case(wr), 'wound')}"
-    )
+    if wr is None or wr == "full":
+        w = "its full wounds"
+    elif is_literal(wr):
+        w = f"{dice_case(wr)} {_wounds(dice_case(wr), 'wound')}"
+    else:
+        w = amount_of(wr, "wound", "wounds")
+    where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
+    detach = ""
+    if m.get("detach") is True:
+        strength = (
+            f" with a Starting Strength of {jstr(m['starting_strength'])}"
+            if m.get("starting_strength") is not None
+            else ""
+        )
+        detach = f", as a separate unit{strength} (it is no longer part of its attached unit)"
     if e.get("target") == "this-model":
-        return f"{subj} is set up again{_placement(m)} with {w} remaining"
-    count = "all" if m.get("count") == "all" else dice_case(m.get("count"))
-    kind = (
-        f"destroyed {jstr(m['model_keyword'])} model"
-        if m.get("model_keyword") is not None
-        else "destroyed model"
+        return f"{subj} is set up again{where} with {w} remaining{detach}"
+    if m.get("model_keyword") is not None:
+        kw = f"{jstr(m['model_keyword'])} "
+    elif m.get("bodyguard_only") is True:
+        kw = "Bodyguard "
+    else:
+        kw = ""
+    kind = f"destroyed {kw}model"
+    what = (
+        f"all {kind}s" if m.get("count") == "all" else amount_of(m.get("count"), kind, f"{kind}s")
     )
-    noun = kind if count == "1" else f"{kind}s"
-    return f"return {count} {noun} to {subj}{_placement(m)}, each with {w} remaining"
+    excluded = m.get("exclude_model_keyword")
+    excl = (
+        f" (excluding {and_list([jstr(k) for k in excluded])} models)"
+        if isinstance(excluded, list)
+        else ""
+    )
+    return f"return {what}{excl} to {subj}{where}, each with {w} remaining{detach}"
 
 
 def _destroy_models(m: dict[str, Any], subj: str) -> str:
@@ -208,16 +219,46 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 
 
 def _add_unit(m: dict[str, Any], ctx: Ctx) -> str:
-    n = num(m.get("count") if m.get("count") is not None else 1)
+    where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
+    engage = (
+        f"; it can be set up within Engagement Range of "
+        f"{effect_subject(m['allow_engagement_with'], ctx)}"
+        if m.get("allow_engagement_with") is not None
+        else ""
+    )
+    models = (
+        f" containing {amount_of(m['model_count'], 'model', 'models')}"
+        if m.get("model_count") is not None
+        else ""
+    )
+    strength = (
+        f" with a Starting Strength of {jstr(m['starting_strength'])}"
+        if m.get("starting_strength") is not None
+        else ""
+    )
+    sheet = title_case(jstr(m.get("datasheet")))
+    # New models that join an existing unit rather than forming their own.
+    if m.get("join") is not None:
+        size = next((m[k] for k in ("model_count", "count") if m.get(k) is not None), 1)
+        added = amount_of(size, f"{sheet} model", f"{sheet} models")
+        return f"add {added} to {effect_subject(m['join'], ctx)}{where}{engage}"
+    literal = is_literal(m.get("count"))
+    n = num(m.get("count") if m.get("count") is not None else 1) if literal else math.nan
     if m.get("copy_of") is not None:
-        units = "a new unit" if n == 1 else f"{num_str(n)} new units"
+        if n == 1:
+            units = "a new unit"
+        elif literal:
+            units = f"{num_str(n)} new units"
+        else:
+            units = amount_of(m.get("count"), "new unit", "new units")
         what = f"{units} identical to {effect_subject(m['copy_of'], ctx)}"
+    elif n == 1:
+        what = f"a {sheet} unit"
+    elif literal:
+        what = f"{num_str(n)} {sheet} units"
     else:
-        what = (
-            f"{'a' if n == 1 else num_str(n)} {title_case(jstr(m.get('datasheet')))} "
-            f"unit{'' if n == 1 else 's'}"
-        )
-    return f"add {what} to your army{_placement(m)}"
+        what = amount_of(m.get("count"), f"{sheet} unit", f"{sheet} units")
+    return f"add {what}{models}{strength} to your army{where}{engage}"
 
 
 _MOVE_VERBS = {
@@ -260,7 +301,56 @@ _PASSTHROUGH = {
 
 
 def _passthrough(p: Any) -> str:
-    return and_list([_PASSTHROUGH.get(jstr(x), dekebab(jstr(x))) for x in p])
+    return and_list(
+        [
+            _pass_item(x) if isinstance(x, dict) else _PASSTHROUGH.get(jstr(x), dekebab(jstr(x)))
+            for x in p
+        ]
+    )
+
+
+def _pass_item(x: dict[str, Any]) -> str:
+    """A typed pass-through item: "models (excluding MONSTER and VEHICLE models)"."""
+    if x.get("kind") == "terrain":
+        if x.get("height") == "up-to-4":
+            return 'terrain features 4" or lower'
+        return 'terrain features over 4"' if x.get("height") == "over-4" else "terrain features"
+    owner = {"friendly": "friendly ", "enemy": "enemy "}.get(x.get("owner"), "")  # type: ignore[arg-type]
+    all_of = x.get("all_of")
+    all_s = (
+        f"{' '.join(title_case(jstr(k).lower()) for k in all_of)} "
+        if isinstance(all_of, list)
+        else ""
+    )
+    excluding = x.get("excluding")
+    excl = (
+        f" (excluding {and_list([jstr(k) for k in excluding])} models)"
+        if isinstance(excluding, list)
+        else ""
+    )
+    return f"{owner}{all_s}models{excl}"
+
+
+def _ends_of(of: Any, ctx: Ctx) -> str:
+    """A unit-ref keeps its effect-subject phrase; markers, objectives and edges read as places."""
+    if of is None:
+        return "this model"
+    if isinstance(of, str):
+        place = of.startswith("battlefield-")
+    else:
+        place = isinstance(of, dict) and (
+            of.get("marker") is not None or of.get("objective") is not None
+        )
+    return place_phrase(of, ctx) if place else effect_subject(of, ctx)
+
+
+def _mode_clause(m: dict[str, Any]) -> str:
+    """ " using the Rapid Disembarkation rules", " using the Desperate Escape rules"."""
+    if m.get("mode") is None:
+        return ""
+    mode = title_case(jstr(m["mode"]))
+    disembark = m.get("move_type") == "disembark" or m.get("from") == "transport"
+    return f" using the {f'{mode} Disembarkation' if disembark else mode} rules"
 
 
 def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -271,15 +361,19 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("distance") is not None:
         d = dice_case(m["distance"])
         up_to = f' of up to {d}"' if verb.startswith("make ") else f' up to {d}"'
-    s = f"{subj} can {verb}{up_to}"
+    s = f"{subj} can {verb}{up_to}{_mode_clause(m)}"
     if isinstance(m.get("passthrough"), list):
         s += f", moving over {_passthrough(m['passthrough'])} as though they were not there"
     ends = m.get("ends_within")
     if ends is not None:
         ends = _obj(ends)
-        of = effect_subject(ends["of"], ctx) if ends.get("of") is not None else "this model"
+        of = _ends_of(ends.get("of"), ctx)
         wholly = "wholly " if ends.get("wholly") is True else ""
         s += f", ending that move {wholly}within {range_phrase(ends.get('range'))} of {of}"
+    if m.get("allow_engagement") is True:
+        s += "; it can end that move within Engagement Range of enemy units"
+    if m.get("counts_as_move") is not None:
+        s += f"; that move counts as {moved_phrase(m['counts_as_move'])}"
     if m.get("keeps_eligible") is True:
         s += "; doing so does not change what it is eligible to do this turn"
     return s
@@ -326,13 +420,6 @@ def _move_modifier(m: dict[str, Any], subj: str) -> str:
 
 
 _ORD = ["", "first", "second", "third", "fourth", "fifth"]
-_SET_UP_PLACEMENT = {
-    "closest-to-original": " as close as possible to its original position",
-    "connected-sections": " with its sections touching",
-    "anywhere": " anywhere on the battlefield",
-    "deployment-zone": " wholly within your deployment zone",
-    "on-terrain": " on top of a terrain feature",
-}
 
 
 def _turn_ord(t: Any) -> str:
@@ -354,11 +441,9 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         else ""
     )
     denied = m.get("allow") is False
+    can = "cannot" if denied else "must" if m.get("mandatory") is True else "can"
     if m.get("to") == "strategic-reserves":
-        return (
-            f"{none_of(who) if denied else who} {'cannot' if denied else 'can'} be placed into "
-            f"Strategic Reserves{limits}"
-        )
+        return f"{none_of(who) if denied else who} {can} be placed into Strategic Reserves{limits}"
     frm = m.get("from")
     source = (
         " from Strategic Reserves"
@@ -367,7 +452,6 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         if frm == "transport"
         else ""
     )
-    can = "cannot" if denied else "can"
     who_can = none_of(who) if denied else who
     if frm == "battlefield":
         s = f"{who_can} {can} be removed from the battlefield and set up again"
@@ -375,13 +459,16 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s = f"{who_can} {can} be set up on the battlefield{source}"
     if m.get("via") == "deep-strike":
         s += " using the Deep Strike rules"
+    s += _mode_clause(m)
     if isinstance(m.get("turns"), list):
         turns = re.sub(r", ([^,]*)$", r" or \1", ", ".join(_turn_ord(t) for t in m["turns"]))
         s += f" in the Reinforcements step of your {turns} Movement phase"
+    if m.get("arrives") == "next-movement-phase":
+        first = " (even in the first battle round)" if m.get("allow_first_round") is True else ""
+        s += f" in the Reinforcements step of your next Movement phase{first}"
     if m.get("sections") is not None:
         s += f" as {jstr(m['sections'])} separate sections"
-    if m.get("placement") is not None:
-        s += _SET_UP_PLACEMENT.get(jstr(m["placement"]), f" {dekebab(jstr(m['placement']))}")
+    s += placement_phrase(m) + placement_limits(m, ctx)
     if m.get("within_edge") is not None:
         s += f' wholly within {jstr(m["within_edge"])}" of a battlefield edge'
     if m.get("min_enemy_distance") is not None:
@@ -400,6 +487,10 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f", treating the battle round as {num_str(abs(off))} "
             f"{'lower' if off < 0 else 'higher'} than it is"
         )
+    if m.get("allow_engagement") is True:
+        s += "; it can be set up within Engagement Range of enemy units"
+    if m.get("counts_as_move") is not None:
+        s += f"; it counts as having made {moved_phrase(m['counts_as_move'])} this turn"
     return s + limits
 
 
@@ -435,23 +526,29 @@ def _designate(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if s is None:
         what = subj
     elif isinstance(s, dict) and s.get("objective") is not None:
-        what = f"the {_objective_phrase(_obj(s['objective']))}"
+        if _obj(s["objective"]).get("selection_var") is not None:
+            what = "that objective marker"
+        else:
+            what = f"the {_objective_phrase(_obj(s['objective']))}"
     elif isinstance(s, dict) and s.get("terrain_area") is not None:
         what = region_phrase({"terrain_area": s["terrain_area"]})
     else:
         what = effect_subject(s, ctx)
     tag = designation_for(jstr(m.get("tag")))
     clears = m.get("clears_on")
-    until = (
+    legacy = (
         " until the end of the turn"
         if clears == "turn-rollover"
         else " until the end of the phase"
         if clears == "phase-end"
         else ""
     )
+    trail = expiry_trail(clears)
+    until = legacy or (f" {trail}" if trail and clears != "battle" else "")
+    by = f" by {effect_subject(m['by'], ctx)}" if m.get("by") is not None else ""
     if m.get("clear") is True:
         return f"{what} {v(what, 'is')} no longer {tag}"
-    return f"{what} {v(what, 'is')} {tag}{until}"
+    return f"{what} {v(what, 'is')} {tag}{by}{until}"
 
 
 def _damage_reduction(m: dict[str, Any], subj: str) -> str:
@@ -475,6 +572,9 @@ def _heal(m: dict[str, Any], subj: str) -> str:
     who = f"each model in {subj}" if m.get("per") == "model" else subj
     if m.get("amount") == "full":
         return f"{who} {v(who, 'regains')} all {pronoun(who)} lost wounds"
+    if not is_literal(m.get("amount")):
+        lost = amount_of(m.get("amount"), "lost wound", "lost wounds")
+        return f"{who} {v(who, 'regains')} up to {lost}"
     amount = dice_case(m.get("amount"))
     return f"{who} {v(who, 'regains')} up to {amount} lost {'wound' if amount == '1' else 'wounds'}"
 
@@ -512,7 +612,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "heal":
         return _heal(m, subj)
     if t == "return-models":
-        return _return_models(e, m, subj)
+        return _return_models(e, m, subj, ctx)
     if t == "destroy-models":
         return _destroy_models(m, subj)
     if t == "act-on-death":

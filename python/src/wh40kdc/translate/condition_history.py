@@ -23,8 +23,10 @@ from wh40kdc.translate.condition_refs import (
     _with_window,
     dekebab,
     move_kinds,
+    roll_word,
     title_case,
     unit_ref_phrase,
+    used_ability_phrase,
 )
 
 
@@ -98,6 +100,11 @@ def _describe_happened(p: P, negated: bool) -> str:
             if window == "event"
             else f" {_window_phrase(window)}"
         )
+        # Who made the attacks, when it is not the unit being checked.
+        subj = p.get("subject")
+        attacker = (
+            f" made by {unit_ref_phrase(subj)}" if subj is not None and subj != "this-unit" else ""
+        )
         if f.get("roll") == "hit" and f.get("result") == "success":
             if _is_num(n) and n > 1:
                 hits = f"{_str(n)}+ {atk}attacks"
@@ -105,9 +112,9 @@ def _describe_happened(p: P, negated: bool) -> str:
                 hits = "an attack"
             else:
                 hits = f"a {atk}attack"
-            return f"{neg}{target} was hit by {hits}{weapon}{by}{when}"
+            return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
         result = f"was a {_str(f['result'])} " if _truthy(f.get("result")) else "was made "
-        return f"{neg}a {_str(f.get('roll'))} roll {result}{_window_phrase(window)}".rstrip()
+        return f"{neg}a {roll_word(f.get('roll'))} roll {result}{_window_phrase(window)}".rstrip()
     if event == "damage-allocated":
         obj = unit_ref_phrase(p.get("object"), "the unit")
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
@@ -155,6 +162,9 @@ def _describe_happened(p: P, negated: bool) -> str:
             elif isinstance(o, dict) and o.get("owner") == "enemy":
                 s += " on an enemy unit"
             return _with_window(s, window)
+        which = used_ability_phrase(f)
+        if which is not None:
+            return f"{neg}{_with_window(f'{who} used {which}', window)}"
         what = f"the {title_case(_str(f['id']))} " if f.get("id") is not None else "a "
         kind = f.get("kind") if f.get("kind") is not None else "ability"
         return f"{neg}{_with_window(f'{who} used {what}{dekebab(_str(kind))}', window)}"

@@ -21,11 +21,17 @@ import math
 from typing import Any, TypeGuard
 
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
+from wh40kdc.cruncher.from_dsl_shapes import (
+    UNSUPPORTED_SHAPE_REASONS,
+    enumerate_roll_allocation,
+    roll_label,
+    unsized_value_reason,
+)
 
 EffectTranslation = dict[str, Any]
 
 #: Targets that resolve to the buffed unit itself.
-_SELF_TARGETS = frozenset(["this-unit", "this-model", "selected-unit", "recipient"])
+_SELF_TARGETS = frozenset(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"])
 #: The subset of :data:`_SELF_TARGETS` naming a single *model* (the bearer) rather
 #: than its unit. Core rule 19.04: a rule affecting one specified model applies
 #: only to that model, even while it is part of an attached unit.
@@ -163,6 +169,12 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
         return
+    # A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed
+    # size here: applying the printed value would over- or under-state it.
+    unsized = unsized_value_reason(node)
+    if unsized is not None:
+        out["unsupported"].append({"reason": unsized, "effectFragment": node})
+        return
     # An `incoming` change modifies attacks made against its target. On the buffed unit it is the
     # attacker's side of those attacks, which the `target: "attacker"` form already models; it never
     # modifies the buffed unit's own attacks.
@@ -236,6 +248,18 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # Player spends dice on options at runtime — each buff-bearing option
         # becomes an opt-in lever, grouped under the pool's activation cap.
         _enumerate_dice_pool(node, source, opts, out)
+    elif node_type == "roll":
+        # A pool roll whose dice are allocated to named options (Blessings of Khorne) is the
+        # same lever set dice-pool-allocation produced; any other bound roll only scopes its
+        # nested effect.
+        if not enumerate_roll_allocation(
+            node, source, opts, out, _collect_gated_buffs, _label_for_buffs
+        ):
+            _walk(node.get("effect"), source, opts, out)
+    elif node_type in UNSUPPORTED_SHAPE_REASONS:
+        out["unsupported"].append(
+            {"reason": UNSUPPORTED_SHAPE_REASONS[node_type], "effectFragment": node}
+        )
     elif node_type == "select-units":
         # Targeting wrapper — the selected units receive the nested effect.
         _walk(node.get("effect"), source, opts, out)
@@ -433,7 +457,7 @@ def _translate_reroll(
     out["unsupported"].append(
         {
             "reason": (
-                f're-roll on "{_js_str(roll)}" (subset "{_js_str(subset)}") '
+                f're-roll on "{roll_label(roll)}" (subset "{_js_str(subset)}") '
                 "is outside the damage path"
             ),
             "effectFragment": node,
@@ -505,7 +529,7 @@ def _translate_roll_modifier(
     if contribution_type is None:
         out["unsupported"].append(
             {
-                "reason": f'roll-modifier on "{_js_str(roll)}" is outside the damage path',
+                "reason": f'roll-modifier on "{roll_label(roll)}" is outside the damage path',
                 "effectFragment": node,
             }
         )
@@ -789,6 +813,7 @@ _UNHONORABLE_NARROWING = (
     "weapon_name",
     "weapon_profile",
     "weapon_keyword",
+    "weapon_ref",
     "weapon_filter",
     "model_filter",
     "model_scope",
@@ -1545,7 +1570,7 @@ def _keyword_label(ref: dict[str, Any]) -> str:
 
 def _is_buffed_unit(subject: Any) -> bool:
     """The buffed unit: the ability's own unit (or model), or the unit an aura is applied to."""
-    return subject is None or subject in ("this-unit", "this-model", "recipient")
+    return subject is None or subject in ("this-unit", "ability-unit", "this-model", "recipient")
 
 
 def _single_keyword(params: dict[str, Any] | None) -> str | None:
@@ -1632,6 +1657,25 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         return all(k.lower() in have for k in all_of) and (
             len(any_of) == 0 or any(k.lower() in have for k in any_of)
         )
+    if ctype == "army-faction":
+        faction = params.get("faction") if params else None
+        if not isinstance(faction, str) or ctx.get("armyFaction") is None:
+            return "unknown"
+        return ctx["armyFaction"] == faction
+    if ctype == "battle-size":
+        size = params.get("size") if params else None
+        if not isinstance(size, str) or ctx.get("battleSize") is None:
+            return "unknown"
+        return ctx["battleSize"] == size
+    if ctype == "guided":
+        # Guided is read for the attacking unit: a For the Greater Good unit, not an
+        # Observer, targeting a Spotted unit.
+        subject = params.get("subject") if params else None
+        if (subject is not None and not _is_buffed_unit(subject)) or ctx.get(
+            "attackerGuided"
+        ) is None:
+            return "unknown"
+        return ctx["attackerGuided"]
     if ctype == "attachment":
         # True whenever the buffed unit is a combined ("attached") unit. We do not thread
         # per-member leader identity, and a Leader keyword filter is not checked: "attachment

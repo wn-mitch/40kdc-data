@@ -25,6 +25,7 @@ from wh40kdc.translate.condition_refs import (
 from wh40kdc.translate.condition_refs import (
     _or_list as or_list,
 )
+from wh40kdc.translate.designations import designation_label
 
 __all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case"]
 
@@ -88,7 +89,12 @@ def capitalize(s: str) -> str:
 
 
 def dice_case(v: Any) -> str:
-    """Dice tokens print with a capital ``D`` (``d3`` → ``D3``)."""
+    """Dice tokens print with a capital ``D`` (``d3`` → ``D3``); a bound or counted
+    quantity prints its phrase."""
+    if isinstance(v, dict):
+        from wh40kdc.translate.effect_quantity import quantity_phrase
+
+        return quantity_phrase(v)
     return re.sub(r"d", "D", jstr(v), flags=re.IGNORECASE)
 
 
@@ -144,6 +150,8 @@ _PLURAL_VERBS = {
     "resolves": "resolve",
     "does": "do",
     "controls": "control",
+    "receives": "receive",
+    "keeps": "keep",
 }
 
 
@@ -233,10 +241,15 @@ _ROLL_NAMES = {
     "dark-pact": "Dark Pact",
     "blessings-of-khorne": "Blessings of Khorne",
     "resource-die": "pool die",
+    "manoeuvre": "Agile Manoeuvre",
+    "channelling": "Channel the Warp",
 }
 
 
 def roll_name(roll: Any) -> str:
+    # The dice a named ability rolls: "Reanimation Protocols".
+    if isinstance(roll, dict) and roll.get("of_ability") is not None:
+        return ability_label(roll["of_ability"])
     r = jstr(roll)
     return _ROLL_NAMES.get(r, title_case(r))
 
@@ -314,6 +327,14 @@ def weapon_noun(m: dict[str, Any]) -> str:
         else ""
     )
     named = title_case(raw) if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw) else raw
+    ref = m.get("weapon_ref")
+    if ref is not None:
+        # A bound weapon ("the selected weapon") or the weapons picked for a named ability.
+        sel = ref.get("selected_by") if isinstance(ref, dict) else None
+        if sel is not None:
+            ability = sel.get("ability") if isinstance(sel, dict) else None
+            return f"the {kind}weapons selected for {ability_label(ability)}{keyword}"
+        return f"the selected {kind}weapon{keyword}"
     return f"{kind}{f'{named} ' if named else ''}weapons{keyword}"
 
 
@@ -323,6 +344,7 @@ def has_weapon(m: dict[str, Any]) -> bool:
         m.get("weapon_type") is not None
         or m.get("weapon_name") is not None
         or m.get("weapon_keyword") is not None
+        or m.get("weapon_ref") is not None
     )
 
 
@@ -338,6 +360,8 @@ _ROLE_SUBJECTS = {
     "event-subject": "the triggering unit",
     "event-object": "that unit",
     "stratagem-target": "that unit",
+    "bearer-transport": "the Transport this unit is embarked within",
+    "ability-unit": "this unit",
 }
 
 
@@ -363,11 +387,20 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     if within is not None:
         w = within if isinstance(within, dict) else {}
         of = f" of {effect_subject(w['of'], ctx)}" if w.get("of") is not None else ""
-        s += f" within {range_phrase(w.get('range'))}{of}"
+        wholly = "wholly " if w.get("wholly") is True else ""
+        s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
+    s += _filter_relations(f, ctx)
     if f.get("visible") is True:
         s += " that are visible"
     if f.get("designated") is not None:
-        s += f" that are {_designation_phrase(jstr(f['designated']))}"
+        by = (
+            f" by {effect_subject(f['designated_by'], ctx)}"
+            if f.get("designated_by") is not None
+            else ""
+        )
+        s += f" that are {_designation_phrase(jstr(f['designated']), True)}{by}"
+    if f.get("not_designated") is not None:
+        s += f" that are not {_designation_phrase(jstr(f['not_designated']), True)}"
     if f.get("state") is not None:
         s += f" that are {_state_phrase(jstr(f['state']))}"
     if f.get("excluding") is not None:
@@ -376,9 +409,52 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         within is not None
         or f.get("visible") is True
         or f.get("designated") is not None
+        or f.get("not_designated") is not None
         or f.get("state") is not None
+        or f.get("embarked_in") is not None
+        or f.get("member_of") is not None
+        or f.get("engaged_with") is not None
+        or f.get("not_engaged_with") is not None
     )
     return s if bounded else f"all {s}"
+
+
+def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
+    """A unit filter's relations to other units and abilities: " embarked within this model",
+    " with the Deep Strike ability"."""
+    s = ""
+    if isinstance(f.get("has_ability"), list):
+        s += f" with the {and_list([ability_label(a) for a in f['has_ability']])} ability"
+    if isinstance(f.get("lacks_ability"), list):
+        s += f" without the {or_list([ability_label(a) for a in f['lacks_ability']])} ability"
+    if f.get("embarked_in") is not None:
+        s += f" embarked within {effect_subject(f['embarked_in'], ctx)}"
+    if f.get("member_of") is not None:
+        s += f" in {effect_subject(f['member_of'], ctx)}"
+
+    # "any other friendly unit": a filter excluding the unit with the ability reads "other".
+    def engaged_with(g: Any) -> str:
+        x = dict(g) if isinstance(g, dict) else {}
+        other = x.get("excluding") in ("this-unit", "this-model")
+        if other:
+            del x["excluding"]
+        phrase = re.sub(r"^all ", "", filter_subject(x, ctx), count=1)
+        phrase = re.sub(r" units\b", " unit", phrase, count=1)
+        phrase = re.sub(r" models\b", " model", phrase, count=1)
+        return f"other {phrase}" if other else phrase
+
+    if f.get("engaged_with") is not None:
+        target = re.sub(
+            r"^an? other ", "another ", _articled(engaged_with(f["engaged_with"])), count=1
+        )
+        s += f" within Engagement Range of {target}"
+    if f.get("not_engaged_with") is not None:
+        s += f" that are not within Engagement Range of any {engaged_with(f['not_engaged_with'])}"
+    return s
+
+
+def _articled(s: str) -> str:
+    return f"{'an' if s[:1].lower() in ('a', 'e', 'i', 'o', 'u') and s else 'a'} {s}"
 
 
 def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
@@ -403,6 +479,8 @@ def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
         return "that unit"
     if isinstance(r.get("selection_var"), str):
         return f"the bound {jstr(r['selection_var']).replace('_', ' ')}"
+    if isinstance(r.get("stratagem_target"), str):
+        return f"the {dekebab(re.sub(r'^the-', '', r['stratagem_target']))} target"
     return filter_subject(r, ctx)
 
 
@@ -441,5 +519,9 @@ def region_phrase(r: dict[str, Any]) -> str:
 
 
 def designation_for(tag: str) -> str:
-    """A tag an effect applies: GW-printed tags stay as printed, others read "marked as …"."""
+    """A tag an effect applies: a registered id prints the rules' term, a legacy upper-case
+    tag stays as printed, others read "marked as …"."""
+    label = designation_label(tag)
+    if label is not None:
+        return label
     return tag if tag == tag.upper() else f"marked as {dekebab(tag)}"

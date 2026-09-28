@@ -9,6 +9,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from wh40kdc.translate.effect_quantity import amount_of, is_literal, requirement_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
     dice_case,
@@ -81,8 +82,14 @@ def resource_die(m: dict[str, Any]) -> str:
         die = "one rolled D6" if m.get("value") == "rolled" else f"one die showing {shown}"
         lost = f", after which all your {per} are lost" if m.get("consumes_pool") is True else ""
         return f"add {die} to your {pool} for each {per} you have{lost}"
+    rolled = m.get("value") == "rolled"
+    if m.get("count") is not None and not is_literal(m["count"]):
+        added = amount_of(
+            m["count"], "rolled D6" if rolled else "die", "rolled D6" if rolled else "dice"
+        )
+        return f"add {added} to your {pool}"
     cnt = dice_case(m["count"]) if m.get("count") is not None else "1"
-    if m.get("value") == "rolled":
+    if rolled:
         return f"add {'a rolled D6' if cnt == '1' else f'{cnt} rolled D6'} to your {pool}"
     return f"add {'a die' if cnt == '1' else f'{cnt} dice'} showing {shown} to your {pool}"
 
@@ -112,9 +119,21 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         return f"each {each} can be given {up_to}{kind}Enhancement{plural}"
     if rule == "faction-forbidden":
         return f"you cannot select {title_case(jstr(m.get('faction')))} as your Army Faction"
+    if rule == "single-chapter":
+        return "your army can include units from only one Chapter"
+    if rule == "detachment-forbidden":
+        return f"you cannot select the {title_case(jstr(m.get('detachment')))} Detachment"
+    if rule == "detachment-tag-exclusive":
+        return (
+            "you cannot select this Detachment together with another "
+            f"{title_case(jstr(m.get('tag')))} Detachment"
+        )
     if rule == "attachment":
         if m.get("mandatory") is True:
             return f"{subj} must be attached to a Leader, or it counts as destroyed"
+        if m.get("attach_as") is not None:
+            host = re.sub(r"^all ", "", effect_subject(m["attach_as"], ctx), count=1)
+            return f"a Leader that can be attached to {host} can also be attached to {subj}"
         led = (
             f" led by a {title_case(jstr(m['led_by']))} model"
             if m.get("led_by") is not None
@@ -125,12 +144,39 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"unit{led}, "
             "becoming part of that Bodyguard unit"
         )
-    if m.get("max") is not None:
-        return (
-            f"your army can include at most {jstr(m['max'])} "
-            f"{with_f if with_f is not None else 'such units'}"
-        )
-    return f"your army cannot include {with_f if with_f is not None else 'such units'}"
+    return _composition(m, with_f, ctx)
+
+
+def _composition(m: dict[str, Any], with_f: str | None, ctx: Ctx) -> str:
+    """A composition limit: at most N units / models / points of X, per matching unit,
+    outside the Retinue limit."""
+    what = with_f if with_f is not None else "such units"
+    exempt = (
+        "; they do not count toward the Retinue limit"
+        if isinstance(m.get("exempt_from"), list)
+        else ""
+    )
+    if m.get("max") is None:
+        return f"your army cannot include {what}{exempt}"
+    measure = (
+        "points of"
+        if m.get("measure") == "points"
+        else "models from"
+        if m.get("measure") == "models"
+        else ""
+    )
+    literal = is_literal(m["max"])
+    top = jstr(m["max"]) if literal else dice_case(m["max"])
+    # "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
+    one = literal and num(m["max"]) == 1 and not measure
+    counted = re.sub(r" units\b", " unit", what, count=1) if one else what
+    per = ""
+    if m.get("per") is not None:
+        each = re.sub(r"^all ", "", effect_subject(m["per"], ctx), count=1)
+        each = re.sub(r" units\b", " unit", each, count=1)
+        per = f" for each {each} in your army"
+    measured = f"{measure} " if measure else ""
+    return f"your army can include at most {top} {measured}{counted}{per}{exempt}"
 
 
 def _space_models(s: Any) -> str:
@@ -221,6 +267,10 @@ def transport_capacity(m: dict[str, Any]) -> str:
 
 def resource_gain(m: dict[str, Any]) -> str:
     a = m.get("amount")
+    if isinstance(a, (dict, list)):
+        one = resource_noun(m.get("pool"), m.get("label"), 1)
+        many = resource_noun(m.get("pool"), m.get("label"), 2)
+        return f"you gain {amount_of(a, one, many)}"
     amount = "a number of" if a == "variable" else "any number of" if a == "any" else dice_case(a)
     return f"you gain {amount} {resource_noun(m.get('pool'), m.get('label'), a)}"
 
@@ -228,7 +278,17 @@ def resource_gain(m: dict[str, Any]) -> str:
 def resource_spend(m: dict[str, Any]) -> str:
     a = m.get("amount")
     amount = "all your" if a == "all" else "one or more" if a == "one-or-more" else dice_case(a)
-    return f"spend {amount} {resource_noun(m.get('pool'), m.get('label'), 2 if a == 'all' else a)}"
+    if m.get("face") is not None:
+        showing = f" showing a {jstr(m['face'])}"
+    elif m.get("requirement") is not None:
+        showing = f" forming a {requirement_phrase(m['requirement'])}"
+    else:
+        showing = ""
+    noun = resource_noun(m.get("pool"), m.get("label"), 2 if a == "all" else a)
+    # A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming a triple".
+    if showing and not re.search(r"\b(die|dice)$", noun):
+        noun += " die" if num(jstr(a)) == 1 else " dice"
+    return f"spend {amount} {noun}{showing}"
 
 
 def cp_gain(m: dict[str, Any]) -> str:

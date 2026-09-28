@@ -12,7 +12,13 @@ import re
 from collections.abc import Callable
 from typing import Any
 
+from wh40kdc.translate.effect_leaf_access import permission, targeting
 from wh40kdc.translate.effect_leaf_board import describe_board_leaf
+from wh40kdc.translate.effect_leaf_shapes import (
+    ability_activate,
+    ability_limits,
+    describe_shape_leaf,
+)
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -29,7 +35,6 @@ from wh40kdc.translate.effect_words import (
     num,
     num_str,
     of_or_possessive,
-    or_list,
     pronoun,
     range_phrase,
     region_phrase,
@@ -92,6 +97,11 @@ LEAF_TYPES = frozenset(
         "objective-sticky",
         "designate",
         "army-rule",
+        "test-exemption",
+        "datasheet-swap",
+        "characteristic-resolution",
+        "borrow-weapons",
+        "select-weapon",
     }
 )
 
@@ -210,7 +220,10 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     noun = "roll" if rn == "any" else f"{roll_name(m.get('roll'))} roll"
     cnt = m.get("count") if is_num(m.get("count")) else None
     failed = "failed " if m.get("subset") == "all-failures" else ""
-    if cnt is not None:
+    if isinstance(m.get("count"), (dict, list)):
+        # A counted allowance ("one for each model equipped with …") reads as a number of rolls.
+        which = f"a number of {_failed_noun(m, noun)}s equal to {dice_case(m['count'])}"
+    elif cnt is not None:
         which = (
             f"{'one' if cnt == 1 else f'up to {jstr(cnt)}'} {failed}{noun}{'' if cnt == 1 else 's'}"
             f"{' of 1' if m.get('subset') == 'ones' else ''}"
@@ -226,8 +239,9 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         if m.get("pool") is not None
         else ""
     )
+    can = "must" if m.get("mandatory") is True else "can"
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}the attacking player can re-roll {which}{pool}"
+        return f"{_incoming_lead(m, subj)}the attacking player {can} re-roll {which}{pool}"
     # "you can re-roll …" names whose roll it is unless that is the ability's own unit.
     target = e.get("target")
     own = (
@@ -241,7 +255,13 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if not own:
         attacks = "attacks made by " if rn in ("hit", "wound", "damage") else ""
         owner = f" for {attacks}{holder}"
-    return f"you can re-roll {which}{owner}{weapon_roll_scope(m)}{pool}"
+    return f"you {can} re-roll {which}{owner}{weapon_roll_scope(m)}{pool}"
+
+
+def _failed_noun(m: dict[str, Any], noun: str) -> str:
+    if m.get("subset") == "all-failures":
+        return f"failed {noun}"
+    return f"{noun} of 1" if m.get("subset") == "ones" else noun
 
 
 def _roll_result(m: dict[str, Any], subj: str) -> str:
@@ -257,6 +277,13 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
             f"{lead}{who} {crit}{'' if lead else 's'} on {roll} rolls of {jstr(m['critical_on'])}+"
             f"{weapon_roll_scope(m)}{' for that attack' if lead else ''}"
         )
+    if m.get("fails_on") is not None:
+        n = num(m["fails_on"])
+        span = "1" if n == 1 else f"1-{num_str(n)}"
+        if lead:
+            return f"{lead}an unmodified {roll} roll of {span} for that attack always fails"
+        rolls = of_or_possessive(subj, f"{roll} rolls")
+        return f"{rolls}{weapon_roll_scope(m)} always fail on an unmodified {span}"
     if m.get("succeeds_on") is not None:
         rolls = (
             f"the {roll} roll for that attack" if lead else of_or_possessive(subj, f"{roll} rolls")
@@ -282,7 +309,8 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
     if result in ("pass", "fail"):
         return f"{lead}{whose}{'' if lead else weapon_roll_scope(m)} {verb[result]}"
     counts = " counts" if lead else f"{weapon_roll_scope(m)} count"
-    return f"{lead}{whose}{counts} as {jstr(result)}"
+    unmod = "an unmodified " if m.get("unmodified") is True else ""
+    return f"{lead}{whose}{counts} as {unmod}{jstr(result)}"
 
 
 def _ability_grant(m: dict[str, Any], subj: str) -> str:
@@ -322,10 +350,9 @@ def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> st
     if m.get("incoming") is True:
         return f"{_incoming_lead(m, subj)}the attacking weapon has {kws}{increment}"
     if has_weapon(m):
-        return (
-            f"{weapon_noun(m)} equipped by {weapon_holder(e.get('target'), ctx)} gain "
-            f"{kws}{increment}"
-        )
+        noun = weapon_noun(m)
+        gain = "gain" if re.search(r"weapons\b", noun) else "gains"
+        return f"{noun} equipped by {weapon_holder(e.get('target'), ctx)} {gain} {kws}{increment}"
     return f"{of_or_possessive(subj, 'weapons')} gain {kws}{increment}"
 
 
@@ -338,6 +365,7 @@ _ASPECTS = {
     "concurrent": "number that can apply at once",
     "duration": "duration",
     "start-round": "first battle round",
+    "end-round": "last battle round",
     "threshold": "threshold",
     "options": "options",
 }
@@ -400,151 +428,7 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
         s += f"; it can also affect {recipients}"
     if option:
         s += f"; add {option}"
-    return s + cap
-
-
-_ACTIVITIES = {
-    "shoot": "shoot",
-    "declare-charge": "declare a charge",
-    "fight": "fight",
-    "start-action": "start an Action",
-    "embark": "embark",
-    "disembark": "disembark",
-    "fall-back": "Fall Back",
-    "advance": "Advance",
-    "use-stratagem": "be targeted with Stratagems",
-    "issue-order": "issue Orders",
-    "attempt-ritual": "attempt Rituals",
-    "use-enhancement": "use Enhancements",
-    "move": "move",
-    "observe": "act as an Observer",
-}
-_AFTER = {
-    "advance": "Advanced",
-    "fall-back": "Fell Back",
-    "disembark": "disembarked",
-    "normal-move": "made a Normal move",
-    "charge": "made a Charge move",
-    "remain-stationary": "Remained Stationary",
-    "set-up": "was set up",
-}
-_DESPITE = {
-    "engaged": "within Engagement Range of enemy units",
-    "battle-shocked": "Battle-shocked",
-    "shot-this-phase": "has already shot this phase",
-    "fought-this-phase": "has already fought this phase",
-    "disembarked-this-turn": "disembarked this turn",
-    "stratagem-used-this-phase": "has already been targeted with that Stratagem this phase",
-    "performing-action": "performing an Action",
-    "advanced": "Advanced this turn",
-    "fell-back": "Fell Back this turn",
-}
-_IS_STATE = frozenset({"engaged", "battle-shocked", "performing-action"})
-_AS_IF = {
-    "shooting-phase": " as if it were your Shooting phase",
-    "fight-phase": " as if it were the Fight phase",
-    "snap-shooting": " using the Snap Shooting rules",
-}
-
-
-def _permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    it = "they" if subj.startswith("all ") or re.search(r" units\b", subj) else "it"
-    activity = m.get("activity")
-    if activity == "use-stratagem" and m.get("stratagem") is not None:
-        act = f"be targeted with the {title_case(jstr(m['stratagem']))} Stratagem"
-    else:
-        act = _ACTIVITIES.get(jstr(activity), jstr(activity))
-    into = ""
-    if m.get("into") is not None:
-        prep = (
-            "at" if activity == "shoot" else "against" if activity == "declare-charge" else "into"
-        )
-        into = f" {prep} {none_of(effect_subject(m['into'], ctx))}"
-    reach = f' from up to {jstr(m["reach"])}" away' if m.get("reach") is not None else ""
-    if m.get("allow") is False:
-        s = f"{none_of(subj)} cannot {act}{into}"
-    else:
-        s = f"{subj} {v(subj, 'is')} eligible to {act}{into}{reach}"
-    if isinstance(m.get("after"), list):
-        s += (
-            f" in a turn in which {it} "
-            f"{or_list([_AFTER.get(jstr(a), jstr(a)) for a in m['after']])}"
-        )
-    if isinstance(m.get("despite"), list):
-        clauses = []
-        for d in m["despite"]:
-            phrase = _DESPITE.get(jstr(d), jstr(d))
-            if jstr(d) in _IS_STATE:
-                clauses.append(f"{'they are' if it == 'they' else 'it is'} {phrase}")
-            else:
-                # "they has already shot" → "they have already shot".
-                clauses.append(
-                    f"{it} {re.sub(r'^has ', 'have ', phrase) if it == 'they' else phrase}"
-                )
-        s += f" even if {or_list(clauses)}"
-    if m.get("as_if") is not None:
-        s += _AS_IF.get(jstr(m["as_if"]), f" as if {jstr(m['as_if'])}")
-    if m.get("next") is True:
-        s += f", and must be the next unit selected to {act}"
-    return s
-
-
-_TARGET_KINDS = {
-    "attack": " with attacks",
-    "shoot": " with ranged attacks",
-    "fight": " with melee attacks",
-    "charge": " with a charge",
-    "stratagem": " with Stratagems",
-    "ability": " with abilities",
-}
-
-
-def _targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    if m.get("by") is not None:
-        who = effect_subject(m["by"], ctx)
-    else:
-        who = subj if m.get("target") is not None else "units"
-    who = re.sub(r"^all ", "", who)
-    if isinstance(m.get("by"), dict) or who == "units" or is_plural(who):
-        attacking = "the attacking model" if re.search(r"\bmodels\b", who) else "the attacking unit"
-    else:
-        attacking = who
-    if m.get("target") == "every-eligible":
-        whom = "every eligible target"
-    elif m.get("target") is not None:
-        whom = effect_subject(m["target"], ctx)
-    else:
-        whom = subj
-    may = m.get("may")
-    verb = (
-        "cannot target"
-        if may == "cannot-target"
-        else "must target"
-        if may == "must-target"
-        else "can target"
-    )
-    if m.get("kind") == "stratagem" and m.get("stratagem") is not None:
-        kind = f" with the {title_case(jstr(m['stratagem']))} Stratagem"
-    elif has_weapon(m):
-        kind = f" with {weapon_noun(m)}"
-    else:
-        kind = _TARGET_KINDS.get(jstr(m.get("kind")), "")
-    if m.get("range") is None:
-        rng = ""
-    elif may == "cannot-target":
-        rng = f" unless {attacking} is within {range_phrase(m['range'])}"
-    else:
-        rng = f" within {range_phrase(m['range'])}"
-    unless = ""
-    if m.get("only_if_none") is not None:
-        other = re.sub(
-            r" units\b",
-            " unit",
-            re.sub(r"^all ", "", effect_subject(m["only_if_none"], ctx)),
-            count=1,
-        )
-        unless = f", unless there is no other eligible {other}"
-    return f"{who} {verb} {whom}{kind}{rng}{unless}"
+    return s + cap + ability_limits(m)
 
 
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -573,6 +457,16 @@ _CORE_RULES = {
         "stops being hidden when it attacks",
         "does not stop being hidden when it attacks",
     ),
+    "engaged-shooting-hit-penalty": (
+        "suffers the -1 to Hit for shooting while within Engagement Range",
+        "does not suffer the -1 to Hit for shooting while within Engagement Range",
+    ),
+    "charge-bonus": ("receives the Charge bonus", "does not receive the Charge bonus"),
+    "hidden": ("can become hidden", "cannot become hidden"),
+    "orders-end-on-battle-shock": (
+        "loses its Orders when it becomes Battle-shocked",
+        "keeps its Orders when it becomes Battle-shocked",
+    ),
 }
 
 
@@ -593,8 +487,13 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
         if phrase.startswith("cannot "):
             return f"{none_of(subj)} {phrase}"
         phrase = re.sub(
-            r"^(has|is|stops|does) ", lambda w: f"{v(subj, w.group(0).strip())} ", phrase, count=1
+            r"^(has|is|stops|does|suffers|receives|loses|keeps) ",
+            lambda w: f"{v(subj, w.group(0).strip())} ",
+            phrase,
+            count=1,
         )
+        if is_plural(subj):
+            phrase = re.sub(r"\bits\b", "their", phrase)
         return f"{subj} {phrase}"
     kind = m.get("rule_kind")
     noun = "keyword" if kind == "keyword" else "rule" if kind == "core-rule" else "ability"
@@ -609,14 +508,6 @@ def _weapon_grant(m: dict[str, Any], subj: str) -> str:
         f"{subj} {v(subj, 'gains')} {num_str(count)} {weapon_label(m.get('weapon_id'))} "
         f"weapon{'' if count == 1 else 's'}"
     )
-
-
-def _ability_activate(m: dict[str, Any], subj: str) -> str:
-    label = ability_label(m.get("ability"))
-    if m.get("option") is None:
-        return f"{subj} {v(subj, 'resolves')} the {label} ability now"
-    exclusive = " (and no other option is)" if m.get("exclusive") is True else ""
-    return f"the {title_case(jstr(m['option']))} option of {label} is active for {subj}{exclusive}"
 
 
 def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
@@ -648,13 +539,14 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "ability-modifier":
         return _ability_modifier(m, subj, ctx, inline)
     if t == "ability-activate":
-        return _ability_activate(m, subj)
+        return ability_activate(m, subj)
     if t == "permission":
-        return _permission(m, subj, ctx)
+        return permission(m, subj, ctx)
     if t == "targeting":
-        return _targeting(m, subj, ctx)
+        return targeting(m, subj, ctx)
     if t == "counts-as":
         return _counts_as(m, subj, ctx)
     if t == "rule-state":
         return _rule_state(m, subj)
-    return describe_board_leaf(e, m, subj, ctx, inline)
+    shaped = describe_shape_leaf(e, m, subj, ctx)
+    return shaped if shaped is not None else describe_board_leaf(e, m, subj, ctx, inline)

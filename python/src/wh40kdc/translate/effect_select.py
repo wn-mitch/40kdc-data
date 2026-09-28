@@ -11,7 +11,9 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition_leadin import describe_selection_eligibility
+from wh40kdc.translate.effect_quantity import quantity_phrase
 from wh40kdc.translate.effect_words import Ctx, capitalize, dekebab, jstr, num, or_list, title_case
+from wh40kdc.translate.expiry import expiry_trail
 from wh40kdc.translate.timing import describe_timing
 
 Effect = dict[str, Any]
@@ -23,23 +25,9 @@ def _obj(x: Any) -> dict[str, Any]:
 
 def duration_clauses(duration: Any) -> tuple[str, str]:
     """Duration → (lead, trail). ``lead`` fronts the sentence; ``trail`` sits before the effect."""
-    trails = {
-        "attack-sequence": "until that unit finishes resolving its attacks",
-        "resolution": "when resolving this use",
-        "phase": "until the end of the phase",
-        "turn": "until the end of the turn",
-        "battle": "for the rest of the battle",
-        "battle-round": "until the end of the battle round",
-        "until-next-command-phase": "until the start of your next Command phase",
-        "until-next-movement-phase": "until the start of your next Movement phase",
-        "until-next-battle-round": "until the start of the next battle round",
-        "until-start-next-turn": "until the start of your next turn",
-    }
     if duration == "one-use":
         return ("once per battle", "")
-    if isinstance(duration, str) and duration in trails:
-        return ("", trails[duration])
-    return ("", "")
+    return ("", expiry_trail(duration))
 
 
 def selection_ref_name(ref: Any, fallback: str) -> str:
@@ -99,10 +87,18 @@ def select_units_subject(sel: Any) -> str:
         exact = sel.get("max_count")
     bounded = sel.get("min_count") is not None and exact is None
     count = exact if exact is not None else sel.get("max_count")
+    # A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units".
+    cap = _obj(count) if isinstance(count, (dict, list)) else None
     single = num(count) == 1
     noun_base = "model" if sel.get("target_kind") == "model" else "unit"
     noun = noun_base if single else f"{noun_base}s"
-    if exact is not None:
+    cap_phrase = quantity_phrase(cap) if cap is not None else ""
+    sized = cap is not None and cap.get("count_of") is None
+    if cap is not None:
+        quantity = (
+            f"up to {re.sub(r' [(].*[)]$', '', cap_phrase, count=1)}" if sized else "any number of"
+        )
+    elif exact is not None:
         quantity = "one" if single else jstr(count)
     elif bounded:
         quantity = f"from {jstr(sel.get('min_count'))} through {jstr(sel.get('max_count'))}"
@@ -113,11 +109,12 @@ def select_units_subject(sel: Any) -> str:
         if sel.get("within_inches_from")
         else ""
     )
+    wholly = " wholly" if sel.get("wholly") is True else ""
     if sel.get("within_inches") is not None:
-        within = f' within {jstr(sel["within_inches"])}"{bound_origin}'
+        within = f'{wholly} within {jstr(sel["within_inches"])}"{bound_origin}'
     elif sel.get("range_inches") is not None:
         origin = bound_origin or f" of {reference_origin(sel.get('reference'))}"
-        within = f' within {jstr(sel["range_inches"])}"{origin}'
+        within = f'{wholly} within {jstr(sel["range_inches"])}"{origin}'
     else:
         within = ""
     if sel.get("visible_to"):
@@ -127,9 +124,17 @@ def select_units_subject(sel: Any) -> str:
     else:
         visible = ""
     inclusive = ", inclusive" if bounded else ""
+    if cap is None:
+        cap_tail = ""
+    elif sized:
+        sizes = re.sub(r"^.*[(](.*)[)]$", r"\1", cap_phrase, count=1)
+        cap_tail = f" ({sizes})"
+    else:
+        cap_tail = f" (at most {cap_phrase})"
+    noun_for = f"{noun_base}s" if cap is not None else noun
     return (
         f"{quantity} {jstr(sel.get('owner'))}{f' {kw}' if kw else ''} "
-        f"{noun}{selection_model_filters(sel)}"
+        f"{noun_for}{cap_tail}{selection_model_filters(sel)}"
         f"{inclusive}{within}{visible}{_eligibility(sel)}"
     )
 
@@ -161,6 +166,9 @@ def select_units_engagement(sel: Any) -> str:
 
 def select_units_plural(sel: Any) -> bool:
     sel = _obj(sel)
+    # A cap set by the battle size or a count can select more than one.
+    if sel.get("count") is None and isinstance(sel.get("max_count"), (dict, list)):
+        return True
     count = sel.get("count") if sel.get("count") is not None else sel.get("max_count")
     return num(count) > 1
 

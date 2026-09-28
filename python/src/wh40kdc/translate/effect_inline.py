@@ -11,7 +11,14 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
+from wh40kdc.translate.effect_quantity import (
+    quantity_phrase,
+    requirement_phrase,
+    roll_kind_noun,
+    scale_source,
+)
 from wh40kdc.translate.effect_region import (
     describe_menu_action,
     describe_named_region_conditional,
@@ -108,8 +115,12 @@ _USAGE = {
 }
 
 
-def usage_clause(u: dict[str, Any]) -> str:
+def usage_clause(u: Any) -> str:
     """Usage limit → front-of-sentence lead clause ("once per turn", "twice per battle")."""
+    # Several limits that all apply: "once per battle per model and once per battle round per army".
+    if isinstance(u, list):
+        return " and ".join(usage_clause(x) for x in u)
+    u = _obj(u)
     n = num(u.get("count") if u.get("count") is not None else 1)
     freq = u.get("frequency")
     if isinstance(freq, str) and freq in _USAGE:
@@ -127,23 +138,17 @@ def usage_clause(u: dict[str, Any]) -> str:
     return f"{base} per {jstr(u['per'])}" if u.get("per") is not None else base
 
 
-_SCALE_OF = {
-    "enemy-models-in-range": "enemy models",
-    "friendly-models-in-range": "friendly models",
-    "models-in-bearer-unit": "models in this unit",
-    "models-in-or-embarked-in-bearer": "models in or embarked within this model",
-    "enemy-units-in-range": "enemy units",
-    "wounds-lost": "wounds lost",
-}
-
-
 def _scaling_clause(s: dict[str, Any]) -> str:
     """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\"")."""
-    c = (
-        f"for every {jstr(s.get('per'))} "
-        f"{_SCALE_OF.get(jstr(s.get('of')), dekebab(jstr(s.get('of'))))}"
-    )
-    if s.get("within_inches") is not None:
+    cap = f" (to a maximum of {jstr(s['max_value'])})" if s.get("max_value") is not None else ""
+    if s.get("of") == "battle-round":
+        return f"multiplied by the battle round number{cap}"
+    # A summed characteristic is counted in points: "for every point of Objective Control …".
+    if s.get("of") == "embarked-models-oc":
+        points = "point" if num(s.get("per")) == 1 else f"{jstr(s.get('per'))} points"
+        return f"for every {points} of {scale_source(s)}{cap}"
+    c = f"for every {jstr(s.get('per'))} {scale_source(s)}"
+    if s.get("within_inches") is not None and not c.endswith(f'within {jstr(s["within_inches"])}"'):
         c += f' within {jstr(s["within_inches"])}"'
     if s.get("round") == "up":
         c += " (rounding up)"
@@ -177,9 +182,13 @@ def _keyword_filter_clause(value: Any, noun: str) -> str:
 
 def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
     if m.get("range_bonus") is not None:
+        capped_bonus = (
+            f' (to a maximum of {jstr(m["range_cap"])}")' if m.get("range_cap") is not None else ""
+        )
         named = f"{title_case(jstr(m['of']))} " if m.get("of") is not None else ""
         return (
             f"the range of this model's {named}abilities is increased by {jstr(m['range_bonus'])}\""
+            f"{capped_bonus}"
         )
     rng = m.get("range")
     if isinstance(rng, list):
@@ -188,6 +197,11 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         range_text = f'{jstr(rng)}"'
     else:
         range_text = "range"
+    capped = (
+        f' (to a maximum of {jstr(m["range_cap"])}", extensions included)'
+        if m.get("range_cap") is not None
+        else ""
+    )
     who = "a friendly unit" if e.get("target") == "friendly-within-aura" else "an enemy unit"
     eligible_who = _aura_eligible_subject(who, m.get("eligible"))
     recipient = (
@@ -205,7 +219,7 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         if m.get("effect") is not None
         else "that unit is affected"
     )
-    return f"while {recipient} is within {range_text} of {emitter}, {effect_text}"
+    return f"while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}"
 
 
 def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
@@ -225,15 +239,7 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
 
 def describe_requirement(req: Any) -> str:
     """A dice-pool requirement as a noun phrase ("pair of 4+"; alternatives join with " or ")."""
-
-    def one(r: Any) -> str:
-        r = _obj(r)
-        return f"{jstr(r.get('type'))} of {jstr(r.get('min_value'))}+"
-
-    any_of = _obj(req).get("any_of")
-    if isinstance(any_of, list):
-        return " or ".join(one(r) for r in any_of)
-    return one(req)
+    return requirement_phrase(req)
 
 
 def dice_table_result_label(results: Any) -> str:
@@ -274,18 +280,24 @@ def roll_with_rider(steps: list[Any], ctx: Ctx) -> str | None:
     )
 
 
-def dice_gated_body(e: Effect, ctx: Ctx) -> str:
-    """ "one D6 (binding …): on a 4+, …; otherwise, …" — shared by the inline and block forms."""
-    comparison = e.get("comparison") if e.get("comparison") is not None else "gte"
-    comp = format_comparison(jstr(comparison), e.get("threshold"))
+def dice_gate(e: Effect, ctx: Ctx) -> str:
+    """A dice gate: roll new dice ("roll one D6: on a 4+, …"), or test the dice of a bound
+    roll against a threshold or a pair/triple requirement — shared by the inline and block
+    forms."""
     success = inline(e["on_success"], ctx) if e.get("on_success") else "nothing happens"
     fail = f"; otherwise, {inline(e['on_fail'], ctx)}" if e.get("on_fail") else ""
-    binding = (
-        f" (binding the result as {dekebab(jstr(e['roll_var']).replace('_', '-'))})"
-        if e.get("roll_var")
-        else ""
-    )
-    return f"one {dice_case(e.get('dice'))}{binding}: on {comp}, {success}{fail}"
+    comparison = e.get("comparison") if e.get("comparison") is not None else "gte"
+    comp = format_comparison(jstr(comparison), e.get("threshold"))
+    if e.get("from") is not None:
+        if e.get("requirement") is not None:
+            req = describe_requirement(e["requirement"])
+            return f"using a {req} from that roll's unused dice, {success}{fail}"
+        return f"if {quantity_phrase(_obj(e['from']))} is {comp}, {success}{fail}"
+    kind = f" ({roll_kind_noun(e['kind'])})" if e.get("kind") is not None else ""
+    # "roll one D6", but "roll 2D6": a dice expression with its own count takes no article.
+    dice = dice_case(e.get("dice"))
+    one = "" if re.match(r"\d", dice) else "one "
+    return f"roll {one}{dice}{kind}: on {comp}, {success}{fail}"
 
 
 def designate_when(applies: dict[str, Any], block: bool) -> str:
@@ -332,7 +344,11 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
     if t == "dice-gated":
         if e.get("test"):
             return leadership_test(e, ctx)
-        return f"roll {dice_gated_body(e, ctx)}"
+        return dice_gate(e, ctx)
+    if t == "roll":
+        return f"{roll_head(e)}; then {inline(e.get('effect'), ctx)}"
+    if t == "select-objective":
+        return select_objective_inline(e, lambda x: inline(x, ctx))
     if t == "dice-table":
         return _dice_table_inline(e, ctx)
     if t == "dice-pool-allocation":

@@ -35,9 +35,11 @@ from wh40kdc.translate.condition_refs import (
     _str,
     _subject_of,
     _truthy,
+    _window_phrase,
     dekebab,
     move_kinds,
     range_phrase,
+    roll_word,
     title_case,
     unit_filter_phrase,
     unit_ref_phrase,
@@ -100,7 +102,8 @@ _VERB_NEGATED = frozenset(
         "engagement-fronts",
         "destroyed-while-on-objective",
         "destroyed-in-tagged-terrain",
-        "terrain-area-control",
+        "army-faction",
+        "battle-size",
     }
 )
 
@@ -307,6 +310,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             who = "the target" if p.get("subject") == "defender" else _subject_of(p)
             return f"{who} is {nt}within {range_phrase(range_v)}"
         if isinstance(of, dict) and _truthy(of.get("objective")):
+            if _obj(of["objective"]).get("selection_var") is not None:
+                return f"{_subject_of(p)} is {nt}{wholly}within range of that objective marker"
             obj = _objective_phrase(of["objective"], False, "objective marker")
             return f"{_subject_of(p)} is {nt}{wholly}within range of {_article(obj)} {obj}"
         if isinstance(of, dict) and of.get("owner") == "enemy" and p.get("subject") is None:
@@ -316,6 +321,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             return f"{unit_filter_phrase(of)} is within {range_phrase(range_v)}"
         if of == "battlefield-edge":
             target = "a battlefield edge"
+        elif of == "battlefield-centre":
+            target = "the centre of the battlefield"
         elif isinstance(of, dict) and _truthy(of.get("marker")):
             marker = _str(of["marker"])
             target = f"{_article(marker)} {dekebab(marker)} marker"
@@ -400,7 +407,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         return f"{neg}{lhs} is {cmp} {rhs}"
     if ctype == "roll-result":
         outcome = "succeeded" if p.get("result") == "success" else f"was a {_str(p.get('result'))}"
-        return f"{neg}the triggering {dekebab(_str(p.get('roll')))} roll {outcome}"
+        return f"{neg}the triggering {roll_word(p.get('roll'))} roll {outcome}"
     if ctype == "visible":
         who = "the target" if p.get("subject") == "defender" else _subject_of(p)
         to_v = p.get("to")
@@ -425,7 +432,11 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             if p.get("count_max") is not None:
                 out_s += f" (at most {_str(p['count_max'])})"
             return out_s
-        return f"{_subject_of(p)} is {nt}{_designation_phrase(_str(p.get('tag')))}"
+        by = ""
+        if p.get("by") is not None:
+            by_phrase = unit_ref_phrase(p["by"], "this unit")
+            by = f" by {'this unit' if by_phrase == 'the unit' else by_phrase}"
+        return f"{_subject_of(p)} is {nt}{_designation_phrase(_str(p.get('tag')))}{by}"
     if ctype == "resource":
         if p.get("below_max") is True:
             source = _obj(p.get("source_ability")).get("ability_id")
@@ -483,9 +494,19 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         )
         count = p["count_min"] if p.get("count_min") is not None else 1
         return f"{neg}{_str(count)}+ enemy units destroyed {where} {terrain}"
-    if ctype == "terrain-area-control":
-        count = p["min_models"] if p.get("min_models") is not None else 1
-        return f"{neg}you control a terrain area with {_str(count)}+ models"
+    if ctype == "battle-size":
+        return f"the battle size is {nt}{title_case(_str(p.get('size')))}"
+    if ctype == "army-faction":
+        faction = _str(p.get("faction")).replace("-", " ").upper()
+        return f"your Army Faction is {nt}{faction}"
+    if ctype == "moved-over":
+        who = _subject_of(p, "the unit")
+        win = p.get("window")
+        window = "during that move" if win is None or win == "event" else _window_phrase(win)
+        by = unit_ref_phrase(p.get("by"), "this model")
+        return f"{who} {'was not' if negated else 'was'} moved over by {by} {window}"
+    if ctype == "guided":
+        return f"{_subject_of(p, 'the unit')} is {nt}{_designation_phrase('guided')}"
     return f"{neg}{dekebab(ctype if ctype is not None else 'unknown')}"
 
 

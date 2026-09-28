@@ -805,39 +805,7 @@
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
                 "of": {
-                  "oneOf": [
-                    {
-                      "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
-                    },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "objective": {
-                          "$ref": "../../defs/common.schema.json#/$defs/objective-filter"
-                        }
-                      },
-                      "required": [
-                        "objective"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "marker": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      },
-                      "required": [
-                        "marker"
-                      ]
-                    },
-                    {
-                      "const": "battlefield-edge"
-                    }
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/place-ref"
                 },
                 "range": {
                   "$ref": "../../defs/common.schema.json#/$defs/range-ref"
@@ -1252,8 +1220,7 @@
                   ]
                 },
                 "tag": {
-                  "type": "string",
-                  "minLength": 1
+                  "$ref": "../../defs/common.schema.json#/$defs/designation-id"
                 },
                 "count_min": {
                   "type": "integer",
@@ -1262,6 +1229,10 @@
                 "count_max": {
                   "type": "integer",
                   "minimum": 0
+                },
+                "by": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+                  "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer)."
                 }
               },
               "required": [
@@ -1477,32 +1448,115 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "title": "terrain-area-control condition",
-          "description": "[board] Mission: you control this terrain area with at least min_models models.",
+          "title": "battle-size condition",
+          "description": "[clock] The battle is being played at this battle size.",
           "required": [
             "type",
             "parameters"
           ],
           "properties": {
             "type": {
-              "const": "terrain-area-control"
+              "const": "battle-size"
             },
             "parameters": {
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "footprint_ref": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "min_models": {
-                  "type": "integer",
-                  "minimum": 0
+                "size": {
+                  "enum": [
+                    "incursion",
+                    "strike-force",
+                    "onslaught"
+                  ]
                 }
               },
               "required": [
-                "footprint_ref"
+                "size"
               ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "army-faction condition",
+          "description": "[army] Your Army Faction is this faction.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-faction"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "faction": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                }
+              },
+              "required": [
+                "faction"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "moved-over condition",
+          "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "moved-over"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "by": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "window": {
+                  "$ref": "../../defs/common.schema.json#/$defs/history-window"
+                }
+              },
+              "required": [
+                "by"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "guided condition",
+          "description": "[designation] The subject (default this unit) is Guided: it has For the Greater Good, is not an Observer, and is targeting one or more Spotted units.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "guided"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                }
+              }
             }
           }
         }
