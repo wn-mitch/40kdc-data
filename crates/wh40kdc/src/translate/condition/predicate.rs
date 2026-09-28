@@ -28,7 +28,8 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "engagement-fronts"
             | "destroyed-while-on-objective"
             | "destroyed-in-tagged-terrain"
-            | "terrain-area-control"
+            | "army-faction"
+            | "battle-size"
     )
 }
 

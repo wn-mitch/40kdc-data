@@ -65,6 +65,12 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             }
             let of_obj = of.and_then(Value::as_object);
             if let Some(o) = of_obj.filter(|o| truthy(o.get("objective"))) {
+                if nn(obj(o.get("objective")), "selection_var").is_some() {
+                    return format!(
+                        "{} is {not_}{wholly}within range of that objective marker",
+                        subject_of(p, "the unit")
+                    );
+                }
                 let phrase = objective_phrase(obj(o.get("objective")), false, "objective marker");
                 return format!(
                     "{} is {not_}{wholly}within range of {} {phrase}",
@@ -87,6 +93,8 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             }
             let target = if of.and_then(Value::as_str) == Some("battlefield-edge") {
                 "a battlefield edge".to_string()
+            } else if of.and_then(Value::as_str) == Some("battlefield-centre") {
+                "the centre of the battlefield".to_string()
             } else if let Some(o) = of_obj.filter(|o| truthy(o.get("marker"))) {
                 let marker = st(o.get("marker"));
                 format!("{} {} marker", article(&marker), dekebab(&marker))
@@ -247,7 +255,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
         }
         "roll-result" => format!(
             "{neg}the triggering {} roll {}",
-            dekebab(&st(p.get("roll"))),
+            roll_word(p.get("roll")),
             if is(p, "result", "success") {
                 "succeeded".to_string()
             } else {
@@ -299,10 +307,22 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     return out;
                 }
             }
+            let by = match nn(p, "by") {
+                Some(b) => {
+                    let phrase = unit_ref_phrase(Some(b), "this unit");
+                    let phrase = if phrase == "the unit" {
+                        "this unit".to_string()
+                    } else {
+                        phrase
+                    };
+                    format!(" by {phrase}")
+                }
+                None => String::new(),
+            };
             format!(
-                "{} is {not_}{}",
+                "{} is {not_}{}{by}",
                 subject_of(p, "the unit"),
-                designation_phrase(&st(p.get("tag")))
+                designation_phrase(&st(p.get("tag")), false)
             )
         }
         "resource" => {
@@ -397,9 +417,31 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 str_or_one(p, "count_min")
             )
         }
-        "terrain-area-control" => format!(
-            "{neg}you control a terrain area with {}+ models",
-            str_or_one(p, "min_models")
+        "battle-size" => format!(
+            "the battle size is {not_}{}",
+            title_case(&st(p.get("size")))
+        ),
+        "army-faction" => format!(
+            "your Army Faction is {not_}{}",
+            st(p.get("faction")).replace('-', " ").to_uppercase()
+        ),
+        "moved-over" => {
+            let window = if nn(p, "window").is_none() || is(p, "window", "event") {
+                "during that move".to_string()
+            } else {
+                window_phrase(p.get("window"))
+            };
+            format!(
+                "{} {} moved over by {} {window}",
+                subject_of(p, "the unit"),
+                if negated { "was not" } else { "was" },
+                unit_ref_phrase(p.get("by"), "this model")
+            )
+        }
+        "guided" => format!(
+            "{} is {not_}{}",
+            subject_of(p, "the unit"),
+            designation_phrase("guided", false)
         ),
         other => format!(
             "{neg}{}",

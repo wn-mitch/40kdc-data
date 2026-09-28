@@ -8,29 +8,29 @@ use super::words::*;
 use super::{empty_value, inline};
 use crate::translate::condition::{describe_condition_value, nn, obj, P};
 use crate::translate::dekebab;
+use crate::translate::expiry::expiry_trail;
 use crate::translate::trigger::describe_trigger_value;
 
 /// Duration → woven clause `(lead, trail)`. `lead` sits at the very front of the sentence
 /// ("Once per battle, …"); `trail` sits after the trigger/condition and before the effect.
 pub(crate) fn duration_clauses(duration: Option<&Value>) -> (&'static str, &'static str) {
-    match duration.and_then(Value::as_str) {
-        Some("attack-sequence") => ("", "until that unit finishes resolving its attacks"),
-        Some("resolution") => ("", "when resolving this use"),
-        Some("phase") => ("", "until the end of the phase"),
-        Some("turn") => ("", "until the end of the turn"),
-        Some("battle") => ("", "for the rest of the battle"),
-        Some("battle-round") => ("", "until the end of the battle round"),
-        Some("until-next-command-phase") => ("", "until the start of your next Command phase"),
-        Some("until-next-movement-phase") => ("", "until the start of your next Movement phase"),
-        Some("until-next-battle-round") => ("", "until the start of the next battle round"),
-        Some("until-start-next-turn") => ("", "until the start of your next turn"),
-        Some("one-use") => ("once per battle", ""),
-        _ => ("", ""),
+    if duration.and_then(Value::as_str) == Some("one-use") {
+        return ("once per battle", "");
     }
+    ("", expiry_trail(duration))
 }
 
 /// Usage limit → front-of-sentence lead clause ("once per turn", "twice per battle per unit").
-pub(crate) fn usage_clause(u: &P) -> String {
+pub(crate) fn usage_clause(u: &Value) -> String {
+    // Several limits that all apply: "once per battle per model and once per battle round per army".
+    if let Some(list) = u.as_array() {
+        return list
+            .iter()
+            .map(usage_clause)
+            .collect::<Vec<_>>()
+            .join(" and ");
+    }
+    let u = obj(Some(u));
     let n = num(Some(nn(u, "count").unwrap_or(&Value::from(1))));
     let base = match sv(u, "frequency") {
         Some("once-per-turn") => "once per turn".to_string(),
@@ -59,27 +59,33 @@ pub(crate) fn usage_clause(u: &P) -> String {
 
 /// A `scaling` block → trailing clause ("for every 5 enemy models within 6\"").
 pub(crate) fn scaling_clause(s: &P) -> String {
-    let of = jstr(s.get("of"));
-    let of_text = match of.as_str() {
-        "enemy-models-in-range" => "enemy models".to_string(),
-        "friendly-models-in-range" => "friendly models".to_string(),
-        "models-in-bearer-unit" => "models in this unit".to_string(),
-        "models-in-or-embarked-in-bearer" => "models in or embarked within this model".to_string(),
-        "enemy-units-in-range" => "enemy units".to_string(),
-        "wounds-lost" => "wounds lost".to_string(),
-        other => dekebab(other),
-    };
-    let mut c = format!("for every {} {of_text}", jstr(s.get("per")));
+    let max = nn(s, "max_value")
+        .map(|mx| format!(" (to a maximum of {})", jv(mx)))
+        .unwrap_or_default();
+    match sv(s, "of") {
+        Some("battle-round") => return format!("multiplied by the battle round number{max}"),
+        // A summed characteristic is counted in points.
+        Some("embarked-models-oc") => {
+            let per = if num(s.get("per")) == 1.0 {
+                "point".to_string()
+            } else {
+                format!("{} points", jstr(s.get("per")))
+            };
+            return format!("for every {per} of {}{max}", scale_source(s));
+        }
+        _ => {}
+    }
+    let mut c = format!("for every {} {}", jstr(s.get("per")), scale_source(s));
     if let Some(w) = nn(s, "within_inches") {
-        c.push_str(&format!(" within {}\"", jv(w)));
+        let within = format!("within {}\"", jv(w));
+        if !c.ends_with(&within) {
+            c.push_str(&format!(" {within}"));
+        }
     }
     if sv(s, "round") == Some("up") {
         c.push_str(" (rounding up)");
     }
-    if let Some(mx) = nn(s, "max_value") {
-        c.push_str(&format!(" (to a maximum of {})", jv(mx)));
-    }
-    c
+    c + &max
 }
 
 /// A polymorphic trigger spec as a list (empty when absent).

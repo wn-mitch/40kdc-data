@@ -101,13 +101,24 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
     });
     let bounded = nn(sel, "min_count").is_some() && exact.is_none();
     let count = exact.or_else(|| sel.get("max_count"));
+    // A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units
+    // (Incursion/…)".
+    let cap = count.and_then(Value::as_object);
     let single = num(count) == 1.0;
     let noun = if single {
         target_noun(sel).to_string()
     } else {
         format!("{}s", target_noun(sel))
     };
-    let quantity = if exact.is_some() {
+    let cap_phrase = cap.map(quantity_phrase).unwrap_or_default();
+    let sized = cap.is_some_and(|c| nn(c, "count_of").is_none());
+    let quantity = if cap.is_some() {
+        if sized {
+            format!("up to {}", strip_paren_tail(&cap_phrase))
+        } else {
+            "any number of".to_string()
+        }
+    } else if exact.is_some() {
         if single {
             "one".to_string()
         } else {
@@ -122,6 +133,11 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
     } else {
         format!("up to {}", jstr(count))
     };
+    let wholly = if is_true(sel, "wholly") {
+        " wholly"
+    } else {
+        ""
+    };
     let bound_origin = if truthy_key(sel, "within_inches_from") {
         format!(
             " of {}",
@@ -131,14 +147,14 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
         String::new()
     };
     let within = if let Some(w) = nn(sel, "within_inches") {
-        format!(" within {}\"{bound_origin}", jv(w))
+        format!("{wholly} within {}\"{bound_origin}", jv(w))
     } else if let Some(r) = nn(sel, "range_inches") {
         let origin = if bound_origin.is_empty() {
             format!(" of {}", reference_origin(sel.get("reference")))
         } else {
             bound_origin
         };
-        format!(" within {}\"{origin}", jv(r))
+        format!("{wholly} within {}\"{origin}", jv(r))
     } else {
         String::new()
     };
@@ -158,8 +174,18 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
     } else {
         format!(" {kw}")
     };
+    let cap_tail = match cap {
+        None => String::new(),
+        Some(_) if sized => format!(" ({})", paren_inner(&cap_phrase)),
+        Some(_) => format!(" (at most {cap_phrase})"),
+    };
+    let noun = if cap.is_some() {
+        format!("{}s", target_noun(sel))
+    } else {
+        noun
+    };
     format!(
-        "{quantity} {}{kw} {noun}{}{inclusive}{within}{visible}{}",
+        "{quantity} {}{kw} {noun}{cap_tail}{}{inclusive}{within}{visible}{}",
         jstr(sel.get("owner")),
         selection_model_filters(sel),
         eligibility_clause(sel, true)
@@ -189,6 +215,10 @@ pub(crate) fn select_units_engagement(sel: &P) -> String {
 }
 
 pub(crate) fn select_units_plural(sel: &P) -> bool {
+    // A cap set by the battle size or a count can select more than one.
+    if nn(sel, "count").is_none() && sel.get("max_count").is_some_and(Value::is_object) {
+        return true;
+    }
     num(nn(sel, "count").or_else(|| sel.get("max_count"))) > 1.0
 }
 
@@ -361,4 +391,20 @@ pub(crate) fn for_each_unit_subject(sel: &P) -> String {
         eligibility_clause(sel, false),
         selection_binding(sel)
     )
+}
+
+/// `s.replace(/ \(.*\)$/, "")`: drop everything from the first " (" when the text ends in ")".
+fn strip_paren_tail(s: &str) -> String {
+    match s.find(" (") {
+        Some(i) if s.ends_with(')') => s[..i].to_string(),
+        _ => s.to_string(),
+    }
+}
+
+/// `s.replace(/^.*\((.*)\)$/, "$1")`: the text inside the last "(" of a trailing group.
+fn paren_inner(s: &str) -> String {
+    match s.rfind('(') {
+        Some(i) if s.ends_with(')') && s.len() > i + 1 => s[i + 1..s.len() - 1].to_string(),
+        _ => s.to_string(),
+    }
 }

@@ -34,6 +34,9 @@
 //!         target_keywords: None,
 //!         timing: None,
 //!         attacker_attached: None,
+//!         army_faction: None,
+//!         battle_size: None,
+//!         attacker_guided: None,
 //!     },
 //! };
 //! let out = crunch(&input, None).expect("crunch succeeds");
@@ -43,6 +46,7 @@
 pub mod attribution;
 pub mod buffs;
 pub mod engine;
+pub mod from_dsl;
 pub mod from_keyword;
 
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
@@ -53,5 +57,9 @@ pub use buffs::{
 pub use engine::{
     crunch, AttackProfileRef, CruncherError, EngineInput, EngineOutput, Stage, StageName,
     TargetProfileRef,
+};
+pub use from_dsl::{
+    effect_to_buffs, parse_keyword_grant, ActivatableBuff, ActivatableGroupRef, EffectTranslation,
+    TranslationPerspective, UnsupportedFragment,
 };
 pub use from_keyword::buffs_from_keyword;

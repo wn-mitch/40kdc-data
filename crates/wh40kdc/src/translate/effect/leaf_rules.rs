@@ -6,6 +6,7 @@ use serde_json::{Map, Value};
 use super::words::*;
 use crate::translate::condition::{nn, obj, objective_phrase, P};
 use crate::translate::dekebab;
+use crate::translate::expiry::expiry_trail;
 
 pub(super) fn marker(m: &P) -> String {
     // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
@@ -166,6 +167,17 @@ pub(super) fn resource_die(m: &P) -> String {
         };
         return format!("add {die} to your {pool} for each {per} you have{consumes}");
     }
+    if nn(m, "count").is_some() && !is_literal(m.get("count")) {
+        let (one, many) = if value == Some("rolled") {
+            ("rolled D6", "rolled D6")
+        } else {
+            ("die", "dice")
+        };
+        return format!(
+            "add {} to your {pool}",
+            amount_of(m.get("count"), one, many)
+        );
+    }
     let cnt = nn(m, "count")
         .map(|c| dice_case(Some(c)))
         .unwrap_or_else(|| "1".to_string());
@@ -188,10 +200,14 @@ pub(super) fn resource_die(m: &P) -> String {
 pub(super) fn designate(m: &P, subj: &str, ctx: &Ctx) -> String {
     let what = match m.get("subject") {
         None | Some(Value::Null) => subj.to_string(),
-        Some(Value::Object(s)) if nn(s, "objective").is_some() => format!(
-            "the {}",
-            objective_phrase(obj(s.get("objective")), false, "objective")
-        ),
+        Some(Value::Object(s)) if nn(s, "objective").is_some() => {
+            let o = obj(s.get("objective"));
+            if nn(o, "selection_var").is_some() {
+                "that objective marker".to_string()
+            } else {
+                format!("the {}", objective_phrase(o, false, "objective"))
+            }
+        }
         Some(Value::Object(s)) if nn(s, "terrain_area").is_some() => {
             let mut r = Map::new();
             r.insert("terrain_area".into(), s["terrain_area"].clone());
@@ -201,14 +217,25 @@ pub(super) fn designate(m: &P, subj: &str, ctx: &Ctx) -> String {
     };
     let tag = designation_for(&jstr(m.get("tag")));
     let until = match sv(m, "clears_on") {
-        Some("turn-rollover") => " until the end of the turn",
-        Some("phase-end") => " until the end of the phase",
-        _ => "",
+        Some("turn-rollover") => " until the end of the turn".to_string(),
+        Some("phase-end") => " until the end of the phase".to_string(),
+        Some("battle") => String::new(),
+        _ => {
+            let trail = expiry_trail(m.get("clears_on"));
+            if trail.is_empty() {
+                String::new()
+            } else {
+                format!(" {trail}")
+            }
+        }
     };
+    let by = nn(m, "by")
+        .map(|b| format!(" by {}", effect_subject(Some(b), ctx)))
+        .unwrap_or_default();
     if is_true(m, "clear") {
         format!("{what} {} no longer {tag}", v(&what, "is"))
     } else {
-        format!("{what} {} {tag}{until}", v(&what, "is"))
+        format!("{what} {} {tag}{by}{until}", v(&what, "is"))
     }
 }
 
@@ -238,9 +265,24 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
             "you cannot select {} as your Army Faction",
             title_case(&jstr(m.get("faction")))
         ),
+        Some("single-chapter") => "your army can include units from only one Chapter".to_string(),
+        Some("detachment-forbidden") => format!(
+            "you cannot select the {} Detachment",
+            title_case(&jstr(m.get("detachment")))
+        ),
+        Some("detachment-tag-exclusive") => format!(
+            "you cannot select this Detachment together with another {} Detachment",
+            title_case(&jstr(m.get("tag")))
+        ),
         Some("attachment") => {
             if is_true(m, "mandatory") {
                 return format!("{subj} must be attached to a Leader, or it counts as destroyed");
+            }
+            if let Some(a) = nn(m, "attach_as") {
+                return format!(
+                    "a Leader that can be attached to {} can also be attached to {subj}",
+                    strip_all(&effect_subject(Some(a), ctx))
+                );
             }
             let led = nn(m, "led_by")
                 .map(|l| format!(" led by a {} model", title_case(&jv(l))))
@@ -249,14 +291,50 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
                 "at the start of the Declare Battle Formations step, {subj} can join one friendly unit{led}, becoming part of that Bodyguard unit"
             )
         }
-        _ => {
-            let units = with.unwrap_or_else(|| "such units".to_string());
-            match nn(m, "max") {
-                Some(max) => format!("your army can include at most {} {units}", jv(max)),
-                None => format!("your army cannot include {units}"),
-            }
-        }
+        _ => composition(m, with, ctx),
     }
+}
+
+/// A composition limit: at most N units / models / points of X, per matching unit, outside
+/// the Retinue limit.
+fn composition(m: &P, with: Option<String>, ctx: &Ctx) -> String {
+    let what = with.unwrap_or_else(|| "such units".to_string());
+    let exempt = if arr(m, "exempt_from").is_some() {
+        "; they do not count toward the Retinue limit"
+    } else {
+        ""
+    };
+    let Some(max_v) = nn(m, "max") else {
+        return format!("your army cannot include {what}{exempt}");
+    };
+    let measure = match sv(m, "measure") {
+        Some("points") => "points of ",
+        Some("models") => "models from ",
+        _ => "",
+    };
+    let literal = is_literal(Some(max_v));
+    let max = if literal {
+        jv(max_v)
+    } else {
+        dice_case(Some(max_v))
+    };
+    // "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
+    let one = literal && num(Some(max_v)) == 1.0 && measure.is_empty();
+    let counted = if one {
+        replace_word_first(&what, " units", " unit", false)
+    } else {
+        what
+    };
+    let per = nn(m, "per")
+        .map(|p| {
+            let each = strip_all(&effect_subject(Some(p), ctx));
+            format!(
+                " for each {} in your army",
+                replace_word_first(&each, " units", " unit", false)
+            )
+        })
+        .unwrap_or_default();
+    format!("your army can include at most {max} {measure}{counted}{per}{exempt}")
 }
 
 /// `effectSubject(x).replace(/^all /, "").replace(/\bunits\b/, "models")` with a default ctx.

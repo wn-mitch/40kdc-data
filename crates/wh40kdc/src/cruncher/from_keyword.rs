@@ -334,6 +334,9 @@ mod tests {
             target_keywords: None,
             timing: None,
             attacker_attached: None,
+            army_faction: None,
+            battle_size: None,
+            attacker_guided: None,
         }
     }
 

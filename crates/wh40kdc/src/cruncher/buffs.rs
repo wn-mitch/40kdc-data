@@ -240,6 +240,39 @@ pub struct EngineContext {
     /// The buffed unit is part of a combined ("attached") unit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_attached: Option<bool>,
+    /// The army's Army Faction id. Drives the `army-faction` condition; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub army_faction: Option<String>,
+    /// The battle size being played (`incursion` / `strike-force` / `onslaught`). Drives the
+    /// `battle-size` condition; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub battle_size: Option<String>,
+    /// The attacking unit is Guided (For the Greater Good: not an Observer, targeting a Spotted
+    /// unit). Drives the `guided` condition; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_guided: Option<bool>,
+}
+
+impl EngineContext {
+    /// A context for `phase` with every optional flag unset (each gate it drives stays unknown).
+    pub fn new(phase: Phase) -> Self {
+        EngineContext {
+            phase,
+            attacker_stationary: None,
+            attacker_charged: None,
+            within_half_range: None,
+            distance_inches: None,
+            attacker_in_cover: None,
+            target_in_cover: None,
+            attacker_keywords: None,
+            target_keywords: None,
+            timing: None,
+            attacker_attached: None,
+            army_faction: None,
+            battle_size: None,
+            attacker_guided: None,
+        }
+    }
 }
 
 /// Read-out of a resolved buff stack, with provenance per field.

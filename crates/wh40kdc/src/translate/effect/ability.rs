@@ -46,8 +46,9 @@ pub(super) fn render_top_level(
     let e_map = obj(Some(e));
     let (dur_lead, trail) = duration_clauses(scope.and_then(|s| s.get("duration")));
     // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
-    let lead = match usage.and_then(Value::as_object) {
-        Some(u) if nn(u, "frequency").is_some() => usage_clause(u),
+    let lead = match usage {
+        Some(u) if u.is_array() => usage_clause(u),
+        Some(u) if u.as_object().is_some_and(|o| nn(o, "frequency").is_some()) => usage_clause(u),
         _ => dur_lead.to_string(),
     };
 

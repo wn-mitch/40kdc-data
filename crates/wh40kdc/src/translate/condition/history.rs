@@ -155,6 +155,13 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             } else {
                 format!(" {}", window_phrase(window))
             };
+            // Who made the attacks, when it is not the unit being checked.
+            let attacker = match nn(p, "subject") {
+                Some(sub) if sub.as_str() != Some("this-unit") => {
+                    format!(" made by {}", unit_ref_phrase(Some(sub), "the unit"))
+                }
+                _ => String::new(),
+            };
             if is(f, "roll", "hit") && is(f, "result", "success") {
                 let hits = if n_val > 1.0 {
                     format!("{n}+ {atk}attacks")
@@ -163,7 +170,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 } else {
                     format!("a {atk}attack")
                 };
-                return format!("{neg}{target} was hit by {hits}{weapon}{by}{when}");
+                return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
             }
             let result = if truthy(f.get("result")) {
                 format!("was a {} ", st(f.get("result")))
@@ -172,7 +179,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             };
             format!(
                 "{neg}a {} roll {result}{}",
-                st(f.get("roll")),
+                roll_word(f.get("roll")),
                 window_phrase(window)
             )
             .trim_end()
@@ -233,7 +240,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 .to_string();
             }
             let tagged = nn(o, "designated")
-                .map(|d| format!(" {}", designation_phrase(&st(Some(d)))))
+                .map(|d| format!(" {}", designation_phrase(&st(Some(d)), false)))
                 .unwrap_or_default();
             format!(
                 "{neg}{}",
@@ -269,6 +276,12 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 }
                 return with_window(&s, window);
             }
+            if let Some(which) = used_ability_phrase(f) {
+                return format!(
+                    "{neg}{}",
+                    with_window(&format!("{who} used {which}"), window)
+                );
+            }
             let which = match nn(f, "id") {
                 Some(id) => format!("the {} ", title_case(&st(Some(id)))),
                 None => "a ".to_string(),
@@ -294,7 +307,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 &format!(
                     "{n}+ {} became {}",
                     unit_ref_phrase(p.get("object"), "units"),
-                    designation_phrase(&st(f.get("tag")))
+                    designation_phrase(&st(f.get("tag")), false)
                 ),
                 window
             )

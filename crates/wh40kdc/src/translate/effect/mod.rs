@@ -11,6 +11,7 @@
 //! `words.rs` holds the shared vocabulary.
 
 mod ability;
+mod bind;
 mod block;
 mod designation;
 mod dice;
@@ -20,7 +21,10 @@ mod leaf_ability;
 mod leaf_board;
 mod leaf_move;
 mod leaf_rules;
+mod leaf_shapes;
 mod menu;
+mod placement;
+mod quantity;
 mod region;
 mod select;
 mod subject;
@@ -46,6 +50,8 @@ pub(crate) use words::title_case;
 use words::*;
 
 const CONTAINER_TYPES: &[&str] = &[
+    "roll",
+    "select-objective",
     "sequence",
     "rules-bundle",
     "ability-part",
@@ -160,8 +166,11 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
             .map(|of| format!("{} ", title_case(&jv(of))))
             .unwrap_or_default();
         return format!(
-            "the range of this model's {named}abilities is increased by {}\"",
-            jv(bonus)
+            "the range of this model's {named}abilities is increased by {}\"{}",
+            jv(bonus),
+            nn(m, "range_cap")
+                .map(|c| format!(" (to a maximum of {}\")", jv(c)))
+                .unwrap_or_default()
         );
     }
     let range_text = match nn(m, "range") {
@@ -201,7 +210,10 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
         ),
         None => "that unit is affected".to_string(),
     };
-    format!("while {recipient} is within {range_text} of {emitter}, {effect_text}")
+    let capped = nn(m, "range_cap")
+        .map(|c| format!(" (to a maximum of {}\", extensions included)", jv(c)))
+        .unwrap_or_default();
+    format!("while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}")
 }
 
 /// "select one", "select two", "select up to two" — how many menu options are picked.
@@ -273,7 +285,7 @@ fn part_head(e: &P) -> String {
         None => String::new(),
     };
     let usage = match e.get("usage").filter(|u| truthy(Some(u))) {
-        Some(u) => usage_clause(obj(Some(u))),
+        Some(u) => usage_clause(u),
         None => String::new(),
     };
     let (_, trail) = duration_clauses(e.get("duration"));
@@ -335,8 +347,14 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             if truthy_key(e, "test") {
                 return leadership_test(e, ctx);
             }
-            format!("roll {}", dice_gated_body(e, ctx))
+            dice_gate(e, ctx)
         }
+        "roll" => format!(
+            "{}; then {}",
+            bind::roll_head(e),
+            inline(child(e, "effect"), ctx)
+        ),
+        "select-objective" => bind::select_objective_inline(e, ctx),
         "dice-table" => dice_table_inline(e, ctx),
         "dice-pool-allocation" => {
             let opts = items(e, "options")

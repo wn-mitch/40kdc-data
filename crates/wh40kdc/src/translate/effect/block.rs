@@ -66,8 +66,10 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             if truthy_key(e, "test") {
                 return format!("{indent}{arrow}{}.", capitalize(&leadership_test(e, ctx)));
             }
-            format!("{indent}{arrow}Roll {}.", dice_gated_body(e, ctx))
+            format!("{indent}{arrow}{}.", capitalize(&dice_gate(e, ctx)))
         }
+        "roll" => super::bind::roll_block(e, depth, ctx),
+        "select-objective" => super::bind::select_objective_block(e, depth, ctx),
         "dice-table" => {
             let mut lines = vec![format!(
                 "{indent}{arrow}Roll one {}:",

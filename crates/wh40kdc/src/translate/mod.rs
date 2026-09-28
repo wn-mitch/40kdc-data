@@ -13,7 +13,9 @@ use crate::generated::{
 };
 
 mod condition;
+pub mod designations;
 mod effect;
+mod expiry;
 mod trigger;
 pub use condition::{
     condition_lead_in_value, describe_condition_value, describe_selection_eligibility_value,

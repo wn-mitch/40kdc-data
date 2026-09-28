@@ -6,9 +6,9 @@ use serde_json::{Map, Value};
 
 use super::leaf_move::*;
 use super::leaf_rules::*;
+use super::placement::{placement_limits, placement_phrase};
 use super::words::*;
 use crate::translate::condition::{and_list, condition_lead_in_value, nn, obj, range_phrase, P};
-use crate::translate::dekebab;
 
 fn wounds(n: &str, noun: &str) -> String {
     if n == "1" {
@@ -20,6 +20,11 @@ fn wounds(n: &str, noun: &str) -> String {
 
 fn mortal_wounds(m: &P, subj: &str) -> String {
     let count = dice_case(m.get("count"));
+    let suffered = if is_literal(m.get("count")) {
+        format!("{count} {}", wounds(&count, "mortal wound"))
+    } else {
+        amount_of(m.get("count"), "mortal wound", "mortal wounds")
+    };
     let psychic = if is_true(m, "psychic") {
         " (Psychic Attack)"
     } else {
@@ -51,10 +56,9 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
             format!("one {}", dice_case(roll.get("dice")))
         };
         return format!(
-            "roll {dice}{each}: for each {}+, {who} {} {count} {}{psychic}",
+            "roll {dice}{each}: for each {}+, {who} {} {suffered}{psychic}",
             jstr(roll.get("threshold")),
-            v(&who, "suffers"),
-            wounds(&count, "mortal wound")
+            v(&who, "suffers")
         );
     }
     let per = if sv(m, "per") == Some("model") {
@@ -69,64 +73,47 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
     } else {
         String::new()
     };
-    format!(
-        "{who} {} {count} {}{per}{psychic}",
-        v(&who, "suffers"),
-        wounds(&count, "mortal wound")
-    )
+    format!("{who} {} {suffered}{per}{psychic}", v(&who, "suffers"))
 }
 
-fn placement(m: &P) -> String {
-    if sv(m, "placement") == Some("wholly-within") {
-        return format!(
-            " wholly within {} of this model",
-            range_phrase(m.get("range"))
-        );
-    }
-    let Some(p) = nn(m, "placement") else {
-        return String::new();
-    };
-    let p = jv(p);
-    match p.as_str() {
-        "closest-to-destruction" => " as close as possible to where it was destroyed".to_string(),
-        "coherency" => " in Unit Coherency".to_string(),
-        "unengaged" => " not within Engagement Range of any enemy units".to_string(),
-        "strategic-reserves" => " in Strategic Reserves".to_string(),
-        "anywhere" => " anywhere on the battlefield".to_string(),
-        other => format!(" {}", dekebab(other)),
-    }
-}
-
-fn return_models(target: Option<&Value>, m: &P, subj: &str) -> String {
-    let w = match m.get("wounds_remaining") {
+fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
+    let wr = m.get("wounds_remaining");
+    let w = match wr {
         None | Some(Value::Null) => "its full wounds".to_string(),
         Some(x) if x.as_str() == Some("full") => "its full wounds".to_string(),
-        Some(x) => {
+        Some(x) if is_literal(Some(x)) => {
             let n = dice_case(Some(x));
             format!("{n} {}", wounds(&n, "wound"))
         }
+        Some(x) => amount_of(Some(x), "wound", "wounds"),
+    };
+    let place = format!("{}{}", placement_phrase(m), placement_limits(m, ctx));
+    let detach = if is_true(m, "detach") {
+        let strength = nn(m, "starting_strength")
+            .map(|s| format!(" with a Starting Strength of {}", jv(s)))
+            .unwrap_or_default();
+        format!(", as a separate unit{strength} (it is no longer part of its attached unit)")
+    } else {
+        String::new()
     };
     if target.and_then(Value::as_str) == Some("this-model") {
-        return format!("{subj} is set up again{} with {w} remaining", placement(m));
+        return format!("{subj} is set up again{place} with {w} remaining{detach}");
     }
-    let count = if sv(m, "count") == Some("all") {
-        "all".to_string()
+    let kw = match nn(m, "model_keyword") {
+        Some(k) => format!("{} ", jv(k)),
+        None if is_true(m, "bodyguard_only") => "Bodyguard ".to_string(),
+        None => String::new(),
+    };
+    let kind = format!("destroyed {kw}model");
+    let what = if sv(m, "count") == Some("all") {
+        format!("all {kind}s")
     } else {
-        dice_case(m.get("count"))
+        amount_of(m.get("count"), &kind, &format!("{kind}s"))
     };
-    let kind = match nn(m, "model_keyword") {
-        Some(k) => format!("destroyed {} model", jv(k)),
-        None => "destroyed model".to_string(),
-    };
-    let noun = if count == "1" {
-        kind
-    } else {
-        format!("{kind}s")
-    };
-    format!(
-        "return {count} {noun} to {subj}{}, each with {w} remaining",
-        placement(m)
-    )
+    let excl = map_arr(m, "exclude_model_keyword", jv)
+        .map(|k| format!(" (excluding {} models)", and_list(&k)))
+        .unwrap_or_default();
+    format!("return {what}{excl} to {subj}{place}, each with {w} remaining{detach}")
 }
 
 fn destroy_models(m: &P, subj: &str) -> String {
@@ -247,26 +234,59 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
 }
 
 fn add_unit(m: &P, ctx: &Ctx) -> String {
-    let n = num(Some(nn(m, "count").unwrap_or(&Value::from(1))));
+    let place = format!("{}{}", placement_phrase(m), placement_limits(m, ctx));
+    let engage = nn(m, "allow_engagement_with")
+        .map(|w| {
+            format!(
+                "; it can be set up within Engagement Range of {}",
+                effect_subject(Some(w), ctx)
+            )
+        })
+        .unwrap_or_default();
+    let models = nn(m, "model_count")
+        .map(|c| format!(" containing {}", amount_of(Some(c), "model", "models")))
+        .unwrap_or_default();
+    let strength = nn(m, "starting_strength")
+        .map(|s| format!(" with a Starting Strength of {}", jv(s)))
+        .unwrap_or_default();
+    let name = title_case(&jstr(m.get("datasheet")));
+    let one_value = Value::from(1);
+    // New models that join an existing unit rather than forming their own.
+    if let Some(join) = nn(m, "join") {
+        let q = nn(m, "model_count")
+            .or_else(|| nn(m, "count"))
+            .unwrap_or(&one_value);
+        return format!(
+            "add {} to {}{place}{engage}",
+            amount_of(Some(q), &format!("{name} model"), &format!("{name} models")),
+            effect_subject(Some(join), ctx)
+        );
+    }
+    let count = m.get("count");
+    let literal = is_literal(count);
+    let n = if literal {
+        num(Some(nn(m, "count").unwrap_or(&one_value)))
+    } else {
+        f64::NAN
+    };
     let one = n == 1.0;
     let what = match nn(m, "copy_of") {
         Some(copy) => format!(
             "{} identical to {}",
             if one {
                 "a new unit".to_string()
-            } else {
+            } else if literal {
                 format!("{} new units", fnum(n))
+            } else {
+                amount_of(count, "new unit", "new units")
             },
             effect_subject(Some(copy), ctx)
         ),
-        None => format!(
-            "{} {} unit{}",
-            if one { "a".to_string() } else { fnum(n) },
-            title_case(&jstr(m.get("datasheet"))),
-            if one { "" } else { "s" }
-        ),
+        None if one => format!("a {name} unit"),
+        None if literal => format!("{} {name} units", fnum(n)),
+        None => amount_of(count, &format!("{name} unit"), &format!("{name} units")),
     };
-    format!("add {what} to your army{}", placement(m))
+    format!("add {what}{models}{strength} to your army{place}{engage}")
 }
 
 /// The board-axis leaves; anything unknown degrades to `[type]`.
@@ -324,6 +344,13 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                     pronoun(&who)
                 );
             }
+            if !is_literal(m.get("amount")) {
+                return format!(
+                    "{who} {} up to {}",
+                    v(&who, "regains"),
+                    amount_of(m.get("amount"), "lost wound", "lost wounds")
+                );
+            }
             let amount = dice_case(m.get("amount"));
             format!(
                 "{who} {} up to {amount} lost {}",
@@ -331,7 +358,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                 if amount == "1" { "wound" } else { "wounds" }
             )
         }
-        Some("return-models") => return_models(target, m, subj),
+        Some("return-models") => return_models(target, m, subj, ctx),
         Some("destroy-models") => destroy_models(m, subj),
         Some("act-on-death") => act_on_death(target, m, subj, ctx),
         Some("split-unit") => {
@@ -387,6 +414,18 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         }
         Some("cost-modifier") => cost_modifier(m, subj),
         Some("resource-gain") => {
+            if let Some(a) = nn(m, "amount").filter(|a| a.is_object() || a.is_array()) {
+                let one = Value::from(1);
+                let two = Value::from(2);
+                return format!(
+                    "you gain {}",
+                    amount_of(
+                        Some(a),
+                        &resource_noun(m.get("pool"), m.get("label"), Some(&one)),
+                        &resource_noun(m.get("pool"), m.get("label"), Some(&two))
+                    )
+                );
+            }
             let amount = match sv(m, "amount") {
                 Some("variable") => "a number of".to_string(),
                 Some("any") => "any number of".to_string(),
@@ -406,10 +445,26 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             };
             let two = Value::from(2);
             let count = if all { Some(&two) } else { m.get("amount") };
-            format!(
-                "spend {amount} {}",
-                resource_noun(m.get("pool"), m.get("label"), count)
-            )
+            let showing = match (nn(m, "face"), nn(m, "requirement")) {
+                (Some(f), _) => format!(" showing a {}", jv(f)),
+                (None, Some(r)) => format!(" forming a {}", requirement_phrase(Some(r))),
+                _ => String::new(),
+            };
+            let mut noun = resource_noun(m.get("pool"), m.get("label"), count);
+            // A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming …".
+            let dice_noun = [" die", " dice"]
+                .iter()
+                .any(|d| noun.ends_with(d))
+                || noun == "die"
+                || noun == "dice";
+            if !showing.is_empty() && !dice_noun {
+                noun.push_str(if num_of_jstr(m.get("amount")) == 1.0 {
+                    " die"
+                } else {
+                    " dice"
+                });
+            }
+            format!("spend {amount} {noun}{showing}")
         }
         Some("resource-die") => resource_die(m),
         Some("objective-sticky") => format!(

@@ -7,22 +7,10 @@ use serde_json::Value;
 use super::words::*;
 use super::{child, inline, items, ty};
 use crate::translate::condition::{describe_condition_value, nn, obj, truthy, P};
-use crate::translate::dekebab;
 
 /// A dice-pool option requirement: `pair of 4+`, or an `any_of` set joined with " or ".
 pub(super) fn describe_requirement(req: Option<&Value>) -> String {
-    let one = |r: Option<&Value>| {
-        let r = obj(r);
-        format!("{} of {}+", jstr(r.get("type")), jstr(r.get("min_value")))
-    };
-    match req.and_then(|r| r.get("any_of")).and_then(Value::as_array) {
-        Some(any) => any
-            .iter()
-            .map(|r| one(Some(r)))
-            .collect::<Vec<_>>()
-            .join(" or "),
-        None => one(req),
-    }
+    requirement_phrase(req)
 }
 
 pub(super) fn dice_table_result_label(results: Option<&Value>) -> String {
@@ -136,28 +124,42 @@ pub(super) fn gated_success(e: &P, ctx: &Ctx) -> String {
     }
 }
 
-/// "roll one D6 (binding …): on a 4+, …; otherwise, …" without the leading verb's case.
-pub(super) fn dice_gated_body(e: &P, ctx: &Ctx) -> String {
-    let comp = format_comparison(
-        &jstr(Some(nn(e, "comparison").unwrap_or(&Value::from("gte")))),
-        e.get("threshold"),
-    );
+/// A dice gate: roll new dice ("roll one D6: on a 4+, …"), or test the dice of a bound roll
+/// against a threshold or a pair/triple requirement.
+pub(super) fn dice_gate(e: &P, ctx: &Ctx) -> String {
+    let success = gated_success(e, ctx);
     let fail = match e.get("on_fail").filter(|f| truthy(Some(f))) {
         Some(f) => format!("; otherwise, {}", inline(f, ctx)),
         None => String::new(),
     };
-    let binding = match sv(e, "roll_var").filter(|s| !s.is_empty()) {
-        Some(var) => format!(
-            " (binding the result as {})",
-            dekebab(&var.replace('_', "-"))
-        ),
-        None => String::new(),
+    let gte = Value::from("gte");
+    let comp = format_comparison(
+        &jstr(Some(nn(e, "comparison").unwrap_or(&gte))),
+        e.get("threshold"),
+    );
+    if let Some(from) = nn(e, "from") {
+        if let Some(req) = nn(e, "requirement") {
+            return format!(
+                "using a {} from that roll's unused dice, {success}{fail}",
+                describe_requirement(Some(req))
+            );
+        }
+        return format!(
+            "if {} is {comp}, {success}{fail}",
+            quantity_phrase(obj(Some(from)))
+        );
+    }
+    let kind = nn(e, "kind")
+        .map(|k| format!(" ({})", roll_kind_noun(Some(k))))
+        .unwrap_or_default();
+    // "roll one D6", but "roll 2D6": a dice expression with its own count takes no article.
+    let dice = dice_case(e.get("dice"));
+    let one = if dice.starts_with(|c: char| c.is_ascii_digit()) {
+        ""
+    } else {
+        "one "
     };
-    format!(
-        "one {}{binding}: on {comp}, {}{fail}",
-        dice_case(e.get("dice")),
-        gated_success(e, ctx)
-    )
+    format!("roll {one}{dice}{kind}: on {comp}, {success}{fail}")
 }
 
 pub(super) fn pool_phrase(e: &P) -> String {

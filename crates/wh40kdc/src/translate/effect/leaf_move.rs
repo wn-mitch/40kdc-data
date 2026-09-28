@@ -3,6 +3,7 @@
 
 use serde_json::Value;
 
+use super::placement::{place_phrase, placement_limits, placement_phrase};
 use super::words::*;
 use crate::translate::condition::{and_list, nn, obj, range_phrase, P};
 use crate::translate::dekebab;
@@ -49,6 +50,9 @@ pub(super) fn passthrough(p: &[Value]) -> String {
     let items: Vec<String> = p
         .iter()
         .map(|x| {
+            if let Value::Object(item) = x {
+                return pass_item(item);
+            }
             let x = jv(x);
             match x.as_str() {
                 "non-titanic-models" => "non-Titanic models".to_string(),
@@ -65,6 +69,61 @@ pub(super) fn passthrough(p: &[Value]) -> String {
     and_list(&items)
 }
 
+/// A typed pass-through item: "models (excluding MONSTER and VEHICLE models)", "terrain
+/// features 4\" or lower".
+fn pass_item(x: &P) -> String {
+    if sv(x, "kind") == Some("terrain") {
+        return match sv(x, "height") {
+            Some("up-to-4") => "terrain features 4\" or lower",
+            Some("over-4") => "terrain features over 4\"",
+            _ => "terrain features",
+        }
+        .to_string();
+    }
+    let owner = match sv(x, "owner") {
+        Some("friendly") => "friendly ",
+        Some("enemy") => "enemy ",
+        _ => "",
+    };
+    let all = map_arr(x, "all_of", |k| title_case(&jv(k).to_lowercase()))
+        .map(|k| format!("{} ", k.join(" ")))
+        .unwrap_or_default();
+    let excl = map_arr(x, "excluding", jv)
+        .map(|k| format!(" (excluding {} models)", and_list(&k)))
+        .unwrap_or_default();
+    format!("{owner}{all}models{excl}")
+}
+
+/// " using the Assault Disembarkation rules", " using the Desperate Escape rules".
+fn mode_clause(m: &P) -> String {
+    let Some(mode) = nn(m, "mode") else {
+        return String::new();
+    };
+    let mode = title_case(&jv(mode));
+    if sv(m, "move_type") == Some("disembark") || sv(m, "from") == Some("transport") {
+        format!(" using the {mode} Disembarkation rules")
+    } else {
+        format!(" using the {mode} rules")
+    }
+}
+
+/// A unit-ref keeps its effect-subject phrase; markers, objectives and edges read as places.
+fn ends_of(of: Option<&Value>, ctx: &Ctx) -> String {
+    let Some(of) = of.filter(|o| !o.is_null()) else {
+        return "this model".to_string();
+    };
+    let place = match of {
+        Value::String(s) => s.starts_with("battlefield-"),
+        Value::Object(o) => nn(o, "marker").is_some() || nn(o, "objective").is_some(),
+        _ => false,
+    };
+    if place {
+        place_phrase(Some(of), ctx)
+    } else {
+        effect_subject(Some(of), ctx)
+    }
+}
+
 pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
     let verb = move_verb(&jstr(m.get("move_type")));
     let up_to = match nn(m, "distance") {
@@ -72,7 +131,7 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(d) => format!(" up to {}\"", dice_case(Some(d))),
         None => String::new(),
     };
-    let mut s = format!("{subj} can {verb}{up_to}");
+    let mut s = format!("{subj} can {verb}{up_to}{}", mode_clause(m));
     if let Some(p) = arr(m, "passthrough") {
         s.push_str(&format!(
             ", moving over {} as though they were not there",
@@ -81,10 +140,7 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
     }
     if let Some(ends) = nn(m, "ends_within") {
         let ends = obj(Some(ends));
-        let of = match nn(ends, "of") {
-            Some(of) => effect_subject(Some(of), ctx),
-            None => "this model".to_string(),
-        };
+        let of = ends_of(ends.get("of"), ctx);
         s.push_str(&format!(
             ", ending that move {}within {} of {of}",
             if is_true(ends, "wholly") {
@@ -94,6 +150,12 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
             },
             range_phrase(ends.get("range"))
         ));
+    }
+    if is_true(m, "allow_engagement") {
+        s.push_str("; it can end that move within Engagement Range of enemy units");
+    }
+    if let Some(c) = nn(m, "counts_as_move") {
+        s.push_str(&format!("; that move counts as {}", moved_phrase(Some(c))));
     }
     if is_true(m, "keeps_eligible") {
         s.push_str("; doing so does not change what it is eligible to do this turn");
@@ -201,22 +263,22 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
         ""
     };
     let denied = is_false(m, "allow");
+    let can = if denied {
+        "cannot"
+    } else if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
     if sv(m, "to") == Some("strategic-reserves") {
-        return if denied {
-            format!(
-                "{} cannot be placed into Strategic Reserves{limits}",
-                none_of(&who)
-            )
-        } else {
-            format!("{who} can be placed into Strategic Reserves{limits}")
-        };
+        let who = if denied { none_of(&who) } else { who };
+        return format!("{who} {can} be placed into Strategic Reserves{limits}");
     }
     let from = match sv(m, "from") {
         Some("strategic-reserves") => " from Strategic Reserves",
         Some("transport") => " from its Transport",
         _ => "",
     };
-    let can = if denied { "cannot" } else { "can" };
     let who = if denied { none_of(&who) } else { who };
     let mut s = if sv(m, "from") == Some("battlefield") {
         format!("{who} {can} be removed from the battlefield and set up again")
@@ -226,6 +288,7 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
     if sv(m, "via") == Some("deep-strike") {
         s.push_str(" using the Deep Strike rules");
     }
+    s.push_str(&mode_clause(m));
     if let Some(turns) = arr(m, "turns") {
         let joined = turns.iter().map(ordinal).collect::<Vec<_>>().join(", ");
         s.push_str(&format!(
@@ -233,20 +296,21 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
             or_last(&joined)
         ));
     }
+    if sv(m, "arrives") == Some("next-movement-phase") {
+        s.push_str(&format!(
+            " in the Reinforcements step of your next Movement phase{}",
+            if is_true(m, "allow_first_round") {
+                " (even in the first battle round)"
+            } else {
+                ""
+            }
+        ));
+    }
     if let Some(sections) = nn(m, "sections") {
         s.push_str(&format!(" as {} separate sections", jv(sections)));
     }
-    if let Some(p) = nn(m, "placement") {
-        let p = jv(p);
-        s.push_str(&match p.as_str() {
-            "closest-to-original" => " as close as possible to its original position".to_string(),
-            "connected-sections" => " with its sections touching".to_string(),
-            "anywhere" => " anywhere on the battlefield".to_string(),
-            "deployment-zone" => " wholly within your deployment zone".to_string(),
-            "on-terrain" => " on top of a terrain feature".to_string(),
-            other => format!(" {}", dekebab(other)),
-        });
-    }
+    s.push_str(&placement_phrase(m));
+    s.push_str(&placement_limits(m, ctx));
     if let Some(edge) = nn(m, "within_edge") {
         s.push_str(&format!(
             " wholly within {}\" of a battlefield edge",
@@ -278,6 +342,15 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
             ", treating the battle round as {} {} than it is",
             fnum(n.abs()),
             if n < 0.0 { "lower" } else { "higher" }
+        ));
+    }
+    if is_true(m, "allow_engagement") {
+        s.push_str("; it can be set up within Engagement Range of enemy units");
+    }
+    if let Some(c) = nn(m, "counts_as_move") {
+        s.push_str(&format!(
+            "; it counts as having made {} this turn",
+            moved_phrase(Some(c))
         ));
     }
     s + limits

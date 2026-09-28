@@ -7,6 +7,7 @@ use serde_json::Value;
 
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
+use super::leaf_shapes::describe_shape_leaf;
 use super::words::*;
 use crate::translate::condition::{and_list, nn, obj, P};
 
@@ -54,6 +55,11 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "objective-sticky",
     "designate",
     "army-rule",
+    "test-exemption",
+    "datasheet-swap",
+    "characteristic-resolution",
+    "borrow-weapons",
+    "select-weapon",
 ];
 
 /// "each time an attack targets the unit, " — the lead of an `incoming` change.
@@ -229,7 +235,17 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
         ""
     };
     let ones = sv(m, "subset") == Some("ones");
+    // A counted allowance ("one for each model equipped with …") reads as a number of rolls.
+    let counted = nn(m, "count").filter(|c| c.is_object() || c.is_array());
     let which = match cnt {
+        _ if counted.is_some() => {
+            let failed_noun = match sv(m, "subset") {
+                Some("all-failures") => format!("failed {noun}"),
+                Some("ones") => format!("{noun} of 1"),
+                _ => noun.clone(),
+            };
+            format!("a number of {failed_noun}s equal to {}", dice_case(counted))
+        }
         Some(c) => {
             let one = c.as_f64() == Some(1.0);
             format!(
@@ -251,9 +267,14 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     let pool = nn(m, "pool")
         .map(|p| format!(" by spending a die from your {}", title_case(&jv(p))))
         .unwrap_or_default();
+    let can = if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
     if is_true(m, "incoming") {
         return format!(
-            "{}the attacking player can re-roll {which}{pool}",
+            "{}the attacking player {can} re-roll {which}{pool}",
             incoming_lead(m, subj)
         );
     }
@@ -280,7 +301,7 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
         format!(" for {attacks}{holder}")
     };
     format!(
-        "you can re-roll {which}{owner}{}{pool}",
+        "you {can} re-roll {which}{owner}{}{pool}",
         weapon_roll_scope(m)
     )
 }
@@ -318,6 +339,23 @@ fn roll_result(m: &P, subj: &str) -> String {
             if led { "" } else { "s" },
             jv(crit_on),
             if led { " for that attack" } else { "" }
+        );
+    }
+    if let Some(f) = nn(m, "fails_on") {
+        let n = num(Some(f));
+        let range = if n == 1.0 {
+            "1".to_string()
+        } else {
+            format!("1-{}", fnum(n))
+        };
+        if led {
+            return format!(
+                "{lead}an unmodified {roll} roll of {range} for that attack always fails"
+            );
+        }
+        return format!(
+            "{}{scope} always fail on an unmodified {range}",
+            of_or_possessive(subj, &format!("{roll} rolls"))
         );
     }
     if let Some(on) = nn(m, "succeeds_on") {
@@ -367,7 +405,12 @@ fn roll_result(m: &P, subj: &str) -> String {
     } else {
         format!("{scope} count")
     };
-    format!("{lead}{whose}{counts} as {}", jstr(m.get("result")))
+    let unmod = if is_true(m, "unmodified") {
+        "an unmodified "
+    } else {
+        ""
+    };
+    format!("{lead}{whose}{counts} as {unmod}{}", jstr(m.get("result")))
 }
 
 /// One single effect as a lowercase-initial clause.
@@ -402,25 +445,52 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
             )
         }
         "ability-modifier" => ability_modifier(m, subj, ctx),
-        "ability-activate" => {
-            let label = ability_label(m.get("ability"));
-            match nn(m, "option") {
-                None => format!("{subj} {} the {label} ability now", v(subj, "resolves")),
-                Some(opt) => format!(
-                    "the {} option of {label} is active for {subj}{}",
-                    title_case(&jv(opt)),
-                    if is_true(m, "exclusive") {
-                        " (and no other option is)"
-                    } else {
-                        ""
-                    }
-                ),
-            }
-        }
+        "ability-activate" => ability_activate(m, subj),
         "permission" => permission(m, subj, ctx),
         "targeting" => targeting(m, subj, ctx),
         "counts-as" => counts_as(m, subj, ctx),
         "rule-state" => rule_state(m, subj),
-        _ => describe_board_leaf(e, m, subj, ctx),
+        _ => describe_shape_leaf(e, m, subj, ctx)
+            .unwrap_or_else(|| describe_board_leaf(e, m, subj, ctx)),
+    }
+}
+
+fn ability_activate(m: &P, subj: &str) -> String {
+    let label = ability_label(m.get("ability"));
+    let consumed = if is_true(m, "ignore_consumed") {
+        ", even if it has already been selected this battle"
+    } else {
+        ""
+    };
+    if let Some(sel) = nn(m, "select") {
+        let how = if sv(obj(Some(sel)), "by") == Some("roll") {
+            format!("make a new {label} roll and activate one result it allows")
+        } else {
+            format!("select one option of {label}")
+        };
+        return format!("{how} for {subj}, in addition to any already active{consumed}");
+    }
+    let instead = nn(m, "override")
+        .map(|o| {
+            format!(
+                ", using {} in place of its usual amount",
+                dice_case(obj(Some(o)).get("amount"))
+            )
+        })
+        .unwrap_or_default();
+    match nn(m, "option") {
+        None => format!(
+            "{subj} {} the {label} ability now{instead}",
+            v(subj, "resolves")
+        ),
+        Some(opt) => format!(
+            "the {} option of {label} is active for {subj}{}{consumed}",
+            title_case(&jv(opt)),
+            if is_true(m, "exclusive") {
+                " (and no other option is)"
+            } else {
+                ""
+            }
+        ),
     }
 }

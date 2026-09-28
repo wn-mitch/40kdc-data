@@ -7,6 +7,7 @@ use crate::translate::condition::{
     and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list, st, strs, truthy,
     unit_filter_phrase, P,
 };
+use crate::translate::condition::{roll_word, used_ability_phrase};
 use crate::translate::dekebab;
 use crate::translate::effect::title_case;
 
@@ -109,6 +110,8 @@ pub(crate) fn roll_noun(roll: &str) -> String {
         "desperate-escape" => "Desperate Escape test".to_string(),
         "dark-pact" => "Dark Pact Leadership test".to_string(),
         "blessings-of-khorne" => "Blessings of Khorne roll".to_string(),
+        "manoeuvre" => "Agile Manoeuvre roll".to_string(),
+        "channelling" => "Channel the Warp roll".to_string(),
         other => format!("{} roll", dekebab(other)),
     }
 }
@@ -135,8 +138,15 @@ pub(crate) fn is_object(v: Option<&Value>) -> bool {
 }
 
 pub(crate) fn roll_clause(t: &P, f: &P) -> String {
-    let roll = st(f.get("roll"));
-    let noun = roll_noun(&roll);
+    // An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
+    let (roll, noun) = match f.get("roll") {
+        Some(r @ Value::Object(_)) => (String::new(), format!("{} roll", roll_word(Some(r)))),
+        r => {
+            let roll = st(r);
+            let noun = roll_noun(&roll);
+            (roll, noun)
+        }
+    };
     let subject = t.get("subject");
     let anyone = subject
         .and_then(Value::as_object)
@@ -406,6 +416,9 @@ pub(crate) fn event_phrase(t: &P) -> String {
             format!("when {} is destroyed", object_phrase(object))
         }
         "used" => {
+            if let Some(which) = used_ability_phrase(f) {
+                return format!("each time {who} uses {which}");
+            }
             if is(f, "kind", "stratagem") {
                 return "each time you use a Stratagem".to_string();
             }

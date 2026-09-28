@@ -988,7 +988,7 @@
       }
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
       "oneOf": [
         {
           "type": "integer",
@@ -1006,6 +1006,9 @@
         },
         {
           "$ref": "#/$defs/count-of"
+        },
+        {
+          "$ref": "#/$defs/unit-rating"
         }
       ]
     },
@@ -1133,6 +1136,19 @@
       "type": "string",
       "minLength": 1,
       "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them."
+    },
+    "unit-rating": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rating"
+      ],
+      "properties": {
+        "rating": {
+          "const": true
+        }
+      },
+      "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
     },
     "game-version-ref": {
       "title": "Game Version Reference",
@@ -3773,8 +3789,45 @@
         },
         "ability_ids": {
           "type": "array",
+          "description": "The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9\", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).",
           "items": {
-            "$ref": "#/$defs/entity-id"
+            "oneOf": [
+              {
+                "$ref": "#/$defs/entity-id"
+              },
+              {
+                "title": "Unit ability ref",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id"
+                ],
+                "anyOf": [
+                  {
+                    "required": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "wargear"
+                    ]
+                  }
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/entity-id"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/stat-value"
+                  },
+                  "wargear": {
+                    "$ref": "#/$defs/entity-id",
+                    "description": "The wargear item (a weapons.json or wargear.json id) that prints this ability."
+                  }
+                }
+              }
+            ]
           }
         },
         "wargear_budgets": {
@@ -7288,7 +7341,14 @@
                   "$ref": "#/$defs/entity-id"
                 },
                 "value": {
-                  "type": "number"
+                  "oneOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "#/$defs/unit-rating"
+                    }
+                  ]
                 },
                 "rules_bundle": {
                   "const": true
@@ -8278,9 +8338,16 @@
               "additionalProperties": false,
               "properties": {
                 "threshold": {
-                  "type": "integer",
-                  "minimum": 2,
-                  "maximum": 6
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 6
+                    },
+                    {
+                      "$ref": "#/$defs/unit-rating"
+                    }
+                  ]
                 },
                 "against": {
                   "enum": [

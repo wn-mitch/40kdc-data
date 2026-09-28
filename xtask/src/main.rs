@@ -133,6 +133,53 @@ fn hoist_member_objects(schema: &mut serde_json::Value, def: &str, property: &st
     }
 }
 
+/// True when `node` only constrains which keys are present: a `required` list, a `not`
+/// of such a constraint, or an `allOf`/`oneOf`/`anyOf` of them.
+fn presence_only(node: &serde_json::Value) -> bool {
+    let Some(obj) = node.as_object() else {
+        return false;
+    };
+    !obj.is_empty()
+        && obj.iter().all(|(key, value)| match key.as_str() {
+            "required" => value.is_array(),
+            "not" => presence_only(value),
+            "allOf" | "oneOf" | "anyOf" => value
+                .as_array()
+                .is_some_and(|members| members.iter().all(presence_only)),
+            _ => false,
+        })
+}
+
+/// Drop presence-only `not` and `allOf` constraints from every object schema that
+/// declares `properties`. typify cannot express them: it emits an empty enum for an
+/// `allOf` of key-exclusivity `oneOf`s (`dice-gated`: exactly one of `dice`/`from`) and
+/// silently drops properties from a struct with a sibling `not` (resource-spend's `face`
+/// and `requirement`). Dropping them keeps every key optional; the validator still
+/// enforces the constraint from the real schema. `oneOf`/`anyOf` siblings are left to
+/// typify (and to [`hoist_member_objects`]), which already generates working types for
+/// them. Only codegen's input changes; the schema does not.
+fn strip_presence_constraints(node: &mut serde_json::Value) {
+    match node {
+        serde_json::Value::Object(obj) => {
+            if obj.contains_key("properties") {
+                for key in ["not", "allOf"] {
+                    if obj.get(key).is_some_and(|v| {
+                        v.as_array()
+                            .map_or_else(|| presence_only(v), |m| m.iter().all(presence_only))
+                    }) {
+                        obj.remove(key);
+                    }
+                }
+            }
+            for value in obj.values_mut() {
+                strip_presence_constraints(value);
+            }
+        }
+        serde_json::Value::Array(items) => items.iter_mut().for_each(strip_presence_constraints),
+        _ => {}
+    }
+}
+
 fn codegen() -> Result<()> {
     let root = workspace_root();
     let schema_path = root.join("crates/wh40kdc/schemas/bundled.schema.json");
@@ -144,6 +191,7 @@ fn codegen() -> Result<()> {
         .with_context(|| format!("parsing {} as JSON", schema_path.display()))?;
     let dispatch_schema = raw.clone();
     tag_effect_variants(&mut raw);
+    strip_presence_constraints(&mut raw);
     hoist_member_objects(
         &mut raw,
         "simple-condition",

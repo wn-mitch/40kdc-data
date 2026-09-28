@@ -5,7 +5,7 @@ use serde_json::Value;
 
 use super::words::*;
 use crate::translate::condition::{
-    designation_phrase, nn, obj, or_list, range_phrase, state_phrase, P,
+    and_list, article, designation_phrase, nn, obj, or_list, range_phrase, state_phrase, P,
 };
 use crate::translate::dekebab;
 
@@ -17,6 +17,8 @@ pub(super) fn role_subject(role: &str) -> Option<&'static str> {
         "event-subject" => "the triggering unit",
         "event-object" => "that unit",
         "stratagem-target" => "that unit",
+        "bearer-transport" => "the Transport this unit is embarked within",
+        "ability-unit" => "this unit",
         _ => return None,
     })
 }
@@ -46,16 +48,30 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     let within = nn(f, "within");
     if let Some(w) = within {
         let w = obj(Some(w));
-        s.push_str(&format!(" within {}", range_phrase(w.get("range"))));
+        let wholly = if is_true(w, "wholly") { "wholly " } else { "" };
+        s.push_str(&format!(" {wholly}within {}", range_phrase(w.get("range"))));
         if let Some(of) = nn(w, "of") {
             s.push_str(&format!(" of {}", effect_subject(Some(of), ctx)));
         }
     }
+    s.push_str(&filter_relations(f, ctx));
     if is_true(f, "visible") {
         s.push_str(" that are visible");
     }
     if let Some(d) = nn(f, "designated") {
-        s.push_str(&format!(" that are {}", designation_phrase(&jv(d))));
+        let by = nn(f, "designated_by")
+            .map(|b| format!(" by {}", effect_subject(Some(b), ctx)))
+            .unwrap_or_default();
+        s.push_str(&format!(
+            " that are {}{by}",
+            designation_phrase(&jv(d), true)
+        ));
+    }
+    if let Some(d) = nn(f, "not_designated") {
+        s.push_str(&format!(
+            " that are not {}",
+            designation_phrase(&jv(d), true)
+        ));
     }
     if let Some(state) = nn(f, "state") {
         s.push_str(&format!(" that are {}", state_phrase(&jv(state), false)));
@@ -66,12 +82,78 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     let bounded = within.is_some()
         || is_true(f, "visible")
         || nn(f, "designated").is_some()
-        || nn(f, "state").is_some();
+        || nn(f, "not_designated").is_some()
+        || nn(f, "state").is_some()
+        || [
+            "embarked_in",
+            "member_of",
+            "engaged_with",
+            "not_engaged_with",
+        ]
+        .iter()
+        .any(|k| nn(f, k).is_some());
     if bounded {
         s
     } else {
         format!("all {s}")
     }
+}
+
+/// A unit filter's relations to other units and abilities: " embarked within this model",
+/// " with the Deep Strike ability".
+fn filter_relations(f: &P, ctx: &Ctx) -> String {
+    let mut s = String::new();
+    if let Some(has) = map_arr(f, "has_ability", |a| ability_label(Some(a))) {
+        s.push_str(&format!(" with the {} ability", and_list(&has)));
+    }
+    if let Some(lacks) = map_arr(f, "lacks_ability", |a| ability_label(Some(a))) {
+        s.push_str(&format!(" without the {} ability", or_list(&lacks)));
+    }
+    if let Some(e) = nn(f, "embarked_in") {
+        s.push_str(&format!(
+            " embarked within {}",
+            effect_subject(Some(e), ctx)
+        ));
+    }
+    if let Some(m) = nn(f, "member_of") {
+        s.push_str(&format!(" in {}", effect_subject(Some(m), ctx)));
+    }
+    // "any other friendly unit": a filter excluding the unit with the ability reads "other".
+    let engaged_with = |g: &Value| -> String {
+        let mut x = obj(Some(g)).clone();
+        let other = matches!(
+            x.get("excluding").and_then(Value::as_str),
+            Some("this-unit" | "this-model")
+        );
+        if other {
+            x.remove("excluding");
+        }
+        let phrase = strip_all(&filter_subject(&x, ctx));
+        let phrase = replace_word_first(&phrase, " units", " unit", false);
+        let phrase = replace_word_first(&phrase, " models", " model", false);
+        if other {
+            format!("other {phrase}")
+        } else {
+            phrase
+        }
+    };
+    if let Some(g) = nn(f, "engaged_with") {
+        let phrase = engaged_with(g);
+        let articled = format!("{} {phrase}", article(&phrase));
+        let articled = articled
+            .strip_prefix("an other ")
+            .or_else(|| articled.strip_prefix("a other "))
+            .map(|rest| format!("another {rest}"))
+            .unwrap_or(articled);
+        s.push_str(&format!(" within Engagement Range of {articled}"));
+    }
+    if let Some(g) = nn(f, "not_engaged_with") {
+        s.push_str(&format!(
+            " that are not within Engagement Range of any {}",
+            engaged_with(g)
+        ));
+    }
+    s
 }
 
 /// An effect target (a unit-ref) as the effect's subject.
@@ -116,6 +198,12 @@ pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
                 return format!(
                     "the bound {}",
                     jstr(r.get("selection_var")).replace('_', " ")
+                );
+            }
+            if let Some(t) = r.get("stratagem_target").and_then(Value::as_str) {
+                return format!(
+                    "the {} target",
+                    dekebab(t.strip_prefix("the-").unwrap_or(t))
                 );
             }
             filter_subject(r, ctx)

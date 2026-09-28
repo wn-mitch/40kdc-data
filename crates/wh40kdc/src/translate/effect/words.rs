@@ -7,11 +7,13 @@
 //! template stringification, `num` is `Number(v)`, and `nn` is `v != null`.
 
 pub(crate) use super::js::*;
+pub(crate) use super::quantity::*;
 pub(crate) use super::subject::*;
 use serde_json::Value;
 
-use crate::translate::condition::{nn, P};
+use crate::translate::condition::{article, nn, obj, P};
 use crate::translate::dekebab;
+use crate::translate::designations::designation_label;
 
 /// Rendering context threaded down from the containers to the leaves.
 #[derive(Default, Clone)]
@@ -68,8 +70,12 @@ pub(crate) fn title_case(s: &str) -> String {
         .join(" ")
 }
 
-/// Dice tokens print with a capital `D` (`d3` → `D3`, `2d6` → `2D6`).
+/// Dice tokens print with a capital `D` (`d3` → `D3`, `2d6` → `2D6`); a bound or counted
+/// quantity prints its phrase.
 pub(crate) fn dice_case(v: Option<&Value>) -> String {
+    if let Some(Value::Object(q)) = v {
+        return quantity_phrase(q);
+    }
     jstr(v).replace('d', "D")
 }
 
@@ -169,6 +175,8 @@ pub(crate) fn v(subj: &str, singular: &str) -> String {
         "resolves" => "resolve",
         "does" => "do",
         "controls" => "control",
+        "receives" => "receive",
+        "keeps" => "keep",
         other => return other.strip_suffix('s').unwrap_or(other).to_string(),
     };
     plural.to_string()
@@ -261,6 +269,12 @@ pub(crate) fn resource_noun(
 }
 
 pub(crate) fn roll_name(roll: Option<&Value>) -> String {
+    // The dice a named ability rolls: "Reanimation Protocols".
+    if let Some(Value::Object(o)) = roll {
+        if nn(o, "of_ability").is_some() {
+            return ability_label(o.get("of_ability"));
+        }
+    }
     let r = jstr(roll);
     let name = match r.as_str() {
         "hit" => "Hit",
@@ -277,6 +291,8 @@ pub(crate) fn roll_name(roll: Option<&Value>) -> String {
         "dark-pact" => "Dark Pact",
         "blessings-of-khorne" => "Blessings of Khorne",
         "resource-die" => "pool die",
+        "manoeuvre" => "Agile Manoeuvre",
+        "channelling" => "Channel the Warp",
         _ => return title_case(&r),
     };
     name.to_string()
@@ -398,6 +414,15 @@ pub(crate) fn weapon_noun(m: &P) -> String {
     } else {
         String::new()
     };
+    if let Some(r) = nn(m, "weapon_ref") {
+        // A bound weapon ("the selected weapon") or the weapons picked for a named ability.
+        let r = obj(Some(r));
+        if let Some(sel) = nn(r, "selected_by") {
+            let label = ability_label(obj(Some(sel)).get("ability"));
+            return format!("the {kind}weapons selected for {label}{keyword}");
+        }
+        return format!("the selected {kind}weapon{keyword}");
+    }
     format!("{kind}{name}weapons{keyword}")
 }
 
@@ -432,6 +457,7 @@ pub(crate) fn has_weapon(m: &P) -> bool {
     nn(m, "weapon_type").is_some()
         || nn(m, "weapon_name").is_some()
         || nn(m, "weapon_keyword").is_some()
+        || nn(m, "weapon_ref").is_some()
 }
 
 /// " with melee weapons" for a roll scoped to a weapon filter, else "".
@@ -443,11 +469,55 @@ pub(crate) fn weapon_roll_scope(m: &P) -> String {
     }
 }
 
-/// A tag an effect applies: GW-printed tags stay as printed, internal ones read "marked as …".
+/// A tag an effect applies: a registered id prints the rules' term, a legacy upper-case tag
+/// stays as printed, others read "marked as …".
 pub(crate) fn designation_for(tag: &str) -> String {
+    if let Some(label) = designation_label(tag, false) {
+        return label;
+    }
     if tag == tag.to_uppercase() {
         tag.to_string()
     } else {
         format!("marked as {}", dekebab(tag))
     }
+}
+
+/// "a Normal move" — the move a counts_as_move names.
+pub(crate) fn moved_phrase(mv: Option<&Value>) -> String {
+    let m = jstr(mv);
+    match m.as_str() {
+        "normal" => "a Normal move".to_string(),
+        "advance" => "an Advance move".to_string(),
+        "fall-back" => "a Fall Back move".to_string(),
+        "charge" => "a Charge move".to_string(),
+        "remain-stationary" => "no move (it Remained Stationary)".to_string(),
+        _ => format!("{} {} move", article(&m), title_case(&m)),
+    }
+}
+
+/// A dice requirement: "pair of 4+", or alternatives "pair of 6+ or triple of 3+".
+pub(crate) fn requirement_phrase(req: Option<&Value>) -> String {
+    let one = |r: &Value| {
+        let r = obj(Some(r));
+        format!("{} of {}+", jstr(r.get("type")), jstr(r.get("min_value")))
+    };
+    let r = obj(req);
+    if let Some(any) = r.get("any_of").and_then(Value::as_array) {
+        return any.iter().map(one).collect::<Vec<_>>().join(" or ");
+    }
+    format!("{} of {}+", jstr(r.get("type")), jstr(r.get("min_value")))
+}
+
+/// "a Psychic test", "a Blessings of Khorne roll" — what kind of roll a gate or a roll step is.
+pub(crate) fn roll_kind_noun(kind: Option<&Value>) -> String {
+    let name = roll_name(kind);
+    let test = matches!(
+        kind.and_then(Value::as_str),
+        Some("psychic" | "battle-shock" | "leadership" | "desperate-escape" | "hazard")
+    );
+    format!(
+        "{} {name} {}",
+        article(&name),
+        if test { "test" } else { "roll" }
+    )
 }

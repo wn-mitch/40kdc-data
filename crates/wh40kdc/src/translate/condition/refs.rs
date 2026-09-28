@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use super::js::*;
 use crate::translate::dekebab;
+use crate::translate::designations::designation_label;
 use crate::translate::effect::title_case;
 
 // ── Shared references ───────────────────────────────────────────────────────
@@ -21,6 +22,8 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
         "stratagem-target" => "the Stratagem's target",
         "selected-unit" => "the selected unit",
         "recipient" => "the unit",
+        "bearer-transport" => "the Transport this unit is embarked within",
+        "ability-unit" => "this unit",
         _ => return None,
     })
 }
@@ -54,8 +57,50 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(none) = strs(f.get("none_of")) {
         s.push_str(&format!(" (excluding {} {noun}s)", or_list(&none)));
     }
+    let titled = |v: &Value| title_case(&st(Some(v)));
+    if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
+        let names: Vec<String> = has.iter().map(titled).collect();
+        s.push_str(&format!(" with the {} ability", and_list(&names)));
+    }
+    if let Some(lacks) = f.get("lacks_ability").and_then(Value::as_array) {
+        let names: Vec<String> = lacks.iter().map(titled).collect();
+        s.push_str(&format!(" without the {} ability", or_list(&names)));
+    }
+    if let Some(e) = nn(f, "embarked_in") {
+        s.push_str(&format!(
+            " embarked within {}",
+            unit_ref_phrase(Some(e), "the unit")
+        ));
+    }
+    if let Some(m) = nn(f, "member_of") {
+        s.push_str(&format!(" in {}", unit_ref_phrase(Some(m), "the unit")));
+    }
+    if let Some(g) = nn(f, "engaged_with") {
+        s.push_str(&format!(
+            " within Engagement Range of {}",
+            unit_filter_phrase(obj(Some(g)))
+        ));
+    }
+    if let Some(g) = nn(f, "not_engaged_with") {
+        s.push_str(&format!(
+            " not within Engagement Range of any {}",
+            strip_article(&unit_filter_phrase(obj(Some(g))))
+        ));
+    }
     if let Some(d) = nn(f, "designated") {
-        s.push_str(&format!(" that is {}", designation_phrase(&st(Some(d)))));
+        let by = nn(f, "designated_by")
+            .map(|b| format!(" by {}", unit_ref_phrase(Some(b), "the unit")))
+            .unwrap_or_default();
+        s.push_str(&format!(
+            " that is {}{by}",
+            designation_phrase(&st(Some(d)), false)
+        ));
+    }
+    if let Some(d) = nn(f, "not_designated") {
+        s.push_str(&format!(
+            " that is not {}",
+            designation_phrase(&st(Some(d)), false)
+        ));
     }
     if let Some(state) = nn(f, "state") {
         s.push_str(&format!(
@@ -68,7 +113,12 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     }
     if let Some(within) = nn(f, "within") {
         let w = obj(Some(within));
-        s.push_str(&format!(" within {}", range_phrase(w.get("range"))));
+        let wholly = if w.get("wholly") == Some(&Value::Bool(true)) {
+            "wholly "
+        } else {
+            ""
+        };
+        s.push_str(&format!(" {wholly}within {}", range_phrase(w.get("range"))));
         if let Some(of) = nn(w, "of") {
             s.push_str(&format!(" of {}", unit_ref_phrase(Some(of), "the unit")));
         }
@@ -97,6 +147,12 @@ pub(crate) fn unit_ref_phrase(r: Option<&Value>, fallback: &str) -> String {
             }
             if o.get("selection_var").is_some_and(Value::is_string) {
                 return format!("the bound {}", st(o.get("selection_var")).replace('_', " "));
+            }
+            if let Some(t) = o.get("stratagem_target").and_then(Value::as_str) {
+                return format!(
+                    "the {} target",
+                    dekebab(t.strip_prefix("the-").unwrap_or(t))
+                );
             }
             unit_filter_phrase(o)
         }
@@ -202,8 +258,12 @@ pub(crate) fn state_phrase(state: &str, negated: bool) -> String {
     base
 }
 
-/// A designation: GW-printed tags stay as printed, internal state names are spelled out.
-pub(crate) fn designation_phrase(tag: &str) -> String {
+/// A designation: a registered id prints the rules' term, legacy upper-case tags stay as
+/// printed, internal ones are spelled out.
+pub(crate) fn designation_phrase(tag: &str, plural: bool) -> String {
+    if let Some(label) = designation_label(tag, plural) {
+        return label;
+    }
     if tag == tag.to_uppercase() {
         tag.to_string()
     } else {
@@ -257,6 +317,36 @@ pub(crate) fn move_kinds(types: Option<&Value>) -> String {
         .map(|a| a.iter().map(|t| move_name(&st(Some(t)))).collect())
         .unwrap_or_default();
     or_list(&names)
+}
+
+/// A roll kind as words: "hit", or the dice a named ability rolls ("Reanimation Protocols").
+pub(crate) fn roll_word(roll: Option<&Value>) -> String {
+    if let Some(Value::Object(o)) = roll {
+        if nn(o, "of_ability").is_some() {
+            return title_case(&st(o.get("of_ability")));
+        }
+    }
+    dekebab(&st(roll))
+}
+
+/// Which ability a `used` filter names: every ability with a bracketed keyword, or the same one
+/// as a bound use.
+pub(crate) fn used_ability_phrase(f: &P) -> Option<String> {
+    if let Some(k) = nn(f, "ability_keyword") {
+        return Some(format!(
+            "a {} ability",
+            title_case(&st(Some(k)).to_lowercase())
+        ));
+    }
+    if nn(f, "same_rule_as").is_some() {
+        let what = if is(f, "kind", "stratagem") {
+            "Stratagem"
+        } else {
+            "ability"
+        };
+        return Some(format!("that same {what}"));
+    }
+    None
 }
 
 // ── Predicates ──────────────────────────────────────────────────────────────

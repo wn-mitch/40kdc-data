@@ -5,7 +5,7 @@ use serde_json::Value;
 
 use super::leaf::incoming_lead;
 use super::words::*;
-use crate::translate::condition::{and_list, nn, obj, or_list, range_phrase, P};
+use crate::translate::condition::{and_list, article, nn, obj, or_list, range_phrase, P};
 use crate::translate::dekebab;
 
 pub(super) fn ability_grant(m: &P, subj: &str) -> String {
@@ -75,9 +75,14 @@ pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ct
         );
     }
     if has_weapon(m) {
+        let noun = weapon_noun(m);
+        let verb = if has_word_end(&noun, "weapons") {
+            "gain"
+        } else {
+            "gains"
+        };
         return format!(
-            "{} equipped by {} gain {kws}{increment}",
-            weapon_noun(m),
+            "{noun} equipped by {} {verb} {kws}{increment}",
             weapon_holder(target, ctx)
         );
     }
@@ -97,6 +102,7 @@ pub(super) fn aspect_name(aspect: &str) -> String {
         "concurrent" => "number that can apply at once",
         "duration" => "duration",
         "start-round" => "first battle round",
+        "end-round" => "last battle round",
         "threshold" => "threshold",
         "options" => "options",
         other => return other.to_string(),
@@ -175,7 +181,41 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     if let Some(o) = option.filter(|o| !o.is_empty()) {
         s.push_str(&format!("; add {o}"));
     }
-    s + &cap
+    s + &cap + &ability_limits(m)
+}
+
+/// The limits on a changed allowance: once per battle round, never in the same phase, outside
+/// the shared limit.
+fn ability_limits(m: &P) -> String {
+    let mut parts: Vec<String> = Vec::new();
+    if let Some(per) = nn(m, "cap_per") {
+        let per = obj(Some(per));
+        let times = if num(per.get("count")) == 1.0 {
+            "once".to_string()
+        } else {
+            format!("{} times", jstr(per.get("count")))
+        };
+        parts.push(format!(
+            "but it can be used at most {times} per {}",
+            dekebab(&jstr(per.get("period")))
+        ));
+    }
+    if let Some(n) = nn(m, "not_same") {
+        parts.push(format!(
+            "but not in the same {} as the use that triggered this",
+            jv(n)
+        ));
+    }
+    if is_false(m, "consumes_shared_use") {
+        parts.push(
+            "and this use does not count toward that ability's limit for other units".to_string(),
+        );
+    }
+    if parts.is_empty() {
+        String::new()
+    } else {
+        format!(", {}", parts.join(", "))
+    }
 }
 
 pub(super) fn activity(a: &str) -> Option<&'static str> {
@@ -294,6 +334,22 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     if is_true(m, "next") {
         s.push_str(&format!(", and must be the next unit selected to {act}"));
     }
+    if let Some(c) = nn(m, "counts_as_move") {
+        let (does, counts) = if it == "they" {
+            ("do", "count")
+        } else {
+            ("does", "counts")
+        };
+        s.push_str(&format!(
+            "; if {it} {does}, {it} {counts} as having made {} this turn",
+            moved_phrase(Some(c))
+        ));
+    }
+    if is_false(m, "consumes_shared_use") {
+        s.push_str(
+            "; this use does not count toward that Stratagem's once-per-phase limit for other units",
+        );
+    }
     s
 }
 
@@ -360,7 +416,40 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
             )
         })
         .unwrap_or_default();
-    format!("{who} {verb} {whom}{kind}{range}{unless}")
+    if may == Some("redirect") {
+        let to = effect_subject(m.get("to"), ctx);
+        let what = match kind_key.as_str() {
+            "stratagem" => "Stratagems",
+            "shoot" => "ranged attacks",
+            "fight" => "melee attacks",
+            _ => "attacks",
+        };
+        // One unit is targeted at a time: "that target a friendly ANATHEMA PSYKANA unit".
+        let one = if whom.starts_with("all ") || is_plural(&whom) {
+            let base = replace_word_first(&strip_all(&whom), " units", " unit", false);
+            let base = replace_word_first(&base, " models", " model", false);
+            format!("{} {base}", article(&base))
+        } else {
+            whom.clone()
+        };
+        let by = if nn(m, "by").is_some() {
+            format!(" made by {who}")
+        } else {
+            String::new()
+        };
+        let eligible = if is_true(m, "if_eligible") {
+            format!(", if {to} is an eligible target")
+        } else {
+            String::new()
+        };
+        return format!("{what}{by} that target {one} must target {to} instead{eligible}");
+    }
+    let except = if sv(m, "except") == Some("core-stratagems") {
+        " (Core Stratagems can still target it)"
+    } else {
+        ""
+    };
+    format!("{who} {verb} {whom}{kind}{range}{unless}{except}")
 }
 
 pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
@@ -401,6 +490,19 @@ pub(super) fn core_rule(rule: &str) -> Option<(&'static str, &'static str)> {
             "stops being hidden when it attacks",
             "does not stop being hidden when it attacks",
         ),
+        "engaged-shooting-hit-penalty" => (
+            "suffers the -1 to Hit for shooting while within Engagement Range",
+            "does not suffer the -1 to Hit for shooting while within Engagement Range",
+        ),
+        "charge-bonus" => (
+            "receives the Charge bonus",
+            "does not receive the Charge bonus",
+        ),
+        "hidden" => ("can become hidden", "cannot become hidden"),
+        "orders-end-on-battle-shock" => (
+            "loses its Orders when it becomes Battle-shocked",
+            "keeps its Orders when it becomes Battle-shocked",
+        ),
         _ => return None,
     })
 }
@@ -427,12 +529,19 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
         if phrase.starts_with("cannot ") {
             return format!("{} {phrase}", none_of(subj));
         }
-        for w in ["has", "is", "stops", "does"] {
+        let mut agreed = phrase.to_string();
+        for w in [
+            "has", "is", "stops", "does", "suffers", "receives", "loses", "keeps",
+        ] {
             if let Some(rest) = phrase.strip_prefix(&format!("{w} ")) {
-                return format!("{subj} {} {rest}", v(subj, w));
+                agreed = format!("{} {rest}", v(subj, w));
+                break;
             }
         }
-        return format!("{subj} {phrase}");
+        if is_plural(subj) {
+            agreed = replace_word_all(&agreed, "its", "their");
+        }
+        return format!("{subj} {agreed}");
     }
     let noun = match kind {
         Some("keyword") => "keyword",
@@ -441,4 +550,27 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
     };
     let verb = if granted { "gains" } else { "loses" };
     format!("{subj} {} the {} {noun}", v(subj, verb), title_case(&rule))
+}
+
+/// `s.replace(/\bword\b/g, repl)`.
+fn replace_word_all(s: &str, word: &str, repl: &str) -> String {
+    let mut out = String::new();
+    let mut rest = s;
+    let mut prev: Option<char> = None;
+    while let Some(i) = rest.find(word) {
+        let before = rest[..i].chars().next_back().or(prev);
+        let after = rest[i + word.len()..].chars().next();
+        let bounded = !before.is_some_and(is_word_char) && !after.is_some_and(is_word_char);
+        let head = &rest[..i + word.len()];
+        if bounded {
+            out.push_str(&rest[..i]);
+            out.push_str(repl);
+        } else {
+            out.push_str(head);
+        }
+        prev = head.chars().next_back();
+        rest = &rest[i + word.len()..];
+    }
+    out.push_str(rest);
+    out
 }
