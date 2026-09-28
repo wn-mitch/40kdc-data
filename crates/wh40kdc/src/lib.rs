@@ -81,6 +81,7 @@ pub mod data;
 #[cfg(feature = "bundled-data")]
 pub use data::{normalize_name, Collection, Dataset, RawData, ReactiveTrigger};
 
+#[cfg(feature = "bundled-data")]
 pub use data::{
     base_loadout, base_unit_points, check_unit_legality, clamp_weapon_count, group_loadout,
     loadout_candidates, loadout_models, loadout_tiers, maximal_loadout, option_cap,

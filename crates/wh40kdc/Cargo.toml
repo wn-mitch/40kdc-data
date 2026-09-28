@@ -48,6 +48,12 @@ share = ["dep:base64"]
 # the embedded BUNDLED_SCHEMA. Self-contained — needs only serde_json.
 validate = []
 
+# The conformance runner drives every area, so it builds only with every feature on.
+[[bin]]
+name = "wh40kdc-runner"
+path = "src/bin/wh40kdc-runner.rs"
+required-features = ["import", "export", "cruncher", "share", "validate"]
+
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 # preserve_order keeps emitted object keys in insertion order — required for
