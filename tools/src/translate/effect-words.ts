@@ -340,7 +340,7 @@ export function effectSubject(target: unknown, ctx: Ctx = {}): string {
   const r = target as P;
   if (typeof r.event_var === "string") return "that unit";
   if (typeof r.selection_var === "string") return `the bound ${jstr(r.selection_var).replace(/_/g, " ")}`;
-  if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target)} target`;
+  if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target.replace(/^the-/, ""))} target`;
   return filterSubject(r, ctx);
 }
 

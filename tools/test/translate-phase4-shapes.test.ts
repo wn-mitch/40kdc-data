@@ -333,3 +333,20 @@ describe("cruncher: phase-4 shapes", () => {
 // Type-level guard: the Effect view accepts the new container fields.
 const _roll: Effect = { type: "roll", dice: "D3", roll_var: "r", effect: { type: "no-effect" } };
 void _roll;
+
+describe("describer: agreement on the new references", () => {
+  it("does not double the article of a named Stratagem target", () => {
+    expect(render(leaf("stat-modifier", { stat: "OC", operation: "add", value: 1 }, { stratagem_target: "the-lure" }))).not.toMatch(/\bthe the\b/);
+  });
+
+  it("agrees the verb with a single selected weapon", () => {
+    const text = render(leaf("weapon-ability-grant", { abilities: ["Lethal Hits"], weapon_ref: { weapon_var: "possessed-blade" } }, "this-model"));
+    expect(text).toMatch(/selected [a-z ]*weapon equipped by this model gains \[LETHAL HITS\]/);
+  });
+
+  it("uses their for a plural subject losing a rule", () => {
+    const text = render(leaf("rule-state", { direction: "granted", rule_kind: "core-rule", rule: "orders-end-on-battle-shock" }, { owner: "friendly" }));
+    expect(text).toContain("their Orders");
+    expect(text).not.toMatch(/\bits Orders\b/);
+  });
+});

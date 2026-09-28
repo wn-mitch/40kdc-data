@@ -100,7 +100,7 @@ export function unitRefPhrase(ref: unknown, fallback = "the unit"): string {
     const r = ref as P;
     if (typeof r.event_var === "string") return "that unit";
     if (typeof r.selection_var === "string") return `the bound ${str(r.selection_var).replace(/_/g, " ")}`;
-    if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target)} target`;
+    if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target.replace(/^the-/, ""))} target`;
     return unitFilterPhrase(r);
   }
   return fallback;

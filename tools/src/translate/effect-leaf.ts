@@ -175,7 +175,10 @@ function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, c
   const kws = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : "[?]";
   const increment = m.if_present === "increment" ? " (a weapon that already has that ability adds the ratings together)" : "";
   if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${kws}${increment}`;
-  if (hasWeapon(m)) return `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)} gain ${kws}${increment}`;
+  if (hasWeapon(m)) {
+    const noun = weaponNoun(m);
+    return `${noun} equipped by ${weaponHolder(e.target, ctx)} ${/weapons\b/.test(noun) ? "gain" : "gains"} ${kws}${increment}`;
+  }
   return `${ofOrPossessive(subj, "weapons")} gain ${kws}${increment}`;
 }
 
@@ -333,7 +336,8 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   if (m.rule_kind === "core-rule" && core) {
     const phrase = granted ? core[0] : core[1];
     if (phrase.startsWith("cannot ")) return `${noneOf(subj)} ${phrase}`;
-    return `${subj} ${phrase.replace(/^(has|is|stops|does|suffers|receives|loses|keeps) /, (w) => `${v(subj, w.trim())} `)}`;
+    const agreed = phrase.replace(/^(has|is|stops|does|suffers|receives|loses|keeps) /, (w) => `${v(subj, w.trim())} `);
+    return `${subj} ${isPlural(subj) ? agreed.replace(/\bits\b/g, "their") : agreed}`;
   }
   const noun = m.rule_kind === "keyword" ? "keyword" : m.rule_kind === "core-rule" ? "rule" : "ability";
   return granted ? `${subj} ${v(subj, "gains")} the ${titleCase(rule)} ${noun}` : `${subj} ${v(subj, "loses")} the ${titleCase(rule)} ${noun}`;
