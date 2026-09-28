@@ -73,7 +73,7 @@ func expiryTrail(duration any) string {
 // dice a named ability rolls ("Reanimation Protocols").
 func rollWord(roll any) string {
 	if r, ok := roll.(map[string]any); ok && r["of_ability"] != nil {
-		return titleCase(cstr(r["of_ability"]))
+		return idLabel(r["of_ability"])
 	}
 	return dekebab(cstr(roll))
 }
@@ -156,6 +156,9 @@ func scaleSource(q map[string]any) string {
 // quantityPhrase renders a non-literal quantity as a noun phrase: one value per
 // battle size, a bound roll's result, or a count.
 func quantityPhrase(q map[string]any) string {
+	if describerRatingRef(q) {
+		return "its rating"
+	}
 	if isBattleSizeValue(q) {
 		return battleSizeValues(q) + " (Incursion/Strike Force/Onslaught)"
 	}
@@ -303,4 +306,42 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		s += " that are not within Engagement Range of any " + engagedWith(f["not_engaged_with"])
 	}
 	return s
+}
+
+// factionSuffixes are the faction dir slugs an ability or Stratagem id ends
+// with (`<name>-<faction>`), longest first. The suffix is identity, not name,
+// so it never reaches the English.
+var factionSuffixes = []string{"agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children",
+	"genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars",
+	"imperial-fists", "crimson-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves",
+	"grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire",
+	"deathwatch", "drukhari", "tyranids", "aeldari", "necrons", "orks"}
+
+// withoutFactionSuffix drops an id's faction suffix ("acts-of-faith-adepta-sororitas" -> "acts-of-faith").
+func withoutFactionSuffix(id string) string {
+	for _, f := range factionSuffixes {
+		if strings.HasSuffix(id, "-"+f) && len(id) > len(f)+1 {
+			return id[:len(id)-len(f)-1]
+		}
+	}
+	return id
+}
+
+// wholeNames are ids whose name itself ends with the faction (the suffix was never added).
+var wholeNames = map[string]string{"lord-of-the-death-guard": "Lord of the Death Guard"}
+
+// idLabel renders an ability or Stratagem id as a name: its name part in Title Case.
+func idLabel(id any) string {
+	s := cstr(id)
+	if n, ok := wholeNames[s]; ok {
+		return n
+	}
+	return titleCase(withoutFactionSuffix(s))
+}
+
+// describerRatingRef is the describer's `{rating: true}` test: any object
+// whose rating is true (the substitution in withRating needs the exact form).
+func describerRatingRef(v any) bool {
+	m, ok := v.(map[string]any)
+	return ok && m["rating"] == true
 }

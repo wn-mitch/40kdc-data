@@ -30,16 +30,7 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 			abilityID := getStr(modifier, "ability")
 			rulesBundle, _ := modifier["rules_bundle"].(bool)
 			if rulesBundle && abilityID != "" && !seen[abilityID] {
-				factionID := getStr(a.Raw, "faction_id")
-				var target *AbilityView
-				var ok bool
-				if factionID != "" {
-					target, ok = a.ds.Abilities.GetInFaction(abilityID, factionID)
-				}
-				if !ok {
-					target, ok = a.ds.Abilities.GetAny(abilityID)
-				}
-				if ok {
+				if target, ok := a.ds.Abilities.Get(abilityID); ok {
 					targetEffect := target.Raw["effect"]
 					if targetMap, isMap := targetEffect.(map[string]any); isMap &&
 						getStr(targetMap, "type") == "rules-bundle" {
@@ -142,10 +133,17 @@ func triggerGatedStep(behavior any, trigger any, effect any) (any, bool) {
 // reaches (auraInches) is stamped onto every emitted buff as
 // applicableWhen.maxRangeInches.
 func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, perspective string) *effectTranslation {
+	return a.describeRatedBuffs(source, ctx, perspective, nil, false)
+}
+
+// describeRatedBuffs is describeBuffs for a rated rule: every {rating: true}
+// in the effect reads the rating the owning unit prints (hasRating).
+func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]any, perspective string, rating any, hasRating bool) *effectTranslation {
 	if ctx == nil {
 		ctx = map[string]any{"phase": "shooting"}
 	}
-	resolvedEffect, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
+	bundled, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
+	resolvedEffect := withRating(bundled, rating, hasRating)
 	gated, byTrigger := triggerGatedStep(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
 	if !byTrigger {
 		gated = usageGated(a.Raw["ability_type"], a.Raw["usage"], resolvedEffect)
@@ -264,7 +262,8 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		}
 		ability := entry["ability"].(*AbilityView)
 		bs := buffSourceFromEligible(entry)
-		out = append(out, ability.getBuffs(bs, ctx, perspective)...)
+		rating, hasRating := entry["rating"]
+		out = append(out, ability.describeRatedBuffs(bs, ctx, perspective, rating, hasRating).applied...)
 	}
 	return out
 }

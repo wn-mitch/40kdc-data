@@ -330,15 +330,22 @@ func abilityGrantLeaf(m map[string]any, subj string) string {
 	if m["ability"] == "scouts" || m["ability"] == "deep-strike" {
 		inch = "\""
 	}
+	rated := describerRatingRef(m["value"])
 	value := ""
-	if m["value"] != nil {
+	if rated {
+		value = " X" + inch
+	} else if m["value"] != nil {
 		value = " " + ejstr(m["value"]) + inch
 	}
 	noun := "ability"
 	if m["rules_bundle"] == true {
 		noun = "rules"
 	}
-	return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + value + " " + noun
+	tail := ""
+	if rated {
+		tail = ", X being its rating"
+	}
+	return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + value + " " + noun + tail
 }
 
 func keywordGrantLeaf(m map[string]any, subj string) string {
@@ -529,9 +536,9 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 	rule := ejstr(m["rule"])
 	if m["rule_kind"] == "faction-rule" {
 		if granted {
-			return subj + " " + ev(subj, "gains") + " " + titleCase(rule)
+			return subj + " " + ev(subj, "gains") + " " + abilityLabel(rule)
 		}
-		return subj + " cannot use " + titleCase(rule)
+		return subj + " cannot use " + abilityLabel(rule)
 	}
 	if rule == "overwatch-against-bearer" {
 		can := "cannot"
@@ -561,10 +568,14 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 	case "core-rule":
 		noun = "rule"
 	}
-	if granted {
-		return subj + " " + ev(subj, "gains") + " the " + titleCase(rule) + " " + noun
+	label := titleCase(rule)
+	if m["rule_kind"] == "ability" {
+		label = abilityLabel(rule)
 	}
-	return subj + " " + ev(subj, "loses") + " the " + titleCase(rule) + " " + noun
+	if granted {
+		return subj + " " + ev(subj, "gains") + " the " + label + " " + noun
+	}
+	return subj + " " + ev(subj, "loses") + " the " + label + " " + noun
 }
 
 // describeLeaf renders one single effect as a lowercase-initial clause.

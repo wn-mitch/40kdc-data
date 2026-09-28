@@ -130,8 +130,8 @@ func TestPhase4ContextConditions(t *testing.T) {
 }
 
 func TestPhase4ShapeDiagnostics(t *testing.T) {
-	own := effectToBuffs(j(t, `{"type":"roll-modifier","target":"this-unit","modifier":{"roll":{"of_ability":"reanimation-protocols"},"operation":"add","value":1}}`), bokSource, fightCtx(nil), "attacker")
-	if got := reasons(own); got != `roll-modifier on "reanimation-protocols roll" is outside the damage path` {
+	own := effectToBuffs(j(t, `{"type":"roll-modifier","target":"this-unit","modifier":{"roll":{"of_ability":"reanimation-protocols-necrons"},"operation":"add","value":1}}`), bokSource, fightCtx(nil), "attacker")
+	if got := reasons(own); got != `roll-modifier on "reanimation-protocols-necrons roll" is outside the damage path` {
 		t.Errorf("own roll reason = %q", got)
 	}
 	for _, typ := range []string{"characteristic-resolution", "borrow-weapons", "select-weapon"} {

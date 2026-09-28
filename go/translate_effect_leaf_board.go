@@ -419,6 +419,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		}
 		return "each time " + attack + " is allocated to " + subj + ", " + how
 	case "feel-no-pain":
+		if describerRatingRef(m["threshold"]) {
+			return subj + " " + ev(subj, "has") + " the Feel No Pain X+ ability" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
+		}
 		return subj + " " + ev(subj, "has") + " the Feel No Pain " + ejstr(m["threshold"]) + "+ ability" + fnpAgainst[ejstr(m["against"])]
 	case "invulnerable-save":
 		vs := ""

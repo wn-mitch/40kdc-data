@@ -138,11 +138,11 @@ var rolePhrases = map[string]string{
 	"ability-unit":       "this unit",
 }
 
-// titleCaseList maps a JSON array of ids through titleCase.
-func titleCaseList(v any) []string {
+// idLabelList maps a JSON array of ability ids through idLabel.
+func idLabelList(v any) []string {
 	l := cstrList(v)
 	for i, x := range l {
-		l[i] = titleCase(x)
+		l[i] = idLabel(x)
 	}
 	return l
 }
@@ -179,10 +179,10 @@ func unitFilterPhrase(f map[string]any) string {
 		s += " (excluding " + orList(cstrList(f["none_of"])) + " " + noun + "s)"
 	}
 	if isList(f["has_ability"]) {
-		s += " with the " + andList(titleCaseList(f["has_ability"])) + " ability"
+		s += " with the " + andList(idLabelList(f["has_ability"])) + " ability"
 	}
 	if isList(f["lacks_ability"]) {
-		s += " without the " + orList(titleCaseList(f["lacks_ability"])) + " ability"
+		s += " without the " + orList(idLabelList(f["lacks_ability"])) + " ability"
 	}
 	if f["embarked_in"] != nil {
 		s += " embarked within " + unitRefPhrase(f["embarked_in"], "the unit")
@@ -263,7 +263,7 @@ func subjectOf(p map[string]any, fallback string) string {
 	return unitRefPhrase(p["subject"], fallback)
 }
 
-var auraRanges = map[string]string{"nurgle-s-gift-aura": "Contagion Range"}
+var auraRanges = map[string]string{"nurgles-gift-death-guard": "Contagion Range"}
 
 var rangeSlugPhrases = map[string]string{
 	"engagement":        "Engagement Range",
@@ -292,7 +292,7 @@ func rangePhrase(r any) string {
 			if p, ok := auraRanges[cstr(x["aura_of"])]; ok {
 				return p
 			}
-			return "the " + titleCase(cstr(x["aura_of"])) + " range"
+			return "the " + idLabel(x["aura_of"]) + " range"
 		}
 	}
 	return "?\""

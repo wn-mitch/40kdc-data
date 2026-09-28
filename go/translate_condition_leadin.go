@@ -68,7 +68,7 @@ func conditionLeadIn(c map[string]any) string {
 	case "player-turn-is", "battle-round":
 		return battleRoundOnwardRe.ReplaceAllString(describePredicate(c, false), "from the $1 battle round onward")
 	case "rule-active":
-		return "while the " + titleCase(cstr(p["rule"])) + " is active"
+		return "while the " + idLabel(p["rule"]) + " is active"
 	case "has-keyword":
 		if p["chosen_by"] != nil {
 			return "if " + describePredicate(c, false)

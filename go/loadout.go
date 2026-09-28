@@ -1033,7 +1033,9 @@ func optionsWithPrintedUnitAbilities(unit map[string]any, options []any, counts 
 		}
 	}
 	effective := append([]any(nil), options...)
-	for _, id := range getStrList(unit, "ability_ids") {
+	// A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+	// equipment even when no option reaches it.
+	for _, id := range printedWargearIDs(unit) {
 		if counts[id] > 0 && !reachable[id] {
 			effective = append(effective, map[string]any{
 				"id":               getStr(unit, "id") + "-printed-ability-" + id,

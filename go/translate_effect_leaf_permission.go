@@ -43,7 +43,7 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	act := lookupOr(permissionActivities, ejstr(m["activity"]))
 	if m["activity"] == "use-stratagem" && m["stratagem"] != nil {
-		act = "be targeted with the " + titleCase(ejstr(m["stratagem"])) + " Stratagem"
+		act = "be targeted with the " + abilityLabel(m["stratagem"]) + " Stratagem"
 	}
 	into := ""
 	if m["into"] != nil {
@@ -151,7 +151,7 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	kind := targetKinds[ejstr(m["kind"])]
 	if m["kind"] == "stratagem" && m["stratagem"] != nil {
-		kind = " with the " + titleCase(ejstr(m["stratagem"])) + " Stratagem"
+		kind = " with the " + abilityLabel(m["stratagem"]) + " Stratagem"
 	} else if hasWeapon(m) {
 		kind = " with " + weaponNoun(m)
 	}

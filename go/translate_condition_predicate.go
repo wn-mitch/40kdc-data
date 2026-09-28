@@ -146,7 +146,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return neg + "during " + where
 	case "rule-active":
-		return "the " + titleCase(cstr(p["rule"])) + " is " + neg + "active"
+		return "the " + idLabel(p["rule"]) + " is " + neg + "active"
 	case "has-keyword":
 		who := subjectOf(p, "the unit")
 		if p["subject"] == "defender" {
@@ -172,7 +172,7 @@ func describePredicate(c map[string]any, negated bool) string {
 	case "model-profile":
 		return subjectOf(p, "the model") + " is " + neg + "the " + titleCase(cstr(p["profile"])) + " model"
 	case "has-ability":
-		return neg + subjectOf(p, "the unit") + " has the " + titleCase(cstr(p["ability"])) + " ability"
+		return neg + subjectOf(p, "the unit") + " has the " + idLabel(p["ability"]) + " ability"
 	case "attachment":
 		w := mapOr(p["with"])
 		kw := ""

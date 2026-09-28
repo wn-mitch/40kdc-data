@@ -242,7 +242,7 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		what := "a "
 		if f["id"] != nil {
-			what = "the " + titleCase(cstr(f["id"])) + " "
+			what = "the " + idLabel(f["id"]) + " "
 		}
 		kind := f["kind"]
 		if kind == nil {

@@ -362,8 +362,8 @@ func pronoun(subj string) string {
 }
 
 var abilityLabels = map[string]string{
-	"nurgle-s-gift-aura": "Nurgle's Gift (Aura)",
-	"fights-first":       "Fights First",
+	"nurgles-gift-death-guard": "Nurgle's Gift (Aura)",
+	"fights-first":             "Fights First",
 }
 
 // abilityLabel is the display label for an ability id: a curated override, else Title Case.
@@ -371,7 +371,7 @@ func abilityLabel(id any) string {
 	if l, ok := abilityLabels[ejstr(id)]; ok {
 		return l
 	}
-	return titleCase(ejstr(id))
+	return idLabel(ejstr(id))
 }
 
 var weaponLabels = map[string]string{"imperiums-sword": "Imperium's Sword"}

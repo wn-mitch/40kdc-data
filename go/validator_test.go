@@ -87,7 +87,7 @@ func TestTriggerBindingConstraints(t *testing.T) {
 	}
 	var base map[string]any
 	for _, a := range abilities {
-		if a["ability_id"] == "searing-soulflame" {
+		if a["ability_id"] == "searing-soulflame-grey-knights" {
 			base = a
 		}
 	}

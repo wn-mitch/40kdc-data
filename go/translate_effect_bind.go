@@ -82,7 +82,7 @@ func objectiveSelectorPhrase(sel map[string]any) string {
 		if req["owner"] == "enemy" {
 			who = "an enemy"
 		}
-		s += " with " + who + " unit with the " + titleCase(ejstr(req["requires_ability"])) + " ability within range of it"
+		s += " with " + who + " unit with the " + abilityLabel(req["requires_ability"]) + " ability within range of it"
 	}
 	return s
 }

@@ -90,14 +90,8 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				if !ok {
 					continue
 				}
-				// Stratagem ability ids are detachment-qualified but the
-				// ability copies are still replicated per faction (SM
-				// chapters) — prefer the resolving faction's copy, falling
-				// back for shared pools.
-				stratAbility, ok := ds.Abilities.GetInFaction(abilityID, factionID)
-				if !ok {
-					stratAbility, ok = ds.Abilities.GetAny(abilityID)
-				}
+				// Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
+				stratAbility, ok := ds.Abilities.Get(abilityID)
 				if !ok {
 					continue
 				}
@@ -118,7 +112,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		if !phaseMatches(ability) {
 			continue
 		}
-		pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "unit", "unitId": getStr(input, "unitId")}, "phases": intersect(ability.Phases())})
+		pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "unit", "unitId": getStr(input, "unitId")}, "phases": intersect(ability.Phases())}, unit, ability))
 	}
 
 	// 5. Attached members.
@@ -131,7 +125,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !phaseMatches(ability) {
 				continue
 			}
-			pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "attached", "unitId": memberID}, "phases": intersect(ability.Phases())})
+			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "attached", "unitId": memberID}, "phases": intersect(ability.Phases())}, member, ability))
 		}
 	}
 
@@ -149,10 +143,18 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !isAuraScope(scope["range"]) {
 				continue
 			}
-			pushUnique(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())})
+			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())}, supporter, ability))
 		}
 	}
 	return out
+}
+
+// rated adds the rating the owning unit prints for a rated rule (Feel No Pain 5+ -> 5).
+func rated(entry map[string]any, unit *UnitView, ability *AbilityView) map[string]any {
+	if r, ok := unit.RatingOf(ability.ID()); ok {
+		entry["rating"] = r
+	}
+	return entry
 }
 
 func isAuraScope(rng any) bool {

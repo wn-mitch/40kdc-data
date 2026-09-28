@@ -61,7 +61,7 @@ func costModifierLeaf(m map[string]any, subj string) string {
 		which = "abilities"
 	}
 	if hasID {
-		which = "the " + titleCase(ejstr(m["id"])) + " " + noun
+		which = "the " + abilityLabel(m["id"]) + " " + noun
 	}
 	whose := ""
 	switch m["applies_to"] {

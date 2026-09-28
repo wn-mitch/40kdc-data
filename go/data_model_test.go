@@ -6,28 +6,42 @@ import (
 	"testing"
 )
 
-// A shared ability_id keeps one copy per faction (the copies legitimately
-// diverge); only true within-faction duplicates collapse. Mirror of the
-// TS/Rust/Python data-model tests.
-func TestDeduplicatesAbilitiesByFactionAndID(t *testing.T) {
+// Ability ids are unique across factions and every faction record names its
+// faction: the collection keeps every record. Mirror of the TS data-model test.
+func TestKeepsEveryAbilityRecordUnderAUniqueID(t *testing.T) {
 	ds := EmbeddedDataset()
 	seen := map[string]struct{}{}
-	idols := 0
-	for _, a := range ds.Abilities.All() {
-		key := getStr(a.Raw, "faction_id") + "::" + a.ID()
-		if _, dup := seen[key]; dup {
-			t.Fatalf("duplicate (faction_id, ability_id) pair %q in All()", key)
+	all := ds.Abilities.All()
+	for _, a := range all {
+		if _, dup := seen[a.ID()]; dup {
+			t.Fatalf("duplicate ability_id %q in All()", a.ID())
 		}
-		seen[key] = struct{}{}
-		if a.ID() == "idol-of-blessed-blood" {
-			idols++
+		seen[a.ID()] = struct{}{}
+		if f := getStr(a.Raw, "faction_id"); f != "" && a.ID() != f && !strings.HasSuffix(a.ID(), "-"+f) {
+			t.Errorf("%s does not end with its faction %s", a.ID(), f)
 		}
 	}
-
-	if idols != 2 {
-		t.Fatalf("idol-of-blessed-blood copies = %d, want 2 (both factions survive dedupe)", idols)
+	if raw := len(embeddedRawData()["abilities"]); len(all) != raw {
+		t.Fatalf("All() = %d records, bundle has %d", len(all), raw)
 	}
 }
+
+// Get of an ability is exact: an old bare faction id resolves to nothing (the
+// mirror's renames carry no alias), so a stale reference misses rather than
+// guessing a faction.
+func TestAbilityGetIsExact(t *testing.T) {
+	ds := EmbeddedDataset()
+	idol, ok := ds.Abilities.Get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")
+	if !ok || getStr(idol.Raw, "faction_id") != "world-eaters" {
+		t.Fatalf("idol lookup = %v, %v", idol, ok)
+	}
+	for _, stale := range []string{"idol-of-blessed-blood", "berzerker-frenzy", "deadly-demise-d3"} {
+		if _, ok := ds.Abilities.Get(stale); ok {
+			t.Errorf("stale id %q still resolves", stale)
+		}
+	}
+}
+
 func TestByExternalRefReturnsEveryExactMatch(t *testing.T) {
 	items := []any{
 		map[string]any{
@@ -74,29 +88,31 @@ func TestByExternalRefReturnsEveryExactMatch(t *testing.T) {
 	}
 }
 
-// idol-of-blessed-blood is authored in both world-eaters and
-// chaos-space-marines (shared Khorne Lord of Skulls datasheet); each faction's
-// unit must see its own faction's copy.
-func TestResolvesSharedAbilityIDToUnitsOwnFactionsCopy(t *testing.T) {
+// Each faction's copy of a shared datasheet gets only what its own datasheet
+// prints: the World Eaters Lord of Skulls prints the Idol of Blessed Blood, the
+// CSM one does not. Both print Deadly Demise D6+2, read from the unit.
+func TestSharedDatasheetGetsOnlyItsOwnPrintedAbilities(t *testing.T) {
 	ds := EmbeddedDataset()
-	for _, faction := range []string{"world-eaters", "chaos-space-marines"} {
+	hasIdol := func(faction string) bool {
 		unit, ok := ds.Units.GetInFaction("khorne-lord-of-skulls", faction)
 		if !ok {
 			t.Fatalf("khorne-lord-of-skulls missing from %s", faction)
 		}
-		var idol *AbilityView
+		if r, ok := unit.RatingOf("deadly-demise"); !ok || r != "D6+2" {
+			t.Errorf("%s deadly-demise rating = %v, %v; want D6+2", faction, r, ok)
+		}
 		for _, a := range unit.Abilities() {
-			if a.ID() == "idol-of-blessed-blood" {
-				idol = a
-				break
+			if strings.HasPrefix(a.ID(), "idol-of-blessed-blood") {
+				return true
 			}
 		}
-		if idol == nil {
-			t.Fatalf("idol-of-blessed-blood missing on %s lord of skulls", faction)
-		}
-		if got := getStr(idol.Raw, "faction_id"); got != faction {
-			t.Fatalf("idol resolved to faction %q, want %q", got, faction)
-		}
+		return false
+	}
+	if !hasIdol("world-eaters") {
+		t.Error("world-eaters lord of skulls lost the Idol of Blessed Blood")
+	}
+	if hasIdol("chaos-space-marines") {
+		t.Error("chaos-space-marines lord of skulls still carries the Idol of Blessed Blood")
 	}
 }
 
@@ -172,16 +188,6 @@ func TestGetPanicsForSharedWeaponIDWithoutFaction(t *testing.T) {
 	ds.Weapons.Get("lascannon")
 }
 
-func TestGetPanicsForSharedAbilityIDWithoutFaction(t *testing.T) {
-	ds := EmbeddedDataset()
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatal("Get on a shared ability id should panic")
-		}
-	}()
-	ds.Abilities.Get("idol-of-blessed-blood")
-}
-
 // Core rule 19.04 — a rule affecting a single specified model only ever applies
 // to that model, even while part of an attached unit. Mirror of the TS
 // `defensive-buffs.test.ts` / Python `test_data_model.py` blocks; pinned
@@ -213,7 +219,7 @@ func TestLeaderPersonalInvulnDoesNotBuffBodyguardUnit(t *testing.T) {
 		"factionId":       "drukhari",
 		"attachedUnitIds": []any{"archon"},
 	}, map[string]any{"phase": "shooting"})
-	if got := contribTypesFrom(attached, "shadowfield"); len(got) != 0 {
+	if got := contribTypesFrom(attached, "shadowfield-drukhari"); len(got) != 0 {
 		t.Errorf("shadowfield buffs on the bodyguard unit = %v, want none", got)
 	}
 
@@ -222,7 +228,7 @@ func TestLeaderPersonalInvulnDoesNotBuffBodyguardUnit(t *testing.T) {
 		map[string]any{"unitId": "archon", "factionId": "drukhari"},
 		map[string]any{"phase": "shooting"},
 	)
-	got := contribTypesFrom(own, "shadowfield")
+	got := contribTypesFrom(own, "shadowfield-drukhari")
 	if len(got) != 1 || getStr(got[0], "type") != "invulnerable-save" || asInt(got[0]["threshold"]) != 4 {
 		t.Errorf("shadowfield buffs on the Archon itself = %v, want one 4+ invulnerable-save", got)
 	}
@@ -237,7 +243,7 @@ func TestUnitScopedLeaderRuleStillBuffsAttachedUnit(t *testing.T) {
 		"factionId":       "adeptus-astartes",
 		"attachedUnitIds": []any{"librarian"},
 	}, map[string]any{"phase": "fight"})
-	got := contribTypesFrom(attached, "mental-fortress-psychic")
+	got := contribTypesFrom(attached, "mental-fortress-adeptus-astartes")
 	if len(got) != 1 || asInt(got[0]["threshold"]) != 4 {
 		t.Errorf("mental-fortress-psychic buffs = %v, want one 4+ invulnerable-save", got)
 	}
@@ -245,7 +251,7 @@ func TestUnitScopedLeaderRuleStillBuffsAttachedUnit(t *testing.T) {
 
 func TestDroppedModelScopedEffectIsReportedUnsupported(t *testing.T) {
 	ds := EmbeddedDataset()
-	ability, ok := ds.Abilities.GetAny("shadowfield")
+	ability, ok := ds.Abilities.GetAny("shadowfield-drukhari")
 	if !ok {
 		t.Fatal("shadowfield missing from the embedded dataset")
 	}
@@ -253,7 +259,7 @@ func TestDroppedModelScopedEffectIsReportedUnsupported(t *testing.T) {
 		ability.Raw["effect"],
 		map[string]any{
 			"kind":         "ability",
-			"abilityId":    "shadowfield",
+			"abilityId":    "shadowfield-drukhari",
 			"abilityKind":  "attached",
 			"sourceUnitId": "archon",
 		},
@@ -292,14 +298,14 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		"factionId":       "agents-of-the-imperium",
 		"attachedUnitIds": []any{"inquisitor"},
 	}, map[string]any{"phase": "command"})
-	if got := keywords(led, "psychic-gifts"); len(got) != 0 {
+	if got := keywords(led, "psychic-gifts-agents-of-the-imperium"); len(got) != 0 {
 		t.Errorf("psychic-gifts keywords on the led unit = %v, want none", got)
 	}
 	alone := ds.buffsFor(
 		map[string]any{"unitId": "inquisitor", "factionId": "agents-of-the-imperium"},
 		map[string]any{"phase": "command"},
 	)
-	if got := keywords(alone, "psychic-gifts"); len(got) != 1 || got[0] != "psyker" {
+	if got := keywords(alone, "psychic-gifts-agents-of-the-imperium"); len(got) != 1 || got[0] != "psyker" {
 		t.Errorf("psychic-gifts keywords on the Inquisitor itself = %v, want [psyker]", got)
 	}
 
@@ -310,7 +316,7 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		"factionId":       "adeptus-astartes",
 		"attachedUnitIds": []any{"apothecary-biologis"},
 	}, map[string]any{"phase": "shooting"})
-	if got := keywords(aggressors, "surgical-precision"); len(got) != 1 || got[0] != "lethal-hits" {
+	if got := keywords(aggressors, "surgical-precision-adeptus-astartes"); len(got) != 1 || got[0] != "lethal-hits" {
 		t.Errorf("surgical-precision keywords = %v, want [lethal-hits]", got)
 	}
 }

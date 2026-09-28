@@ -87,7 +87,7 @@ func TestPhase4SchemaPins(t *testing.T) {
 		{"effect", gate(`"dice":"D6","requirement":{"type":"pair","min_value":2}`), false},
 		{"effect", gate(`"from":{"roll_var":"x"},"threshold":4,"requirement":{"type":"pair","min_value":2}`), false},
 		{"effect", gate(`"dice":"D6","threshold":4,"roll_var":"x"`), false},
-		{"effect", leaf("roll-modifier", tu, `{"roll":{"of_ability":"reanimation-protocols"},"operation":"add","value":1}`), true},
+		{"effect", leaf("roll-modifier", tu, `{"roll":{"of_ability":"reanimation-protocols-necrons"},"operation":"add","value":1}`), true},
 		{"effect", leaf("roll-modifier", tu, `{"roll":"manoeuvre","operation":"add","value":1}`), true},
 		{"effect", leaf("re-roll", tu, `{"roll":"channelling","result_scope":"any-result","count":1,"mandatory":true}`), true},
 		{"effect", leaf("roll-result", tu, `{"roll":"hit","result":6,"unmodified":true}`), true},

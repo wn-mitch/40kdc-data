@@ -1024,7 +1024,7 @@
       ]
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
       "oneOf": [
         {
           "type": "integer",
@@ -1042,6 +1042,9 @@
         },
         {
           "$ref": "#/$defs/count-of"
+        },
+        {
+          "$ref": "#/$defs/unit-rating"
         }
       ]
     },
@@ -1169,6 +1172,19 @@
       "type": "string",
       "minLength": 1,
       "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them."
+    },
+    "unit-rating": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rating"
+      ],
+      "properties": {
+        "rating": {
+          "const": true
+        }
+      },
+      "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
     }
   }
 }
