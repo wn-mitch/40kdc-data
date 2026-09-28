@@ -599,6 +599,25 @@ describe("unit-scoped weapon profiles", () => {
   });
 });
 
+describe("Tyranid datasheet links", () => {
+  it("keeps Tyranid leaders' bodyguards distinct", () => {
+    expect(
+      dataset.bodyguardsAttachableFrom("old-one-eye", "tyranids").map((unit) => unit.name),
+    ).toEqual(["Carnifexes"]);
+    expect(
+      dataset.bodyguardsAttachableFrom("hyperadapted-raveners", "tyranids").map((unit) => unit.name),
+    ).toEqual(["Raveners"]);
+  });
+
+  it("exposes the Screamer-Killer's named melee weapon", () => {
+    expect(
+      dataset.units.getInFaction("screamer-killer", "tyranids")?.weapons
+        .filter((weapon) => weapon.raw.type === "melee")
+        .map((weapon) => weapon.name),
+    ).toEqual(["Screamer-Killer talons"]);
+  });
+});
+
 describe("leadersAttachableTo", () => {
   it("lists leaders whose attachment data covers the body unit, sorted by name", () => {
     const leaders = dataset.leadersAttachableTo("battle-sisters-squad");

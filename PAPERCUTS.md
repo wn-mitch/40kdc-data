@@ -240,3 +240,7 @@ npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so pip
 ## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
 
 The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+
+## 2026-09-28T15:02:33Z — gpt-6-sol
+
+In a new jj workspace, just test-all ran pytest against the editable wh40kdc installation in the sibling checkout rather than this workspace, producing hundreds of misleading failures; set PYTHONPATH=src or install this workspace editable before pytest.
