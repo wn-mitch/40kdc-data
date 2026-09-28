@@ -44,7 +44,7 @@ const graphAgent = createTrustedAgent({ driverArgs: args, invokeAgent: agent })
 // which may be a different checkout of this repo (a parallel session's working copy).
 const PRE = args.repo_root
   ? `Repo root: ${args.repo_root} — cd there first; run every command and resolve every ` +
-    `relative path (including ../40kdc-abilities and ../40kdc-embeddings) against it. ` +
+    `relative path (including ../40kdc-embeddings) against it. ` +
     `Never read or write any other checkout of this repo.\n`
   : ''
 

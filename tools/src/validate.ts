@@ -94,7 +94,7 @@ export async function validatePublicSourceBoundary(
         {
           path: relative(root, file),
           message:
-            "raw source input must live under _private/ or in the private source store",
+            "raw source input must live under _private/",
         },
       ],
     })),

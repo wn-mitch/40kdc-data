@@ -1,5 +1,5 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { loadRepoProse } from "../mfm/record-prose.js";
 import { sourceDigest } from "../source-digest.js";
 import { selectRound4BCohort, type SourceIndex } from "./cohort.js";
 import type { FrozenAbility, FrozenDataset, RunManifest } from "./contracts.js";
@@ -7,8 +7,8 @@ import { hashFile, hashJson, sha256Bytes } from "./hash.js";
 import { requireAbsent, writeJson, writeRunManifest } from "./manifest.js";
 import { createSourceOnlyModelInput, MODEL_OUTPUT_JSON_SCHEMA } from "./prompt.js";
 import {
-  ABILITIES_ROOT,
   DATASET_PATH,
+  DUMP_PATH,
   FREEZE_MARKER_PATH,
   MANIFEST_PATH,
   MODEL_INPUT_PATH,
@@ -24,7 +24,7 @@ export function freezeDataset(sourceIndex: SourceIndex, now = new Date()): Froze
   const selection = selectRound4BCohort(sourceIndex);
   const records: FrozenAbility[] = selection.map((candidate) => {
     const sourceBytes = Buffer.from(candidate.assembled.source_text, "utf8");
-    const sourceFile = `${candidate.faction_id}.json`;
+    const ref = candidate.record.source?.ref ?? `dump.json#?${candidate.faction_id}/${candidate.ability_id}`;
     return {
       faction_id: candidate.faction_id,
       ability_id: candidate.ability_id,
@@ -34,16 +34,16 @@ export function freezeDataset(sourceIndex: SourceIndex, now = new Date()): Froze
         source_kind: candidate.assembled.source_kind,
         fields: candidate.assembled.source_fragments.map((fragment) => fragment.label),
       },
-      source_locator: `${join(ABILITIES_ROOT, sourceFile)}#/${candidate.ability_id}`,
+      source_locator: `${DUMP_PATH}#${ref.split("#")[1]}`,
       source_text: candidate.assembled.source_text,
       source_bytes_base64: sourceBytes.toString("base64"),
       source_byte_length: sourceBytes.length,
       source_hash: candidate.source_hash,
       source_digest: sourceDigest(candidate.assembled.source_text),
       source_provenance: {
-        repository: "40kdc-abilities",
-        file: sourceFile,
-        record_pointer: `/${candidate.ability_id}`,
+        repository: "mfm-dump",
+        file: "dump.json",
+        record_pointer: ref.split("#")[1]!,
       },
       source_fragments: candidate.assembled.source_fragments,
     };
@@ -67,8 +67,7 @@ function assertFreezeOutputsAbsent(): void {
 
 function main(): void {
   assertFreezeOutputsAbsent();
-  const indexPath = join(ABILITIES_ROOT, "index.json");
-  const sourceIndex = JSON.parse(readFileSync(indexPath, "utf8")) as SourceIndex;
+  const sourceIndex: SourceIndex = loadRepoProse({ dumpPath: DUMP_PATH }).index();
   const dataset = freezeDataset(sourceIndex);
   const modelInput = createSourceOnlyModelInput(dataset);
 
@@ -87,7 +86,7 @@ function main(): void {
     stages: [{
       stage: "freeze",
       created_at: dataset.frozen_at,
-      input_hashes: { source_index: sha256Bytes(readFileSync(indexPath)) },
+      input_hashes: { source_index: hashJson(sourceIndex) },
       output_hashes: {
         dataset: hashFile(DATASET_PATH),
         source_only_model_input: hashFile(MODEL_INPUT_PATH),

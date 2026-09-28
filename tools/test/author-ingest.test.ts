@@ -1,16 +1,10 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import * as ingest from "../src/author-ingest.js";
 import {
-  buildRawTextIndex,
   ingestFaction,
   ingestSnapshot,
-  mergeRawTextRecords,
   projectPhaseMappings,
-  projectRawTextRecords,
   type IngestRecord,
-  type RawTextRecord,
   type SnapshotManifest,
 } from "../src/author-ingest.js";
 import { reconcileFaction } from "../src/author-reconcile.js";
@@ -22,21 +16,8 @@ const rec = (over: Partial<IngestRecord> & { name: string }): IngestRecord => ({
   ...over,
 });
 
-const raw = (ability_id: string, unit_ids: string[], over: Partial<RawTextRecord> = {}): RawTextRecord => ({
-  ability_id,
-  name: ability_id,
-  faction_id: "orks",
-  detachment_id: null,
-  unit_ids,
-  ability_type: "unit",
-  game_version: { edition: "11th", dataslate: "launch" },
-  source: { kind: "json", ref: "old", phases: null },
-  raw_text: `old ${ability_id}`,
-  ...over,
-});
-
 describe("ingestFaction", () => {
-  it("seeds a stub, a resolved author-input entry, and a raw-text record", () => {
+  it("seeds a stub and a resolved author-input entry, and keeps the prose only in author-input", () => {
     const r = ingestFaction("orks", [rec({ name: "Waaagh! Energy", unit_ids: ["weirdboy"] })], [], []);
 
     expect(r.created).toBe(1);
@@ -54,9 +35,8 @@ describe("ingestFaction", () => {
     expect(input.resolved).toBe(true);
     expect(input.src?.description).toBe("GW TEXT — must not leak into the repo");
 
-    expect(r.rawText).toHaveLength(1);
-    expect(r.rawText[0]).toMatchObject({ ability_id: "waaagh-energy", faction_id: "orks" });
-    expect(r.rawText[0].raw_text).toContain("GW TEXT");
+    // No second copy of the prose: the result carries no raw-text records for any store.
+    expect(r).not.toHaveProperty("rawText");
 
     // IP guard: raw text must NEVER appear in committed enrichment data.
     expect(JSON.stringify(r.abilities)).not.toContain("GW TEXT");
@@ -85,7 +65,6 @@ describe("ingestFaction", () => {
   it("leaves a record with empty raw_text unresolved (seeded, skipped by propose)", () => {
     const r = ingestFaction("orks", [rec({ name: "Mystery Power", raw_text: "   " })], [], []);
     expect(r.created).toBe(1); // stub still seeded
-    expect(r.rawText).toHaveLength(0); // nothing to store
     const input = r.authorInput.find((e) => e.ability_id === "mystery-power")!;
     expect(input.resolved).toBe(false);
     expect(input.src).toBeUndefined();
@@ -105,15 +84,14 @@ describe("ingestFaction", () => {
     expect(stub.faction_id).toBe("orks");
   });
 
-  it("carries detachment_id into the raw-text record as a top-level field", () => {
+  it("carries detachment_id onto the seeded stub", () => {
     const r = ingestFaction(
       "adeptus-custodes",
       [rec({ faction: "adeptus-custodes", name: "March of the Honoured Dead", ability_type: "detachment", detachment_id: "might-of-the-moritoi", unit_ids: [] })],
       [],
       [],
     );
-    expect(r.rawText[0].detachment_id).toBe("might-of-the-moritoi");
-    expect(r.rawText[0].unit_ids).toEqual([]);
+    expect(r.abilities[0]).toMatchObject({ detachment_id: "might-of-the-moritoi", unit_ids: [] });
   });
 
   it("merges into an authored (non-stub) entry additively and flags it for review", () => {
@@ -193,7 +171,7 @@ describe("ingestSnapshot", () => {
   });
 
 
-  it("normalizes raw-store metadata after replacing an existing ability", () => {
+  it("normalizes ability and author-input metadata after replacing an existing ability", () => {
     const result = ingestSnapshot({
       records: [rec({
         name: "Current Name",
@@ -217,14 +195,14 @@ describe("ingestSnapshot", () => {
       game_version: { edition: "11th", dataslate: "launch" },
       effect: { type: "stat-modifier", modifier: {} },
     }], []);
-    expect(result.rawText[0]).toMatchObject({
+    expect(result.abilities[0]).toMatchObject({
       name: "Current Name",
       faction_id: "orks",
-      detachment_id: null,
       unit_ids: ["covered"],
       ability_type: "unit",
       game_version: { edition: "11th", dataslate: "codex-orks" },
     });
+    expect(result.abilities[0]).not.toHaveProperty("detachment_id");
     expect(result.authorInput[0]).toMatchObject({
       name: "Current Name",
       faction_id: "orks",
@@ -277,42 +255,6 @@ describe("ingestSnapshot", () => {
       },
     };
     expect(() => projectPhaseMappings([], manifest, [])).toThrow(/invalid phase/);
-  });
-
-  it("replaces raw-store ownership while preserving uncovered owners and source holdovers", () => {
-    const manifest: SnapshotManifest = {
-      records: [
-        rec({ name: "Current", ability_id: "current", unit_ids: ["covered"], game_version: { edition: "11th", dataslate: "codex-orks" } }),
-        rec({ name: "Holdover", ability_id: "holdover", unit_ids: ["covered"], raw_text: "", game_version: { edition: "11th", dataslate: "codex-orks" } }),
-      ],
-      replace_scope: {
-        faction_id: "orks",
-        game_version: { edition: "11th", dataslate: "codex-orks" },
-        unit_ids: ["covered"],
-        detachment_ids: ["covered-detachment"],
-      },
-    };
-    const incoming = raw("current", ["covered"], {
-      name: "Current",
-      game_version: { edition: "11th", dataslate: "codex-orks" },
-      raw_text: "current prose",
-    });
-    const projected = projectRawTextRecords([
-      raw("stale", ["covered"]),
-      raw("shared", ["covered", "uncovered"]),
-      raw("current", ["covered"]),
-      raw("holdover", ["covered", "uncovered"]),
-      raw("old-detachment", [], { detachment_id: "covered-detachment", ability_type: "detachment" }),
-      raw("legacy-covered-detachment", [], { ability_type: "stratagem" }),
-    ], [incoming], manifest);
-    expect(projected.map((entry) => entry.ability_id)).toEqual(["shared", "current", "holdover"]);
-    expect(projected.find((entry) => entry.ability_id === "shared")?.unit_ids).toEqual(["uncovered"]);
-    expect(projected.find((entry) => entry.ability_id === "current")?.raw_text).toBe("current prose");
-    expect(projected.find((entry) => entry.ability_id === "holdover")).toMatchObject({
-      unit_ids: ["uncovered", "covered"],
-      game_version: { edition: "11th", dataslate: "codex-orks" },
-      raw_text: "old holdover",
-    });
   });
 });
 
@@ -441,76 +383,8 @@ describe("reconcileFaction", () => {
   });
 });
 
-describe("mergeRawTextRecords (non-destructive store writes)", () => {
-  const rt = (id: string, text: string): RawTextRecord => ({
-    ability_id: id, name: id, faction_id: "orks", detachment_id: null, unit_ids: [], ability_type: "unit",
-    game_version: { edition: "11th", dataslate: "x" }, source: { kind: "json", ref: "", phases: null }, raw_text: text,
-  });
-
-  it("preserves every existing entry and appends new abilities", () => {
-    const out = mergeRawTextRecords([rt("a", "AAA"), rt("b", "BBB")], [rt("c", "CCC")]);
-    expect(out.map((r) => r.ability_id)).toEqual(["a", "b", "c"]);
-    expect(out.find((r) => r.ability_id === "a")!.raw_text).toBe("AAA"); // untouched
-    expect(out.find((r) => r.ability_id === "b")!.raw_text).toBe("BBB"); // untouched
-  });
-
-  it("updates an existing ability_id in place without dropping or duplicating others", () => {
-    const out = mergeRawTextRecords([rt("a", "old"), rt("b", "BBB")], [rt("a", "new")]);
-    expect(out.map((r) => r.ability_id)).toEqual(["a", "b"]); // no duplicate, b preserved
-    expect(out.find((r) => r.ability_id === "a")!.raw_text).toBe("new");
-  });
-
-  it("never deletes: incoming empty leaves the store intact", () => {
-    const existing = [rt("a", "AAA"), rt("b", "BBB")];
-    expect(mergeRawTextRecords(existing, [])).toEqual(existing);
-  });
-});
-
-describe("buildRawTextIndex", () => {
-  it("retains same-id records under their owning factions", () => {
-    const store = mkdtempSync(join(tmpdir(), "40kdc-abilities-"));
-    try {
-      writeFileSync(
-        join(store, "orks.json"),
-        JSON.stringify([raw("shared-rule", [], { raw_text: "Fabricated Orks rule." })]),
-      );
-      writeFileSync(
-        join(store, "tau-empire.json"),
-        JSON.stringify([
-          {
-            ...raw("shared-rule", [], { raw_text: "Fabricated T'au rule." }),
-            faction_id: "tau-empire",
-          },
-        ]),
-      );
-
-      expect(buildRawTextIndex(store)).toMatchObject({
-        orks: {
-          "shared-rule": { faction: "orks", raw_text: "Fabricated Orks rule." },
-        },
-        "tau-empire": {
-          "shared-rule": {
-            faction: "tau-empire",
-            raw_text: "Fabricated T'au rule.",
-          },
-        },
-      });
-    } finally {
-      rmSync(store, { recursive: true, force: true });
-    }
-  });
-});
-
-describe("raw-text store precedence", () => {
-  // Fabricated records only.
-  const record = (kind: string, raw_text: string) => ({
-    ability_id: "fixture-rule", name: "Fixture Rule", faction_id: "fixture", detachment_id: null, unit_ids: [],
-    ability_type: "unit", game_version: { edition: "11th", dataslate: "fixture" }, source: { kind, ref: "fixture", phases: null }, raw_text,
-  });
-
-  it("never lets another source replace text taken from the MFM dump", () => {
-    expect(mergeRawTextRecords([record("mfm", "dump text")], [record("pdf", "pack text")])[0]!.raw_text).toBe("dump text");
-    expect(mergeRawTextRecords([record("mfm", "dump text")], [record("mfm", "newer dump text")])[0]!.raw_text).toBe("newer dump text");
-    expect(mergeRawTextRecords([record("game-datacards", "old text")], [record("pdf", "pack text")])[0]!.raw_text).toBe("pack text");
+describe("author-ingest store retirement", () => {
+  it("exports no raw-text store writer", () => {
+    for (const name of ["buildRawTextIndex", "mergeRawTextRecords", "projectRawTextRecords", "keepsDumpText"]) expect(ingest).not.toHaveProperty(name);
   });
 });

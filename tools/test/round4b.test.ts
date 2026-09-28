@@ -14,7 +14,7 @@ import { wilsonInterval, type ModelOutputArtifact } from "../src/round4b/shared.
 function fixtureIndex(): SourceIndex {
   const records: Record<string, SourceRecord> = {};
   for (let index = 1; index <= 5; index += 1) {
-    records[`dice-${index}`] = { raw_text: `Roll a D6 for outcome ${index}${index === 1 ? " with unité" : ""}.` };
+    records[`dice-${index}`] = { raw_text: `Roll a D6 for outcome ${index}${index === 1 ? " with unité" : ""}.`, source: { ref: `dump.json#row-dice-${index}` } };
     records[`attack-${index}`] = { raw_text: `Add ${index} to this unit's Attack characteristic.` };
     records[`condition-${index}`] = { raw_text: `If it has moved previously, apply rule ${index}.` };
     records[`menu-${index}`] = { raw_text: `Choose one option and spend one Command Point ${index}.` };
@@ -53,6 +53,9 @@ describe("Round 4B source-only foundation", () => {
     const utf8Record = dataset.records.find((record) => record.ability_id === "dice-1")!;
     expect(utf8Record.source_byte_length).toBe(Buffer.byteLength(utf8Record.source_text, "utf8"));
     expect(utf8Record.source_fragments).toEqual([{ label: "RAW_TEXT", start: 0, end: utf8Record.source_byte_length }]);
+    // Provenance names the dump row the prose came from, not the retired store.
+    expect(utf8Record.source_provenance).toEqual({ repository: "mfm-dump", file: "dump.json", record_pointer: "row-dice-1" });
+    expect(utf8Record.source_locator).toMatch(/dump\.json#row-dice-1$/);
     expect(modelInput.records).toHaveLength(30);
     expect(Object.keys(modelInput)).toEqual(["contract_version", "run_id", "cohort_hash", "output_schema", "records"]);
     expect(Object.keys(modelInput.records[0]!).sort()).toEqual(["ability_id", "faction_id", "name", "selection", "source_byte_length", "source_fragments", "source_hash", "source_text"]);

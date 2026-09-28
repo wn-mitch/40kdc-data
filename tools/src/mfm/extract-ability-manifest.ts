@@ -3,16 +3,16 @@
  * skeleton unit's DATASHEET abilities, straight from the GW MFM dump.
  *
  * The `author-ability` pipeline ingests a JSON manifest (one record per ability,
- * SKILL.md §3) whose `raw_text` lands ONLY in the out-of-repo `40kdc-abilities`
- * store; the committed repo gets community DSL, never the prose. This tool produces
+ * SKILL.md §3) whose `raw_text` lands ONLY in git-ignored author-input; the
+ * committed repo gets community DSL, never the prose. This tool produces
  * that manifest for the freshly-seeded units whose `ability_ids` are still empty:
  *
  *   - It emits only `abilityType === "datasheet"` rows (the unit-specific abilities).
  *     `core` (USRs: Deep Strike, Lone Operative …) and `faction` rows are shared and
  *     already authored — the pipeline would merge them by name, but they are out of
  *     scope here and add noise, so they are skipped.
- *   - `raw_text` is the dump's `localisations.en.rules`, HTML-stripped (the store
- *     wants verbatim prose; the `<b>/<u>` tags are presentation only).
+ *   - `raw_text` is the dump's `localisations.en.rules`, HTML-stripped (the
+ *     classify pass wants verbatim prose; the `<b>/<u>` tags are presentation only).
  *
  * Output: `_private/manifests/<faction>.manifest.json` (git-ignored — it carries GW
  * text). IP: nothing this tool writes goes into committed `data/**`.

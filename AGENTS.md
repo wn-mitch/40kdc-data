@@ -254,13 +254,9 @@ across implementations by the `conformance/share/` corpus.
   faction's faction rule. Run `npx tsx tools/src/convert-faction.ts <faction-id>`
   to regenerate core data from this source (e.g., `convert-faction.ts world-eaters`).
 - **game-datacards** (`github.com/game-datacards/datasources`, `10th/json/`):
-  community-extracted datasheet text. Source for the **raw-text store backfill**
-  (`npm run author:backfill-store`) — populates the out-of-repo `40kdc-abilities`
-  store with verbatim prose for ability_ids that have none, **fill-only** (never
-  overwrites newer 11e text from `author:ingest`). 10e provenance is stamped on
-  each entry. Coverage is tracked by `npm run audit:store-coverage`
-  (`data/_audit/store-coverage.md`). As with all raw text, it lands ONLY in the
-  out-of-repo store, never in this repo.
+  community-extracted datasheet text. Used only for structure: external-ref ids
+  (`sync-external-refs.ts`) and the 10e detachment↔rule association
+  (`reconcile-detachment-rules.ts`). Its prose is never stored anywhere.
 - **GW MFM dump**: `_private/dump.json` is the ignored raw Munitorum Field
   Manual export; its intentionally public structural contract is committed in
   `tools/src/mfm/`. The ~30MB UUID-keyed relational dump (`data_version 867`)
@@ -291,8 +287,8 @@ across implementations by the `conformance/share/` corpus.
   (all-or-nothing) only after validation passes. The loader/faction-map live in
   `tools/src/mfm/`. Models 11e
   per-army-ordinal pricing via `unit_count_min`/`unit_count_max` on unit `points`.
-  Numeric/structural fields land in the repo; GW prose routes to the out-of-repo
-  store. NB: unrelated to the NewRecruit roster-builder import/export feature
+  Numeric/structural fields land in the repo; GW prose stays in the dump (see
+  "Rule prose" below). NB: unrelated to the NewRecruit roster-builder import/export feature
   (`tools/src/{import,export}/newrecruit-*`), which keeps that name. The
   `attachment-role` subcommand (`mfm/attachment.ts`) is the **authoritative**
   source for unit `attachment_role` (leader/support) and `leader-attachments.json`
@@ -353,7 +349,7 @@ prose, or artwork/asset URLs. BSData 11e is a warning-only backstop; it never
 overrides the MFM. If the GW app displays a field that a mapping does not expose,
 search the actual dump before declaring a source gap.
 
-## Ability ids, the raw-text store, and share tokens
+## Ability ids, rule prose, and share tokens
 
 - **Canonical ability_id pattern.** Detachment-scoped entities
   (stratagems, enhancements, detachment rules) use `<name-slug>-<detachment-slug>`
@@ -362,18 +358,23 @@ search the actual dump before declaring a source gap.
   names repeat across detachments (e.g. two different `flawless-construction`s), so a
   bare name-slug collides. Unit/faction abilities (no detachment) stay bare
   (`deep-strike`, `oath-of-moment`). Run `npm run author:reconcile` to keep links in sync.
-- **Raw-text store shape.** The out-of-repo `40kdc-abilities` store is keyed by
-  `ability_id ?? id` (the app's lookup). **Stratagems** carry structured
-  `when`/`target`/`effect`/`restrictions` (cost lives in core `cp_cost`, not the
-  store); unit abilities + enhancements carry a single `raw_text` string. Fill
-  precedence: an 11e PDF entry (`source.kind: pdf`) supersedes a game-datacards 10e
-  entry; both are fill-only and never clobber existing 11e prose.
-- **Two backfill sources.** `npm run author:backfill-store` pulls 10e text from
-  game-datacards (fill-only). `npm run author:backfill-store`'s sibling
-  `extract-pack-store` pulls **11e** text from the faction-pack PDFs in
-  `_private/sources/` — this is the authoritative source for new-detachment content
-  game-datacards lacks. After either, regenerate `index.json`
-  (`tsx tools/src/build-abilities-index.ts`) and re-check `audit:store-coverage`.
+- **Rule prose comes only from the private MFM dump.** `tools/src/mfm/record-prose.ts`
+  (`RepoProse`, `loadRepoProse()`) resolves a repo ability record to the text its own
+  owner prints in `_private/dump.json`: a stratagem or enhancement by its core record's
+  `mfm` external ref (else its detachment), a detachment rule by its detachment, an army
+  rule by the faction's army rules, a core ability by the Core Rules, a unit ability by
+  the datasheets of its `unit_ids`. It never falls back to a same-named rule elsewhere;
+  two different texts for one record come back `ambiguous` with no text (codex wins over
+  Combat Patrol, non-Legends over Legends, before that). Entries use the old store
+  shape — stratagems `when`/`target`/`effect`/`restrictions`, everything else
+  `raw_text` — so `mfm/store-source.ts` assembles either. `npm run prose -- get
+  <faction> <id>` / `grep <regex>` read it from the shell; `npm run prose -- export`
+  writes `_private/prose/` (`<faction>.json` + `index.json`) for tools that cannot import
+  TypeScript (the dsl-campaign graph, the embeddings harness via
+  `WH40KDC_ABILITIES_DIR`). The export refuses any path in the repo outside `_private/`.
+  The former `40kdc-abilities` raw-text store and its writers and backfills are
+  retired; no tool reads or writes `../40kdc-abilities` (`tools/test/no-abilities-store.test.ts`
+  enforces this).
 - **Share tokens (`data/share-registry.json`).** The list-builder encodes lists as
   integer indices into this append-only registry (see `tools/docs/share-token.md`).
   **Renames are NOT just tombstones** — they MUST be added to the `aliases` map
@@ -386,9 +387,9 @@ search the actual dump before declaring a source gap.
 ## PDF ingestion — always use the coordinate path (needs poppler)
 
 **Source order:** prefer structured sources over PDFs. game-datacards 10e carries
-both the detachment↔rule association and rule text in `rules.detachment[]`
-(`reconcile-detachment-rules.ts` joins it; `author:backfill-store` for strat/enh/
-unit prose). The PDF path is the **fallback** for new-11e content those sources lack.
+the detachment↔rule association in `rules.detachment[]` (`reconcile-detachment-rules.ts`
+joins it). The PDF path is the **fallback** for new-11e content those sources lack.
+Either way only structure lands in the repo; rule text comes from the dump.
 
 **When you do read a pack PDF, use the coordinate foundation — never linearize.**
 All pack prose (stratagems, enhancements, detachment rules) goes through
@@ -399,8 +400,8 @@ their detachment's coordinate *region*, so association is positional (not guesse
 from the linear stream) and the 2-column layout never interleaves.
 - **Do NOT write a new extractor that linearizes with plain `pdftotext -`.** That
   path mis-associates rules (it once put Sisters' "Hymns of Battle" on the wrong
-  detachment) and mangles columns/drop-caps. The two store extractors
-  (`extract-pack-store`, `extract-detachment-rules`) are built on `extractPackCards`.
+  detachment) and mangles columns/drop-caps. `extract-detachment-rules`
+  is built on `extractPackCards`.
 - **`-bbox-layout` requires *poppler's* pdftotext.** The XPDF build (Glyph & Cog
   4.00) lacks it; the tools now **fail loudly** telling you to install poppler
   (`choco install poppler` / `brew install poppler` / `apt install poppler-utils`)
@@ -419,7 +420,6 @@ from the linear stream) and the 2-column layout never interleaves.
   hash instead.
 - Tool path args are resolved against the repo root, not the shell cwd — pass paths
   relative to the repo (or absolute), not `../`-relative from `tools/`.
-- The store is a **sibling** repo (`../40kdc-abilities`), not under this one.
 
 ## Working with the upstream fork
 

@@ -2,7 +2,7 @@
  * author:reconcile — deterministically back-link core entities to the community
  * abilities they were authored from, so the downstream lookup contract
  *
- *     raw-text-store[ entity.ability_id ?? entity.id ]   (and abilities.json[id])
+ *     abilities.json[ entity.ability_id ?? entity.id ]
  *
  * resolves for EVERY stratagem / enhancement / unit-ability / detachment-rule.
  *
@@ -26,7 +26,7 @@
  *
  * Single-id guarantee: it never invents a *new* id mapping — it points the core
  * entity's existing `ability_id` link field at the canonical abilities id, so all
- * three sources (core / abilities.json / raw-text store) agree on one key. New
+ * sources (core / abilities.json) agree on one key. New
  * entities seeded by `author:seed-core` already get `id == ability_id`, so there
  * is nothing to reconcile for those; this is the retroactive pass for legacy data.
  *

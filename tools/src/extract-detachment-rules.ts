@@ -9,19 +9,20 @@
  * located inside its detachment's coordinate region, so there is no guessing from
  * the linear text stream (the failure that mis-assigned "Hymns of Battle").
  *
- * Each fill is a 3-way write (a detachment rule has none of these yet):
+ * Each fill is a 2-way write (a detachment rule has neither yet):
  *   - data/core/<f>/detachments.json : detachment_rule_id (or _ids if >1 rule)
  *   - data/enrichment/<f>/abilities.json : an [APPROX] DSL stub (no prose)
- *   - <store>/<f>.json : raw_text (prose lands ONLY here)
+ * The PDF's prose is read only to find the rule cards and is never written anywhere;
+ * rule text comes from the MFM dump (`npm run prose -- get <faction> <id>`).
  * Rule ids are BARE `slug(name)` (the detachment-rule convention). Fill-only.
  *
  * Usage:
- *   npx tsx tools/src/extract-detachment-rules.ts <pdf> --faction <id> [--store <dir>] [--only <det,det>] [--dry-run]
+ *   npx tsx tools/src/extract-detachment-rules.ts <pdf> --faction <id> [--only <det,det>] [--dry-run]
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { slug, titleCase } from "./pack-blocks.js";
+import { slug } from "./pack-blocks.js";
 import { extractPackCards } from "./author-input-pack.js";
 import { STUB_EFFECT } from "./audit-coverage.js";
 
@@ -29,12 +30,11 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const REPO = resolve(__dirname, "../..");
 const args = process.argv.slice(2);
 const flag = (n: string): string | undefined => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
-const PDF = args.find((a, i) => !a.startsWith("--") && !["--faction", "--store", "--only"].includes(args[i - 1]));
+const PDF = args.find((a, i) => !a.startsWith("--") && !["--faction", "--only"].includes(args[i - 1]));
 const FACTION = flag("--faction");
-const STORE_ROOT = resolve(REPO, flag("--store") ?? "../40kdc-abilities");
 const DRY = args.includes("--dry-run");
 const ONLY = new Set((flag("--only") ?? "").split(",").map((s) => s.trim()).filter(Boolean));
-if (!PDF || !FACTION) { console.error("usage: extract-detachment-rules <pdf> --faction <id> [--store <dir>] [--only <ids>] [--dry-run]"); process.exit(2); }
+if (!PDF || !FACTION) { console.error("usage: extract-detachment-rules <pdf> --faction <id> [--only <ids>] [--dry-run]"); process.exit(2); }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Json = any;
@@ -55,13 +55,9 @@ const hasRule = (d: Json): boolean => !!(d.detachment_rule_id || (Array.isArray(
 const enrPath = join(REPO, "data/enrichment", FACTION, "abilities.json");
 const enr: Json[] = existsSync(enrPath) ? readJSON(enrPath) : [];
 const enrIds = new Set(enr.map((a) => a.ability_id));
-const storePath = join(STORE_ROOT, `${FACTION}.json`);
-const store: Json[] = existsSync(storePath) ? readJSON(storePath) : [];
-const storeIds = new Set(store.map((e) => e.ability_id));
 const GV = { edition: "11th", dataslate: "pre-launch-provisional" };
-const ref = PDF.split(/[\\/]/).pop();
 
-let filled = 0, abil = 0, storeAdded = 0;
+let filled = 0, abil = 0;
 const unmatched: string[] = [];
 // group cards by detachment (a detachment can carry >1 rule)
 const byDet = new Map<string, typeof cards>();
@@ -84,16 +80,9 @@ for (const [detId, rules] of byDet) {
         supersedes: null, unit_ids: [], faction_id: FACTION, detachment_id: detId, ability_type: "detachment",
         behavior: "passive", stub: true, effect: { ...STUB_EFFECT },
         scope: { duration: "permanent" },
-        community_notes: "[APPROX] DSL stub — detachment rule; mechanics pending authoring. Full rule in raw-text store.",
+        community_notes: "[APPROX] DSL stub — detachment rule; mechanics pending authoring. Rule text is in the MFM dump.",
       });
       enrIds.add(id); abil++;
-    }
-    if (!storeIds.has(id)) {
-      store.push({
-        ability_id: id, name: titleCase(r.name), faction_id: FACTION, unit_ids: [], ability_type: "detachment",
-        game_version: GV, source: { kind: "pdf", edition: "11e", ref }, raw_text: text,
-      });
-      storeIds.add(id); storeAdded++;
     }
   }
   if (ids.length === 1) d.detachment_rule_id = ids[0];
@@ -102,14 +91,12 @@ for (const [detId, rules] of byDet) {
 }
 
 const ruleless = dets.filter((d) => !hasRule(d)).map((d) => d.id);
-console.log(`${FACTION}: detachment-rule cards=${cards.length} | filled=${filled} (abilities +${abil}, store +${storeAdded}) | unmatched=${unmatched.length}`);
+console.log(`${FACTION}: detachment-rule cards=${cards.length} | filled=${filled} (abilities +${abil}) | unmatched=${unmatched.length}`);
 if (unmatched.length) console.log("  unmatched:", unmatched.slice(0, 10).join(" | "));
 if (ruleless.length) console.log(`  still ruleless (${ruleless.length}):`, ruleless.slice(0, 12).join(", ") + (ruleless.length > 12 ? ` … +${ruleless.length - 12}` : ""));
 
-if (!DRY && (filled || abil || storeAdded)) {
+if (!DRY && (filled || abil)) {
   writeFileSync(detPath, JSON.stringify(dets, null, 2) + "\n");
   writeFileSync(enrPath, JSON.stringify(enr, null, 2) + "\n");
-  if (!existsSync(STORE_ROOT)) mkdirSync(STORE_ROOT, { recursive: true });
-  writeFileSync(storePath, JSON.stringify(store, null, 2) + "\n");
 }
 if (DRY) console.log("  (dry-run — nothing written)");

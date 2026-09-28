@@ -1028,7 +1028,7 @@ async function runSeedStratagemsCmd(
     `Creates repo stratagem entities for dump stratagems with no repo entity. Structural\n` +
     `fields are dump-derived; phases are prose-parsed and timing defaults to\n` +
     `\`once-per-phase\`, so every seed is stamped \`pre-launch-provisional\` for review.\n` +
-    `Prose routes to the store via \`mfm-backfill-store\`, never here.\n\n` +
+    `Prose stays in the private dump (read it with \`npm run prose\`), never here.\n\n` +
     `- **Seeded:** ${report.seeded.length}\n` +
     `- **Held back (Combat Patrol):** ${report.heldBackCombatPatrol.length}\n` +
     `- **Skipped (coreless — manual review):** ${report.skippedCoreless.length}${report.skippedCoreless.length ? ` (${report.skippedCoreless.map((id) => `\`${id}\``).join(", ")})` : ""}\n` +
@@ -1054,12 +1054,6 @@ async function runSeedStratagemsCmd(
     `Seeded ${report.seeded.length}, held back ${report.heldBackCombatPatrol.length} Combat-Patrol, ` +
       `skipped ${report.skippedCoreless.length} coreless / ${report.skippedNoDir.length} no-dir / ${report.skippedNoCanon.length} no-canon.`,
   );
-  if (write && report.seeded.length) {
-    console.log(
-      `Follow-through: run \`npx tsx src/mfm-backfill-store.ts --write\` to push the seeded ` +
-        `stratagems' prose to the store, then rebuild index.json.`,
-    );
-  }
   await applyWrites(report.staged, { write, label: "seed-stratagems" });
   if (!write)
     console.log("DRY RUN — no files written. Re-run with --write to apply.");

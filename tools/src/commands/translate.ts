@@ -5,13 +5,14 @@
  * conformance-pinned `ability.print()`); this file only handles file loading
  * and per-ability presentation.
  *
- * Pass `--gw` to load source text from the private sibling
- * `40kdc-abilities` store and display it above each generated description.
+ * Pass `--gw` to show each ability's GW source text (from the private MFM dump,
+ * `_private/dump.json`) above its generated description, or `--gw-file` to read
+ * it from any private JSON array of `{ ability_id, raw_text | src.description |
+ * when/target/effect/restrictions }` entries.
  */
 
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname, basename } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import {
   describeAbility,
@@ -21,9 +22,9 @@ import {
   type AbilityUsage,
   type Effect,
 } from "../translate/effect.js";
+import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
+import { loadRepoProse } from "../mfm/record-prose.js";
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const REPO_ROOT = resolve(__dirname, "../../..");
 
 interface Ability {
   ability_id: string;
@@ -56,23 +57,23 @@ export interface TranslateOptions {
   gwFile?: string;
 }
 
-/** Load source text keyed by ability_id from a private source file. */
-function loadGwText(
+/**
+ * Source text keyed by ability_id: from `--gw-file` when given, else the dump's
+ * prose for the abilities file's faction dir (`data/enrichment/<faction>/`).
+ */
+export function loadGwText(
   abilitiesPath: string,
   opts: TranslateOptions,
+  dumpEntries: (faction: string) => SourceEntry[] = (faction) =>
+    existsSync(DEFAULT_DUMP_PATH) ? [...loadRepoProse().faction(faction).values()] : [],
 ): Map<string, string> {
-  let sourcePath = opts.gwFile;
-  if (!sourcePath) {
-    const factionDir = basename(dirname(abilitiesPath));
-    sourcePath = resolve(
-      REPO_ROOT,
-      "..",
-      "40kdc-abilities",
-      `${factionDir}.json`,
-    );
+  let entries: SourceEntry[];
+  if (opts.gwFile) {
+    if (!existsSync(opts.gwFile)) return new Map();
+    entries = JSON.parse(readFileSync(opts.gwFile, "utf-8"));
+  } else {
+    entries = dumpEntries(basename(dirname(abilitiesPath)));
   }
-  if (!existsSync(sourcePath)) return new Map();
-  const entries: SourceEntry[] = JSON.parse(readFileSync(sourcePath, "utf-8"));
   const out = new Map<string, string>();
   for (const entry of entries) {
     const id = entry.ability_id ?? entry.id;

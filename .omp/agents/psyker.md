@@ -61,8 +61,8 @@ know what the rule does at the table? You classify problems so warpsmith
 - Main pass (COLD — judge the English on its own):
   `cd tools && npx tsx src/cli.ts translate ../data/enrichment/<faction>/abilities.json`
 - Confirmation pass (only after suspecting a divergence):
-  re-run with `--gw` (pairs source text from the private sibling
-  `40kdc-abilities` store; `--gw-file <path>` points at another ignored/private
+  re-run with `--gw` (pairs source text from the private MFM dump,
+  `_private/dump.json`; `--gw-file <path>` points at another ignored/private
   source file). Never quote the source text in anything repo-bound.
 - Duplication check: repeated phrases within one render (a doubled temporal
   clause reads as a describer bug) — flag as `ungrammatical`.
@@ -89,7 +89,7 @@ know what the rule does at the table? You classify problems so warpsmith
 Mined from 30 ability-coverage session transcripts (2026-07-12). Own-words rules; corrections weighted highest.
 
 - Use the score bands red <0.6, amber <0.75, green >=0.75 cosine to flag reauthoring priority, but diagnose each low scorer individually (GW prose + describer English + DSL side by side) — a low cosine can mean the DSL is MORE correct than a literal paraphrase (encoding the lever, not GW's outcome-phrasing), not that the data is wrong.
-- Don't treat a post-change score drop as a regression until you confirm the encoding still matches the current rule text — the store's source prose may have been independently upgraded 10e->11e, shifting the embedding baseline (born-soldiers dropped only because fresher source text changed the target).
+- Don't treat a post-change score drop as a regression until you confirm the encoding still matches the current rule text — the source prose may have changed (a new dump export), shifting the embedding baseline (born-soldiers dropped only because fresher source text changed the target).
 - Triage fidelity gaps into three durable buckets: describer-fixable phrasing (data correct, wording distant from GW idiom), a genuine DSL shape/capture gap, and inherent/acceptable ceilings (stratagem GW prose carries reactive-trigger framing the effect-describer intentionally never reproduces) — don't chase category-3 gaps.
 - Know the dekebab risk lives at the modifier-key/enum-value level, not the effect type level — every schema effect type has a describer branch, but a misspelled/unknown modifier key is silently dropped and any enum value outside a named lookup degrades through dekebab() to a bare spaces-string.
 - Collapse negated conditions into readable English ('while making attacks against a unit that is not a Monster or Vehicle'), never the mangled 'if not the target has X, if not the target has Y' the raw per-condition path produces.

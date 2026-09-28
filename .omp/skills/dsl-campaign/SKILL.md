@@ -34,8 +34,9 @@ was launched elsewhere. The worked example of one converged campaign is
   here; do not simulate agents. Nested agent-spawning (the kroot suite, arch-magos)
   needs `task.maxRecursionDepth >= 2` in `.omp/config.yml`; wf-shape-scout throws
   `spawn-unavailable` and fails loud if it is unset.
-- Sibling repos: raw-text store `../40kdc-abilities`; embeddings harness
-  `../40kdc-embeddings` (its own `.venv`).
+- Rule prose: the private MFM dump, read with `cd tools && npm run prose -- get|grep`.
+  The graph reads `_private/prose/` (`npm run prose -- export`; refresh it after a
+  dump update). Sibling repo: embeddings harness `../40kdc-embeddings` (its own `.venv`).
 - Toolchain in THIS workspace: `tools/node_modules` + `tools/dist`, `python/.venv`,
   `target/release/wh40kdc-runner`, `go/wh40kdc-runner`. Rebuild all three runners after
   ANY source edit before parity checks — stale runners give phantom verdicts.
@@ -156,7 +157,7 @@ cd /Users/will.mitchell/40kdc-embeddings && .venv/bin/python -m wh40kdc_embeddin
 Snapshot `_reports/roundtrip-all.json` to the session scratchpad as
 `prose-baseline.json` — this is the **whole-dataset prose-diff baseline** (anti-condition
 7): at close, a fresh `--faction all` run's describer outputs are diffed against it and
-any changed non-worklist id fails the campaign. (Coverage is store-paired abilities; the
+any changed non-worklist id fails the campaign. (Coverage is dump-paired abilities; the
 `drift`/conformance gates cover the goldens beyond it.)
 
 ### 1 — Prioritize
@@ -357,7 +358,7 @@ event path, and its nine active claims remain excluded from every new campaign.
 
 - Cull/stop driver-spawned agents as soon as their output is verified.
 - `execSync`-based repo tools resolve path args against the repo root, not shell cwd.
-- The dump/store/report debugging rule applies to prose lookups: before concluding an
+- The dump/report debugging rule applies to prose lookups: before concluding an
   ability "has no prose", make data-enginseer show the failing grep, not the theory.
 - A dry run (`--dry-run`) runs the identical procedure with worklist_cap 5 and should
   include one known-hard multi-clause aura ability to probe the eversor floor.

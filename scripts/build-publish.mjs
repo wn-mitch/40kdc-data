@@ -8,9 +8,9 @@
 //     "enhancements":[...], "stratagems":[...], "wargear":[...], "wargear-options":[...],
 //     "unit-compositions":[...], "weapon-keywords":[...] }
 //
-// This repo owns ONLY the core slice. The 40kdc-abilities repo independently publishes
-// bundle-abilities.json. The client downloads both (presigned, via the Fly signer) and
-// merges them — no cross-repo coupling, no public bucket, no manifest.
+// This repo publishes ONLY the core slice; it publishes no ability prose (rule text lives
+// only in the private MFM dump). The client downloads the bundle presigned, via the Fly
+// signer — no public bucket, no manifest.
 //
 // Only whitelisted entity files are included; missions/terrain/_example/_reports/etc.
 // are skipped because the app never reads them.

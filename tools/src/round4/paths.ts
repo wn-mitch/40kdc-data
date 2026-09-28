@@ -5,7 +5,8 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_REPO_ROOT = resolve(HERE, "../../..");
 export const REPO_ROOT = process.env.ROUND4_REPO_ROOT ?? DEFAULT_REPO_ROOT;
 export const TOOLS_ROOT = join(REPO_ROOT, "tools");
-export const ABILITIES_ROOT = process.env.ROUND4_ABILITIES_ROOT ?? resolve(REPO_ROOT, "../40kdc-abilities");
+/** The private MFM dump the freeze reads prose from. */
+export const DUMP_PATH = process.env.ROUND4_DUMP_PATH ?? join(REPO_ROOT, "_private", "dump.json");
 export const ROUND4_ROOT = process.env.ROUND4_RUNTIME_ROOT ?? join(REPO_ROOT, "_private", "round4");
 export const DATASET_PATH = process.env.ROUND4_DATASET_PATH ?? join(ROUND4_ROOT, "round4-dataset.json");
 export const EVALUATOR_ROOT = process.env.ROUND4_EVALUATOR_ROOT ?? join(ROUND4_ROOT, "evaluator");

@@ -9,7 +9,7 @@
  *
  * ── detachment_rule_ids: structural rule-ability association ──
  * detachment_rule lists the named rule(s) a detachment carries. The rule PROSE is
- * authored enrichment (DSL / raw-text store) and never enters this repo; only the
+ * GW's, stays in the private dump and never enters this repo; only the
  * structural id LINK is dump-derived here. Each dump rule display name is slugged
  * with {@link nameToId} (the same bare-id form the authored rule abilities use,
  * e.g. "Warp Rifts" → `warp-rifts`) and reconciled against the detachment's authored

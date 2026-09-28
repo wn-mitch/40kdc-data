@@ -8,7 +8,7 @@
  * there's no way to feed them to `author:propose`. This tool is that front door.
  *
  * It takes a normalized **ingest manifest** (a JSON array; one record per
- * ability — see {@link IngestRecord}) and does three things, all *non-agentic*:
+ * ability — see {@link IngestRecord}) and does two things, both *non-agentic*:
  *
  *   1. Seeds a stub (`stub: true`, effect `no-effect`) into `data/enrichment/<faction>/abilities.json`
  *      for any new ability (idempotent; additive `unit_ids` merge for known ids),
@@ -18,16 +18,14 @@
  *      as `src.description`, marked `resolved`. The pipeline then runs unchanged:
  *      the model only classifies, TypeScript assembles + AJV-validates + the
  *      verifier judges fidelity + the gate decides what `apply` splices.
- *   3. Writes a durable **raw-text lookup store** keyed by `ability_id`, in a
- *      sibling directory *outside this repo* (default `../40kdc-abilities`), so
- *      raw ability text can be recovered from an ability key. The store is its own
- *      git repo (auto-`git init`ed), separate from 40kdc-data, which tracks
- *      mechanics only — GW prose never lands in 40kdc-data.
+ *
+ * A snapshot manifest also projects the faction's `phase-mappings.json`.
  *
  * IP posture matches `author-seed.ts`: only the ability *name* (a factual label)
  * and an empty placeholder effect are written into the repo. The raw rule text
- * goes to git-ignored author-input (transient, for the classify pass to read) and
- * to the out-of-repo raw-text store — never into committed enrichment data.
+ * goes only to git-ignored author-input (transient, for the classify pass to
+ * read) — never into committed enrichment data. The canonical prose of every
+ * ability is the private MFM dump, read through `mfm/record-prose.ts`.
  *
  * The DSL itself is NOT authored here. This tool emits no effect tree of its own
  * beyond the empty stub; the real mechanic is authored downstream by the
@@ -37,7 +35,6 @@
  *   npx tsx tools/src/author-ingest.ts <manifest.json> [--dry-run]
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync } from "node:fs";
-import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { kebab } from "./author-seed.js";
@@ -48,12 +45,6 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
 const ENRICHMENT_ROOT = resolve(DATA_ROOT, "enrichment");
 const INPUT_DIR = resolve(DATA_ROOT, "_audit", "author-input");
-/**
- * Out-of-repo raw-text store — its own git repo, sibling to 40kdc-data. Resolved
- * relative to this file, so the skill always finds it regardless of cwd. Override
- * with RAW_TEXT_STORE.
- */
-const RAW_TEXT_STORE = process.env.RAW_TEXT_STORE ?? resolve(__dirname, "../../../40kdc-abilities");
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Json = any;
@@ -71,7 +62,7 @@ export interface IngestRecord {
   faction: string;
   /** Human-readable ability name (a factual label — safe to commit). Required. */
   name: string;
-  /** Raw GW rule text. Goes ONLY to git-ignored author-input + the sibling store. */
+  /** Raw GW rule text. Goes ONLY to git-ignored author-input. */
   raw_text: string;
   /** Explicit ability_id override; defaults to kebab(name). */
   ability_id?: string;
@@ -87,27 +78,11 @@ export interface IngestRecord {
   game_version?: { edition: string; dataslate: string };
 }
 
-/** A raw-text lookup record in the out-of-repo store, keyed by ability_id. */
-export interface RawTextRecord {
-  ability_id: string;
-  name: string;
-  faction_id: string;
-  /** Owning detachment for detachment/stratagem/enhancement abilities; null otherwise. */
-  detachment_id: string | null;
-  unit_ids: string[];
-  ability_type: string;
-  game_version: { edition: string; dataslate: string };
-  source: { kind: string; ref: string; phases: string[] | null };
-  raw_text: string;
-}
-
 export interface IngestResult {
   /** The faction's abilities array after seeding (existing + new stubs). */
   abilities: Json[];
   /** Merged author-input entries for this faction (existing + this run). */
   authorInput: AuthorInputEntry[];
-  /** Raw-text records produced this run (only for records with raw_text). */
-  rawText: RawTextRecord[];
   created: number;
   mergedUnits: number;
   /** Ability ids removed by snapshot replacement. Empty for additive ingestion. */
@@ -173,7 +148,7 @@ export function ingestFaction(
   const byId = new Map<string, Json>(abilities.map((a) => [a.ability_id, a]));
   const inputById = new Map<string, AuthorInputEntry>(existingInput.map((e) => [e.ability_id, e]));
   const result: IngestResult = {
-    abilities, authorInput: [], rawText: [], created: 0, mergedUnits: 0, deletedAbilityIds: [], mergedIntoAuthored: [], unresolved: [],
+    abilities, authorInput: [], created: 0, mergedUnits: 0, deletedAbilityIds: [], mergedIntoAuthored: [], unresolved: [],
   };
 
   for (const rec of records) {
@@ -224,23 +199,7 @@ export function ingestFaction(
       ...(description !== "" ? { src } : { reason: "no raw_text provided" }),
     };
     inputById.set(id, inputEntry);
-    if (description === "") {
-      result.unresolved.push({ ability_id: id, name: rec.name, reason: "no raw_text provided" });
-      continue;
-    }
-
-    // 3. Raw-text lookup record (only when we actually have text to store).
-    result.rawText.push({
-      ability_id: id,
-      name: rec.name,
-      faction_id: rec.faction_id ?? faction,
-      detachment_id: entry.detachment_id ?? rec.detachment_id ?? null,
-      unit_ids: entry.unit_ids,
-      ability_type: entry.ability_type,
-      game_version: entry.game_version,
-      source: { kind: rec.source_kind ?? "json", ref: rec.source_ref ?? "", phases: rec.phases ?? null },
-      raw_text: description,
-    });
+    if (description === "") result.unresolved.push({ ability_id: id, name: rec.name, reason: "no raw_text provided" });
   }
 
   result.authorInput = Array.from(inputById.values());
@@ -301,37 +260,15 @@ export function ingestSnapshot(
       input.ability_type = ability.ability_type;
     }
   }
-  for (const rawText of result.rawText) {
-    const ability = abilities.get(rawText.ability_id);
-    if (!ability) continue;
-    rawText.name = ability.name;
-    rawText.faction_id = ability.faction_id ?? scope.faction_id;
-    rawText.detachment_id = ability.detachment_id ?? null;
-    rawText.unit_ids = [...(ability.unit_ids ?? [])];
-    rawText.ability_type = ability.ability_type;
-    rawText.game_version = { ...ability.game_version };
-  }
   result.authorInput = result.authorInput.filter((entry) => !deleted.has(entry.ability_id));
   result.deletedAbilityIds = [...deleted];
   return result;
 }
 
-const DETACHMENT_ABILITY_TYPES = new Set(["detachment", "enhancement", "stratagem"]);
 const PHASE_IDS = new Set(["command", "movement", "shooting", "charge", "fight"]);
 
 function ingestRecordId(record: IngestRecord): string {
   return record.ability_id ?? kebab(record.name);
-}
-
-function hasCanonicalCoveredDetachment(
-  record: Pick<RawTextRecord, "ability_id" | "ability_type">,
-  coveredDetachments: ReadonlySet<string>,
-): boolean {
-  if (!DETACHMENT_ABILITY_TYPES.has(record.ability_type)) return false;
-  for (const detachmentId of coveredDetachments) {
-    if (record.ability_id.endsWith(`-${detachmentId}`)) return true;
-  }
-  return false;
 }
 
 export function projectPhaseMappings(
@@ -365,162 +302,6 @@ export function projectPhaseMappings(
     });
   }
   return projected;
-}
-
-export function projectRawTextRecords(
-  existing: RawTextRecord[],
-  incoming: RawTextRecord[],
-  manifest: SnapshotManifest,
-): RawTextRecord[] {
-  const coveredUnits = new Set(manifest.replace_scope.unit_ids);
-  const coveredDetachments = new Set(manifest.replace_scope.detachment_ids);
-  const incomingIds = new Set(manifest.records.map(ingestRecordId));
-  const projected = new Map<string, RawTextRecord>();
-  for (const record of existing) {
-    const remainingUnits = (record.unit_ids ?? []).filter((id) => !coveredUnits.has(id));
-    const coveredOwner = (record.unit_ids ?? []).some((id) => coveredUnits.has(id));
-    const coveredDetachment = record.detachment_id != null && coveredDetachments.has(record.detachment_id);
-    const canonicalCoveredDetachment = hasCanonicalCoveredDetachment(record, coveredDetachments);
-    if (!incomingIds.has(record.ability_id) && (coveredDetachment || canonicalCoveredDetachment || (coveredOwner && remainingUnits.length === 0))) continue;
-    projected.set(record.ability_id, { ...record, unit_ids: remainingUnits });
-  }
-  const incomingById = new Map(incoming.map((record) => [record.ability_id, record]));
-  for (const source of manifest.records) {
-    const id = ingestRecordId(source);
-    const replacement = incomingById.get(id);
-    if (replacement) {
-      if (!keepsDumpText(projected.get(id), replacement)) projected.set(id, replacement);
-      continue;
-    }
-    const prior = projected.get(id);
-    if (!prior) continue;
-    projected.set(id, {
-      ...prior,
-      name: source.name,
-      faction_id: source.faction_id ?? manifest.replace_scope.faction_id,
-      detachment_id: source.detachment_id ?? null,
-      unit_ids: [...new Set([...prior.unit_ids, ...(source.unit_ids ?? [])])],
-      ability_type: source.ability_type ?? prior.ability_type,
-      game_version: { ...(source.game_version ?? manifest.replace_scope.game_version) },
-    });
-  }
-  return [...projected.values()];
-}
-
-// ─── raw-text store I/O ──────────────────────────────────────────────
-
-const STORE_README = `# 40kdc-abilities — raw ability text store
-
-Out-of-repo lookup mapping \`faction\` and \`ability_id\` → original raw ability
-text, written by \`40kdc-data\`'s \`author:ingest\`. This pairs each authored
-Ability DSL entry with the source prose it was authored from.
-
-This store is its **own git repository**, separate from 40kdc-data. The
-\`author:ingest\` tool runs \`jj git init\` on first use; commit it to version the raw text.
-
-**This is GW-copyrighted text — never commit it into 40kdc-data, which tracks
-mechanics only.**
-
-- \`index.json\` — nested \`faction → ability_id → { faction, raw_text }\` lookup.
-- \`<faction>.json\` — full records (hierarchy + provenance + raw_text) per faction.
-`;
-
-/**
- * The store is always its own git-backed jj repo, separate from 40kdc-data.
- * Best-effort initialization on first run; an existing jj-only workspace is
- * already a repository even though it intentionally has no `.git` directory.
- */
-function ensureStoreRepo(): void {
-  if (existsSync(resolve(RAW_TEXT_STORE, ".jj")) || existsSync(resolve(RAW_TEXT_STORE, ".git"))) return;
-  try {
-    execFileSync("jj", ["git", "init", RAW_TEXT_STORE], { stdio: "ignore" });
-    console.log(`Initialized raw-text store as a jj repo → ${RAW_TEXT_STORE} (commit to version the raw text).`);
-  } catch {
-    console.warn(`Could not initialize the raw-text store (${RAW_TEXT_STORE}). Files written; initialize it as a jj repo by hand.`);
-  }
-}
-
-/**
- * Merge incoming raw-text records into the existing on-disk set, keyed by
- * `ability_id`. Additive manifests keep every existing entry; snapshot
- * manifests use {@link projectRawTextRecords} to replace only their declared
- * ownership scope.
- */
-export function mergeRawTextRecords(existing: RawTextRecord[], incoming: RawTextRecord[]): RawTextRecord[] {
-  const merged = new Map<string, RawTextRecord>(existing.map((e) => [e.ability_id, e]));
-  for (const r of incoming) if (!keepsDumpText(merged.get(r.ability_id), r)) merged.set(r.ability_id, r); // updates in place; new ids append
-  return Array.from(merged.values());
-}
-
-/**
- * The GW MFM dump is the live game's own text, so a store entry taken from it (`source.kind`
- * "mfm", written by mfm-refresh-store) is only replaced by newer dump text, never by a PDF,
- * JSON manifest or other source.
- */
-export function keepsDumpText(existing: { source?: { kind?: string } } | undefined, incoming: { source?: { kind?: string } }): boolean {
-  return existing?.source?.kind === "mfm" && incoming.source?.kind !== "mfm";
-}
-
-export function buildRawTextIndex(storeRoot: string = RAW_TEXT_STORE): Record<string, Record<string, Json>> {
-  const index: Record<string, Record<string, Json>> = {};
-  for (const file of readdirSync(storeRoot)) {
-    if (!file.endsWith(".json") || file.startsWith("bundle-") || file === "index.json") continue;
-    let entries: Json;
-    try {
-      entries = readJSON(resolve(storeRoot, file));
-    } catch {
-      continue;
-    }
-    if (!Array.isArray(entries)) continue;
-    const faction = file.replace(/\.json$/, "");
-    for (const entry of entries) {
-      if (!entry.ability_id) continue;
-      const owner = entry.faction_id ?? faction;
-      const factionIndex = index[owner] ??= {};
-      if (entry.ability_type === "stratagem" && (entry.when || entry.effect)) {
-        const indexed: Json = {
-          faction: owner,
-          when: entry.when ?? "",
-          target: entry.target ?? "",
-          effect: entry.effect ?? "",
-        };
-        if (entry.restrictions) indexed.restrictions = entry.restrictions;
-        factionIndex[entry.ability_id] = indexed;
-      } else if (entry.raw_text) {
-        factionIndex[entry.ability_id] = { faction: owner, raw_text: entry.raw_text };
-      }
-    }
-  }
-  return index;
-}
-
-function writeRawTextStore(records: RawTextRecord[], snapshots: ReadonlyMap<string, SnapshotManifest>): void {
-  mkdirSync(RAW_TEXT_STORE, { recursive: true });
-  ensureStoreRepo();
-  const readmePath = resolve(RAW_TEXT_STORE, "README.md");
-  if (!existsSync(readmePath)) writeFileSync(readmePath, STORE_README);
-
-  const byFaction = new Map<string, RawTextRecord[]>();
-  for (const record of records) {
-    const factionRecords = byFaction.get(record.faction_id);
-    if (factionRecords) factionRecords.push(record);
-    else byFaction.set(record.faction_id, [record]);
-  }
-  for (const faction of new Set([...byFaction.keys(), ...snapshots.keys()])) {
-    const path = resolve(RAW_TEXT_STORE, `${faction}.json`);
-    const existing: RawTextRecord[] = existsSync(path) ? readJSON(path) : [];
-    const incoming = byFaction.get(faction) ?? [];
-    const snapshot = snapshots.get(faction);
-    const projected = snapshot
-      ? projectRawTextRecords(existing, incoming, snapshot)
-      : mergeRawTextRecords(existing, incoming);
-    writeFileSync(path, JSON.stringify(projected, null, 2) + "\n");
-  }
-
-  writeFileSync(
-    resolve(RAW_TEXT_STORE, "index.json"),
-    JSON.stringify(buildRawTextIndex(), null, 2) + "\n",
-  );
 }
 
 function main(): void {
@@ -576,7 +357,6 @@ function main(): void {
     (byFaction.get(r.faction) ?? byFaction.set(r.faction, []).get(r.faction)!).push(r);
   }
 
-  const allRawText: RawTextRecord[] = [];
   let totalCreated = 0, totalMerged = 0, totalUnresolved = 0;
   const review: { faction: string; ability_id: string; unit_id: string }[] = [];
 
@@ -594,10 +374,9 @@ function main(): void {
     totalMerged += r.mergedUnits;
     totalUnresolved += r.unresolved.length;
     review.push(...r.mergedIntoAuthored.map((m) => ({ faction, ...m })));
-    allRawText.push(...r.rawText);
     console.log(
       `  ${faction}: ${recs.length} records → +${r.created} stubs, ${r.mergedUnits} unit links merged, ` +
-        `${r.rawText.length} raw-text records, ${r.unresolved.length} unresolved`,
+        `${r.unresolved.length} unresolved`,
     );
 
     if (snapshot) {
@@ -614,13 +393,11 @@ function main(): void {
     }
   }
 
-  if (!dryRun) writeRawTextStore(allRawText, snapshots);
-
   console.log(
     `\n${totalCreated} stubs created, ${totalMerged} unit links merged, ` +
-      `${allRawText.length} raw-text records, ${totalUnresolved} unresolved.` +
+      `${totalUnresolved} unresolved.` +
       (review.length ? ` ${review.length} merged into authored entries — review.` : "") +
-      (dryRun ? " (dry run — nothing written)" : ` Raw-text store → ${RAW_TEXT_STORE}`),
+      (dryRun ? " (dry run — nothing written)" : ""),
   );
   console.log("Next: cd tools && npm run author:propose -- <faction> → author:review → author:apply → validate");
 }

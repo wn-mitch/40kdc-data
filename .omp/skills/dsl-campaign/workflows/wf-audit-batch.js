@@ -27,7 +27,7 @@ const graphAgent = createTrustedAgent({ driverArgs: args, invokeAgent: agent })
 
 const PRE = args.repo_root
   ? `Repo root: ${args.repo_root} — cd there first; resolve every relative path there. ` +
-    `The sibling raw-text store is read-only. Never write GW prose to any repository file.\n`
+    `Rule text comes from the private MFM dump (tools: npm run prose -- get <faction> <ability_id>). Never write GW prose to any repository file.\n`
   : ''
 
 const AUDIT_OUT = {
@@ -60,8 +60,8 @@ const AUDIT_OUT = {
 
 phase('Audit')
 const audit = await graphAgent(PRE + `Produce a maintainer-facing final audit for exactly these abilities. Read the specified ` +
-`baseline and updated roundtrip reports. Retrieve every original rule verbatim from the raw-text ` +
-`store; do not reconstruct it from a report preview. For each requested key, pair that source text with ` +
+`baseline and updated roundtrip reports. Retrieve every original rule verbatim with ` +
+`npm run prose -- get; do not reconstruct it from a report preview. For each requested key, pair that source text with ` +
 `the baseline report's English render and score, then the updated report's English render and score. ` +
 `Return entries in input order. This output is ephemeral: it will be shown to the maintainer but never ` +
 `written to the repository. Input:\n` +

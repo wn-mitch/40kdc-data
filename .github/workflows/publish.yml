@@ -1,9 +1,8 @@
 name: Publish 40kdc core to R2
 
 # Publishes ONLY this repo's slice as a single merged bundle (bundle-core.json) to the
-# private 40kdc-reference bucket. The 40kdc-abilities repo publishes bundle-abilities.json
-# independently. The app fetches both via presigned URLs minted by the Fly signer.
-# No cross-repo coupling, no public access, no PAT.
+# private 40kdc-reference bucket; no ability prose is published from here. The app fetches
+# it via a presigned URL minted by the Fly signer. No public access, no PAT.
 
 on:
   push:

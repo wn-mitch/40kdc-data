@@ -50,7 +50,8 @@ export interface FrozenAbility extends AbilityIdentity {
   source_hash: string;
   source_digest: string;
   source_provenance: {
-    repository: "40kdc-abilities";
+    /** `mfm-dump` for new freezes; `40kdc-abilities` in datasets frozen from the retired store. */
+    repository: "mfm-dump" | "40kdc-abilities";
     file: string;
     record_pointer: string;
   };

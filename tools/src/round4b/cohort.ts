@@ -10,6 +10,8 @@ import { sha256Bytes } from "./hash.js";
 
 export interface SourceRecord {
   faction?: string;
+  /** Provenance: `ref` is the dump row, `dump.json#<rowId>`. */
+  source?: { ref?: string };
   raw_text?: string;
   when?: string;
   target?: string;

@@ -50,9 +50,9 @@ npm run audit:coverage                             # 6. re-measure coverage
 
 Then PR the resulting `data/enrichment/<faction>/abilities.json` diffs.
 
-Source prose must remain in `_private/`, an ignored author-input directory, or
-the private `40kdc-abilities` store. Commit only structured DSL and
-community-authored notes.
+Source prose must remain in `_private/` (the MFM dump, read with
+`cd tools && npm run prose -- get <faction> <ability_id>`) or an ignored
+author-input directory. Commit only structured DSL and community-authored notes.
 
 ### Coverage report — what needs authoring
 

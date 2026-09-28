@@ -62,7 +62,7 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
 - Prior art (adoption over invention): grep committed data before proposing
   anything — `grep -rl '"type": "stance-select"' data/enrichment/`,
   `grep -B2 -A8 '"type": "<leaf>"' data/enrichment/<faction>/abilities.json`.
-- Store lookup (read-only): `jq '.["<ability_id>"]' ../40kdc-abilities/index.json`.
+- Prose lookup (read-only): `cd tools && npm run prose -- get <faction> <ability_id>` (the private MFM dump).
 - **Self-check via the reference describer**: Write your candidate entry as a
   one-element JSON array to the scratchpad (NEVER inside the repo), then
   `cd tools && npx tsx src/cli.ts translate <scratchpad>/candidate.json`

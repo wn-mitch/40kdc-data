@@ -22,8 +22,8 @@
  * Every seed is stamped `pre-launch-provisional` so phases/timing are flagged for
  * review, mirroring how seed-units emits a skeleton. Combat-Patrol publications are
  * held back by default (the competitive set is matched-play), like seed-units /
- * seed-detachments. Prose (whenRules/targetRules/effectRules/restrictionRules) routes
- * to the out-of-repo store via mfm-backfill-store, never into this repo.
+ * seed-detachments. Prose (whenRules/targetRules/effectRules/restrictionRules) stays
+ * in the private dump (read through mfm/record-prose.ts), never in this repo.
  */
 import * as fs from "fs";
 import * as path from "path";

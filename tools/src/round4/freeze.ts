@@ -1,13 +1,14 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
+import { loadRepoProse } from "../mfm/record-prose.js";
 import { randomUUID } from "node:crypto";
 import { ROUND4_COHORT } from "./cohort.js";
 import type { FrozenAbility, FrozenDataset, SourceFragment } from "./contracts.js";
 import { hashJson, sha256Bytes } from "./hash.js";
 import { sourceDigest } from "../source-digest.js";
 import {
-  ABILITIES_ROOT,
   DATASET_PATH,
+  DUMP_PATH,
   EVALUATOR_ROOT,
   MANIFEST_PATH,
   PROCESS_APP,
@@ -19,6 +20,8 @@ import { requireAbsent, writeJson, writeRunManifest } from "./manifest.js";
 
 interface SourceRecord {
   faction?: string;
+  /** Provenance: `ref` is the dump row, `dump.json#<rowId>`. */
+  source?: { ref?: string };
   raw_text?: string;
   when?: string;
   target?: string;
@@ -72,10 +75,8 @@ function assemble(record: SourceRecord): {
   return { source_text: pieces.join("\n"), source_fragments: fragments, source_kind: "structured-stratagem" };
 }
 
-export function freezeDataset(now = new Date()): FrozenDataset {
+export function freezeDataset(now = new Date(), sourceIndex: SourceIndex = loadRepoProse({ dumpPath: DUMP_PATH }).index()): FrozenDataset {
   requireAbsent(DATASET_PATH, "Round 4 dataset");
-  const indexPath = join(ABILITIES_ROOT, "index.json");
-  const sourceIndex = JSON.parse(readFileSync(indexPath, "utf8")) as SourceIndex;
   const identities = new Set<string>();
   const records: FrozenAbility[] = ROUND4_COHORT.map((spec) => {
     const key = `${spec.faction_id}/${spec.ability_id}`;
@@ -89,21 +90,21 @@ export function freezeDataset(now = new Date()): FrozenDataset {
     }
     const assembled = assemble(record);
     const bytes = Buffer.from(assembled.source_text, "utf8");
-    const sourceFile = `${spec.faction_id}.json`;
+    const rowId = (record.source?.ref ?? "").split("#")[1] ?? `?${key}`;
     return {
       ...spec,
       name: titleFromId(spec.ability_id),
       card: { source_kind: assembled.source_kind, fields: assembled.source_fragments.map((item) => item.label) },
-      source_locator: `${join(ABILITIES_ROOT, sourceFile)}#/${spec.ability_id}`,
+      source_locator: `${DUMP_PATH}#${rowId}`,
       source_text: assembled.source_text,
       source_bytes_base64: bytes.toString("base64"),
       source_byte_length: bytes.length,
       source_hash: sha256Bytes(bytes),
       source_digest: sourceDigest(assembled.source_text),
       source_provenance: {
-        repository: "40kdc-abilities",
-        file: sourceFile,
-        record_pointer: `/${spec.ability_id}`,
+        repository: "mfm-dump",
+        file: "dump.json",
+        record_pointer: rowId,
       },
       source_fragments: assembled.source_fragments,
     };
@@ -125,7 +126,8 @@ function main(): void {
   mkdirSync(PROCESS_INPUT, { recursive: true });
   mkdirSync(PROCESS_APP, { recursive: true });
   mkdirSync(PROCESS_OUTPUT, { recursive: true });
-  const dataset = freezeDataset();
+  const sourceIndex: SourceIndex = loadRepoProse({ dumpPath: DUMP_PATH }).index();
+  const dataset = freezeDataset(new Date(), sourceIndex);
   writeJson(DATASET_PATH, dataset);
   writeJson(join(PROCESS_INPUT, basename(DATASET_PATH)), dataset);
   const datasetHash = sha256Bytes(readFileSync(DATASET_PATH));
@@ -147,7 +149,7 @@ function main(): void {
       run_id: dataset.run_id,
       stage: "freeze",
       created_at: new Date().toISOString(),
-      input_hashes: { source_index: sha256Bytes(readFileSync(join(ABILITIES_ROOT, "index.json"))) },
+      input_hashes: { source_index: hashJson(sourceIndex) },
       bundle_hashes: {},
       output_hashes: { dataset: datasetHash },
       model: null,

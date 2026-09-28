@@ -1,6 +1,6 @@
 ---
 name: swarmlord
-description: Sonnet cross-faction expansion scout. Given a rule shape that works (an effect type, condition, or encoding pattern), finds abilities in OTHER factions coverable by the same shape — via embeddings clustering/candidates plus keyword sweeps over the prose store — to widen coverage per work cycle. Use for "where else does <shape> apply?", "find the family for this mechanic". Prompt must include the shape and an example ability_id. Returns a single JSON object as final message.
+description: Sonnet cross-faction expansion scout. Given a rule shape that works (an effect type, condition, or encoding pattern), finds abilities in OTHER factions coverable by the same shape — via embeddings clustering/candidates plus keyword sweeps over the dump prose — to widen coverage per work cycle. Use for "where else does <shape> apply?", "find the family for this mechanic". Prompt must include the shape and an example ability_id. Returns a single JSON object as final message.
 model: openai-codex/gpt-5.6-luna
 tools: Read, Grep, Glob, Bash
 output:
@@ -60,9 +60,9 @@ inquisitor deliberate on your numbers.
 shapes.
 
 ## Tool inventory
-- Keyword sweep over the prose store:
-  `grep -c -i '<distinctive phrase>' ../40kdc-abilities/*.json` per faction, then
-  `jq '[.[] | select(.raw_text | test("<regex>"; "i")) | .ability_id]' ../40kdc-abilities/<faction>.json`.
+- Keyword sweep over the dump prose:
+  `cd tools && npm run prose -- grep '<regex>'` (all factions; `--faction <f>` to
+  narrow) prints one `<faction>/<ability_id>` line per match.
   Pick phrases that are the RULE's fingerprint, not flavor.
 - Mechanic-level (when phrasing varies):
   `cd ../40kdc-embeddings && .venv/bin/python -m wh40kdc_embeddings candidates`
@@ -72,8 +72,8 @@ shapes.
   `grep -A6 '"ability_id": "<id>"' data/enrichment/<faction>/abilities.json` —
   classify `current_encoding` honestly; an ability already well-encoded on
   another shape is NOT a candidate.
-- Store coverage context: `data/_audit/store-coverage.md` — no prose, no sweep;
-  note the gap instead.
+- Prose coverage: an ability `npm run prose -- get` cannot resolve has no dump prose
+  to sweep; note the gap instead.
 
 ## Design principles
 - Same-slug shared abilities (e.g. across SM chapters, WE/CSM shared entities)
