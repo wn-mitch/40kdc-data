@@ -1,94 +1,23 @@
 /**
- * Rules prose from the GW MFM dump, shaped as the raw-text store keeps it: stratagems as their
- * when/target/effect/restrictions fields, everything else as `raw_text` with `**bold**` keywords
- * and line breaks kept. Shared by the store backfills and the dump-wins store refresh.
+ * Rules prose from the GW MFM dump.
+ *
+ * The faction-safe API is {@link DumpProse} (`dump-prose-lookup.ts`): prose keyed by (faction,
+ * owner, ability) over {@link enumerateAbilityRows} (`dump-prose-rows.ts`), the complete,
+ * deterministic list of ability-bearing dump rows with their owning publication, faction, owner,
+ * printed name and slug. Text assembly lives in `dump-text.ts`.
+ *
+ * The store-shaped helpers below (`stratagemProseById`, `collectRules`, `buildProseIndex`,
+ * `resolveProse`) serve the raw-text store writers and are deprecated with them: they key by bare
+ * name across factions.
  */
 import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
-import type { MfmDump, RuleContainerComponentRow } from "./loader.js";
+import type { MfmDump } from "./loader.js";
 import { repoDirForFactionName } from "./faction-map.js";
+import { assembleRuleText, menuSections, plainBlock, plainLine } from "./dump-text.js";
 
-const NAMED_ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", ndash: "–", mdash: "—", hellip: "…" };
-
-/** HTML character references as the characters they stand for ("&#x65;" → "e", "&amp;" → "&"). */
-export function decodeEntities(s: string): string {
-  return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/giu, (whole, ref: string) => {
-    if (ref[0] === "#") {
-      const code = ref[1] === "x" || ref[1] === "X" ? parseInt(ref.slice(2), 16) : parseInt(ref.slice(1), 10);
-      return Number.isFinite(code) && code > 0 ? String.fromCodePoint(code) : whole;
-    }
-    return NAMED_ENTITIES[ref.toLowerCase()] ?? whole;
-  });
-}
-
-/** Inline markup to plain text on one line, `<b>` kept as `**bold**`; null/empty → undefined. */
-export function plainLine(s: string | null | undefined): string | undefined {
-  if (!s) return undefined;
-  const t = s
-    .replace(/<b>(.*?)<\/b>/gis, "**$1**")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&[#a-z0-9]+;/giu, (m) => decodeEntities(m))
-    .replace(/\s+/g, " ")
-    .trim();
-  return t || undefined;
-}
-
-/**
- * Inline markup to plain text keeping line breaks: multi-section rules delimit their sub-rules by
- * line (the `■ **Name [cost]**` reward menus), and that structure carries meaning.
- */
-export function plainBlock(s: string | null | undefined): string | undefined {
-  if (!s) return undefined;
-  const t = s
-    .replace(/<b>(.*?)<\/b>/gis, "**$1**")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&[#a-z0-9]+;/giu, (m) => decodeEntities(m))
-    .replace(/[ \t]+/g, " ")
-    .replace(/ *\n+ */g, "\n")
-    .trim();
-  return t || undefined;
-}
-
-/** A rule's prose from its ordered rule-container components; undefined if none carry text. */
-export function assembleRuleText(components: readonly RuleContainerComponentRow[]): string | undefined {
-  const blocks: string[] = [];
-  for (const c of [...components].sort((a, b) => a.displayOrder - b.displayOrder)) {
-    const en = c.localisations?.en;
-    switch (c.type) {
-      case "text":
-      case "textBold":
-      case "boxedText":
-      case "bullets": {
-        const t = plainBlock(en?.textContent);
-        if (t) blocks.push(t);
-        break;
-      }
-      case "header": {
-        const t = plainBlock(en?.textContent);
-        if (t) blocks.push(`**${t.replace(/\*\*/g, "")}**`);
-        break;
-      }
-      case "accordion": {
-        const title = plainBlock(en?.title);
-        const t = plainBlock(en?.textContent);
-        if (title) blocks.push(`**${title.replace(/\*\*/g, "")}**`);
-        if (t) blocks.push(t);
-        break;
-      }
-      case "triggerEffectAccordion": {
-        const title = plainBlock(en?.title);
-        const trigger = plainBlock(en?.trigger);
-        const effect = plainBlock(en?.effect);
-        if (title) blocks.push(`**${title.replace(/\*\*/g, "")}**`);
-        if (trigger) blocks.push(trigger);
-        if (effect) blocks.push(effect);
-        break;
-      }
-      default:
-        break; // loreAccordion / quote / image — flavour and presentation
-    }
-  }
-  return blocks.length ? blocks.join("\n") : undefined;
-}
+export * from "./dump-text.js";
+export * from "./dump-prose-rows.js";
+export * from "./dump-prose-lookup.js";
 
 export interface StratagemProse {
   name: string;
@@ -99,7 +28,9 @@ export interface StratagemProse {
   ref: string;
 }
 
-/** Repo stratagem id (`detachmentScopedId`, or `nameToId` for core ones) → its dump prose. */
+/** Repo stratagem id (`detachmentScopedId`, or `nameToId` for core ones) → its dump prose.
+ * @deprecated Keys by bare name across factions; use {@link DumpProse}.
+ */
 export function stratagemProseById(dump: MfmDump): Map<string, StratagemProse> {
   const detName = dump.byId("detachment");
   const m = new Map<string, StratagemProse>();
@@ -144,7 +75,9 @@ function preferredPub(dump: MfmDump, publicationId: string | undefined): boolean
   return !!pub && !pub.isCombatPatrol && !pub.isLegends;
 }
 
-/** Every detachment and army rule with assembled prose, deduped per (faction, primary slug). */
+/** Every detachment and army rule with assembled prose, deduped per (faction, primary slug).
+ * @deprecated Keys by bare name across factions; use {@link DumpProse}.
+ */
 export function collectRules(dump: MfmDump): DumpRule[] {
   const fkName = (fkId: string | null): string | undefined =>
     fkId ? dump.enName(dump.byId("faction_keyword").get(fkId)) : undefined;
@@ -209,23 +142,18 @@ export function collectRules(dump: MfmDump): DumpRule[] {
 
 function subSections(rule: DumpRule): DumpRule[] {
   const subs: DumpRule[] = [];
-  for (const chunk of rule.text.split(/\n?■ ?/).slice(1)) {
-    const m = /^\*\*([^*\n]+?)\s*(?:\[([^\]]+)\])?\*\*\n?([\s\S]*)$/.exec(chunk.trim());
-    if (!m) continue;
-    const [, title, cost, body] = m;
-    const text = body!.split(/\n?■ /)[0]!.trim();
-    if (!title!.trim() || !text) continue;
+  for (const m of menuSections(rule.text)) {
     let slug: string;
     try {
-      slug = nameToId(title!.trim());
+      slug = nameToId(m.name);
     } catch {
       continue;
     }
     subs.push({
-      name: title!.trim(),
+      name: m.name,
       slugs: [slug],
       factionDir: rule.factionDir,
-      text: cost ? `**${title!.trim()} [${cost}]**\n${text}` : `**${title!.trim()}**\n${text}`,
+      text: m.cost ? `**${m.name} [${m.cost}]**\n${m.text}` : `**${m.name}**\n${m.text}`,
       ref: rule.ref,
       fromPreferredPub: rule.fromPreferredPub,
       isSub: true,
@@ -303,7 +231,9 @@ type Row = Record<string, unknown> & { id?: unknown; localisations?: { en?: Reco
 const en = (row: Row): Record<string, unknown> => row.localisations?.en ?? {};
 const str = (v: unknown): string | undefined => (typeof v === "string" ? v : undefined);
 
-/** Unit abilities, enhancements and wargear prose, keyed as repo ability ids are. */
+/** Unit abilities, enhancements and wargear prose, keyed as repo ability ids are.
+ * @deprecated Keys by bare name across factions; use {@link DumpProse}.
+ */
 export function buildProseIndex(dump: MfmDump): ProseIndex {
   const table = (name: string): Row[] => dump.table(name as Parameters<MfmDump["table"]>[0]) as unknown as Row[];
   const index: ProseIndex = { unitScoped: new Candidates(), detachmentScoped: new Candidates(), bareDetachment: new Candidates(), bareRule: new Candidates() };
@@ -365,7 +295,9 @@ export function buildProseIndex(dump: MfmDump): ProseIndex {
   return index;
 }
 
-/** A repo ability's prose: its own id first, then the units it is on, then a bare name match. */
+/** A repo ability's prose: its own id first, then the units it is on, then a bare name match.
+ * @deprecated Keys by bare name across factions; use {@link DumpProse}.
+ */
 export function resolveProse(
   ability: { ability_id: string; name?: string; ability_type?: string; unit_ids?: readonly string[] },
   index: ProseIndex,
