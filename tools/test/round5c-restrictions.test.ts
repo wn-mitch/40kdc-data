@@ -49,7 +49,7 @@ describe("Round 5C restrictions", () => {
   it("turns a choice into an optional trigger, or an activated ability without one", () => {
     const withEvent = compiled([leaf("RESTRICTION", "optional-use", { who: "you" }), leaf("EVENT", "event", { kind: "charge" }), grant()]);
     expect(withEvent.mechanics).toMatchObject({ behavior: "reactive", trigger: { event: "move-ended", filter: { move_types: ["charge"] }, optional: true } });
-    expect(compiled([leaf("RESTRICTION", "optional-use", { who: "bearer" }), grant()]).mechanics).toMatchObject({ behavior: "activated", trigger: null });
+    expect(compiled([leaf("RESTRICTION", "optional-use", { who: "this-model" }), grant()]).mechanics).toMatchObject({ behavior: "activated", trigger: null });
   });
 
   it("checks a stratagem's phases against core, where each phase has its own owner", () => {

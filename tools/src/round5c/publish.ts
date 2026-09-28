@@ -187,7 +187,7 @@ function manifestFile(manifest: PublicationManifest): string {
 
 function freshSourceMap(rows: EntryRow[]): Map<string, SourceRecord> {
   const selected = new Set(rows.map((row) => `${row.faction_id}\u0000${row.ability_id}`));
-  const source = loadSourceRecords(process.env.RAW_TEXT_STORE);
+  const source = loadSourceRecords();
   const selectedConflicts = source.conflicts.filter((conflict) => selected.has(`${conflict.factionId}\u0000${conflict.abilityId}`));
   if (selectedConflicts.length > 0) {
     throw new PublicationError(409, `Publication source is ambiguous for ${selectedConflicts.map((item) => `${item.factionId}/${item.abilityId}`).join(", ")}.`);
@@ -241,7 +241,7 @@ function sourceMatchHash(sourceType: string | null, fragments: unknown): string 
 
 /**
  * Pin an approved entry to its current evidence: the source version must still be current and
- * byte-identical to the raw-text store, and the leaves it compiled from must be unchanged.
+ * byte-identical to its source prose, and the leaves it compiled from must be unchanged.
  */
 function approvedEntrySnapshot(db: DatabaseSync, row: EntryRow, freshSource: SourceRecord): PublicationEntrySnapshot {
   if (row.status !== "approved" || row.current !== 1) {

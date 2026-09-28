@@ -9,7 +9,9 @@ import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./f
  */
 
 export const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
-export const ATTACK_UNITS = ["this-model", "this-unit", "bearer", "bearers-unit", "that-unit"] as const;
+/** Attack version 1 units. "The bearer" is the model, so version 2 spells it this-model. */
+const ATTACK_UNITS_WITH_BEARER = ["this-model", "this-unit", "bearer", "bearers-unit", "that-unit"] as const;
+export const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit"] as const;
 export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
 export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
 const UNIT_STATES_V1 = ["below-starting-strength", "below-half-strength", "battle-shocked"] as const;
@@ -45,6 +47,21 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     role: "EVENT",
     label: "Each time an attack is made",
     description: "An attack made by the named model or unit, or an attack that targets it, optionally only melee or only ranged. What the attack targets is a separate condition.",
+    starter: { direction: "", unit: "", attack_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["direction", "unit", "attack_type"],
+      properties: { direction: { enum: ATTACK_DIRECTIONS }, unit: { enum: ATTACK_UNITS_WITH_BEARER }, attack_type: { enum: ATTACK_TYPES } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "attack",
+    version: 2,
+    role: "EVENT",
+    label: "Each time an attack is made",
+    description: "An attack made by the named model or unit, or an attack that targets it, optionally only melee or only ranged. What the attack targets is a separate condition. \"The bearer\" is this model.",
     starter: { direction: "", unit: "", attack_type: "" },
     parameterSchema: {
       type: "object",
@@ -232,7 +249,7 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       exactKeys(input, ["direction", "unit", "attack_type"], family);
       return {
         direction: enumValue(input.direction, ATTACK_DIRECTIONS, "attack.direction"),
-        unit: enumValue(input.unit, ATTACK_UNITS, "attack.unit"),
+        unit: enumValue(input.unit, version === 1 ? ATTACK_UNITS_WITH_BEARER : ATTACK_UNITS, "attack.unit"),
         attack_type: enumValue(input.attack_type, ATTACK_TYPES, "attack.attack_type"),
       };
     case "unit-state": {

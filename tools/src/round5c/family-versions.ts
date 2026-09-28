@@ -1,15 +1,17 @@
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
-import { validateFingerprint } from "./contracts.js";
+import { familyRole, validateFingerprint } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
 
 /**
  * Move leaves from a deprecated family version to its successor, which may be another family.
  * Each mapping turns old parameters into new ones, or returns null when no current meaning
- * exists. A mapped active annotation is superseded by an identical one on the new fingerprint,
- * pending proposals and decided surfaces are re-pointed, and the old fingerprint is marked
- * superseded. Unmapped fingerprints keep their annotations and are reported, never guessed.
+ * exists. A mapped active annotation is superseded by an identical one on the new fingerprint
+ * (or, when its span already carries the new fingerprint, only superseded), pending proposals,
+ * candidate judgments and decided surfaces are re-pointed, leaf-proposal pieces are rewritten,
+ * and the old fingerprint is marked superseded. Unmapped fingerprints keep their annotations
+ * and are reported, never guessed.
  */
 type VersionMapping = {
   family: string;
@@ -19,6 +21,11 @@ type VersionMapping = {
   to: number;
   map: (parameters: Record<string, unknown>) => Record<string, unknown> | null;
 };
+
+/** "The bearer" is the model that has the ability; one value, this-model, now says so. */
+function bearerIsThisModel(key: string): (parameters: Record<string, unknown>) => Record<string, unknown> {
+  return (parameters) => (parameters[key] === "bearer" ? { ...parameters, [key]: "this-model" } : parameters);
+}
 
 /** Free-text event kinds that name a closed-enum kind exactly, by normalized source text. */
 const EVENT_SOURCE_KINDS: Record<string, string> = {
@@ -52,8 +59,9 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       return parameters.kind === "attack-made" ? null : parameters;
     },
   },
-  // Version 5 only adds kinds.
+  // Versions 5 and 6 only add kinds.
   { family: "event", from: 4, to: 5, map: (parameters) => parameters },
+  { family: "event", from: 5, to: 6, map: (parameters) => parameters },
   { family: "event", from: 3, to_family: "attack", to: 1, map: (parameters) => (parameters.kind === "attack-made" ? { direction: "makes", unit: "that-unit", attack_type: "any" } : null) },
   // Version 2 adds the starts of your next turn and phases; quoted source endpoints have no meaning yet.
   { family: "duration", from: 1, to: 2, map: (parameters) => (typeof parameters.endpoint === "string" ? parameters : null) },
@@ -66,6 +74,18 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
     family: "characteristic-modifier", from: 1, to: 2,
     map: (parameters) => ({ subject: parameters.subject, characteristics: [parameters.characteristic], operation: parameters.operation, value: parameters.value, weapon_type: "all" }),
   },
+  // These versions drop the value "bearer", which meant the same model as "this-model".
+  { family: "characteristic-set", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "weapon-ability-grant", from: 2, to: 3, map: bearerIsThisModel("subject") },
+  { family: "feel-no-pain", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "invulnerable-save", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "fights-first", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "no-advance-roll", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "act-after-move", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "regain-wounds", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  { family: "characteristic-modifier", from: 2, to: 3, map: bearerIsThisModel("subject") },
+  { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
+  { family: "optional-use", from: 1, to: 2, map: bearerIsThisModel("who") },
   {
     family: "below-starting-strength", from: 1, to_family: "unit-state", to: 1,
     map: (parameters) => {
@@ -80,6 +100,13 @@ export type FamilyVersionReport = {
   migrated_annotations: number;
   repointed_proposals: number;
   repointed_surfaces: number;
+  repointed_judgments: number;
+  /** Candidate judgments left on the old fingerprint because the successor already has the same judgment key. */
+  judgment_conflicts: number;
+  /** Leaf-proposal pieces moved to the current version of their family. */
+  migrated_proposal_pieces: number;
+  /** Leaf-proposal pieces on a retired version with no current meaning; left as they are. */
+  unmapped_proposal_pieces: number;
   /** Deprecated fingerprints that still carry active annotations and have no current meaning. */
   unmapped: Array<{ fingerprint_id: string; family_id: string; active_annotations: number }>;
 };
@@ -102,7 +129,10 @@ export function mapToLatest(family: string, from: number, parameters: Record<str
 }
 
 export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
-  const report: FamilyVersionReport = { migrated_fingerprints: 0, migrated_annotations: 0, repointed_proposals: 0, repointed_surfaces: 0, unmapped: [] };
+  const report: FamilyVersionReport = {
+    migrated_fingerprints: 0, migrated_annotations: 0, repointed_proposals: 0, repointed_surfaces: 0, repointed_judgments: 0,
+    judgment_conflicts: 0, migrated_proposal_pieces: 0, unmapped_proposal_pieces: 0, unmapped: [],
+  };
   let batchId: string | null = null;
   const batch = (): string => {
     if (batchId) return batchId;
@@ -136,8 +166,15 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
       }
       const successor = validateFingerprint(db, mapped.family, mapped.parameters, mapped.version);
       const now = new Date().toISOString();
+      const alreadyOnSuccessor = db.prepare("SELECT 1 FROM annotations WHERE span_id = ? AND fingerprint_id = ? AND status = 'active'");
       for (const annotation of annotations) {
         db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(annotation.id);
+        // Two old meanings that now read the same (bearer and this-model) merge into one annotation.
+        if (alreadyOnSuccessor.get(annotation.span_id, successor)) {
+          member.run(batch(), "annotation-merged", String(annotation.id));
+          report.migrated_annotations += 1;
+          continue;
+        }
         const inserted = db.prepare(`
           INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
           VALUES (?, ?, 'active', ?, 'human', ?, ?, ?, ?)
@@ -149,13 +186,62 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
         UPDATE proposals SET fingerprint_id = ? WHERE fingerprint_id = ? AND status IN ('pending', 'unresolved')
       `).run(successor, fingerprint.id).changes);
       report.repointed_surfaces += repointSurfaces(db, fingerprint.id, successor);
+      const judgments = repointJudgments(db, fingerprint.id, successor);
+      report.repointed_judgments += judgments.repointed;
+      report.judgment_conflicts += judgments.conflicts;
       db.prepare("UPDATE fingerprints SET status = 'superseded' WHERE id = ?").run(fingerprint.id);
       member.run(batch(), "fingerprint-superseded", fingerprint.id);
       report.migrated_fingerprints += 1;
     }
   }
   report.repointed_surfaces += repairStaleSurfaces(db);
+  const pieces = migrateProposalPieces(db);
+  report.migrated_proposal_pieces = pieces.migrated;
+  report.unmapped_proposal_pieces = pieces.unmapped;
   return report;
+}
+
+/**
+ * Move judgments of a candidate against the old fingerprint to the successor. A judgment whose
+ * key (candidate, fingerprint, source artifact) the successor already holds stays where it is,
+ * as history of the superseded fingerprint, and is counted.
+ */
+function repointJudgments(db: DatabaseSync, from: string, to: string): { repointed: number; conflicts: number } {
+  const repointed = Number(db.prepare("UPDATE OR IGNORE candidate_judgments SET queried_fingerprint_id = ? WHERE queried_fingerprint_id = ?").run(to, from).changes);
+  const left = db.prepare("SELECT COUNT(*) AS count FROM candidate_judgments WHERE queried_fingerprint_id = ?").get(from) as { count: number };
+  return { repointed, conflicts: left.count };
+}
+
+type StoredPiece = Record<string, unknown> & { family_id?: unknown; family_version?: unknown; parameters?: unknown };
+
+/**
+ * Rewrite each leaf-proposal piece that names a retired family version to the current version,
+ * so accepting it records a current fingerprint. Dismissed proposals are rewritten too: their
+ * pieces are what keeps a later run's identical proposal hidden.
+ */
+function migrateProposalPieces(db: DatabaseSync): { migrated: number; unmapped: number } {
+  const table = db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'leaf_proposals'").get();
+  if (!table) return { migrated: 0, unmapped: 0 };
+  const update = db.prepare("UPDATE leaf_proposals SET pieces_json = ? WHERE id = ?");
+  let migrated = 0;
+  let unmapped = 0;
+  for (const row of db.prepare("SELECT id, pieces_json FROM leaf_proposals ORDER BY id").all() as Array<{ id: number; pieces_json: string }>) {
+    let changed = false;
+    const pieces = (JSON.parse(row.pieces_json) as StoredPiece[]).map((piece) => {
+      if (typeof piece.family_id !== "string" || typeof piece.family_version !== "number" || !piece.parameters || typeof piece.parameters !== "object") return piece;
+      const mapped = mapToLatest(piece.family_id, piece.family_version, piece.parameters as Record<string, unknown>);
+      if (!mapped) {
+        unmapped += 1;
+        return piece;
+      }
+      if (mapped.family === piece.family_id && mapped.version === piece.family_version) return piece;
+      changed = true;
+      migrated += 1;
+      return { ...piece, family_id: mapped.family, family_version: mapped.version, role: familyRole(mapped.family, mapped.version), parameters: mapped.parameters };
+    });
+    if (changed) update.run(JSON.stringify(pieces), row.id);
+  }
+  return { migrated, unmapped };
 }
 
 function repointSurfaces(db: DatabaseSync, from: string, to: string): number {

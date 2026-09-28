@@ -44,6 +44,8 @@ function eventFromSource(exactText: string): Record<string, unknown> {
     };
   }
   if (/\bafter this unit has shot\b/iu.test(exactText)) return { kind: "after-shooting" };
+  if (/\ba model in this unit is destroyed\b/iu.test(exactText)) return { kind: "model-destroyed" };
+  if (/\b(?:this model|the bearer) is destroyed\b/iu.test(exactText)) return { kind: "this-model-destroyed" };
   const moments: Array<[RegExp, string]> = [
     [/enemy unit has selected its targets/iu, "enemy-selected-targets"], [/enemy unit ends an? (?:normal|advance|fall back|[a-z, ]+) move/iu, "enemy-ended-move"],
     [/enemy unit has shot/iu, "enemy-has-shot"], [/enemy unit declares a charge/iu, "enemy-declared-charge"],
@@ -52,6 +54,22 @@ function eventFromSource(exactText: string): Record<string, unknown> {
   const moment = moments.find(([pattern]) => pattern.test(exactText))?.[1];
   if (moment) return { kind: moment };
   return {};
+}
+
+/**
+ * Rules text prints curly apostrophes ("bearer’s", "can’t", "opponent’s"); the patterns here are
+ * written with straight ones. Nothing the prefill returns quotes the source, so reading the
+ * text with straight apostrophes changes no value's spelling.
+ */
+const straightApostrophes = (text: string) => text.replace(/[\u2018\u2019\u02BC]/gu, "'");
+
+/**
+ * An effect's subject when the words name the bearer. The bearer is the model that has the
+ * ability; the bearer's unit is its unit.
+ */
+function bearerSubject(text: string): "this-unit" | "this-model" | null {
+  if (/\bthe bearer's unit\b/iu.test(text)) return "this-unit";
+  return /\bthe bearer\b/iu.test(text) ? "this-model" : null;
 }
 
 /** Who attacks, which way, and with what, when the words say so. */
@@ -65,7 +83,7 @@ function attackFromSource(text: string): Record<string, unknown> {
   else if (/\battack/u.test(lower)) result.attack_type = "any";
   const units: Array<[RegExp, string]> = [
     [/\ba model in the bearer's unit\b|\bthe bearer's unit\b/u, "bearers-unit"],
-    [/\bthe bearer\b/u, "bearer"],
+    [/\bthe bearer\b/u, "this-model"],
     [/\ba model in this unit\b|\bthis unit\b/u, "this-unit"],
     [/\bthis model\b/u, "this-model"],
     [/\ba model in (?:that|your) unit\b|\b(?:that|your) unit\b/u, "that-unit"],
@@ -158,7 +176,7 @@ function characteristicFromSource(text: string): Record<string, unknown> {
     result.subject = "attack";
     result.weapon_type = "all";
   } else if (/\bthis model\b/iu.test(text)) result.subject = "this-model";
-  else if (/\bthe bearer\b/iu.test(text)) result.subject = "bearer";
+  else if (bearerSubject(text)) result.subject = bearerSubject(text);
   else if (/\b(?:that|this|your) unit\b/iu.test(text)) result.subject = "this-unit";
   return result;
 }
@@ -168,7 +186,7 @@ const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"];
 /** "Your opponent's Shooting phase or the Fight phase": each phase with its own owner. */
 function windowFromSource(text: string): Record<string, unknown> {
   const window: Record<string, string[]> = { your_phases: [], opponent_phases: [], either_phases: [] };
-  const lower = text.toLowerCase().replaceAll("’", "'");
+  const lower = text.toLowerCase();
   if (/\bany phase\b/u.test(lower)) return { ...window, either_phases: [...WINDOW_PHASES] };
   let previous = "either_phases";
   for (const part of lower.split(/\bor\b|,/u)) {
@@ -213,8 +231,9 @@ function targetFromSource(familyId: string, text: string): Record<string, unknow
 
 const PREDICATES = new Set(["unit-state", "unit-keyword", "unit-mark", "unit-position"]);
 
-export function prefillFromSource(family: PrefillFamily | undefined, exactText: string): Record<string, unknown> {
+export function prefillFromSource(family: PrefillFamily | undefined, sourceText: string): Record<string, unknown> {
   if (!family) return {};
+  const exactText = straightApostrophes(sourceText);
   const prefill: Record<string, unknown> = family.id === "event" ? eventFromSource(exactText)
     : family.id === "attack" ? attackFromSource(exactText)
       : family.id === "select-unit" ? selectionFromSource(exactText)
@@ -222,7 +241,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, exactText: 
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
   if (family.id === "no-advance-roll") {
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
-    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:it|your unit|this unit|that unit)\b/iu.test(exactText)) prefill.subject = "this-unit";
   }
   if (family.id === "dice-roll") {
@@ -261,7 +280,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, exactText: 
   if (family.id === "usage-limit") {
     const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();
     if (frequency) prefill.frequency = `once-per-${frequency.replace(" ", "-")}`;
-    if (/your opponent's turn|opponent’s turn/iu.test(exactText)) prefill.frequency = "once-per-opponent-turn";
+    if (/your opponent's turn/iu.test(exactText)) prefill.frequency = "once-per-opponent-turn";
     const per = /\bper (army|unit|model)\b|\bfor each (unit|model)\b/iu.exec(exactText);
     prefill.per = per ? (per[1] ?? per[2])!.toLowerCase() : "any";
   }
@@ -276,7 +295,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, exactText: 
   if (family.id === "stratagem-target" || family.id === "triggering-target") Object.assign(prefill, targetFromSource(family.id, exactText));
   if (family.id === "target-binding" && /selected as the target of/iu.test(exactText)) prefill.bound_to = "attacked-unit";
   if (family.id === "optional-use") {
-    if (/\bthe bearer\b/iu.test(exactText)) prefill.who = "bearer";
+    if (/\bthe bearer\b/iu.test(exactText)) prefill.who = "this-model";
     else if (/\byou can\b/iu.test(exactText)) prefill.who = "you";
     else if (/\bthis model\b/iu.test(exactText)) prefill.who = "this-model";
     else if (/\bthis unit\b/iu.test(exactText)) prefill.who = "this-unit";
@@ -287,14 +306,14 @@ export function prefillFromSource(family: PrefillFamily | undefined, exactText: 
     if (moves.length) prefill.moves = moves;
     if (acts.length) prefill.acts = acts;
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
-    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
   }
   if (family.id === "regain-wounds") {
     const amount = /regains? (\d+|d3\+3|d3|d6) lost wounds?/iu.exec(exactText)?.[1];
     if (amount) prefill.amount = amount.toUpperCase();
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
-    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+    else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
   }
   for (const [name, property] of Object.entries(family.parameterSchema.properties ?? {})) {
     if (name in prefill) continue;

@@ -38,7 +38,7 @@ describe("Leaf prefill", () => {
     expect(prefillFromSource(family("usage-limit"), "Once per battle")).toEqual({ frequency: "once-per-battle", per: "any" });
     expect(prefillFromSource(family("bearer-eligibility"), "CANONESS, PALATINE or MINISTORUM PRIEST model only")).toEqual({ keywords: ["CANONESS", "PALATINE", "MINISTORUM PRIEST"], match: "any" });
     expect(prefillFromSource(family("bearer-eligibility"), "ADEPTA SORORITAS model only")).toEqual({ keywords: ["ADEPTA SORORITAS"], match: "all" });
-    expect(prefillFromSource(family("optional-use"), "the bearer can use this Enhancement")).toEqual({ who: "bearer" });
+    expect(prefillFromSource(family("optional-use"), "the bearer can use this Enhancement")).toEqual({ who: "this-model" });
     expect(prefillFromSource(family("dice-roll"), "roll one D6")).toEqual({ dice: "D6" });
     expect(prefillFromSource(family("roll-result"), "on a 4+")).toEqual({ from: 4, to: 6 });
     expect(prefillFromSource(family("roll-result"), "on a 2-5")).toEqual({ from: 2, to: 5 });

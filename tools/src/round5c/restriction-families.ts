@@ -19,7 +19,9 @@ const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
 
 const phaseSet = { type: "array", items: { enum: WINDOW_PHASES }, minItems: 0, uniqueItems: true } as const;
 
-export const OPTIONAL_USERS = ["you", "bearer", "this-unit", "this-model"] as const;
+/** Optional-use version 1 users. "The bearer" is the model, so version 2 spells it this-model. */
+const OPTIONAL_USERS_WITH_BEARER = ["you", "bearer", "this-unit", "this-model"] as const;
+export const OPTIONAL_USERS = ["you", "this-unit", "this-model"] as const;
 export const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
 export const TARGET_SIDES = ["your-army", "enemy"] as const;
 export const TARGET_SELECTS = ["unit", "model"] as const;
@@ -79,6 +81,21 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     role: "RESTRICTION",
     label: "Used by choice",
     description: "\"You can use this ability\" or \"the bearer can use this Enhancement\": the player chooses whether it happens. With an event it becomes an optional trigger; without one, the ability is activated.",
+    starter: { who: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["who"],
+      properties: { who: { enum: OPTIONAL_USERS_WITH_BEARER } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "optional-use",
+    version: 2,
+    role: "RESTRICTION",
+    label: "Used by choice",
+    description: "\"You can use this ability\" or \"the bearer can use this Enhancement\": the player chooses whether it happens. With an event it becomes an optional trigger; without one, the ability is activated. \"The bearer\" is this model.",
     starter: { who: "" },
     parameterSchema: {
       type: "object",
@@ -152,7 +169,7 @@ function keywords(value: unknown, label = "bearer-eligibility.keywords", allowEm
   return list.sort();
 }
 
-export function normalizeRestrictionParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+export function normalizeRestrictionParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> | null {
   switch (family) {
     case "stratagem-target": {
       const count = enumValue(input.count, TARGET_COUNTS, "stratagem-target.count");
@@ -179,7 +196,7 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
       };
     case "optional-use":
       exactKeys(input, ["who"], family);
-      return { who: enumValue(input.who, OPTIONAL_USERS, "optional-use.who") };
+      return { who: enumValue(input.who, version === 1 ? OPTIONAL_USERS_WITH_BEARER : OPTIONAL_USERS, "optional-use.who") };
     case "usage-limit":
       exactKeys(input, ["frequency", "per"], family);
       return { frequency: enumValue(input.frequency, USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };

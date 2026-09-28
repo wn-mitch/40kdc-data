@@ -23,11 +23,11 @@ const SHAPE = "CONDITION(leading-unit) · EFFECT(reroll)";
 
 const roots: string[] = [];
 const originalDataRoot = process.env.ROUND5C_DATA_ROOT;
-const originalStore = process.env.RAW_TEXT_STORE;
+const originalStore = process.env.ROUND5C_SOURCE_FIXTURE;
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
   if (originalDataRoot === undefined) delete process.env.ROUND5C_DATA_ROOT; else process.env.ROUND5C_DATA_ROOT = originalDataRoot;
-  if (originalStore === undefined) delete process.env.RAW_TEXT_STORE; else process.env.RAW_TEXT_STORE = originalStore;
+  if (originalStore === undefined) delete process.env.ROUND5C_SOURCE_FIXTURE; else process.env.ROUND5C_SOURCE_FIXTURE = originalStore;
 });
 
 const records = [
@@ -60,7 +60,7 @@ beforeEach(() => {
   abilitiesFile = join(dataRoot, "enrichment", "fixture", "abilities.json");
   writeFileSync(abilitiesFile, `${JSON.stringify(records.map((record) => authoredEntry(record.ability_id)), null, 2)}\n`);
   process.env.ROUND5C_DATA_ROOT = dataRoot;
-  process.env.RAW_TEXT_STORE = store;
+  process.env.ROUND5C_SOURCE_FIXTURE = store;
   db = new DatabaseSync(":memory:");
   initializeWorkbench(db);
   refreshSources(db, store);

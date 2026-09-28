@@ -166,7 +166,7 @@ describe("Round 5C source-bound review ledger", () => {
       const span = sourceSpan(value.source, "models in this unit gain [Lethal Hits] on their weapons");
       const decision = {
         action: "confirm" as const, ability_version_id: value.abilityId, source_hash: value.sourceHash, ...span,
-        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 2,
+        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 3,
         parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" },
       };
       const batch = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [decision] });

@@ -271,33 +271,36 @@ describe("Round 5C external Luna transport", () => {
 });
 
 describe("Round 5C characteristic-set family", () => {
-  it("registers bearer characteristic assignments as reviewed effects", () => {
+  it("registers the bearer's characteristic assignments as this-model effects", () => {
     const value = fixture([{ abilityId: "characteristics", source: "The bearer's M characteristic is 7 and its Sv characteristic is 3." }]);
     try {
       expect(familyRole("characteristic-set")).toBe("EFFECT");
       expect(normalizeFingerprintParameters("characteristic-set", {
-        subject: "bearer",
+        subject: "this-model",
         characteristic: "M",
         value: 7,
-      })).toEqual({ subject: "bearer", characteristic: "M", value: 7 });
+      }, 2)).toEqual({ subject: "this-model", characteristic: "M", value: 7 });
+      // "The bearer" is this model; version 2 has no second spelling of it.
+      expect(() => normalizeFingerprintParameters("characteristic-set", { subject: "bearer", characteristic: "M", value: 7 }, 2)).toThrow(/characteristic-set.subject/i);
+      expect(() => validateFingerprint(value.db, "characteristic-set", { subject: "bearer", characteristic: "M", value: 7 }, 1)).toThrow(/not active/i);
       expect(normalizeFingerprintParameters("characteristic-set", {
-        subject: "bearer",
+        subject: "this-model",
         characteristic: "Sv",
         value: 3,
-      })).toEqual({ subject: "bearer", characteristic: "Sv", value: 3 });
+      }, 2)).toEqual({ subject: "this-model", characteristic: "Sv", value: 3 });
 
       expect(validateFingerprint(
         value.db,
         "characteristic-set",
-        { subject: "bearer", characteristic: "M", value: 7 },
-        1,
+        { subject: "this-model", characteristic: "M", value: 7 },
+        2,
         "The bearer's M characteristic is 7",
       )).toMatch(/^fp_/);
       expect(validateFingerprint(
         value.db,
         "characteristic-set",
-        { subject: "bearer", characteristic: "Sv", value: 3 },
-        1,
+        { subject: "this-model", characteristic: "Sv", value: 3 },
+        2,
         "its Sv characteristic is 3",
       )).toMatch(/^fp_/);
     } finally {
@@ -311,25 +314,25 @@ describe("Round 5C characteristic-set family", () => {
       expect(validateFingerprint(
         value.db,
         "characteristic-set",
-        { subject: "bearer", characteristic: "M", value: { source: "D6" } },
-        1,
+        { subject: "this-model", characteristic: "M", value: { source: "D6" } },
+        2,
         "Set the bearer's M characteristic to D6",
       )).toMatch(/^fp_/);
       expect(() => normalizeFingerprintParameters("characteristic-set", {
         subject: "target-unit",
         characteristic: "M",
         value: 7,
-      })).toThrow(/characteristic-set.subject/i);
+      }, 2)).toThrow(/characteristic-set.subject/i);
       expect(() => normalizeFingerprintParameters("characteristic-set", {
-        subject: "bearer",
+        subject: "this-model",
         characteristic: "Move",
         value: 7,
-      })).toThrow(/characteristic-set.characteristic/i);
+      }, 2)).toThrow(/characteristic-set.characteristic/i);
       expect(() => validateFingerprint(
         value.db,
         "characteristic-set",
-        { subject: "bearer", characteristic: "M", value: { source: "D3" } },
-        1,
+        { subject: "this-model", characteristic: "M", value: { source: "D3" } },
+        2,
         "Set the bearer's M characteristic to D6",
       )).toThrow(/exact source span/i);
     } finally {

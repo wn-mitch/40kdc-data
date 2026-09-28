@@ -459,7 +459,7 @@ function selectUnit(selection: CompileLeaf, body: Node): Node {
 function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
-  const own = attack.parameters.unit === "this-model" || attack.parameters.unit === "bearer";
+  const own = attack.parameters.unit === "this-model";
   return {
     type: "designate-target",
     designation: "selected-unit",

@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/round5c/compile.js";
+import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
+import { prefillFromSource, type PrefillFamily } from "../src/round5c/leaf-prefill.js";
 import { previewLeaf } from "../src/round5c/leaf-preview.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -63,8 +65,8 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }), { type: "cp-gain", target: "this-model", modifier: { amount: 1 } }],
       [leaf("EFFECT", "resource-action", { resource: "miracle-dice", operation: "gain", amount: 1 }), { type: "resource-gain", target: "this-model", modifier: { pool: "miracle-dice-pool", amount: 1 } }],
       [leaf("EFFECT", "characteristic-set", { subject: "this-model", characteristic: "M", value: 7 }), { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "set", value: 7 } }],
-      // A bearer's weapon keyword is a weapon ability on this model, never a unit keyword.
-      [leaf("EFFECT", "weapon-ability-grant", { subject: "bearer", keyword: "Lethal Hits", weapon_type: "melee" }, 2), { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } }],
+      // The bearer's weapon keyword is a weapon ability on this model, never a unit keyword.
+      [leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "melee" }, 3), { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } }],
       [leaf("EFFECT", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }), { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } }],
       [leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 4, against: "psychic" }), { type: "feel-no-pain", target: "this-model", modifier: { threshold: 4, against: "psychic" } }],
       [leaf("EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 4 }), { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } }],
@@ -86,7 +88,7 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance", "fall-back"], acts: ["shoot"] }), { type: "sequence", steps: [
         { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Assault"], weapon_type: "ranged" } },
         { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, after: ["fall-back"] } }] }],
-      [leaf("EFFECT", "regain-wounds", { subject: "bearer", amount: "D3" }), { type: "heal", target: "this-model", modifier: { amount: "D3" } }],
+      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "D3" }, 2), { type: "heal", target: "this-model", modifier: { amount: "D3" } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);
@@ -191,5 +193,73 @@ describe("Round 5C leaf compiler", () => {
     expect(fail([leaf("CONDITION", "army-faction", { faction: { source: "Fabricated" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })])[0]).toMatch(/army-faction has no DSL fragment/u);
     expect(fail([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }), leaf("EVENT", "event", { kind: "selected-to-fight" })]))
       .toContain("A moment ends the ability with no effect after it.");
+  });
+
+  it("compiles each meaning to the trigger or condition form the authored data uses", () => {
+    const base = authored("adeptus-mechanicus", "control-edict");
+    // Leaves compile in source order, so each effect is made after its moment.
+    const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2);
+    // "When this model is destroyed" is the model itself, before it is removed; not any model in its unit.
+    const own = [leaf("EVENT", "event", { kind: "this-model-destroyed" }, 6), heal()];
+    expect(compiled(own).mechanics.trigger).toEqual({ event: "model-destroyed", object: "this-model", filter: { timing: "before-removal" } });
+    expect(rendered(base, own).length).toBeGreaterThan(0);
+    expect(compiled([leaf("EVENT", "event", { kind: "model-destroyed" }, 6), heal()]).mechanics.trigger).toEqual({ event: "model-destroyed", object: "model-in-this-unit" });
+    // Having shot is the unit's shooting attacks resolved, in any phase; not a Shooting-phase condition.
+    const shot = [leaf("EVENT", "event", { kind: "after-shooting" }, 6), heal()];
+    expect(compiled(shot).mechanics.trigger).toEqual({ event: "attacks-resolved", filter: { kind: "shoot" } });
+    expect(JSON.stringify(compiled(shot).mechanics)).not.toMatch(/phase-is/u);
+    expect(rendered(base, shot).length).toBeGreaterThan(0);
+  });
+
+  it("compiles a supporting model as part of an attached unit, never as leading", () => {
+    const grant = leaf("EFFECT", "fights-first", { subject: "this-unit" }, 2);
+    const supporting = compiled([leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "supporting" }, 2), grant]);
+    expect(supporting.mechanics.effect).toEqual({ type: "conditional", condition: { type: "attachment", parameters: { subject: "this-model", role: "attached" } }, effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } } });
+    expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "supporting" }, 2), grant]).length).toBeGreaterThan(0);
+    // A unit is attached whether it is led or supported: a supporting unit has no DSL condition.
+    const unit = compileLeaves([leaf("CONDITION", "leading-unit", { subject: "this-unit", attachment: "supporting" }, 2), grant]);
+    expect(unit.ok ? [] : unit.errors).toEqual([expect.stringMatching(/leading-unit supporting .*no DSL condition/u)]);
+    expect(compiled([leaf("CONDITION", "leading-unit", { subject: "bearers-unit", attachment: "leading" }, 2), grant]).mechanics.effect)
+      .toMatchObject({ condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } } });
+  });
+
+  it("writes once per battle as a usage count of one, never a one-use duration", () => {
+    const once = compiled([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "any" }), leaf("EFFECT", "fights-first", { subject: "this-unit" }, 2)]);
+    expect(once.mechanics.usage).toEqual({ frequency: "n-per-battle", count: 1 });
+    expect(JSON.stringify(once.mechanics)).not.toMatch(/one-use/u);
+  });
+
+  it("refuses a leaf still spelling the bearer, which only a retired version carries", () => {
+    const stale = compileLeaves([leaf("EFFECT", "invulnerable-save", { subject: "bearer", threshold: 4 })]);
+    expect(stale.ok ? [] : stale.errors).toEqual([expect.stringMatching(/subject "bearer" has no DSL target/u)]);
+  });
+});
+
+describe("Round 5C leaf prefill", () => {
+  const family = (id: string) => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === id && item.version === currentFamilyVersion(id)) as unknown as PrefillFamily;
+  const prefill = (id: string, text: string) => prefillFromSource(family(id), text);
+
+  it("reads the bearer as this model and the bearer's unit as its unit, with either apostrophe", () => {
+    for (const apostrophe of ["'", "\u2019"]) {
+      expect(prefill("attack", `Each time a model in the bearer${apostrophe}s unit makes an attack`)).toMatchObject({ direction: "makes", unit: "bearers-unit" });
+      expect(prefill("characteristic-modifier", `add 1 to the Strength characteristic of melee weapons equipped by models in the bearer${apostrophe}s unit`)).toMatchObject({ subject: "this-unit" });
+      expect(prefill("act-after-move", `the bearer${apostrophe}s unit is eligible to shoot in a turn in which it Fell Back`)).toMatchObject({ subject: "this-unit" });
+    }
+    expect(prefill("attack", "Each time an attack targets the bearer")).toEqual({ direction: "targeted", attack_type: "any", unit: "this-model" });
+    expect(prefill("regain-wounds", "the bearer regains D3 lost wounds")).toEqual({ subject: "this-model", amount: "D3" });
+    expect(prefill("no-advance-roll", "the bearer does not make an Advance roll")).toEqual({ subject: "this-model" });
+    expect(prefill("optional-use", "the bearer can use this Enhancement")).toEqual({ who: "this-model" });
+  });
+
+  it("reads curly apostrophes wherever a pattern names one", () => {
+    expect(prefill("usage-limit", "once per your opponent\u2019s turn")).toMatchObject({ frequency: "once-per-opponent-turn" });
+    expect(prefill("event", "At the start of your opponent\u2019s Command phase")).toEqual({ kind: "phase-start", phase: "command", turn: "opponent" });
+    expect(prefill("unit-keyword", "that target can\u2019t **FLY**")).toMatchObject({ negated: true });
+  });
+
+  it("tells this model being destroyed from a model in this unit being destroyed", () => {
+    expect(prefill("event", "When this model is destroyed")).toEqual({ kind: "this-model-destroyed" });
+    expect(prefill("event", "Each time a model in this unit is destroyed")).toEqual({ kind: "model-destroyed" });
+    expect(prefill("event", "After this unit has shot")).toEqual({ kind: "after-shooting" });
   });
 });

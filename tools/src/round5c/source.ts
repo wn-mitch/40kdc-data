@@ -1,15 +1,23 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { fileURLToPath } from "node:url";
 
 import { assembleStoreSource, type StoreSourceFragment } from "../mfm/store-source.js";
 import { hashJson } from "../round4/hash.js";
 import { bumpWorkbenchRevision, initializeWorkbench, withTransaction } from "./db.js";
+import { type DumpSourceOptions, loadDumpSourceRecords } from "./dump-source.js";
 import { proposeLexical } from "./retrieval.js";
 
-const repositoryRoot = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
-const defaultStorePath = process.env.RAW_TEXT_STORE ?? resolve(repositoryRoot, "../40kdc-abilities");
+/**
+ * Where source prose comes from: the GW MFM dump (options, the default), or a fixture directory
+ * of faction-array JSON files. `ROUND5C_SOURCE_FIXTURE` names a fixture directory for callers
+ * that take no origin (publication's freshness check), so tests never read the dump.
+ */
+export type SourceOrigin = string | DumpSourceOptions;
+
+function defaultOrigin(): SourceOrigin {
+  return process.env.ROUND5C_SOURCE_FIXTURE ?? {};
+}
 
 export type SourceRecord = {
   factionId: string;
@@ -39,14 +47,15 @@ export type SourceConflict = {
 };
 
 export type SourceLoadReport = {
-  storePath: string;
+  /** The fixture directory, or `dump:<path>`. */
+  origin: string;
   records: SourceRecord[];
   skipped: SkippedSourceRecord[];
   conflicts: SourceConflict[];
 };
 
 export type SourceRefreshReport = {
-  storePath: string;
+  origin: string;
   loaded: number;
   inserted: number;
   retained: number;
@@ -86,13 +95,17 @@ function identityKey(factionId: string, abilityId: string): string {
   return `${factionId}\u0000${abilityId}`;
 }
 
+/** The source records of an origin: the dump by default, or a fixture directory. */
+export function loadSourceRecords(origin: SourceOrigin = defaultOrigin()): SourceLoadReport {
+  return typeof origin === "string" ? loadFixtureSourceRecords(origin) : loadDumpSourceRecords(origin);
+}
+
 /**
- * Read faction-array source files directly from the sibling store.
- *
- * `index.json` is deliberately ignored: it is a flattened convenience index
- * and does not preserve the authoritative faction-local metadata or bytes.
+ * Read a fixture directory of faction-array JSON files: records with `raw_text`, or a
+ * stratagem's `when`/`target`/`effect`/`restrictions`. The file name is the faction unless a
+ * record names its own. `index.json` is ignored.
  */
-export function loadSourceRecords(storePath = defaultStorePath): SourceLoadReport {
+export function loadFixtureSourceRecords(storePath: string): SourceLoadReport {
   const skipped: SkippedSourceRecord[] = [];
   const conflicts: SourceConflict[] = [];
   const candidates = new Map<string, PendingRecord>();
@@ -186,7 +199,7 @@ export function loadSourceRecords(storePath = defaultStorePath): SourceLoadRepor
   const records = [...candidates.values()]
     .sort((left, right) => identityKey(left.factionId, left.abilityId).localeCompare(identityKey(right.factionId, right.abilityId)))
     .map(({ file: _file, row: _row, ...record }) => record);
-  return { storePath, records, skipped, conflicts };
+  return { origin: storePath, records, skipped, conflicts };
 }
 
 function normalizeSourceText(text: string): string {
@@ -244,9 +257,9 @@ function chunksForFragment(fragment: StoreSourceFragment): SourceChunk[] {
 
 
 /** Refresh current source-version pointers while retaining historical rows and spans. */
-export function refreshSources(db: DatabaseSync, storePath = defaultStorePath): SourceRefreshReport {
+export function refreshSources(db: DatabaseSync, origin: SourceOrigin = defaultOrigin()): SourceRefreshReport {
   initializeWorkbench(db);
-  const loaded = loadSourceRecords(storePath);
+  const loaded = loadSourceRecords(origin);
 
   return withTransaction(db, () => {
     const currentRows = db.prepare("SELECT id FROM abilities WHERE current = 1").all() as Array<{ id: number }>;
@@ -332,7 +345,7 @@ export function refreshSources(db: DatabaseSync, storePath = defaultStorePath): 
     }
 
     return {
-      storePath: loaded.storePath,
+      origin: loaded.origin,
       loaded: loaded.records.length,
       inserted,
       retained,

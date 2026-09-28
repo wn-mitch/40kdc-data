@@ -22,7 +22,9 @@ const TRIGGERS: Record<string, Node> = {
   "event:charge": { event: "move-ended", filter: { move_types: ["charge"] } },
   "event:unit-destroyed": { event: "destroyed" },
   "event:model-destroyed": { event: "model-destroyed", object: "model-in-this-unit" },
-  "event:after-shooting": { event: "attacks-resolved", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
+  "event:this-model-destroyed": { event: "model-destroyed", object: "this-model", filter: { timing: "before-removal" } },
+  // Having shot is the unit's own shooting attacks resolved, in whichever phase it shot.
+  "event:after-shooting": { event: "attacks-resolved", filter: { kind: "shoot" } },
   "event:selected-to-shoot": { event: "selected", filter: { to: "shoot" } },
   "event:selected-to-fight": { event: "selected", filter: { to: "fight" } },
   // Enemy moments name the enemy unit as the one acting, and this unit as what it acts on.
@@ -45,7 +47,8 @@ const RESOURCE_POOLS: Record<string, string> = {
   "miracle-dice": "miracle-dice-pool", "fate-dice": "fate-dice-pool", "bloodshed-point": "bloodshed-point",
 };
 
-const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model", bearer: "this-model" };
+/** Whose models an effect changes. "The bearer" is this-model; leaves still spelling it bearer are on a retired version. */
+const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model" };
 
 /** Marks as the designations an effect applies, uppercase as the rules print them. */
 const MARK_TAGS: Record<string, string> = {
@@ -129,8 +132,18 @@ export function condition(leaf: CompileLeaf): Node {
   const target = closed(leaf, "subject") === "target";
   const who = target ? "defender" : undefined;
   switch (leaf.family_id) {
-    case "leading-unit":
-      return pred("attachment", { role: "leading" }, "this-model");
+    case "leading-unit": {
+      // A Leader is a model, so this model, this unit and the bearer's unit leading all say the
+      // Leader model is leading. Version 1 leaves only ever meant leading.
+      const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
+      if (attachment === "leading") return pred("attachment", { role: "leading" }, "this-model");
+      // The DSL has no supporting role. A model attached in support is part of an attached unit,
+      // and a Support model is attached only in support, so "this model is supporting a unit"
+      // is "this model is part of an attached unit". A unit is attached whether it is led or
+      // supported, so a supporting unit has no DSL condition yet.
+      if (attachment === "supporting" && closed(leaf, "subject") === "this-model") return pred("attachment", { role: "attached" }, "this-model");
+      throw new CompileError(`leading-unit ${String(attachment)} with subject ${JSON.stringify(leaf.parameters.subject)} has no DSL condition yet.`);
+    }
     case "below-starting-strength":
       return pred("strength", { below: "starting" }, target || leaf.parameters.subject === "target-unit" ? "defender" : undefined);
     case "unit-state":
@@ -182,7 +195,11 @@ const ATTACKER_ROLLS = new Set(["hit", "wound", "damage"]);
  * target this unit, where the attacker's rolls are modified.
  */
 export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: string | null; incoming: boolean }): Node {
-  const target = (subject: unknown) => context.attached ? "this-unit" : SUBJECT_TARGETS[String(subject)] ?? "this-unit";
+  const target = (subject: unknown) => {
+    const found = SUBJECT_TARGETS[String(subject)];
+    if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
+    return context.attached ? "this-unit" : found;
+  };
   const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
     case "reroll": {

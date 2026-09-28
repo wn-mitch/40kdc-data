@@ -25,7 +25,7 @@ const TARGET = "One STELLAR WARDENS INFANTRY unit from your army that has not be
 const EFFECT = "Until the end of the phase, models in your unit have the Fights First ability.";
 
 const roots: string[] = [];
-const saved = { data: process.env.ROUND5C_DATA_ROOT, store: process.env.RAW_TEXT_STORE };
+const saved = { data: process.env.ROUND5C_DATA_ROOT, store: process.env.ROUND5C_SOURCE_FIXTURE };
 let db: DatabaseSync;
 let stratagemsFile: string;
 
@@ -59,7 +59,7 @@ beforeEach(() => {
     effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } }, scope: { duration: "phase" }, behavior: "activated",
   }], null, 2)}\n`);
   process.env.ROUND5C_DATA_ROOT = data;
-  process.env.RAW_TEXT_STORE = store;
+  process.env.ROUND5C_SOURCE_FIXTURE = store;
   db = new DatabaseSync(":memory:");
   initializeWorkbench(db);
   refreshSources(db, store);
@@ -69,7 +69,7 @@ afterEach(() => {
   db.close();
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
   if (saved.data === undefined) delete process.env.ROUND5C_DATA_ROOT; else process.env.ROUND5C_DATA_ROOT = saved.data;
-  if (saved.store === undefined) delete process.env.RAW_TEXT_STORE; else process.env.RAW_TEXT_STORE = saved.store;
+  if (saved.store === undefined) delete process.env.ROUND5C_SOURCE_FIXTURE; else process.env.ROUND5C_SOURCE_FIXTURE = saved.store;
 });
 
 describe("Round 5C stratagem targets", () => {
