@@ -14,6 +14,7 @@ import { runLeafProposals } from "./leaf-proposals.js";
 import { localEmbedder } from "./embeddings.js";
 import { reapplyLeafSurfaces } from "./leaves.js";
 import { refreshSources } from "./source.js";
+import { runPipeline8b } from "./pipeline-8b.js";
 
 const root = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
 
@@ -46,9 +47,9 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
 }
 
 async function run(command: string | undefined): Promise<void> {
-  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals"];
+  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals", "pipeline-8b"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals>");
+    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b>");
   }
   if (command === "leaf-describer-audit") {
     // Depends only on the registry and the describer, not on the workbench database.
@@ -66,6 +67,10 @@ async function run(command: string | undefined): Promise<void> {
     } else if (command === "leaf-proposals") {
       const started = Date.now();
       const result = await runLeafProposals(db, localEmbedder());
+      console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
+    } else if (command === "pipeline-8b") {
+      const started = Date.now();
+      const result = await runPipeline8b(db);
       console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "repair-related-variants") {
       console.log(JSON.stringify(repairRelatedVariantProposals(db), null, 2));
