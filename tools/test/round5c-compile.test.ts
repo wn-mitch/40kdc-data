@@ -41,6 +41,16 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 }
 
 describe("Round 5C leaf compiler", () => {
+  it("gates a whole non-Stratagem ability on its own phase window, in the turn each phase belongs to", () => {
+    const window = leaf("RESTRICTION", "activation-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: ["fight"] });
+    const result = compiled([window, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    // The gate: the opponent's Shooting phase, or the Fight phase in either turn.
+    expect(JSON.stringify(result.mechanics)).toContain(JSON.stringify({ operator: "or", operands: [
+      { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "shooting" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }] },
+      { type: "phase-is", parameters: { phase: "fight" } },
+    ] }));
+  });
+
   it("reproduces authored leader auras exactly, condition included", () => {
     const edict = authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
     const result = compiled([lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })]);

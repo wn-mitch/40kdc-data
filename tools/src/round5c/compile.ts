@@ -1,7 +1,7 @@
 import { exactSpan } from "./contracts.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import {
-  allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, kindKey, negate, targetRestrictions, trigger,
+  activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, kindKey, negate, targetRestrictions, trigger,
 } from "./compile-conditions.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
 import {
@@ -152,7 +152,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
       ? `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.`
       : leaf.family_id === "optional-use" ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
         : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
-          : "No separate text: checked against the core record, which already holds it." };
+          : leaf.family_id === "activation-window" ? "No separate text: the whole ability applies only in the phases it names."
+            : "No separate text: checked against the core record, which already holds it." };
   }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
@@ -296,6 +297,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
         else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) targetParts.push(leaf);
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
+        // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
+        else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
       else if (leaf.role === "EVENT") {

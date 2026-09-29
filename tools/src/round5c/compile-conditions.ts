@@ -438,6 +438,24 @@ export function duration(leaf: CompileLeaf): string {
 }
 
 /** Several conditions all holding, or null when there are none; shared with `compile.ts`'s own gating. */
+/**
+ * A non-Stratagem ability's own phase window as a gate on the whole ability: any one listed
+ * phase, in the turn it belongs to (a phase under `either_phases` holds in both players' turns).
+ * The same nodes phase-window emits; a Stratagem's use-window is checked against core instead.
+ */
+export function activationWindowCondition(parameters: Record<string, unknown>): Node {
+  const window = (phases: unknown, turn: "your-turn" | "opponent-turn" | null): Node[] => (phases as string[]).map((phase) => turn
+    ? { operator: "and", operands: [{ type: "phase-is", parameters: { phase } }, { type: "player-turn-is", parameters: { turn } }] }
+    : { type: "phase-is", parameters: { phase } });
+  const nodes = [
+    ...window(parameters.your_phases, "your-turn"),
+    ...window(parameters.opponent_phases, "opponent-turn"),
+    ...window(parameters.either_phases, null),
+  ];
+  if (nodes.length === 0) throw new CompileError("activation-window must name at least one phase.");
+  return nodes.length === 1 ? nodes[0]! : { operator: "or", operands: nodes };
+}
+
 export function allOf(nodes: Node[]): Node | null {
   return nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : { operator: "and", operands: nodes };
 }
