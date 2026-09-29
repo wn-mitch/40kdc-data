@@ -36,6 +36,7 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     id: "stratagem-target",
     version: 1,
     role: "RESTRICTION",
+    kinds: ["stratagem"],
     label: "Stratagem target",
     description: "A stratagem's TARGET: how many, whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
     starter: { count: "", side: "", selects: "", keywords: [], match: "", excluded_keywords: [] },
@@ -139,8 +140,24 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     id: "use-window",
     version: 1,
     role: "RESTRICTION",
+    kinds: ["stratagem"],
     label: "Phases it can be used in",
     description: "A stratagem's WHEN: the phases it can be used in, and whose turn each belongs to. \"Your opponent's Shooting phase or the Fight phase\" is opponent Shooting plus either player's Fight. Checked against the core stratagem record, not written again.",
+    starter: { your_phases: [], opponent_phases: [], either_phases: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["your_phases", "opponent_phases", "either_phases"],
+      properties: { your_phases: phaseSet, opponent_phases: phaseSet, either_phases: phaseSet },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "activation-window",
+    version: 1,
+    role: "RESTRICTION",
+    kinds: ["unit", "enhancement", "detachment", "faction", "core"],
+    label: "Phases it can be used in (non-Stratagem)",
+    description: "A non-Stratagem ability's own phase restriction: the phases it can be used in, and whose turn each belongs to (\"in the Fight phase\", \"your opponent's Shooting phase\"). Same shape as use-window, for abilities with no core stratagem record to check it against instead.",
     starter: { your_phases: [], opponent_phases: [], either_phases: [] },
     parameterSchema: {
       type: "object",
@@ -153,6 +170,7 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     id: "bearer-eligibility",
     version: 1,
     role: "RESTRICTION",
+    kinds: ["enhancement"],
     label: "Which models can take it",
     description: "An enhancement's \"<KEYWORD> model only\": every keyword, or any one of them (\"CANONESS, PALATINE or MINISTORUM PRIEST\"). Checked against the core enhancement record, not written again.",
     starter: { keywords: [], match: "" },
@@ -217,16 +235,17 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
     case "usage-limit":
       exactKeys(input, ["frequency", "per"], family);
       return { frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
-    case "use-window": {
+    case "use-window":
+    case "activation-window": {
       exactKeys(input, ["your_phases", "opponent_phases", "either_phases"], family);
       const window = {
-        your_phases: phases(input.your_phases, "use-window.your_phases"),
-        opponent_phases: phases(input.opponent_phases, "use-window.opponent_phases"),
-        either_phases: phases(input.either_phases, "use-window.either_phases"),
+        your_phases: phases(input.your_phases, `${family}.your_phases`),
+        opponent_phases: phases(input.opponent_phases, `${family}.opponent_phases`),
+        either_phases: phases(input.either_phases, `${family}.either_phases`),
       };
       const all = [...window.your_phases, ...window.opponent_phases, ...window.either_phases];
-      if (all.length === 0) throw new TypeError("use-window must name at least one phase.");
-      if (new Set(all).size !== all.length) throw new TypeError("use-window names a phase under two owners; a phase in either player's turn belongs only under either.");
+      if (all.length === 0) throw new TypeError(`${family} must name at least one phase.`);
+      if (new Set(all).size !== all.length) throw new TypeError(`${family} names a phase under two owners; a phase in either player's turn belongs only under either.`);
       return window;
     }
     case "bearer-eligibility":

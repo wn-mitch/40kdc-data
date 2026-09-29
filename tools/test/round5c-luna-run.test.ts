@@ -173,7 +173,7 @@ describe("Round 5C OMP Luna transport", () => {
     const view = await runLuna(open, run.run_id, { binary });
     expect(view).toMatchObject({ state: "completed", model: LUNA_MODEL, model_version: "omp/0.0.0-fixture", transport: "omp-json" });
     // "attacks" is not reported, so it becomes an explicit implicit-unresolved claim.
-    expect(view.summary).toEqual({ proposals: 3, unresolved: 2, structural: 1, candidates: 1 });
+    expect(view.summary).toEqual({ proposals: 3, unresolved: 2, structural: 1, candidates: 1, rejected_spans: 0, dropped_covered_spans: 0 });
 
     const seen = record();
     const scratchCwd = seen.argv[seen.argv.indexOf("--cwd") + 1]!;
@@ -468,7 +468,7 @@ describe("Round 5C DeepSeek Luna transport", () => {
     expect(view.state).toBe("completed");
     expect(view.model).toBe("deepseek-v4-pro");
     expect(view.model_version).toBe("deepseek-v4-pro");
-    expect(view.summary).toEqual({ proposals: 3, unresolved: 2, structural: 1, candidates: 1 });
+    expect(view.summary).toEqual({ proposals: 3, unresolved: 2, structural: 1, candidates: 1, rejected_spans: 0, dropped_covered_spans: 0 });
 
     // The transport received exactly the prepared request's own instructions, and the same
     // {request, input_hash} envelope the omp path sends on stdin (LUNA_INSTRUCTIONS_V2 tells the

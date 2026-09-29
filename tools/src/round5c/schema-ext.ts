@@ -55,7 +55,7 @@ CREATE INDEX IF NOT EXISTS source_atom_reviews_proposal
 
 CREATE TABLE IF NOT EXISTS family_candidates (
   id INTEGER PRIMARY KEY,
-  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')),
+  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION')),
   label TEXT NOT NULL CHECK(length(trim(label)) > 0),
   distinction TEXT NOT NULL CHECK(length(trim(distinction)) > 0),
   parameter_hints_json TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(parameter_hints_json) AND json_type(parameter_hints_json) = 'array'),

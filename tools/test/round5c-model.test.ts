@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { canonicalize, hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
-import { importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
+import { dropUncoveredRegions, importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
 import { lunaStdinEnvelope } from "../src/round5c/luna-schema.js";
 import { getCurrentCoverage } from "../src/round5c/coverage.js";
 
@@ -174,6 +174,29 @@ describe("Round 5C external Luna transport", () => {
     }
   });
 
+  it("caps a batch by outputBudgetTokens even when limit and the byte budget would allow more", () => {
+    // Four abilities, each well inside the 48 KiB byte budget on its own; a small output-token
+    // budget (a fraction of one ability's own estimated output) still stops the batch after the
+    // first ability instead of packing all four in, the way the DeepSeek transport's default
+    // batch-of-2 relies on this cap rather than `limit` alone.
+    const rows = Array.from({ length: 4 }, (_, index) => ({ abilityId: `budget-${index}`, source: `Re-roll a Hit roll of 1. Ability ${index}.` }));
+    const value = fixture(rows);
+    try {
+      const prepared = prepareLuna(value.db, { limit: 12, outputBudgetTokens: 1 });
+      expect(preparedRequest(prepared).abilities.map((ability) => ability.ability_id)).toEqual(["budget-0"]);
+      // Unset (the default) preserves the byte-budget-only behavior every other test relies on.
+      const secondValue = fixture(rows);
+      try {
+        const unbudgeted = prepareLuna(secondValue.db, { limit: 12 });
+        expect(preparedRequest(unbudgeted).abilities.length).toBe(4);
+      } finally {
+        secondValue.db.close();
+      }
+    } finally {
+      value.db.close();
+    }
+  });
+
   it("gives two requests for different abilities an identical byte prefix up to \"abilities\", so a prompt-prefix cache can hit", () => {
     // Two abilities each on their own, via `limit: 1`, guarantees two different `abilities`
     // arrays over the same registry and confirmed examples — exactly what a real residue sweep
@@ -248,7 +271,11 @@ describe("Round 5C external Luna transport", () => {
     }
   });
 
-  it("rejects unknown families atomically and closes the run as failed", () => {
+  it("degrades a span with an unknown family to a rejected UNRESOLVED entry instead of failing the whole response", () => {
+    // Per-span classification failures (bad family, bad parameters, role/family mismatch, …)
+    // must not throw away every other well-formed span in the same response — only an
+    // envelope-level problem (bad input_hash, unknown ability identity, malformed structure) does
+    // that (covered elsewhere, e.g. the luna-run "forged self-report and malformed body" test).
     const value = fixture([{ abilityId: "unknown-family", source: "Re-roll a Hit roll of 1." }]);
     try {
       const prepared = prepareLuna(value.db, { limit: 1 });
@@ -263,12 +290,81 @@ describe("Round 5C external Luna transport", () => {
         parameters: {},
       }];
 
-      expect(() => importLuna(value.db, { run_id: prepared.run_id, response })).toThrow(/Unknown reviewed semantic family/i);
-      expect(value.db.prepare("SELECT count(*) AS total FROM proposals").get()).toEqual({ total: 0 });
-      expect(value.db.prepare("SELECT status FROM model_runs WHERE id = ?").get(Number(prepared.run_id))).toEqual({ status: "failed" });
+      const result = importLuna(value.db, { run_id: prepared.run_id, response });
+      expect(result.rejected_spans).toBe(1);
+      expect(result.proposals).toBe(0);
+      expect(result.unresolved).toBe(1);
+      expect(value.db.prepare("SELECT status FROM model_runs WHERE id = ?").get(Number(prepared.run_id))).toEqual({ status: "completed" });
+      const row = value.db.prepare(`
+        SELECT proposals.role, proposals.status, json_extract(proposals.reason_json, '$.description') AS description
+        FROM proposals
+      `).get() as { role: string; status: string; description: string };
+      expect(row).toEqual({ role: "UNRESOLVED", status: "unresolved", description: expect.stringMatching(/^Rejected: .*Unknown reviewed semantic family/i) });
     } finally {
       value.db.close();
     }
+  });
+
+  it("imports a valid span from a response even when another span in the same ability fails classification", () => {
+    const source = "Re-roll a Hit roll of 1, gain a bogus token.";
+    const value = fixture([{ abilityId: "mixed-validity", source }]);
+    try {
+      const prepared = prepareLuna(value.db, { limit: 1 });
+      const requestAbility = preparedRequest(prepared).abilities[0]!;
+      const response = emptyResponse(prepared);
+      response.abilities[0]!.spans = [
+        existingRerollSpan(requestAbility),
+        {
+          ...sourceSpan(requestAbility.source_text, "gain a bogus token"),
+          role: "EFFECT",
+          status: "EXISTING",
+          family_id: "no-such-family",
+          family_version: 1,
+          parameters: {},
+        },
+      ];
+
+      const result = importLuna(value.db, { run_id: prepared.run_id, response });
+      expect(result.rejected_spans).toBe(1);
+      expect(result.proposals).toBe(1); // the valid reroll span still imported
+      const proposals = value.db.prepare(`
+        SELECT proposals.role, proposals.status, source_spans.exact_text FROM proposals
+        JOIN source_spans ON source_spans.id = proposals.span_id
+        ORDER BY source_spans.start_byte
+      `).all() as Array<{ role: string; status: string; exact_text: string }>;
+      expect(proposals[0]).toMatchObject({ exact_text: "Re-roll a Hit roll of 1", status: "pending" });
+      expect(proposals.find((p) => p.exact_text === "gain a bogus token")).toMatchObject({ role: "UNRESOLVED", status: "unresolved" });
+    } finally {
+      value.db.close();
+    }
+  });
+
+  it("drops a span that lands outside the prepared uncovered source as a counted, non-erroring omission", () => {
+    // Direct unit test of dropUncoveredRegions: a region whose byte range never overlaps any of
+    // the ability's uncovered_regions (already covered by something else since the request was
+    // prepared, or simply outside them) is silently removed and counted — not a thrown error —
+    // while a region that does overlap is kept untouched.
+    const ability = {
+      id: 1, faction_id: "fixture", ability_id: "covered", source_hash: "x".repeat(64),
+      source_text: "Re-roll a Hit roll of 1 and gain a glimmer token.", fragments_json: "[]",
+    };
+    const configured = [{
+      ability_version_id: 1, faction_id: "fixture", ability_id: "covered", source_hash: ability.source_hash,
+      uncovered_regions: [{ fragment: "RAW_TEXT", start_byte: 0, end_byte: 23 }], // only "Re-roll a Hit roll of 1" is still open
+    }];
+    const kept = { kind: "semantic" as const, ability, fragment: "RAW_TEXT", start_byte: 0, end_byte: 23, exact_text: "Re-roll a Hit roll of 1",
+      reported_role: "EFFECT" as const, role: "EFFECT" as const, status: "NOVEL" as const, fingerprint_id: null, qualifier_spans: [],
+      description: null, hypothesis: null, index: 0, offset_repaired: false };
+    const droppedSpan = { ...kept, start_byte: 28, end_byte: 49, exact_text: "gain a glimmer token.", index: 1 };
+    const parsed = {
+      model: "test", model_version: "test", prompt_version: "v2", latency_ms: null, cost_usd: null, version: 2 as const,
+      semantic_spans: [kept, droppedSpan], structural: [], connectives: [], unresolved: [],
+      rejected_spans: 0, dropped_covered_spans: 0,
+    };
+    dropUncoveredRegions(parsed, configured);
+    expect(parsed.semantic_spans).toEqual([kept]);
+    expect(parsed.dropped_covered_spans).toBe(1);
+    expect(parsed.rejected_spans).toBe(0); // a drop is never a rejection: no reason is recorded, nothing is reviewed
   });
 
   it("uses UTF-8 byte offsets and fragment bounds, then makes an omitted source clause explicit", () => {
@@ -296,6 +392,8 @@ describe("Round 5C external Luna transport", () => {
         unresolved: 1,
         structural: 0,
         candidates: 0,
+        rejected_spans: 0,
+        dropped_covered_spans: 0,
       });
       expect(() => importLuna(value.db, { run_id: prepared.run_id, response })).toThrow(/already been imported or failed/i);
       expect(value.db.prepare(`
@@ -338,6 +436,8 @@ describe("Round 5C external Luna transport", () => {
         unresolved: 1,
         structural: 0,
         candidates: 0,
+        rejected_spans: 0,
+        dropped_covered_spans: 0,
       });
       expect(value.db.prepare(`
         SELECT source_spans.exact_text, proposals.status
@@ -422,6 +522,87 @@ describe("Round 5C characteristic-set family", () => {
       value.db.close();
     }
   });
+
+  it("sends RESTRICTION and COMBINATOR families in the registry and accepts EXISTING spans labelled with those roles", () => {
+    const source = "Instead of gaining a point, you can only use this Stratagem once per battle.";
+    const value = fixture([{ abilityId: "restriction-combinator", source }]);
+    try {
+      const prepared = prepareLuna(value.db, { limit: 1 });
+      const rawRegistry = (prepared.request as { registry: Array<{ id: string; role: string }> }).registry;
+      expect(rawRegistry.some((family) => family.role === "RESTRICTION")).toBe(true);
+      expect(rawRegistry.some((family) => family.role === "COMBINATOR")).toBe(true);
+
+      const requestAbility = preparedRequest(prepared).abilities[0]!;
+      const response = emptyResponse(prepared);
+      response.abilities[0]!.spans = [
+        {
+          ...sourceSpan(requestAbility.source_text, "Instead"),
+          role: "COMBINATOR",
+          status: "EXISTING",
+          family_id: "instead",
+          family_version: 1,
+          parameters: {},
+        },
+        {
+          ...sourceSpan(requestAbility.source_text, "once per battle"),
+          role: "RESTRICTION",
+          status: "EXISTING",
+          family_id: "usage-limit",
+          family_version: 2,
+          parameters: { frequency: "once-per-battle", per: "any" },
+        },
+      ];
+
+      const result = importLuna(value.db, { run_id: prepared.run_id, response });
+      expect(result.proposals).toBe(2);
+      const roles = (value.db.prepare("SELECT role FROM proposals WHERE model_run_id = ? ORDER BY role").all(Number(prepared.run_id)) as Array<{ role: string }>)
+        .map((row) => row.role);
+      // The two labelled spans don't cover the whole source; the rest becomes an implicit
+      // UNRESOLVED proposal (`addImplicitUnresolved`), not a failure of either labelled role.
+      expect(roles).toEqual(["COMBINATOR", "RESTRICTION", "UNRESOLVED"]);
+    } finally {
+      value.db.close();
+    }
+  });
+
+  it("excludes a Stratagem-only family from a unit ability's registry, and rejects it if claimed anyway", () => {
+    // The fixture helper always inserts a 'unit' ability (source_type), so use-window and
+    // stratagem-target (kinds: ["stratagem"]) must never appear in its request, and a response
+    // that claims one anyway must degrade to UNRESOLVED, not throw the whole response away or
+    // silently accept a family that means nothing on a unit ability.
+    const source = "Once per battle, in the Fight phase, this model can use this ability.";
+    const value = fixture([{ abilityId: "unit-timing", source }]);
+    try {
+      const prepared = prepareLuna(value.db, { limit: 1 });
+      const rawRegistry = (prepared.request as { registry: Array<{ id: string }> }).registry;
+      expect(rawRegistry.some((family) => family.id === "use-window")).toBe(false);
+      expect(rawRegistry.some((family) => family.id === "stratagem-target")).toBe(false);
+      expect(rawRegistry.some((family) => family.id === "activation-window")).toBe(true);
+
+      const requestAbility = preparedRequest(prepared).abilities[0]!;
+      const response = emptyResponse(prepared);
+      response.abilities[0]!.spans = [{
+        ...sourceSpan(requestAbility.source_text, "in the Fight phase"),
+        role: "RESTRICTION",
+        status: "EXISTING",
+        family_id: "use-window",
+        family_version: 1,
+        parameters: { your_phases: [], opponent_phases: [], either_phases: ["fight"] },
+      }];
+
+      const result = importLuna(value.db, { run_id: prepared.run_id, response });
+      expect(result.rejected_spans).toBe(1);
+      const row = value.db.prepare(`
+        SELECT proposals.role, json_extract(proposals.reason_json, '$.description') AS description
+        FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+        WHERE source_spans.exact_text = 'in the Fight phase'
+      `).get() as { role: string; description: string };
+      expect(row.role).toBe("UNRESOLVED");
+      expect(row.description).toMatch(/does not apply to a unit ability/i);
+    } finally {
+      value.db.close();
+    }
+  });
 });
 
 describe("Round 5C turn and faction leaves", () => {
@@ -437,6 +618,29 @@ describe("Round 5C turn and faction leaves", () => {
       expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, source)).toMatch(/^fp_/);
       expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 2, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);
+    } finally {
+      value.db.close();
+    }
+  });
+
+  it("still rejects a source-qualified value found in none of the span, the ability's source text, or a binding reference", () => {
+    const source = "At the start of your opponent's turn, if your army faction is Example Guard, gain a point.";
+    const value = fixture([{ abilityId: "reference-rule", source }]);
+    try {
+      // Elsewhere in the ability's own source text: accepted even though it's outside the span.
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, "gain a point", {
+        wholeSourceText: source,
+      })).toMatch(/^fp_/);
+      // A same-response binding reference: accepted even though it names no literal quote at all.
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "that faction" } }, 2, "gain a point", {
+        wholeSourceText: source,
+        bindingSurfaces: new Set(["that faction"]),
+      })).toMatch(/^fp_/);
+      // Found nowhere — not the span, not the ability's own text, not a binding — still rejected.
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Nonexistent Guard" } }, 2, "gain a point", {
+        wholeSourceText: source,
+        bindingSurfaces: new Set(["that faction"]),
+      })).toThrow(/must occur in the exact source span/i);
     } finally {
       value.db.close();
     }

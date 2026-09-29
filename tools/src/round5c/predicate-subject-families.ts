@@ -233,6 +233,28 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-position",
+    version: 3,
+    role: "CONDITION",
+    label: "Unit's position",
+    description: "As version 2; within/beyond now take the same wide subject as objective-range and closest-eligible, not only the attack's target — \"while this unit is within 6\" of an objective marker\" names the unit directly, not the attack it may not even be part of.",
+    starter: { kind: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["kind", "subject", "negated"],
+      properties: {
+        kind: { enum: POSITION_KINDS },
+        inches: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: DISTANCE_KINDS } },
+        controlled_by: { enum: OBJECTIVE_CONTROLLERS, "x-only-when": { kind: ["objective-range"] } },
+        to: { enum: WIDE_SUBJECTS, "x-only-when": { kind: ["closest-eligible"] } },
+        range: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: ["closest-eligible"] } },
+        ...wideSubjectAndNegation,
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "target-is-selected",
@@ -283,8 +305,11 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
       const kind = enumValue(input.kind, POSITION_KINDS, "unit-position.kind");
       const common = version >= 2 ? wide(family) : legacy(family);
       // Only objective-range and (from version 2) closest-eligible have a meaning for a subject
-      // other than the attack's target; within/beyond still measure distance to it specifically.
-      const subjectFree = version >= 2 ? kind === "objective-range" || kind === "closest-eligible" : kind === "objective-range";
+      // other than the attack's target in version 1/2; version 3 widens within/beyond too — "this
+      // unit is within 6\" of an objective marker" names the unit directly.
+      const subjectFree = version >= 3
+        ? kind === "objective-range" || kind === "closest-eligible" || (DISTANCE_KINDS as readonly string[]).includes(kind)
+        : version >= 2 ? kind === "objective-range" || kind === "closest-eligible" : kind === "objective-range";
       if (!subjectFree && common.subject !== "target") throw new TypeError(`unit-position ${kind} describes the attack's target; its subject must be target.`);
       if ((DISTANCE_KINDS as readonly string[]).includes(kind)) {
         exactKeys(input, ["kind", "inches", "subject", "negated"], family);

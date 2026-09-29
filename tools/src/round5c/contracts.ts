@@ -30,6 +30,10 @@ export type LeafRole = (typeof LEAF_ROLES)[number];
 
 type FamilyParameters = Record<string, unknown>;
 
+/** The rule kind an ability's own record carries (`abilities.source_type`). */
+export const ABILITY_KINDS = ["stratagem", "unit", "enhancement", "detachment", "faction", "core"] as const;
+export type AbilityKind = (typeof ABILITY_KINDS)[number];
+
 export type SemanticFamilyDefinition = {
   id: string;
   version: number;
@@ -43,7 +47,21 @@ export type SemanticFamilyDefinition = {
    * model request may use it; `upgradeFamilyVersions` moves its leaves to the current version.
    */
   deprecated?: true;
+  /**
+   * Which ability kinds this family can legitimately label (`ABILITY_KINDS`); omitted means every
+   * kind. A Luna request built for a batch of abilities sends only the families that fit at least
+   * one ability kind in that batch (`activeRegistry`), and `importLuna` rejects an EXISTING span
+   * whose family doesn't fit its own ability's kind (recorded as unresolved with the reason) —
+   * some families genuinely mean something different, or nothing, outside their kind (a
+   * Stratagem's TARGET or WHEN has no meaning on a unit ability, and vice versa).
+   */
+  kinds?: readonly AbilityKind[];
 };
+
+/** True when a family (by its declared `kinds`, default every kind) fits an ability kind. */
+export function familyFitsKind(family: Pick<SemanticFamilyDefinition, "kinds">, kind: string): boolean {
+  return family.kinds === undefined || (family.kinds as readonly string[]).includes(kind);
+}
 
 export { PHASE_EVENT_KINDS } from "./core-families.js";
 export type * from "./stamp-types.js";
@@ -192,6 +210,19 @@ export function validateFamilySource(family: string, parameters: Record<string, 
 }
 
 /**
+ * Where a source-qualified fingerprint value is allowed to come from, beyond a literal quote
+ * inside the leaf's own span. A pronoun ("that unit", "it") legitimately points outside its span:
+ * `wholeSourceText` allows a quote found anywhere in the ability's own source (still real source
+ * text, just not this leaf's own words), and `bindingSurfaces` allows a reference to another span
+ * in the same response via the contract's `binding` structural span — a true cross-reference, not
+ * a quote, which compiles to the DSL's selection_var/event_var refs rather than a literal.
+ */
+export type FingerprintSourceContext = {
+  wholeSourceText?: string;
+  bindingSurfaces?: ReadonlySet<string>;
+};
+
+/**
  * Insert or return the canonical fingerprint for one reviewed family version.
  *
  * Legacy IDs remain separate historical evidence; callers map them through
@@ -203,6 +234,7 @@ export function validateFingerprint(
   parameters: Record<string, unknown>,
   version = 1,
   exactText?: string,
+  sourceContext?: FingerprintSourceContext,
 ): string {
   const definition = reviewedFamily(family, version);
   const normalized = normalizeFingerprintParameters(family, parameters, version);
@@ -212,8 +244,12 @@ export function validateFingerprint(
   if (exactText !== undefined) {
     for (const value of Object.values(normalized)) {
       const source = sourceQualified(value, "Fingerprint parameter");
-      if (source && !exactText.includes(source.source)) {
-        throw new TypeError("A source-qualified fingerprint value must occur in the exact source span.");
+      if (!source) continue;
+      const inOwnSpan = exactText.includes(source.source);
+      const inWholeSource = sourceContext?.wholeSourceText !== undefined && sourceContext.wholeSourceText.includes(source.source);
+      const isBindingReference = sourceContext?.bindingSurfaces?.has(source.source) ?? false;
+      if (!inOwnSpan && !inWholeSource && !isBindingReference) {
+        throw new TypeError("A source-qualified fingerprint value must occur in the exact source span, elsewhere in the ability's source text, or a same-response binding reference.");
       }
     }
   }

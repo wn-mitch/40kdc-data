@@ -1,4 +1,4 @@
-import { exactSpan, type SemanticRole } from "./contracts.js";
+import { exactSpan, type LeafRole } from "./contracts.js";
 import type { StructuralKind } from "./schema-ext.js";
 
 /**
@@ -22,6 +22,8 @@ export type CurrentAbility = {
   source_hash: string;
   source_text: string;
   fragments_json: string;
+  /** `abilities.source_type` (stratagem/unit/enhancement/detachment/faction/core), for kind-scoping. */
+  source_type: string;
 };
 
 export type ParsedQualifier = { start_byte: number; end_byte: number };
@@ -33,8 +35,8 @@ export type ParsedSemanticSpan = {
   start_byte: number;
   end_byte: number;
   exact_text: string;
-  reported_role: SemanticRole | "UNRESOLVED";
-  role: SemanticRole | "UNRESOLVED";
+  reported_role: LeafRole | "UNRESOLVED";
+  role: LeafRole | "UNRESOLVED";
   status: "EXISTING" | "NOVEL" | "UNRESOLVED";
   fingerprint_id: string | null;
   qualifier_spans: ParsedQualifier[];
@@ -98,6 +100,21 @@ export type ParsedResponse = {
   structural: ParsedStructural[];
   connectives: ParsedConnective[];
   unresolved: ParsedUnresolved[];
+  /**
+   * A span whose offsets/status/role parsed but whose classification (family, parameters,
+   * hypothesis) failed validation. It still lands in `semantic_spans` as a synthetic UNRESOLVED
+   * entry (so review and vocabulary tooling see it), but is counted here separately so an import
+   * summary can report how many of a response's own labels the model got wrong versus how many
+   * were genuinely novel or ambiguous.
+   */
+  rejected_spans: number;
+  /**
+   * A span that parsed and validated but landed on bytes the request's uncovered_regions no
+   * longer claims (already covered by something else, or outside them entirely) by the time the
+   * response was checked. Silently dropped, not an error and not an unresolved gap — the bytes
+   * are already accounted for.
+   */
+  dropped_covered_spans: number;
 };
 
 export function asRecord(value: unknown, label: string): JsonRecord {

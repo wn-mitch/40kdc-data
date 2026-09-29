@@ -1,6 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
+import { LEAF_ROLES } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
 
 /**
@@ -8,7 +9,7 @@ import { normalizedSurface } from "./matching.js";
  * `db.ts`: `initializeWorkbench` calls `backfillFamilyCandidates` from here.
  */
 
-const SEMANTIC_ROLES = new Set(["EFFECT", "DURATION", "EVENT", "CONDITION"]);
+const LEAF_ROLE_SET = new Set<string>(LEAF_ROLES);
 
 /** A NOVEL-leaf occurrence that suggests, but never establishes, a provisional family. */
 export type CandidateSuggestion = {
@@ -33,7 +34,7 @@ export function candidateSignature(role: string, exactText: string): string {
  * Idempotent per candidate and span. Never writes families, fingerprints, annotations, or DSL.
  */
 export function recordCandidateSuggestion(db: DatabaseSync, suggestion: CandidateSuggestion): { candidate_id: number; evidence_id: number } | null {
-  if (!SEMANTIC_ROLES.has(suggestion.role)) return null;
+  if (!LEAF_ROLE_SET.has(suggestion.role)) return null;
   const signature = candidateSignature(suggestion.role, suggestion.exact_text);
   const now = new Date().toISOString();
   const hints = [...new Set(suggestion.parameter_hints ?? [])].sort();

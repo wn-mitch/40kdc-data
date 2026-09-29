@@ -2,11 +2,14 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { insertStructuralProposal } from "./atoms-store.js";
+import { LEAF_ROLES } from "./contracts.js";
 import {
   bumpWorkbenchRevision, insertSpan, invalidateWholeReview, withTransaction,
 } from "./db.js";
 import { CONNECTIVE_KINDS } from "./luna-schema.js";
 import { STRUCTURAL_KINDS, type StructuralKind } from "./schema-ext.js";
+
+const LEAF_ROLE_SQL_LIST = LEAF_ROLES.map((role) => `'${role}'`).join(", ");
 
 /**
  * Structural source authority: participant, selector, usage, and binding constituents. A human
@@ -221,7 +224,7 @@ function assertContainment(db: DatabaseSync, proposal: AtomProposalRow, interval
   }
   const parents = db.prepare(`
     SELECT id, reason_json FROM proposals
-    WHERE span_id = ? AND status IN ('accepted', 'corrected') AND role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')
+    WHERE span_id = ? AND status IN ('accepted', 'corrected') AND role IN (${LEAF_ROLE_SQL_LIST})
   `).all(container!.span_id) as Array<{ id: number; reason_json: string }>;
   const eligible = parents.filter((parent) => (proposal.parent_proposal_id === null || parent.id === proposal.parent_proposal_id)
     && qualifierContains(parent.reason_json, interval));

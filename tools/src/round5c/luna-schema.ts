@@ -1,4 +1,4 @@
-import { SEMANTIC_ROLES } from "./contracts.js";
+import { LEAF_ROLES, SEMANTIC_ROLES } from "./contracts.js";
 import { STRUCTURAL_KINDS } from "./schema-ext.js";
 
 /**
@@ -166,7 +166,7 @@ export const RESPONSE_SCHEMA_V2 = {
               properties: {
                 ...interval,
                 exact_text: { type: "string", minLength: 1 },
-                role: { enum: [...SEMANTIC_ROLES, "UNRESOLVED"] },
+                role: { enum: [...LEAF_ROLES, "UNRESOLVED"] },
                 status: { enum: ["EXISTING", "NOVEL", "UNRESOLVED"] },
                 family_id: { type: "string", minLength: 1 },
                 family_version: { type: "integer", minimum: 1 },
@@ -245,9 +245,10 @@ export const LUNA_INSTRUCTIONS_V2 = [
   "Echo input_hash verbatim from the message, set schema_version to 2, prompt_version to \"v2\", model to request.requested_model, and model_version to \"unknown\".",
   "Return every request ability exactly once with its faction_id, ability_id, and source_hash unchanged.",
   "All offsets are half-open UTF-8 byte offsets into source_text. Take every start_byte from the start and every end_byte from the end of an entry in that ability's byte_tokens ([start_byte, end_byte, text]); never count bytes yourself. exact_text must equal the source between those offsets exactly; never paraphrase. Every region must lie inside one fragment and overlap a supplied uncovered region.",
-  "Classify each meaningful clause into exactly one kind. spans: semantic leaves only, roles EFFECT (a mechanical change), EVENT (a trigger), CONDITION (a predicate), DURATION (a lifetime).",
+  "Classify each meaningful clause into exactly one kind. spans: semantic leaves only, roles EFFECT (a mechanical change), EVENT (a trigger), CONDITION (a predicate), DURATION (a lifetime), RESTRICTION (a limit on who may use the ability, how often, or under what usage cost — once per turn, once per battle, a Stratagem's eligible target, who may activate it), COMBINATOR (a clause that replaces or supersedes an earlier effect of the same kind rather than adding to it, such as \"instead\").",
   "Use status EXISTING only with a supplied registry family whose parameters satisfy its schema and whose role matches; use NOVEL when the meaning is a leaf no registry family expresses, and then include hypothesis {label, distinction, parameters:[{name,start_byte,end_byte,exact_text}]} naming how it differs from the closest family, with parameter hints inside the span; use UNRESOLVED when you cannot classify safely.",
   "structural_spans: who acts or is affected (participant), which entities qualify (selector), use limits or costs (usage), and what a phrase refers or attaches to (binding). These are not semantic leaves. A structural span may overlap a semantic span only when it lies wholly inside one of that span's qualifier_spans; then set parent_span_index to that span's index in spans.",
+  "A quoted fingerprint parameter (one whose value copies exact wording) need not come from the leaf's own span: a pronoun (\"that unit\", \"it\") legitimately points elsewhere. Quote it from anywhere in the ability's source_text if it appears verbatim there, or from a binding structural span's exact_text if the reference is to another part of this response rather than a literal quote.",
   "connectives: conjunctions, conditional joins, alternatives, sequencing, and references between constituents, each with exact_text and a kind from the schema enum.",
   "Only EXISTING spans carry family_id, family_version, and parameters; only NOVEL spans carry hypothesis. Omit every optional key that does not apply; never send null.",
   "Regions of different kinds never overlap: a connective, structural span, or unresolved region may not share bytes with a semantic span, except a structural span lying wholly inside one of its parent's qualifier_spans. A trigger phrase such as \"each time\" belongs to its EVENT span, and \"until\" to its DURATION span, not to a connective.",

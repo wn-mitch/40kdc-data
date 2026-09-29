@@ -10,6 +10,7 @@ import { upgradeFamilyVersions } from "./family-versions.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
 import { COMPILED_SCHEMA, COMPILED_TABLES, upgradeCompiledCore } from "./compiled.js";
 import { LEAF_PROPOSAL_KINDS_MARKER, LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
+import { normalizedSurface } from "./matching.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
@@ -72,12 +73,21 @@ CREATE TABLE IF NOT EXISTS source_spans (
   start_byte INTEGER NOT NULL CHECK(start_byte >= 0),
   end_byte INTEGER NOT NULL CHECK(end_byte > start_byte),
   exact_text TEXT NOT NULL CHECK(length(exact_text) > 0),
+  -- normalizedSurface(exact_text) (matching.ts), computed once at insert since it isn't a SQL
+  -- expression, so surfaceOccurrences (leaves.ts) can look up "every proposal with this surface"
+  -- by an indexed equality instead of scanning every current pending/unresolved proposal and
+  -- normalizing each one in JS -- the corpus-wide cost that stalled the deterministic confirm pass.
+  -- Nullable only so an existing database can add the column without a full rebuild; insertSpan
+  -- always populates it, and a migration backfills every row that predates the column.
+  normalized_surface TEXT,
   UNIQUE(ability_version_id, start_byte, end_byte, fragment),
   FOREIGN KEY(ability_version_id) REFERENCES abilities(id) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) STRICT;
 
 CREATE INDEX IF NOT EXISTS source_spans_ability_lookup
   ON source_spans(ability_version_id, start_byte, end_byte);
+CREATE INDEX IF NOT EXISTS source_spans_normalized_surface_lookup
+  ON source_spans(normalized_surface);
 
 CREATE TABLE IF NOT EXISTS model_runs (
   id INTEGER PRIMARY KEY,
@@ -107,7 +117,7 @@ CREATE TABLE IF NOT EXISTS proposals (
   id INTEGER PRIMARY KEY,
   span_id INTEGER NOT NULL,
   fingerprint_id TEXT,
-  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'RESOURCE', 'CONNECTIVE', 'UNRESOLVED')),
+  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION', 'RESOURCE', 'CONNECTIVE', 'UNRESOLVED')),
   origin TEXT NOT NULL CHECK(length(trim(origin)) > 0),
   model_run_id INTEGER,
   status TEXT NOT NULL CHECK(status IN ('pending', 'accepted', 'rejected', 'corrected', 'superseded', 'unresolved')),
@@ -322,6 +332,32 @@ function upgradeAnnotationAuthority(db: DatabaseSync): void {
 export function invalidateWholeReview(db: DatabaseSync, abilityVersionIds: Iterable<number>): void {
   const review = db.prepare("UPDATE ability_reviews SET whole_context_checked = 0 WHERE ability_version_id = ?");
   for (const abilityVersionId of new Set(abilityVersionIds)) review.run(abilityVersionId);
+}
+
+/**
+ * Add and backfill `source_spans.normalized_surface` for a database predating it. A simple
+ * `ALTER TABLE ADD COLUMN` suffices here — unlike the CHECK-constraint migrations above, this
+ * column carries no constraint SQLite can't add in place, so no table rebuild is needed. The
+ * backfill computes `normalizedSurface(exact_text)` (a JS function, not a SQL expression) once
+ * per existing row in one transaction.
+ */
+function upgradeSourceSpanNormalizedSurface(db: DatabaseSync): void {
+  // Must run before `db.exec(SCHEMA)`: SCHEMA's own `CREATE INDEX ... ON source_spans
+  // (normalized_surface)` fails outright on a pre-existing source_spans table that doesn't have
+  // the column yet (`CREATE TABLE IF NOT EXISTS` is a no-op there). A genuinely fresh database has
+  // no source_spans table at all at this point; SCHEMA creates it with the column already, so
+  // there's nothing to migrate.
+  if (!tableExists(db, "source_spans")) return;
+  const columns = db.prepare("PRAGMA table_info(source_spans)").all() as Array<{ name: string }>;
+  if (!columns.some((column) => column.name === "normalized_surface")) {
+    db.exec("ALTER TABLE source_spans ADD COLUMN normalized_surface TEXT");
+  }
+  const stale = db.prepare("SELECT id, exact_text FROM source_spans WHERE normalized_surface IS NULL").all() as Array<{ id: number; exact_text: string }>;
+  if (stale.length === 0) return;
+  const update = db.prepare("UPDATE source_spans SET normalized_surface = ? WHERE id = ?");
+  withTransaction(db, () => {
+    for (const row of stale) update.run(normalizedSurface(row.exact_text), row.id);
+  });
 }
 
 function upgradeAnnotationBatchMetadata(db: DatabaseSync): void {
@@ -578,6 +614,108 @@ function upgradeLeafRoles(db: DatabaseSync): void {
   }
 }
 
+/**
+ * Allow every leaf role (combinators, restrictions) on proposals, mirroring `upgradeLeafRoles`
+ * for `semantic_families`. Without this, `importLuna` cannot insert a RESTRICTION- or
+ * COMBINATOR-role proposal at all: the old CHECK predates those two roles and SQLite rejects the
+ * insert outright. SQLite cannot alter a CHECK, so the table is rebuilt with foreign keys off
+ * (both `gaps.proposal_id` referencing it and its own `span_id`/`fingerprint_id`/`model_run_id`
+ * references) and checked before committing. This must run outside a transaction, where the
+ * foreign_keys pragma takes effect.
+ */
+function upgradeProposalRoles(db: DatabaseSync): void {
+  const existing = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'proposals'").get() as { sql: string } | undefined;
+  if (!existing || existing.sql.includes("'RESTRICTION'")) return;
+  db.exec("PRAGMA foreign_keys = OFF");
+  try {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      db.exec(`
+        CREATE TABLE proposals_new (
+          id INTEGER PRIMARY KEY,
+          span_id INTEGER NOT NULL,
+          fingerprint_id TEXT,
+          role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION', 'RESOURCE', 'CONNECTIVE', 'UNRESOLVED')),
+          origin TEXT NOT NULL CHECK(length(trim(origin)) > 0),
+          model_run_id INTEGER,
+          status TEXT NOT NULL CHECK(status IN ('pending', 'accepted', 'rejected', 'corrected', 'superseded', 'unresolved')),
+          reason_json TEXT NOT NULL CHECK(json_valid(reason_json)),
+          score REAL,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+          FOREIGN KEY(fingerprint_id) REFERENCES fingerprints(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+          FOREIGN KEY(model_run_id) REFERENCES model_runs(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+        ) STRICT;
+        INSERT INTO proposals_new (id, span_id, fingerprint_id, role, origin, model_run_id, status, reason_json, score, created_at)
+          SELECT id, span_id, fingerprint_id, role, origin, model_run_id, status, reason_json, score, created_at FROM proposals;
+        DROP TABLE proposals;
+        ALTER TABLE proposals_new RENAME TO proposals;
+        CREATE INDEX IF NOT EXISTS proposals_status_origin_lookup ON proposals(status, origin, span_id);
+      `);
+      const violations = db.prepare("PRAGMA foreign_key_check").all();
+      if (violations.length > 0) throw new Error(`Rebuilding proposals broke ${violations.length} foreign key reference(s).`);
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
+/**
+ * Allow every leaf role on `family_candidates`, mirroring `upgradeLeafRoles`/`upgradeProposalRoles`.
+ * Without this, `recordCandidateSuggestion` cannot track a RESTRICTION- or COMBINATOR-role NOVEL
+ * hypothesis as a vocabulary candidate: the old CHECK predates those two roles. Rebuilt with
+ * foreign keys off (its own references to `model_runs`/`semantic_families`, plus the incoming
+ * `family_candidate_evidence.candidate_id` reference) and checked before committing, outside a
+ * transaction, where the foreign_keys pragma takes effect.
+ */
+function upgradeFamilyCandidateRoles(db: DatabaseSync): void {
+  const existing = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'family_candidates'").get() as { sql: string } | undefined;
+  if (!existing || existing.sql.includes("'RESTRICTION'")) return;
+  db.exec("PRAGMA foreign_keys = OFF");
+  try {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      db.exec(`
+        CREATE TABLE family_candidates_new (
+          id INTEGER PRIMARY KEY,
+          role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION')),
+          label TEXT NOT NULL CHECK(length(trim(label)) > 0),
+          distinction TEXT NOT NULL CHECK(length(trim(distinction)) > 0),
+          parameter_hints_json TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(parameter_hints_json) AND json_type(parameter_hints_json) = 'array'),
+          signature TEXT NOT NULL UNIQUE CHECK(length(signature) = 64),
+          state TEXT NOT NULL CHECK(state IN ('open', 'mapped', 'dismissed')),
+          created_from_model_run_id INTEGER,
+          mapped_family_id TEXT,
+          mapped_family_version INTEGER,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL,
+          CHECK((state = 'mapped') = (mapped_family_id IS NOT NULL AND mapped_family_version IS NOT NULL)),
+          FOREIGN KEY(created_from_model_run_id) REFERENCES model_runs(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+          FOREIGN KEY(mapped_family_id, mapped_family_version) REFERENCES semantic_families(id, version)
+            ON UPDATE RESTRICT ON DELETE RESTRICT
+        ) STRICT;
+        INSERT INTO family_candidates_new (id, role, label, distinction, parameter_hints_json, signature, state, created_from_model_run_id, mapped_family_id, mapped_family_version, created_at, updated_at)
+          SELECT id, role, label, distinction, parameter_hints_json, signature, state, created_from_model_run_id, mapped_family_id, mapped_family_version, created_at, updated_at FROM family_candidates;
+        DROP TABLE family_candidates;
+        ALTER TABLE family_candidates_new RENAME TO family_candidates;
+        CREATE INDEX IF NOT EXISTS family_candidates_state_role ON family_candidates(state, role, id);
+      `);
+      const violations = db.prepare("PRAGMA foreign_key_check").all();
+      if (violations.length > 0) throw new Error(`Rebuilding family_candidates broke ${violations.length} foreign key reference(s).`);
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 /** Drop a leaf_proposals table whose kind CHECK predates the current kinds; the schema recreates it. */
 function upgradeLeafProposals(db: DatabaseSync): void {
   const row = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'leaf_proposals'").get() as { sql: string } | undefined;
@@ -588,6 +726,9 @@ export function initializeWorkbench(db: DatabaseSync): void {
   if (initialized.has(db)) return;
   db.exec("PRAGMA busy_timeout = 3000");
   upgradeLeafRoles(db);
+  upgradeProposalRoles(db);
+  upgradeFamilyCandidateRoles(db);
+  upgradeSourceSpanNormalizedSurface(db);
   db.exec("PRAGMA foreign_keys = ON");
   withTransaction(db, () => {
     db.exec(SCHEMA);
@@ -706,13 +847,13 @@ export function insertSpan(
 
 
   const insert = db.prepare(
-    "INSERT OR IGNORE INTO source_spans (ability_version_id, fragment, start_byte, end_byte, exact_text) VALUES (?, ?, ?, ?, ?)",
+    "INSERT OR IGNORE INTO source_spans (ability_version_id, fragment, start_byte, end_byte, exact_text, normalized_surface) VALUES (?, ?, ?, ?, ?, ?)",
   );
   const select = db.prepare(
     "SELECT id, exact_text FROM source_spans WHERE ability_version_id = ? AND start_byte = ? AND end_byte = ? AND fragment = ?",
   );
   {
-    insert.run(abilityVersionId, fragment, startByte, endByte, exactText);
+    insert.run(abilityVersionId, fragment, startByte, endByte, exactText, normalizedSurface(exactText));
     const span = select.get(abilityVersionId, startByte, endByte, fragment) as
       | { id: number; exact_text: string }
       | undefined;

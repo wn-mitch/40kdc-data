@@ -22,7 +22,11 @@ const MEMBERS_PER_CLUSTER = 8;
 const EXAMPLES_PER_FAMILY = 3;
 
 /** DeepSeek's own reported token accounting for one chat completion. */
-export type DeepSeekUsage = { prompt_tokens: number; prompt_cache_hit_tokens: number; prompt_cache_miss_tokens: number; completion_tokens: number };
+export type DeepSeekUsage = {
+  prompt_tokens: number; prompt_cache_hit_tokens: number; prompt_cache_miss_tokens: number; completion_tokens: number;
+  /** From `usage.completion_tokens_details.reasoning_tokens` when DeepSeek reports it; already included in `completion_tokens` (and so already billed as output). Informational only. */
+  reasoning_tokens?: number;
+};
 export type ModelReply = {
   body: Record<string, unknown>; model: string; model_version: string; cost_usd: number | null; latency_ms: number | null;
   /** Present only for a DeepSeek reply; other model transports leave it unset. */
@@ -32,19 +36,23 @@ export type ModelReply = {
 export type ModelCall = (instructions: string, request: string) => Promise<ModelReply>;
 
 /**
- * DeepSeek's published off-peak per-million-token prices for deepseek-v4-pro, as of 2026-09-29:
- * https://api-docs.deepseek.com/quick_start/pricing — $0.022 cache-hit input, $0.66 cache-miss
- * input, $1.98 output. Peak hours (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) double every price;
- * this always reports the off-peak rate and says so, rather than silently mis-costing a peak call.
+ * DeepSeek's published off-peak per-million-token prices, as of 2026-09-29:
+ * https://api-docs.deepseek.com/quick_start/pricing. Peak hours (01:00-04:00 and 06:00-10:00
+ * UTC, Mon-Fri) double every price; this always reports the off-peak rate and says so, rather
+ * than silently mis-costing a peak call.
  */
 export const DEEPSEEK_PRICE_SOURCE = "https://api-docs.deepseek.com/quick_start/pricing (off-peak, read 2026-09-29)";
-const DEEPSEEK_PRICE_PER_MILLION_USD = { cacheHitInput: 0.022, cacheMissInput: 0.66, output: 1.98 };
+const DEEPSEEK_PRICE_PER_MILLION_USD: Record<string, { cacheHitInput: number; cacheMissInput: number; output: number }> = {
+  "deepseek-v4-pro": { cacheHitInput: 0.022, cacheMissInput: 0.66, output: 1.98 },
+  "deepseek-flash": { cacheHitInput: 0.003, cacheMissInput: 0.15, output: 0.6 },
+};
 
 /** Cost of one DeepSeek reply from its own usage accounting, at the off-peak published prices. */
-export function deepseekCostUsd(usage: DeepSeekUsage): number {
-  return (usage.prompt_cache_hit_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.cacheHitInput
-    + (usage.prompt_cache_miss_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.cacheMissInput
-    + (usage.completion_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.output;
+export function deepseekCostUsd(usage: DeepSeekUsage, model: string = DEEPSEEK_MODEL): number {
+  const price = DEEPSEEK_PRICE_PER_MILLION_USD[model] ?? DEEPSEEK_PRICE_PER_MILLION_USD[DEEPSEEK_MODEL]!;
+  return (usage.prompt_cache_hit_tokens / 1_000_000) * price.cacheHitInput
+    + (usage.prompt_cache_miss_tokens / 1_000_000) * price.cacheMissInput
+    + (usage.completion_tokens / 1_000_000) * price.output;
 }
 
 export const LEAF_PROPOSAL_INSTRUCTIONS = [
@@ -57,6 +65,11 @@ export const LEAF_PROPOSAL_INSTRUCTIONS = [
 ].join("\n");
 
 export const DEEPSEEK_MODEL = "deepseek-v4-pro";
+/** DeepSeek's fast/cheap model (the API's own id; the `omp` CLI profile calls it "deepseek-v4-flash"). */
+export const DEEPSEEK_FLASH_MODEL = "deepseek-flash";
+/** `reasoning_effort` request values DeepSeek's chat-completions API accepts. */
+export const DEEPSEEK_REASONING_EFFORTS = ["none", "low", "high", "max"] as const;
+export type DeepSeekReasoningEffort = typeof DEEPSEEK_REASONING_EFFORTS[number];
 const DEEPSEEK_ENDPOINT = process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/chat/completions";
 /** The gitignored file holding the key when the environment does not. */
 const DEEPSEEK_ENV_FILE = fileURLToPath(new URL("../../../_private/round5c/.env", import.meta.url));
@@ -72,21 +85,53 @@ export function deepseekKey(): string {
   throw Object.assign(new Error("DEEPSEEK_API_KEY is not set in the environment or in _private/round5c/.env."), { status: 503 });
 }
 
+/**
+ * DeepSeek's published ceiling for `max_tokens` (deepseek-v4-pro's context: 1M in, up to 384K
+ * out) is 393216; the API's own default in thinking mode is 64K (128K at `reasoning_effort:
+ * "max"`). The pilot's own default request budget below (100000) sits well above what a
+ * two-ability Luna response has needed in practice (~27K completion tokens observed) but under
+ * the ceiling, since reasoning tokens are billed and counted as completion tokens alongside the
+ * JSON answer — a request that reasons heavily before answering can exhaust a too-small budget
+ * before it ever reaches its answer ("DeepSeek stopped with length"). The old hardcoded 32768
+ * sat *below* the model's own thinking-mode default and caused exactly that truncation.
+ */
+export const DEEPSEEK_MAX_TOKENS_CEILING = 393216;
+const DEFAULT_MAX_TOKENS = 100000;
+
+/** Hard wall-clock budget for one DeepSeek HTTP call; a timeout is a transport failure like any other. */
+const DEFAULT_REQUEST_TIMEOUT_MS = 5 * 60 * 1000;
+
 /** DeepSeek's chat completions in JSON mode. */
-export function deepseekModelCall(model = DEEPSEEK_MODEL): ModelCall {
+export function deepseekModelCall(
+  model = DEEPSEEK_MODEL, maxTokens = DEFAULT_MAX_TOKENS, reasoningEffort?: DeepSeekReasoningEffort, timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS,
+): ModelCall {
   return async (instructions, request) => {
     const key = deepseekKey();
     const started = Date.now();
-    const response = await fetch(DEEPSEEK_ENDPOINT, {
-      method: "POST",
-      headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-      body: JSON.stringify({ model, temperature: 0, response_format: { type: "json_object" }, max_tokens: 32768,
-        messages: [{ role: "system", content: instructions }, { role: "user", content: request }] }),
-      signal: AbortSignal.timeout(10 * 60 * 1000),
-    });
+    let response: Response;
+    try {
+      response = await fetch(DEEPSEEK_ENDPOINT, {
+        method: "POST",
+        headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
+        body: JSON.stringify({
+          model, temperature: 0, response_format: { type: "json_object" }, max_tokens: maxTokens,
+          ...(reasoningEffort !== undefined ? { reasoning_effort: reasoningEffort } : {}),
+          messages: [{ role: "system", content: instructions }, { role: "user", content: request }],
+        }),
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch (error) {
+      if (error instanceof Error && error.name === "TimeoutError") {
+        throw new Error(`DeepSeek request timed out after ${Math.round(timeoutMs / 1000)}s.`);
+      }
+      throw error;
+    }
     const payload = await response.json().catch(() => null) as {
       model?: unknown; choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }>; error?: { message?: unknown };
-      usage?: { prompt_tokens?: unknown; prompt_cache_hit_tokens?: unknown; prompt_cache_miss_tokens?: unknown; completion_tokens?: unknown };
+      usage?: {
+        prompt_tokens?: unknown; prompt_cache_hit_tokens?: unknown; prompt_cache_miss_tokens?: unknown; completion_tokens?: unknown;
+        completion_tokens_details?: { reasoning_tokens?: unknown };
+      };
     } | null;
     if (!response.ok) throw new Error(`DeepSeek HTTP ${response.status}: ${String(payload?.error?.message ?? response.statusText).slice(0, 300)}`);
     const choice = payload?.choices?.[0];
@@ -102,13 +147,15 @@ export function deepseekModelCall(model = DEEPSEEK_MODEL): ModelCall {
     const returned = typeof payload?.model === "string" ? payload.model : model;
     const rawUsage = payload?.usage;
     const num = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
+    const reasoningTokens = rawUsage?.completion_tokens_details?.reasoning_tokens;
     const usage: DeepSeekUsage | undefined = rawUsage ? {
       prompt_tokens: num(rawUsage.prompt_tokens), prompt_cache_hit_tokens: num(rawUsage.prompt_cache_hit_tokens),
       prompt_cache_miss_tokens: num(rawUsage.prompt_cache_miss_tokens), completion_tokens: num(rawUsage.completion_tokens),
+      ...(reasoningTokens !== undefined ? { reasoning_tokens: num(reasoningTokens) } : {}),
     } : undefined;
     return {
       body: body as Record<string, unknown>, model: returned, model_version: returned, latency_ms: Date.now() - started,
-      cost_usd: usage ? deepseekCostUsd(usage) : null, usage,
+      cost_usd: usage ? deepseekCostUsd(usage, model) : null, usage,
     };
   };
 }

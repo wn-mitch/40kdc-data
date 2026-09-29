@@ -143,7 +143,7 @@ export const PREDICATE_FAMILIES_2: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "CONDITION",
     label: "Unit was moved over",
-    description: "Requires a unit to have been moved over by a named unit during that move, or within a wider history window.",
+    description: "\"That unit it moved over during that move\", \"a unit this model moved across this phase\": the subject unit's models were moved across by `by` during the move just made (omit `window`), or within a wider window (phase, turn, round, battle, or the previous turn) when the wording says so explicitly. This is the condition on a unit selected by proximity to a move, not the move itself.",
     starter: { by: "this-model" },
     parameterSchema: withSubjectAndNegation({ by: { enum: SUBJECT_REF }, window: { enum: HISTORY_WINDOWS } }, ["by"]),
   },

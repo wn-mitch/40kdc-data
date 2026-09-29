@@ -125,15 +125,18 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
       }
     }
   }
+  // Pending wording the lexical scan cannot see (for example across a clause break) still counts.
+  // Looked up by the indexed `source_spans.normalized_surface` column, not a corpus-wide scan of
+  // every pending/unresolved proposal renormalized in JS: `applySurface` calls this once per
+  // deterministic piece in a confirm round, so an O(corpus) lookup here is O(corpus) per piece.
   const proposals = db.prepare(`
     SELECT abilities.id AS ability_version_id, abilities.faction_id, abilities.ability_id, source_spans.fragment,
       source_spans.start_byte, source_spans.end_byte, source_spans.exact_text
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE abilities.current = 1 AND proposals.status IN ('pending', 'unresolved')
-  `).all() as Occurrence[];
-  // Pending wording the lexical scan cannot see (for example across a clause break) still counts.
-  for (const proposal of proposals) if (normalizedSurface(proposal.exact_text) === surface) add(proposal);
+    WHERE abilities.current = 1 AND proposals.status IN ('pending', 'unresolved') AND source_spans.normalized_surface = ?
+  `).all(surface) as Occurrence[];
+  for (const proposal of proposals) add(proposal);
   return [...found.values()].sort((left, right) => left.ability_version_id - right.ability_version_id || left.start_byte - right.start_byte);
 }
 

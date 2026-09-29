@@ -139,6 +139,9 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Version 2/2 (batch 7a) only add an optional range_cap_inches/counts_as_move field.
   { family: "aura-range", from: 1, to: 2, map: (parameters) => parameters },
   { family: "make-move", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 3 only widens which subjects within/beyond accept; every version 2 leaf's subject
+  // (never more than "target" for those two kinds under v2's own rule) still fits.
+  { family: "unit-position", from: 2, to: 3, map: (parameters) => parameters },
 ];
 
 export type FamilyVersionReport = {

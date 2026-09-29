@@ -5,11 +5,12 @@ import { fileURLToPath } from "node:url";
 
 import { canonicalize, hashJson } from "../round4/hash.js";
 import {
+  LEAF_ROLES,
   REVIEWED_FAMILY_REGISTRY,
-  SEMANTIC_ROLES,
+  familyFitsKind,
   familyRole,
   validateFingerprint,
-  type SemanticRole,
+  type LeafRole,
 } from "./contracts.js";
 import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, exactSpan, initializeWorkbench, insertSpan, withTransaction } from "./db.js";
@@ -34,14 +35,32 @@ import { anchorExactText, parseHypothesis, parseQualifiersV2, parseStructuralSpa
 const ABILITY_BUDGET_BYTES = 48 * 1024;
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 15;
+
+/**
+ * Estimated output tokens one requested ability costs the model. The response echoes the source
+ * back as tiled spans (each carrying its own start/end/exact_text/role/family_id/parameters), so
+ * the reply is several times larger than the source text itself; the DeepSeek transport measured
+ * this empirically (15 abilities per request overflowed its 32,768-token output limit; 2
+ * completed), and this ratio approximates that observation from each ability's own byte size
+ * rather than hard-coding the abilities-per-request count.
+ */
+const OUTPUT_TOKENS_PER_SOURCE_BYTE = 3;
+/** Reserves headroom under a 32,768-token output cap (DeepSeek's) for the transport's own overhead. */
+export const DEFAULT_OUTPUT_BUDGET_TOKENS = 24_000;
+
+function estimatedOutputTokens(ability: CurrentAbility): number {
+  return Math.ceil(Buffer.byteLength(ability.source_text, "utf8") * OUTPUT_TOKENS_PER_SOURCE_BYTE);
+}
 const repositoryRoot = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
 const defaultArtifactDirectory = resolve(repositoryRoot, "_private", "round5c");
 
-const roleCues: Record<SemanticRole | "CONNECTIVE", readonly string[]> = {
+const roleCues: Record<LeafRole | "CONNECTIVE", readonly string[]> = {
   CONDITION: ["if", "while", "unless", "below", "leading"],
   EVENT: ["when", "each time", "after", "before", "whenever"],
   EFFECT: ["re-roll", "add", "subtract", "gain", "lose", "spend", "set"],
   DURATION: ["until", "end of"],
+  RESTRICTION: ["once per", "you can", "the bearer can", "can be used only", "target this Stratagem"],
+  COMBINATOR: ["instead"],
   CONNECTIVE: ["and", "or", "then", "while", "if"],
 };
 
@@ -50,7 +69,7 @@ type ConfirmedSpan = {
   start_byte: number;
   end_byte: number;
   exact_text: string;
-  role: SemanticRole;
+  role: LeafRole;
   family_id: string;
   family_version: number;
   parameters: Record<string, unknown>;
@@ -85,7 +104,7 @@ export type PreparedRequest = {
   registry: Array<{
     id: string;
     version: number;
-    role: SemanticRole;
+    role: LeafRole;
     parameter_schema: Record<string, unknown>;
   }>;
   confirmed_examples: Array<ConfirmedSpan & {
@@ -94,7 +113,7 @@ export type PreparedRequest = {
     source_hash: string;
   }>;
   lexical_vocabulary: {
-    role_cues: Record<SemanticRole | "CONNECTIVE", readonly string[]>;
+    role_cues: Record<LeafRole | "CONNECTIVE", readonly string[]>;
     known_forms: string[];
   };
   abilities: RequestAbility[];
@@ -153,7 +172,7 @@ function requestedLimit(options: { limit?: number } | undefined): number {
 
 function currentAbilities(db: DatabaseSync): CurrentAbility[] {
   return db.prepare(`
-    SELECT id, faction_id, ability_id, source_hash, source_text, fragments_json
+    SELECT id, faction_id, ability_id, source_hash, source_text, fragments_json, source_type
     FROM abilities
     WHERE current = 1
     ORDER BY faction_id, ability_id, id
@@ -180,7 +199,7 @@ function confirmedSpans(db: DatabaseSync, abilityVersionId: number): ConfirmedSp
     start_byte: number;
     end_byte: number;
     exact_text: string;
-    role: SemanticRole;
+    role: LeafRole;
     family_id: string;
     family_version: number;
     parameters_json: string;
@@ -219,7 +238,7 @@ function selectedExamples(db: DatabaseSync): PreparedRequest["confirmed_examples
     start_byte: number;
     end_byte: number;
     exact_text: string;
-    role: SemanticRole;
+    role: LeafRole;
     family_id: string;
     family_version: number;
     parameters_json: string;
@@ -245,7 +264,7 @@ function activeRegistry(db: DatabaseSync): PreparedRequest["registry"] {
     FROM semantic_families
     WHERE status = 'active'
     ORDER BY id, version
-  `).all() as Array<{ id: string; version: number; role: SemanticRole; parameter_schema_json: string }>;
+  `).all() as Array<{ id: string; version: number; role: LeafRole; parameter_schema_json: string }>;
   if (rows.length !== REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).length) throw new Error("The persisted reviewed semantic registry is incomplete.");
   return rows.map((row) => ({
     id: row.id,
@@ -383,6 +402,12 @@ export type PrepareLunaOptions = {
    * requests across multiple calls, batched the same way as an unrestricted run.
    */
   abilityVersionIds?: ReadonlySet<number>;
+  /**
+   * Stop adding abilities to the batch once their combined `estimatedOutputTokens` would exceed
+   * this budget, even if `limit` has not yet been reached. Unset preserves the byte-budget-only
+   * behavior every existing caller and test relies on.
+   */
+  outputBudgetTokens?: number;
 };
 
 function positiveId(value: unknown, label: string): number | undefined {
@@ -468,6 +493,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
       const fresh = abilityVersionId !== undefined || retryScope !== null
         ? candidates
         : candidates.filter((candidate) => !completed.has(candidate.ability.id));
+      let outputTokensSelected = 0;
       for (const candidate of fresh.length ? fresh : candidates) {
         if (selected.length >= limit) break;
         const next = requestAbility(candidate.ability, candidate.uncovered, db);
@@ -475,14 +501,38 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
           oversized.push(candidate.ability);
           continue;
         }
+        // A single ability always gets its own batch even if it alone exceeds the output budget;
+        // otherwise it would never be selected by any batch size.
+        const nextOutputTokens = estimatedOutputTokens(candidate.ability);
+        if (
+          selected.length > 0
+          && options.outputBudgetTokens !== undefined
+          && outputTokensSelected + nextOutputTokens > options.outputBudgetTokens
+        ) {
+          break;
+        }
         const tentative: PreparedRequest = { ...base, abilities: [...selected.map((item) => item.request), next] };
-        if (canonicalBytes(tentative) <= maxRequestBytes) selected.push({ ...candidate, request: next });
+        if (canonicalBytes(tentative) <= maxRequestBytes) {
+          selected.push({ ...candidate, request: next });
+          outputTokensSelected += nextOutputTokens;
+        }
       }
       recordManualOversize(db, oversized);
       // Commit the oversize gaps, then report: the source stays actionable by manual review.
       if (selected.length === 0) return null;
 
-      const request: PreparedRequest = { ...base, abilities: selected.map((item) => item.request) };
+      // Only the families that fit at least one selected ability's kind: a Stratagem-only family
+      // (use-window, stratagem-target) has no meaning on a unit ability's own timing restriction,
+      // and sending it anyway is exactly what let the model mislabel one with the other. Computed
+      // from the FINAL selection, after the byte-budget loop above (which used the full, unscoped
+      // `base.registry` for its size math) — the scoped registry is never larger, so the request
+      // that's actually sent still fits inside `maxRequestBytes`.
+      const selectedKinds = new Set(selected.map((item) => item.ability.source_type));
+      const scopedRegistry = base.registry.filter((family) => {
+        const definition = REVIEWED_FAMILY_REGISTRY.find((candidate) => candidate.id === family.id && candidate.version === family.version);
+        return !definition?.kinds || definition.kinds.some((kind) => selectedKinds.has(kind));
+      });
+      const request: PreparedRequest = { ...base, registry: scopedRegistry, abilities: selected.map((item) => item.request) };
       const serializedRequest = serializeLunaRequest(request);
       const requestBytes = Buffer.byteLength(serializedRequest, "utf8");
       if (requestBytes > maxRequestBytes) throw new Error("Luna request cap enforcement failed.");
@@ -599,7 +649,7 @@ function abilityIdentity(factionId: string, abilityId: string, sourceHash: strin
 
 function currentAbilityForConfigured(db: DatabaseSync, configured: RequestAbilityConfig): CurrentAbility {
   const ability = db.prepare(`
-    SELECT id, faction_id, ability_id, source_hash, source_text, fragments_json
+    SELECT id, faction_id, ability_id, source_hash, source_text, fragments_json, source_type
     FROM abilities
     WHERE id = ? AND faction_id = ? AND ability_id = ? AND source_hash = ? AND current = 1
   `).get(
@@ -630,6 +680,8 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
   const connectives: ParsedConnective[] = [];
   const unresolved: ParsedUnresolved[] = [];
   const seenAbilities = new Set<string>();
+  let rejectedSpans = 0;
+  let droppedCoveredSpans = 0;
 
   for (const [abilityIndex, value] of root.abilities.entries()) {
     const item = asRecord(value, `response.abilities[${abilityIndex}]`);
@@ -647,6 +699,18 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
     if (seenAbilities.has(key)) throw new Error(`response repeats ability ${factionId}/${abilityId}.`);
     seenAbilities.add(key);
     const fragments = parseFragments(JSON.parse(configured.ability.fragments_json), configured.ability.source_text, "abilities.fragments_json");
+    // Binding surfaces this ability's response claims — read from the raw, not-yet-validated
+    // structural_spans (parsed properly further below), just to let a reference-shaped parameter
+    // value point at one. A malformed structural span here still fails its own validation later.
+    const bindingSurfaces = new Set<string>();
+    if (version === 2 && Array.isArray(item.structural_spans)) {
+      for (const raw of item.structural_spans) {
+        if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+          const record = raw as Record<string, unknown>;
+          if (record.kind === "binding" && typeof record.exact_text === "string") bindingSurfaces.add(record.exact_text);
+        }
+      }
+    }
 
     if (!Array.isArray(item.spans)) throw new TypeError(`response.abilities[${abilityIndex}].spans must be an array.`);
     for (const [spanIndex, value] of item.spans.entries()) {
@@ -672,77 +736,107 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
         throw new Error(`response.abilities[${abilityIndex}].spans[${spanIndex}].exact_text does not match source bytes.`);
       }
       const fragment = fragmentFor(fragments, startByte, endByte);
-      const status = nonblank(span.status, `response.abilities[${abilityIndex}].spans[${spanIndex}].status`);
-      if (status !== "EXISTING" && status !== "NOVEL" && status !== "UNRESOLVED") {
-        throw new TypeError(`response.abilities[${abilityIndex}].spans[${spanIndex}].status is invalid.`);
-      }
-      const rawRole = nonblank(span.role, `response.abilities[${abilityIndex}].spans[${spanIndex}].role`);
-      const reportedRole = rawRole === "UNRESOLVED"
-        ? "UNRESOLVED"
-        : (SEMANTIC_ROLES as readonly string[]).includes(rawRole)
-          ? rawRole as SemanticRole
-          : (() => { throw new TypeError(`response.abilities[${abilityIndex}].spans[${spanIndex}].role is invalid.`); })();
-      const description = span.description === undefined ? null : nonblank(span.description, `response.abilities[${abilityIndex}].spans[${spanIndex}].description`);
-      let qualifiers: ParsedQualifier[];
-      if (version === 2) {
-        const parsedQualifiers = parseQualifiersV2(span.qualifier_spans, configured.ability, startByte, endByte, `response.abilities[${abilityIndex}].spans[${spanIndex}].qualifier_spans`);
-        qualifiers = parsedQualifiers.qualifiers;
-        offsetRepaired ||= parsedQualifiers.repaired;
-      } else {
-        qualifiers = parseQualifiers(
-          span.qualifier_spans,
-          configured.ability,
-          fragments,
-          startByte,
-          endByte,
-          `response.abilities[${abilityIndex}].spans[${spanIndex}].qualifier_spans`,
-        );
-      }
-      let fingerprintId: string | null = null;
-      let role: SemanticRole | "UNRESOLVED" = reportedRole;
-      if (status === "EXISTING") {
-        if (reportedRole === "UNRESOLVED") throw new TypeError("An EXISTING span must declare a semantic role.");
-        const familyId = nonblank(span.family_id, `response.abilities[${abilityIndex}].spans[${spanIndex}].family_id`);
-        const familyVersion = safeInteger(span.family_version, `response.abilities[${abilityIndex}].spans[${spanIndex}].family_version`);
-        if (familyVersion < 1) throw new RangeError("An EXISTING family_version must be positive.");
-        const parameters = parseParameters(span.parameters, `response.abilities[${abilityIndex}].spans[${spanIndex}].parameters`);
-        if (familyRole(familyId, familyVersion) !== reportedRole) {
-          throw new TypeError(`response.abilities[${abilityIndex}].spans[${spanIndex}] role does not match its reviewed family.`);
-        }
-        fingerprintId = validateFingerprint(db, familyId, parameters, familyVersion, exactText);
-        role = reportedRole;
-      } else {
-        for (const field of ["family_id", "family_version", "parameters"] as const) {
-          if (span[field] !== undefined) throw new TypeError(`${field} is only allowed for EXISTING spans.`);
-        }
-        if (status === "NOVEL" && reportedRole === "UNRESOLVED") throw new TypeError("A NOVEL span must declare a semantic role.");
-        if (status === "UNRESOLVED") role = "UNRESOLVED";
-      }
       const spanLabel = `response.abilities[${abilityIndex}].spans[${spanIndex}]`;
-      if (version === 2 && status === "NOVEL" && span.hypothesis === undefined) {
-        throw new TypeError(`${spanLabel} is NOVEL and must carry a hypothesis; return an unresolved region instead if none is justified.`);
+      // Everything from here on classifies what this span MEANS (status, role, family,
+      // parameters, hypothesis) rather than where it sits in the source. A model can misjudge
+      // any of that for one span without the rest of its response being untrustworthy, so a
+      // failure here downgrades just this span to a synthetic UNRESOLVED entry carrying the
+      // rejection reason (visible to review and the vocabulary sweep) instead of failing the
+      // whole response — see `rejected_spans`. Only the source-position parsing above (offsets,
+      // exact_text anchoring) can still fail the response: those aren't per-span classification
+      // choices, they're whether the model followed the byte-offset contract at all.
+      try {
+        const status = nonblank(span.status, `${spanLabel}.status`);
+        if (status !== "EXISTING" && status !== "NOVEL" && status !== "UNRESOLVED") {
+          throw new TypeError(`${spanLabel}.status is invalid.`);
+        }
+        const rawRole = nonblank(span.role, `${spanLabel}.role`);
+        const reportedRole = rawRole === "UNRESOLVED"
+          ? "UNRESOLVED"
+          : (LEAF_ROLES as readonly string[]).includes(rawRole)
+            ? rawRole as LeafRole
+            : (() => { throw new TypeError(`${spanLabel}.role is invalid.`); })();
+        const description = span.description === undefined ? null : nonblank(span.description, `${spanLabel}.description`);
+        let qualifiers: ParsedQualifier[];
+        if (version === 2) {
+          const parsedQualifiers = parseQualifiersV2(span.qualifier_spans, configured.ability, startByte, endByte, `${spanLabel}.qualifier_spans`);
+          qualifiers = parsedQualifiers.qualifiers;
+          offsetRepaired ||= parsedQualifiers.repaired;
+        } else {
+          qualifiers = parseQualifiers(span.qualifier_spans, configured.ability, fragments, startByte, endByte, `${spanLabel}.qualifier_spans`);
+        }
+        let fingerprintId: string | null = null;
+        let role: LeafRole | "UNRESOLVED" = reportedRole;
+        if (status === "EXISTING") {
+          if (reportedRole === "UNRESOLVED") throw new TypeError("An EXISTING span must declare a semantic role.");
+          const familyId = nonblank(span.family_id, `${spanLabel}.family_id`);
+          const familyVersion = safeInteger(span.family_version, `${spanLabel}.family_version`);
+          if (familyVersion < 1) throw new RangeError("An EXISTING family_version must be positive.");
+          const parameters = parseParameters(span.parameters, `${spanLabel}.parameters`);
+          if (familyRole(familyId, familyVersion) !== reportedRole) {
+            throw new TypeError(`${spanLabel} role does not match its reviewed family.`);
+          }
+          const familyDefinition = REVIEWED_FAMILY_REGISTRY.find((candidate) => candidate.id === familyId && candidate.version === familyVersion);
+          if (!familyDefinition || !familyFitsKind(familyDefinition, configured.ability.source_type)) {
+            throw new TypeError(`${familyId}@${familyVersion} does not apply to a ${configured.ability.source_type} ability.`);
+          }
+          fingerprintId = validateFingerprint(db, familyId, parameters, familyVersion, exactText, {
+            wholeSourceText: configured.ability.source_text,
+            bindingSurfaces,
+          });
+          role = reportedRole;
+        } else {
+          for (const field of ["family_id", "family_version", "parameters"] as const) {
+            if (span[field] !== undefined) throw new TypeError(`${field} is only allowed for EXISTING spans.`);
+          }
+          if (status === "NOVEL" && reportedRole === "UNRESOLVED") throw new TypeError("A NOVEL span must declare a semantic role.");
+          if (status === "UNRESOLVED") role = "UNRESOLVED";
+        }
+        if (version === 2 && status === "NOVEL" && span.hypothesis === undefined) {
+          throw new TypeError(`${spanLabel} is NOVEL and must carry a hypothesis; return an unresolved region instead if none is justified.`);
+        }
+        if (status !== "NOVEL" && span.hypothesis !== undefined) throw new TypeError(`${spanLabel}.hypothesis is only allowed for NOVEL spans.`);
+        const hypothesis = span.hypothesis === undefined
+          ? null
+          : parseHypothesis(span.hypothesis, configured.ability, startByte, endByte, `${spanLabel}.hypothesis`);
+        semanticSpans.push({
+          kind: "semantic",
+          ability: configured.ability,
+          fragment,
+          start_byte: startByte,
+          end_byte: endByte,
+          exact_text: exactText,
+          reported_role: reportedRole,
+          role,
+          status,
+          fingerprint_id: fingerprintId,
+          qualifier_spans: qualifiers,
+          description,
+          hypothesis,
+          index: spanIndex,
+          offset_repaired: offsetRepaired,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        semanticSpans.push({
+          kind: "semantic",
+          ability: configured.ability,
+          fragment,
+          start_byte: startByte,
+          end_byte: endByte,
+          exact_text: exactText,
+          reported_role: "UNRESOLVED",
+          role: "UNRESOLVED",
+          status: "UNRESOLVED",
+          fingerprint_id: null,
+          qualifier_spans: [],
+          description: `Rejected: ${message}`,
+          hypothesis: null,
+          index: spanIndex,
+          offset_repaired: offsetRepaired,
+        });
+        rejectedSpans += 1;
       }
-      if (status !== "NOVEL" && span.hypothesis !== undefined) throw new TypeError(`${spanLabel}.hypothesis is only allowed for NOVEL spans.`);
-      const hypothesis = span.hypothesis === undefined
-        ? null
-        : parseHypothesis(span.hypothesis, configured.ability, startByte, endByte, `${spanLabel}.hypothesis`);
-      semanticSpans.push({
-        kind: "semantic",
-        ability: configured.ability,
-        fragment,
-        start_byte: startByte,
-        end_byte: endByte,
-        exact_text: exactText,
-        reported_role: reportedRole,
-        role,
-        status,
-        fingerprint_id: fingerprintId,
-        qualifier_spans: qualifiers,
-        description,
-        hypothesis,
-        index: spanIndex,
-        offset_repaired: offsetRepaired,
-      });
     }
     if (version === 2) {
       structural.push(...parseStructuralSpans(
@@ -820,6 +914,8 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
     structural,
     connectives,
     unresolved,
+    rejected_spans: rejectedSpans,
+    dropped_covered_spans: droppedCoveredSpans,
   };
 }
 
@@ -850,19 +946,47 @@ function intervalOverlaps(left: { start_byte: number; end_byte: number }, right:
   return left.start_byte < right.end_byte && right.start_byte < left.end_byte;
 }
 
-function assertRegionsAreUncovered(parsed: ParsedResponse, configured: readonly RequestAbilityConfig[]): void {
+/**
+ * Drop, rather than fail the response over, any region that lands outside the prepared
+ * uncovered_regions (already covered by something else since the request was prepared, or never
+ * inside them at all). This isn't a model error worth surfacing to review — the bytes are already
+ * accounted for — so it's a silent, counted drop, not an unresolved region and not a hard failure
+ * of the rest of the response. A structural span parented to a dropped semantic span is dropped
+ * with it: its own bytes are a subset of its parent's, so it would fail the same check.
+ */
+export function dropUncoveredRegions(parsed: ParsedResponse, configured: readonly RequestAbilityConfig[]): void {
   const byAbility = new Map(configured.map((ability) => [ability.ability_version_id, ability.uncovered_regions]));
-  for (const region of [
-    ...parsed.semantic_spans,
-    ...parsed.structural,
-    ...parsed.connectives,
-    ...parsed.unresolved,
-  ]) {
+  const isCovered = (region: { ability: CurrentAbility; fragment: string; start_byte: number; end_byte: number }): boolean => {
     const uncovered = byAbility.get(region.ability.id) ?? [];
-    if (!uncovered.some((candidate) => candidate.fragment === region.fragment && intervalOverlaps(candidate, region))) {
-      throw new Error(`Luna response region is outside the prepared uncovered source for ${region.ability.faction_id}/${region.ability.ability_id}.`);
-    }
+    return uncovered.some((candidate) => candidate.fragment === region.fragment && intervalOverlaps(candidate, region));
+  };
+  let dropped = 0;
+
+  const keptSemantic: ParsedSemanticSpan[] = [];
+  const droppedSemantic = new Set<ParsedSemanticSpan>();
+  for (const span of parsed.semantic_spans) {
+    if (isCovered(span)) keptSemantic.push(span);
+    else { droppedSemantic.add(span); dropped += 1; }
   }
+  parsed.semantic_spans = keptSemantic;
+
+  parsed.structural = parsed.structural.filter((span) => {
+    if (span.parent && droppedSemantic.has(span.parent)) { dropped += 1; return false; }
+    if (!isCovered(span)) { dropped += 1; return false; }
+    return true;
+  });
+  parsed.connectives = parsed.connectives.filter((connective) => {
+    if (isCovered(connective)) return true;
+    dropped += 1;
+    return false;
+  });
+  parsed.unresolved = parsed.unresolved.filter((region) => {
+    if (isCovered(region)) return true;
+    dropped += 1;
+    return false;
+  });
+
+  parsed.dropped_covered_spans += dropped;
 }
 
 function trimToMeaningful(source: string, start: number, end: number): { start_byte: number; end_byte: number } | null {
@@ -964,7 +1088,7 @@ function insertProposal(
   db: DatabaseSync,
   spanId: number,
   fingerprintId: string | null,
-  role: SemanticRole | "CONNECTIVE" | "UNRESOLVED",
+  role: LeafRole | "CONNECTIVE" | "UNRESOLVED",
   status: "pending" | "unresolved",
   runId: number,
   reason: string,
@@ -1036,7 +1160,7 @@ function persistParsedResponse(db: DatabaseSync, run: ModelRun, parsed: ParsedRe
       db,
       spanId,
       span.fingerprint_id,
-      span.role as SemanticRole,
+      span.role as LeafRole,
       "pending",
       run.id,
       proposalReason(runId, run.input_hash, parsed.version, {
@@ -1139,11 +1263,20 @@ function persistParsedResponse(db: DatabaseSync, run: ModelRun, parsed: ParsedRe
     provenance.owner,
   );
   if (completed.changes !== 1) throw new LunaRunError(409, `Luna model run ${runId} was claimed, abandoned, or completed by another runner.`);
-  return { proposals, unresolved, structural, candidates };
+  return { proposals, unresolved, structural, candidates, rejected_spans: parsed.rejected_spans, dropped_covered_spans: parsed.dropped_covered_spans };
 }
 
 /** Counts of pending review work an import created; none of it is reviewed authority. */
-export type LunaImportSummary = { proposals: number; unresolved: number; structural: number; candidates: number };
+export type LunaImportSummary = {
+  proposals: number;
+  unresolved: number;
+  structural: number;
+  candidates: number;
+  /** Spans this response labelled but whose classification failed validation; imported as UNRESOLVED with the reason. */
+  rejected_spans: number;
+  /** Spans silently dropped for landing on bytes already covered by the time the response was checked. */
+  dropped_covered_spans: number;
+};
 
 /** A redacted, source-free reason a run closed without importing anything. */
 export type LunaFailure = { stage: "transport" | "parse" | "import" | "abandon"; reason_code: string; message: string; exit_code?: number | null };
@@ -1230,7 +1363,7 @@ export function importLuna(
       }
       const abilities = current.map((item) => item.ability);
       assertNoResponseOverlap(parsed, abilities);
-      assertRegionsAreUncovered(parsed, configured);
+      dropUncoveredRegions(parsed, configured);
       addImplicitUnresolved(parsed, configured, abilities);
       assertNoResponseOverlap(parsed, abilities);
       assertNoPersistentConflicts(db, parsed);

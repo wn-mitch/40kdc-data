@@ -69,6 +69,12 @@ describe("Round 5C leaf surfaces", () => {
       expect(leaves(db, "other")).toEqual([]);
       // Confirming again changes nothing.
       expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning })).toMatchObject({ applied: 0, already: 3 });
+      // surfaceOccurrences finds these three occurrences by the indexed source_spans.normalized_surface
+      // column, not a corpus-wide JS-side renormalize of every proposal; pin that insertSpan actually
+      // populates it, matching every occurrence confirmSurface just applied.
+      const normalized = (db.prepare("SELECT DISTINCT normalized_surface FROM source_spans WHERE exact_text = ?").all(CP) as Array<{ normalized_surface: string | null }>);
+      expect(normalized).toHaveLength(1);
+      expect(normalized[0]!.normalized_surface).toBeTruthy();
     } finally {
       db.close();
     }

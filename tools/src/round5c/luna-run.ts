@@ -98,11 +98,21 @@ function importSummary(db: DatabaseSync, runId: number): LunaImportSummary {
   const proposals = db.prepare("SELECT status, count(*) AS total FROM proposals WHERE model_run_id = ? GROUP BY status").all(runId) as Array<{ status: string; total: number }>;
   const structural = db.prepare("SELECT count(*) AS total FROM source_atom_proposals WHERE model_run_id = ?").get(runId) as { total: number };
   const candidates = db.prepare("SELECT count(DISTINCT candidate_id) AS total FROM family_candidate_evidence WHERE model_run_id = ?").get(runId) as { total: number };
+  // Recovered from `proposals.reason_json`, which `parseResponseBody`'s per-span degrade tags
+  // with description "Rejected: <reason>" (see proposal.ts). `dropped_covered_spans` leaves no
+  // row at all — it's a silent drop by design — so it can't be recomputed here; `runDeepSeekArm`
+  // overlays the live count from the import call that actually ran instead.
+  const rejected = db.prepare(`
+    SELECT count(*) AS total FROM proposals
+    WHERE model_run_id = ? AND role = 'UNRESOLVED' AND reason_json LIKE '%"description":"Rejected:%'
+  `).get(runId) as { total: number };
   return {
     proposals: proposals.filter((row) => row.status !== "unresolved").reduce((total, row) => total + Number(row.total), 0),
     unresolved: proposals.filter((row) => row.status === "unresolved").reduce((total, row) => total + Number(row.total), 0),
     structural: Number(structural.total),
     candidates: Number(candidates.total),
+    rejected_spans: Number(rejected.total),
+    dropped_covered_spans: 0,
   };
 }
 
@@ -187,6 +197,15 @@ export type LunaRunOptions = {
   transport?: "omp" | "deepseek";
   /** Test injection point for the `"deepseek"` transport, mirroring `binary` for `"omp"`. */
   deepseekCall?: ModelCall;
+  /**
+   * The DeepSeek model id actually being called (`DEEPSEEK_MODEL` by default). The wire request's
+   * `requested_model` field — which the instructions tell the model to echo back verbatim — is
+   * stamped with this, not a hardcoded profile name; passing the wrong one here makes the model
+   * truthfully echo a model it isn't, which `importLuna` then (correctly) rejects as a
+   * self-reported/observed mismatch. Also selects the default transport when `deepseekCall` is
+   * not supplied.
+   */
+  deepseekModel?: string;
 };
 
 /** The claimed invocation a background runner must finish. */
@@ -280,8 +299,9 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
       // field — instructions, registry, confirmed_examples, abilities, schema — is untouched, and
       // this substitution is identical across every deepseek-transport request in a batch, so it
       // does not disturb the shared prefix those requests still get from `serializeLunaRequest`.
-      const deepseekRequestText = serializeLunaRequest({ ...(request as PreparedRequest), requested_model: DEEPSEEK_MODEL });
-      const call = options.deepseekCall ?? deepseekModelCall(DEEPSEEK_MODEL);
+      const deepseekModel = options.deepseekModel ?? DEEPSEEK_MODEL;
+      const deepseekRequestText = serializeLunaRequest({ ...(request as PreparedRequest), requested_model: deepseekModel });
+      const call = options.deepseekCall ?? deepseekModelCall(deepseekModel);
       const reply = await call(request.instructions, lunaStdinEnvelope(config.input_hash!, deepseekRequestText));
       outcome = { response: { body: reply.body, model: reply.model, cost_usd: reply.cost_usd, latency_ms: reply.latency_ms, usage: reply.usage } };
     } else {
@@ -311,6 +331,10 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
 
   const db = openDb();
   try {
+    // `dropped_covered_spans` leaves no row (a silent, by-design drop), so `lunaRunView`'s
+    // DB-recomputed summary can't see it; capture it from the live `importLuna` call instead and
+    // overlay it on the view this function returns.
+    let liveDroppedCoveredSpans: number | null = null;
     if ("error" in outcome) {
       failLunaRun(db, claimed.run_id, claimed.execution.owner, transportFailure(outcome.error));
     } else {
@@ -326,13 +350,14 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
             .run(outcome.response.model, claimed.run_id);
         }
         assertSourcesCurrent(db, config);
-        importLuna(db, { run_id: String(claimed.run_id), response: outcome.response.body }, {
+        const imported = importLuna(db, { run_id: String(claimed.run_id), response: outcome.response.body }, {
           owner: claimed.execution.owner,
           model: outcome.response.model,
           model_version: version,
           latency_ms: outcome.response.latency_ms,
           cost_usd: outcome.response.cost_usd,
         });
+        liveDroppedCoveredSpans = imported.dropped_covered_spans;
       } catch (error) {
         // importLuna already failed the run for invalid content; stale source fails here.
         if (error instanceof LunaRunError && error.status === 409 && /changed after this run/u.test(error.message)) {
@@ -340,7 +365,10 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
         }
       }
     }
-    return lunaRunView(db, claimed.run_id);
+    const view = lunaRunView(db, claimed.run_id);
+    return liveDroppedCoveredSpans !== null && view.summary
+      ? { ...view, summary: { ...view.summary, dropped_covered_spans: liveDroppedCoveredSpans } }
+      : view;
   } finally {
     db.close();
   }

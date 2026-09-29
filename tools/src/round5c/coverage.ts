@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 
-import { exactSpan } from "./contracts.js";
+import { exactSpan, LEAF_ROLES } from "./contracts.js";
 import { parseStoredFragments, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
 import {
   normalized, overlapDiagnostics, overlapLength, partitionExclusive, subtractIntervals, totalLength,
@@ -85,7 +85,7 @@ type CoverageIndexes = {
   structural: Map<number, TaggedInterval[]>;
 };
 
-const semanticRoles = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
+const semanticRoles = LEAF_ROLES;
 const whitespace = /\s/u;
 const punctuation = /\p{P}/u;
 

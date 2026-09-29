@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 
-import { currentFamilyVersion, familyRole, SEMANTIC_ROLES, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, familyRole, LEAF_ROLES, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
 import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
@@ -251,8 +251,9 @@ type ProposalRow = {
 };
 type ParsedDecision = AnnotationDecision;
 
-const semanticRoleSet = new Set<string>(SEMANTIC_ROLES);
-const proposalRoleSet = new Set<string>([...SEMANTIC_ROLES, "CONNECTIVE", "UNRESOLVED"]);
+const leafRoleSet = new Set<string>(LEAF_ROLES);
+const proposalRoleSet = new Set<string>([...LEAF_ROLES, "CONNECTIVE", "UNRESOLVED"]);
+const LEAF_ROLE_SQL_LIST = LEAF_ROLES.map((role) => `'${role}'`).join(", ");
 
 function invalid(message: string): never {
   throw new WorkbenchError(422, message);
@@ -558,7 +559,7 @@ function fingerprintForDecision(db: DatabaseSync, decision: ParsedDecision): { i
   } catch (error) {
     invalid(error instanceof Error ? error.message : "Fingerprint parameters are invalid.");
   }
-  if (!semanticRoleSet.has(decision.role) || role !== decision.role) {
+  if (!leafRoleSet.has(decision.role) || role !== decision.role) {
     invalid("The selected role must be the reviewed family's canonical role.");
   }
   return { id: fingerprintId, role };
@@ -1199,7 +1200,7 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND proposals.status = 'pending'
-      AND proposals.role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')
+      AND proposals.role IN (${LEAF_ROLE_SQL_LIST})
       AND NOT ${RESTATES_ACTIVE_ANNOTATION}
   `);
   const modelProposalRows = db.prepare(`

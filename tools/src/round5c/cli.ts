@@ -54,7 +54,7 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
 async function run(command: string | undefined): Promise<void> {
   const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals", "pipeline-8b", "pipeline-8b-gates-only", "pilot-sample", "jev-pilot", "deepseek-pilot", "calibrate-segmentation", "jev-v2-pilot"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only [sample.json]|pilot-sample [seed] [target-size]|jev-pilot <sample.json> [spend-cap-usd]|deepseek-pilot <sample.json> [max-requests] [spend-cap-usd]|calibrate-segmentation [max-abilities]|jev-v2-pilot <sample.json> <threshold> [spend-cap-usd] [max-rounds]>");
+    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only [sample.json]|pilot-sample [seed] [target-size]|jev-pilot <sample.json> [spend-cap-usd]|deepseek-pilot <sample.json> [max-requests] [spend-cap-usd] [abilities-per-request] [concurrency]|calibrate-segmentation [max-abilities]|jev-v2-pilot <sample.json> <threshold> [spend-cap-usd] [max-rounds]>");
   }
   if (command === "leaf-describer-audit") {
     // Depends only on the registry and the describer, not on the workbench database.
@@ -104,10 +104,12 @@ async function run(command: string | undefined): Promise<void> {
       if (!samplePath) throw new Error("deepseek-pilot requires a pilot sample JSON path.");
       const maxRequests = process.argv[4] ? Number(process.argv[4]) : undefined;
       const spendCapUsd = process.argv[5] ? Number(process.argv[5]) : undefined;
+      const abilitiesPerRequest = process.argv[6] ? Number(process.argv[6]) : undefined;
+      const concurrency = process.argv[7] ? Number(process.argv[7]) : undefined;
       const sample = JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample;
       const abilityVersionIds = new Set(sample.abilities.map((ability) => ability.ability_version_id));
       const started = Date.now();
-      const result = await runDeepSeekArm(db, () => openWorkbench(), abilityVersionIds, { maxRequests, spendCapUsd });
+      const result = await runDeepSeekArm(db, () => openWorkbench(), abilityVersionIds, { maxRequests, spendCapUsd, abilitiesPerRequest, concurrency });
       console.log(JSON.stringify({ ...result, wall_seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "calibrate-segmentation") {
       const maxAbilities = process.argv[3] ? Number(process.argv[3]) : undefined;
