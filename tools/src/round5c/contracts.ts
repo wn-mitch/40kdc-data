@@ -15,6 +15,9 @@ import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-bu
 import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
 import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
+import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
+import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
+import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -57,6 +60,9 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...ABILITY_MODIFIER_FAMILIES,
   ...CONTAINER_FAMILIES,
   ...NAMED_REGION_FAMILIES,
+  ...PREDICATE_FAMILIES,
+  ...PREDICATE_FAMILIES_2,
+  ...PREDICATE_SUBJECT_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -110,7 +116,10 @@ export function normalizeFingerprintParameters(
     ?? normalizeWeaponBuffParameters(family, input, version)
     ?? normalizeAbilityModifierParameters(family, input, version)
     ?? normalizeContainerParameters(family, input)
-    ?? normalizeNamedRegionParameters(family, input);
+    ?? normalizeNamedRegionParameters(family, input)
+    ?? normalizePredicateParameters(family, input)
+    ?? normalizePredicateParameters2(family, input)
+    ?? normalizePredicateSubjectParameters(family, input, version);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

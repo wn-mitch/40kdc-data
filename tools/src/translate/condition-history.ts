@@ -89,5 +89,6 @@ export function describeHappened(p: P, negated: boolean): string {
 
 export function destroyedCount(side: P): string {
   const o = (side.object ?? {}) as P;
-  return `${str(o.owner)} units ${windowPhrase(side.window)}`.trimEnd();
+  const kws = Array.isArray(o.all_of) ? `${(o.all_of as unknown[]).map(str).join(" ")} ` : "";
+  return `${str(o.owner)} ${kws}units ${windowPhrase(side.window)}`.trimEnd();
 }

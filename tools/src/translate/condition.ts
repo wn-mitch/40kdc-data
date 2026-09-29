@@ -180,7 +180,9 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const who = p.subject === "defender" ? "the target" : subjectOf(p);
       const within = p.range != null ? ` within ${rangePhrase(p.range)}` : "";
       const among = p.among === "eligible-targets" ? "eligible target" : p.among && typeof p.among === "object" ? unitFilterPhrase(p.among as P).replace(/^an? /, "") : "unit";
-      return `${neg}${who} is the closest ${among}${within}`;
+      // Default (omitted) is the attacker; anything else names who it is closest to.
+      const to = p.to != null && p.to !== "attacker" ? ` to ${p.to === "defender" ? "the target" : unitRefPhrase(p.to)}` : "";
+      return `${neg}${who} is the closest ${among}${to}${within}`;
     }
     case "controls": {
       if (p.compare === "more-than-opponent") return `${neg}you hold more objectives than the opponent`;

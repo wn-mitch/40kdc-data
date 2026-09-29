@@ -358,8 +358,8 @@ describe("Round 5C turn and faction leaves", () => {
       for (const turn of ["battle-round", "player-turn", "opponent-turn"]) {
         expect(validateFingerprint(value.db, "turn-start", { turn }, 1)).toMatch(/^fp_/);
       }
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 1, source)).toMatch(/^fp_/);
-      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 1, source)).toThrow(/exact source span/i);
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, source)).toMatch(/^fp_/);
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 2, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);
     } finally {
       value.db.close();

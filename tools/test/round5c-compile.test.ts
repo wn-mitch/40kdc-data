@@ -190,7 +190,10 @@ describe("Round 5C leaf compiler", () => {
     expect(fail([lead()])).toEqual(["There is no effect leaf to compile."]);
     expect(fail([leaf("EFFECT", "reroll", { roll: { source: "Hit" }, subset: "ones" })])[0]).toMatch(/quoted source text/u);
     expect(fail([leaf("EFFECT", "resource-action", { resource: "command-point", operation: "spend", amount: 1 })])[0]).toMatch(/Only resource gains/u);
-    expect(fail([leaf("CONDITION", "army-faction", { faction: { source: "Fabricated" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })])[0]).toMatch(/army-faction has no DSL fragment/u);
+    // A quoted (not yet reviewer-resolved) army-faction still cannot compile; a resolved kebab-case id does (batch 6).
+    expect(fail([leaf("CONDITION", "army-faction", { faction: { source: "Fabricated" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })])[0]).toMatch(/quoted source text/u);
+    expect(compiled([leaf("CONDITION", "army-faction", { faction: "ultramarines" }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.effect)
+      .toEqual({ type: "conditional", condition: { type: "army-faction", parameters: { faction: "ultramarines" } }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
     expect(fail([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }), leaf("EVENT", "event", { kind: "selected-to-fight" })]))
       .toContain("A moment ends the ability with no effect after it.");
   });

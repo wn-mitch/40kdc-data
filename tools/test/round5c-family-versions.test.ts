@@ -94,8 +94,8 @@ describe("Round 5C family version registry", () => {
   });
 
   it("moves every event kind to version 6, and an old attack event through attack to its current version", () => {
-    expect(mapToLatest("event", 5, { kind: "enemy-has-shot" })).toEqual({ family: "event", version: 6, parameters: { kind: "enemy-has-shot" } });
-    expect(mapToLatest("event", 4, { kind: "phase-end", phase: "fight", turn: "your" })).toEqual({ family: "event", version: 6, parameters: { kind: "phase-end", phase: "fight", turn: "your" } });
+    expect(mapToLatest("event", 5, { kind: "enemy-has-shot" })).toEqual({ family: "event", version: 7, parameters: { kind: "enemy-has-shot" } });
+    expect(mapToLatest("event", 4, { kind: "phase-end", phase: "fight", turn: "your" })).toEqual({ family: "event", version: 7, parameters: { kind: "phase-end", phase: "fight", turn: "your" } });
     expect(mapToLatest("event", 3, { kind: "attack-made" })).toEqual({ family: "attack", version: 2, parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } });
     expect(normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 6)).toEqual({ kind: "this-model-destroyed" });
     expect(() => normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 5)).toThrow(/event.kind/u);

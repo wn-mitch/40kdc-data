@@ -69,6 +69,12 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "unit-state", from: 1, to: 2, map: (parameters) => parameters },
   { family: "unit-state", from: 2, to: 3, map: (parameters) => parameters },
   { family: "unit-activity", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 4/2/3 (batch 6) only widen the subject enum; an existing this-unit/this-model/target still fits.
+  { family: "unit-state", from: 3, to: 4, map: (parameters) => parameters },
+  { family: "unit-keyword", from: 1, to: 2, map: (parameters) => parameters },
+  { family: "unit-activity", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 2 (batch 6) only adds optional to/range on closest-eligible and widens subject.
+  { family: "unit-position", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 takes a set of characteristics, improve and worsen, and which weapons carry the change.
   {
     family: "characteristic-modifier", from: 1, to: 2,
@@ -108,6 +114,10 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "ability-modifier", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 adds act (fight/shoot); every version 1 leaf meant fighting.
   { family: "fight-on-death", from: 1, to: 2, map: (parameters) => ({ ...parameters, act: "fight" }) },
+  // Version 7 (batch 6) only adds kinds and their own filter fields; existing leaves still fit.
+  { family: "event", from: 6, to: 7, map: (parameters) => parameters },
+  // Version 2 only widens faction from always-quoted to quoted-or-resolved; a pending quote still fits.
+  { family: "army-faction", from: 1, to: 2, map: (parameters) => parameters },
 ];
 
 export type FamilyVersionReport = {

@@ -1,4 +1,5 @@
 import { containerPrefill } from "./leaf-prefill-containers.js";
+import { eventV7Prefill, predicateConditionPrefill } from "./leaf-prefill-conditions.js";
 
 /** A family parameter's JSON Schema, as far as the leaf form and the prefill read it. */
 export type Property = {
@@ -232,14 +233,25 @@ function targetFromSource(familyId: string, text: string): Record<string, unknow
 }
 
 const PREDICATES = new Set(["unit-state", "unit-keyword", "unit-mark", "unit-position"]);
+/** Batch 6's new predicate families, prefilled by `leaf-prefill-conditions.ts`. */
+const NEW_PREDICATES = new Set([
+  "rule-active", "unit-owner", "unit-has-ability", "same-unit", "model-count", "wounds-state", "in-region",
+  "controls-objective", "visible", "designated-filter", "battle-round", "battle-size", "guided", "moved-over",
+  "phase-window", "attack-filter", "attack-compare", "history-compare",
+]);
 
 export function prefillFromSource(family: PrefillFamily | undefined, sourceText: string): Record<string, unknown> {
   if (!family) return {};
   const exactText = straightApostrophes(sourceText);
-  const prefill: Record<string, unknown> = family.id === "event" ? eventFromSource(exactText)
+  const eventPrefill = () => {
+    const v1to6 = eventFromSource(exactText);
+    return Object.keys(v1to6).length ? v1to6 : eventV7Prefill(exactText);
+  };
+  const prefill: Record<string, unknown> = family.id === "event" ? eventPrefill()
     : family.id === "attack" ? attackFromSource(exactText)
       : family.id === "select-unit" ? selectionFromSource(exactText)
-        : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : containerPrefill(family.id, exactText);
+        : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText)
+          : NEW_PREDICATES.has(family.id) ? predicateConditionPrefill(family.id, exactText) : containerPrefill(family.id, exactText);
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
   if (family.id === "no-advance-roll") {
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";

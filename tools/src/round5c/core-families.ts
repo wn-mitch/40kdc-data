@@ -4,38 +4,27 @@ import {
   sourceQualifiedSchema,
 } from "./family-validation.js";
 import { ROLL_KINDS, WEAPON_TYPES } from "./dice-families.js";
+import { EVENT_FAMILY, normalizeEventParameters } from "./event-family.js";
+
+export { PHASE_EVENT_KINDS, PHASES, TURNS } from "./event-family.js";
+
+/** A kebab-case entity id, shared with buff-families.ts's ENTITY_ID. */
+export const ENTITY_ID_PATTERN = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
 /**
- * The original reviewed families: rolls, resources, durations, events, turn starts, army
- * faction, and attachment. Later families live beside their domain (buff-, effect-,
+ * The original reviewed families: rolls, resources, durations, turn starts, army faction, and
+ * attachment. `event` (batch 6, versions 1-7) lives in `event-family.ts`, split out once version
+ * 7 pushed this file past the line ceiling. Later families live beside their domain (buff-,
  * targeting-, restriction- and dice-families) and are joined into the registry by contracts.ts.
  */
 
-const EVENT_KINDS_V3 = [
-  "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
-] as const;
-/** Attacks are the `attack` family from version 4 on, which says who attacks and with what. */
-const EVENT_KINDS_V4 = ["charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting"] as const;
-/** Version 5 adds the moments stratagems are used at, each a DSL trigger event. */
-const EVENT_KINDS_V5 = [
-  ...EVENT_KINDS_V4, "selected-to-shoot", "selected-to-fight",
-  "enemy-selected-targets", "enemy-ended-move", "enemy-has-shot", "enemy-declared-charge",
-] as const;
-/**
- * Version 6 tells "this model is destroyed" (the model itself, before it is removed) from
- * "a model in this unit is destroyed" (model-destroyed).
- */
-const EVENT_KINDS = [...EVENT_KINDS_V5, "this-model-destroyed"] as const;
 const DURATION_ENDPOINTS = [
   "end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle",
   "start-of-next-turn", "start-of-next-command-phase", "start-of-next-movement-phase", "start-of-next-battle-round",
 ] as const;
-/** Event kinds that need to say which phase, and whose turn, they belong to. */
-export const PHASE_EVENT_KINDS = ["phase-start", "phase-end"] as const;
-const PHASES = ["command", "movement", "shooting", "charge", "fight", "any"] as const;
-const TURNS = ["your", "opponent", "either"] as const;
 
 export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  ...EVENT_FAMILY,
   {
     id: "reroll",
     version: 1,
@@ -158,117 +147,6 @@ export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
-    id: "event",
-    version: 1,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: {
-        kind: enumOrSourceSchema(["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"]),
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "event",
-    version: 2,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers. Attack events are part of the effect; the others become the ability's trigger.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: { kind: { enum: EVENT_KINDS_V3 } },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "event",
-    version: 3,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers. Attack events are part of the effect; the others become the ability's trigger. The start or end of a phase also names the phase and whose turn it is.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: {
-        kind: { enum: EVENT_KINDS_V3 },
-        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
-        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "event",
-    version: 4,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers: a charge, a unit or model destroyed, after shooting, or the start or end of a phase (naming the phase and whose turn). Attacks are the separate attack leaf.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: {
-        kind: { enum: EVENT_KINDS_V4 },
-        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
-        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "event",
-    version: 5,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers: a charge, a unit or model destroyed, after shooting, when this unit is selected to shoot or fight, a stratagem moment (just after an enemy unit selects its targets, ends a move, has shot, or declares a charge), or the start or end of a phase. Attacks are the separate attack leaf.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: {
-        kind: { enum: EVENT_KINDS_V5 },
-        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
-        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-      },
-      additionalProperties: false,
-    },
-    deprecated: true,
-  },
-  {
-    id: "event",
-    version: 6,
-    role: "EVENT",
-    label: "At an event",
-    description: "Marks when the mechanic triggers: a charge, a unit destroyed, a model in this unit destroyed, this model destroyed (before it is removed), after shooting, when this unit is selected to shoot or fight, a stratagem moment (just after an enemy unit selects its targets, ends a move, has shot, or declares a charge), or the start or end of a phase. Attacks are the separate attack leaf.",
-    starter: { kind: "" },
-    parameterSchema: {
-      type: "object",
-      required: ["kind"],
-      properties: {
-        kind: { enum: EVENT_KINDS },
-        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
-        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
-      },
-      additionalProperties: false,
-    },
-  },
-  {
     id: "turn-start",
     version: 1,
     role: "EVENT",
@@ -293,6 +171,21 @@ export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["faction"],
       properties: { faction: sourceQualifiedSchema },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "army-faction",
+    version: 2,
+    role: "CONDITION",
+    label: "Army faction is",
+    description: "Requires the army to have a specified faction. Quote the exact name from the source until a reviewer resolves it to the faction's kebab-case id (the DSL condition names the id, not free text).",
+    starter: { faction: { source: "" } },
+    parameterSchema: {
+      type: "object",
+      required: ["faction"],
+      properties: { faction: { oneOf: [sourceQualifiedSchema, { type: "string", pattern: ENTITY_ID_PATTERN.source }] } },
       additionalProperties: false,
     },
   },
@@ -409,26 +302,21 @@ export function normalizeCoreParameters(
         endpoint: enumOrSource(input.endpoint, ["end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle"], "duration.endpoint"),
       };
     case "event":
-      if (version < 3) exactKeys(input, ["kind"], family);
-      if (version === 1) return { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") };
-      if (version === 2) return { kind: enumValue(input.kind, EVENT_KINDS_V3, "event.kind") };
-      {
-        const kind = enumValue(input.kind, version === 3 ? EVENT_KINDS_V3 : version === 4 ? EVENT_KINDS_V4 : version === 5 ? EVENT_KINDS_V5 : EVENT_KINDS, "event.kind");
-        if (!(PHASE_EVENT_KINDS as readonly string[]).includes(kind)) {
-          exactKeys(input, ["kind"], family);
-          return { kind };
-        }
-        exactKeys(input, ["kind", "phase", "turn"], family);
-        return { kind, phase: enumValue(input.phase, PHASES, "event.phase"), turn: enumValue(input.turn, TURNS, "event.turn") };
-      }
+      return normalizeEventParameters(family, input, version);
     case "turn-start":
       exactKeys(input, ["turn"], family);
       return { turn: enumValue(input.turn, ["battle-round", "player-turn", "opponent-turn"], "turn-start.turn") };
     case "army-faction": {
       exactKeys(input, ["faction"], family);
-      const faction = sourceQualified(input.faction, "army-faction.faction");
-      if (!faction) throw new TypeError("army-faction.faction must be source-qualified.");
-      return { faction };
+      if (version < 2) {
+        const faction = sourceQualified(input.faction, "army-faction.faction");
+        if (!faction) throw new TypeError("army-faction.faction must be source-qualified.");
+        return { faction };
+      }
+      const quoted = sourceQualified(input.faction, "army-faction.faction");
+      if (quoted) return { faction: quoted };
+      if (typeof input.faction === "string" && ENTITY_ID_PATTERN.test(input.faction)) return { faction: input.faction };
+      throw new TypeError("army-faction.faction must be source-qualified or a kebab-case faction id.");
     }
     case "leading-unit":
       if (version === 1) {

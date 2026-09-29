@@ -1,7 +1,8 @@
 import { exactSpan } from "./contracts.js";
+import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import {
-  ATTACK_EVENTS, attackTypeCondition, closed, CompileError, condition, DURATIONS, effect, kindKey, negate, trigger, type CompileLeaf,
-} from "./compile-fragments.js";
+  allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, kindKey, negate, targetRestrictions, trigger,
+} from "./compile-conditions.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
 import {
   designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
@@ -168,13 +169,6 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   return { kind: "trigger", node: trigger(leaf) };
 }
 
-function duration(leaf: CompileLeaf): string {
-  const found = DURATIONS[String(closed(leaf, "endpoint"))];
-  if (!found) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
-  return found;
-}
-
-const allOf = (nodes: Node[]): Node | null => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : { operator: "and", operands: nodes };
 const gated = (gate: Node[], body: Node): Node => {
   const node = allOf(gate);
   return node ? { type: "conditional", condition: node, effect: body } : body;
@@ -466,32 +460,6 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     },
     checks,
   };
-}
-
-/** A stratagem's target_restrictions from its TARGET leaves; null when the ability has none. */
-function targetRestrictions(parts: readonly CompileLeaf[], eligibility: readonly Node[]): Node | null {
-  if (parts.length === 0 && eligibility.length === 0) return null;
-  const selectors = parts.filter((leaf) => leaf.family_id === "stratagem-target" || leaf.family_id === "triggering-target");
-  const bindings = parts.filter((leaf) => leaf.family_id === "target-binding");
-  if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
-  if (bindings.length > 1) throw new CompileError("A stratagem TARGET is bound to more than one unit.");
-  const selector = selectors[0]!;
-  const keywords = selector.parameters.keywords as string[];
-  const excluded = (selector.parameters.excluded_keywords as string[] | undefined) ?? [];
-  const triggering = selector.family_id === "triggering-target";
-  const restrictions: Node = {
-    count: triggering ? "one" : selector.parameters.count,
-    ...(selector.parameters.count_max !== undefined ? { count_max: selector.parameters.count_max } : {}),
-    ...(triggering ? {} : { side: selector.parameters.side }),
-    selects: selector.parameters.selects,
-    ...(keywords.length ? { [selector.parameters.match === "any" ? "required_keywords_any" : "required_keywords"]: keywords } : {}),
-    ...(excluded.length ? { excluded_keywords: excluded } : {}),
-  };
-  const bound = triggering ? "triggering-unit" : bindings[0]?.parameters.bound_to;
-  if (bound) restrictions.bound_to = bound;
-  const condition = allOf([...eligibility]);
-  if (condition) restrictions.eligibility = condition;
-  return restrictions;
 }
 
 /** Whether an effect (or one nested in it) applies to the selected unit. */

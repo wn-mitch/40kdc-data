@@ -37,11 +37,28 @@ describe("Round 5C leaf describer audit", () => {
       "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 0 },
       // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
       "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
+      // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads
+      // the same as naming it explicitly, and "recipient" reads as "the unit" too.
+      "unit-owner": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "same-unit": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "wounds-state": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "in-region": { unrendered: [], colliding: ["subject"], problems: 0 },
+      guided: { unrendered: [], colliding: ["subject"], problems: 0 },
+      "moved-over": { unrendered: [], colliding: ["subject", "by"], problems: 0 },
+      // "to" omitted defaults to the attacker, which reads the same as naming it explicitly.
+      visible: { unrendered: [], colliding: ["subject", "to", "blocked_by"], problems: 0 },
+      // Version 2/4/3 (batch 6) widen subject to also include "recipient", which reads as "the
+      // unit" too — the same collision the omitted default already had with "this-unit".
+      "unit-keyword": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
+      "unit-position": { unrendered: [], colliding: ["subject", "to"], problems: 0 },
     });
   });
 
   it("tells the attack's target apart from this unit for every predicate", () => {
-    for (const family of ["unit-keyword", "unit-mark", "unit-position", "unit-activity"]) {
+    for (const family of ["unit-mark"]) {
       expect(leafDescriberAudit().find((item) => item.family_id === family)).toMatchObject({ unrendered: [], collisions: [], problems: [] });
     }
     expect(describeCondition({ type: "strength", parameters: { subject: "defender", below: "starting" } } as never)).toBe("the target unit is below starting strength");
