@@ -54,6 +54,13 @@ describe("Round 5C leaf describer audit", () => {
       "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
       "unit-position": { unrendered: [], colliding: ["subject", "to"], problems: 0 },
+      // Batch 7a: be-selected always reads "at the end of the opponent's previous turn", so `at`
+      // never shows; the omitted-subject collision is the same one every widened predicate has.
+      eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
+      // count_min stops mattering once count_max is 0 ("no operation markers"), same text either way.
+      "operation-markers": { unrendered: [], colliding: ["count_min"], problems: 0 },
+      // test-exemption (x-leaf-5): a target filter whose fields don't all reach the English for every branch.
+      "test-exemption": { unrendered: [], colliding: ["target", "require_keywords", "exclude_keywords"], problems: 0 },
     });
   });
 

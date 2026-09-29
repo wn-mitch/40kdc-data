@@ -10,6 +10,8 @@ import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
  */
 
 export const USAGE_FREQUENCIES = ["once-per-battle", "once-per-battle-round", "once-per-turn", "once-per-phase", "once-per-opponent-turn"] as const;
+/** Version 2 (batch 7a) adds once per Command phase and the two "first this battle/phase" frequencies. */
+export const USAGE_FREQUENCIES_V2 = [...USAGE_FREQUENCIES, "once-per-command-phase", "first-this-battle", "first-time-this-phase"] as const;
 export const USAGE_PER = ["any", "army", "unit", "model"] as const;
 export const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"] as const;
 export const KEYWORD_MATCH = ["all", "any"] as const;
@@ -117,6 +119,21 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { frequency: { enum: USAGE_FREQUENCIES }, per: { enum: USAGE_PER } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "usage-limit",
+    version: 2,
+    role: "RESTRICTION",
+    label: "How often it can be used",
+    description: "As version 1, plus once per Command phase, the first time this battle, and the first time this phase.",
+    starter: { frequency: "", per: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["frequency", "per"],
+      properties: { frequency: { enum: USAGE_FREQUENCIES_V2 }, per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
   },
   {
     id: "use-window",
@@ -199,7 +216,7 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
       return { who: enumValue(input.who, version === 1 ? OPTIONAL_USERS_WITH_BEARER : OPTIONAL_USERS, "optional-use.who") };
     case "usage-limit":
       exactKeys(input, ["frequency", "per"], family);
-      return { frequency: enumValue(input.frequency, USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
+      return { frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
     case "use-window": {
       exactKeys(input, ["your_phases", "opponent_phases", "either_phases"], family);
       const window = {

@@ -44,6 +44,26 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "aura-range",
+    version: 2,
+    role: "CONDITION",
+    label: "Within an aura",
+    description: "As version 1, plus an optional cap: the aura's range, extensions from other abilities included, never exceeds this many inches.",
+    starter: { side: "", inches: null },
+    parameterSchema: {
+      type: "object",
+      required: ["side", "inches"],
+      properties: {
+        side: { enum: AURA_SIDES },
+        inches: { type: "integer", minimum: 1, maximum: 24 },
+        keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true },
+        range_cap_inches: { type: "integer", minimum: 1, maximum: 24 },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "leader-target",
@@ -199,10 +219,11 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
 export function normalizeContainerParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
     case "aura-range": {
-      const keys = ["side", "inches", ...("keywords" in input ? ["keywords"] : [])];
+      const keys = ["side", "inches", ...("keywords" in input ? ["keywords"] : []), ...("range_cap_inches" in input ? ["range_cap_inches"] : [])];
       exactKeys(input, keys, family);
       const result: Record<string, unknown> = { side: enumValue(input.side, AURA_SIDES, "aura-range.side"), inches: boundedInteger(input.inches, 1, 24, "aura-range.inches") };
       if ("keywords" in input) result.keywords = enumSet(input.keywords, (input.keywords as string[]) ?? [], "aura-range.keywords");
+      if ("range_cap_inches" in input) result.range_cap_inches = boundedInteger(input.range_cap_inches, 1, 24, "aura-range.range_cap_inches");
       return result;
     }
     case "leader-target": {

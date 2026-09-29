@@ -22,6 +22,16 @@ const DURATION_ENDPOINTS = [
   "end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle",
   "start-of-next-turn", "start-of-next-command-phase", "start-of-next-movement-phase", "start-of-next-battle-round",
 ] as const;
+/**
+ * Version 3 (batch 7a) adds seven endpoints scope.duration already has DSL values and describer
+ * support for (`expiry.ts`), but no leaf ever set: the current attack sequence, just this use,
+ * the start of your next Shooting phase, the end of your or the opponent's next turn, this unit
+ * having shot, and losing control of the designated objective.
+ */
+const DURATION_ENDPOINTS_V3 = [
+  ...DURATION_ENDPOINTS, "end-of-attack-sequence", "end-of-this-use", "start-of-next-shooting-phase",
+  "end-of-your-next-turn", "end-of-opponents-next-turn", "this-unit-has-shot", "control-lost",
+] as const;
 
 export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
   ...EVENT_FAMILY,
@@ -143,6 +153,21 @@ export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["endpoint"],
       properties: { endpoint: { enum: DURATION_ENDPOINTS } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "duration",
+    version: 3,
+    role: "DURATION",
+    label: "Set a duration",
+    description: "As version 2, plus: until the current attack sequence ends, only while resolving this use, the start of your next Shooting phase, the end of your or your opponent's next turn, until this unit has shot, and until you lose control of the designated objective.",
+    starter: { endpoint: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["endpoint"],
+      properties: { endpoint: { enum: DURATION_ENDPOINTS_V3 } },
       additionalProperties: false,
     },
   },
@@ -297,7 +322,8 @@ export function normalizeCoreParameters(
       };
     case "duration":
       exactKeys(input, ["endpoint"], family);
-      if (version >= 2) return { endpoint: enumValue(input.endpoint, DURATION_ENDPOINTS, "duration.endpoint") };
+      if (version >= 3) return { endpoint: enumValue(input.endpoint, DURATION_ENDPOINTS_V3, "duration.endpoint") };
+      if (version === 2) return { endpoint: enumValue(input.endpoint, DURATION_ENDPOINTS, "duration.endpoint") };
       return {
         endpoint: enumOrSource(input.endpoint, ["end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle"], "duration.endpoint"),
       };

@@ -44,6 +44,17 @@ const TURN_ENDED_KINDS = ["turn-ended"] as const;
 const STEPS = ["battle-shock", "reinforcements"] as const;
 const USED_ACTIVITIES = ["stratagem", "ability", "action", "manoeuvre", "order", "ritual", "dark-pact", "act-of-faith", "doctrine", "contract"] as const;
 const CHANGED_STATES = ["engaged", "battle-shocked", "embarked", "in-strategic-reserves", "on-battlefield", "hidden", "fights-first", "benefit-of-cover"] as const;
+/**
+ * Version 8 (batch 7a) adds six more moments: after a named roll (mirrors before-roll), Battle
+ * Formations declared, a placed marker removed, an objective newly gained, and a resource pool
+ * gained or spent.
+ */
+const EVENT_KINDS_V8 = [
+  ...EVENT_KINDS_V7, "after-roll", "battle-formations-declared", "marker-removed", "objective-gained", "resource-gained", "resource-spent",
+] as const;
+const AFTER_ROLL_KINDS = ["after-roll"] as const;
+const MARKER_REMOVED_KINDS = ["marker-removed"] as const;
+const RESOURCE_EVENT_KINDS = ["resource-gained", "resource-spent"] as const;
 /** Event kinds that need to say which phase, and whose turn, they belong to. */
 export const PHASE_EVENT_KINDS = ["phase-start", "phase-end"] as const;
 export const PHASES = ["command", "movement", "shooting", "charge", "fight", "any"] as const;
@@ -180,6 +191,32 @@ export const EVENT_FAMILY: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "event",
+    version: 8,
+    role: "EVENT",
+    label: "At an event",
+    description: "Adds six more moments: after a named roll, declaring Battle Formations, one of your markers being removed, newly gaining control of an objective, and a resource pool gained or spent.",
+    starter: { kind: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: {
+        kind: { enum: EVENT_KINDS_V8 },
+        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+        turn: { enum: TURNS, "x-only-when": { kind: [...PHASE_EVENT_KINDS, ...TURN_ENDED_KINDS] } },
+        step: { enum: STEPS, "x-only-when": { kind: STEP_STARTED_KINDS } },
+        activity: { enum: USED_ACTIVITIES, "x-only-when": { kind: USED_KINDS } },
+        state: { enum: CHANGED_STATES, "x-only-when": { kind: STATE_CHANGED_KINDS } },
+        tag: { type: "string", minLength: 1, "x-only-when": { kind: DESIGNATION_EVENT_KINDS } },
+        roll: { enum: ROLL_KINDS, "x-only-when": { kind: [...BEFORE_ROLL_KINDS, ...AFTER_ROLL_KINDS] } },
+        marker: { type: "string", minLength: 1, "x-only-when": { kind: MARKER_REMOVED_KINDS } },
+        pool: { type: "string", minLength: 1, "x-only-when": { kind: RESOURCE_EVENT_KINDS } },
+      },
+      additionalProperties: false,
+    },
   },
 ];
 
@@ -198,7 +235,7 @@ export function normalizeEventParameters(family: string, input: Record<string, u
     exactKeys(input, ["kind", "phase", "turn"], family);
     return { kind, phase: enumValue(input.phase, PHASES, "event.phase"), turn: enumValue(input.turn, TURNS, "event.turn") };
   }
-  const kind = enumValue(input.kind, EVENT_KINDS_V7, "event.kind");
+  const kind = enumValue(input.kind, version >= 8 ? EVENT_KINDS_V8 : EVENT_KINDS_V7, "event.kind");
   if ((PHASE_EVENT_KINDS as readonly string[]).includes(kind)) {
     exactKeys(input, ["kind", "phase", "turn"], family);
     return { kind, phase: enumValue(input.phase, PHASES, "event.phase"), turn: enumValue(input.turn, TURNS, "event.turn") };
@@ -226,10 +263,23 @@ export function normalizeEventParameters(family: string, input: Record<string, u
     if (!DESIGNATION_IDS.has(tag) && !/^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u.test(tag)) throw new TypeError("event.tag must be a registered designation id.");
     return { kind, tag };
   }
-  if ((BEFORE_ROLL_KINDS as readonly string[]).includes(kind)) {
+  if ((BEFORE_ROLL_KINDS as readonly string[]).includes(kind) || (AFTER_ROLL_KINDS as readonly string[]).includes(kind)) {
     exactKeys(input, ["kind", "roll"], family);
     return { kind, roll: enumValue(input.roll, ROLL_KINDS, "event.roll") };
   }
+  if ((MARKER_REMOVED_KINDS as readonly string[]).includes(kind)) {
+    exactKeys(input, ["kind", "marker"], family);
+    return { kind, marker: nonEmpty(input.marker, "event.marker") };
+  }
+  if ((RESOURCE_EVENT_KINDS as readonly string[]).includes(kind)) {
+    exactKeys(input, ["kind", "pool"], family);
+    return { kind, pool: nonEmpty(input.pool, "event.pool") };
+  }
   exactKeys(input, ["kind"], family);
   return { kind };
+}
+
+function nonEmpty(value: unknown, label: string): string {
+  if (typeof value === "string" && value.length > 0) return value;
+  throw new TypeError(`${label} must be a nonempty string.`);
 }

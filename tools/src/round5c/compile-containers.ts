@@ -1,4 +1,5 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
+import { trigger } from "./compile-conditions.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -18,7 +19,14 @@ import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragme
 
 type Node = Record<string, unknown>;
 
-const LEADING_CONTAINERS = new Set(["choice-open", "stance-select-open", "issue-orders-open", "dice-pool-allocation-open"]);
+const LEADING_CONTAINERS = new Set([
+  "choice-open", "stance-select-open", "issue-orders-open", "dice-pool-allocation-open",
+  "risk-reward-open", "resource-action-menu-open", "persistent-designation-open", "select-objective-open",
+]);
+/** Openers that wrap a single combined body instead of splitting into two or more options. */
+const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-objective-open"]);
+/** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
+const ONE_OR_MORE_CONTAINERS = new Set(["resource-action-menu-open"]);
 
 export function isContainerOpener(familyId: string): boolean {
   return LEADING_CONTAINERS.has(familyId);
@@ -37,6 +45,8 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   const modifier: Node = { range: closed(leaf, "inches"), effect: body };
   const keywords = leaf.parameters.keywords as string[] | undefined;
   if (keywords?.length) modifier.eligible = { required_keywords: keywords };
+  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
+  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }
 
@@ -211,12 +221,72 @@ function buildDicePoolAllocation(head: CompileLeaf, groups: CompileLeaf[][]): No
   };
 }
 
+/** risk-reward: its first group is led by on-fail-open (risk.on_fail); the rest is the reward — one effect, or a choice among several. */
+function buildRiskReward(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+  const [onFailGroup, ...rewardGroups] = groups;
+  const marker = onFailGroup![0];
+  if (!marker || marker.family_id !== "on-fail-open") throw new CompileError("risk-reward-open's first sentence needs a leading on-fail-open leaf.");
+  const onFail = effectsOf(onFailGroup!.slice(1));
+  const reward = rewardGroups.length === 1 ? effectsOf(rewardGroups[0]!) : { type: "choice", options: rewardGroups.map((group) => effectsOf(group)) };
+  return { type: "risk-reward", reward, risk: { test: closed(head, "test"), on_fail: onFail } };
+}
+
+/** resource-action-menu: each group is led by menu-action, whose own next leaf is that action's trigger (`when`). */
+function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+  const actions = groups.map((group) => {
+    const marker = group[0];
+    if (!marker || marker.family_id !== "menu-action") throw new CompileError("Each resource-action-menu action needs a leading menu-action leaf.");
+    const when = group[1];
+    if (!when || when.role !== "EVENT") throw new CompileError("A menu-action needs its own trigger leaf (an EVENT leaf) right after it.");
+    const cost: Node = { pool_id: marker.parameters.cost_pool_id !== undefined ? closed(marker, "cost_pool_id") : closed(head, "pool_id"), amount: closed(marker, "cost_amount") };
+    if (marker.parameters.cost_resource_label !== undefined) cost.resource_label = closed(marker, "cost_resource_label");
+    const action: Node = { id: closed(marker, "action_id"), label: closed(marker, "label"), when: trigger(when), cost, effect: effectsOf(group.slice(2)) };
+    if (marker.parameters.duration !== undefined) action.duration = closed(marker, "duration");
+    if (marker.parameters.repeatable_if_different_unit === true) action.usage = { repeatable_if_different_unit: true };
+    return action;
+  });
+  const node: Node = { type: "resource-action-menu", menu_id: closed(head, "menu_id"), pool_id: closed(head, "pool_id"), actions };
+  const sharedUsage: Node = {};
+  if (head.parameters.unit_max_manoeuvres_per_phase !== undefined) sharedUsage.unit_max_manoeuvres_per_phase = closed(head, "unit_max_manoeuvres_per_phase");
+  if (head.parameters.default_manoeuvre_max_per_phase !== undefined) sharedUsage.default_manoeuvre_max_per_phase = closed(head, "default_manoeuvre_max_per_phase");
+  if (Object.keys(sharedUsage).length) node.shared_usage = sharedUsage;
+  return node;
+}
+
+function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+  const scope = closed(head, "scope") as string;
+  return {
+    type: "persistent-designation",
+    designation: closed(head, "designation"),
+    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: "one-time" },
+    consumer: {
+      relation: scope === "enemy-unit" ? "attacks-selected-unit" : "within-selected-marker",
+      beneficiary: closed(head, "beneficiary") === "this-model" ? "bearer" : "unit",
+      effect: effectsOf(groups[0]!),
+    },
+    duration: "battle",
+  };
+}
+
+function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+  const selector: Node = { bind_as: closed(head, "bind_as") };
+  selector.count = head.parameters.each === true ? "each" : head.parameters.count !== undefined ? closed(head, "count") : 1;
+  if (head.parameters.range_inches !== undefined) selector.range_inches = closed(head, "range_inches");
+  if (head.parameters.origin !== undefined) selector.origin = closed(head, "origin") === "this-model" ? "bearer" : "bearer-unit";
+  if (head.parameters.controlled_by !== undefined) selector.controlled_by = closed(head, "controlled_by");
+  return { type: "select-objective", selector, effect: effectsOf(groups[0]!) };
+}
+
 function buildContainer(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   switch (head.family_id) {
     case "choice-open": return buildChoice(head, groups);
     case "stance-select-open": return buildStanceSelect(head, groups);
     case "issue-orders-open": return buildIssueOrders(head, groups);
-    default: return buildDicePoolAllocation(head, groups);
+    case "dice-pool-allocation-open": return buildDicePoolAllocation(head, groups);
+    case "risk-reward-open": return buildRiskReward(head, groups);
+    case "resource-action-menu-open": return buildResourceActionMenu(head, groups);
+    case "persistent-designation-open": return buildPersistentDesignation(head, groups);
+    default: return buildSelectObjective(head, groups);
   }
 }
 
@@ -249,7 +319,13 @@ export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonl
       consumed.add(cursor);
     }
     if (current.length) groups.push(current);
-    if (groups.length < 2) throw new CompileError(`${leaf.family_id} needs at least two options after it, one sentence each.`);
+    if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {
+      if (groups.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
+    } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {
+      if (groups.length < 1) throw new CompileError(`${leaf.family_id} needs at least one option after it.`);
+    } else if (groups.length < 2) {
+      throw new CompileError(`${leaf.family_id} needs at least two options after it, one sentence each.`);
+    }
     nodes.set(index, buildContainer(leaf, groups));
   });
   return { nodes, consumed };

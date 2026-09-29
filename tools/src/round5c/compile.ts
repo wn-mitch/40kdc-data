@@ -141,6 +141,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
   }
   if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
+  if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
+  if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {
     return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };

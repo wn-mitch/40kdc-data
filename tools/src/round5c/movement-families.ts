@@ -72,6 +72,27 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "make-move",
+    version: 2,
+    role: "EFFECT",
+    label: "Make a move",
+    description: "As version 1, plus an optional counts_as_move: for rules that check what the unit did this turn, the move counts as a different named kind of move (or as Remaining Stationary).",
+    starter: { subject: "this-unit", move_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "move_type"],
+      properties: {
+        subject: enumOrSourceSchema(MOVE_SUBJECTS),
+        move_type: enumOrSourceSchema(MOVE_TYPES),
+        distance: distanceSchema,
+        ends_within_inches: { type: "integer", minimum: 1, maximum: 48 },
+        counts_as_move: { enum: [...MOVE_TYPES, "remain-stationary"] },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "move-through",
@@ -176,16 +197,20 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   },
 ];
 
-export function normalizeMovementParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
     case "make-move": {
-      keySet(input, ["subject", "move_type"], ["distance", "ends_within_inches"], family);
+      const optional = version >= 2 ? ["distance", "ends_within_inches", "counts_as_move"] : ["distance", "ends_within_inches"];
+      keySet(input, ["subject", "move_type"], optional, family);
       const result: Record<string, unknown> = {
         subject: enumOrSource(input.subject, MOVE_SUBJECTS, "make-move.subject"),
         move_type: enumOrSource(input.move_type, MOVE_TYPES, "make-move.move_type"),
       };
       if (input.distance !== undefined) result.distance = distanceValue(input.distance, "make-move.distance");
       if (input.ends_within_inches !== undefined) result.ends_within_inches = boundedInteger(input.ends_within_inches, 1, 48, "make-move.ends_within_inches");
+      if (version >= 2 && input.counts_as_move !== undefined) {
+        result.counts_as_move = enumValue(input.counts_as_move, [...MOVE_TYPES, "remain-stationary"], "make-move.counts_as_move");
+      }
       return result;
     }
     case "move-through": {

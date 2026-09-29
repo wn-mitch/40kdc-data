@@ -33,12 +33,19 @@ const TRIGGERS: Record<string, Node> = {
   "event:round-ended": { event: "round-ended" },
   "event:disembarked": { event: "disembarked" },
   "event:damage-allocated": { event: "damage-allocated" },
+  // Version 8 (batch 7a): more bare moments.
+  "event:battle-formations-declared": { event: "battle-formations-declared" },
+  "event:objective-gained": { event: "objective-gained" },
 };
 
 export const DURATIONS: Record<string, string> = {
   "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
   "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
   "start-of-next-movement-phase": "until-next-movement-phase", "start-of-next-battle-round": "until-next-battle-round",
+  // Version 3 (batch 7a).
+  "end-of-attack-sequence": "attack-sequence", "end-of-this-use": "resolution", "start-of-next-shooting-phase": "until-next-shooting-phase",
+  "end-of-your-next-turn": "until-end-of-your-next-turn", "end-of-opponents-next-turn": "until-end-of-opponent-next-turn",
+  "this-unit-has-shot": "until-this-unit-has-shot", "control-lost": "control-lost",
 };
 
 /** A unit's own activity, as the history it leaves: [event, filter, window]. */
@@ -109,6 +116,11 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: closed(leaf, "roll") } }),
+  // Version 8 (batch 7a).
+  "after-roll": (leaf) => ({ event: "after-roll", filter: { roll: closed(leaf, "roll") } }),
+  "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),
+  "resource-gained": (leaf) => ({ event: "resource-gained", filter: { pool: closed(leaf, "pool") } }),
+  "resource-spent": (leaf) => ({ event: "resource-spent", filter: { pool: closed(leaf, "pool") } }),
 };
 
 export function kindKey(leaf: CompileLeaf): string {
@@ -328,6 +340,66 @@ export function condition(leaf: CompileLeaf): Node {
       if (turn !== undefined && turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: `${String(turn)}-turn` } });
       if (operands.length === 0) throw new CompileError("phase-window needs a phase, a turn other than either, or both.");
       return operands.length === 1 ? operands[0]! : { operator: "and", operands };
+    }
+    // ── Mission/composition predicate families (batch 7a, mission-predicate-families.ts) ────
+    case "model-profile":
+      return polarity(leaf, pred("model-profile", { profile: closed(leaf, "profile") }, subjectOf(leaf)));
+    case "loadout": {
+      const parameters: Node = { uniform: closed(leaf, "uniform") };
+      if (leaf.parameters.model_keyword !== undefined) parameters.model_keyword = closed(leaf, "model_keyword");
+      return polarity(leaf, pred("loadout", parameters, subjectOf(leaf)));
+    }
+    case "eligible": {
+      const parameters: Node = { to: closed(leaf, "to") };
+      if (leaf.parameters.source_ability_id !== undefined) {
+        const sourceAbility: Node = { ability_id: closed(leaf, "source_ability_id") };
+        if (leaf.parameters.source_ability_owner !== undefined) sourceAbility.owner = closed(leaf, "source_ability_owner");
+        parameters.source_ability = sourceAbility;
+      }
+      if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
+      return polarity(leaf, pred("eligible", parameters, subjectOf(leaf)));
+    }
+    case "resource": {
+      const parameters: Node = { pool: closed(leaf, "pool") };
+      if (leaf.parameters.at_least !== undefined) parameters.at_least = closed(leaf, "at_least");
+      if (leaf.parameters.at_most !== undefined) parameters.at_most = closed(leaf, "at_most");
+      if (leaf.parameters.below_max === true) parameters.below_max = true;
+      if (leaf.parameters.source_ability_id !== undefined) {
+        const sourceAbility: Node = { ability_id: closed(leaf, "source_ability_id") };
+        if (leaf.parameters.source_ability_owner !== undefined) sourceAbility.owner = closed(leaf, "source_ability_owner");
+        parameters.source_ability = sourceAbility;
+      }
+      if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
+      return polarity(leaf, { type: "resource", parameters });
+    }
+    case "operation-markers": {
+      const parameters: Node = {};
+      for (const key of ["side", "count_min", "count_max"]) {
+        if (leaf.parameters[key] !== undefined) parameters[key] = closed(leaf, key);
+      }
+      for (const flag of ["friendly_unit_in_same_terrain_area", "no_enemy_in_terrain_area"]) {
+        if (leaf.parameters[flag] === true) parameters[flag] = true;
+      }
+      if (leaf.parameters.within_range_of !== undefined) parameters.within_range_of = closed(leaf, "within_range_of");
+      return polarity(leaf, { type: "operation-markers", parameters });
+    }
+    case "engagement-fronts":
+      return polarity(leaf, { type: "engagement-fronts", parameters: { count_min: closed(leaf, "count_min") } });
+    case "destroyed-while-on-objective": {
+      const parameters: Node = {};
+      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
+      if (leaf.parameters.objective_role !== undefined) parameters.objective_role = closed(leaf, "objective_role");
+      for (const flag of ["destroyer_on_objective", "victim_on_objective", "victim_started_turn_on_objective"]) {
+        if (leaf.parameters[flag] === true) parameters[flag] = true;
+      }
+      return polarity(leaf, { type: "destroyed-while-on-objective", parameters });
+    }
+    case "destroyed-in-tagged-terrain": {
+      const parameters: Node = {};
+      if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
+      if (leaf.parameters.tag !== undefined) parameters.tag = closed(leaf, "tag");
+      if (leaf.parameters.at_start_of_turn === true) parameters.at_start_of_turn = true;
+      return polarity(leaf, { type: "destroyed-in-tagged-terrain", parameters });
     }
     default:
       throw new CompileError(`Condition ${leaf.family_id} has no DSL fragment yet.`);

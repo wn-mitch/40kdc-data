@@ -118,6 +118,13 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "event", from: 6, to: 7, map: (parameters) => parameters },
   // Version 2 only widens faction from always-quoted to quoted-or-resolved; a pending quote still fits.
   { family: "army-faction", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 8/3/2 (batch 7a) only add kinds/endpoints/frequencies and their own filter fields.
+  { family: "event", from: 7, to: 8, map: (parameters) => parameters },
+  { family: "duration", from: 2, to: 3, map: (parameters) => parameters },
+  { family: "usage-limit", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2/2 (batch 7a) only add an optional range_cap_inches/counts_as_move field.
+  { family: "aura-range", from: 1, to: 2, map: (parameters) => parameters },
+  { family: "make-move", from: 1, to: 2, map: (parameters) => parameters },
 ];
 
 export type FamilyVersionReport = {

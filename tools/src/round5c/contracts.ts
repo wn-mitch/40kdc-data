@@ -18,6 +18,9 @@ import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-r
 import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
 import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
+import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
+import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
+import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -63,6 +66,9 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...PREDICATE_FAMILIES,
   ...PREDICATE_FAMILIES_2,
   ...PREDICATE_SUBJECT_FAMILIES,
+  ...TEST_FAMILIES,
+  ...GAP_CONTAINER_FAMILIES,
+  ...MISSION_PREDICATE_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -110,7 +116,7 @@ export function normalizeFingerprintParameters(
     ?? normalizeEffectParameters(family, input, version)
     ?? normalizeRestrictionParameters(family, input, version)
     ?? normalizeDiceParameters(family, input, version)
-    ?? normalizeMovementParameters(family, input)
+    ?? normalizeMovementParameters(family, input, version)
     ?? normalizeEconomyParameters(family, input)
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
@@ -119,7 +125,10 @@ export function normalizeFingerprintParameters(
     ?? normalizeNamedRegionParameters(family, input)
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)
-    ?? normalizePredicateSubjectParameters(family, input, version);
+    ?? normalizePredicateSubjectParameters(family, input, version)
+    ?? normalizeTestParameters(family, input)
+    ?? normalizeGapContainerParameters(family, input)
+    ?? normalizeMissionPredicateParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

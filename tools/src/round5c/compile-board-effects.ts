@@ -15,6 +15,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
       const modifier: Node = { move_type: closed(leaf, "move_type") };
       if (leaf.parameters.distance !== undefined) modifier.distance = closed(leaf, "distance");
       if (leaf.parameters.ends_within_inches !== undefined) modifier.ends_within = { range: { inches: closed(leaf, "ends_within_inches") } };
+      // Version 2 (batch 7a): the move counts as a different kind of move for later checks.
+      if (leaf.parameters.counts_as_move !== undefined) modifier.counts_as_move = closed(leaf, "counts_as_move");
       return { type: "move", target: closed(leaf, "subject"), modifier };
     }
     case "move-through": {
