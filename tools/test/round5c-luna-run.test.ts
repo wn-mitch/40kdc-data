@@ -7,9 +7,10 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
 import { openWorkbench } from "../src/round5c/db.js";
 import { abandonLunaRun, ABANDON_AFTER_MS, claimLunaRun, finishLunaRun, lunaRunView, runLuna, startLunaRun } from "../src/round5c/luna-run.js";
-import { LUNA_MODEL, LunaRunError } from "../src/round5c/luna-schema.js";
+import { LUNA_MODEL, lunaStdinEnvelope, LunaRunError } from "../src/round5c/luna-schema.js";
 import { extractAssistantJson, ompArgs, OmpTransportError, providerError } from "../src/round5c/omp-driver.js";
-import { importLuna, prepareLuna, type PreparedLuna } from "../src/round5c/proposal.js";
+import { importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna, type PreparedRequest } from "../src/round5c/proposal.js";
+import type { DeepSeekUsage, ModelCall } from "../src/round5c/leaf-proposals-llm.js";
 
 // Fabricated fixture prose only; nothing here is published source text.
 const SOURCE = "Each time this unit attacks, re-roll a Hit roll of 1 and gain a glimmer token.";
@@ -440,5 +441,51 @@ describe("v2 exact-text offset anchoring", () => {
     } finally {
       db.close();
     }
+  });
+});
+
+describe("Round 5C DeepSeek Luna transport", () => {
+  it("sends the same prepared request bytes to the injected DeepSeek call and imports its reply unchanged", async () => {
+    const db = open();
+    const run = prepared(db);
+    db.close();
+    const requestBytes = readFileSync(run.request_path, "utf8");
+    const requestJson = JSON.parse(requestBytes) as { instructions: string };
+
+    const usage: DeepSeekUsage = { prompt_tokens: 1200, prompt_cache_hit_tokens: 900, prompt_cache_miss_tokens: 300, completion_tokens: 150 };
+    let seenInstructions: string | null = null;
+    let seenRequest: string | null = null;
+    const deepseekCall: ModelCall = async (instructions, request) => {
+      seenInstructions = instructions;
+      seenRequest = request;
+      return {
+        body: validResponse(run, { model: "deepseek-v4-pro", model_version: "deepseek-v4-pro" }),
+        model: "deepseek-v4-pro", model_version: "deepseek-v4-pro", cost_usd: 0.001234, latency_ms: 42, usage,
+      };
+    };
+
+    const view = await runLuna(open, run.run_id, { transport: "deepseek", deepseekCall });
+    expect(view.state).toBe("completed");
+    expect(view.model).toBe("deepseek-v4-pro");
+    expect(view.model_version).toBe("deepseek-v4-pro");
+    expect(view.summary).toEqual({ proposals: 3, unresolved: 2, structural: 1, candidates: 1 });
+
+    // The transport received exactly the prepared request's own instructions, and the same
+    // {request, input_hash} envelope the omp path sends on stdin (LUNA_INSTRUCTIONS_V2 tells the
+    // model the user message is that envelope, and to echo input_hash back) — no separate
+    // DeepSeek-specific request format. `request` still leads (see lunaStdinEnvelope), so
+    // `requestBytes`'s stable fixed-prefix-first bytes are still the leading bytes DeepSeek sees.
+    // `requested_model` is the one field DeepSeek receives edited, to "deepseek-v4-pro" — the
+    // on-disk artifact still names the omp profile (chosen before any transport is picked), and
+    // the instructions ask the model to self-report that field back verbatim; sending it as-is
+    // would make DeepSeek truthfully self-report a model it isn't.
+    const deepseekRequestText = serializeLunaRequest({ ...(JSON.parse(requestBytes) as PreparedRequest), requested_model: "deepseek-v4-pro" });
+    expect(seenInstructions).toBe(requestJson.instructions);
+    expect(seenRequest).toBe(lunaStdinEnvelope(run.input_hash, deepseekRequestText));
+    expect(seenRequest!.startsWith(`{"request":${requestBytes.slice(0, 40)}`)).toBe(true);
+
+    const persisted = open().prepare("SELECT cost_usd, latency_ms FROM model_runs WHERE id = ?").get(Number(run.run_id)) as { cost_usd: number; latency_ms: number };
+    expect(persisted.cost_usd).toBeCloseTo(0.001234, 6);
+    expect(persisted.latency_ms).toBe(42);
   });
 });

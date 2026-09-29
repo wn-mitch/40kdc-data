@@ -11,7 +11,8 @@ import {
   extractAssistantJson, OMP_KILL_GRACE_MS, OMP_MAX_TIME_MS, ompArgs, ompBinary, OmpTransportError, ompVersion,
   overlayYaml, runOmpProcess,
 } from "./omp-driver.js";
-import { failLunaRun, importLuna, type LunaExecution, type LunaFailure, type LunaImportSummary } from "./proposal.js";
+import { deepseekKey, deepseekModelCall, DEEPSEEK_MODEL, type DeepSeekUsage, type ModelCall } from "./leaf-proposals-llm.js";
+import { failLunaRun, importLuna, serializeLunaRequest, type LunaExecution, type LunaFailure, type LunaImportSummary, type PreparedRequest } from "./proposal.js";
 
 /** A claimed run may be abandoned only after the subprocess deadline plus this grace. */
 export const ABANDON_AFTER_MS = OMP_MAX_TIME_MS + OMP_KILL_GRACE_MS;
@@ -175,23 +176,47 @@ export type LunaRunOptions = {
   now?: Date;
   hardKillMs?: number;
   maxTimeMs?: number;
+  /**
+   * Which transport executes the run's already-prepared request. `"omp"` (default) spawns the
+   * `omp` CLI against the `openai-codex/gpt-5.6-luna` profile, unchanged. `"deepseek"` sends the
+   * exact same request bytes (`serializeLunaRequest`'s fixed-prefix-first form; see
+   * `PreparedLuna`) as the user message to DeepSeek's chat completions API instead, with the
+   * request's own `instructions` as the system message — a transport swap, not a second request
+   * format. Either way the reply is validated and imported through the same `importLuna`.
+   */
+  transport?: "omp" | "deepseek";
+  /** Test injection point for the `"deepseek"` transport, mirroring `binary` for `"omp"`. */
+  deepseekCall?: ModelCall;
 };
 
 /** The claimed invocation a background runner must finish. */
 export type ClaimedLunaRun = { run_id: number; execution: LunaExecution };
 
 /**
- * Probe the binary and claim the run. Throws 503 when omp is unavailable, before any claim.
+ * Probe the transport and claim the run. Throws 503 when the transport is unavailable (the
+ * `omp` binary, or `DEEPSEEK_API_KEY`), before any claim.
  */
 export async function startLunaRun(db: DatabaseSync, runIdValue: unknown, options: LunaRunOptions = {}): Promise<ClaimedLunaRun> {
   const runId = parseRunId(runIdValue);
   lunaRunView(db, runId);
   let version: string;
-  try {
-    version = await ompVersion(options.binary ?? ompBinary());
-  } catch (error) {
-    if (error instanceof OmpTransportError) throw new LunaRunError(503, error.message);
-    throw error;
+  if (options.transport === "deepseek") {
+    // A test supplying its own `deepseekCall` doesn't need a real key to probe.
+    if (!options.deepseekCall) {
+      try {
+        deepseekKey();
+      } catch (error) {
+        throw new LunaRunError(503, error instanceof Error ? error.message : "DEEPSEEK_API_KEY is unavailable.");
+      }
+    }
+    version = "deepseek-transport";
+  } else {
+    try {
+      version = await ompVersion(options.binary ?? ompBinary());
+    } catch (error) {
+      if (error instanceof OmpTransportError) throw new LunaRunError(503, error.message);
+      throw error;
+    }
   }
   return { run_id: runId, execution: claimLunaRun(db, runId, { omp_version: version, now: options.now }) };
 }
@@ -227,30 +252,57 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
     }
     db.close();
   }
-  let outcome: { error: unknown } | { response: ReturnType<typeof extractAssistantJson> };
+  type Outcome = { body: Record<string, unknown>; model: string; cost_usd: number | null; latency_ms: number | null; usage?: DeepSeekUsage };
+  let outcome: { error: unknown } | { response: Outcome };
+  const transport = options.transport ?? "omp";
   try {
     const request = JSON.parse(requestText) as { instructions?: unknown };
     if (hashJson(request) !== config.input_hash) throw new LunaRunError(409, "The request artifact no longer matches the run's input hash.");
     if (typeof request.instructions !== "string" || hashJson({ instructions: request.instructions }) !== config.system_prompt_hash) {
       throw new LunaRunError(409, "The request artifact's instructions no longer match the run's system prompt hash.");
     }
-    const cwd = join(scratch, "cwd");
-    const configPath = join(scratch, "overlay.yml");
-    const systemPromptPath = join(scratch, "system-prompt.txt");
-    mkdirSync(cwd);
-    writeFileSync(configPath, overlayYaml(), "utf8");
-    writeFileSync(systemPromptPath, request.instructions, "utf8");
-    const requestedModel = config.requested_model ?? LUNA_MODEL;
-    const processResult = await runOmpProcess({
-      binary: options.binary,
-      args: ompArgs({ model: requestedModel, cwd, configPath, systemPromptPath, maxTimeMs: options.maxTimeMs }),
-      cwd: scratch,
-      stdin: lunaStdinEnvelope(config.input_hash!, requestText),
-      hardKillMs: options.hardKillMs,
-    });
-    const response = extractAssistantJson(processResult.stdout, requestedModel);
-    if (response.latency_ms === null) response.latency_ms = processResult.duration_ms;
-    outcome = { response };
+    if (transport === "deepseek") {
+      // Same prepared request bytes, same instructions, same envelope — only the transport
+      // differs: DeepSeek's chat completions API in place of the omp/gpt-5.6-luna subprocess.
+      // LUNA_INSTRUCTIONS_V2 tells the model "the user message is one JSON object
+      // {input_hash, request}" and to echo input_hash back verbatim, so the user message must be
+      // the same `lunaStdinEnvelope` the omp path sends on stdin, not the bare request — omitting
+      // the wrapper (an earlier version of this code did) leaves the model with no input_hash to
+      // echo and `importLuna` rejects the reply. `lunaStdinEnvelope` puts `request` first and
+      // `input_hash` last, so `requestText`'s stable fixed-prefix-first bytes are still the
+      // leading bytes of what DeepSeek actually receives — the prefix-cache property holds.
+      //
+      // One field is deliberately not "the same bytes": `requested_model`. The on-disk artifact
+      // always carries the omp/gpt-5.6-luna profile name (prepareLuna doesn't know the transport
+      // yet), and the instructions tell the model to self-report exactly that field back —
+      // sending it unedited would have DeepSeek truthfully self-report a model it isn't, which
+      // `importLuna` (correctly) then rejects as a self-reported/observed mismatch. Every other
+      // field — instructions, registry, confirmed_examples, abilities, schema — is untouched, and
+      // this substitution is identical across every deepseek-transport request in a batch, so it
+      // does not disturb the shared prefix those requests still get from `serializeLunaRequest`.
+      const deepseekRequestText = serializeLunaRequest({ ...(request as PreparedRequest), requested_model: DEEPSEEK_MODEL });
+      const call = options.deepseekCall ?? deepseekModelCall(DEEPSEEK_MODEL);
+      const reply = await call(request.instructions, lunaStdinEnvelope(config.input_hash!, deepseekRequestText));
+      outcome = { response: { body: reply.body, model: reply.model, cost_usd: reply.cost_usd, latency_ms: reply.latency_ms, usage: reply.usage } };
+    } else {
+      const cwd = join(scratch, "cwd");
+      const configPath = join(scratch, "overlay.yml");
+      const systemPromptPath = join(scratch, "system-prompt.txt");
+      mkdirSync(cwd);
+      writeFileSync(configPath, overlayYaml(), "utf8");
+      writeFileSync(systemPromptPath, request.instructions, "utf8");
+      const requestedModel = config.requested_model ?? LUNA_MODEL;
+      const processResult = await runOmpProcess({
+        binary: options.binary,
+        args: ompArgs({ model: requestedModel, cwd, configPath, systemPromptPath, maxTimeMs: options.maxTimeMs }),
+        cwd: scratch,
+        stdin: lunaStdinEnvelope(config.input_hash!, requestText),
+        hardKillMs: options.hardKillMs,
+      });
+      const response = extractAssistantJson(processResult.stdout, requestedModel);
+      if (response.latency_ms === null) response.latency_ms = processResult.duration_ms;
+      outcome = { response };
+    }
   } catch (error) {
     outcome = { error };
   } finally {
@@ -262,8 +314,17 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
     if ("error" in outcome) {
       failLunaRun(db, claimed.run_id, claimed.execution.owner, transportFailure(outcome.error));
     } else {
-      const version = claimed.execution.omp_version ?? "unknown";
+      const version = transport === "deepseek" ? outcome.response.model : claimed.execution.omp_version ?? "unknown";
       try {
+        if (transport === "deepseek") {
+          // `importLuna` checks the reply's observed model against the run's own
+          // `requested_model`, which `prepareLuna` always stamps as the omp/gpt-5.6-luna profile
+          // (chosen at prepare time, before a transport is picked). The transport is chosen here,
+          // at run time, so this run's expectation is corrected to match before import — the
+          // request itself (instructions, abilities, schema) is untouched.
+          db.prepare("UPDATE model_runs SET config_json = json_set(config_json, '$.requested_model', ?) WHERE id = ?")
+            .run(outcome.response.model, claimed.run_id);
+        }
         assertSourcesCurrent(db, config);
         importLuna(db, { run_id: String(claimed.run_id), response: outcome.response.body }, {
           owner: claimed.execution.owner,

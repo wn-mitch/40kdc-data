@@ -142,7 +142,7 @@ describe("pipeline-8b", () => {
     }
   });
 
-  it("gates-only mode reproduces the compile/residue/cost picture without touching sources or re-confirming, reusing cached embeddings", async () => {
+  it("gates-only mode reproduces the compile picture without touching sources or re-confirming, reusing cached embeddings", async () => {
     const db = fixture();
     try {
       const full = await runPipeline8b(db, { describerSimilarityFloor: 0 });
@@ -152,8 +152,6 @@ describe("pipeline-8b", () => {
 
       const gatesOnly = await runGatesOnly(db, { describerSimilarityFloor: 0 });
       expect(gatesOnly.compile).toEqual(full.compile);
-      expect(gatesOnly.residue).toEqual(full.residue);
-      expect(gatesOnly.cost_estimate).toEqual(full.cost_estimate);
       // Every text `runGatesOnly` needed to embed (each gated ability's rendered/source pair) was
       // already cached by the full run above — a re-gate embeds nothing new.
       expect(embeddingRows()).toBe(cachedAfterFull);
@@ -168,6 +166,23 @@ describe("pipeline-8b", () => {
     try {
       const result = await runGatesOnly(db);
       expect(result.compile).toMatchObject({ abilities_total: 0, fully_tiled: 0, compile_attempted: 0 });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("gates-only mode scoped to an ability-id set ignores everything else that's tiled", async () => {
+    const db = fixture();
+    try {
+      const full = await runPipeline8b(db, { describerSimilarityFloor: 0 });
+      expect(full.compile.fully_tiled).toBe(2); // CLOSABLE and CLOSABLE_BAD_SHAPE
+      const closableOnlyId = db.prepare("SELECT id FROM abilities WHERE ability_id = ? AND current = 1").get(CLOSABLE) as { id: number };
+
+      const scoped = await runGatesOnly(db, { describerSimilarityFloor: 0, abilityVersionIds: new Set([closableOnlyId.id]) });
+      expect(scoped.compile.abilities_total).toBe(1);
+      expect(scoped.compile.fully_tiled).toBe(1);
+      expect(scoped.compile.compile_attempted).toBe(1);
+      expect(scoped.compile.all_gates_pass).toBe(1);
     } finally {
       db.close();
     }

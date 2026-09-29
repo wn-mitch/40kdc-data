@@ -21,9 +21,31 @@ const CLUSTERS_PER_CALL = 10;
 const MEMBERS_PER_CLUSTER = 8;
 const EXAMPLES_PER_FAMILY = 3;
 
-export type ModelReply = { body: Record<string, unknown>; model: string; model_version: string; cost_usd: number | null; latency_ms: number | null };
+/** DeepSeek's own reported token accounting for one chat completion. */
+export type DeepSeekUsage = { prompt_tokens: number; prompt_cache_hit_tokens: number; prompt_cache_miss_tokens: number; completion_tokens: number };
+export type ModelReply = {
+  body: Record<string, unknown>; model: string; model_version: string; cost_usd: number | null; latency_ms: number | null;
+  /** Present only for a DeepSeek reply; other model transports leave it unset. */
+  usage?: DeepSeekUsage;
+};
 /** One model call: instructions as the system prompt, the request as the user message. */
 export type ModelCall = (instructions: string, request: string) => Promise<ModelReply>;
+
+/**
+ * DeepSeek's published off-peak per-million-token prices for deepseek-v4-pro, as of 2026-09-29:
+ * https://api-docs.deepseek.com/quick_start/pricing — $0.022 cache-hit input, $0.66 cache-miss
+ * input, $1.98 output. Peak hours (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri) double every price;
+ * this always reports the off-peak rate and says so, rather than silently mis-costing a peak call.
+ */
+export const DEEPSEEK_PRICE_SOURCE = "https://api-docs.deepseek.com/quick_start/pricing (off-peak, read 2026-09-29)";
+const DEEPSEEK_PRICE_PER_MILLION_USD = { cacheHitInput: 0.022, cacheMissInput: 0.66, output: 1.98 };
+
+/** Cost of one DeepSeek reply from its own usage accounting, at the off-peak published prices. */
+export function deepseekCostUsd(usage: DeepSeekUsage): number {
+  return (usage.prompt_cache_hit_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.cacheHitInput
+    + (usage.prompt_cache_miss_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.cacheMissInput
+    + (usage.completion_tokens / 1_000_000) * DEEPSEEK_PRICE_PER_MILLION_USD.output;
+}
 
 export const LEAF_PROPOSAL_INSTRUCTIONS = [
   "You label Warhammer 40,000 rules wording with leaves. A leaf is one meaning from the listed families: an EFFECT (what changes), a CONDITION (when it applies), an EVENT (when it fires), a DURATION, a RESTRICTION, or a COMBINATOR.",
@@ -40,7 +62,7 @@ const DEEPSEEK_ENDPOINT = process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek
 const DEEPSEEK_ENV_FILE = fileURLToPath(new URL("../../../_private/round5c/.env", import.meta.url));
 
 /** The DeepSeek key from the environment, else from the private .env file; never logged. */
-function deepseekKey(): string {
+export function deepseekKey(): string {
   if (process.env.DEEPSEEK_API_KEY?.trim()) return process.env.DEEPSEEK_API_KEY.trim();
   if (existsSync(DEEPSEEK_ENV_FILE)) {
     const line = readFileSync(DEEPSEEK_ENV_FILE, "utf8").split(/\r?\n/u).find((entry) => entry.startsWith("DEEPSEEK_API_KEY="));
@@ -62,7 +84,10 @@ export function deepseekModelCall(model = DEEPSEEK_MODEL): ModelCall {
         messages: [{ role: "system", content: instructions }, { role: "user", content: request }] }),
       signal: AbortSignal.timeout(10 * 60 * 1000),
     });
-    const payload = await response.json().catch(() => null) as { model?: unknown; choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }>; error?: { message?: unknown } } | null;
+    const payload = await response.json().catch(() => null) as {
+      model?: unknown; choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }>; error?: { message?: unknown };
+      usage?: { prompt_tokens?: unknown; prompt_cache_hit_tokens?: unknown; prompt_cache_miss_tokens?: unknown; completion_tokens?: unknown };
+    } | null;
     if (!response.ok) throw new Error(`DeepSeek HTTP ${response.status}: ${String(payload?.error?.message ?? response.statusText).slice(0, 300)}`);
     const choice = payload?.choices?.[0];
     if (choice?.finish_reason !== "stop") throw new Error(`DeepSeek stopped with ${String(choice?.finish_reason)}.`);
@@ -75,7 +100,16 @@ export function deepseekModelCall(model = DEEPSEEK_MODEL): ModelCall {
     }
     if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("DeepSeek's reply is not a JSON object.");
     const returned = typeof payload?.model === "string" ? payload.model : model;
-    return { body: body as Record<string, unknown>, model: returned, model_version: returned, cost_usd: null, latency_ms: Date.now() - started };
+    const rawUsage = payload?.usage;
+    const num = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
+    const usage: DeepSeekUsage | undefined = rawUsage ? {
+      prompt_tokens: num(rawUsage.prompt_tokens), prompt_cache_hit_tokens: num(rawUsage.prompt_cache_hit_tokens),
+      prompt_cache_miss_tokens: num(rawUsage.prompt_cache_miss_tokens), completion_tokens: num(rawUsage.completion_tokens),
+    } : undefined;
+    return {
+      body: body as Record<string, unknown>, model: returned, model_version: returned, latency_ms: Date.now() - started,
+      cost_usd: usage ? deepseekCostUsd(usage) : null, usage,
+    };
   };
 }
 

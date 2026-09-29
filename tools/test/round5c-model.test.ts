@@ -10,6 +10,7 @@ import { initializeWorkbench } from "../src/round5c/db.js";
 import { familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
 import { importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
 import { lunaStdinEnvelope } from "../src/round5c/luna-schema.js";
+import { getCurrentCoverage } from "../src/round5c/coverage.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -211,6 +212,39 @@ describe("Round 5C external Luna transport", () => {
         .toBe(secondEnvelope.slice(0, secondSplit + '{"request":'.length));
     } finally {
       value.db.close();
+    }
+  });
+
+  it("accepts a precomputed coverage snapshot in place of its own getCurrentCoverage pass, for a caller batching several requests", () => {
+    const rows = [
+      { abilityId: "batch-one", source: "Re-roll a Hit roll of 1." },
+      { abilityId: "batch-two", source: "Re-roll a Wound roll of 1." },
+    ];
+    // Two independent, identically-seeded databases: one exercises prepareLuna's default
+    // internal getCurrentCoverage pass, the other a precomputed snapshot — same DB content, so
+    // any difference in what gets selected is down to the coverage source, not fixture drift.
+    const withoutSnapshot = fixture(rows);
+    const withSnapshot = fixture(rows);
+    try {
+      const defaultResult = prepareLuna(withoutSnapshot.db, { limit: 1 });
+      const coverage = getCurrentCoverage(withSnapshot.db);
+      const snapshotResult = prepareLuna(withSnapshot.db, { limit: 1, coverage });
+      expect(preparedRequest(snapshotResult).abilities.map((a) => a.ability_id))
+        .toEqual(preparedRequest(defaultResult).abilities.map((a) => a.ability_id));
+
+      // Proof the snapshot is actually consulted rather than silently ignored: an empty one
+      // (as if nothing were ever confirmed) leaves prepareLuna with no residue to select from,
+      // even though the database's own live coverage has plenty.
+      const emptyCoverage = fixture(rows);
+      try {
+        expect(() => prepareLuna(emptyCoverage.db, { limit: 1, coverage: new Map() }))
+          .toThrow(/No current abilities are available/i);
+      } finally {
+        emptyCoverage.db.close();
+      }
+    } finally {
+      withoutSnapshot.db.close();
+      withSnapshot.db.close();
     }
   });
 

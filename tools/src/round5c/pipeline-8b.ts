@@ -193,10 +193,15 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
   try {
     const clone = new DatabaseSyncCtor(scratchDb);
     try {
+      // One coverage snapshot for the whole simulated batch: nothing about leaf annotations
+      // changes between these ~400 read-only `prepareLuna` calls, so recomputing the full-corpus
+      // coverage on every one of them (prepareLuna's own default when no snapshot is given) is
+      // pure waste here — see PrepareLunaOptions.coverage.
+      const coverage = getCurrentCoverage(clone);
       for (;;) {
         let prepared;
         try {
-          prepared = prepareLuna(clone, { mode: "residue", limit: 15 } as PrepareLunaOptions);
+          prepared = prepareLuna(clone, { mode: "residue", limit: 15, coverage } as PrepareLunaOptions);
         } catch (error) {
           if (error instanceof RangeError) break;
           throw error;
@@ -274,25 +279,30 @@ export async function runPipeline8bCli(options: Pipeline8bOptions = {}): Promise
   }
 }
 
-export type GatesOnlyReport = { compile: CompileGateReport; residue: ResidueReport; cost_estimate: CostEstimate };
+export type GatesOnlyReport = { compile: CompileGateReport };
+export type GatesOnlyOptions = Pick<Pipeline8bOptions, "describerSimilarityFloor"> & {
+  /** Restrict compile+gate to this set of ability versions (a pilot sample, for example). */
+  abilityVersionIds?: ReadonlySet<number>;
+};
 
 /**
- * Re-gate the workbench's current compiles without refreshing sources or running another
- * deterministic-confirm pass — for iterating on the gate logic itself (as here: adding the
- * "outside the damage path" bucket) against a DB a full `runPipeline8b` already brought to a
- * steady state, without paying for the proposal pass and refresh again.
+ * Re-gate the workbench's current compiles — nothing else. No refresh, no deterministic-confirm
+ * pass, no residue report, no cost estimate: those aren't "the gate", and `costEstimate` in
+ * particular is not cheap to include here (it drives the real `prepareLuna`, which simulates
+ * requests over the *whole* residue corpus by default — fine as a one-off in the full run,
+ * ruinous if paid again on every gate iteration, and irrelevant to an arm comparison anyway).
+ * Pass `abilityVersionIds` to scope the compile+gate pass itself to a pilot sample instead of
+ * every current ability, for a fast per-arm comparison run.
  */
-export async function runGatesOnly(db: DatabaseSync, options: Pick<Pipeline8bOptions, "describerSimilarityFloor"> = {}): Promise<GatesOnlyReport> {
+export async function runGatesOnly(db: DatabaseSync, options: GatesOnlyOptions = {}): Promise<GatesOnlyReport> {
   const floor = options.describerSimilarityFloor ?? DEFAULT_OPTIONS.describerSimilarityFloor;
   const embedder = localEmbedder();
-  const compile = await runCompileGates(db, embedder, floor);
-  const residue = residueReport(db);
-  const cost_estimate = await costEstimate(db);
-  return { compile, residue, cost_estimate };
+  const compile = await runCompileGates(db, embedder, floor, options.abilityVersionIds);
+  return { compile };
 }
 
 /** Standalone entry point for `round5c pipeline-8b-gates-only` — opens the workbench itself. */
-export async function runGatesOnlyCli(options: Pick<Pipeline8bOptions, "describerSimilarityFloor"> = {}): Promise<GatesOnlyReport> {
+export async function runGatesOnlyCli(options: GatesOnlyOptions = {}): Promise<GatesOnlyReport> {
   const db = openWorkbench();
   try {
     return await runGatesOnly(db, options);

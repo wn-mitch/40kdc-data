@@ -11,7 +11,7 @@ import {
   validateFingerprint,
   type SemanticRole,
 } from "./contracts.js";
-import { getCurrentCoverage, type UncoveredInterval } from "./coverage.js";
+import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, exactSpan, initializeWorkbench, insertSpan, withTransaction } from "./db.js";
 import {
   asRecord, assertExactKeys, fragmentFor, nonblank, nonnegativeInteger, parseFragments, parseQualifiers,
@@ -368,6 +368,21 @@ export type PrepareLunaOptions = {
   ability_version_id?: number;
   /** Re-prepare the abilities of this failed run as a new, linked run. */
   retry_of?: number;
+  /**
+   * A coverage snapshot to use instead of computing one from `db`. `getCurrentCoverage` is a
+   * full-corpus pass; a caller preparing several requests back to back in one batch (nothing
+   * about leaf annotations changes between them) computes it once and passes it to every call
+   * instead of paying for it again each time. The real single-shot Luna workflow (the CLI, the
+   * server) never sets this, so its behavior — one internal `getCurrentCoverage(db)` call per
+   * `prepareLuna` invocation — is unchanged.
+   */
+  coverage?: Map<number, AbilityCoverage>;
+  /**
+   * Restrict candidates to this set of ability versions (a pilot sample, for example), in
+   * addition to every other filter. Unlike `ability_version_id`, this can still fill several
+   * requests across multiple calls, batched the same way as an unrestricted run.
+   */
+  abilityVersionIds?: ReadonlySet<number>;
 };
 
 function positiveId(value: unknown, label: string): number | undefined {
@@ -420,9 +435,10 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
         if (pending.has(abilityVersionId)) throw new LunaRunError(409, `Ability version ${abilityVersionId} already belongs to a pending Luna run.`);
         if (retryScope && !retryScope.has(abilityVersionId)) throw new LunaRunError(422, `Run ${retryOf} did not request ability version ${abilityVersionId}.`);
       }
-      const coverage = getCurrentCoverage(db);
+      const coverage = options.coverage ?? getCurrentCoverage(db);
       const candidates = currentAbilities(db)
         .filter((ability) => abilityVersionId === undefined || ability.id === abilityVersionId)
+        .filter((ability) => !options.abilityVersionIds || options.abilityVersionIds.has(ability.id))
         .filter((ability) => retryScope === null || retryScope.has(ability.id))
         .map((ability) => {
           const view = coverage.get(ability.id);

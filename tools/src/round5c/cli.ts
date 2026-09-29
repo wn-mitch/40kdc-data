@@ -15,6 +15,11 @@ import { localEmbedder } from "./embeddings.js";
 import { reapplyLeafSurfaces } from "./leaves.js";
 import { refreshSources } from "./source.js";
 import { runGatesOnly, runPipeline8b } from "./pipeline-8b.js";
+import { selectPilotSample, type PilotSample } from "./pilot-sample.js";
+import { buildTypeSafeClient, pilotSpans, runJevProposer } from "./jev-proposer.js";
+import { runDeepSeekArm } from "./deepseek-pilot.js";
+import { calibrateThreshold } from "./jev-v2-segment.js";
+import { runJevV2Rounds } from "./jev-v2-rounds.js";
 
 const root = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
 
@@ -47,9 +52,9 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
 }
 
 async function run(command: string | undefined): Promise<void> {
-  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals", "pipeline-8b", "pipeline-8b-gates-only"];
+  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals", "pipeline-8b", "pipeline-8b-gates-only", "pilot-sample", "jev-pilot", "deepseek-pilot", "calibrate-segmentation", "jev-v2-pilot"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only>");
+    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only [sample.json]|pilot-sample [seed] [target-size]|jev-pilot <sample.json> [spend-cap-usd]|deepseek-pilot <sample.json> [max-requests] [spend-cap-usd]|calibrate-segmentation [max-abilities]|jev-v2-pilot <sample.json> <threshold> [spend-cap-usd] [max-rounds]>");
   }
   if (command === "leaf-describer-audit") {
     // Depends only on the registry and the describer, not on the workbench database.
@@ -73,9 +78,51 @@ async function run(command: string | undefined): Promise<void> {
       const result = await runPipeline8b(db);
       console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "pipeline-8b-gates-only") {
+      const samplePath = process.argv[3];
+      const abilityVersionIds = samplePath
+        ? new Set((JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample).abilities.map((ability) => ability.ability_version_id))
+        : undefined;
       const started = Date.now();
-      const result = await runGatesOnly(db);
+      const result = await runGatesOnly(db, { abilityVersionIds });
       console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
+    } else if (command === "pilot-sample") {
+      const seed = process.argv[3] ? Number(process.argv[3]) : undefined;
+      const targetSize = process.argv[4] ? Number(process.argv[4]) : undefined;
+      console.log(JSON.stringify(selectPilotSample(db, { seed, targetSize }), null, 2));
+    } else if (command === "jev-pilot") {
+      const samplePath = process.argv[3];
+      if (!samplePath) throw new Error("jev-pilot requires a pilot sample JSON path.");
+      const spendCapUsd = process.argv[4] ? Number(process.argv[4]) : undefined;
+      const sample = JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample;
+      const spans = pilotSpans(db, sample.abilities);
+      const client = buildTypeSafeClient();
+      const started = Date.now();
+      const result = await runJevProposer(client, spans, { spendCapUsd });
+      console.log(JSON.stringify({ ...result, wall_seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
+    } else if (command === "deepseek-pilot") {
+      const samplePath = process.argv[3];
+      if (!samplePath) throw new Error("deepseek-pilot requires a pilot sample JSON path.");
+      const maxRequests = process.argv[4] ? Number(process.argv[4]) : undefined;
+      const spendCapUsd = process.argv[5] ? Number(process.argv[5]) : undefined;
+      const sample = JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample;
+      const abilityVersionIds = new Set(sample.abilities.map((ability) => ability.ability_version_id));
+      const started = Date.now();
+      const result = await runDeepSeekArm(db, () => openWorkbench(), abilityVersionIds, { maxRequests, spendCapUsd });
+      console.log(JSON.stringify({ ...result, wall_seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
+    } else if (command === "calibrate-segmentation") {
+      const maxAbilities = process.argv[3] ? Number(process.argv[3]) : undefined;
+      console.log(JSON.stringify(await calibrateThreshold(db, localEmbedder(), { maxAbilities }), null, 2));
+    } else if (command === "jev-v2-pilot") {
+      const samplePath = process.argv[3];
+      const threshold = process.argv[4] ? Number(process.argv[4]) : undefined;
+      if (!samplePath || threshold === undefined) throw new Error("jev-v2-pilot requires a pilot sample JSON path and a calibrated segmentation threshold.");
+      const spendCapUsd = process.argv[5] ? Number(process.argv[5]) : undefined;
+      const maxRounds = process.argv[6] ? Number(process.argv[6]) : undefined;
+      const sample = JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample;
+      const client = buildTypeSafeClient();
+      const started = Date.now();
+      const result = await runJevV2Rounds(db, localEmbedder(), client, sample.abilities, { segmentationThreshold: threshold, spendCapUsd, maxRounds });
+      console.log(JSON.stringify({ ...result, wall_seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "repair-related-variants") {
       console.log(JSON.stringify(repairRelatedVariantProposals(db), null, 2));
     } else if (command === "prepare-luna") {

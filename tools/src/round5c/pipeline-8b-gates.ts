@@ -57,10 +57,13 @@ export type CompileGateReport = {
 };
 
 /** Leaves for every ability whose source is now fully tiled, keyed by ability_version_id. */
-function tiledLeaves(db: DatabaseSync): Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }> {
+function tiledLeaves(
+  db: DatabaseSync, abilityVersionIds?: ReadonlySet<number>,
+): Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }> {
   const coverage = getCurrentCoverage(db);
-  const abilities = db.prepare(`SELECT id, faction_id, ability_id, source_text FROM abilities WHERE current = 1`)
-    .all() as Array<{ id: number; faction_id: string; ability_id: string; source_text: string }>;
+  const abilities = (db.prepare(`SELECT id, faction_id, ability_id, source_text FROM abilities WHERE current = 1`)
+    .all() as Array<{ id: number; faction_id: string; ability_id: string; source_text: string }>)
+    .filter((ability) => !abilityVersionIds || abilityVersionIds.has(ability.id));
   const leaves = new Map<number, CompileLeaf[]>();
   for (const row of db.prepare(`
     SELECT source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
@@ -221,10 +224,14 @@ async function gateCompiledAbility(
   return { status: "gated", schema, coreChecks, integrity, describer, describerScore, crunchShapeOk, honestUnknown, outsideDamagePath, unrecognizedShape, leverDiff, failures };
 }
 
-export async function runCompileGates(db: DatabaseSync, embedder: Embedder, floor: number): Promise<CompileGateReport> {
+export async function runCompileGates(
+  db: DatabaseSync, embedder: Embedder, floor: number, abilityVersionIds?: ReadonlySet<number>,
+): Promise<CompileGateReport> {
   const dataRoot = round5cDataRoot();
-  const tiled = tiledLeaves(db);
-  const abilitiesTotal = (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
+  const tiled = tiledLeaves(db, abilityVersionIds);
+  const abilitiesTotal = abilityVersionIds
+    ? abilityVersionIds.size
+    : (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
   const report: CompileGateReport = {
     abilities_total: abilitiesTotal, fully_tiled: tiled.size, compile_attempted: 0, compile_ok: 0, compile_errors: {},
     gated: 0, no_data_entry: 0, schema_pass: 0, core_checks_pass: 0, integrity_pass: 0, describer_pass: 0, describer_scores: [],
