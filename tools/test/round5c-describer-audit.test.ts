@@ -59,8 +59,15 @@ describe("Round 5C leaf describer audit", () => {
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
       // count_min stops mattering once count_max is 0 ("no operation markers"), same text either way.
       "operation-markers": { unrendered: [], colliding: ["count_min"], problems: 0 },
-      // test-exemption (x-leaf-5): a target filter whose fields don't all reach the English for every branch.
-      "test-exemption": { unrendered: [], colliding: ["target", "require_keywords", "exclude_keywords"], problems: 0 },
+      // Batch 7b follow-up (x-leaf-5): the schema lets move_types/action_kind pair with a `to`
+      // (kind: selected) that has nothing to do with a move or an attack ("selected to shoot"
+      // with a move_types filter); the describer only renders move/attack wording for the kinds
+      // that call for it, so those combinations read the same regardless of the filter's value.
+      event: { unrendered: [], colliding: ["move_types", "action_kind"], problems: 0 },
+      // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
+      // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
+      // "recipient" collision every widened subject-like enum in this file already has.
+      "test-exemption": { unrendered: [], colliding: ["target"], problems: 0 },
     });
   });
 

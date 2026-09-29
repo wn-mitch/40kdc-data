@@ -98,6 +98,18 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "sticky-objective", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds an optional roll_var (the phase-4 `roll` binding container); v1's plain dice still fits.
   { family: "dice-roll", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds an optional reward_choice_label; v1's plain {test} still fits.
+  { family: "risk-reward-open", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds optional eligibility/binds_event_variable fields; v1's plain shape still fits.
+  { family: "menu-action", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds an optional label; v1's plain {pool, amount} still fits.
+  { family: "resource-spend", from: 1, to: 2, map: (parameters) => parameters },
+  { family: "resource-gain", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds optional pool_gain/pool_spend; v1's plain {menu_id, pool_id} still fits.
+  { family: "resource-action-menu-open", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds optional of_owner/of_keywords and (test only) scaling_*; v1's shape still fits.
+  { family: "test", from: 1, to: 2, map: (parameters) => parameters },
+  { family: "test-exemption", from: 1, to: 2, map: (parameters) => parameters },
   {
     family: "below-starting-strength", from: 1, to_family: "unit-state", to: 1,
     map: (parameters) => {
@@ -120,6 +132,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "army-faction", from: 1, to: 2, map: (parameters) => parameters },
   // Version 8/3/2 (batch 7a) only add kinds/endpoints/frequencies and their own filter fields.
   { family: "event", from: 7, to: 8, map: (parameters) => parameters },
+  // Version 9 only adds four new kinds and their own owner/move_types/to/action_kind fields; v8's shapes still fit.
+  { family: "event", from: 8, to: 9, map: (parameters) => parameters },
   { family: "duration", from: 2, to: 3, map: (parameters) => parameters },
   { family: "usage-limit", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2/2 (batch 7a) only add an optional range_cap_inches/counts_as_move field.

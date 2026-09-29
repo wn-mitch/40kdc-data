@@ -9,9 +9,9 @@ import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 /**
  * Batch 7b, containers half: risk-reward, resource-action-menu, persistent-designation,
  * select-objective — each an opener composed like choice-open (see compile-containers.ts).
- * resource-action-menu is reduced from the schema's full generality (no eligibility/
- * binds_event_variable); Aeldari's Battle Focus, the one authored record, needs both and is not
- * reproduced exactly here — see the batch report.
+ * resource-action-menu's actions read their trigger from ordinary `event` leaves (version 9's
+ * general owner/move_types/to/action_kind filters) and their eligibility from ordinary
+ * unit-keyword/select-unit leaves in the action's own group — not a closed vocabulary of its own.
  */
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -116,6 +116,26 @@ describe("Round 5C resource-action-menu compiler", () => {
     ]).length).toBeGreaterThan(0);
   });
 
+  it("compiles an action's eligibility from an ordinary unit-keyword leaf (requires_keyword, and excludes_keyword when negated) and a select-unit leaf (selector_count)", () => {
+    expect(compiled([
+      leaf("EFFECT", "resource-action-menu-open", { menu_id: "m", pool_id: "p" }, "A"),
+      leaf("EVENT", "menu-action", { action_id: "vehicle-only", label: "Vehicle Only", cost_amount: 1 }, "B"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["VEHICLE"], negated: false, subject: "this-unit" }, "B"),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move" }, "B", 9),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+      leaf("EVENT", "menu-action", { action_id: "not-titanic", label: "Not Titanic", cost_amount: 1 }, "C"),
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }, "C"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "C"),
+      leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "C", 9),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
+    ]).mechanics.effect).toMatchObject({
+      actions: [
+        { id: "vehicle-only", eligibility: { requires_keyword: ["VEHICLE"] } },
+        { id: "not-titanic", eligibility: { excludes_keyword: ["TITANIC"], selector_count: 1 } },
+      ],
+    });
+  });
+
   it("refuses a menu action with no leading trigger leaf", () => {
     const result = compileLeaves([
       leaf("EFFECT", "resource-action-menu-open", { menu_id: "m", pool_id: "p" }, "A"),
@@ -124,23 +144,59 @@ describe("Round 5C resource-action-menu compiler", () => {
     ]);
     expect(result.ok).toBe(false);
   });
+
+  it("reproduces battle-focus-aeldari exactly, all six actions", () => {
+    const entry = authored("aeldari", "battle-focus-aeldari");
+    const cost = { cost_pool_id: "battle-focus-pool", cost_resource_label: "Battle Focus token" };
+    const move = (owner: string, moveTypes: string[], fragment: string) => leaf("EVENT", "event", { kind: "move-ended", owner, move_types: moveTypes }, fragment, 9);
+    const result = compiled([
+      leaf("EFFECT", "resource-action-menu-open", {
+        menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool", unit_max_manoeuvres_per_phase: 1, default_manoeuvre_max_per_phase: 1,
+        pool_gain: { trigger: "round-started", amount: "variable", label: "Battle Focus token" },
+        pool_spend: { trigger: "round-ended", amount: "all", label: "Battle Focus token" },
+      }, "A", 2),
+      leaf("EVENT", "menu-action", { action_id: "swift-as-the-wind", label: "Swift as the Wind", cost_amount: 1, ...cost, repeatable_if_different_unit: true, duration: "until-end-of-phase" }, "B", 2),
+      move("friendly", ["normal"], "B"), move("friendly", ["advance"], "B"), move("friendly", ["fall-back"], "B"),
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3),
+      leaf("EVENT", "menu-action", { action_id: "flitting-shadows", label: "Flitting Shadows", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "C", 2),
+      move("friendly", ["normal"], "C"), move("friendly", ["advance"], "C"), move("friendly", ["fall-back"], "C"),
+      leaf("EVENT", "event", { kind: "set-up", owner: "friendly" }, "C", 9),
+      leaf("EVENT", "event", { kind: "targets-selected", owner: "friendly", action_kind: "charge" }, "C", 9),
+      leaf("EFFECT", "rule-state", { subject: "this-unit", direction: "suppressed", rule_kind: "core-rule", rule: "overwatch-against-bearer" }, "C"),
+      leaf("EVENT", "menu-action", { action_id: "star-engines", label: "Star Engines", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "D", 2),
+      leaf("CONDITION", "unit-keyword", { keywords: ["VEHICLE"], negated: false, subject: "this-unit" }, "D"),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move", move_types: ["advance"] }, "D", 9),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Assault", weapon_type: "ranged" }, "D"),
+      leaf("EVENT", "menu-action", { action_id: "sudden-strike", label: "Sudden Strike", cost_amount: 1, ...cost, duration: "until-end-of-phase" }, "E", 2),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "fight" }, "E", 9),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "pile-in", distance: 6 }, "E"),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "consolidation", distance: 6 }, "E"),
+      leaf("EVENT", "menu-action", { action_id: "opportunity-seized", label: "Opportunity Seized", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-enemy", eligibility_engaged_with_bound_at_phase_start: true }, "F", 2),
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }, "F"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "F"),
+      move("enemy", ["fall-back"], "F"),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "F"),
+      leaf("EVENT", "menu-action", { action_id: "fade-back", label: "Fade Back", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-shooter", eligibility_after_bound_hit_roll: true }, "G", 2),
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }, "G"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "G"),
+      leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "G", 9),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "G"),
+    ]);
+    expect(result.mechanics.effect).toEqual(entry.effect);
+  });
 });
 
 describe("Round 5C persistent-designation compiler", () => {
   const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
-  it("reproduces unbridled-ardour-the-angelic-host-blood-angels, up to this-unit vs this-model on the consumer effect", () => {
+  it("reproduces unbridled-ardour-the-angelic-host-blood-angels exactly", () => {
     const entry = authored("blood-angels", "unbridled-ardour-the-angelic-host-blood-angels");
     const result = compiled([
       leaf("EFFECT", "persistent-designation-open", { designation: "unbridled-ardour-slayer", scope: "enemy-unit", timing: "on-unit-destroyed", beneficiary: "this-model" }, "A"),
       leaf("EFFECT", "reroll", { roll: "hit", subset: "any", weapon_type: "all" }, "B"),
       leaf("EFFECT", "reroll", { roll: "wound", subset: "any", weapon_type: "all" }, "B"),
     ]);
-    // effectsOf (shared by every batch-5/7b container opener) calls effect() with no attacker
-    // context, so a reroll option's target always defaults to this-unit; the real record's own
-    // consumer.effect happens to use this-model. Same node otherwise — see the batch report.
-    const expected = JSON.parse(JSON.stringify(entry.effect).replaceAll('"this-model"', '"this-unit"'));
-    expect(result.mechanics.effect).toEqual(expected);
+    expect(result.mechanics.effect).toEqual(entry.effect);
     expect(rendered(base(), [
       leaf("EFFECT", "persistent-designation-open", { designation: "unbridled-ardour-slayer", scope: "enemy-unit", timing: "on-unit-destroyed", beneficiary: "this-model" }, "A"),
       leaf("EFFECT", "reroll", { roll: "hit", subset: "any", weapon_type: "all" }, "B"),

@@ -82,6 +82,38 @@ describe("Round 5C test-family compiler", () => {
     expect(() => normalizeFingerprintParameters("test", { target: "this-unit", test: "battle-shock", range: "engagement" }, 1)).toThrow();
   });
 
+  it("reproduces terror-made-manifest-chaos-space-marines' test node exactly (its own within.of names a friendly-keyword filter, not a fixed role)", () => {
+    const entry = authored("chaos-space-marines", "terror-made-manifest-chaos-space-marines");
+    const steps = (entry.effect as { steps: Array<{ effect: unknown }> }).steps;
+    expect(compiled([leaf("EFFECT", "test", {
+      target: "enemy", range: "inches", within_inches: 12, of_owner: "friendly", of_keywords: ["HERETIC ASTARTES"], test: "battle-shock", modifier: -1,
+    })]).mechanics.effect).toEqual(steps[0]!.effect);
+  });
+
+  it("reproduces powers-of-da-waaagh-orks' test node exactly (nested under for-each-unit; target here is its own \"selected-unit\" binding, not this family's, so pinned as this-unit)", () => {
+    const entries = JSON.parse(readFileSync(join(dataRoot, "orks", "abilities.json"), "utf8")) as Array<Record<string, unknown>>;
+    const entry = entries.find((item) => item.ability_id === "powers-of-da-waaagh-orks")!;
+    const find = (node: unknown, kind: string): Record<string, unknown> | undefined => {
+      if (Array.isArray(node)) { for (const item of node) { const hit = find(item, kind); if (hit) return hit; } return undefined; }
+      if (node === null || typeof node !== "object") return undefined;
+      const record = node as Record<string, unknown>;
+      if (record.type === kind) return record;
+      for (const value of Object.values(record)) { const hit = find(value, kind); if (hit) return hit; }
+      return undefined;
+    };
+    const real = find(entry.effect, "test")!;
+    const compiledNode = compiled([leaf("EFFECT", "test", {
+      target: "this-unit", test: "battle-shock", modifier: -1, scaling_per: 10, scaling_of: "models-in-bearer-unit", scaling_round: "down",
+    })]).mechanics.effect as Record<string, unknown>;
+    expect(compiledNode.modifier).toEqual(real.modifier);
+    expect(compiledNode.scaling).toEqual(real.scaling);
+  });
+
+  it("refuses of and of_owner together, and of_keywords without of_owner", () => {
+    expect(() => normalizeFingerprintParameters("test", { target: "enemy", range: "inches", within_inches: 6, of: "this-model", of_owner: "friendly", test: "battle-shock" }, 2)).toThrow();
+    expect(() => normalizeFingerprintParameters("test", { target: "enemy", range: "inches", within_inches: 6, of_keywords: ["X"], test: "battle-shock" }, 2)).toThrow();
+  });
+
   it("reproduces using-sir-hekhtur-imperial-knights' destruction-rule step exactly (the ability's third sequence step)", () => {
     const entry = authored("imperial-knights", "using-sir-hekhtur-imperial-knights");
     const steps = (entry.effect as { steps: unknown[] }).steps;

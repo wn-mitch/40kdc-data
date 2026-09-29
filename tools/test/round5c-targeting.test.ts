@@ -99,7 +99,7 @@ describe("Round 5C targeting families", () => {
       db.prepare("UPDATE annotations SET status = 'superseded' WHERE fingerprint_id = ?").run(stale);
       db.prepare("UPDATE fingerprints SET status = 'superseded' WHERE id = ?").run(stale);
       expect(upgradeFamilyVersions(db).repointed_surfaces).toBe(1);
-      expect(surfaceMeaning(db, "after this unit has shot")).toEqual({ family_id: "event", family_version: 8, parameters_json: JSON.stringify({ kind: "after-shooting" }) });
+      expect(surfaceMeaning(db, "after this unit has shot")).toEqual({ family_id: "event", family_version: 9, parameters_json: JSON.stringify({ kind: "after-shooting" }) });
     } finally {
       db.close();
     }

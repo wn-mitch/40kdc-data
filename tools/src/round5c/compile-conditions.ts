@@ -7,6 +7,7 @@
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
+import { OWNED_EVENT_KINDS } from "./event-family.js";
 
 type Node = Record<string, unknown>;
 
@@ -127,9 +128,22 @@ export function kindKey(leaf: CompileLeaf): string {
   return `${leaf.family_id}:${String(leaf.family_id === "turn-start" ? leaf.parameters.turn : leaf.parameters.kind)}`;
 }
 
+/** Version 9's four general moments: any owner, and their own move_types/to/action_kind filter. */
+function ownedEventTrigger(leaf: CompileLeaf): Node {
+  const node: Node = { event: closed(leaf, "kind") };
+  if (leaf.parameters.owner !== undefined) node.subject = { owner: closed(leaf, "owner") };
+  const filter: Node = {};
+  if (leaf.parameters.move_types !== undefined) filter.move_types = closed(leaf, "move_types");
+  if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to");
+  if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
+  if (Object.keys(filter).length) node.filter = filter;
+  return node;
+}
+
 export function trigger(leaf: CompileLeaf): Node {
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
+    if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind)) return ownedEventTrigger(leaf);
     if (V7_FILTERED_KINDS[kind]) return V7_FILTERED_KINDS[kind]!(leaf);
     const boundary = phaseTrigger(leaf);
     if (boundary) return boundary;
@@ -332,6 +346,11 @@ export function condition(leaf: CompileLeaf): Node {
       if (leaf.parameters.min !== undefined) parameters.min = closed(leaf, "min");
       if (leaf.parameters.max !== undefined) parameters.max = closed(leaf, "max");
       return { type: "battle-round", parameters };
+    }
+    case "roll-outcome": {
+      const parameters: Node = { roll: closed(leaf, "roll"), result: closed(leaf, "result") };
+      if (leaf.parameters.source !== undefined) parameters.source = { event_var: closed(leaf, "source") };
+      return polarity(leaf, { type: "roll-result", parameters });
     }
     case "phase-window": {
       const operands: Node[] = [];

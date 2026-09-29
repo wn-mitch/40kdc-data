@@ -4,6 +4,7 @@ import { nonEmptyString } from "./buff-families.js";
 import { PHASES, TURNS } from "./core-families.js";
 import { SUBJECT_REF } from "./predicate-families.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
+import { ROLL_KINDS } from "./dice-families.js";
 
 /**
  * More new predicate families (batch 6), split from `predicate-families.ts` to keep both files
@@ -20,6 +21,7 @@ const STAT_SIDES = ["attacker", "defender"] as const;
 const COMPARISONS = ["greater-than", "less-than", "equal-to", "greater-or-equal", "less-or-equal"] as const;
 const HISTORY_WINDOWS = ["phase", "turn", "round", "battle", "previous-turn"] as const;
 const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
+const ROLL_OUTCOMES = ["success", "failure", "critical"] as const;
 
 const withSubjectAndNegation = (properties: Record<string, unknown>, required: string[] = []) => ({
   type: "object",
@@ -146,6 +148,25 @@ export const PREDICATE_FAMILIES_2: readonly SemanticFamilyDefinition[] = [
     parameterSchema: withSubjectAndNegation({ by: { enum: SUBJECT_REF }, window: { enum: HISTORY_WINDOWS } }, ["by"]),
   },
   {
+    id: "roll-outcome",
+    version: 1,
+    role: "CONDITION",
+    label: "A roll came out this way",
+    description: "Requires a named roll (the Wound roll, a Hit roll, a Leadership test, ...) to have come out a given way — success, failure or a critical result. `source` binds the roll to an earlier EVENT leaf's binds_event_variable, when the ability needs a specific roll rather than the most recent one of that kind.",
+    starter: { roll: "hit", result: "success" },
+    parameterSchema: {
+      type: "object",
+      required: ["roll", "result"],
+      properties: {
+        roll: { enum: ROLL_KINDS },
+        result: { enum: ROLL_OUTCOMES },
+        source: { type: "string", minLength: 1 },
+        negated: { type: "boolean" },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "phase-window",
     version: 1,
     role: "CONDITION",
@@ -249,6 +270,16 @@ export function normalizePredicateParameters2(family: string, input: Record<stri
       exactKeys(input, keys, family);
       const result: Record<string, unknown> = { ...withSubject, by: enumValue(input.by, SUBJECT_REF, "moved-over.by") };
       if (input.window !== undefined) result.window = enumValue(input.window, HISTORY_WINDOWS, "moved-over.window");
+      return { ...result, ...negated };
+    }
+    case "roll-outcome": {
+      const keys = ["roll", "result", ...(input.source !== undefined ? ["source"] : []), ...(("negated" in input) ? ["negated"] : [])];
+      exactKeys(input, keys, family);
+      const result: Record<string, unknown> = {
+        roll: enumValue(input.roll, ROLL_KINDS, "roll-outcome.roll"),
+        result: enumValue(input.result, ROLL_OUTCOMES, "roll-outcome.result"),
+      };
+      if (input.source !== undefined) result.source = nonEmptyString(input.source, "roll-outcome.source");
       return { ...result, ...negated };
     }
     case "phase-window": {

@@ -144,12 +144,19 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
 // Container openers: fold the leaf sentences after an opener into that opener's options.
 // ---------------------------------------------------------------------------------------------
 
-/** One option's effect: every leaf in its sentence must be a plain EFFECT leaf. */
-function effectsOf(leaves: readonly CompileLeaf[]): Node {
+/**
+ * One option's effect: every leaf in its sentence must be a plain EFFECT leaf. `attacker` is who
+ * a roll-target family (re-roll, roll-modifier, ignore-modifiers, roll-auto-result,
+ * critical-hit-threshold) defaults to with no attack leaf of its own — `null` keeps the platform
+ * default (`this-unit`, the same default an un-contained effect gets); a container whose leaf
+ * already names a bearer (persistent-designation's `beneficiary`) passes that name instead, so a
+ * reroll inside it targets the same bearer the container itself names, not a second default.
+ */
+function effectsOf(leaves: readonly CompileLeaf[], attacker: string | null = null): Node {
   const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
   if (bad) throw new CompileError(`An option here can only hold effect leaves; ${bad.family_id} has no place inside it.`);
   if (leaves.length === 0) throw new CompileError("An option has no effect.");
-  const nodes = leaves.map((leaf) => effect(leaf, { attached: false, attacker: null, incoming: false }));
+  const nodes = leaves.map((leaf) => effect(leaf, { attached: false, attacker, incoming: false }));
   return nodes.length === 1 ? nodes[0]! : { type: "sequence", steps: nodes };
 }
 
@@ -227,20 +234,83 @@ function buildRiskReward(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const marker = onFailGroup![0];
   if (!marker || marker.family_id !== "on-fail-open") throw new CompileError("risk-reward-open's first sentence needs a leading on-fail-open leaf.");
   const onFail = effectsOf(onFailGroup!.slice(1));
-  const reward = rewardGroups.length === 1 ? effectsOf(rewardGroups[0]!) : { type: "choice", options: rewardGroups.map((group) => effectsOf(group)) };
+  const reward: Node = rewardGroups.length === 1
+    ? effectsOf(rewardGroups[0]!)
+    : { type: "choice", options: rewardGroups.map((group) => effectsOf(group)) };
+  if (rewardGroups.length > 1 && head.parameters.reward_choice_label !== undefined) reward.choice_label = closed(head, "reward_choice_label");
   return { type: "risk-reward", reward, risk: { test: closed(head, "test"), on_fail: onFail } };
 }
 
-/** resource-action-menu: each group is led by menu-action, whose own next leaf is that action's trigger (`when`). */
+/** Battle Focus's own two eligibility.requires shapes (menu-action's two eligibility_* flags — see the batch report for why these are fixed shapes, not a general vocabulary). */
+function boundEligibilityRequires(marker: CompileLeaf): Node[] {
+  const boundVar = closed(marker, "binds_event_variable");
+  const requires: Node[] = [];
+  if (marker.parameters.eligibility_engaged_with_bound_at_phase_start === true) {
+    requires.push({ type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: { event_var: boundVar }, at: "phase-start" } });
+  }
+  if (marker.parameters.eligibility_after_bound_hit_roll === true) {
+    requires.push(
+      { type: "phase-is", parameters: { phase: "shooting" } },
+      { type: "player-turn-is", parameters: { turn: "opponent-turn" } },
+      { type: "happened", parameters: { event: "after-roll", object: "selected-unit", filter: { roll: "hit", result: "success", by: { event_var: boundVar } }, window: "event" } },
+    );
+  }
+  return requires;
+}
+
+/**
+ * A menu-action's own eligibility, read from ordinary leaves in its group rather than flags: a
+ * `unit-keyword` CONDITION leaf becomes `requires_keyword` (negated: `excludes_keyword`), and a
+ * `select-unit` leaf's presence becomes `selector_count: 1` — the only count any authored record
+ * needs so far. Returns the eligibility fields and how many leading leaves they consumed.
+ */
+function menuActionEligibility(group: readonly CompileLeaf[]): { eligibility: Node; consumed: number } {
+  const requiresKeyword: string[] = [];
+  const excludesKeyword: string[] = [];
+  let selectorCount: number | undefined;
+  let cursor = 0;
+  while (group[cursor]) {
+    const leaf = group[cursor]!;
+    if (leaf.role === "CONDITION" && leaf.family_id === "unit-keyword") {
+      const keywords = closed(leaf, "keywords") as string[];
+      (leaf.parameters.negated === true ? excludesKeyword : requiresKeyword).push(...keywords);
+      cursor += 1;
+      continue;
+    }
+    if (leaf.role === "EVENT" && leaf.family_id === "select-unit") {
+      selectorCount = 1;
+      cursor += 1;
+      continue;
+    }
+    break;
+  }
+  const eligibility: Node = {};
+  if (requiresKeyword.length) eligibility.requires_keyword = requiresKeyword;
+  if (excludesKeyword.length) eligibility.excludes_keyword = excludesKeyword;
+  if (selectorCount !== undefined) eligibility.selector_count = selectorCount;
+  return { eligibility, consumed: cursor };
+}
+
+/** resource-action-menu: each group is led by menu-action; the leaves after it (past eligibility) are its trigger(s) (`when`, one or several alternatives), then its effect. */
 function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const actions = groups.map((group) => {
     const marker = group[0];
     if (!marker || marker.family_id !== "menu-action") throw new CompileError("Each resource-action-menu action needs a leading menu-action leaf.");
-    const when = group[1];
-    if (!when || when.role !== "EVENT") throw new CompileError("A menu-action needs its own trigger leaf (an EVENT leaf) right after it.");
+    const { eligibility: keywordEligibility, consumed } = menuActionEligibility(group.slice(1));
+    let cursor = 1 + consumed;
+    const whenLeaves: CompileLeaf[] = [];
+    while (group[cursor] && group[cursor]!.role === "EVENT") { whenLeaves.push(group[cursor]!); cursor += 1; }
+    if (whenLeaves.length === 0) throw new CompileError("A menu-action needs its own trigger leaf (an EVENT leaf) after its marker and any eligibility leaves.");
+    const triggers = whenLeaves.map((leaf) => trigger(leaf));
+    const when: Node | Node[] = triggers.length === 1 ? triggers[0]! : triggers;
+    if (marker.parameters.binds_event_variable !== undefined && !Array.isArray(when)) when.binds_event_variable = closed(marker, "binds_event_variable");
     const cost: Node = { pool_id: marker.parameters.cost_pool_id !== undefined ? closed(marker, "cost_pool_id") : closed(head, "pool_id"), amount: closed(marker, "cost_amount") };
     if (marker.parameters.cost_resource_label !== undefined) cost.resource_label = closed(marker, "cost_resource_label");
-    const action: Node = { id: closed(marker, "action_id"), label: closed(marker, "label"), when: trigger(when), cost, effect: effectsOf(group.slice(2)) };
+    const action: Node = { id: closed(marker, "action_id"), label: closed(marker, "label"), when, cost, effect: effectsOf(group.slice(cursor)) };
+    const eligibility: Node = { ...keywordEligibility };
+    const requires = boundEligibilityRequires(marker);
+    if (requires.length) eligibility.requires = requires;
+    if (Object.keys(eligibility).length) action.eligibility = eligibility;
     if (marker.parameters.duration !== undefined) action.duration = closed(marker, "duration");
     if (marker.parameters.repeatable_if_different_unit === true) action.usage = { repeatable_if_different_unit: true };
     return action;
@@ -250,19 +320,46 @@ function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): No
   if (head.parameters.unit_max_manoeuvres_per_phase !== undefined) sharedUsage.unit_max_manoeuvres_per_phase = closed(head, "unit_max_manoeuvres_per_phase");
   if (head.parameters.default_manoeuvre_max_per_phase !== undefined) sharedUsage.default_manoeuvre_max_per_phase = closed(head, "default_manoeuvre_max_per_phase");
   if (Object.keys(sharedUsage).length) node.shared_usage = sharedUsage;
-  return node;
+  return poolLifecycleSequence(head, node);
+}
+
+/**
+ * pool_gain/pool_spend (Battle Focus): the menu carries no lifecycle of its own, so its pool's
+ * population and clearing are each their own sibling ability-part, wrapping the menu into a
+ * sequence of up to three steps (gain, the bare menu, spend) — never nested inside one another.
+ */
+function poolLifecycleSequence(head: CompileLeaf, menu: Node): Node {
+  const steps: Node[] = [];
+  const gain = head.parameters.pool_gain as { trigger: string; amount: unknown; label?: string } | undefined;
+  if (gain) {
+    const modifier: Node = { pool: closed(head, "pool_id"), amount: gain.amount };
+    if (gain.label !== undefined) modifier.label = gain.label;
+    steps.push({ type: "ability-part", trigger: { event: gain.trigger }, effect: { type: "resource-gain", target: "this-model", modifier } });
+  }
+  steps.push(menu);
+  const spend = head.parameters.pool_spend as { trigger: string; amount: unknown; label?: string } | undefined;
+  if (spend) {
+    const modifier: Node = { pool: closed(head, "pool_id"), amount: spend.amount };
+    if (spend.label !== undefined) modifier.label = spend.label;
+    steps.push({ type: "ability-part", trigger: { event: spend.trigger }, effect: { type: "resource-spend", target: "this-model", modifier } });
+  }
+  return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
 }
 
 function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const scope = closed(head, "scope") as string;
+  const beneficiary = closed(head, "beneficiary") as string;
   return {
     type: "persistent-designation",
     designation: closed(head, "designation"),
     select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: "one-time" },
     consumer: {
       relation: scope === "enemy-unit" ? "attacks-selected-unit" : "within-selected-marker",
-      beneficiary: closed(head, "beneficiary") === "this-model" ? "bearer" : "unit",
-      effect: effectsOf(groups[0]!),
+      beneficiary: beneficiary === "this-model" ? "bearer" : "unit",
+      // The consumer's effect targets the same bearer the container already names — a reroll
+      // inside it (no attack leaf of its own) should read "this-model", not fall back to the
+      // platform's ordinary "this-unit" default, when beneficiary is this-model.
+      effect: effectsOf(groups[0]!, beneficiary),
     },
     duration: "battle",
   };
@@ -319,6 +416,15 @@ export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonl
       consumed.add(cursor);
     }
     if (current.length) groups.push(current);
+    // resource-action-menu-open's own actions must each lead with a menu-action marker; a
+    // trailing sentence that doesn't (Battle Focus's own "at the end of the round, clear the
+    // pool" ability-part) is not one of its actions — give those leaves back to the ordinary
+    // compileLeaves pipeline, which already turns a later trigger+effect into its own part.
+    if (leaf.family_id === "resource-action-menu-open") {
+      while (groups.length && groups.at(-1)![0]!.family_id !== "menu-action") {
+        for (const returned of groups.pop()!) consumed.delete(list.indexOf(returned));
+      }
+    }
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {
       if (groups.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
     } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {

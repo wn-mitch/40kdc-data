@@ -77,6 +77,25 @@ export const ECONOMY_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { pool: poolIdSchema, amount: integerOrSourceSchema },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "resource-gain",
+    version: 2,
+    role: "EFFECT",
+    label: "Gain a resource",
+    description: "Gains an amount of a named resource pool (command-point becomes CP), or a variable/any amount the rules don't fix. label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
+    starter: { pool: "", amount: null },
+    parameterSchema: {
+      type: "object",
+      required: ["pool", "amount"],
+      properties: {
+        pool: poolIdSchema,
+        amount: { anyOf: [...integerOrSourceSchema.anyOf, { const: "variable" }, { const: "any" }] },
+        label: { type: "string", minLength: 1 },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "resource-spend",
@@ -94,6 +113,34 @@ export const ECONOMY_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: {
         pool: poolIdSchema,
         amount: { anyOf: [...integerOrSourceSchema.anyOf, { const: "all" }] },
+        spend_gate: { enum: SPEND_GATES },
+        face: { type: "integer", minimum: 1, maximum: 6, "x-only-when": { spend_gate: ["face"] } },
+        requirement_type: { enum: DICE_REQUIREMENT_TYPES, "x-only-when": { spend_gate: ["requirement"] } },
+        requirement_min: { type: "integer", minimum: 1, maximum: 6, "x-only-when": { spend_gate: ["requirement"] } },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "resource-spend",
+    version: 2,
+    role: "EFFECT",
+    label: "Spend a resource",
+    description:
+      "Spends an amount from a named resource pool, or all of it. spend_gate optionally requires the spent dice " +
+      "to show a named face, or to form a pair/triple/single/run at or above a minimum value (face and the " +
+      "requirement are mutually exclusive, so spend_gate says which — or neither — applies). label is the " +
+      "player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the " +
+      "rules give the pool one.",
+    starter: { pool: "", amount: null },
+    parameterSchema: {
+      type: "object",
+      required: ["pool", "amount"],
+      properties: {
+        pool: poolIdSchema,
+        amount: { anyOf: [...integerOrSourceSchema.anyOf, { const: "all" }] },
+        label: { type: "string", minLength: 1 },
         spend_gate: { enum: SPEND_GATES },
         face: { type: "integer", minimum: 1, maximum: 6, "x-only-when": { spend_gate: ["face"] } },
         requirement_type: { enum: DICE_REQUIREMENT_TYPES, "x-only-when": { spend_gate: ["requirement"] } },
@@ -182,15 +229,28 @@ export const ECONOMY_FAMILIES: readonly SemanticFamilyDefinition[] = [
 
 export function normalizeEconomyParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
-    case "resource-gain":
-      keySet(input, ["pool", "amount"], [], family);
-      return { pool: poolId(input.pool, "resource-gain.pool"), amount: integerOrSource(input.amount, "resource-gain.amount") };
+    case "resource-gain": {
+      keySet(input, ["pool", "amount"], ["label"], family);
+      const result: Record<string, unknown> = {
+        pool: poolId(input.pool, "resource-gain.pool"),
+        amount: input.amount === "variable" || input.amount === "any" ? input.amount : integerOrSource(input.amount, "resource-gain.amount"),
+      };
+      if (input.label !== undefined) {
+        if (typeof input.label !== "string" || !input.label) throw new TypeError("resource-gain.label must be a nonblank string.");
+        result.label = input.label;
+      }
+      return result;
+    }
     case "resource-spend": {
-      keySet(input, ["pool", "amount"], ["spend_gate", "face", "requirement_type", "requirement_min"], family);
+      keySet(input, ["pool", "amount"], ["label", "spend_gate", "face", "requirement_type", "requirement_min"], family);
       const result: Record<string, unknown> = {
         pool: poolId(input.pool, "resource-spend.pool"),
         amount: input.amount === "all" ? "all" : integerOrSource(input.amount, "resource-spend.amount"),
       };
+      if (input.label !== undefined) {
+        if (typeof input.label !== "string" || !input.label) throw new TypeError("resource-spend.label must be a nonblank string.");
+        result.label = input.label;
+      }
       const hasFace = input.face !== undefined;
       const hasType = input.requirement_type !== undefined;
       const hasMin = input.requirement_min !== undefined;

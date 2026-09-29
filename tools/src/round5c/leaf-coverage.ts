@@ -3,7 +3,8 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
-import { normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
+import { REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
+import { boundedCombinations, familyCombinations } from "./leaf-coverage-samples.js";
 
 /**
  * Step-8 leaf coverage: proof, by actually compiling, that every DSL type in the schema catalog
@@ -17,7 +18,7 @@ import { normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, type Semantic
  * (a type can appear in a comment or an unrelated table, and a mapped/computed value such as
  * `event:charge` -> `move-ended` never appears as its own literal anywhere). This module instead
  * builds each reviewed family's leaves for every one of its valid parameter combinations
- * (`familyCombinations` below, in the same spirit as `leaf-describer-audit.ts`'s own
+ * (`familyCombinations` in `leaf-coverage-samples.ts`, in the same spirit as `leaf-describer-audit.ts`'s own
  * `combinations()`: a product over each parameter's domain, `x-only-when` applied in dependency
  * order, invalid combinations dropped by re-running them through `normalizeFingerprintParameters`
  * -- widened here to also flatten `oneOf` the way that file flattens `anyOf`, sample a `pattern`
@@ -136,7 +137,7 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "C"),
   ],
   "resource-action-menu-open": () => [
-    leafOf("EVENT", "menu-action", { action_id: "swift", label: "Swift", cost_amount: 1 }, 1, "B"),
+    leafOf("EVENT", "menu-action", { action_id: "swift", label: "Swift", cost_amount: 1 }, 2, "B"),
     leafOf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, 8, "B"),
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
   ],
@@ -150,10 +151,11 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
 
 /**
  * Families whose parameter schema is nested deeply enough (`$ref`-composed sub-objects with their
- * own required fields) that even `familyCombinations`' `starter` fallback below cannot assemble a
- * concrete value: a hand-picked, schema-valid parameter set stands in for the combinatorial sweep
- * instead. `named-region-state` is the only reviewed family shaped this way; this is exactly the
- * flow-of-magic-thousand-sons case pinned by `round5c-compile-named-region.test.ts`.
+ * own *required* fields) that no sweep — full product or bounded — can synthesize a concrete
+ * value for them at all: `domain()` returns `[]` for a required object field with no starter
+ * example, so every combination is invalid. `named-region-state` (flow-of-magic-thousand-sons,
+ * pinned by `round5c-compile-named-region.test.ts`) is the only reviewed family shaped this way;
+ * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
   "named-region-state": [
@@ -164,135 +166,83 @@ const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> 
       qualified_branch: { kind: "roll-modifier", roll: "wound", operation: "add", value: 1, weapon_keyword: "Psychic", optional: false },
     },
   ],
+  // pool_gain/pool_spend are optional, but each is a required-shaped nested object with no
+  // starter example, so a bounded sample (which only ever varies one property from a baseline)
+  // never includes either — the same reason named-region-state needs a hand-picked set.
+  "resource-action-menu-open": [
+    {
+      menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool", unit_max_manoeuvres_per_phase: 1, default_manoeuvre_max_per_phase: 1,
+      pool_gain: { trigger: "round-started", amount: "variable", label: "Battle Focus token" },
+      pool_spend: { trigger: "round-ended", amount: "all", label: "Battle Focus token" },
+    },
+  ],
 };
-
-type Schema = {
-  enum?: readonly unknown[]; anyOf?: Schema[]; oneOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>;
-};
-
-/** A handful of representative strings, tried against a `pattern` until one matches it. */
-const PATTERN_CANDIDATES = ["test-id", "test-unit", "test-rule", "TEST KEYWORD", "Test Ability", "Lethal Hits", "Sustained Hits 1", "test"];
-
-function sampleForPattern(pattern: string | undefined): string | undefined {
-  if (!pattern) return undefined;
-  const re = new RegExp(pattern.startsWith("^") ? pattern : `^(?:${pattern})$`, "u");
-  return PATTERN_CANDIDATES.find((candidate) => re.test(candidate));
-}
-
-const isConcrete = (value: unknown): boolean => value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0);
 
 /**
- * Values to try for one parameter: every listed value, a couple of samples of an open one, or (for
- * a shape none of that structurally covers) the family's own `starter` example for this property,
- * when it is concrete rather than a placeholder.
+ * Families whose independent optional properties are numerous enough that the full cross-product
+ * (`familyCombinations` in `leaf-coverage-samples.ts`) is too large to build (`menu-action`'s ~11 independent optional
+ * properties once OOM'd the sweep) — `boundedCombinations` samples instead of multiplying: one
+ * baseline (every required field, no optionals) plus one variant per optional property in
+ * isolation. This is O(properties), not O(values-per-property^properties); it does not reach
+ * combinations that need two or more properties set together (`test`'s enemy/friendly filtered
+ * target needs `target`+`range`+`within_inches` all at once), but the coverage gate only needs
+ * one compiling combination per catalog type, which the baseline alone already supplies — the
+ * exact record shapes stay covered by their own pinned tests, not this sweep.
  */
-function domain(name: string, schema: Schema, starter: Record<string, unknown> | undefined): unknown[] {
-  if (schema.const !== undefined) return [schema.const];
-  if (schema.enum) return [...schema.enum];
-  if (schema.type === "boolean") return [false, true];
-  if (schema.type === "array") {
-    if (schema.items?.enum) return [...schema.items.enum.map((value) => [value]), schema.items.enum.slice(0, 2)];
-    const sample = sampleForPattern(schema.items?.pattern);
-    if (sample) return [[sample]];
-    if (starter && name in starter && isConcrete(starter[name])) return [starter[name]];
-    return [["CHARACTER"]];
-  }
-  const branches = schema.anyOf ?? schema.oneOf;
-  if (branches) {
-    const values: unknown[] = [];
-    const listed = branches.flatMap((item) => item.enum ?? []);
-    values.push(...listed.filter((value) => value !== "source"));
-    const patterned = branches.map((item) => sampleForPattern(item.pattern)).find((value) => value !== undefined);
-    if (patterned) values.push(patterned);
-    if (branches.some((item) => item.type === "integer")) values.push(...(name === "threshold" ? [4, 5] : [1, 2]));
-    // An object branch closed to one const-valued shape (buff-families.ts's abilityRatingSchema:
-    // `{rating: true}`, the "or rated instead of numbered" alternative on a cap/value field).
-    for (const branch of branches) {
-      if (branch.type !== "object" || !branch.required) continue;
-      const properties = ((branch as { properties?: Record<string, { const?: unknown }> }).properties) ?? {};
-      if (branch.required.every((key) => "const" in (properties[key] ?? {}))) {
-        values.push(Object.fromEntries(branch.required.map((key) => [key, properties[key]!.const])));
-      }
-    }
-    if (values.length) return values;
-    if (starter && name in starter && isConcrete(starter[name])) return [starter[name]];
-    return [];
-  }
-  if (schema.type === "integer") {
-    const low = schema.minimum ?? 1;
-    // A few hand-validated fields (stratagem-cost's amount, a "multiply" needs at least 2) impose a
-    // tighter minimum than the schema states; a wider sample catches those without naming each one.
-    return name === "threshold" ? [4, 5] : name === "inches" ? [6, 12] : [low, low + 1, low + 2, low + 3];
-  }
-  if (schema.type === "string") {
-    const sample = sampleForPattern(schema.pattern);
-    if (sample) return [sample];
-    if (starter && name in starter && isConcrete(starter[name])) return [starter[name]];
-    // No pattern is visible at the schema level (some families validate a string's shape by hand,
-    // e.g. rule-state's rule_kind-dependent slug/keyword check), so try several plain shapes and
-    // let normalizeFingerprintParameters keep whichever the family actually accepts.
-    return [...PATTERN_CANDIDATES, "Test Value"];
-  }
-  if (schema.type === "object") {
-    if (!schema.required || schema.required.length === 0) return [{}];
-    if (starter && name in starter && isConcrete(starter[name])) return [starter[name]];
-    return [];
-  }
-  if (starter && name in starter && isConcrete(starter[name])) return [starter[name]];
-  return [];
-}
+const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption"]);
 
-function appliesGiven(schema: Schema, parameters: Record<string, unknown>): boolean {
-  return !schema["x-only-when"] || Object.entries(schema["x-only-when"]).every(([key, values]) => values.includes(String(parameters[key])));
+/**
+ * `trigger`/`when` are the only fields whose value is genuinely a trigger node (or an array of
+ * alternatives); once inside one, `event` counts. `parameters` holds a predicate's own payload —
+ * data, not further compiled-DSL structure — so descending through it always leaves trigger
+ * context, even when the parameters happen to carry their own `event` (a `happened` condition's
+ * own history filter reuses the game-event enum for what it checks, which is not the same as the
+ * ability's own firing moment).
+ */
+const TRIGGER_KEYS = new Set(["trigger", "when"]);
+
+function addLiteral(into: Map<string, Set<string>>, bucket: string, value: string): void {
+  const set = into.get(bucket);
+  if (set) set.add(value); else into.set(bucket, new Set([value]));
 }
 
 /**
- * Every valid parameter set for one family: a product over the parameters that apply, given
- * earlier choices, with invalid combinations dropped by `normalizeFingerprintParameters`. In the
- * same spirit as `leaf-describer-audit.ts`'s own `combinations()`, widened (see `domain` above)
- * so a family with a `oneOf`-, pattern-, or nested-object-shaped property still yields at least
- * one combination rather than zero.
+ * Walk a compiled DSL node, collecting every literal by the catalog kind it actually sits in —
+ * not by its object key alone, which several unrelated shapes reuse (`set-up` is both a movement
+ * EFFECT's own `type` and the unconnected `set-up` trigger's `event`; a `happened` condition's
+ * `type` reuses the same key a container's own `type` does). `type` becomes an effect/container
+ * type unless the node also carries `parameters` (a predicate's own shape), in which case it's a
+ * predicate type instead; `event` only counts while `inTrigger`. `duration`/`frequency` have no
+ * such collision today, so they stay flat, key-name-only collectors.
  */
-function familyCombinations(family: SemanticFamilyDefinition): Record<string, unknown>[] {
-  const properties = Object.entries((family.parameterSchema.properties ?? {}) as Record<string, Schema>);
-  properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
-  let sets: Record<string, unknown>[] = [{}];
-  for (const [name, schema] of properties) {
-    sets = sets.flatMap((set) => appliesGiven(schema, set) ? domain(name, schema, family.starter).map((value) => ({ ...set, [name]: value })) : [set]);
-  }
-  const valid = new Map<string, Record<string, unknown>>();
-  for (const set of sets) {
-    try {
-      const normalized = normalizeFingerprintParameters(family.id, set, family.version);
-      valid.set(JSON.stringify(normalized), normalized);
-    } catch {
-      // Combinations the family refuses are not leaves; skip them the same way the audit does.
-    }
-  }
-  return [...valid.values()];
-}
-
-const LITERAL_KEYS = new Set(["type", "event", "frequency", "duration"]);
-
-/** Walk a compiled DSL node, collecting every type/event/frequency/duration literal, plus the five behavior flags. */
-function collectLiterals(node: unknown, into: Set<string>): void {
+function collectLiterals(node: unknown, into: Map<string, Set<string>>, inTrigger = false): void {
   if (Array.isArray(node)) {
-    for (const item of node) collectLiterals(item, into);
+    for (const item of node) collectLiterals(item, into, inTrigger);
     return;
   }
   if (node === null || typeof node !== "object") return;
   const record = node as Record<string, unknown>;
-  for (const [key, value] of Object.entries(record)) {
-    if (LITERAL_KEYS.has(key) && typeof value === "string") into.add(value);
-    collectLiterals(value, into);
-  }
+  const isPredicate = "parameters" in record;
+  if (typeof record.type === "string") addLiteral(into, isPredicate ? "predicate" : "type", record.type);
+  if (inTrigger && typeof record.event === "string") addLiteral(into, "trigger", record.event);
+  if (typeof record.frequency === "string") addLiteral(into, "frequency", record.frequency);
+  if (typeof record.duration === "string") addLiteral(into, "duration", record.duration);
   const modifier = record.modifier as Record<string, unknown> | undefined;
-  if (record.type === "aura" && modifier?.range_cap != null) into.add("BEHAVIOR:aura.range_cap");
-  if (record.rating === true) into.add("BEHAVIOR:unit-rating.rating=true");
-  if (record.type === "cost-modifier" && modifier?.operation === "multiply") into.add("BEHAVIOR:cost-modifier.multiply");
-  if (record.counts_as_move !== undefined) into.add("BEHAVIOR:counts_as_move");
-  if ("wholly" in record) into.add("BEHAVIOR:wholly");
+  if (record.type === "aura" && modifier?.range_cap != null) addLiteral(into, "behavior", "aura.range_cap");
+  if (record.rating === true) addLiteral(into, "behavior", "unit-rating.rating=true");
+  if (record.type === "cost-modifier" && modifier?.operation === "multiply") addLiteral(into, "behavior", "cost-modifier.multiply");
+  if (record.counts_as_move !== undefined) addLiteral(into, "behavior", "counts_as_move");
+  if ("wholly" in record) addLiteral(into, "behavior", "wholly");
+  for (const [key, value] of Object.entries(record)) {
+    collectLiterals(value, into, key === "parameters" ? false : inTrigger || TRIGGER_KEYS.has(key));
+  }
+}
+
+/** The `Produced` key for one catalog entry: kind-namespaced, matching `collectLiterals`' buckets. */
+function producedKey(entry: CatalogEntry): string {
+  if (entry.kind === "behavior") return `behavior:${entry.type.slice("BEHAVIOR:".length)}`;
+  const bucket = entry.kind === "effect" || entry.kind === "container" ? "type" : entry.kind === "usage" ? "frequency" : entry.kind;
+  return `${bucket}:${entry.type}`;
 }
 
 export type Produced = Map<string, string[]>;
@@ -314,7 +264,7 @@ export function produceLiterals(): Produced {
     // A COMBINATOR ("instead") replaces an earlier effect of its own family; it owns no DSL type
     // of its own and only compiles inside a fuller ability (see the COMPOSED list).
     if (family.role === "COMBINATOR") continue;
-    const combos = FIXED_PARAMETERS[family.id] ?? familyCombinations(family);
+    const combos = FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
     for (const parameters of combos) {
       let result: Compiled;
       try {
@@ -323,13 +273,16 @@ export function produceLiterals(): Produced {
         continue;
       }
       if (!result.ok) continue;
-      const literals = new Set<string>();
+      const literals: Map<string, Set<string>> = new Map();
       collectLiterals(result.mechanics, literals);
       if (result.core) collectLiterals(result.core, literals);
       const key = `${family.id}@${family.version}`;
-      for (const literal of literals) {
-        const existing = produced.get(literal);
-        if (existing) { if (!existing.includes(key)) existing.push(key); } else produced.set(literal, [key]);
+      for (const [bucket, values] of literals) {
+        for (const value of values) {
+          const literal = `${bucket}:${value}`;
+          const existing = produced.get(literal);
+          if (existing) { if (!existing.includes(key)) existing.push(key); } else produced.set(literal, [key]);
+        }
       }
     }
   }
@@ -381,11 +334,6 @@ export const COMPOSED: readonly ComposedEntry[] = [
     reason: "Needs a select-unit leaf plus a later attack leaf targeting that selection; select-unit alone (no attack) compiles to select-units instead.",
     pinnedTest: "tools/test/round5c-compose.test.ts:298",
   },
-  {
-    type: "ability-part",
-    reason: "Needs two distinct trigger/EVENT moments in one ability with an effect between them; a single family only ever supplies one trigger leaf.",
-    pinnedTest: "tools/test/round5c-compose.test.ts (compound-ability part tests)",
-  },
 ];
 
 // ------------------------------------------------------------------------------------------
@@ -404,7 +352,7 @@ export function leafCoverage(): LeafCoverage {
   const retiredTypes = new Set(RETIRED.map((entry) => entry.type));
   const unproduced: string[] = [];
   for (const entry of catalogInventory()) {
-    if (produced.has(entry.type) || composedTypes.has(entry.type) || retiredTypes.has(entry.type)) continue;
+    if (produced.has(producedKey(entry)) || composedTypes.has(entry.type) || retiredTypes.has(entry.type)) continue;
     unproduced.push(`${entry.kind}:${entry.type}`);
   }
   return { produced, unproduced };
@@ -419,7 +367,7 @@ function printTable(): void {
   const composedTypes = new Set(COMPOSED.map((entry) => entry.type));
   const retiredTypes = new Set(RETIRED.map((entry) => entry.type));
   const rows = catalogInventory().map((entry) => {
-    const families = produced.get(entry.type);
+    const families = produced.get(producedKey(entry));
     const state = families ? "produced" : composedTypes.has(entry.type) ? "composed" : retiredTypes.has(entry.type) ? "retired" : "MISSING";
     return { kind: entry.kind, type: entry.type, state, families: families?.join(", ") ?? "" };
   });

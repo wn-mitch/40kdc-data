@@ -166,3 +166,54 @@ describe("Round 5C batch-7a describer round-trip", () => {
     }
   });
 });
+
+// leaf-coverage.ts's collectLiterals fix (this round) exposed predicate:roll-result as a real,
+// previously-hidden gap: the "roll-result" family id already names dice-families.ts's band
+// (on-a-4+) family, so this new one is "roll-outcome" — the condition.schema.json predicate,
+// `{type: "roll-result", parameters: {roll, result, source?}}`, distinct from the roll-result
+// EFFECT (roll-auto-result/critical-hit-threshold's output shape) the coverage sweep used to
+// conflate it with.
+describe("Round 5C roll-outcome predicate (closes the roll-result coverage gap)", () => {
+  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
+
+  it("compiles roll, result and an optional source binding", () => {
+    const bare = compiled([leaf("CONDITION", "roll-outcome", { roll: "wound", result: "critical" }), effect()]);
+    expect(bare.mechanics.effect).toEqual({
+      type: "conditional",
+      condition: { type: "roll-result", parameters: { roll: "wound", result: "critical" } },
+      effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+    });
+
+    const bound = compiled([leaf("CONDITION", "roll-outcome", { roll: "hit", result: "success", source: "the-shot" }), effect()]);
+    expect(bound.mechanics.effect).toMatchObject({
+      condition: { type: "roll-result", parameters: { roll: "hit", result: "success", source: { event_var: "the-shot" } } },
+    });
+
+    const negated = compiled([leaf("CONDITION", "roll-outcome", { roll: "save", result: "failure", negated: true }), effect()]);
+    expect(negated.mechanics.effect).toMatchObject({
+      condition: { operator: "not", operands: [{ type: "roll-result", parameters: { roll: "save", result: "failure" } }] },
+    });
+  });
+
+  // Pins crack-shot-tau-empire's authored condition exactly: the one real record with this shape.
+  it("reproduces crack-shot-tau-empire's roll-result condition exactly", () => {
+    const authoredAbility = authored("tau-empire", "crack-shot-tau-empire");
+    const authoredCondition = (authoredAbility.effect as Record<string, unknown>).effect as Record<string, unknown>;
+    expect((authoredCondition.condition as Record<string, unknown>)).toEqual({ type: "roll-result", parameters: { roll: "wound", result: "critical" } });
+
+    const result = compiled([leaf("CONDITION", "roll-outcome", { roll: "wound", result: "critical" }),
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "set", value: 3, weapon_type: "ranged" }, 3)]);
+    expect((result.mechanics.effect as Record<string, unknown>).condition).toEqual(authoredCondition.condition);
+  });
+
+  it("rejects a leaf missing roll or result, and an unknown result", () => {
+    expect(() => normalizeFingerprintParameters("roll-outcome", { roll: "wound" })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-outcome", { roll: "wound", result: "fumble" })).toThrow();
+  });
+
+  it("renders readable describer English", () => {
+    const preview = previewLeaf({ family_id: "roll-outcome", family_version: 1, parameters: { roll: "wound", result: "critical" } });
+    expect(preview.problem).toBeNull();
+    expect(preview.text.length).toBeGreaterThan(0);
+  });
+});

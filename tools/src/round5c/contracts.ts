@@ -126,8 +126,8 @@ export function normalizeFingerprintParameters(
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)
     ?? normalizePredicateSubjectParameters(family, input, version)
-    ?? normalizeTestParameters(family, input)
-    ?? normalizeGapContainerParameters(family, input)
+    ?? normalizeTestParameters(family, input, version)
+    ?? normalizeGapContainerParameters(family, input, version)
     ?? normalizeMissionPredicateParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);

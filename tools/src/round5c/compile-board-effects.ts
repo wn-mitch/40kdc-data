@@ -68,12 +68,14 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
     case "resource-gain": {
       const pool = closed(leaf, "pool");
       const amount = closed(leaf, "amount");
-      return pool === "command-point"
-        ? { type: "cp-gain", target: "this-model", modifier: { amount } }
-        : { type: "resource-gain", target: "this-model", modifier: { pool, amount } };
+      if (pool === "command-point") return { type: "cp-gain", target: "this-model", modifier: { amount } };
+      const modifier: Node = { pool, amount };
+      if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
+      return { type: "resource-gain", target: "this-model", modifier };
     }
     case "resource-spend": {
       const modifier: Node = { pool: closed(leaf, "pool"), amount: closed(leaf, "amount") };
+      if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
       if (leaf.parameters.face !== undefined) modifier.face = closed(leaf, "face");
       if (leaf.parameters.requirement_type !== undefined) modifier.requirement = { type: closed(leaf, "requirement_type"), min_value: closed(leaf, "requirement_min") };
       return { type: "resource-spend", target: "this-model", modifier };
