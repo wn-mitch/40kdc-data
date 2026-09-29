@@ -438,7 +438,17 @@ function translateReroll(
   // A historical migration (2026-weapon-keywords) mis-defaulted such nodes to
   // `subset: "all-failures"`; honor the value as the source of truth so any
   // stray data of that shape can't silently over-apply the reroll.
-  const subset = modifier.value === 1 ? "ones" : modifier.subset;
+  //
+  // `result_scope: "any-result"` (no `subset`) is the DSL's shape for an unrestricted, optional
+  // re-roll ("you can re-roll the Wound roll", no "of 1"/"failed" qualifier) — see
+  // compile-fragments.ts and named-region-family.ts. It resolves to the same buff contribution as
+  // "all-failures": a rational player holding an *optional* reroll always exercises it on a fail
+  // (strictly improves the outcome) and never on an already-passing roll (rerolling a pass can
+  // only convert some of those passes to fails; there's no scenario where an expected-value-
+  // maximizing player takes that trade for a plain "re-roll" grant with no crit-fishing framing).
+  // So the two subsets are behaviorally identical to the pass/crit optimizer in engine.ts, and no
+  // new probability modelling is needed — only recognizing the shape.
+  const subset = modifier.value === 1 ? "ones" : modifier.subset === undefined && modifier.result_scope === "any-result" ? "all-failures" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
   // Finite permissions are non-linear over a roll pool. Until the cruncher

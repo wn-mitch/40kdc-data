@@ -53,6 +53,28 @@ describe("effectToBuffs: leaves", () => {
     });
   });
 
+  it("re-roll with result_scope: any-result (no subset) resolves as an all-failures reroll", () => {
+    // "you can re-roll the Wound roll" (no "of 1"/"failed" qualifier) compiles to
+    // `result_scope: "any-result"` with no `subset` (compile-fragments.ts). An optional reroll
+    // is only ever rationally used on a fail, so it applies exactly like "all-failures".
+    const result = effectToBuffs(
+      {
+        type: "re-roll",
+        target: "this-unit",
+        modifier: { roll: "wound", result_scope: "any-result" },
+      },
+      armyRule,
+      ctx,
+    );
+    expect(result.applied).toHaveLength(1);
+    expect(result.applied[0].contribution).toEqual({
+      type: "reroll",
+      roll: "wound",
+      subset: "all-failures",
+    });
+    expect(result.unsupported).toEqual([]);
+  });
+
   it("rejects count-capped rerolls instead of applying them as unlimited", () => {
     const effect = {
       type: "re-roll",

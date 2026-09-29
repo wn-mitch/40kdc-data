@@ -4,21 +4,19 @@ import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import { createRequire } from "node:module";
 
-import { diceTableInvariantErrors } from "../integrity.js";
-import { effectToBuffs } from "../cruncher/from-dsl.js";
-import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { openWorkbench } from "./db.js";
 import { refreshSources, type SourceRefreshReport } from "./source.js";
 import { reapplyLeafSurfaces, untiledRuns, type ApplyReport } from "./leaves.js";
 import { getCurrentCoverage } from "./coverage.js";
-import { localEmbedder } from "./embeddings.js";
+import { localEmbedder, type Embedder } from "./embeddings.js";
 import { runLeafProposals, listLeafProposals, type ListedProposal, type ProposalPiece } from "./leaf-proposals.js";
 import { confirmSurface, LeafError } from "./leaves.js";
-import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
-import { coreCheckErrors } from "./core-checks.js";
-import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
 import { prepareLuna, serializeLunaRequest, type PrepareLunaOptions, type PreparedRequest } from "./proposal.js";
 import { lunaStdinEnvelope } from "./luna-schema.js";
+import { runCompileGates, type CompileGateReport, type GateFailure, type LeverDiff } from "./pipeline-8b-gates.js";
+
+export { classifyUnsupported } from "./pipeline-8b-gates.js";
+export type { CompileGateReport, GateFailure, LeverDiff } from "./pipeline-8b-gates.js";
 
 type DatabaseType = DatabaseSync;
 const DatabaseSyncCtor = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string): DatabaseType };
@@ -55,26 +53,6 @@ export type AutoConfirmReport = {
   confirmed: number;
   skipped_probabilistic: number;
   errors: Array<{ surface: string; reason: string }>;
-};
-
-export type GateFailure = { faction_id: string; ability_id: string; reason: string; detail: string };
-
-export type CompileGateReport = {
-  abilities_total: number;
-  fully_tiled: number;
-  compile_attempted: number;
-  compile_ok: number;
-  compile_errors: Record<string, number>;
-  gated: number;
-  no_data_entry: number;
-  schema_pass: number;
-  core_checks_pass: number;
-  integrity_pass: number;
-  describer_pass: number;
-  describer_scores: number[];
-  cruncher_no_regression: number;
-  all_gates_pass: number;
-  failures: GateFailure[];
 };
 
 export type ResidueCluster = { cluster: number; occurrences: number; closes: number; sample_texts: string[] };
@@ -119,8 +97,8 @@ function piecesOf(proposal: ListedProposal): ProposalPiece[] | null {
 }
 
 /** One round: propose (local embeddings only), then confirm every deterministic proposal found. */
-async function confirmRound(db: DatabaseSync, reviewer: string): Promise<{ confirmed: number; skipped: number; errors: Array<{ surface: string; reason: string }> }> {
-  await runLeafProposals(db, localEmbedder());
+async function confirmRound(db: DatabaseSync, embedder: Embedder, reviewer: string): Promise<{ confirmed: number; skipped: number; errors: Array<{ surface: string; reason: string }> }> {
+  await runLeafProposals(db, embedder);
   const listing = listLeafProposals(db, { limit: 100000 });
   let confirmed = 0;
   let skipped = 0;
@@ -148,144 +126,19 @@ async function confirmRound(db: DatabaseSync, reviewer: string): Promise<{ confi
   return { confirmed, skipped, errors };
 }
 
-async function runAutoConfirm(db: DatabaseSync, reviewer: string, maxRounds: number): Promise<AutoConfirmReport> {
+async function runAutoConfirm(db: DatabaseSync, embedder: Embedder, reviewer: string, maxRounds: number): Promise<AutoConfirmReport> {
   let rounds = 0;
   let confirmed = 0;
   let skipped = 0;
   const errors: Array<{ surface: string; reason: string }> = [];
   for (; rounds < maxRounds; rounds += 1) {
-    const round = await confirmRound(db, reviewer);
+    const round = await confirmRound(db, embedder, reviewer);
     confirmed += round.confirmed;
     skipped = round.skipped; // only the last round's count is meaningful: earlier skips may resolve later
     errors.push(...round.errors);
     if (round.confirmed === 0) { rounds += 1; break; }
   }
   return { rounds, confirmed, skipped_probabilistic: skipped, errors };
-}
-
-/** Leaves for every ability whose source is now fully tiled, keyed by ability_version_id. */
-function tiledLeaves(db: DatabaseSync): Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }> {
-  const coverage = getCurrentCoverage(db);
-  const abilities = db.prepare(`SELECT id, faction_id, ability_id, source_text FROM abilities WHERE current = 1`)
-    .all() as Array<{ id: number; faction_id: string; ability_id: string; source_text: string }>;
-  const leaves = new Map<number, CompileLeaf[]>();
-  for (const row of db.prepare(`
-    SELECT source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
-      fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
-    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
-    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active'
-  `).all() as Array<{ ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string; family_id: string; family_version: number; parameters_json: string }>) {
-    const list = leaves.get(row.ability_version_id) ?? [];
-    list.push({
-      role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
-      start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
-    });
-    leaves.set(row.ability_version_id, list);
-  }
-  const result = new Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }>();
-  for (const ability of abilities) {
-    const view = coverage.get(ability.id);
-    const own = leaves.get(ability.id);
-    if (!view || !own?.length || untiledRuns(view).length > 0) continue;
-    result.set(ability.id, { faction_id: ability.faction_id, ability_id: ability.ability_id, source_text: ability.source_text, leaves: own });
-  }
-  return result;
-}
-
-/** Cosine similarity of two texts under the same local embedder used for leaf proposals — the
- * "workbench's existing similarity measure" the round-trip gate is asked to reuse. */
-async function describerSimilarity(rendered: string, sourceText: string): Promise<number> {
-  const embedder = localEmbedder();
-  const [a, b] = await embedder.embed([rendered, sourceText]);
-  let dot = 0;
-  for (let i = 0; i < a!.length; i += 1) dot += a![i]! * b![i]!;
-  return dot;
-}
-
-const CRUNCHER_CONTEXT: EngineContext = { phase: "shooting", attackerStationary: false };
-
-async function gateCompiledAbility(
-  dataRoot: string, factionId: string, abilityId: string, compiled: Extract<Compiled, { ok: true }>, sourceText: string, floor: number,
-): Promise<{ status: "no-data-entry" } | { status: "gated"; schema: boolean; coreChecks: boolean; integrity: boolean; describer: boolean; describerScore: number | null; crunchNoRegression: boolean; failures: GateFailure[] }> {
-  const failures: GateFailure[] = [];
-  let resolved;
-  try {
-    resolved = resolveAbilityEntity(dataRoot, factionId, abilityId);
-  } catch {
-    return { status: "no-data-entry" };
-  }
-  const entry = entryWithMechanics(resolved.entry, compiled.mechanics);
-  const checked = checkEntry(entry);
-  const coreErrors = coreCheckErrors(dataRoot, abilityId, compiled.checks);
-  const schema = checked.errors.length === 0;
-  const coreChecks = coreErrors.length === 0;
-  if (!schema) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "schema", detail: checked.errors.join("; ").slice(0, 300) });
-  if (!coreChecks) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "core-checks", detail: coreErrors.join("; ").slice(0, 300) });
-
-  const diceErrors = diceTableInvariantErrors(compiled.mechanics.effect);
-  const integrity = diceErrors.length === 0;
-  if (!integrity) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "integrity", detail: diceErrors.join("; ").slice(0, 300) });
-
-  let describerScore: number | null = null;
-  let describer = false;
-  if (checked.rendered_text) {
-    describerScore = await describerSimilarity(checked.rendered_text, sourceText);
-    describer = describerScore >= floor;
-    if (!describer) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "describer-roundtrip", detail: `similarity ${describerScore.toFixed(3)} < ${floor}` });
-  } else {
-    failures.push({ faction_id: factionId, ability_id: abilityId, reason: "describer-roundtrip", detail: "describer produced no text" });
-  }
-
-  const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
-  const newTranslation = effectToBuffs(compiled.mechanics.effect, source, CRUNCHER_CONTEXT);
-  // A mirror stub carries no `effect` at all: there is no "before" buff extraction to regress
-  // from, so any unsupported branch the fresh compile reports is new information, not a
-  // regression, and the gate only reports it. Only an ability the old record already described
-  // (a stale compiled entry being re-authored) can regress.
-  const oldEffect = (resolved.entry as { effect?: unknown }).effect;
-  const oldUnsupported = oldEffect ? effectToBuffs(oldEffect, source, CRUNCHER_CONTEXT).unsupported.length : null;
-  const crunchNoRegression = oldUnsupported === null || newTranslation.unsupported.length <= oldUnsupported;
-  if (!crunchNoRegression) {
-    failures.push({ faction_id: factionId, ability_id: abilityId, reason: "cruncher-regression", detail: `${newTranslation.unsupported.length} unsupported branches vs ${oldUnsupported} before` });
-  }
-
-  return { status: "gated", schema, coreChecks, integrity, describer, describerScore, crunchNoRegression, failures };
-}
-
-async function runCompileGates(db: DatabaseSync, floor: number): Promise<CompileGateReport> {
-  const dataRoot = round5cDataRoot();
-  const tiled = tiledLeaves(db);
-  const abilitiesTotal = (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
-  const report: CompileGateReport = {
-    abilities_total: abilitiesTotal, fully_tiled: tiled.size, compile_attempted: 0, compile_ok: 0, compile_errors: {},
-    gated: 0, no_data_entry: 0, schema_pass: 0, core_checks_pass: 0, integrity_pass: 0, describer_pass: 0, describer_scores: [],
-    cruncher_no_regression: 0, all_gates_pass: 0, failures: [],
-  };
-  for (const [, ability] of tiled) {
-    report.compile_attempted += 1;
-    const compiled = compileLeaves(ability.leaves, ability.source_text);
-    if (!compiled.ok) {
-      const reason = compiled.errors[0] ?? "unknown";
-      report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;
-      continue;
-    }
-    report.compile_ok += 1;
-    const gate = await gateCompiledAbility(dataRoot, ability.faction_id, ability.ability_id, compiled, ability.source_text, floor);
-    if (gate.status === "no-data-entry") { report.no_data_entry += 1; continue; }
-    report.gated += 1;
-    if (gate.schema) report.schema_pass += 1;
-    if (gate.coreChecks) report.core_checks_pass += 1;
-    if (gate.integrity) report.integrity_pass += 1;
-    if (gate.describer) report.describer_pass += 1;
-    if (gate.describerScore !== null) report.describer_scores.push(Math.round(gate.describerScore * 1000) / 1000);
-    if (gate.crunchNoRegression) report.cruncher_no_regression += 1;
-    if (gate.schema && gate.coreChecks && gate.integrity && gate.describer && gate.crunchNoRegression) report.all_gates_pass += 1;
-    report.failures.push(...gate.failures);
-  }
-  return report;
 }
 
 function residueReport(db: DatabaseSync): ResidueReport {
@@ -396,11 +249,16 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
 
 export async function runPipeline8b(db: DatabaseSync, options: Pipeline8bOptions = {}): Promise<Pipeline8bReport> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
+  // One embedder — and, via `cachedEmbeddings`, one warm run of the workbench's own
+  // `text_embeddings` cache (model + sha256(text)) — for the whole run. Building a fresh
+  // `localEmbedder()` per proposal round or per gated ability reloads the ONNX model each time;
+  // that (not a lack of caching) was the real cost of a repeat run.
+  const embedder = localEmbedder();
   const refresh = refreshSources(db);
   const reapply = reapplyLeafSurfaces(db);
-  const autoConfirm = await runAutoConfirm(db, opts.reviewer, opts.maxConfirmRounds);
+  const autoConfirm = await runAutoConfirm(db, embedder, opts.reviewer, opts.maxConfirmRounds);
   reapplyLeafSurfaces(db); // corpus-wide sweep so every ability sees every surface just confirmed
-  const compile = await runCompileGates(db, opts.describerSimilarityFloor);
+  const compile = await runCompileGates(db, embedder, opts.describerSimilarityFloor);
   const residue = residueReport(db);
   const cost_estimate = await costEstimate(db);
   return { refresh, reapply, auto_confirm: autoConfirm, compile, residue, cost_estimate };
@@ -411,6 +269,33 @@ export async function runPipeline8bCli(options: Pipeline8bOptions = {}): Promise
   const db = openWorkbench();
   try {
     return await runPipeline8b(db, options);
+  } finally {
+    db.close();
+  }
+}
+
+export type GatesOnlyReport = { compile: CompileGateReport; residue: ResidueReport; cost_estimate: CostEstimate };
+
+/**
+ * Re-gate the workbench's current compiles without refreshing sources or running another
+ * deterministic-confirm pass — for iterating on the gate logic itself (as here: adding the
+ * "outside the damage path" bucket) against a DB a full `runPipeline8b` already brought to a
+ * steady state, without paying for the proposal pass and refresh again.
+ */
+export async function runGatesOnly(db: DatabaseSync, options: Pick<Pipeline8bOptions, "describerSimilarityFloor"> = {}): Promise<GatesOnlyReport> {
+  const floor = options.describerSimilarityFloor ?? DEFAULT_OPTIONS.describerSimilarityFloor;
+  const embedder = localEmbedder();
+  const compile = await runCompileGates(db, embedder, floor);
+  const residue = residueReport(db);
+  const cost_estimate = await costEstimate(db);
+  return { compile, residue, cost_estimate };
+}
+
+/** Standalone entry point for `round5c pipeline-8b-gates-only` — opens the workbench itself. */
+export async function runGatesOnlyCli(options: Pick<Pipeline8bOptions, "describerSimilarityFloor"> = {}): Promise<GatesOnlyReport> {
+  const db = openWorkbench();
+  try {
+    return await runGatesOnly(db, options);
   } finally {
     db.close();
   }
