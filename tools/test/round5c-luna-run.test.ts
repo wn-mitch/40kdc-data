@@ -186,9 +186,12 @@ describe("Round 5C OMP Luna transport", () => {
     expect(seen.argv).toContain("--no-tools");
     expect(seen.argv[seen.argv.indexOf("--max-time") + 1]).toBe("1200");
     expect(existsSync(scratchCwd)).toBe(false);
-    // stdin carries the canonical request plus the input hash the model must echo.
+    // stdin carries the canonical request plus the input hash the model must echo. `request`
+    // comes first and `input_hash` last, so the per-request-varying hash never sits ahead of the
+    // (potentially large, request-to-request stable) request body in the byte stream.
     expect(JSON.parse(seen.stdin)).toEqual({ input_hash: run.input_hash, request: JSON.parse(readFileSync(run.request_path, "utf8")) });
-    expect(seen.stdin.endsWith(`"request":${readFileSync(run.request_path, "utf8")}}`)).toBe(true);
+    expect(seen.stdin.startsWith(`{"request":${readFileSync(run.request_path, "utf8")},"input_hash":`)).toBe(true);
+    expect(seen.stdin.endsWith(`"input_hash":${JSON.stringify(run.input_hash)}}`)).toBe(true);
     expect(seen.system_prompt).toBe((run.request as { instructions: string }).instructions);
     expect(seen.overlay).toMatch(/modelFallback: false/u);
     expect(seen.overlay).toMatch(/fallbackChains: \{\}/u);

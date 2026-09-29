@@ -4,7 +4,6 @@ import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import { createRequire } from "node:module";
 
-import { canonicalize } from "../round4/hash.js";
 import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs } from "../cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
@@ -18,7 +17,8 @@ import { confirmSurface, LeafError } from "./leaves.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
-import { prepareLuna, type PrepareLunaOptions } from "./proposal.js";
+import { prepareLuna, serializeLunaRequest, type PrepareLunaOptions, type PreparedRequest } from "./proposal.js";
+import { lunaStdinEnvelope } from "./luna-schema.js";
 
 type DatabaseType = DatabaseSync;
 const DatabaseSyncCtor = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string): DatabaseType };
@@ -307,10 +307,22 @@ function residueReport(db: DatabaseSync): ResidueReport {
   return { untiled_abilities: untiledAbilities, untiled_spans: untiledSpans, clusters };
 }
 
+/** Bytes two strings share at the start, up to the shorter one's length. */
+function sharedPrefixBytes(left: string, right: string): number {
+  const a = Buffer.from(left, "utf8");
+  const b = Buffer.from(right, "utf8");
+  const max = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < max && a[i] === b[i]) i += 1;
+  return i;
+}
+
 /**
  * A DeepSeek cost estimate for the residue, computed by running the real `prepareLuna` request
  * builder against a throwaway VACUUM clone of `db` (never `db` itself, so this makes no lasting
  * change and issues no network call — `prepareLuna` only assembles and writes a request file).
+ * The wire bytes measured here are exactly what `finishLunaRun` sends on stdin
+ * (`lunaStdinEnvelope` wrapped around `serializeLunaRequest`'s output), not a re-derivation.
  */
 async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
   const scratchDir = mkdtempSync(join(tmpdir(), "round5c-8b-cost-"));
@@ -323,8 +335,8 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
   let fixedBytes = 0;
   let variableBytesTotal = 0;
   let residueAbilityCount = 0;
-  let firstPrefix: string | null = null;
-  let secondPrefix: string | null = null;
+  let firstEnvelope: string | null = null;
+  let secondEnvelope: string | null = null;
   try {
     const clone = new DatabaseSyncCtor(scratchDb);
     try {
@@ -337,15 +349,15 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
           throw error;
         }
         requests += 1;
-        const request = prepared.request as { abilities: unknown[] };
-        const bytes = Buffer.byteLength(canonicalize(request), "utf8");
-        const withoutAbilities = Buffer.byteLength(canonicalize({ ...request, abilities: [] }), "utf8");
+        const request = prepared.request as PreparedRequest;
+        const serialized = serializeLunaRequest(request);
+        const withoutAbilities = Buffer.byteLength(serializeLunaRequest({ ...request, abilities: [] }), "utf8");
         if (fixedBytes === 0) fixedBytes = withoutAbilities;
-        variableBytesTotal += bytes - withoutAbilities;
+        variableBytesTotal += Buffer.byteLength(serialized, "utf8") - withoutAbilities;
         residueAbilityCount += request.abilities.length;
-        const prefix = canonicalize(request).slice(0, 64);
-        if (firstPrefix === null) firstPrefix = prefix;
-        else if (secondPrefix === null) secondPrefix = prefix;
+        const envelope = lunaStdinEnvelope(prepared.input_hash, serialized);
+        if (firstEnvelope === null) firstEnvelope = envelope;
+        else if (secondEnvelope === null) secondEnvelope = envelope;
       }
     } finally {
       clone.close();
@@ -355,22 +367,25 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
     else process.env.ROUND5C_ARTIFACT_DIR = previousArtifactDir;
     rmSync(scratchDir, { recursive: true, force: true });
   }
-  const stable = firstPrefix !== null && secondPrefix !== null && firstPrefix === secondPrefix;
-  const finding = firstPrefix === null
+  const sharedBytes = firstEnvelope !== null && secondEnvelope !== null ? sharedPrefixBytes(firstEnvelope, secondEnvelope) : 0;
+  // A trivial handful of shared leading bytes (just "{"request":{") is not a cache-worthy prefix;
+  // most of the fixed part (registry + confirmed examples + instructions echo) must be shared.
+  const stable = firstEnvelope !== null && secondEnvelope !== null && sharedBytes >= fixedBytes - 200;
+  const finding = firstEnvelope === null
     ? "No residue abilities to estimate."
     : stable
-      ? "Requests share a stable leading prefix; DeepSeek's prefix cache can hit."
-      : "canonicalize() sorts PreparedRequest's top-level keys alphabetically, so the per-request "
-        + "\"abilities\" field (which sorts before confirmed_examples/instructions/lexical_vocabulary/"
-        + "registry/response_schema/schema_version) lands FIRST in the serialized request bytes — the "
-        + "one field that changes every request. Every request therefore diverges at byte 0 and the "
-        + "large fixed part (instructions + registry + confirmed examples) never lands in a stable "
-        + "prefix, so DeepSeek's prefix cache gets a 0% hit rate across requests. Fix (not applied "
-        + "here): serialize the wire request with the fixed fields first and \"abilities\" last, e.g. "
-        + "build the request body by string-concatenating `canonicalize({...base, abilities: []})` "
-        + "minus its trailing \"}\" with `,\"abilities\":${canonicalize(abilities)}}`, or key the "
-        + "PreparedRequest type so a dedicated (non-canonicalize) transport serializer emits the fixed "
-        + "fields first; input_hash (which must stay order-independent) can keep using canonicalize().";
+      ? `Requests share a ${sharedBytes}-byte leading prefix (of ~${fixedBytes} fixed bytes before `
+        + "\"abilities\"), so a provider that caches by prompt prefix (DeepSeek's included) reuses it "
+        + "across requests instead of reprocessing the registry, confirmed examples and instructions "
+        + "echo every time. This is the fixed state after the fix in serializeLunaRequest/"
+        + "lunaStdinEnvelope: \"abilities\" now serializes last in the request body, and input_hash "
+        + "(which necessarily differs per request) now sits last in the stdin envelope instead of "
+        + "first, so no per-request-varying value sits ahead of the shared part."
+      : `Requests only share ${sharedBytes} leading bytes out of ~${fixedBytes} fixed bytes — the `
+        + "prefix is not stable. If this reappears, check whether something upstream of "
+        + "serializeLunaRequest (a varying registry, confirmed-examples selection, or vocabulary) "
+        + "changed between requests, or whether a caller bypassed serializeLunaRequest/"
+        + "lunaStdinEnvelope and re-serialized the request with plain canonicalize().";
   return {
     residue_ability_count: residueAbilityCount, requests, fixed_bytes_per_request: fixedBytes,
     variable_bytes_total: variableBytesTotal,

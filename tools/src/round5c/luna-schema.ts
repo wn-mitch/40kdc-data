@@ -11,9 +11,19 @@ export const PROMPT_VERSION = "v2";
 export const LEGACY_REQUEST_SCHEMA_VERSION = 1;
 export const LEGACY_PROMPT_VERSION = "v1";
 
-/** The stdin message for one OMP run: the canonical request plus the hash it must echo. */
+/**
+ * The stdin message for one OMP run: the canonical request plus the hash it must echo.
+ * `request` comes first and `input_hash` last on purpose — `request_path`'s own bytes already
+ * put every field the model's abilities don't change ahead of `abilities` (see
+ * `serializeLunaRequest` in proposal.ts), and the request's hash necessarily differs on every
+ * call; putting it first would put a varying value at byte 0 of the whole message and defeat
+ * that shared prefix before the model ever reaches it. `input_hash` trailing keeps the entire
+ * leading run — including all of `request` up to `abilities` — identical across requests that
+ * share the same registry and confirmed examples, so a provider that caches by prompt prefix
+ * reuses it instead of reprocessing the fixed part of every request from scratch.
+ */
 export function lunaStdinEnvelope(inputHash: string, canonicalRequest: string): string {
-  return `{"input_hash":${JSON.stringify(inputHash)},"request":${canonicalRequest}}`;
+  return `{"request":${canonicalRequest},"input_hash":${JSON.stringify(inputHash)}}`;
 }
 
 /** The only model a trusted OMP run may observe. */

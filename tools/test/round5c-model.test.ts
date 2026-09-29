@@ -8,7 +8,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { canonicalize, hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
-import { importLuna, prepareLuna, type PreparedLuna } from "../src/round5c/proposal.js";
+import { importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
+import { lunaStdinEnvelope } from "../src/round5c/luna-schema.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -158,7 +159,7 @@ describe("Round 5C external Luna transport", () => {
       // The budget covers the abilities; the fixed instructions and family registry sit outside it.
       const fixedBytes = Buffer.byteLength(canonicalize({ ...prepared.request, abilities: [] }), "utf8");
       expect(Buffer.byteLength(canonicalize(prepared.request), "utf8") - fixedBytes).toBeLessThanOrEqual(48 * 1024);
-      expect(readFileSync(prepared.request_path, "utf8")).toBe(canonicalize(prepared.request));
+      expect(readFileSync(prepared.request_path, "utf8")).toBe(serializeLunaRequest(prepared.request as Parameters<typeof serializeLunaRequest>[0]));
       for (const ability of request.abilities) {
         expect(ability.source_text).toBe(rows.find((row) => row.abilityId === ability.ability_id)?.source);
       }
@@ -167,6 +168,47 @@ describe("Round 5C external Luna transport", () => {
       expect(preparedRequest(next).abilities[0]?.ability_id).toBe(rows[1 + sent.length]!.abilityId);
       expect(value.db.prepare("SELECT count(*) AS total FROM gaps WHERE description LIKE 'Complete ability exceeds%' ").get())
         .toEqual({ total: 1 });
+    } finally {
+      value.db.close();
+    }
+  });
+
+  it("gives two requests for different abilities an identical byte prefix up to \"abilities\", so a prompt-prefix cache can hit", () => {
+    // Two abilities each on their own, via `limit: 1`, guarantees two different `abilities`
+    // arrays over the same registry and confirmed examples — exactly what a real residue sweep
+    // sends across successive DeepSeek requests.
+    const value = fixture([
+      { abilityId: "prefix-one", source: "Re-roll a Hit roll of 1." },
+      { abilityId: "prefix-two", source: "Re-roll a Wound roll of 1." },
+    ]);
+    try {
+      const first = prepareLuna(value.db, { limit: 1 });
+      const second = prepareLuna(value.db, { limit: 1 });
+      expect(preparedRequest(first).abilities.map((a) => a.ability_id)).toEqual(["prefix-one"]);
+      expect(preparedRequest(second).abilities.map((a) => a.ability_id)).toEqual(["prefix-two"]);
+
+      const firstSerialized = readFileSync(first.request_path, "utf8");
+      const secondSerialized = readFileSync(second.request_path, "utf8");
+      expect(firstSerialized).not.toBe(secondSerialized); // the abilities differ, so the requests must too
+      const abilitiesMarker = ',"abilities":';
+      const firstSplit = firstSerialized.indexOf(abilitiesMarker);
+      const secondSplit = secondSerialized.indexOf(abilitiesMarker);
+      expect(firstSplit).toBeGreaterThan(0);
+      // Everything up to and including the `"abilities":` marker — every fixed field
+      // (confirmed_examples, instructions, lexical_vocabulary, registry, response_schema,
+      // schema_version) — is byte-identical between the two requests.
+      expect(firstSerialized.slice(0, firstSplit + abilitiesMarker.length))
+        .toBe(secondSerialized.slice(0, secondSplit + abilitiesMarker.length));
+      expect(firstSerialized.slice(firstSplit)).not.toBe(secondSerialized.slice(secondSplit));
+
+      // The actual stdin envelope (what `finishLunaRun` sends the model) preserves that same
+      // shared prefix: `request` comes first, so `input_hash` — which necessarily differs per
+      // request — trails behind the fixed part instead of leading it.
+      const firstEnvelope = lunaStdinEnvelope(first.input_hash, firstSerialized);
+      const secondEnvelope = lunaStdinEnvelope(second.input_hash, secondSerialized);
+      expect(firstEnvelope.startsWith('{"request":')).toBe(true);
+      expect(firstEnvelope.slice(0, firstSplit + '{"request":'.length))
+        .toBe(secondEnvelope.slice(0, secondSplit + '{"request":'.length));
     } finally {
       value.db.close();
     }

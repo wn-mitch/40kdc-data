@@ -76,7 +76,7 @@ type RequestAbilityConfig = {
   uncovered_regions: Array<{ fragment: string; start_byte: number; end_byte: number }>;
 };
 
-type PreparedRequest = {
+export type PreparedRequest = {
   schema_version: number;
   prompt_version: string;
   instructions: string;
@@ -301,6 +301,25 @@ function canonicalBytes(request: PreparedRequest): number {
   return Buffer.byteLength(canonicalize(request), "utf8");
 }
 
+/**
+ * The request's wire bytes, with every field but `abilities` serialized first and `abilities`
+ * last. `canonicalize()` sorts a request's top-level keys alphabetically for hashing, which
+ * happens to put "abilities" — the one field that differs on every call — ahead of the large,
+ * request-to-request stable "confirmed_examples"/"instructions"/"lexical_vocabulary"/"registry"/
+ * "response_schema"/"schema_version" fields. Two requests built from the same registry and
+ * confirmed examples then share no leading bytes at all, so a model transport that caches by
+ * prompt prefix (DeepSeek's included) gets nothing to reuse. Moving "abilities" to the end makes
+ * everything before it byte-identical across such requests, so the fixed ~tens-of-KB part is a
+ * real shared prefix. `input_hash` (order-independent; recomputed with `hashJson`, which still
+ * canonicalizes with the original alphabetical order) is unaffected by this — it hashes the
+ * parsed object, not this literal string.
+ */
+export function serializeLunaRequest(request: PreparedRequest): string {
+  const { abilities, ...fixed } = request;
+  const fixedJson = canonicalize(fixed);
+  return `${fixedJson.slice(0, -1)},"abilities":${canonicalize(abilities)}}`;
+}
+
 function manualGapDescription(): string {
   return "Complete ability exceeds the 48 KiB Luna ability budget and requires manual review.";
 }
@@ -448,7 +467,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
       if (selected.length === 0) return null;
 
       const request: PreparedRequest = { ...base, abilities: selected.map((item) => item.request) };
-      const serializedRequest = canonicalize(request);
+      const serializedRequest = serializeLunaRequest(request);
       const requestBytes = Buffer.byteLength(serializedRequest, "utf8");
       if (requestBytes > maxRequestBytes) throw new Error("Luna request cap enforcement failed.");
       const inputHash = hashJson(request);

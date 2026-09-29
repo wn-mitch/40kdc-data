@@ -17,7 +17,9 @@ const DatabaseSyncCtor = createRequire(import.meta.url)("node:sqlite").DatabaseS
 const REVIEWER = "fixture-reviewer";
 const FACTION = "fixture-faction";
 const CLOSABLE = "closable-ability";
-const RESIDUE = "residue-ability";
+/** 16 abilities, so `prepareLuna`'s 15-per-request cap forces at least two residue requests. */
+const RESIDUE_COUNT = 16;
+const RESIDUE_WORDS = ["platypus", "kazoo", "marmalade", "trombone", "wobble", "gizmo", "sprocket", "wombat", "custard", "yodel", "gargoyle", "noodle", "trinket", "walrus", "confetti", "biscuit"];
 
 const roots: string[] = [];
 let previousDataRoot: string | undefined;
@@ -37,7 +39,9 @@ function fixture(): DatabaseSync {
   roots.push(sourceDir);
   writeFileSync(join(sourceDir, `${FACTION}.json`), JSON.stringify([
     { faction_id: FACTION, ability_id: CLOSABLE, raw_text: "If this model is on the battlefield, re-roll a hit roll of 1." },
-    { faction_id: FACTION, ability_id: RESIDUE, raw_text: "Do the improbable platypus dance nobody else can name." },
+    ...RESIDUE_WORDS.slice(0, RESIDUE_COUNT).map((word, index) => ({
+      faction_id: FACTION, ability_id: `residue-ability-${index}`, raw_text: `Do the improbable ${word} dance nobody else can name.`,
+    })),
   ]));
 
   const dataRoot = mkdtempSync(join(tmpdir(), "round5c-8b-data-"));
@@ -85,15 +89,17 @@ describe("pipeline-8b", () => {
       expect(report.compile.all_gates_pass).toBe(1);
       expect(report.compile.failures).toEqual([]);
 
-      // The residue ability shares no vocabulary with anything decided, so it stays untiled.
-      expect(report.residue.untiled_abilities).toBe(1);
+      // The residue abilities share no vocabulary with anything decided, so they stay untiled.
+      expect(report.residue.untiled_abilities).toBe(RESIDUE_COUNT);
       expect(report.residue.untiled_spans).toBeGreaterThan(0);
 
-      expect(report.cost_estimate.residue_ability_count).toBeGreaterThanOrEqual(1);
-      expect(report.cost_estimate.requests).toBeGreaterThanOrEqual(1);
+      // 16 residue abilities need at least two 15-per-request `prepareLuna` batches, so the
+      // fixed-prefix fix (serializeLunaRequest + lunaStdinEnvelope) is actually exercised here.
+      expect(report.cost_estimate.residue_ability_count).toBe(RESIDUE_COUNT);
+      expect(report.cost_estimate.requests).toBeGreaterThanOrEqual(2);
       expect(report.cost_estimate.fixed_bytes_per_request).toBeGreaterThan(0);
-      expect(report.cost_estimate.prefix_cache.stable_prefix).toBe(false);
-      expect(report.cost_estimate.prefix_cache.finding).toMatch(/abilities.*first|byte 0/iu);
+      expect(report.cost_estimate.prefix_cache.stable_prefix).toBe(true);
+      expect(report.cost_estimate.prefix_cache.finding).toMatch(/leading prefix/iu);
 
       // Idempotence: nothing left to confirm, and the compile/residue picture is unchanged.
       const second = await runPipeline8b(db, { describerSimilarityFloor: 0 });
