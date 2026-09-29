@@ -90,6 +90,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "regain-wounds", from: 2, to: 3, map: (parameters) => parameters },
   // Version 2 only adds an optional subject; v1's empty parameters (always this-unit) still fit.
   { family: "sticky-objective", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds an optional roll_var (the phase-4 `roll` binding container); v1's plain dice still fits.
+  { family: "dice-roll", from: 1, to: 2, map: (parameters) => parameters },
   {
     family: "below-starting-strength", from: 1, to_family: "unit-state", to: 1,
     map: (parameters) => {

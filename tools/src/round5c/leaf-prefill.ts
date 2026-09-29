@@ -1,3 +1,5 @@
+import { containerPrefill } from "./leaf-prefill-containers.js";
+
 /** A family parameter's JSON Schema, as far as the leaf form and the prefill read it. */
 export type Property = {
   enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number;
@@ -237,7 +239,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   const prefill: Record<string, unknown> = family.id === "event" ? eventFromSource(exactText)
     : family.id === "attack" ? attackFromSource(exactText)
       : family.id === "select-unit" ? selectionFromSource(exactText)
-        : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : {};
+        : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : containerPrefill(family.id, exactText);
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
   if (family.id === "no-advance-roll") {
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";

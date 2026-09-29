@@ -13,6 +13,8 @@ import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families
 import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
 import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
 import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
+import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
+import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -53,6 +55,8 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...UNIT_STATE_EFFECT_FAMILIES,
   ...WEAPON_BUFF_FAMILIES,
   ...ABILITY_MODIFIER_FAMILIES,
+  ...CONTAINER_FAMILIES,
+  ...NAMED_REGION_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -104,7 +108,9 @@ export function normalizeFingerprintParameters(
     ?? normalizeEconomyParameters(family, input)
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
-    ?? normalizeAbilityModifierParameters(family, input, version);
+    ?? normalizeAbilityModifierParameters(family, input, version)
+    ?? normalizeContainerParameters(family, input)
+    ?? normalizeNamedRegionParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

@@ -50,6 +50,9 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
   const dice = String(rolls[0]!.parameters.dice);
   const faces = DICE_FACES[dice]!;
+  // A roll_var (dice-roll@2) binds the roll as the DSL's `roll` container; a single band then
+  // compiles its dice-gated `from` that binding instead of a fresh `dice` field.
+  const rollVar = rolls[0]!.parameters.roll_var as string | undefined;
   const bandOf = (item: Planned) => {
     const markers = item.gate.filter(isRollMarker);
     if (markers.length > 1) throw new CompileError("One effect is gated by two result bands.");
@@ -85,7 +88,10 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     if (table.length === 0) return null;
     table.sort((left, right) => left.band.from - right.band.from);
     if (table.length === 1 && table[0]!.band.to === faces) {
-      return { type: "dice-gated", dice, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null };
+      const gate: Node = rollVar
+        ? { type: "dice-gated", from: { roll_var: rollVar }, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null }
+        : { type: "dice-gated", dice, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null };
+      return rollVar ? { type: "roll", dice, roll_var: rollVar, effect: gate } : gate;
     }
     if (dice === "2D6") throw new CompileError("Several result bands on 2D6 have no DSL table; only D3 and D6 tables exist.");
     const outcomes: Array<{ results: number[]; effect: Node }> = [];
@@ -98,7 +104,10 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
       next = row.band.to + 1;
     }
     if (next <= faces) outcomes.push({ results: range(next, faces), effect: { type: "no-effect" } });
-    return { type: "dice-table", dice, outcomes };
+    const table_: Node = { type: "dice-table", dice, outcomes };
+    // dice-table always rolls its own dice (the DSL gives it no `from`); roll_var still binds the
+    // wrapping roll so the total (or successes_on count) is available to a sibling `from` elsewhere.
+    return rollVar ? { type: "roll", dice, roll_var: rollVar, effect: table_ } : table_;
   };
 
   // The roll takes the place of its first banded effect; everything else keeps its order.

@@ -3,6 +3,10 @@ import {
   ATTACK_EVENTS, attackTypeCondition, closed, CompileError, condition, DURATIONS, effect, kindKey, negate, trigger, type CompileLeaf,
 } from "./compile-fragments.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
+import {
+  designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
+} from "./compile-containers.js";
+import { compileNamedRegionState } from "./compile-named-region.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -132,24 +136,34 @@ export type LeafFragment =
   | { kind: "implicit"; note: string };
 
 export function leafFragment(leaf: CompileLeaf): LeafFragment {
+  if (isContainerOpener(leaf.family_id)) {
+    return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
+  }
+  if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
-  if (leaf.role === "COMBINATOR") return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
+  if (leaf.role === "COMBINATOR") {
+    return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
+  }
   if (leaf.role === "RESTRICTION") {
     return { kind: "implicit", note: leaf.family_id === "usage-limit"
       ? `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.`
       : leaf.family_id === "optional-use" ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
-        : "No separate text: checked against the core record, which already holds it." };
+        : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
+          : "No separate text: checked against the core record, which already holds it." };
   }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
   if (leaf.family_id === "roll-result") return { kind: "implicit", note: `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
+  if (leaf.family_id === "aura-range" || leaf.family_id === "leader-target") {
+    return { kind: "implicit", note: "No separate text: wraps the rest of the ability's effects, the same way select-unit does." };
+  }
   if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
   if (leaf.role === "DURATION") return { kind: "duration", duration: duration(leaf) };
   if (leaf.family_id === "attack") {
     const gate = attackTypeCondition(leaf);
     return gate ? { kind: "condition", node: gate } : { kind: "implicit", note: "No separate text: an attack is part of the effect it goes with." };
   }
-  if (leaf.family_id === "select-unit") return { kind: "implicit", note: "No separate text: the selection is written with the effects that refer to the selected unit." };
+  if (leaf.family_id === "select-unit" || leaf.family_id === "for-each-unit-select") return { kind: "implicit", note: "No separate text: the selection is written with the effects that refer to the selected unit." };
   if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit", note: "No separate text: an attack-time event is part of the effect it goes with." };
   return { kind: "trigger", node: trigger(leaf) };
 }
@@ -185,7 +199,29 @@ type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
   const list = ordered(leaves);
   const signature = shapeSignature(list, sourceText);
+  // named-region-state is a whole ability by itself: the DSL shape it produces has no room for
+  // any other leaf beside it (see compile-named-region.ts for why).
+  if (list.length === 1 && list[0]!.family_id === "named-region-state") {
+    try {
+      const { effect: node, behavior } = compileNamedRegionState(list[0]!);
+      return { ok: true, signature, mechanics: { effect: node, scope: { duration: "permanent" }, behavior, trigger: null }, checks: [] };
+    } catch (error) {
+      if (!(error instanceof CompileError)) throw error;
+      return { ok: false, signature, errors: [error.message] };
+    }
+  }
+  if (list.some((leaf) => leaf.family_id === "named-region-state")) {
+    return { ok: false, signature, errors: ["named-region-state must be the ability's only leaf."] };
+  }
   const places = placements(list, sourceText);
+  let containerNodes: Map<number, Node>;
+  let consumedByContainer: Set<number>;
+  try {
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence)));
+  } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature, errors: [error.message] };
+  }
   const errors: string[] = [];
   const attempt = <T>(work: () => T): T | null => {
     try {
@@ -219,8 +255,17 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const checks: CoreCheck[] = [];
   const targetParts: CompileLeaf[] = [];
   const targetEligibility: Node[] = [];
+  // Container-wrapping markers (batch 5): at most one of each is expected on a real ability.
+  let auraLeaf: CompileLeaf | null = null;
+  let leaderLeaf: CompileLeaf | null = null;
+  let forEachLeaf: CompileLeaf | null = null;
+  let rulesBundle = false;
 
   list.forEach((leaf, index) => {
+    // A container opener's options are folded into its own node (`containerNodes.get(index)`,
+    // used where planned effects are built below); the leaves that became those options never
+    // separately reach condition/duration/event dispatch or their own planned effect.
+    if (consumedByContainer.has(index)) return;
     const { sentence, clause } = places[index]!;
     const first = firstEffect(sentence);
     const leading = first === -1 || index < first;
@@ -242,12 +287,17 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     };
     attempt(() => {
       if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") targetEligibility.push(condition(leaf));
+      else if (leaf.role === "CONDITION" && WRAP_CONDITION_FAMILIES.has(leaf.family_id)) {
+        if (leaf.family_id === "aura-range") auraLeaf = leaf;
+        else leaderLeaf = leaf;
+      }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {
         if (leaf.family_id === "usage-limit") usages.push(usageFor(leaf.parameters));
         else if (leaf.family_id === "optional-use") optional = true;
+        else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
         else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) targetParts.push(leaf);
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
@@ -257,6 +307,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
           const gate = attackTypeCondition(leaf);
           if (gate) scope(gate);
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
+        else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
           triggers.push(trigger(leaf));
@@ -268,15 +319,18 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
 
   const planned: PlannedEffect[] = [];
   list.forEach((leaf, index) => {
+    if (consumedByContainer.has(index)) return;
     if (leaf.role !== "EFFECT") return;
     const { sentence, clause } = places[index]!;
-    // The nearest attack before this effect says who attacks and which way.
-    const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
-    const node = attempt(() => effect(leaf, {
-      attached,
-      attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "this-model" : "this-unit") : null,
-      incoming: attack?.parameters.direction === "targeted",
-    }));
+    const node = containerNodes.has(index) ? containerNodes.get(index)! : attempt(() => {
+      // The nearest attack before this effect says who attacks and which way.
+      const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
+      return effect(leaf, {
+        attached,
+        attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "this-model" : "this-unit") : null,
+        incoming: attack?.parameters.direction === "targeted",
+      });
+    });
     if (!node) return;
     planned.push({
       index, leaf, node,
@@ -344,6 +398,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
+  if (forEachLeaf && selections.length > 0) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
   const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;
@@ -358,7 +413,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
   else if (selections.length === 1) body = selectUnit(selections[0]!, body);
+  else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
   if (!body) return { ok: false, signature, errors };
+  if (auraLeaf) { const aura = auraLeaf; body = attempt(() => wrapAura(aura, body!)); }
+  if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
+  if (!body) return { ok: false, signature, errors };
+  if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
@@ -398,8 +458,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       effect: gated(global, body),
       scope: { duration: scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
-      // stratagem (it has a phase window or a TARGET), which a player always chooses to use.
-      behavior: triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive",
+      // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
+      // aura-range leaf always reads as an aura, ahead of any of those.
+      behavior: auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive",
       trigger: entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
@@ -441,35 +502,3 @@ function namesSelected(node: unknown): boolean {
   return record.target === "selected-unit" || Object.values(record).some(namesSelected);
 }
 
-/** A selection that only names "that unit" (it suffers mortal wounds, say): select-units around the effects. */
-function selectUnit(selection: CompileLeaf, body: Node): Node {
-  return {
-    type: "select-units",
-    selector: {
-      owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
-      count: 1,
-      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
-      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
-    },
-    effect: body,
-  };
-}
-
-/** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
-function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
-  const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
-  if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
-  const own = attack.parameters.unit === "this-model";
-  return {
-    type: "designate-target",
-    designation: "selected-unit",
-    select: {
-      scope: selection.parameters.scope === "friendly" ? "friendly-unit" : "enemy-unit",
-      count: 1,
-      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
-      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
-    },
-    applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
-    ...(lasting ? { duration: lasting } : {}),
-  };
-}

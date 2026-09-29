@@ -155,7 +155,9 @@ describe("Round 5C external Luna transport", () => {
       expect(sent.length).toBeGreaterThan(0);
       expect(sent.length).toBeLessThan(13);
       expect(sent).toEqual(rows.slice(1, 1 + sent.length).map((row) => row.abilityId));
-      expect(Buffer.byteLength(canonicalize(prepared.request), "utf8")).toBeLessThanOrEqual(48 * 1024);
+      // The budget covers the abilities; the fixed instructions and family registry sit outside it.
+      const fixedBytes = Buffer.byteLength(canonicalize({ ...prepared.request, abilities: [] }), "utf8");
+      expect(Buffer.byteLength(canonicalize(prepared.request), "utf8") - fixedBytes).toBeLessThanOrEqual(48 * 1024);
       expect(readFileSync(prepared.request_path, "utf8")).toBe(canonicalize(prepared.request));
       for (const ability of request.abilities) {
         expect(ability.source_text).toBe(rows.find((row) => row.abilityId === ability.ability_id)?.source);

@@ -4,6 +4,7 @@
  */
 
 import { boardEffect } from "./compile-board-effects.js";
+import { containerEffect } from "./compile-containers.js";
 
 export type CompileLeaf = {
   role: string;
@@ -427,6 +428,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     default: {
       const board = boardEffect(leaf, target);
       if (board) return board;
+      const container = containerEffect(leaf);
+      if (container) return container;
       throw new CompileError(`Effect ${leaf.family_id} has no DSL fragment yet.`);
     }
   }

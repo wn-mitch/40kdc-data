@@ -27,7 +27,11 @@ import {
 } from "./luna-schema.js";
 import { anchorExactText, parseHypothesis, parseQualifiersV2, parseStructuralSpans } from "./luna-v2.js";
 
-const MAX_REQUEST_BYTES = 48 * 1024;
+/**
+ * Bytes of ability payload one request may carry, over its fixed instructions, examples and
+ * family registry. The registry grows with every leaf family, so it sits outside the budget.
+ */
+const ABILITY_BUDGET_BYTES = 48 * 1024;
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 15;
 const repositoryRoot = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
@@ -298,7 +302,7 @@ function canonicalBytes(request: PreparedRequest): number {
 }
 
 function manualGapDescription(): string {
-  return "Complete ability exceeds the 48 KiB Luna request cap and requires manual review.";
+  return "Complete ability exceeds the 48 KiB Luna ability budget and requires manual review.";
 }
 
 function recordManualOversize(db: DatabaseSync, abilities: readonly CurrentAbility[]): void {
@@ -422,6 +426,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
       }
 
       const base = requestBase(db);
+      const maxRequestBytes = canonicalBytes({ ...base, abilities: [] }) + ABILITY_BUDGET_BYTES;
       const selected: Array<{ ability: CurrentAbility; uncovered: UncoveredInterval[]; request: RequestAbility }> = [];
       const oversized: CurrentAbility[] = [];
       // A targeted or retried request re-sends previously analyzed abilities on purpose.
@@ -431,12 +436,12 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
       for (const candidate of fresh.length ? fresh : candidates) {
         if (selected.length >= limit) break;
         const next = requestAbility(candidate.ability, candidate.uncovered, db);
-        if (canonicalBytes({ ...base, abilities: [next] }) > MAX_REQUEST_BYTES) {
+        if (canonicalBytes({ ...base, abilities: [next] }) > maxRequestBytes) {
           oversized.push(candidate.ability);
           continue;
         }
         const tentative: PreparedRequest = { ...base, abilities: [...selected.map((item) => item.request), next] };
-        if (canonicalBytes(tentative) <= MAX_REQUEST_BYTES) selected.push({ ...candidate, request: next });
+        if (canonicalBytes(tentative) <= maxRequestBytes) selected.push({ ...candidate, request: next });
       }
       recordManualOversize(db, oversized);
       // Commit the oversize gaps, then report: the source stays actionable by manual review.
@@ -445,7 +450,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
       const request: PreparedRequest = { ...base, abilities: selected.map((item) => item.request) };
       const serializedRequest = canonicalize(request);
       const requestBytes = Buffer.byteLength(serializedRequest, "utf8");
-      if (requestBytes > MAX_REQUEST_BYTES) throw new Error("Luna request cap enforcement failed.");
+      if (requestBytes > maxRequestBytes) throw new Error("Luna request cap enforcement failed.");
       const inputHash = hashJson(request);
       const configFor = (requestPath: string): ModelRunConfig => ({
         schema_version: REQUEST_SCHEMA_VERSION,
@@ -492,7 +497,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
     if (writtenPath) rmSync(writtenPath, { force: true });
     throw error;
   }
-  if (!prepared) throw new RangeError("No complete ability fits within the 48 KiB Luna request cap; oversized abilities were marked for manual review.");
+  if (!prepared) throw new RangeError("No complete ability fits within the 48 KiB Luna ability budget; oversized abilities were marked for manual review.");
   return prepared;
 }
 
