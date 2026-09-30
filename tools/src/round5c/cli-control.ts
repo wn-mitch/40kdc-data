@@ -3,7 +3,8 @@ import type { DatabaseSync } from "node:sqlite";
 import { authorityAudit } from "./authority-migration.js";
 import { REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
-import { getDataEpoch, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import { getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import { applyChatReviewFile } from "./review-apply.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "./pilot.js";
 
 /**
@@ -121,6 +122,16 @@ export function projectStatus(db: DatabaseSync): Record<string, unknown> {
 }
 
 const COMMANDS: Record<string, ControlCommand> = {
+  "review-apply": {
+    effect: () => "human", usage: "review-apply <decisions.json>",
+    summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective; pilot-reviewed marks) as his own.",
+    run: (flags) => {
+      const path = flags.positional[0];
+      if (!path) throw Object.assign(new Error("review-apply needs a decisions file."), { code: "INVALID_ARGUMENT" });
+      const db = openWorkbench();
+      try { return applyChatReviewFile(db, path); } finally { db.close(); }
+    },
+  },
   commands: {
     effect: () => "read", usage: "commands", summary: "This catalog: every control command, its effect and usage.",
     run: () => Object.entries(COMMANDS).map(([name, command]) => ({ name, usage: command.usage, summary: command.summary })),

@@ -63,6 +63,21 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { dice: { enum: DICE }, roll_var: { type: "string", minLength: 1 } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "dice-roll",
+    version: 3,
+    role: "EVENT",
+    label: "Roll dice",
+    description: "\"Roll one D6\" or \"roll six D6\": the result bands that follow (on a 4+, for each 5+) say what happens for each result. count is how many dice are rolled when it is more than one (\"roll six D6: for each 5+, that unit suffers 1 mortal wound\"). A named roll_var binds the roll (the DSL's phase-4 `roll` container) so a single result band compiles its dice-gated from that binding instead of rolling again.",
+    starter: { dice: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["dice"],
+      properties: { dice: { enum: DICE }, count: { type: "integer", minimum: 2, maximum: 30 }, roll_var: { type: "string", minLength: 1 } },
+      additionalProperties: false,
+    },
   },
   {
     id: "roll-result",
@@ -174,9 +189,13 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
 export function normalizeDiceParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
     case "dice-roll": {
-      const keys = version >= 2 && "roll_var" in input ? ["dice", "roll_var"] : ["dice"];
+      const keys = ["dice", ...(version >= 2 && "roll_var" in input ? ["roll_var"] : []), ...(version >= 3 && "count" in input ? ["count"] : [])];
       exactKeys(input, keys, family);
       const result: Record<string, unknown> = { dice: enumValue(input.dice, DICE, "dice-roll.dice") };
+      if (version >= 3 && "count" in input) {
+        if (!Number.isSafeInteger(input.count) || (input.count as number) < 2 || (input.count as number) > 30) throw new TypeError("dice-roll.count must be a whole number of dice from 2 to 30; leave it out for one die.");
+        result.count = input.count;
+      }
       if (version >= 2 && "roll_var" in input) {
         if (typeof input.roll_var !== "string" || !input.roll_var) throw new TypeError("dice-roll.roll_var must be a nonblank string.");
         result.roll_var = input.roll_var;

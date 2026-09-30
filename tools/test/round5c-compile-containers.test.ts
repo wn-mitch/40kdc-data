@@ -340,6 +340,16 @@ describe("Round 5C dice-roll@2 roll_var binding", () => {
     });
   });
 
+  it("folds several dice with a per-die success band into mortal wounds per success, and refuses any other effect", () => {
+    const roll = () => leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 3);
+    const band = () => leaf("CONDITION", "roll-result", { from: 5, to: 6 });
+    expect(compiled([roll(), band(), leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" })]).mechanics.effect)
+      .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: { count: 1, per: "success", roll: { dice: 6, threshold: 5 } } });
+    // Rolling one die per something other than mortal wounds has no DSL shape: an error, not a guess.
+    expect(compileLeaves([roll(), band(), leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }, 3)]).ok).toBe(false);
+    expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", count: 1 }, 3)).toThrow(/count/u);
+  });
+
   it("accepts a dice expression outside the sampled enum unchanged", () => {
     expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", roll_var: "x" }, 2)).not.toThrow();
     expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", roll_var: "" }, 2)).toThrow(/roll_var/u);
