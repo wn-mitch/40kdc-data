@@ -73,6 +73,8 @@ export type AbilityView = {
   ability_id: string;
   source_hash: string;
   review_evidence_hash: string;
+  /** Will marked this ability reviewed for its pilot step (it need not be fully accounted). */
+  pilot_reviewed: boolean;
   source_text: string;
   source_type: string | null;
   source_kind: string | null;
@@ -759,6 +761,9 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     ability_id: ability.ability_id,
     source_hash: ability.source_hash,
     review_evidence_hash: reviewEvidenceHash(review),
+    pilot_reviewed: db.prepare(`
+      SELECT 1 FROM annotation_batches WHERE operation = 'pilot-review' AND json_extract(metadata_json, '$.ability_version_id') = ? LIMIT 1
+    `).get(ability.id) !== undefined,
     source_text: ability.source_text,
     source_type: ability.source_type,
     source_kind: ability.source_kind,
@@ -843,6 +848,26 @@ export function getAbilities(
 export function getAbility(db: DatabaseSync, abilityVersionId: number): AbilityView {
   if (!Number.isSafeInteger(abilityVersionId) || abilityVersionId < 1) invalid("Ability version id must be positive.");
   return abilityView(db, requireAbility(db, abilityVersionId));
+}
+
+/**
+ * Will finished reviewing this ability for its pilot step: every label he meant to confirm,
+ * correct or reject is decided. Unlike the whole-context check it does not need the source fully
+ * accounted, since a step's abilities can hold wording no family expresses yet. The pilot's next
+ * step waits for this mark on every ability of the previous one.
+ */
+export function markPilotReviewed(db: DatabaseSync, abilityVersionId: number, body: unknown, actor: Actor): AbilityView {
+  requireHuman(actor, "mark a pilot step reviewed");
+  const input = asObject(body, "pilot review body");
+  assertReviewer(actor, input.reviewer);
+  const sourceHash = asNonblankString(input.source_hash, "source_hash");
+  return withTransaction(db, () => {
+    const ability = requireCurrentAbility(db, abilityVersionId, sourceHash);
+    db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'pilot-review', ?, ?, ?)")
+      .run(`pilot_${randomUUID()}`, actor.reviewer, new Date().toISOString(), JSON.stringify({ ability_version_id: ability.id }));
+    bumpWorkbenchRevision(db);
+    return abilityView(db, ability);
+  });
 }
 
 /** Record the separate whole-context review action for a current source version. */

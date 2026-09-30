@@ -29,7 +29,7 @@ type Annotation = Span & {
 };
 type Proposal = Span & { reason: unknown; score: number | null; status: string };
 type Ability = {
-  id: number; current: boolean; faction_id: string; ability_id: string; source_hash: string; review_evidence_hash: string; source_text: string;
+  id: number; current: boolean; faction_id: string; ability_id: string; source_hash: string; review_evidence_hash: string; pilot_reviewed: boolean; source_text: string;
   source_type: string | null; source_kind: string | null; name: string | null;
   fragments: Fragment[]; annotations: Annotation[]; proposals: Proposal[];
   coverage: SourceWorkAbility["coverage"] & { proposal_fraction: number; whole_reviewed: boolean; uncovered: Fragment[]; unaccounted: Fragment[]; residue: Fragment[] };
@@ -898,6 +898,17 @@ export default function WorkbenchApp() {
               {!connectiveProposal && draft.kind !== "annotation" && <button className="primary" disabled={!canWrite || reselecting || !!boundaryError || !supportsSemanticConfirmation} onClick={decideEverywhere}>Confirm everywhere this wording appears</button>}
             </section>}
             <section className="wb-bulk"><button className="secondary" disabled={!canWrite || !safeProposals.length} onClick={() => void perform(() => apply(safeProposals.map((proposal) => proposalDecision(ability, proposal, "confirm"))))}>Confirm {safeProposals.length} nonconflicting proposals</button><p className="wb-help">Only this inspected ability. Overlapping proposals and unregistered regions are excluded. This does not check whole context.</p></section>
+            {ONLY_ABILITIES && <section className="wb-census" aria-label="Pilot step review">
+              <h3>Pilot step review</h3>
+              {ability.pilot_reviewed
+                ? <p className="wb-reviewed">Marked reviewed for this pilot step.</p>
+                : <><button className="primary" disabled={!canWrite} onClick={() => void perform(async () => {
+                    await api<Ability>(`/abilities/${ability.id}/pilot-reviewed`, { source_hash: ability.source_hash, reviewer: REVIEWER });
+                    setRevision((value) => value + 1);
+                    setStatus("Marked reviewed for this pilot step.");
+                  })}>Done reviewing this ability</button>
+                  <p className="wb-help">When every label here is confirmed, corrected or rejected. Wording no family fits can stay unresolved. The next pilot step waits for all of this step's abilities.</p></>}
+            </section>}
             <ReviewCensus key={`${ability.id}:${censusResetToken}`} ability={ability} disabled={!canWrite} onDirtyChange={setDirtyCensusAbilityId} save={(checked, shape, cues, expectedReviewHash) => void perform(async () => {
               const updated = await api<Ability>(`/abilities/${ability.id}/review`, { source_hash: ability.source_hash, expected_review_hash: expectedReviewHash, reviewer: REVIEWER, whole_context_checked: checked, ...(shape.trim() ? { source_shape: shape.trim() } : {}), cues: parameters(cues) });
               setDirtyCensusAbilityId(null); setDraft(null); setRevision((value) => value + 1);

@@ -10,7 +10,7 @@ import { openWorkbench } from "../src/round5c/db.js";
 import type { JevClient } from "../src/round5c/jev-core.js";
 import type { ModelReply } from "../src/round5c/leaf-proposals-llm.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "../src/round5c/pilot.js";
-import { applyAnnotationBatch, reviewAbility } from "./round5c-human.js";
+import { applyAnnotationBatch, markPilotReviewed } from "./round5c-human.js";
 
 // Fabricated fixture prose only; nothing here is published source text.
 const PHRASE = "Re-roll a Hit roll of 1";
@@ -164,7 +164,9 @@ describe("Round 5C pilot step", () => {
           fragment: "RAW_TEXT", start_byte: 0, end_byte: Buffer.byteLength(text, "utf8"), exact_text: text, role: "EFFECT",
           family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
         }] });
-        reviewAbility(db, id, { source_hash: ability.source_hash, reviewer: "will", whole_context_checked: true });
+        // The unlabelled residue keeps the source from being fully accounted, so the whole-context
+        // check is unavailable; the pilot mark is how Will says the step's review is done.
+        markPilotReviewed(db, id, { source_hash: ability.source_hash, reviewer: "will" });
       }
     } finally {
       db.close();
@@ -175,6 +177,8 @@ describe("Round 5C pilot step", () => {
     expect(evaluated.deepseek_family).toEqual({ correct: 2, compared: 2 });
     expect(evaluated.jev_family).toEqual({ top1: 2, top3: 2, compared: 2 });
     expect(evaluated.segmentation_unchanged_rate).toBe(0.5);
+    // With the step reviewed, the next step may start.
+    await expect(runPilotStep(options("fib-5", { next: 2 }))).resolves.toMatchObject({ step: "fib-5" });
     expect(evaluated.jev_parameters).toEqual({ agreed: 6, asked: 6 });
   });
 });

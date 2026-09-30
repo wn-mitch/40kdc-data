@@ -8,7 +8,7 @@ import { defineConfig, type Plugin } from "vite";
 import { getWorkbenchRevision, openWorkbench } from "../src/round5c/db.js";
 import { repairRelatedVariantProposals } from "../src/round5c/migration.js";
 import { humanActor, type HumanActor } from "../src/round5c/authority.js";
-import { applyAnnotationBatch, getAbilities, getAbility, getDashboard, getFactions, reviewAbility, undoBatch } from "../src/round5c/review.js";
+import { applyAnnotationBatch, getAbilities, getAbility, getDashboard, getFactions, markPilotReviewed, reviewAbility, undoBatch } from "../src/round5c/review.js";
 import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, startLunaRun } from "../src/round5c/luna-run.js";
 import { applySourceAtomBatch, proposeSourceAtom } from "../src/round5c/atoms.js";
@@ -75,7 +75,7 @@ function round5WorkbenchBridge(): Plugin {
         if (!request.url?.startsWith("/__round5c/")) return next();
         const url = new URL(request.url, "http://localhost");
         const path = url.pathname.slice("/__round5c".length);
-        const abilityMatch = /^\/abilities\/([1-9]\d*)(\/review)?$/.exec(path);
+        const abilityMatch = /^\/abilities\/([1-9]\d*)(\/review|\/pilot-reviewed)?$/.exec(path);
         const undoMatch = /^\/batches\/([^/]+)\/undo$/.exec(path);
         const familyMatch = /^\/families\/([a-z0-9-]+)\/candidates$/.exec(path);
         const lunaRunMatch = /^\/luna\/runs\/([1-9]\d*)$/.exec(path);
@@ -112,6 +112,9 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "GET" && abilityMatch && !abilityMatch[2]) {
             return json(response, 200, getAbility(db, Number(abilityMatch[1])));
+          }
+          if (request.method === "POST" && abilityMatch?.[2] === "/pilot-reviewed") {
+            return json(response, 200, withHuman(await body(), (input, actor) => markPilotReviewed(db!, Number(abilityMatch[1]), input, actor)));
           }
           if (request.method === "POST" && abilityMatch?.[2] === "/review") {
             return json(response, 200, withHuman(await body(), (input, actor) => reviewAbility(db!, Number(abilityMatch[1]), input, actor)));

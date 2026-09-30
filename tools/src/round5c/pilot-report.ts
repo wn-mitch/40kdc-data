@@ -102,15 +102,22 @@ export function runAccounting(runs: ReturnType<typeof stepRuns>): {
   };
 }
 
-/** Abilities Will marked reviewed after looking at the whole source (a human whole-context review). */
+/**
+ * Abilities Will marked reviewed: a pilot-review mark, or a whole-context check, by a human
+ * reviewer. The pilot mark exists because an ability with wording no family expresses can never
+ * pass the whole-context check, yet its review is complete.
+ */
 export function reviewedAbilities(db: DatabaseSync, ids: readonly number[]): Set<number> {
   if (ids.length === 0) return new Set();
-  return new Set((db.prepare(`
-    SELECT ability_version_id, reviewed_by FROM ability_reviews
-    WHERE whole_context_checked = 1 AND ability_version_id IN (${ids.map(Number).join(",")})
-  `).all() as Array<{ ability_version_id: number; reviewed_by: string | null }>)
-    .filter((row) => row.reviewed_by !== null && HUMAN_REVIEWERS.has(row.reviewed_by))
-    .map((row) => row.ability_version_id));
+  const list = ids.map(Number).join(",");
+  const rows = [
+    ...db.prepare(`SELECT ability_version_id, reviewed_by FROM ability_reviews WHERE whole_context_checked = 1 AND ability_version_id IN (${list})`).all(),
+    ...db.prepare(`
+      SELECT json_extract(metadata_json, '$.ability_version_id') AS ability_version_id, reviewer AS reviewed_by FROM annotation_batches
+      WHERE operation = 'pilot-review' AND json_extract(metadata_json, '$.ability_version_id') IN (${list})
+    `).all(),
+  ] as Array<{ ability_version_id: number; reviewed_by: string | null }>;
+  return new Set(rows.filter((row) => row.reviewed_by !== null && HUMAN_REVIEWERS.has(row.reviewed_by)).map((row) => Number(row.ability_version_id)));
 }
 
 type HumanRow = { ability_version_id: number; fragment: string; start_byte: number; end_byte: number; family_id: string; parameters: Record<string, unknown> };
