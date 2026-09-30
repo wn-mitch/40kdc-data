@@ -108,12 +108,14 @@ export function wrapRulesBundle(body: Node): Node {
  * ceiling): a selection with no attack on it is only who "that unit" names, so it becomes a
  * `select-units` around the effects; one with an attack becomes a `designate-target`.
  */
-export function selectUnit(selection: CompileLeaf, body: Node): Node {
+export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null } = {}): Node {
   return {
     type: "select-units",
     selector: {
       owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
-      count: 1,
+      // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
+      ...(extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }),
+      ...(extra.eligibility ? { eligibility: extra.eligibility } : {}),
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
     },

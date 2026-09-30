@@ -26,6 +26,14 @@ function leaf(role: string, familyId: string, parameters: Record<string, unknown
 const lead = () => leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }, 2);
 const attack = () => leaf("EVENT", "event", { kind: "attack-made" }, 2);
 
+const leavesOf8561 = () => [
+  leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }),
+  leaf("CONDITION", "in-region", { subject: "selected-unit", region_kind: "territory", territory: "your-deployment-zone", wholly: true }),
+  leaf("RESTRICTION", "count-by-battle-size", { incursion: 1, "strike-force": 2, onslaught: 3 }),
+  leaf("EFFECT", "set-up", { subject: "selected-unit", to: "strategic-reserves", from: "battlefield" }),
+  leaf("RESTRICTION", "reserves-arrival", { allow_first_round: true }),
+];
+
 function compiled(leaves: CompileLeaf[]) {
   const result = compileLeaves(leaves);
   if (!result.ok) throw new Error(result.errors.join("; "));
@@ -51,6 +59,25 @@ describe("Round 5C leaf compiler", () => {
     const parts = (result.mechanics.effect as { steps: Array<{ trigger: unknown; effect: { type: string } }> }).steps;
     expect(parts).toHaveLength(2);
     expect(parts[1]!.effect.type).toBe("select-units");
+  });
+
+  it("reads a battle-size count and selected-unit conditions as the selection's cap and eligibility, and returns a set-up unit next Movement phase", () => {
+    const result = compiled(leavesOf8561());
+    const effect = result.mechanics.effect as { type: string; selector: Record<string, unknown>; effect: { modifier: Record<string, unknown> } };
+    expect(effect.type).toBe("select-units");
+    expect(effect.selector).toMatchObject({ max_count: { incursion: 1, "strike-force": 2, onslaught: 3 }, eligibility: { type: expect.any(String) } });
+    expect(effect.selector.count).toBeUndefined();
+    expect(effect.effect.modifier).toMatchObject({ arrives: "next-movement-phase", allow_first_round: true });
+    // The eligibility is the selection's, not a gate on the whole ability.
+    expect(result.mechanics.condition).toBeUndefined();
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leavesOf8561()).length).toBeGreaterThan(0);
+  });
+
+  it("lowers a move-distance bonus to a move-modifier on the named moves", () => {
+    const result = compiled([leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: ["pile-in", "consolidation"], bonus: 3 })]);
+    const leaves = [leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: ["pile-in", "consolidation"], bonus: 3 })];
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leaves)).toContain("3");
+    expect(result.mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["pile-in", "consolidation"], distance_bonus: 3 } });
   });
 
   it("folds \"must end that move either … or …\" into the move's end condition, gating nothing", () => {

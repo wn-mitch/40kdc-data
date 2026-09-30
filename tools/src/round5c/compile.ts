@@ -266,6 +266,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && places[at]!.sentence === places[index]!.sentence ? [at] : []),
   }] : []);
   const endConditions = new Set(moveEnds.flatMap((rule) => rule.conditions));
+  // Conditions on the selected unit right after a selection in its sentence ("select one enemy
+  // unit within 6\" of this unit", "that are on the battlefield") say which units can be selected:
+  // the selection's eligibility, not a gate on the ability.
+  const selectionIndex = list.findIndex((leaf) => leaf.family_id === "select-unit");
+  const eligibilityIndexes = selectionIndex === -1 ? [] : list.flatMap((leaf, at) => at > selectionIndex && leaf.role === "CONDITION"
+    && leaf.parameters.subject === "selected-unit" && places[at]!.sentence === places[selectionIndex]!.sentence
+    && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
+  for (const at of eligibilityIndexes) endConditions.add(at);
+  const battleSizeCount = list.find((leaf) => leaf.family_id === "count-by-battle-size");
 
   list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
@@ -309,7 +318,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
-        else if (leaf.family_id === "move-must-end") { /* folded into the preceding move below */ }
+        else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size") { /* folded below */ }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
       else if (leaf.role === "EVENT") {
@@ -352,6 +361,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   });
   if (list.every((leaf) => leaf.role !== "EFFECT")) errors.push("There is no effect leaf to compile.");
 
+  // "Can make an ingress move in your next Movement phase": the set-up before it returns then.
+  for (const [index, leaf] of list.entries()) {
+    if (leaf.family_id !== "reserves-arrival") continue;
+    const setUp = planned.filter((item) => item.index < index && item.node.type === "set-up").at(-1);
+    if (!setUp) { errors.push("A reserves arrival has no set-up before it."); continue; }
+    const modifier = setUp.node.modifier as Node;
+    modifier.arrives = "next-movement-phase";
+    if (leaf.parameters.allow_first_round === true) modifier.allow_first_round = true;
+  }
   for (const rule of moveEnds) {
     const move = planned.filter((item) => item.index < rule.index && item.node.type === "move").at(-1);
     if (!move) { errors.push("\"Must end that move\" has no move before it."); continue; }
@@ -442,7 +460,13 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
-  else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) body = selectUnit(selections[0]!, body);
+  else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
+    const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
+    body = selectUnit(selections[0]!, body, {
+      ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
+      eligibility,
+    });
+  }
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
   if (!body) return { ok: false, signature, errors };
   if (auraLeaf) { const aura = auraLeaf; body = attempt(() => wrapAura(aura, body!)); }

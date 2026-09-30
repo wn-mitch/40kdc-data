@@ -95,6 +95,12 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
   // Version 3 only adds psychic and recipient; version 2 parameters still fit.
   { family: "attack", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 only adds friendly-unit; version 3 parameters still fit.
+  { family: "attack", from: 3, to: 4, map: (parameters) => parameters },
+  // Version 5 only lets `of` be event-object; version 4 parameters still fit.
+  { family: "unit-position", from: 4, to: 5, map: (parameters) => parameters },
+  // Version 2 adds the models an enhancement excludes; none were recorded before.
+  { family: "bearer-eligibility", from: 1, to: 2, map: (parameters) => ({ ...parameters, excluded_keywords: [] }) },
   { family: "optional-use", from: 1, to: 2, map: bearerIsThisModel("who") },
   // Version 3 only adds amounts (D3+1, D3+2) and an optional per; existing parameters still fit.
   { family: "regain-wounds", from: 2, to: 3, map: (parameters) => parameters },

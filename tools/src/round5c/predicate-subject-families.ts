@@ -20,6 +20,8 @@ export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
  * predicate can also ask about it directly ("if the attacking unit is below half-strength").
  */
 export const WIDE_SUBJECTS = ["this-unit", "this-model", "target", "attacker", "event-subject", "recipient", "selected-unit"] as const;
+/** unit-position@5's `of` can also be the unit the triggering event acted on (event-object): "within 6\" of that unit when it was destroyed". */
+const POSITION_OF_V5 = [...WIDE_SUBJECTS, "event-object"] as const;
 
 const UNIT_STATES_V1 = ["below-starting-strength", "below-half-strength", "battle-shocked"] as const;
 /** Version 2 adds being within Engagement Range of an enemy unit (negated: unengaged). */
@@ -278,6 +280,29 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-position",
+    version: 5,
+    role: "CONDITION",
+    label: "Unit's position",
+    description: "As version 4, and `of` can also be event-object, the unit the triggering event acted on (\"within 6\\\" of that NECRONS unit when it was destroyed\").",
+    starter: { kind: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["kind", "subject", "negated"],
+      properties: {
+        kind: { enum: POSITION_KINDS },
+        inches: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: DISTANCE_KINDS } },
+        of: { enum: POSITION_OF_V5, "x-only-when": { kind: DISTANCE_KINDS } },
+        controlled_by: { enum: OBJECTIVE_CONTROLLERS, "x-only-when": { kind: ["objective-range"] } },
+        to: { enum: WIDE_SUBJECTS, "x-only-when": { kind: ["closest-eligible"] } },
+        range: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: ["closest-eligible"] } },
+        ...wideSubjectAndNegation,
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "target-is-selected",
@@ -339,7 +364,7 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
         exactKeys(input, ["kind", "inches", "subject", "negated", ...(version >= 4 ? ["of"] : [])], family);
         return {
           kind, inches: boundedInteger(input.inches, 1, MAX_INCHES, "unit-position.inches"),
-          ...(version >= 4 ? { of: enumValue(input.of, WIDE_SUBJECTS, "unit-position.of") } : {}), ...common,
+          ...(version >= 4 ? { of: enumValue(input.of, version >= 5 ? POSITION_OF_V5 : WIDE_SUBJECTS, "unit-position.of") } : {}), ...common,
         };
       }
       if (kind === "objective-range") {

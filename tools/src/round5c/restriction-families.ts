@@ -183,6 +183,26 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "bearer-eligibility",
+    version: 2,
+    role: "RESTRICTION",
+    kinds: ["enhancement"],
+    label: "Which models can take it",
+    description: "An enhancement's \"<KEYWORD> model only\": every keyword, or any one of them (\"CANONESS, PALATINE or MINISTORUM PRIEST\"), and the models it excludes (\"(excluding CYBERNETICA DATASMITH models)\"). Checked against the core enhancement record, not written again.",
+    starter: { keywords: [], match: "", excluded_keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["keywords", "match", "excluded_keywords"],
+      properties: {
+        keywords: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 1, uniqueItems: true },
+        match: { enum: KEYWORD_MATCH },
+        excluded_keywords: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, uniqueItems: true },
+      },
+      additionalProperties: false,
+    },
   },
 ];
 
@@ -249,8 +269,11 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
       return window;
     }
     case "bearer-eligibility":
-      exactKeys(input, ["keywords", "match"], family);
-      return { keywords: keywords(input.keywords), match: enumValue(input.match, KEYWORD_MATCH, "bearer-eligibility.match") };
+      exactKeys(input, ["keywords", "match", ...(version >= 2 ? ["excluded_keywords"] : [])], family);
+      return {
+        keywords: keywords(input.keywords), match: enumValue(input.match, KEYWORD_MATCH, "bearer-eligibility.match"),
+        ...(version >= 2 ? { excluded_keywords: keywords(input.excluded_keywords, "bearer-eligibility.excluded_keywords", true) } : {}),
+      };
     default:
       return null;
   }

@@ -45,6 +45,12 @@ function eligibilityProblem(record: CoreRecord, parameters: Record<string, unkno
     ? (record.keyword_restriction_groups as unknown[][]).map((group) => group.map(upper))
     : Array.isArray(record.keyword_restrictions) ? [(record.keyword_restrictions as unknown[]).map(upper)] : [];
   if (groups.length === 0) return "the core enhancement names no eligible keywords";
+  // Excluded models, when the leaf names any, must be exactly the ones core excludes.
+  if (Array.isArray(parameters.excluded_keywords)) {
+    const excluded = (parameters.excluded_keywords as string[]).map(upper).sort();
+    const coreExcluded = (Array.isArray(record.exclusion_keywords) ? record.exclusion_keywords as unknown[] : []).map(upper).sort();
+    if (excluded.join() !== coreExcluded.join()) return `core excludes ${coreExcluded.join(", ") || "no keywords"}`;
+  }
   // Core adds the army's faction keyword the wording leaves out, so each named keyword must be
   // present, not the lists equal.
   if (parameters.match === "all") {

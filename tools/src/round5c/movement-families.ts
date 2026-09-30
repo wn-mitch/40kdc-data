@@ -196,6 +196,38 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    id: "move-distance",
+    version: 1,
+    role: "EFFECT",
+    label: "Moves go further",
+    description: "\"Each time a model in your unit makes a Pile-in or Consolidation move, it can move up to 6\\\" instead of up to 3\\\"\": the named kinds of move go `bonus` inches further than normal (3 here).",
+    starter: { subject: "this-unit", move_types: [], bonus: null },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "move_types", "bonus"],
+      properties: {
+        subject: { enum: ["this-unit", "this-model"] },
+        move_types: { type: "array", items: { enum: MOVE_TYPES }, minItems: 1, uniqueItems: true },
+        bonus: { type: "integer", minimum: 1, maximum: 24 },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "reserves-arrival",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Arrives from reserves next Movement phase",
+    description: "\"This unit can make an ingress move in your next Movement phase (including in your first turn)\": the unit set up into Strategic Reserves just before it returns in your next Movement phase; allow_first_round when that can be the first battle round.",
+    starter: { allow_first_round: false },
+    parameterSchema: {
+      type: "object",
+      required: ["allow_first_round"],
+      properties: { allow_first_round: { type: "boolean" } },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "move-must-end",
     version: 1,
     role: "RESTRICTION",
@@ -213,6 +245,19 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
 
 export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
+    case "move-distance": {
+      const keys = Object.keys(input).sort().join();
+      if (keys !== "bonus,move_types,subject") throw new TypeError("move-distance parameters must be exactly: subject, move_types, bonus.");
+      return {
+        subject: enumValue(input.subject, ["this-unit", "this-model"], "move-distance.subject"),
+        move_types: enumSet(input.move_types, MOVE_TYPES, "move-distance.move_types"),
+        bonus: boundedInteger(input.bonus, 1, 24, "move-distance.bonus"),
+      };
+    }
+    case "reserves-arrival": {
+      if (Object.keys(input).join() !== "allow_first_round" || typeof input.allow_first_round !== "boolean") throw new TypeError("reserves-arrival parameters must be exactly: allow_first_round (true or false).");
+      return { allow_first_round: input.allow_first_round };
+    }
     case "move-must-end": {
       const keys = Object.keys(input);
       if (keys.length !== 1 || keys[0] !== "match") throw new TypeError("move-must-end parameters must be exactly: match.");

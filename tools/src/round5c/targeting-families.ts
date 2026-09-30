@@ -16,6 +16,8 @@ export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
 /** Version 3: a Psychic Attack, and the unit an aura applies to as the one attacking. */
 export const ATTACK_TYPES_V3 = [...ATTACK_TYPES, "psychic"] as const;
 export const ATTACK_UNITS_V3 = [...ATTACK_UNITS, "recipient"] as const;
+/** Version 4: an attack by any friendly unit ("each time a friendly unit makes an attack that targets that enemy unit"). */
+export const ATTACK_UNITS_V4 = [...ATTACK_UNITS_V3, "friendly-unit"] as const;
 export const SELECT_SCOPES = ["enemy", "friendly"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
 const MAX_INCHES = 48;
@@ -86,6 +88,35 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["direction", "unit", "attack_type"],
       properties: { direction: { enum: ATTACK_DIRECTIONS }, unit: { enum: ATTACK_UNITS_V3 }, attack_type: { enum: ATTACK_TYPES_V3 } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "attack",
+    version: 4,
+    role: "EVENT",
+    label: "Each time an attack is made",
+    description: "An attack made by the named model or unit, or an attack that targets it, optionally only melee, ranged or psychic. What the attack targets is a separate condition. \"The bearer\" is this model; recipient is the unit an aura applies to; friendly-unit is any friendly unit (\"each time a friendly unit makes an attack that targets that enemy unit\").",
+    starter: { direction: "", unit: "", attack_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["direction", "unit", "attack_type"],
+      properties: { direction: { enum: ATTACK_DIRECTIONS }, unit: { enum: ATTACK_UNITS_V4 }, attack_type: { enum: ATTACK_TYPES_V3 } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "count-by-battle-size",
+    version: 1,
+    role: "RESTRICTION",
+    label: "How many, by battle size",
+    description: "\"The maximum number of units you can select depends on the battle size: Incursion up to 2, Strike Force up to 3, Onslaught up to 4\": the most units the selection before it can take, per battle size.",
+    starter: { incursion: null, "strike-force": null, onslaught: null },
+    parameterSchema: {
+      type: "object",
+      required: ["incursion", "strike-force", "onslaught"],
+      properties: { incursion: { type: "integer", minimum: 1 }, "strike-force": { type: "integer", minimum: 1 }, onslaught: { type: "integer", minimum: 1 } },
       additionalProperties: false,
     },
   },
@@ -214,9 +245,17 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       exactKeys(input, ["direction", "unit", "attack_type"], family);
       return {
         direction: enumValue(input.direction, ATTACK_DIRECTIONS, "attack.direction"),
-        unit: enumValue(input.unit, version === 1 ? ATTACK_UNITS_WITH_BEARER : version >= 3 ? ATTACK_UNITS_V3 : ATTACK_UNITS, "attack.unit"),
+        unit: enumValue(input.unit, version === 1 ? ATTACK_UNITS_WITH_BEARER : version >= 4 ? ATTACK_UNITS_V4 : version >= 3 ? ATTACK_UNITS_V3 : ATTACK_UNITS, "attack.unit"),
         attack_type: enumValue(input.attack_type, version >= 3 ? ATTACK_TYPES_V3 : ATTACK_TYPES, "attack.attack_type"),
       };
+    case "count-by-battle-size": {
+      exactKeys(input, ["incursion", "strike-force", "onslaught"], family);
+      return {
+        incursion: boundedInteger(input.incursion, 1, 20, "count-by-battle-size.incursion"),
+        "strike-force": boundedInteger(input["strike-force"], 1, 20, "count-by-battle-size.strike-force"),
+        onslaught: boundedInteger(input.onslaught, 1, 20, "count-by-battle-size.onslaught"),
+      };
+    }
     case "instead":
       exactKeys(input, [], family);
       return {};
