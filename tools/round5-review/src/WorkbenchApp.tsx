@@ -51,7 +51,7 @@ type LeafProgress = {
   readiness: SourceWorkAbility["progress"]["readiness"];
 };
 type UncoveredSelection = Fragment & { ability_version_id: number; source_hash: string; ability_id: string; faction_id: string };
-type ParameterProperty = { enum?: string[]; anyOf?: Array<{ enum?: string[]; type?: string; const?: string }>; type?: string; items?: { enum?: string[] } };
+type ParameterProperty = { enum?: string[]; anyOf?: Array<{ enum?: string[]; type?: string; const?: string }>; type?: string; items?: { enum?: string[] }; minItems?: number };
 type ReviewedFamily = {
   id: string; version: number; role: Role; label: string; description: string;
   starter: Record<string, unknown>;
@@ -94,6 +94,11 @@ const pending = (proposal: Proposal) => proposal.status === "pending" || proposa
 const uncoveredKey = (item: UncoveredSelection) => `${item.ability_version_id}:${item.source_hash}:${item.fragment}:${item.start_byte}:${item.end_byte}`;
 const choicesFor = (property: ParameterProperty) => property.enum ?? property.anyOf?.find((item) => item.enum)?.enum ?? [];
 function parameterReady(value: unknown, property: ParameterProperty, exactText: string): boolean {
+  // A list of closed values: at least one, each allowed (an empty list only where the schema allows it).
+  if (property.type === "array" && property.items?.enum && Array.isArray(value)) {
+    return (value.length > 0 || property.minItems === 0) && value.every((item) => property.items!.enum!.includes(String(item)));
+  }
+  if (property.type === "boolean") return typeof value === "boolean";
   if (choicesFor(property).includes(String(value))) return true;
   if (Number.isSafeInteger(value) && (property.type === "integer" || property.anyOf?.some((item) => item.type === "integer"))) return true;
   if ((property.type === "object" || property.anyOf?.some((item) => item.type === "object"))
