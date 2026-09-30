@@ -99,6 +99,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "attack", from: 3, to: 4, map: (parameters) => parameters },
   // Version 5 only lets `of` be event-object; version 4 parameters still fit.
   { family: "unit-position", from: 4, to: 5, map: (parameters) => parameters },
+  { family: "unit-state", from: 4, to: 5, map: (parameters) => parameters },
   // Version 2 adds the models an enhancement excludes; none were recorded before.
   { family: "bearer-eligibility", from: 1, to: 2, map: (parameters) => ({ ...parameters, excluded_keywords: [] }) },
   { family: "optional-use", from: 1, to: 2, map: bearerIsThisModel("who") },

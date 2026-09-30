@@ -10,6 +10,9 @@
  * - `source_types`: the kind of ability (stratagem, unit, enhancement, ...);
  * - `clause_prefix`: the words between the start of the occurrence's clause (the fragment start,
  *   or the last "." or ":" before it) and the occurrence; "" means the occurrence opens the clause;
+ * - `preceded_by`: phrases one of which must end the occurrence's clause just before it; a
+ *   qualifier means the selected unit only right after the selection ("select one enemy unit
+ *   (excluding MONSTERS and VEHICLES)");
  * - `not_followed_by`: phrases that, when they are the next words after the occurrence, put it
  *   out of scope ("roll one D6 for each model" is not a single roll).
  *
@@ -23,6 +26,7 @@ export type SurfaceScope = {
   fragments?: string[];
   source_types?: string[];
   clause_prefix?: string[];
+  preceded_by?: string[];
   not_followed_by?: string[];
 };
 
@@ -35,7 +39,7 @@ export type OccurrenceContext = {
   after: string;
 };
 
-const FIELDS = ["fragments", "source_types", "clause_prefix", "not_followed_by"] as const;
+const FIELDS = ["fragments", "source_types", "clause_prefix", "preceded_by", "not_followed_by"] as const;
 
 export class ScopeError extends Error {}
 
@@ -67,6 +71,7 @@ export function parseScope(value: unknown): SurfaceScope | null {
   if (input.fragments !== undefined) scope.fragments = stringList(input.fragments, "fragments", false);
   if (input.source_types !== undefined) scope.source_types = stringList(input.source_types, "source_types", false);
   if (input.clause_prefix !== undefined) scope.clause_prefix = stringList(input.clause_prefix, "clause_prefix", true);
+  if (input.preceded_by !== undefined) scope.preceded_by = stringList(input.preceded_by, "preceded_by", false);
   if (input.not_followed_by !== undefined) scope.not_followed_by = stringList(input.not_followed_by, "not_followed_by", false);
   if (FIELDS.every((field) => scope[field] === undefined)) throw new ScopeError("A scope must narrow at least one field.");
   return scope;
@@ -85,6 +90,11 @@ export function inScope(scope: SurfaceScope | null, context: OccurrenceContext):
   if (scope.clause_prefix) {
     const clause = context.before.split(/[.:]/u).at(-1) ?? "";
     if (!scope.clause_prefix.includes(words(clause))) return false;
+  }
+  if (scope.preceded_by) {
+    const clause = words(context.before.split(/[.:]/u).at(-1) ?? "");
+    // Whole words only: "select one enemy unit" ends "… select one enemy unit", not "… reselect one enemy unit".
+    if (!scope.preceded_by.some((phrase) => clause === phrase || (clause.endsWith(phrase) && !/[\p{L}\p{N}]/u.test(clause[clause.length - phrase.length - 1]!)))) return false;
   }
   if (scope.not_followed_by) {
     const next = words(context.after);

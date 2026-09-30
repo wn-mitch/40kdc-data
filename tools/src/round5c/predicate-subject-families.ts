@@ -107,6 +107,24 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { states: { type: "array", items: { enum: UNIT_STATES }, minItems: 1, uniqueItems: true }, ...wideSubjectAndNegation },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-state",
+    version: 5,
+    role: "CONDITION",
+    label: "Unit is (or is not) in a state",
+    description: "As version 4, and `with` names the one unit an engaged subject is engaged with (\"within Engagement Range of this model\", \"engaged with your unit\").",
+    starter: { states: [], subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["states", "subject", "negated"],
+      properties: {
+        states: { type: "array", items: { enum: UNIT_STATES }, minItems: 1, uniqueItems: true }, ...wideSubjectAndNegation,
+        with: { enum: WIDE_SUBJECTS, "x-only-when": { states: ["engaged"] } },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "unit-keyword",
@@ -333,12 +351,14 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
   const legacy = (label: string) => ({ subject: enumValue(input.subject, PREDICATE_SUBJECTS, `${label}.subject`), negated: booleanValue(input.negated, `${label}.negated`) });
   switch (family) {
     case "unit-state": {
-      exactKeys(input, ["states", "subject", "negated"], family);
+      exactKeys(input, version >= 5 && input.with !== undefined ? ["states", "subject", "negated", "with"] : ["states", "subject", "negated"], family);
       const states = enumSet(input.states, version >= 3 ? UNIT_STATES : version === 2 ? UNIT_STATES_V2 : UNIT_STATES_V1, "unit-state.states");
       if (version < 3) return { states, ...legacy(family) };
       const subject = enumValue(input.subject, version >= 4 ? WIDE_SUBJECTS : STATE_SUBJECTS, "unit-state.subject");
       if (subject === "this-model" && states.some((state) => state !== "on-battlefield")) throw new TypeError("unit-state: only being on the battlefield can be said of this model; use this unit for the other states.");
-      return { states, subject, negated: booleanValue(input.negated, "unit-state.negated") };
+      if (input.with === undefined) return { states, subject, negated: booleanValue(input.negated, "unit-state.negated") };
+      if (states.length !== 1 || states[0] !== "engaged") throw new TypeError("unit-state.with only narrows being engaged.");
+      return { states, subject, negated: booleanValue(input.negated, "unit-state.negated"), with: enumValue(input.with, WIDE_SUBJECTS, "unit-state.with") };
     }
     case "unit-keyword":
       exactKeys(input, ["keywords", "subject", "negated"], family);

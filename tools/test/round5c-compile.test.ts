@@ -73,6 +73,17 @@ describe("Round 5C leaf compiler", () => {
     expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leavesOf8561()).length).toBeGreaterThan(0);
   });
 
+  it("narrows a selected unit's engagement to the one unit it is engaged with", () => {
+    const leaves = [
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "selected-unit", negated: false, with: "this-model" }, 5),
+      leaf("EFFECT", "set-up", { subject: "selected-unit", to: "strategic-reserves", from: "battlefield" }),
+    ];
+    const selector = (compiled(leaves).mechanics.effect as { selector: { eligibility: unknown } }).selector;
+    expect(selector.eligibility).toEqual({ type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: "this-model" } });
+    expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leaves)).toMatch(/Engagement Range of this model|engaged with this model/iu);
+  });
+
   it("lowers a move-distance bonus to a move-modifier on the named moves", () => {
     const result = compiled([leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: ["pile-in", "consolidation"], bonus: 3 })]);
     const leaves = [leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: ["pile-in", "consolidation"], bonus: 3 })];

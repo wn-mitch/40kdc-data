@@ -199,6 +199,8 @@ export function condition(leaf: CompileLeaf): Node {
           : STRENGTH_STATES[state] ? who
             : state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
         if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, subject);
+        // Version 5: engaged with one named unit, the DSL's `with`.
+        if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) }, subject);
         return pred("unit-state", { state }, subject);
       })));
     }

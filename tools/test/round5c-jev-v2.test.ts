@@ -69,7 +69,7 @@ function fixtureDb(): DatabaseSync {
   const db = new DatabaseSyncCtor(":memory:") as DatabaseSync;
   initializeWorkbench(db);
   confirmSurface(db, { reviewer: REVIEWER, exact_text: "re-roll a hit roll of 1", family_id: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" } });
-  confirmSurface(db, { reviewer: REVIEWER, exact_text: "If this model is on the battlefield", family_id: "unit-state", family_version: 4, parameters: { states: ["on-battlefield"], subject: "this-model", negated: false } });
+  confirmSurface(db, { reviewer: REVIEWER, exact_text: "If this model is on the battlefield", family_id: "unit-state", family_version: 5, parameters: { states: ["on-battlefield"], subject: "this-model", negated: false } });
   return db;
 }
 

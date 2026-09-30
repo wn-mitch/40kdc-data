@@ -23,7 +23,7 @@ describe("Round 5C predicate proposals from the wording", () => {
 
   it("proposes states and marks, including this model on the battlefield", () => {
     expect(predicateProposal("If this model is on the battlefield", index)).toMatchObject({
-      family_id: "unit-state", family_version: 4, parameters: { states: ["on-battlefield"], subject: "this-model", negated: false },
+      family_id: "unit-state", family_version: 5, parameters: { states: ["on-battlefield"], subject: "this-model", negated: false },
     });
     expect(predicateProposal("that targets a unit that is not Below Half-strength", index)).toMatchObject({
       family_id: "unit-state", parameters: { states: ["below-half-strength"], subject: "target", negated: true },
