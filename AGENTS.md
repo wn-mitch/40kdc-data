@@ -144,6 +144,19 @@ same faction's enrichment; `faction_keywords` must match the faction's home
 keyword) is enforced by `tools/src/integrity.ts`, run as part of
 `npm run validate`.
 
+## Semantic authoring (locked architecture)
+
+Ability semantics are authored through the leaf/sideways path in
+[`SEMANTIC_AUTHORING.md`](SEMANTIC_AUTHORING.md): models propose, the human
+reviewer authorizes trusted leaves, scoped surfaces (wording + occurrence
+scope) propagate them sideways, and the deterministic compiler lowers
+leaf-complete records to DSL. Read it before proposing any change to how
+abilities are authored. Its closed approaches (whole-rule generation,
+proof-route search, Gold-conditioned search, model-authored canonical DSL,
+Jev as segmenter, and the rest) stay closed without new evidence; classify a
+hard problem as segmentation, leaf semantics, relation/composition or DSL
+representation and solve it at that layer.
+
 ## Cross-language parity
 
 This repo holds the TypeScript, Rust, Python, and Go implementations in parity through the `conformance/` corpus, and the same mechanism extends to the upcoming R port. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
