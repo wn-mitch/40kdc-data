@@ -714,7 +714,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -788,12 +788,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 70
+        "cost": 65
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -1006,7 +1006,7 @@
       },
       {
         "models": 1,
-        "cost": 485,
+        "cost": 505,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1194,7 +1194,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2110,7 +2110,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 175,
+        "cost": 190,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -2135,7 +2135,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 205,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2608,7 +2608,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -2913,7 +2913,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -3064,7 +3064,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 185
+        "cost": 195
       }
     ],
     "keywords": [
@@ -3141,7 +3141,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 50
+        "cost": 60
       }
     ],
     "keywords": [
@@ -3371,7 +3371,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 210,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -4318,7 +4318,7 @@
     "weapon_ids": [
       "gauss-flayer",
       "gauss-reaper",
-      "close-combat-weapon"
+      "combat-attachments"
     ],
     "ability_ids": [
       "their-number-is-legion-amonhotekhs-guard-necron-warriors-necrons"
@@ -4377,7 +4377,7 @@
       "max": 3
     },
     "weapon_ids": [
-      "skorpekh-hyperphase-weapons"
+      "hyperphase-blades"
     ],
     "ability_ids": [
       "plasmacyte-amonhotekhs-guard-skorpekh-destroyers-necrons",

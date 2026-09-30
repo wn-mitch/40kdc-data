@@ -18,7 +18,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 135
       }
     ],
     "keywords": [
@@ -94,7 +94,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 135
+        "cost": 130
       }
     ],
     "keywords": [
@@ -2182,7 +2182,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2825,7 +2825,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -2900,7 +2900,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 60
+        "cost": 55
       },
       {
         "models": 11,
@@ -3144,12 +3144,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 55
+        "cost": 50
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 110
+        "cost": 100
       }
     ],
     "keywords": [
@@ -3369,7 +3369,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 160
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3447,7 +3447,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -3767,12 +3767,12 @@
     "points": [
       {
         "models": 10,
-        "cost": 80
+        "cost": 75
       },
       {
         "models": 11,
         "models_max": 20,
-        "cost": 155
+        "cost": 150
       }
     ],
     "keywords": [
@@ -4078,7 +4078,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -4247,7 +4247,7 @@
     },
     "weapon_ids": [
       "barblauncher",
-      "chitinous-claws-and-teeth-barbgaunts"
+      "chitinous-claws-and-teeth"
     ],
     "ability_ids": [
       "disruption-bombardment-vardenghast-swarm-barbgaunts-tyranids",
@@ -4377,8 +4377,8 @@
       "diameter": 28.5
     },
     "weapon_ids": [
-      "chitinous-claws-and-teeth-termagants",
-      "fleshborer"
+      "fleshborer",
+      "chitinous-claws-and-teeth"
     ],
     "ability_ids": [
       "skulking-horrors-vardenghast-swarm-termagants-tyranids",
@@ -4444,7 +4444,7 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "leapers-talons"
+      "chitinous-talons"
     ],
     "ability_ids": [
       "pouncing-leap-vardenghast-swarm-von-ryans-leapers-tyranids",

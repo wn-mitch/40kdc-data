@@ -9,7 +9,7 @@
       "disposition": null,
       "units": []
     },
-    "token": "ARoAAgEAAAA"
+    "token": "ARsAAgEAAAA"
   },
   {
     "name": "warlord-enhancement-grants",
@@ -39,7 +39,7 @@
               2
             ],
             [
-              "absolver-bolt-pistol",
+              "absolvor-bolt-pistol",
               1
             ]
           ]
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "token": "ARoSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUTsQ8BCUNoYXJhY3RlcgIPAhABDgoAAREK"
+    "token": "ARsSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUTsQ8BCUNoYXJhY3RlcgIPAhEBDgoAAREK"
   },
   {
     "name": "allies-attachment",
@@ -104,21 +104,21 @@
           "isWarlord": false,
           "enhancementId": null,
           "allyFactionId": "chaos-daemons",
-          "allyRuleId": "aeldari-harlequins",
+          "allyRuleId": "adeptus-astartes-allies",
           "attachedToOrdinal": null,
           "grants": [
             "Battleline"
           ],
           "loadout": [
             [
-              "absolvor-bolt-pistol",
+              "absolvor-bolt-pistol-apothecary",
               1
             ]
           ]
         }
       ]
     },
-    "token": "ARoEU291cAIAAQIABQMKAQUBAA4FAAAQARgKDgEKQmF0dGxlbGluZQERAQ"
+    "token": "ARsEU291cAIAAQIABQMKAQUBAA4FAAAQARgKGQEKQmF0dGxlbGluZQHlGgE"
   },
   {
     "name": "malformed-bad-format-byte",
@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "ARoAgIl6",
+    "decode_token": "ARsAgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

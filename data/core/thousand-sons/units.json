@@ -434,13 +434,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -694,7 +694,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -781,27 +781,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 190,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 5,
-        "cost": 110,
+        "cost": 125,
         "unit_count_min": 4,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 200,
+        "cost": 220,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -900,7 +900,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -1134,27 +1134,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 180,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 385,
+        "cost": 425,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 195,
+        "cost": 240,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 400,
+        "cost": 465,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1809,7 +1809,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -1971,7 +1971,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -2047,13 +2047,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 100,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2584,13 +2584,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "force-weapon-rubric-marines",
-      "inferno-bolt-pistol-prism-of-zadophon",
       "malefic-curse",
       "soulreaper-cannon",
       "stocks-and-fists",
       "inferno-boltgun",
-      "warpflamer"
+      "warpflamer",
+      "force-weapon",
+      "inferno-bolt-pistol"
     ],
     "ability_ids": [
       "bringers-of-change-prism-of-zadophon-rubric-marines-thousand-sons",

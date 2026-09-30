@@ -502,8 +502,7 @@
     },
     "is_free": true,
     "replaces": [
-      "havoc-autocannon",
-      "havoc-lascannon"
+      "havoc-autocannon"
     ],
     "replacement_choice": [
       [
@@ -511,6 +510,9 @@
       ],
       [
         "havoc-reaper-chaincannon"
+      ],
+      [
+        "havoc-lascannon"
       ],
       [
         "havoc-heavy-bolter"
@@ -682,12 +684,12 @@
     ],
     "replacement_choice": [
       [
-        "electroscourge",
-        "hades-lascannon"
+        "hades-lascannon",
+        "electroscourge"
       ],
       [
-        "electroscourge",
-        "heavy-reaper-autocannon"
+        "heavy-reaper-autocannon",
+        "electroscourge"
       ],
       [
         "hades-lascannon",

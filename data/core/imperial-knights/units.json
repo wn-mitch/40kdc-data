@@ -106,13 +106,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 400,
+        "cost": 385,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 420,
+        "cost": 405,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -752,13 +752,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 375,
+        "cost": 365,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 390,
+        "cost": 380,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1295,13 +1295,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 400,
+        "cost": 390,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 415,
+        "cost": 405,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1892,13 +1892,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 405,
+        "cost": 420,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 425,
+        "cost": 440,
         "unit_count_min": 2,
         "unit_count_max": null
       }

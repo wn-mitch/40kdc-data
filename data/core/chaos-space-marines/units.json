@@ -19,7 +19,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 165
+        "cost": 155
       }
     ],
     "keywords": [
@@ -95,7 +95,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 180
+        "cost": 170
       }
     ],
     "keywords": [
@@ -172,7 +172,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -222,14 +222,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 100,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -275,12 +275,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 105
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 180
+        "cost": 190
       }
     ],
     "keywords": [
@@ -397,7 +397,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -441,14 +441,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -605,7 +605,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -760,7 +760,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 160
+        "cost": 155
       }
     ],
     "keywords": [
@@ -835,12 +835,29 @@
     "points": [
       {
         "models": 5,
-        "cost": 175
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 350
+        "cost": 370,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 400,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -1103,6 +1120,36 @@
         "namespace": "mfm",
         "id": "773f87bc-a214-4022-9652-dafaa5bd5fb7"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 200,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 220,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 210,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "emperors-children"
+      },
+      {
+        "models": 1,
+        "cost": 230,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "emperors-children"
+      }
     ]
   },
   {
@@ -1124,27 +1171,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 250,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1334,7 +1381,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 65
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1518,13 +1565,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1575,28 +1622,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 140,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 150,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 135,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -1730,13 +1763,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1887,27 +1920,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 235,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2119,13 +2152,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 145,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2176,14 +2209,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -2251,27 +2284,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 270,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 145,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2386,7 +2419,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2562,13 +2595,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 185,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 195,
+        "cost": 190,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2625,6 +2658,22 @@
         "namespace": "mfm",
         "id": "00bf212d-7582-4d98-bbf9-78abc292edd3"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "thousand-sons"
+      },
+      {
+        "models": 1,
+        "cost": 195,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "thousand-sons"
+      }
     ]
   },
   {
@@ -2646,13 +2695,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2770,7 +2819,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2846,7 +2895,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2929,27 +2978,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 220,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 230,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3024,7 +3073,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -3120,7 +3169,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 195,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -3133,7 +3182,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 215,
+        "cost": 205,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3210,7 +3259,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -3264,7 +3313,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 110,
+        "cost": 105,
         "host_faction": "death-guard"
       },
       {
@@ -3319,7 +3368,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -3479,7 +3528,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -3559,12 +3608,12 @@
     "points": [
       {
         "models": 3,
-        "cost": 70
+        "cost": 80
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 130
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3664,27 +3713,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 290,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3845,7 +3894,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -4124,12 +4173,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 90
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 170
+        "cost": 180
       }
     ],
     "keywords": [
@@ -4246,7 +4295,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -4330,7 +4379,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 145
+        "cost": 150
       }
     ],
     "keywords": [
@@ -4491,7 +4540,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 135
       }
     ],
     "keywords": [
@@ -4569,7 +4618,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4645,7 +4694,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 295
+        "cost": 300
       }
     ],
     "keywords": [
@@ -4731,7 +4780,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 100
+        "cost": 110
       }
     ],
     "keywords": [
@@ -4815,7 +4864,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4995,7 +5044,7 @@
       },
       {
         "models": 3,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -5065,7 +5114,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 130
       }
     ],
     "keywords": [

@@ -279,27 +279,27 @@
     "points": [
       {
         "models": 3,
-        "cost": 80,
+        "cost": 85,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 160,
+        "cost": 170,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 170,
+        "cost": 180,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -691,7 +691,7 @@
       },
       {
         "models": 1,
-        "cost": 265,
+        "cost": 270,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1119,7 +1119,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1513,25 +1513,25 @@
     "points": [
       {
         "models": 1,
-        "cost": 70,
+        "cost": 75,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 2,
-        "cost": 140,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 80,
+        "cost": 95,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 2,
-        "cost": 150,
+        "cost": 170,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1616,12 +1616,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 95
+        "cost": 90
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 190
+        "cost": 180
       }
     ],
     "keywords": [

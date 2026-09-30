@@ -12,14 +12,14 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | aeldari | 0 | 0 | 0 | 16 |
 | agents-of-the-imperium | 0 | 0 | 0 | 6 |
 | astra-militarum | 0 | 0 | 0 | 12 |
-| black-templars | 0 | 0 | 0 | 21 |
-| blood-angels | 0 | 0 | 0 | 25 |
+| black-templars | 0 | 0 | 0 | 19 |
+| blood-angels | 0 | 0 | 0 | 20 |
 | chaos-daemons | 0 | 0 | 0 | 9 |
 | chaos-knights | 0 | 0 | 0 | 8 |
 | chaos-space-marines | 0 | 0 | 0 | 18 |
-| dark-angels | 0 | 0 | 0 | 25 |
+| dark-angels | 0 | 0 | 0 | 20 |
 | death-guard | 0 | 0 | 0 | 10 |
-| deathwatch | 0 | 0 | 0 | 17 |
+| deathwatch | 0 | 0 | 0 | 16 |
 | drukhari | 0 | 0 | 0 | 10 |
 | emperors-children | 0 | 0 | 0 | 11 |
 | genestealer-cults | 0 | 0 | 0 | 10 |
@@ -29,33 +29,16 @@ Combat Patrol parents and their cost-0 enhancements remain opt-in.
 | iron-hands | 0 | 0 | 0 | 17 |
 | leagues-of-votann | 0 | 0 | 0 | 11 |
 | necrons | 0 | 0 | 0 | 13 |
-| orks | 15 | 0 | 0 | 1 |
+| orks | 0 | 0 | 0 | 16 |
 | raven-guard | 0 | 0 | 0 | 17 |
 | salamanders | 0 | 0 | 0 | 17 |
-| space-wolves | 0 | 0 | 0 | 24 |
+| space-wolves | 0 | 0 | 0 | 20 |
 | tau-empire | 0 | 0 | 0 | 8 |
 | thousand-sons | 0 | 0 | 0 | 10 |
 | tyranids | 0 | 0 | 0 | 11 |
-| ultramarines | 0 | 0 | 0 | 18 |
+| ultramarines | 0 | 0 | 0 | 17 |
 | white-scars | 0 | 0 | 0 | 17 |
 | world-eaters | 0 | 0 | 0 | 9 |
 
-Total: 15 detachment(s), 0 enhancement(s) created; 0 held back; 453 skipped.
-
-## orks
-- created detachment `blitz-brigade` (Blitz Brigade)
-- created detachment `brute-bosses` (Brute Bosses)
-- created detachment `bully-boyz` (Bully Boyz)
-- created detachment `da-big-hunt` (Da Big Hunt)
-- created detachment `dread-mob` (Dread Mob)
-- created detachment `flyboyz` (Flyboyz)
-- created detachment `green-tide` (Green Tide)
-- created detachment `kult-of-speed` (Kult of Speed)
-- created detachment `madcap-meks` (Madcap Meks)
-- created detachment `runt-swarm` (Runt Swarm)
-- created detachment `shoota-boyz` (Shoota Boyz)
-- created detachment `taktikal-brigade` (Taktikal Brigade)
-- created detachment `war-horde` (War Horde)
-- created detachment `wreckas` (Wreckas)
-- created detachment `wurrband` (Wurrband)
+Total: 0 detachment(s), 0 enhancement(s) created; 0 held back; 450 skipped.
 

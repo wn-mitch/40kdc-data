@@ -3,7 +3,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1363,10 +1363,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1391,10 +1391,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1419,10 +1419,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1641,10 +1641,10 @@
     ]
   },
   {
-    "id": "spy-skull-data-link-ceramite-sentinels-adeptus-astartes",
+    "id": "spy-skull-data-link-ceramite-sentinels-imperial-fists",
     "name": "Spy-skull Data Link",
     "detachment_id": "ceramite-sentinels",
-    "cost": 15,
+    "cost": 10,
     "ability_id": "spy-skull-data-link-ceramite-sentinels-adeptus-astartes",
     "is_unique": true,
     "game_version": {
@@ -1726,6 +1726,571 @@
         "namespace": "mfm",
         "id": "76c90a49-1af1-4fb0-8744-58858de3d446"
       }
+    ]
+  },
+  {
+    "id": "venator-omni-auspex-phobos-shadow-force-adeptus-astartes",
+    "name": "Venator Omni-auspex",
+    "detachment_id": "phobos-shadow-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Phobos"
+    ]
+  },
+  {
+    "id": "immovable-conquerors-upgrade-gravis-siege-force-adeptus-astartes",
+    "name": "Immovable Conquerors (Upgrade)",
+    "detachment_id": "gravis-siege-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Gravis"
+    ]
+  },
+  {
+    "id": "master-forged-firearms-devastator-brethren-adeptus-astartes",
+    "name": "Master-forged Firearms",
+    "detachment_id": "devastator-brethren",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Adeptus Astartes",
+        "Infantry"
+      ],
+      [
+        "Adeptus Astartes",
+        "Mounted"
+      ]
+    ]
+  },
+  {
+    "id": "laurels-of-triumph-gladius-task-force-adeptus-astartes",
+    "name": "Laurels of Triumph",
+    "detachment_id": "gladius-task-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "imperiums-sword-assault-brethren-adeptus-astartes",
+    "name": "Imperium’s Sword",
+    "detachment_id": "assault-brethren",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "tactical-insight-tactical-brethren-adeptus-astartes",
+    "name": "Tactical Insight",
+    "detachment_id": "tactical-brethren",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Captain"
+    ]
+  },
+  {
+    "id": "auspex-triangulation-shrines-upgrade-stormlance-task-force-adeptus-astartes",
+    "name": "Auspex Triangulation Shrines (Upgrade)",
+    "detachment_id": "stormlance-task-force",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Speeder"
+    ]
+  },
+  {
+    "id": "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes",
+    "name": "Venerable Champion (Aura) (Upgrade)",
+    "detachment_id": "ironclad-champions",
+    "cost": 30,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Dreadnought"
+    ]
+  },
+  {
+    "id": "execute-and-redeploy-phobos-shadow-force-adeptus-astartes",
+    "name": "Execute and Redeploy",
+    "detachment_id": "phobos-shadow-force",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Phobos"
+    ]
+  },
+  {
+    "id": "corporeum-reliquary-terminator-storm-force-adeptus-astartes",
+    "name": "Corporeum Reliquary",
+    "detachment_id": "terminator-storm-force",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Terminator"
+    ]
+  },
+  {
+    "id": "martial-paragon-tacticus-attack-force-adeptus-astartes",
+    "name": "Martial Paragon",
+    "detachment_id": "tacticus-attack-force",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Tacticus"
+    ]
+  },
+  {
+    "id": "linebreaker-onslaught-gauntlet-task-force-adeptus-astartes",
+    "name": "Linebreaker Onslaught",
+    "detachment_id": "gauntlet-task-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "narthecis-gauntlet-gravis-siege-force-adeptus-astartes",
+    "name": "Narthecis Gauntlet",
+    "detachment_id": "gravis-siege-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Apothecary Biologis"
+    ]
+  },
+  {
+    "id": "seal-of-shrouding-phobos-shock-force-adeptus-astartes",
+    "name": "Seal of Shrouding",
+    "detachment_id": "phobos-shock-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Phobos"
+    ]
+  },
+  {
+    "id": "cyber-familiar-tacticus-firestorm-force-adeptus-astartes",
+    "name": "Cyber-familiar",
+    "detachment_id": "tacticus-firestorm-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Tacticus"
+    ]
+  },
+  {
+    "id": "damocles-class-uplink-gauntlet-task-force-adeptus-astartes",
+    "name": "Damocles-class Uplink",
+    "detachment_id": "gauntlet-task-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Captain"
+    ]
+  },
+  {
+    "id": "spearpoint-war-leader-tacticus-attack-force-adeptus-astartes",
+    "name": "Spearpoint War Leader",
+    "detachment_id": "tacticus-attack-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Tacticus"
+    ]
+  },
+  {
+    "id": "furious-assault-upgrade-assault-brethren-adeptus-astartes",
+    "name": "Furious Assault (Upgrade)",
+    "detachment_id": "assault-brethren",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "relentless-advance-gravis-linebreaker-force-adeptus-astartes",
+    "name": "Relentless Advance",
+    "detachment_id": "gravis-linebreaker-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Gravis"
+    ]
+  },
+  {
+    "id": "honour-of-vigilance-devastator-brethren-adeptus-astartes",
+    "name": "Honour of Vigilance",
+    "detachment_id": "devastator-brethren",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "tempered-in-battle-aura-tacticus-firestorm-force-adeptus-astartes",
+    "name": "Tempered in Battle (Aura)",
+    "detachment_id": "tacticus-firestorm-force",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Tacticus"
+    ]
+  },
+  {
+    "id": "venator-omni-auspex-phobos-shock-force-adeptus-astartes",
+    "name": "Venator Omni-auspex",
+    "detachment_id": "phobos-shock-force",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Phobos"
+    ]
+  },
+  {
+    "id": "redoubtable-machine-spirit-upgrade-ironstorm-spearhead-adeptus-astartes",
+    "name": "Redoubtable Machine Spirit (Upgrade)",
+    "detachment_id": "ironstorm-spearhead",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Vehicle"
+    ],
+    "exclusion_keywords": [
+      "Dedicated Transport",
+      "Fly",
+      "Walker"
+    ]
+  },
+  {
+    "id": "supercharged-engines-upgrade-stormlance-task-force-adeptus-astartes",
+    "name": "Supercharged Engines (Upgrade)",
+    "detachment_id": "stormlance-task-force",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Mounted"
+    ]
+  },
+  {
+    "id": "champion-of-the-first-company-terminator-storm-force-adeptus-astartes",
+    "name": "Champion of the First Company",
+    "detachment_id": "terminator-storm-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Terminator"
+    ]
+  },
+  {
+    "id": "gunnery-honours-upgrade-ironstorm-spearhead-adeptus-astartes",
+    "name": "Gunnery Honours (Upgrade)",
+    "detachment_id": "ironstorm-spearhead",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Vehicle"
+    ],
+    "exclusion_keywords": [
+      "Dedicated Transport",
+      "Fly",
+      "Walker"
+    ]
+  },
+  {
+    "id": "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes",
+    "name": "Indefatigable Fortitude",
+    "detachment_id": "gravis-linebreaker-force",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Gravis"
+    ]
+  },
+  {
+    "id": "laurels-of-vigilance-tactical-brethren-adeptus-astartes",
+    "name": "Laurels of Vigilance",
+    "detachment_id": "tactical-brethren",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "standard-of-the-emperor-ascendant-gladius-task-force-adeptus-astartes",
+    "name": "Standard of the Emperor Ascendant",
+    "detachment_id": "gladius-task-force",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Ancient"
+    ]
+  },
+  {
+    "id": "artificer-sarcophagus-upgrade-ironclad-champions-adeptus-astartes",
+    "name": "Artificer Sarcophagus (Upgrade)",
+    "detachment_id": "ironclad-champions",
+    "cost": 40,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Dreadnought"
     ]
   }
 ]

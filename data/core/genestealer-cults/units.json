@@ -922,7 +922,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 60
       }
     ],
     "keywords": [
@@ -1078,7 +1078,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 50
       }
     ],
     "keywords": [
@@ -1150,7 +1150,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -1396,12 +1396,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 70
+        "cost": 65
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -1769,13 +1769,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 120,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 130,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2112,9 +2112,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull-achilles-ridgerunners",
       "missile-launcher",
-      "twin-heavy-stubber"
+      "twin-heavy-stubber",
+      "armoured-hull"
     ],
     "ability_ids": [
       "crossfire-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
@@ -2187,10 +2187,10 @@
       "max": 5
     },
     "weapon_ids": [
-      "atalan-power-weapon",
       "mining-laser",
       "stolen-blade",
-      "stolen-firearms"
+      "stolen-firearms",
+      "power-weapon"
     ],
     "ability_ids": [
       "adaptable-fighters-genestealer-cults"
@@ -2306,9 +2306,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "autopistol-jackal-alphus",
-      "cult-sniper-rifle-jackal-alphus",
-      "stolen-blade"
+      "stolen-blade",
+      "autopistol",
+      "cult-sniper-rifle"
     ],
     "ability_ids": [
       "master-outrider-shanus-daskovian-genestealer-cults",

@@ -163,7 +163,7 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Astartes chainsword",
+                    "name": "Chainsword",
                     "type": "upgrade",
                     "number": 1,
                     "categories": [
@@ -195,7 +195,7 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Astartes chainsword",
+                    "name": "Chainsword",
                     "type": "upgrade",
                     "number": 4,
                     "categories": [

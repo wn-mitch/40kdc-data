@@ -1068,7 +1068,7 @@
     "name": "FROM BEYOND THE VEIL",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
-    "cp_cost": 1,
+    "cp_cost": 2,
     "phases": [
       "movement"
     ],

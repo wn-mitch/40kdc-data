@@ -637,7 +637,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -1617,26 +1617,26 @@
         "models": 3,
         "cost": 90,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
         "cost": 200,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 105,
-        "unit_count_min": 2,
+        "cost": 120,
+        "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 215,
-        "unit_count_min": 2,
+        "cost": 230,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -2257,12 +2257,12 @@
         "models": 1,
         "cost": 125,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
-        "unit_count_min": 2,
+        "cost": 145,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -3736,12 +3736,12 @@
         "models": 1,
         "cost": 95,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 115,
-        "unit_count_min": 2,
+        "cost": 125,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -3923,13 +3923,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 125,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4568,7 +4568,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [
@@ -5267,12 +5267,12 @@
         "models": 1,
         "cost": 150,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
-        "unit_count_min": 2,
+        "cost": 180,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -5627,12 +5627,12 @@
         "models": 1,
         "cost": 115,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
-        "unit_count_min": 2,
+        "cost": 145,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -6451,7 +6451,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -6629,9 +6629,9 @@
       "goad-lance",
       "hunting-lance",
       "lasgun",
-      "laspistol-attilan-rough-riders",
-      "power-sabre-attilan-rough-riders",
-      "steeds-hooves"
+      "steeds-hooves",
+      "laspistol",
+      "power-sabre"
     ],
     "ability_ids": [
       "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum"
@@ -6777,16 +6777,16 @@
       "max": 10
     },
     "weapon_ids": [
-      "chainsword-kasrkin",
       "flamer",
-      "grenade-launcher-kasrkin",
       "gun-stocks",
       "hot-shot-lasgun",
       "hot-shot-laspistol",
       "hot-shot-marksman-rifle",
       "hot-shot-volley-gun",
-      "plasma-gun-kasrkin",
-      "plasma-pistol"
+      "plasma-pistol",
+      "chainsword",
+      "grenade-launcher",
+      "plasma-gun"
     ],
     "ability_ids": [
       "warrior-elite-draydens-lance-kasrkin-astra-militarum",

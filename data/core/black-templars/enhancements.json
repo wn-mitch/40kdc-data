@@ -380,7 +380,6 @@
     "detachment_id": "marshals-household",
     "cost": 10,
     "keyword_restrictions": [
-      "Black Templars",
       "Sword Brethren Squad"
     ],
     "ability_id": "fervent-exemplars-upgrade-marshals-household-black-templars",
@@ -409,7 +408,6 @@
     "detachment_id": "marshals-household",
     "cost": 15,
     "keyword_restrictions": [
-      "Black Templars",
       "Sword Brethren Squad"
     ],
     "ability_id": "inheritors-of-sigismund-upgrade-marshals-household-black-templars",
@@ -579,7 +577,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1825,10 +1823,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1853,10 +1851,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1881,10 +1879,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2127,6 +2125,120 @@
         "namespace": "mfm",
         "id": "44d03a4a-13a9-494e-8769-269187496002"
       }
+    ]
+  },
+  {
+    "id": "incendiary-animus-vow-sworn-crusaders-black-templars",
+    "name": "Incendiary Animus",
+    "detachment_id": "vow-sworn-crusaders",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Chaplain"
+      ],
+      [
+        "Judiciar"
+      ]
+    ]
+  },
+  {
+    "id": "oathbound-exemplar-fist-of-the-god-emperor-black-templars",
+    "name": "Oathbound Exemplar",
+    "detachment_id": "fist-of-the-god-emperor",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Infantry"
+    ]
+  },
+  {
+    "id": "consecrating-aura-vow-sworn-crusaders-black-templars",
+    "name": "Consecrating Aura",
+    "detachment_id": "vow-sworn-crusaders",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "righteous-fervour-upgrade-fist-of-the-god-emperor-black-templars",
+    "name": "Righteous Fervour (Upgrade)",
+    "detachment_id": "fist-of-the-god-emperor",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Crusader Squad"
+    ]
+  },
+  {
+    "id": "zealous-vanguard-vow-sworn-crusaders-black-templars",
+    "name": "Zealous Vanguard",
+    "detachment_id": "vow-sworn-crusaders",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "augury-servo-host-vow-sworn-crusaders-black-templars",
+    "name": "Augury Servo-host",
+    "detachment_id": "vow-sworn-crusaders",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
     ]
   }
 ]

@@ -155,7 +155,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 75
       }
     ],
     "keywords": [
@@ -202,7 +202,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 65,
+        "cost": 75,
         "host_faction": "imperium"
       }
     ],
@@ -1036,12 +1036,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 115
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190
+        "models": 10,
+        "cost": 220
       }
     ],
     "keywords": [
@@ -1068,15 +1067,15 @@
     "weapon_ids": [
       "black-shield-blades",
       "boltgun",
-      "close-combat-weapon-deathwatch-kill-team",
       "combi-weapon-deathwatch-kill-team",
       "deathwatch-shotgun",
-      "deathwatch-thunder-hammer",
       "frag-cannon",
       "infernus-heavy-bolter",
       "power-weapon",
       "stalker-pattern-boltgun",
-      "xenophase-blade"
+      "xenophase-blade",
+      "knives-and-fists",
+      "heavy-thunder-hammer"
     ],
     "ability_ids": [
       {
@@ -1094,64 +1093,21 @@
     "wargear_budgets": [
       {
         "items": [
-          "stalker-pattern-boltgun"
-        ],
-        "count": 2,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "infernus-heavy-bolter"
-        ],
-        "count": 2,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "deathwatch-thunder-hammer"
-        ],
-        "count": 4,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "black-shield-blades"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "astartes-shield"
+          "storm-shield"
         ],
         "count": 2,
         "per_models": 5
-      },
-      {
-        "items": [
-          "deathwatch-shotgun"
-        ],
-        "count": 4,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "frag-cannon"
-        ],
-        "count": 2,
-        "per_models": 10
       }
     ],
     "allied_points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 115,
         "host_faction": "imperium"
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190,
+        "models": 10,
+        "cost": 220,
         "host_faction": "imperium"
       }
     ],
@@ -1395,11 +1351,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 110
       },
       {
         "models": 10,
-        "cost": 200
+        "cost": 210
       }
     ],
     "keywords": [
@@ -1426,11 +1382,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-grenade-launcher",
       "bolt-pistol-aquila-kill-team",
-      "close-combat-weapon-aquila-kill-team",
-      "combat-knife",
-      "deathwatch-marksman-bolt-carbine",
       "frag-cannon-aquila-kill-team",
       "heavy-thunder-hammer",
       "hellstorm-bolt-rifle",
@@ -1441,8 +1393,9 @@
       "special-issue-bolt-pistol",
       "stalker-bolt-rifle",
       "xenophase-blade",
-      "boltgun",
-      "plasma-pistol"
+      "knives-and-fists",
+      "grenade-launcher",
+      "deathwatch-marksman-bolt-carbine"
     ],
     "ability_ids": [
       "kill-team-agents-of-the-imperium",
@@ -1461,12 +1414,12 @@
     "allied_points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 110,
         "host_faction": "imperium"
       },
       {
         "models": 10,
-        "cost": 200,
+        "cost": 210,
         "host_faction": "imperium"
       }
     ],
@@ -2242,7 +2195,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 105
       }
     ],
     "keywords": [
@@ -2283,7 +2236,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 105,
         "host_faction": "imperium"
       }
     ],
@@ -2554,7 +2507,6 @@
     "weapon_ids": [
       "armoured-hull",
       "blackstar-rocket-launcher",
-      "hurricane-bolter",
       "stormstrike-missile-launcher",
       "twin-assault-cannon",
       "twin-lascannon"
@@ -2980,9 +2932,9 @@
     "weapon_ids": [
       "agent-firearm",
       "agents-implement",
-      "heavy-bolter-inquisitorial-agents",
       "mystic-stave",
-      "plasma-pistol-standard-inquisitors-hand"
+      "heavy-bolter",
+      "plasma-pistol"
     ],
     "ability_ids": [
       "loyal-to-the-cause-agents-of-the-imperium",
@@ -3045,11 +2997,11 @@
     },
     "weapon_ids": [
       "combat-shotgun",
-      "grenade-launcher-frag-inquisitors-hand",
       "gun-stocks",
       "mechanical-bite",
       "shotpistol",
-      "webber-inquisitors-hand"
+      "grenade-launcher",
+      "webber"
     ],
     "ability_ids": [
       "assigned-agents-agents-of-the-imperium"

@@ -22,7 +22,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
     ],
@@ -56,9 +56,9 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
+    "detachment_points": 3,
     "force_dispositions": [
-      "disruption"
+      "priority-assets"
     ],
     "external_refs": [
       {

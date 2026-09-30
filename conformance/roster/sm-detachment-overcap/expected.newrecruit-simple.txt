@@ -9,5 +9,5 @@ Detachment: Gladius Task Force
 Detachment: 1st Company Task Force
 
 ## Battleline [365 pts]
-Gladiator Lancer [160 pts]: Armoured Hull, Defensive Array, Lancer laser destroyer
-Redemptor Dreadnought [205 pts]: Fragstorm Grenade Launchers, Heavy Flamer, Heavy onslaught gatling cannon, Redemptor fist, Storm Bolters
+Gladiator Lancer [160 pts]: Armoured Hull, Defensive Array, Laser Destroyer
+Redemptor Dreadnought [205 pts]: Fragstorm Grenade Launchers, Heavy Flamer, Heavy onslaught gatling cannon, Redemptor fist

@@ -4053,8 +4053,8 @@
     },
     "is_free": true,
     "replacement": [
-      "vox-caster",
-      "vox-relay-beacon"
+      "vox-relay-beacon",
+      "vox-caster"
     ],
     "model_constraint": {
       "model_name": "Recon Trooper",

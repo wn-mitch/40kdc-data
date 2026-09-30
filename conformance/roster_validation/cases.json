@@ -192,17 +192,17 @@
   {
     "name": "detachment-points-over",
     "args": {
-      "factionId": "world-eaters",
+      "factionId": "tyranids",
       "battleSize": "incursion",
-      "forceDisposition": "purge-the-foe",
+      "forceDisposition": "priority-assets",
       "detachments": [
         {
-          "id": "berzerker-warband"
+          "id": "invasion-fleet"
         }
       ],
       "units": [
         {
-          "unitId": "daemon-prince-of-khorne",
+          "unitId": "hive-tyrant",
           "modelCount": 1,
           "isWarlord": true,
           "enhancementId": null,
@@ -571,7 +571,7 @@
   },
   {
     "name": "points-over-limit-from-wargear-costs",
-    "note": "6 Terminator Assault Squads at 6 models = 1860 base (legal at 2000), but each squad's five thunder hammers (wargear_costs 5 pts each = 25/squad, +150) push the army to 2010 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75).",
+    "note": "5 Terminator Assault Squads at 10 models = 1870 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2020 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75).",
     "args": {
       "factionId": "adeptus-astartes",
       "battleSize": "strike-force",
@@ -584,62 +584,62 @@
       "units": [
         {
           "unitId": "terminator-assault-squad",
-          "modelCount": 6,
+          "modelCount": 10,
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer": 5
+            "thunder-hammer-terminator-assault-squad": 6,
+            "storm-shield": 6,
+            "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
         {
           "unitId": "terminator-assault-squad",
-          "modelCount": 6,
+          "modelCount": 10,
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer": 5
+            "thunder-hammer-terminator-assault-squad": 6,
+            "storm-shield": 6,
+            "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
         {
           "unitId": "terminator-assault-squad",
-          "modelCount": 6,
+          "modelCount": 10,
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer": 5
+            "thunder-hammer-terminator-assault-squad": 6,
+            "storm-shield": 6,
+            "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
         {
           "unitId": "terminator-assault-squad",
-          "modelCount": 6,
+          "modelCount": 10,
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer": 5
+            "thunder-hammer-terminator-assault-squad": 6,
+            "storm-shield": 6,
+            "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
         {
           "unitId": "terminator-assault-squad",
-          "modelCount": 6,
+          "modelCount": 10,
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer": 5
-          }
-        },
-        {
-          "unitId": "terminator-assault-squad",
-          "modelCount": 6,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {
-            "thunder-hammer": 5
+            "thunder-hammer-terminator-assault-squad": 6,
+            "storm-shield": 6,
+            "twin-lightning-claws-terminator-assault-squad": 4
           }
         }
       ]

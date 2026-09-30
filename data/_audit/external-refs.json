@@ -14,31 +14,31 @@
       }
     },
     "unit": {
-      "entities": 1096,
-      "with_external_refs": 1084,
+      "entities": 1081,
+      "with_external_refs": 1069,
       "covered_entities_by_namespace": {
-        "bsdata": 983,
-        "game-datacards": 989,
-        "mfm": 1084
+        "bsdata": 965,
+        "game-datacards": 971,
+        "mfm": 1069
       },
       "references_by_namespace": {
-        "bsdata": 1047,
-        "game-datacards": 989,
-        "mfm": 1096
+        "bsdata": 1028,
+        "game-datacards": 971,
+        "mfm": 1081
       }
     },
     "detachment": {
-      "entities": 484,
-      "with_external_refs": 467,
+      "entities": 642,
+      "with_external_refs": 625,
       "covered_entities_by_namespace": {
-        "mfm": 467
+        "mfm": 625
       },
       "references_by_namespace": {
-        "mfm": 467
+        "mfm": 625
       }
     },
     "enhancement": {
-      "entities": 944,
+      "entities": 995,
       "with_external_refs": 943,
       "covered_entities_by_namespace": {
         "game-datacards": 897,
@@ -50,37 +50,37 @@
       }
     },
     "stratagem": {
-      "entities": 1407,
-      "with_external_refs": 1405,
+      "entities": 1462,
+      "with_external_refs": 1460,
       "covered_entities_by_namespace": {
         "game-datacards": 1309,
-        "mfm": 1382
+        "mfm": 1437
       },
       "references_by_namespace": {
         "game-datacards": 1309,
-        "mfm": 1382
+        "mfm": 1437
       }
     },
     "weapon": {
-      "entities": 3366,
-      "with_external_refs": 3092,
+      "entities": 3309,
+      "with_external_refs": 3046,
       "covered_entities_by_namespace": {
-        "bsdata": 2817,
-        "mfm": 3027
+        "bsdata": 2742,
+        "mfm": 2982
       },
       "references_by_namespace": {
-        "bsdata": 3321,
-        "mfm": 3192
+        "bsdata": 3244,
+        "mfm": 3144
       }
     },
     "wargear": {
       "entities": 208,
-      "with_external_refs": 154,
+      "with_external_refs": 156,
       "covered_entities_by_namespace": {
-        "mfm": 154
+        "mfm": 156
       },
       "references_by_namespace": {
-        "mfm": 172
+        "mfm": 174
       }
     }
   },
@@ -98,22 +98,6 @@
           "entity_type": "weapon",
           "id": "power-sword-storm-guardians",
           "faction_id": "aeldari"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "1063-59-2a38-61fd",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "twin-storm-bolter-ballistus-dreadnought",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "twin-storm-bolter-redemptor-dreadnought",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -208,27 +192,6 @@
           "entity_type": "weapon",
           "id": "autocannon-catachan-heavy-weapons-squad",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "1c19-102c-9058-c35d",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "missile-launcher-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "missile-launcher-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "missile-launcher-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -362,17 +325,7 @@
         },
         {
           "entity_type": "weapon",
-          "id": "plasma-pistol-death-company-marines-with-bolt-rifles",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "plasma-pistol-death-company-marines-with-jump-packs",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "plasma-pistol-devastator-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -393,11 +346,6 @@
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-sword-brethren-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "plasma-pistol-tactical-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -594,22 +542,12 @@
         },
         {
           "entity_type": "weapon",
-          "id": "combi-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "combi-weapon-librarian-in-terminator-armour",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "combi-weapon-sternguard-veteran-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "combi-weapon-tactical-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -780,22 +718,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "3acf-2a72-a5a2-84a2",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-death-company-marines",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-death-company-marines-with-bolt-rifles",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "3b59-048c-5410-33fe",
       "targets": [
         {
@@ -917,27 +839,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "3f91-0cab-f770-21d9",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-ancient",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-company-heroes",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-invader-atv",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "3fc0-1753-fefb-89b5",
       "targets": [
         {
@@ -1002,22 +903,6 @@
           "entity_type": "weapon",
           "id": "starcannon-war-walkers",
           "faction_id": "aeldari"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "47ef-a0e2-2cb0-845d",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "plasma-cannon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "plasma-cannon-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -1097,27 +982,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "58c-876b-8430-a0e6",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-tactical-squad",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "5953-e173-bc8b-1109",
       "targets": [
         {
@@ -1134,32 +998,6 @@
           "entity_type": "weapon",
           "id": "meltagun-tempestus-scions",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "59c-91b5-f87b-1395",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-eradicator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-indomitor-kill-team",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -1232,22 +1070,6 @@
           "entity_type": "weapon",
           "id": "armoured-tracks-wyvern",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "5d22-a8d8-8e57-b8ab",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "power-fist-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-fist-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -1578,27 +1400,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "7b46-de5b-2c60-4597",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-invictor-tactical-warsuit",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-predator-annihilator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-predator-destructor",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "7b6b-13c7-2973-44c0",
       "targets": [
         {
@@ -1652,22 +1453,6 @@
           "entity_type": "weapon",
           "id": "rapture-lash-tormentors",
           "faction_id": "emperors-children"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "7ead-a4ee-c2e-fcf9",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -2109,22 +1894,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "a7b6-eeb7-d0e4-b84c",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "power-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-weapon-tactical-squad",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "aaaa-9466-3887-3cdd",
       "targets": [
         {
@@ -2310,11 +2079,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "bolt-pistol-uriel-ventris",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "bolt-pistol-vulkan-hestan",
           "faction_id": "adeptus-astartes"
         }
@@ -2343,27 +2107,6 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-militarum-tempestus-command-squad",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "b3b-a615-f023-94ef",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -2526,32 +2269,12 @@
         },
         {
           "entity_type": "weapon",
-          "id": "armoured-tracks-predator-annihilator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-predator-destructor",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "armoured-tracks-razorback",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "armoured-tracks-rhino",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-vindicator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-whirlwind",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2621,31 +2344,6 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-apothecary-biologis",
           "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-land-speeder",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-sternguard-veteran-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-hailstrike",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-hammerstrike",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-thunderstrike",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -2682,22 +2380,6 @@
         {
           "entity_type": "weapon",
           "id": "power-weapon-ancient-in-terminator-armour",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "e0fb-ea05-d58d-1799",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "lascannon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "lascannon-tactical-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2969,17 +2651,7 @@
         },
         {
           "entity_type": "weapon",
-          "id": "astartes-chainsword-death-company-marines-with-bolt-rifles",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "astartes-chainsword-death-company-marines-with-jump-packs",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "astartes-chainsword-devastator-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -3000,11 +2672,6 @@
         {
           "entity_type": "weapon",
           "id": "astartes-chainsword-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "astartes-chainsword-tactical-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -3087,17 +2754,7 @@
       "targets": [
         {
           "entity_type": "weapon",
-          "id": "close-combat-weapon-ancient",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "close-combat-weapon-ancient-in-terminator-armour",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-bladeguard-ancient",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -4974,11 +4631,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "close-combat-weapon-dreadnought",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "close-combat-weapon-helbrute",
           "faction_id": "chaos-space-marines"
         },
@@ -5170,6 +4822,72 @@
           "entity_type": "weapon",
           "id": "helbrute-hammer",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "1f9b6d20-1a56-4a45-8621-4ee2648e029a",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "ironclad-champions",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -5370,22 +5088,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "26b48e91-ff7f-4522-bd07-26479fdd1e3f",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "emperors-children"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-captain",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "27267983-3f49-4202-8f84-c2482d623c49",
       "targets": [
         {
@@ -5567,6 +5269,72 @@
     },
     {
       "namespace": "mfm",
+      "id": "2df70179-96ad-4f64-b5fd-a0ee2b7a904d",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tactical-brethren",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "2e6c8e98-f957-4b50-b5c3-df69a2e46249",
       "targets": [
         {
@@ -5642,22 +5410,12 @@
         },
         {
           "entity_type": "weapon",
-          "id": "plasma-pistol-death-company-marines-with-bolt-rifles",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "plasma-pistol-death-company-marines-with-jump-packs",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-decimus-kill-team",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "plasma-pistol-devastator-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -5707,11 +5465,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "plasma-pistol-tactical-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "plasma-pistol-tallyman",
           "faction_id": "death-guard"
         },
@@ -5755,6 +5508,72 @@
           "entity_type": "weapon",
           "id": "heavy-thunder-hammer",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "2fc4c2ed-d11d-40a5-8b56-2339e226203c",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-siege-force",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -5855,6 +5674,72 @@
     },
     {
       "namespace": "mfm",
+      "id": "31cf4080-95f4-44a4-acfc-9ac9e2c93c62",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "devastator-brethren",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "3233dfd1-7b40-42ae-b86e-30d18c66a8c4",
       "targets": [
         {
@@ -5866,6 +5751,72 @@
           "entity_type": "weapon",
           "id": "missile-pod-commander-in-enforcer-battlesuit",
           "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "32355f5d-db41-4589-ad75-e2801b5d8afb",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "terminator-storm-force",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -5971,11 +5922,6 @@
         {
           "entity_type": "weapon",
           "id": "bolt-pistol-sammael",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "bolt-pistol-uriel-ventris",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -6167,16 +6113,6 @@
         {
           "entity_type": "weapon",
           "id": "heavy-bolter-land-speeder-vengeance",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-predator-annihilator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-predator-destructor",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -6440,6 +6376,72 @@
     },
     {
       "namespace": "mfm",
+      "id": "40603815-0ddb-4180-bd06-143ab40f0985",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-firestorm-force",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "40ed9cd7-d7b3-4749-bcc5-f5721d521e51",
       "targets": [
         {
@@ -6607,22 +6609,6 @@
           "entity_type": "weapon",
           "id": "helbrute-fist",
           "faction_id": "thousand-sons"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "47e2ff50-9772-44be-bda4-6bbffb6d9b6d",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -6806,6 +6792,67 @@
     },
     {
       "namespace": "mfm",
+      "id": "4fde4216-b0dd-4665-8556-2d394d293ed6",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "deathwatch-support",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "50a1a21c-5170-4078-963b-fed96914b26b",
       "targets": [
         {
@@ -6853,6 +6900,72 @@
     },
     {
       "namespace": "mfm",
+      "id": "55db5c18-2a63-4cbb-8ed4-542525cf600a",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shock-force",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "5640c544-9436-4fc1-9153-0e65e064eaeb",
       "targets": [
         {
@@ -6888,11 +7001,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "heavy-bolter-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "heavy-bolter-inquisitorial-agents",
           "faction_id": "agents-of-the-imperium"
         },
@@ -6910,11 +7018,6 @@
           "entity_type": "weapon",
           "id": "heavy-bolter-sisters-of-battle-squad",
           "faction_id": "agents-of-the-imperium"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "heavy-bolter-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -7066,26 +7169,6 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-ravenwing-darkshroud",
           "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-sternguard-veteran-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-hailstrike",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-hammerstrike",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-storm-speeder-thunderstrike",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -7158,22 +7241,7 @@
         },
         {
           "entity_type": "weapon",
-          "id": "multi-melta-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-eradicator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "multi-melta-indomitor-kill-team",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "multi-melta-tactical-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -7452,17 +7520,7 @@
       "targets": [
         {
           "entity_type": "weapon",
-          "id": "close-combat-weapon-ancient",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "close-combat-weapon-ancient-in-terminator-armour",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-bladeguard-ancient",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -7485,27 +7543,6 @@
           "entity_type": "weapon",
           "id": "accursed-weapon-chaos-lord-with-jump-pack",
           "faction_id": "chaos-space-marines"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "6dcac4f1-9ea1-4aca-97fa-f93ffe1ecb39",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-company-heroes",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-invader-atv",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-outrider-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -7570,6 +7607,72 @@
           "entity_type": "weapon",
           "id": "acheron-flame-cannon",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6fead3ce-6ab9-4637-9c53-70af7ee47328",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "assault-brethren",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -8160,43 +8263,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "8ca1c67f-5dcc-4113-a1ae-67298f309e67",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "lascannon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "lascannon-legionaries",
-          "faction_id": "chaos-space-marines"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "lascannon-tactical-squad",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "8ca41df4-91ec-4c56-9372-641a919b5c95",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "twin-storm-bolter-ballistus-dreadnought",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "twin-storm-bolter-redemptor-dreadnought",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "8d0b4fd2-3433-41a1-a476-eee9896a60df",
       "targets": [
         {
@@ -8591,11 +8657,6 @@
         {
           "entity_type": "weapon",
           "id": "thunder-hammer-death-company-marines",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "thunder-hammer-death-company-marines-with-bolt-rifles",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -9060,11 +9121,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "combi-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "combi-weapon-librarian-in-terminator-armour",
           "faction_id": "adeptus-astartes"
         },
@@ -9076,11 +9132,6 @@
         {
           "entity_type": "weapon",
           "id": "combi-weapon-sternguard-veteran-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "combi-weapon-tactical-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -9221,17 +9272,7 @@
         },
         {
           "entity_type": "weapon",
-          "id": "astartes-chainsword-death-company-marines-with-bolt-rifles",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "astartes-chainsword-death-company-marines-with-jump-packs",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "astartes-chainsword-devastator-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -9252,11 +9293,6 @@
         {
           "entity_type": "weapon",
           "id": "astartes-chainsword-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "astartes-chainsword-tactical-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -9284,6 +9320,72 @@
           "entity_type": "weapon",
           "id": "power-fist-traitor-enforcer",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ad2c163a-82ee-4279-8dde-b36217f3e5d3",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "phobos-shadow-force",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -10074,6 +10176,72 @@
     },
     {
       "namespace": "mfm",
+      "id": "c36cda66-a994-4354-aa2a-fb4fd2338efa",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gravis-linebreaker-force",
+          "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "c4264e96-49d6-40d7-806f-c0c061bec825",
       "targets": [
         {
@@ -10522,22 +10690,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "d28c24e8-32a1-4108-9a99-a6ea677ad16e",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "plasma-cannon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "plasma-cannon-tactical-squad",
-          "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "d294dca3-0126-4fb8-9623-e8ddf9dbfb0e",
       "targets": [
         {
@@ -10647,27 +10799,6 @@
           "entity_type": "weapon",
           "id": "fusion-blaster-commander-in-enforcer-battlesuit",
           "faction_id": "tau-empire"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "d526ed1b-303d-49dd-a805-8b4f5cb14d93",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "power-fist",
-          "faction_id": "adeptus-mechanicus"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-fist-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-fist-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -10888,16 +11019,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "armoured-tracks-predator-annihilator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-predator-destructor",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "armoured-tracks-razorback",
           "faction_id": "adeptus-astartes"
         },
@@ -10928,16 +11049,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "armoured-tracks-vindicator",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "armoured-tracks-whirlwind",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "armoured-tracks-wyvern",
           "faction_id": "astra-militarum"
         }
@@ -10959,17 +11070,7 @@
         },
         {
           "entity_type": "weapon",
-          "id": "missile-launcher-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "missile-launcher-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "missile-launcher-tactical-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -11148,16 +11249,6 @@
           "entity_type": "weapon",
           "id": "power-weapon-deathwatch-veterans",
           "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-weapon-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -11174,6 +11265,72 @@
           "entity_type": "weapon",
           "id": "absolvor-bolt-pistol",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e27a3395-01d7-4d89-aa99-cc333d833217",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "gauntlet-task-force",
+          "faction_id": "white-scars"
         }
       ]
     },
@@ -11638,11 +11795,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "close-combat-weapon-devastator-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
           "id": "close-combat-weapon-immortals",
           "faction_id": "necrons"
         },
@@ -11660,16 +11812,6 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-rubric-marines",
           "faction_id": "thousand-sons"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-scout-squad",
-          "faction_id": "adeptus-astartes"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-tactical-squad",
-          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -12073,6 +12215,72 @@
           "entity_type": "weapon",
           "id": "twin-heavy-bolter",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "fe1cc3f3-76af-4036-9709-629374090134",
+      "targets": [
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "black-templars"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "blood-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "dark-angels"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "deathwatch"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "imperial-fists"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "iron-hands"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "raven-guard"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "salamanders"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "space-wolves"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "ultramarines"
+        },
+        {
+          "entity_type": "detachment",
+          "id": "tacticus-attack-force",
+          "faction_id": "white-scars"
         }
       ]
     },

@@ -287,5 +287,27 @@
         "id": "b0c5864c-a235-476f-8196-133c6e07e5d5"
       }
     ]
+  },
+  {
+    "id": "storm-shield",
+    "name": "storm shield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "007d6307-976c-424b-871a-c3324c4f8b6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b6f34d2-cadf-4b4b-83ca-343026d55249"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6eb2ceb-969b-4268-a7c0-4dd6bd428a35"
+      }
+    ]
   }
 ]

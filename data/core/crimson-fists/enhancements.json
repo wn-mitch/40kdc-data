@@ -117,7 +117,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1363,10 +1363,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1391,10 +1391,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1419,10 +1419,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

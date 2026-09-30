@@ -1219,7 +1219,7 @@
     "category": "detachment",
     "type": "battle-tactic",
     "detachment_id": "wrath-of-the-rock",
-    "cp_cost": 2,
+    "cp_cost": 1,
     "phases": [
       "command",
       "movement",
@@ -3000,7 +3000,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

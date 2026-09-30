@@ -19,7 +19,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 110
+        "cost": 125
       }
     ],
     "keywords": [
@@ -94,13 +94,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 160,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -124,12 +124,8 @@
     },
     "weapon_ids": [
       "armoured-hull-gladiator-lancer",
-      "fragstorm-grenade-launcher",
-      "icarus-rocket-pod",
-      "ironhail-heavy-stubber",
-      "lancer-laser-destroyer",
-      "storm-bolter",
-      "defensive-array-gladiator-lancer"
+      "defensive-array-gladiator-lancer",
+      "laser-destroyer"
     ],
     "ability_ids": [
       "aquilon-optics-adeptus-astartes",
@@ -168,6 +164,22 @@
         "namespace": "mfm",
         "id": "5f3b31db-62e7-4b4e-9699-ad0d4bdd33fc"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "black-templars"
+      },
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "black-templars"
+      }
     ]
   },
   {
@@ -189,12 +201,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 160
+        "cost": 195,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 320
+        "models": 10,
+        "cost": 390,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 235,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 430,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -241,12 +268,12 @@
     "wargear_budgets": [
       {
         "items": [
-          "assault-cannon",
-          "cyclone-missile-launcher",
-          "heavy-flamer"
+          "assault-cannon-terminator-squad",
+          "cyclone-missile-launcher-terminator-squad",
+          "heavy-flamer-terminator-squad"
         ],
-        "count": 2,
-        "per_models": 10
+        "count": 1,
+        "per_models": 5
       }
     ],
     "conditional_keywords": [
@@ -276,6 +303,12 @@
         "namespace": "mfm",
         "id": "6ad781cd-6ee5-493b-8114-44363a3ae071"
       }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "cyclone-missile-launcher",
+        "cost": 10
+      }
     ]
   },
   {
@@ -298,15 +331,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 90,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "cost": 80
       }
     ],
     "keywords": [
@@ -381,51 +406,49 @@
     "points": [
       {
         "models": 4,
-        "cost": 100,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 125,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 9,
-        "cost": 225,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 10,
+        "models": 9,
         "cost": 250,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
+        "models": 10,
+        "cost": 275,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
         "models": 4,
-        "cost": 120,
+        "cost": 135,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 5,
-        "cost": 145,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 9,
-        "cost": 245,
+        "models": 9,
+        "cost": 270,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 10,
-        "cost": 270,
+        "cost": 295,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -450,13 +473,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword",
       "heavy-bolt-pistol",
       "master-crafted-power-weapon-sword-brethren-squad",
       "plasma-pistol-sword-brethren-squad",
-      "pyre-pistol",
       "thunder-hammer",
-      "twin-lightning-claws"
+      "twin-lightning-claws",
+      "chainsword",
+      "hand-flamer"
     ],
     "ability_ids": [
       "attached-unit-black-templars",
@@ -513,11 +536,11 @@
     "points": [
       {
         "models": 10,
-        "cost": 150
+        "cost": 160
       },
       {
         "models": 20,
-        "cost": 290
+        "cost": 305
       }
     ],
     "keywords": [
@@ -541,7 +564,6 @@
       "max": 20
     },
     "weapon_ids": [
-      "astartes-chainsword-crusader-squad",
       "bolt-pistol",
       "bolt-rifle",
       "close-combat-weapon",
@@ -549,8 +571,12 @@
       "master-crafted-power-weapon-crusader-squad",
       "neophyte-firearm",
       "power-fist",
-      "pyre-pistol",
-      "pyreblaster"
+      "pyreblaster",
+      "neophyte-chainsword",
+      "hand-flamer",
+      "initiate-chainsword",
+      "shotgun",
+      "combat-knife"
     ],
     "ability_ids": [
       "righteous-zeal-black-templars"
@@ -567,8 +593,8 @@
           "power-fist",
           "pyreblaster"
         ],
-        "count": 4,
-        "per_models": 20
+        "count": 2,
+        "per_models": 10
       }
     ],
     "external_refs": [
@@ -606,7 +632,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 50
+        "cost": 65
       }
     ],
     "keywords": [
@@ -634,7 +660,7 @@
       "absolvor-bolt-pistol",
       "crozius-arcanum",
       "master-crafted-power-weapon-execrator",
-      "pyre-pistol"
+      "hand-flamer"
     ],
     "ability_ids": [
       "condemnatory-annihilation-black-templars",
@@ -682,12 +708,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 105,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 200
+        "models": 10,
+        "cost": 210,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 115,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 220,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -709,16 +750,14 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-sternguard-veteran-squad",
-      "combi-weapon-sternguard-veteran-squad",
       "power-fist-sternguard-veteran-squad",
       "power-weapon-sternguard-veteran-squad",
       "pyrecannon-sternguard-veteran-squad",
-      "sternguard-bolt-pistol",
-      "sternguard-bolt-rifle",
-      "sternguard-heavy-bolter",
       "artificer-firearm-sternguard-veteran-squad",
-      "ceramite-fists-sternguard-veteran-squad"
+      "ceramite-fists-sternguard-veteran-squad",
+      "bolt-pistol",
+      "chainsword",
+      "heavy-bolter"
     ],
     "ability_ids": [
       "sternguard-focus-adeptus-astartes",
@@ -733,11 +772,11 @@
     "wargear_budgets": [
       {
         "items": [
-          "pyrecannon",
-          "sternguard-heavy-bolter"
+          "heavy-bolter",
+          "pyrecannon-sternguard-veteran-squad"
         ],
-        "count": 2,
-        "per_models": 10
+        "count": 1,
+        "per_models": 5
       }
     ],
     "allied_points": [
@@ -801,13 +840,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 245,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -918,7 +957,7 @@
     "points": [
       {
         "models": 4,
-        "cost": 100
+        "cost": 120
       }
     ],
     "keywords": [
@@ -1003,7 +1042,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -1062,12 +1101,12 @@
   },
   {
     "id": "emperors-champion",
-    "name": "Emperor\u2019s Champion",
+    "name": "Emperor’s Champion",
     "faction_id": "adeptus-astartes",
     "role": "character",
     "profiles": [
       {
-        "name": "Emperor\u2019s Champion",
+        "name": "Emperor’s Champion",
         "M": 8,
         "T": 4,
         "W": 5,
@@ -1080,7 +1119,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1089,7 +1128,7 @@
       "Grenades",
       "Imperium",
       "Tacticus",
-      "Emperor\u2019s Champion"
+      "Emperor’s Champion"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1233,22 +1272,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 1,
-        "cost": 75,
-        "unit_count_min": 1,
-        "unit_count_max": 3,
-        "host_faction": "black-templars"
-      },
-      {
-        "models": 1,
-        "cost": 85,
-        "unit_count_min": 4,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1269,6 +1292,12 @@
       {
         "namespace": "mfm",
         "id": "ef2ccd76-4552-40b5-ab0f-c806ac456686"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "orbital-comms-array",
+        "cost": 10
       }
     ]
   },
@@ -1291,13 +1320,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 240,
+        "cost": 275,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 260,
+        "cost": 295,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1324,12 +1353,9 @@
       "armoured-hull-repulsor-executioner",
       "heavy-laser-destroyer",
       "heavy-onslaught-gatling-cannon",
-      "icarus-rocket-pod",
-      "ironhail-heavy-stubber",
       "macro-plasma-incinerator",
-      "repulsor-executioner-defensive-array",
       "twin-heavy-bolter-repulsor-executioner",
-      "twin-icarus-ironhail-heavy-stubber"
+      "defensive-array"
     ],
     "ability_ids": [
       "executioner-adeptus-astartes",
@@ -1415,14 +1441,14 @@
       },
       {
         "models": 1,
-        "cost": 255,
+        "cost": 265,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "black-templars"
       },
       {
         "models": 1,
-        "cost": 275,
+        "cost": 285,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "black-templars"
@@ -1476,13 +1502,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1506,8 +1532,6 @@
     },
     "weapon_ids": [
       "armoured-hull-gladiator-valiant",
-      "icarus-rocket-pod",
-      "ironhail-heavy-stubber",
       "multi-melta-gladiator-valiant",
       "twin-las-talon",
       "defensive-array-gladiator-valiant"
@@ -1549,6 +1573,22 @@
         "namespace": "mfm",
         "id": "c75a736d-2aac-40ad-bab0-78e768d49831"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 145,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "black-templars"
+      },
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "black-templars"
+      }
     ]
   },
   {
@@ -1571,7 +1611,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 40
+        "cost": 45
       }
     ],
     "keywords": [
@@ -1645,13 +1685,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 170,
+        "cost": 190,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 190,
+        "cost": 210,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1679,9 +1719,8 @@
       "heavy-onslaught-gatling-cannon-repulsor",
       "hunter-slayer-missile",
       "las-talon-repulsor",
-      "repulsor-defensive-array",
       "twin-heavy-bolter-repulsor",
-      "twin-lascannon-repulsor"
+      "defensive-array"
     ],
     "ability_ids": [
       "emergency-combat-embarkation-adeptus-astartes",
@@ -1750,13 +1789,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 160,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1780,8 +1819,6 @@
     },
     "weapon_ids": [
       "armoured-hull-gladiator-reaper",
-      "icarus-rocket-pod",
-      "ironhail-heavy-stubber",
       "twin-heavy-onslaught-gatling-cannon",
       "defensive-array-gladiator-reaper"
     ],
@@ -1822,6 +1859,22 @@
         "namespace": "mfm",
         "id": "55fb581c-0805-4e4a-a6f4-9aea8aadf019"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "black-templars"
+      },
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "black-templars"
+      }
     ]
   },
   {
@@ -1843,13 +1896,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1942,15 +1995,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 85,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "cost": 60
       }
     ],
     "keywords": [
@@ -1975,7 +2020,7 @@
     },
     "weapon_ids": [
       "absolvor-bolt-pistol",
-      "astartes-chainsword-sanguinary-priest"
+      "chainsword"
     ],
     "ability_ids": [
       "blood-chalice-blood-angels",
@@ -2024,7 +2069,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 85
       }
     ],
     "keywords": [
@@ -2051,12 +2096,13 @@
       "max": 1
     },
     "weapon_ids": [
-      "astartes-chainsword-death-company-captain-with-jump-pack",
       "hand-flamer",
       "heavy-bolt-pistol-death-company-captain-with-jump-pack",
       "plasma-pistol",
       "power-fist-death-company-captain-with-jump-pack",
-      "relic-weapon"
+      "relic-weapon",
+      "chainsword",
+      "thunder-hammer"
     ],
     "ability_ids": [
       "black-rage-blood-angels",
@@ -2110,27 +2156,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 85,
+        "cost": 90,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 160,
+        "models": 10,
+        "cost": 170,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 95,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 170,
+        "models": 10,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2156,7 +2200,6 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-death-company-marines",
       "eviscerator",
       "hand-flamer",
       "heavy-bolt-pistol",
@@ -2164,7 +2207,11 @@
       "plasma-pistol-death-company-marines",
       "power-fist",
       "power-weapon",
-      "thunder-hammer-death-company-marines"
+      "thunder-hammer-death-company-marines",
+      "chainsword",
+      "bolt-rifle",
+      "combat-blade",
+      "grenade-launcher"
     ],
     "ability_ids": [
       "black-rage-blood-angels",
@@ -2241,7 +2288,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2318,7 +2365,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2395,7 +2442,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 110
+        "cost": 175
       }
     ],
     "keywords": [
@@ -2476,7 +2523,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 110
       }
     ],
     "keywords": [
@@ -2559,7 +2606,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 125
+        "cost": 140
       }
     ],
     "keywords": [
@@ -2615,139 +2662,6 @@
       {
         "namespace": "mfm",
         "id": "d906421b-e147-452b-86bc-f0293746c545"
-      }
-    ]
-  },
-  {
-    "id": "death-company-marines-with-bolt-rifles",
-    "name": "Death Company Marines with Bolt Rifles",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Death Company Marines with Bolt Rifles",
-        "M": 6,
-        "T": 4,
-        "W": 2,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 80,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 155,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 90,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 165,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Imperium",
-      "Tacticus",
-      "Death Company",
-      "Death Company Marines with Bolt Rifles"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes",
-      "Blood Angels"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "astartes-chainsword-death-company-marines-with-bolt-rifles",
-      "astartes-grenade-launcher",
-      "bolt-pistol",
-      "bolt-rifle",
-      "close-combat-weapon",
-      "eviscerator",
-      "hand-flamer",
-      "inferno-pistol",
-      "plasma-pistol-death-company-marines-with-bolt-rifles",
-      "power-fist",
-      "power-weapon",
-      "thunder-hammer-death-company-marines-with-bolt-rifles"
-    ],
-    "ability_ids": [
-      "black-rage-blood-angels",
-      "visions-of-heresy-blood-angels",
-      {
-        "id": "feel-no-pain",
-        "value": 6
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "hand-flamer",
-          "inferno-pistol",
-          "plasma-pistol-death-company-marines-with-bolt-rifles"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "power-fist",
-          "power-weapon",
-          "thunder-hammer-death-company-marines-with-bolt-rifles"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
-    "conditional_keywords": [
-      {
-        "keyword": "Battleline",
-        "required_detachment_id": "the-lost-brethren"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "4aab-3ca5-0435-ed5e"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "b9557837-1b04-5259-940e-8119494de566"
-      },
-      {
-        "namespace": "mfm",
-        "id": "10f6d882-ef36-4ce1-9a10-9c0a08c1e9c2"
       }
     ]
   },
@@ -2846,27 +2760,25 @@
     "points": [
       {
         "models": 3,
-        "cost": 120,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 260,
+        "models": 6,
+        "cost": 275,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 140,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 280,
+        "models": 6,
+        "cost": 290,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2894,9 +2806,8 @@
     },
     "weapon_ids": [
       "angelus-boltgun",
-      "encarmine-blade",
-      "encarmine-spear",
-      "inferno-pistol"
+      "inferno-pistol",
+      "encarmine-weapon"
     ],
     "ability_ids": [
       "angelic-visage-blood-angels",
@@ -2913,15 +2824,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "sanguinary-banner"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2960,13 +2862,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3046,27 +2948,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 115,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 230,
+        "models": 10,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 245,
+        "models": 10,
+        "cost": 290,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3094,14 +2994,14 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-death-company-marines-with-jump-packs",
       "eviscerator",
       "hand-flamer",
       "heavy-bolt-pistol",
       "inferno-pistol",
       "plasma-pistol-death-company-marines-with-jump-packs",
       "power-fist",
-      "power-weapon"
+      "power-weapon",
+      "chainsword"
     ],
     "ability_ids": [
       "black-rage-blood-angels",
@@ -3118,32 +3018,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "power-fist",
-          "power-weapon"
-        ],
-        "count": 2,
-        "per_models": 5
-      },
-      {
-        "items": [
-          "power-fist",
-          "power-weapon"
-        ],
-        "count": 3,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "inferno-pistol",
-          "plasma-pistol-death-company-marines-with-jump-packs"
-        ],
-        "count": 4,
-        "per_models": 10
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -3179,7 +3053,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 80
       }
     ],
     "keywords": [
@@ -3261,7 +3135,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 80
       }
     ],
     "keywords": [
@@ -3288,8 +3162,8 @@
     },
     "weapon_ids": [
       "assault-cannon",
-      "close-combat-weapon-ravenwing-darkshroud",
-      "heavy-bolter-ravenwing-darkshroud"
+      "heavy-bolter-ravenwing-darkshroud",
+      "armoured-hull"
     ],
     "ability_ids": [
       "icon-of-old-caliban-dark-angels",
@@ -3338,27 +3212,25 @@
     "points": [
       {
         "models": 3,
-        "cost": 75,
+        "cost": 85,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 150,
+        "models": 6,
+        "cost": 170,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 85,
+        "cost": 95,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 160,
+        "models": 6,
+        "cost": 180,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3384,10 +3256,10 @@
       "max": 6
     },
     "weapon_ids": [
-      "astartes-grenade-launcher",
-      "black-knight-combat-weapon",
       "bolt-pistol",
-      "plasma-talon"
+      "plasma-talon",
+      "corvus-hammers",
+      "grenade-launcher"
     ],
     "ability_ids": [
       "knights-of-caliban-dark-angels"
@@ -3401,10 +3273,10 @@
     "wargear_budgets": [
       {
         "items": [
-          "astartes-grenade-launcher"
+          "grenade-launcher"
         ],
-        "count": 2,
-        "per_models": 6
+        "count": 1,
+        "per_models": 3
       }
     ],
     "external_refs": [
@@ -3442,7 +3314,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 110
       }
     ],
     "keywords": [
@@ -3523,12 +3395,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 165
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 330
+        "models": 10,
+        "cost": 380,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 230,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 420,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -3583,15 +3470,8 @@
           "heavy-flamer",
           "plasma-cannon"
         ],
-        "count": 2,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "watcher-in-the-dark"
-        ],
         "count": 1,
-        "per_models": 0
+        "per_models": 5
       }
     ],
     "external_refs": [
@@ -3606,6 +3486,12 @@
       {
         "namespace": "mfm",
         "id": "88aa6d99-b712-42c3-961f-171000c3c481"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "cyclone-missile-launcher",
+        "cost": 10
       }
     ]
   },
@@ -3628,27 +3514,25 @@
     "points": [
       {
         "models": 3,
-        "cost": 80,
+        "cost": 90,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 160,
+        "models": 6,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 90,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 170,
+        "models": 6,
+        "cost": 195,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3721,7 +3605,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3801,13 +3685,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 130,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 140,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3836,9 +3720,9 @@
     },
     "weapon_ids": [
       "assault-cannon",
-      "close-combat-weapon-land-speeder-vengeance",
       "heavy-bolter-land-speeder-vengeance",
-      "plasma-storm-battery"
+      "plasma-storm-battery",
+      "armoured-hull"
     ],
     "ability_ids": [
       "storm-of-vengeance-dark-angels",
@@ -3887,7 +3771,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 180
+        "cost": 200
       }
     ],
     "keywords": [
@@ -3967,7 +3851,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 80
       }
     ],
     "keywords": [
@@ -4043,13 +3927,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 240,
+        "cost": 255,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 260,
+        "cost": 275,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4094,15 +3978,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "watcher-in-the-dark"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4138,7 +4013,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 100
       }
     ],
     "keywords": [
@@ -4197,12 +4072,12 @@
   },
   {
     "id": "lion-eljonson",
-    "name": "Lion El\u2019Jonson",
+    "name": "Lion El’Jonson",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Lion El\u2019Jonson",
+        "name": "Lion El’Jonson",
         "M": 8,
         "T": 9,
         "W": 10,
@@ -4215,7 +4090,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 265
+        "cost": 415
       }
     ],
     "keywords": [
@@ -4224,7 +4099,7 @@
       "Epic Hero",
       "Imperium",
       "Primarch",
-      "Lion El\u2019Jonson"
+      "Lion El’Jonson"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -4291,13 +4166,13 @@
     "points": [
       {
         "models": 3,
-        "cost": 105,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 115,
+        "cost": 135,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4324,11 +4199,11 @@
       "max": 3
     },
     "weapon_ids": [
-      "astartes-grenade-launcher",
-      "black-knight-combat-weapon",
       "bolt-pistol",
       "master-crafted-power-weapon-ravenwing-command-squad",
-      "plasma-talon"
+      "plasma-talon",
+      "corvus-hammers",
+      "grenade-launcher"
     ],
     "ability_ids": [
       "astartes-banner-dark-angels",
@@ -4346,7 +4221,7 @@
     "wargear_budgets": [
       {
         "items": [
-          "astartes-grenade-launcher"
+          "grenade-launcher"
         ],
         "count": 1,
         "per_models": 0
@@ -4387,7 +4262,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 80
       }
     ],
     "keywords": [
@@ -4463,7 +4338,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 200
+        "cost": 190
       }
     ],
     "keywords": [
@@ -4541,7 +4416,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 105
+        "cost": 120
       }
     ],
     "keywords": [
@@ -4623,7 +4498,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 75
       }
     ],
     "keywords": [
@@ -4701,27 +4576,13 @@
     "points": [
       {
         "models": 10,
-        "cost": 275,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "models_max": 16,
-        "cost": 275,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 290,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "models_max": 16,
-        "cost": 290,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4743,20 +4604,20 @@
       "diameter": 40
     },
     "model_count": {
-      "min": 3,
-      "max": 16
+      "min": 10,
+      "max": 10
     },
     "weapon_ids": [
       "auto-boltstorm-gauntlets",
       "bolt-pistol",
-      "close-combat-weapon",
       "deathwatch-heavy-bolt-rifle",
       "deathwatch-heavy-bolter",
       "flamestorm-gauntlets",
       "fragstorm-grenade-launcher",
       "melta-rifle",
       "multi-melta-indomitor-kill-team",
-      "twin-power-fists"
+      "twin-power-fists",
+      "ceramite-fists"
     ],
     "ability_ids": [
       "indomitor-doctrines-deathwatch"
@@ -4812,12 +4673,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 115
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190
+        "models": 10,
+        "cost": 220
       }
     ],
     "keywords": [
@@ -4843,15 +4703,15 @@
     "weapon_ids": [
       "black-shield-blades",
       "boltgun",
-      "close-combat-weapon",
       "combi-weapon-deathwatch-veterans",
       "deathwatch-shotgun",
-      "deathwatch-thunder-hammer",
       "frag-cannon",
       "infernus-heavy-bolter",
       "power-weapon-deathwatch-veterans",
       "stalker-pattern-boltgun",
-      "xenophase-blade"
+      "xenophase-blade",
+      "heavy-thunder-hammer",
+      "knives-and-fists"
     ],
     "ability_ids": [
       {
@@ -4869,49 +4729,7 @@
     "wargear_budgets": [
       {
         "items": [
-          "infernus-heavy-bolter"
-        ],
-        "count": 1,
-        "per_models": 5
-      },
-      {
-        "items": [
-          "frag-cannon"
-        ],
-        "count": 1,
-        "per_models": 5
-      },
-      {
-        "items": [
-          "astartes-shield"
-        ],
-        "count": 4,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "black-shield-blades"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "stalker-pattern-boltgun"
-        ],
-        "count": 1,
-        "per_models": 5
-      },
-      {
-        "items": [
-          "deathwatch-shotgun"
-        ],
-        "count": 2,
-        "per_models": 5
-      },
-      {
-        "items": [
-          "deathwatch-thunder-hammer"
+          "storm-shield"
         ],
         "count": 2,
         "per_models": 5
@@ -4962,11 +4780,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 110
       },
       {
         "models": 10,
-        "cost": 190
+        "cost": 210
       }
     ],
     "keywords": [
@@ -4992,10 +4810,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-grenade-launcher",
       "bolt-pistol-decimus-kill-team",
-      "close-combat-weapon",
-      "combat-knife",
       "deathwatch-marksman-bolt-carbine",
       "frag-cannon-decimus-kill-team",
       "heavy-thunder-hammer",
@@ -5006,7 +4821,9 @@
       "power-weapon-decimus-kill-team",
       "special-issue-bolt-pistol",
       "stalker-bolt-rifle",
-      "xenophase-blade"
+      "xenophase-blade",
+      "knives-and-fists",
+      "grenade-launcher"
     ],
     "ability_ids": [
       {
@@ -5066,27 +4883,13 @@
     "points": [
       {
         "models": 10,
-        "cost": 265,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "models_max": 15,
-        "cost": 265,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 280,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "models_max": 15,
-        "cost": 280,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -5109,19 +4912,19 @@
       "diameter": 32
     },
     "model_count": {
-      "min": 3,
-      "max": 15
+      "min": 10,
+      "max": 10
     },
     "weapon_ids": [
       "assault-bolters",
-      "astartes-chainsword-talonstrike-kill-team",
-      "close-combat-weapon",
       "hand-flamer",
       "heavy-bolt-pistol",
       "plasma-exterminators",
       "plasma-pistol-talonstrike-kill-team",
       "power-fist",
-      "power-weapon"
+      "power-weapon",
+      "chainsword",
+      "ceramite-fists"
     ],
     "ability_ids": [
       "talonstrike-doctrines-deathwatch",
@@ -5168,7 +4971,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 105
       }
     ],
     "keywords": [
@@ -5333,12 +5136,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 180
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 330
+        "models": 10,
+        "cost": 380,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 230,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 420,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -5389,7 +5207,11 @@
     "points_provisional": false,
     "wargear_costs": [
       {
-        "item_id": "thunder-hammer",
+        "item_id": "cyclone-missile-launcher",
+        "cost": 10
+      },
+      {
+        "item_id": "storm-shield",
         "cost": 5
       }
     ],
@@ -5439,27 +5261,13 @@
     "points": [
       {
         "models": 10,
-        "cost": 195,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "models_max": 24,
-        "cost": 195,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 210,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "models_max": 24,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -5481,15 +5289,12 @@
       "diameter": 32
     },
     "model_count": {
-      "min": 3,
-      "max": 24
+      "min": 10,
+      "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-fortis-kill-team",
-      "astartes-grenade-launcher",
       "bolt-pistol",
       "castellan-launcher",
-      "close-combat-weapon",
       "deathwatch-bolt-rifle",
       "hand-flamer",
       "heavy-bolt-pistol",
@@ -5501,7 +5306,10 @@
       "superfrag-rocket-launcher",
       "superkrak-rocket-launcher",
       "thunder-hammer-fortis-kill-team",
-      "vengor-launcher"
+      "vengor-launcher",
+      "knives-and-fists",
+      "grenade-launcher",
+      "chainsword"
     ],
     "ability_ids": [
       "fortis-doctrines-deathwatch"
@@ -5515,10 +5323,10 @@
     "wargear_budgets": [
       {
         "items": [
-          "astartes-grenade-launcher"
+          "grenade-launcher"
         ],
-        "count": 2,
-        "per_models": 10
+        "count": 1,
+        "per_models": 5
       }
     ],
     "external_refs": [
@@ -5555,27 +5363,13 @@
     "points": [
       {
         "models": 10,
-        "cost": 170,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "models_max": 21,
-        "cost": 170,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 180,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "models_max": 21,
-        "cost": 180,
+        "cost": 195,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -5598,13 +5392,12 @@
       "diameter": 32
     },
     "model_count": {
-      "min": 3,
-      "max": 21
+      "min": 10,
+      "max": 10
     },
     "weapon_ids": [
       "bolt-pistol",
       "bolt-sniper-rifle",
-      "close-combat-weapon",
       "combat-knife",
       "deathwatch-bolt-carbine",
       "deathwatch-marksman-bolt-carbine",
@@ -5612,7 +5405,8 @@
       "las-fusil",
       "paired-combat-blades",
       "special-issue-bolt-pistol-spectrus-kill-team",
-      "instigator-bolt-carbine"
+      "instigator-bolt-carbine",
+      "ceramite-fists"
     ],
     "ability_ids": [
       {
@@ -5637,16 +5431,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "helix-gauntlet",
-          "infiltrator-comms-array"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -5682,7 +5466,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 90
       }
     ],
     "keywords": [
@@ -5708,10 +5492,9 @@
       "boltstorm-gauntlet",
       "master-crafted-heavy-bolt-rifle",
       "master-crafted-power-weapon-captain-in-gravis-armour",
-      "power-fist-captain-in-gravis-armour",
       "relic-blade",
       "relic-chainsword",
-      "relic-fist"
+      "relic-power-fist"
     ],
     "ability_ids": [
       "leader",
@@ -5760,7 +5543,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 90
       }
     ],
     "keywords": [
@@ -5835,12 +5618,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 75,
-        "models_max": 9
+        "cost": 90
       },
       {
         "models": 10,
-        "cost": 150
+        "cost": 175
       }
     ],
     "keywords": [
@@ -5862,13 +5644,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-assault-intercessor-squad",
       "hand-flamer-assault-intercessor-squad",
       "heavy-bolt-pistol-assault-intercessor-squad",
       "plasma-pistol-assault-intercessor-squad",
       "power-fist-assault-intercessor-squad",
       "power-weapon-assault-intercessor-squad",
-      "thunder-hammer-assault-intercessor-squad"
+      "thunder-hammer-assault-intercessor-squad",
+      "chainsword"
     ],
     "ability_ids": [
       "targeted-intercession-adeptus-astartes"
@@ -5930,8 +5712,7 @@
         "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
+        "models": 6,
         "cost": 250,
         "unit_count_min": 1,
         "unit_count_max": 2
@@ -5943,8 +5724,7 @@
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
+        "models": 6,
         "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
@@ -6018,7 +5798,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 75
       }
     ],
     "keywords": [
@@ -6040,13 +5820,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "chainfist-ancient-in-terminator-armour",
-      "close-combat-weapon-ancient-in-terminator-armour",
-      "power-fist-ancient-in-terminator-armour",
-      "power-weapon-ancient-in-terminator-armour",
       "storm-bolter-ancient-in-terminator-armour",
-      "thunder-hammer-ancient-in-terminator-armour",
-      "twin-lightning-claws-ancient-in-terminator-armour"
+      "master-crafted-power-weapon"
     ],
     "ability_ids": [
       "keep-the-banner-high-adeptus-astartes",
@@ -6105,13 +5880,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 115,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -6198,7 +5973,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 65
       }
     ],
     "keywords": [
@@ -6223,8 +5998,7 @@
     "weapon_ids": [
       "forge-bolter",
       "grav-pistol-techmarine",
-      "omnissiah-power-axe",
-      "servo-arm"
+      "omnissian-power-axe-and-servo-arm"
     ],
     "ability_ids": [
       "blessing-of-the-omnissiah-adeptus-astartes",
@@ -6256,12 +6030,12 @@
   },
   {
     "id": "korsarro-khan",
-    "name": "Kor\u2019sarro Khan",
+    "name": "Kor’sarro Khan",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Kor\u2019sarro Khan",
+        "name": "Kor’sarro Khan",
         "M": 6,
         "T": 4,
         "W": 5,
@@ -6274,7 +6048,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 80
       }
     ],
     "keywords": [
@@ -6351,7 +6125,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 105
       }
     ],
     "keywords": [
@@ -6428,7 +6202,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -6489,97 +6263,6 @@
     ]
   },
   {
-    "id": "eradicator-squad",
-    "name": "Eradicator Squad",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Eradicator",
-        "M": 5,
-        "T": 6,
-        "W": 3,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 90,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 180,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "cost": 100,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 190,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Explosives",
-      "Gravis",
-      "Imperium"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "bolt-pistol-eradicator-squad",
-      "melta-rifle-eradicator-squad",
-      "multi-melta-eradicator-squad",
-      "ceramite-fists-eradicator-squad"
-    ],
-    "ability_ids": [
-      "total-obliteration-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "c570-c6ba-c9dc-5a44"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "b3a4b88e-2164-580c-8fb1-a5c6e4e8e62a"
-      },
-      {
-        "namespace": "mfm",
-        "id": "258c4554-ef84-418a-9125-ca1ccd5e8d03"
-      }
-    ]
-  },
-  {
     "id": "librarian",
     "name": "Librarian",
     "faction_id": "adeptus-astartes",
@@ -6599,15 +6282,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 80,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "cost": 75
       }
     ],
     "keywords": [
@@ -6684,7 +6359,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 160
       }
     ],
     "keywords": [
@@ -6740,91 +6415,6 @@
     ]
   },
   {
-    "id": "dreadnought",
-    "name": "Dreadnought",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Dreadnought",
-        "M": 6,
-        "T": 9,
-        "W": 8,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 135
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Walker",
-      "Smoke",
-      "Imperium",
-      "Dreadnought"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 60
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "assault-cannon",
-      "close-combat-weapon-dreadnought",
-      "dreadnought-combat-weapon",
-      "heavy-flamer",
-      "heavy-plasma-cannon",
-      "missile-launcher",
-      "multi-melta",
-      "storm-bolter",
-      "twin-lascannon"
-    ],
-    "ability_ids": [
-      {
-        "id": "deadly-demise",
-        "value": 1
-      },
-      "wisdom-of-the-ancients-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Deathwing",
-        "required_faction_keyword": "Dark Angels"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "d204-13c6-dab1-ecdc"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "9ae4aba2-748d-5e1f-96f9-f71efd85a5b6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "707c3861-353c-462a-9628-281e6048b9aa"
-      }
-    ]
-  },
-  {
     "id": "terminator-assault-squad",
     "name": "Terminator Assault Squad",
     "faction_id": "adeptus-astartes",
@@ -6843,12 +6433,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 155
+        "cost": 175,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 310
+        "models": 10,
+        "cost": 350,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 390,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -6891,7 +6496,7 @@
     ],
     "wargear_costs": [
       {
-        "item_id": "thunder-hammer",
+        "item_id": "storm-shield",
         "cost": 5
       }
     ],
@@ -6917,90 +6522,6 @@
     ]
   },
   {
-    "id": "predator-destructor",
-    "name": "Predator Destructor",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Predator Destructor",
-        "M": 10,
-        "T": 10,
-        "W": 11,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 140,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 150,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Smoke",
-      "Imperium",
-      "Predator Destructor"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-predator-destructor",
-      "heavy-bolter-predator-destructor",
-      "hunter-killer-missile",
-      "lascannon",
-      "predator-autocannon",
-      "storm-bolter"
-    ],
-    "ability_ids": [
-      "destructor-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      },
-      "damaged-1-4-wounds-remaining-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "d4c8-dd6a-cd7a-ccc3"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "3f20009a-ac23-5a71-9fb3-314a04b85d34"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3e841dc9-30de-48ce-9a44-3ea70d50a16e"
-      }
-    ]
-  },
-  {
     "id": "bladeguard-veteran-squad",
     "name": "Bladeguard Veteran Squad",
     "faction_id": "adeptus-astartes",
@@ -7019,26 +6540,25 @@
     "points": [
       {
         "models": 3,
-        "cost": 80,
+        "cost": 85,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
-        "cost": 160,
+        "cost": 170,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 3,
-        "unit_count_max": null,
-        "models_max": 5
+        "unit_count_max": null
       },
       {
         "models": 6,
-        "cost": 170,
+        "cost": 180,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -7063,9 +6583,9 @@
     },
     "weapon_ids": [
       "heavy-bolt-pistol-bladeguard-veteran-squad",
-      "master-crafted-power-weapon-bladeguard-veteran-squad",
       "neo-volkite-pistol",
-      "plasma-pistol-bladeguard-veteran-squad"
+      "plasma-pistol-bladeguard-veteran-squad",
+      "master-crafted-power-sword"
     ],
     "ability_ids": [
       "bladeguard-adeptus-astartes"
@@ -7146,11 +6666,11 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 80
       },
       {
         "models": 2,
-        "cost": 150
+        "cost": 160
       }
     ],
     "keywords": [
@@ -7310,7 +6830,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 90
       }
     ],
     "keywords": [
@@ -7385,7 +6905,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 50
       }
     ],
     "keywords": [
@@ -7420,7 +6940,7 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader",
+    "attachment_role": "support",
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -7455,28 +6975,26 @@
     "points": [
       {
         "models": 3,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 230,
+        "models": 6,
+        "cost": 250,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 130,
-        "unit_count_min": 2,
+        "cost": 150,
+        "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 250,
-        "unit_count_min": 2,
+        "models": 6,
+        "cost": 280,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -7520,10 +7038,6 @@
       {
         "item_id": "banner-of-macragge",
         "cost": 15
-      },
-      {
-        "item_id": "blades-of-honour",
-        "cost": 10
       }
     ],
     "external_refs": [
@@ -7573,7 +7087,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 100
       }
     ],
     "keywords": [
@@ -7654,7 +7168,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 355
+        "cost": 415
       }
     ],
     "keywords": [
@@ -7816,7 +7330,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 90
       }
     ],
     "keywords": [
@@ -7841,13 +7355,13 @@
       "max": 1
     },
     "weapon_ids": [
-      "astartes-chainsword-captain-with-jump-pack",
       "hand-flamer-captain-with-jump-pack",
       "heavy-bolt-pistol-captain-with-jump-pack",
       "plasma-pistol-captain-with-jump-pack",
       "power-fist-captain-with-jump-pack",
       "relic-weapon-captain-with-jump-pack",
-      "thunder-hammer-captain-with-jump-pack"
+      "thunder-hammer-captain-with-jump-pack",
+      "chainsword"
     ],
     "ability_ids": [
       "angels-wrath-adeptus-astartes",
@@ -7907,13 +7421,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 135,
+        "cost": 155,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 165,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -7981,153 +7495,6 @@
     ]
   },
   {
-    "id": "hammerfall-bunker",
-    "name": "Hammerfall Bunker",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Hammerfall Bunker",
-        "M": 0,
-        "T": 12,
-        "W": 14,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 175
-      }
-    ],
-    "keywords": [
-      "Fortification",
-      "Vehicle",
-      "Imperium",
-      "Hammerfall Bunker"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "hammerfall-heavy-bolter-array",
-      "hammerfall-heavy-flamer-array",
-      "hammerfall-missile-launcher"
-    ],
-    "ability_ids": [
-      "ceramite-cover-adeptus-astartes",
-      "defensive-array-adeptus-astartes",
-      "fortification-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D6"
-      },
-      "damaged-1-5-wounds-remaining-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "5882-9143-e7c5-ac11"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "4d5b4ec3-22a0-5ede-b3e9-9bfd070f2cc8"
-      },
-      {
-        "namespace": "mfm",
-        "id": "77963911-be84-4852-8d43-6c6828e71f88"
-      }
-    ]
-  },
-  {
-    "id": "suppressor-squad",
-    "name": "Suppressor Squad",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Suppressor",
-        "M": 12,
-        "T": 4,
-        "W": 2,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 85
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Smoke",
-      "Jump Pack",
-      "Fly",
-      "Imperium",
-      "Suppressor Squad"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 3,
-      "max": 3
-    },
-    "weapon_ids": [
-      "accelerator-autocannon",
-      "bolt-pistol",
-      "close-combat-weapon"
-    ],
-    "ability_ids": [
-      "suppression-fire-suppressor-squad-adeptus-astartes",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "97f6-b1f8-c72d-e826"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "3a1b4813-01ca-5a6b-83c2-dd4d1b327fa3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "235ce59a-e559-448a-aaef-a252faff9168"
-      }
-    ]
-  },
-  {
     "id": "librarian-in-terminator-armour",
     "name": "Librarian in Terminator Armour",
     "faction_id": "adeptus-astartes",
@@ -8168,7 +7535,6 @@
       "max": 1
     },
     "weapon_ids": [
-      "combi-weapon-librarian-in-terminator-armour",
       "force-weapon",
       "smite",
       "storm-bolter-librarian-in-terminator-armour"
@@ -8211,119 +7577,13 @@
     ]
   },
   {
-    "id": "devastator-squad",
-    "name": "Devastator Squad",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Devastator",
-        "M": 6,
-        "T": 4,
-        "W": 2,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 120
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 200
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Imperium",
-      "Devastator Squad"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "astartes-chainsword-devastator-squad",
-      "bolt-pistol",
-      "boltgun",
-      "close-combat-weapon-devastator-squad",
-      "combi-weapon-devastator-squad",
-      "grav-cannon",
-      "grav-pistol",
-      "heavy-bolter-devastator-squad",
-      "lascannon-devastator-squad",
-      "missile-launcher-devastator-squad",
-      "multi-melta-devastator-squad",
-      "plasma-cannon-devastator-squad",
-      "plasma-pistol-devastator-squad",
-      "power-fist-devastator-squad",
-      "power-weapon-devastator-squad",
-      "thunder-hammer-devastator-squad"
-    ],
-    "ability_ids": [
-      "armorium-cherub-adeptus-astartes",
-      "signum-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "grav-cannon",
-          "heavy-bolter-devastator-squad",
-          "heavy-flamer",
-          "lascannon-devastator-squad",
-          "missile-launcher-devastator-squad",
-          "multi-melta-devastator-squad",
-          "plasma-cannon-devastator-squad"
-        ],
-        "count": 4,
-        "per_models": 0
-      }
-    ],
-    "excluded_faction_keywords": [
-      "Deathwatch",
-      "Space Wolves"
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "3f4c-1e67-66dc-ffa5"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "f715322f-e40b-5c04-bbee-e34a13203a6b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "74c044ed-6a53-45a9-ab84-7d1f5a30bada"
-      }
-    ]
-  },
-  {
     "id": "vulkan-hestan",
-    "name": "Vulkan He\u2019stan",
+    "name": "Vulkan He’stan",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Vulkan He\u2019stan",
+        "name": "Vulkan He’stan",
         "M": 6,
         "T": 4,
         "W": 5,
@@ -8336,7 +7596,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 105
       }
     ],
     "keywords": [
@@ -8397,88 +7657,6 @@
     ]
   },
   {
-    "id": "centurion-devastator-squad",
-    "name": "Centurion Devastator Squad",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Devastator Centurion",
-        "M": 4,
-        "T": 7,
-        "W": 4,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 175
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 350
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Imperium",
-      "Centurion",
-      "Centurion Devastator Squad"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "centurion-bolters",
-      "centurion-fists",
-      "centurion-missile-launcher",
-      "grav-cannon-centurion-devastator-squad",
-      "twin-heavy-bolter",
-      "twin-lascannon"
-    ],
-    "ability_ids": [
-      "decimator-protocols-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "twin-lascannon",
-        "cost": 5
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "6ba0-cede-e278-f86b"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "d08f3b3f-ff1c-557b-b582-d2b5383a97f7"
-      },
-      {
-        "namespace": "mfm",
-        "id": "7af2db9c-c3dd-4c62-98d9-d1c161b8c3c3"
-      }
-    ]
-  },
-  {
     "id": "hellblaster-squad",
     "name": "Hellblaster Squad",
     "faction_id": "adeptus-astartes",
@@ -8497,12 +7675,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110
+        "cost": 110,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 220
+        "models": 10,
+        "cost": 220,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 125,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 235,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -8526,7 +7719,7 @@
       "bolt-pistol-hellblaster-squad",
       "plasma-incinerator-hellblaster-squad",
       "plasma-pistol-hellblaster-squad",
-      "close-combat-weapon-hellblaster-squad"
+      "ceramite-fists"
     ],
     "ability_ids": [
       "for-the-chapter-adeptus-astartes"
@@ -8572,12 +7765,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 110
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 200
+        "models": 10,
+        "cost": 220
       }
     ],
     "keywords": [
@@ -8602,7 +7794,7 @@
       "bolt-pistol-heavy-intercessor-squad",
       "heavy-bolt-rifle",
       "heavy-bolter-heavy-intercessor-squad",
-      "close-combat-weapon-heavy-intercessor-squad"
+      "ceramite-fists"
     ],
     "ability_ids": [
       "unyielding-in-the-face-of-the-foe-adeptus-astartes"
@@ -8724,29 +7916,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 65,
-        "unit_count_min": 1,
-        "unit_count_max": 2
+        "cost": 65
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 120,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 75,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 130,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "models": 10,
+        "cost": 120
       }
     ],
     "keywords": [
@@ -8767,14 +7941,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-scout-squad",
-      "astartes-shotgun",
       "bolt-pistol-scout-squad",
       "boltgun-scout-squad",
       "combat-knife-scout-squad",
       "heavy-bolter-scout-squad",
       "missile-launcher-scout-squad",
-      "scout-sniper-rifle"
+      "shotgun",
+      "sniper-rifle"
     ],
     "ability_ids": [
       "guerrilla-tactics-adeptus-astartes",
@@ -8819,80 +7992,6 @@
     ]
   },
   {
-    "id": "marneus-calgar-in-armour-of-antilochus",
-    "name": "Marneus Calgar in Armour of Antilochus",
-    "faction_id": "adeptus-astartes",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Marneus Calgar",
-        "M": 6,
-        "T": 6,
-        "W": 6,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 155
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Chapter Master",
-      "Character",
-      "Epic Hero",
-      "Imperium",
-      "Terminator"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes",
-      "Ultramarines"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "gauntlets-of-ultramar"
-    ],
-    "ability_ids": [
-      "inspiring-leader-adeptus-astartes",
-      "leader",
-      "master-tactician-adeptus-astartes",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "a136-76f7-34d1-8035"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "d1cfaaaa-bf15-5dc5-aece-7859649ca4d4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "de36bfa7-9cc5-4875-b9d8-d3940027b48c"
-      }
-    ]
-  },
-  {
     "id": "apothecary-biologis",
     "name": "Apothecary Biologis",
     "faction_id": "adeptus-astartes",
@@ -8912,7 +8011,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 60
       }
     ],
     "keywords": [
@@ -8936,7 +8035,7 @@
     },
     "weapon_ids": [
       "absolvor-bolt-pistol-apothecary-biologis",
-      "close-combat-weapon-apothecary-biologis"
+      "servo-armature"
     ],
     "ability_ids": [
       "surgical-precision-adeptus-astartes",
@@ -8987,13 +8086,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 160,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 170,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -9016,12 +8115,12 @@
       "max": 1
     },
     "weapon_ids": [
-      "brutalis-bolt-rifles",
       "brutalis-fists",
       "brutalis-talons",
       "twin-heavy-bolter-brutalis-dreadnought",
       "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought",
-      "twin-multi-melta-brutalis-dreadnought"
+      "twin-multi-melta-brutalis-dreadnought",
+      "bolt-rifle"
     ],
     "ability_ids": [
       "brutalis-charge-adeptus-astartes",
@@ -9078,7 +8177,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -9156,7 +8255,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 40
+        "cost": 45
       }
     ],
     "keywords": [
@@ -9180,8 +8279,8 @@
     },
     "weapon_ids": [
       "absolvor-bolt-pistol-apothecary",
-      "close-combat-weapon-apothecary",
-      "reductor-pistol"
+      "reductor-pistol",
+      "servo-armature"
     ],
     "ability_ids": [
       "gene-seed-recovery-adeptus-astartes",
@@ -9236,13 +8335,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 245,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -9331,7 +8430,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 45
+        "cost": 50
       }
     ],
     "keywords": [
@@ -9355,7 +8454,6 @@
     },
     "weapon_ids": [
       "bolt-pistol-lieutenant",
-      "close-combat-weapon-lieutenant",
       "heavy-bolt-pistol-lieutenant",
       "master-crafted-bolter-lieutenant",
       "master-crafted-power-weapon-lieutenant",
@@ -9415,7 +8513,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 115
       }
     ],
     "keywords": [
@@ -9573,7 +8671,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 115
       }
     ],
     "keywords": [
@@ -9744,7 +8842,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 75
+        "cost": 85
       }
     ],
     "keywords": [
@@ -9818,12 +8916,11 @@
     "points": [
       {
         "models": 3,
-        "cost": 70,
-        "models_max": 5
+        "cost": 85
       },
       {
         "models": 6,
-        "cost": 140
+        "cost": 160
       }
     ],
     "keywords": [
@@ -9841,18 +8938,15 @@
     },
     "model_count": {
       "min": 3,
-      "max": 7
+      "max": 6
     },
     "weapon_ids": [
-      "astartes-chainsword-outrider-squad",
-      "bolt-pistol",
       "heavy-bolt-pistol-outrider-squad",
-      "multi-melta",
-      "onslaught-gatling-cannon",
       "twin-bolt-rifle-outrider-squad",
       "plasma-pistol-outrider-squad",
       "power-weapon-outrider-squad",
-      "thunder-hammer-outrider-squad"
+      "thunder-hammer-outrider-squad",
+      "chainsword"
     ],
     "ability_ids": [
       "thunderous-impact-adeptus-astartes"
@@ -9898,6 +8992,15 @@
         "namespace": "mfm",
         "id": "d5a5b4f6-c63e-421d-9a58-5a0df13bee8b"
       }
+    ],
+    "wargear_budgets": [
+      {
+        "items": [
+          "plasma-pistol-outrider-squad"
+        ],
+        "count": 1,
+        "per_models": 3
+      }
     ]
   },
   {
@@ -9919,14 +9022,14 @@
     "points": [
       {
         "models": 5,
-        "cost": 180,
+        "cost": 135,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 210,
-        "unit_count_min": 2,
+        "cost": 145,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -9953,7 +9056,7 @@
       "superfrag-rocket-launcher-desolation-squad",
       "superkrak-rocket-launcher-desolation-squad",
       "vengor-launcher-desolation-squad",
-      "close-combat-weapon-desolation-squad"
+      "ceramite-fists"
     ],
     "ability_ids": [
       "targeter-optics-adeptus-astartes"
@@ -9977,354 +9080,11 @@
         "namespace": "mfm",
         "id": "3ea51431-bb1e-42a8-b25c-0eb01615c79b"
       }
-    ]
-  },
-  {
-    "id": "centurion-assault-squad",
-    "name": "Centurion Assault Squad",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Assault Centurion",
-        "M": 4,
-        "T": 7,
-        "W": 4,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      }
     ],
-    "points": [
+    "wargear_costs": [
       {
-        "models": 3,
-        "cost": 150
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 300
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Imperium",
-      "Centurion",
-      "Centurion Assault Squad"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "centurion-bolters",
-      "siege-drills",
-      "twin-flamer",
-      "twin-meltagun"
-    ],
-    "ability_ids": [
-      "annihilator-protocols-adeptus-astartes",
-      {
-        "id": "centurion-assault-launcher-adeptus-astartes",
-        "wargear": "centurion-assault-launcher"
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2a8a-522d-51e4-3abc"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "5689c57d-bec3-54f4-92dc-d5cca77534f0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "25e339e2-946e-45f3-bb89-742688562b3c"
-      }
-    ]
-  },
-  {
-    "id": "vindicator",
-    "name": "Vindicator",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Vindicator",
-        "M": 9,
-        "T": 11,
-        "W": 11,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 185,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 200,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Smoke",
-      "Imperium",
-      "Vindicator"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-vindicator",
-      "demolisher-cannon",
-      "hunter-killer-missile",
-      "storm-bolter"
-    ],
-    "ability_ids": [
-      "siege-shield-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      },
-      "damaged-1-4-wounds-remaining-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "cb6d-201f-4888-3027"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "d3292df5-bfd1-5e04-b335-5c87e717f411"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f563e8ca-0a01-45ad-ae6f-d907dd31b56c"
-      }
-    ]
-  },
-  {
-    "id": "tactical-squad",
-    "name": "Tactical Squad",
-    "faction_id": "adeptus-astartes",
-    "role": "battleline",
-    "profiles": [
-      {
-        "name": "Tactical Marine",
-        "M": 6,
-        "T": 4,
-        "W": 2,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 10,
-        "cost": 140
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Battleline",
-      "Grenades",
-      "Imperium",
-      "Tactical Squad"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 10,
-      "max": 10
-    },
-    "weapon_ids": [
-      "astartes-chainsword-tactical-squad",
-      "bolt-pistol",
-      "boltgun",
-      "close-combat-weapon-tactical-squad",
-      "combi-weapon-tactical-squad",
-      "flamer",
-      "grav-cannon",
-      "grav-gun",
-      "grav-pistol",
-      "heavy-bolter-tactical-squad",
-      "lascannon-tactical-squad",
-      "meltagun",
-      "missile-launcher-tactical-squad",
-      "multi-melta-tactical-squad",
-      "plasma-cannon-tactical-squad",
-      "plasma-gun",
-      "plasma-pistol-tactical-squad",
-      "power-fist-tactical-squad",
-      "power-weapon-tactical-squad",
-      "storm-bolter",
-      "thunder-hammer-tactical-squad",
-      "twin-lightning-claws-tactical-squad"
-    ],
-    "ability_ids": [
-      "combat-squads-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "grav-cannon",
-          "heavy-bolter-tactical-squad",
-          "lascannon-tactical-squad",
-          "missile-launcher-tactical-squad",
-          "multi-melta-tactical-squad",
-          "plasma-cannon-tactical-squad"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
-    "excluded_faction_keywords": [
-      "Deathwatch",
-      "Space Wolves"
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "c09a-6504-d25f-477"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "a345ee5b-b2c6-530a-9baf-73a455aba51a"
-      },
-      {
-        "namespace": "mfm",
-        "id": "56a89836-34ad-4a12-8259-050aa1f8c36f"
-      }
-    ]
-  },
-  {
-    "id": "whirlwind",
-    "name": "Whirlwind",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Whirlwind",
-        "M": 10,
-        "T": 10,
-        "W": 11,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 175,
-        "unit_count_min": 1,
-        "unit_count_max": 1
-      },
-      {
-        "models": 1,
-        "cost": 195,
-        "unit_count_min": 2,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Smoke",
-      "Imperium",
-      "Whirlwind"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-whirlwind",
-      "hunter-killer-missile",
-      "storm-bolter",
-      "whirlwind-vengeance-launcher"
-    ],
-    "ability_ids": [
-      "pinning-bombardment-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      },
-      "damaged-1-4-wounds-remaining-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ae85-3e33-217d-7413"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "82cf4278-37e8-5c09-8c97-b795d77f3667"
-      },
-      {
-        "namespace": "mfm",
-        "id": "632bd3f6-4c24-4d96-aae5-34288ceb073b"
+        "item_id": "vengor-launcher",
+        "cost": 5
       }
     ]
   },
@@ -10348,7 +9108,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 105
+        "cost": 115
       }
     ],
     "keywords": [
@@ -10386,7 +9146,7 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "support",
+    "attachment_role": "leader",
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -10472,7 +9232,7 @@
     "points": [
       {
         "models": 6,
-        "cost": 120
+        "cost": 115
       }
     ],
     "keywords": [
@@ -10494,12 +9254,12 @@
       "archeotech-laspistol",
       "astropathic-blast",
       "bolt-rifle-wardens-of-ultramar",
-      "close-combat-weapon-wardens-of-ultramar",
       "force-stave",
       "heavy-bolt-pistol-wardens-of-ultramar",
       "master-crafted-power-weapon-wardens-of-ultramar",
       "power-weapon-wardens-of-ultramar",
-      "ceramite-fists-wardens-of-ultramar"
+      "ceramite-fists-wardens-of-ultramar",
+      "ultramarian-combat-weapons"
     ],
     "ability_ids": [
       {
@@ -10555,13 +9315,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 195,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 210,
+        "cost": 195,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -10590,10 +9350,8 @@
       "macro-plasma-incinerator",
       "onslaught-gatling-cannon",
       "redemptor-fist",
-      "twin-fragstorm-grenade-launcher",
-      "twin-storm-bolter-redemptor-dreadnought",
-      "fragstorm-grenade-launchers-redemptor-dreadnought",
-      "storm-bolters-redemptor-dreadnought"
+      "fragstorm-grenade-launcher",
+      "storm-bolter"
     ],
     "ability_ids": [
       "duty-eternal-adeptus-astartes",
@@ -10656,7 +9414,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 40
+        "cost": 45
       }
     ],
     "keywords": [
@@ -10715,88 +9473,6 @@
     ]
   },
   {
-    "id": "pedro-kantor",
-    "name": "Pedro Kantor",
-    "faction_id": "adeptus-astartes",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Pedro Kantor",
-        "M": 6,
-        "T": 4,
-        "W": 5,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Grenades",
-      "Imperium",
-      "Tacticus",
-      "Chapter Master",
-      "Pedro Kantor"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes",
-      "Imperial Fists"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "dorns-arrow",
-      "fist-of-retribution"
-    ],
-    "ability_ids": [
-      "crimson-fists-adeptus-astartes",
-      "leader",
-      "oath-of-rynn-adeptus-astartes",
-      "to-the-last-adeptus-astartes",
-      {
-        "id": "feel-no-pain",
-        "value": 6
-      },
-      "inspiring-commander-pedro-kantor-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "59e3-5a97-f36d-5b94"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "a5466eb5-f937-5880-bdb0-43b0ce3cbce6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "529d2da3-7fbb-408a-baa0-5db2e9f54b9b"
-      }
-    ]
-  },
-  {
     "id": "chaplain-in-terminator-armour",
     "name": "Chaplain in Terminator Armour",
     "faction_id": "adeptus-astartes",
@@ -10816,7 +9492,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 85
       }
     ],
     "keywords": [
@@ -10899,7 +9575,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 80
       }
     ],
     "keywords": [
@@ -10977,27 +9653,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 85,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 150,
+        "models": 10,
+        "cost": 160,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 95,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 160,
+        "models": 10,
+        "cost": 170,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -11042,15 +9716,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "haywire-mine"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -11085,26 +9750,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 85,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 160,
+        "cost": 190,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 95,
+        "cost": 110,
         "unit_count_min": 3,
-        "unit_count_max": null,
-        "models_max": 9
+        "unit_count_max": null
       },
       {
         "models": 10,
-        "cost": 170,
+        "cost": 200,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -11129,12 +9793,12 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-assault-intercessors-with-jump-packs",
       "hand-flamer-assault-intercessors-with-jump-packs",
       "heavy-bolt-pistol-assault-intercessors-with-jump-packs",
       "plasma-pistol-assault-intercessors-with-jump-packs",
       "power-fist-assault-intercessors-with-jump-packs",
-      "power-weapon-assault-intercessors-with-jump-packs"
+      "power-weapon-assault-intercessors-with-jump-packs",
+      "chainsword"
     ],
     "ability_ids": [
       "hammer-of-wrath-adeptus-astartes",
@@ -11211,7 +9875,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 100
       }
     ],
     "keywords": [
@@ -11289,26 +9953,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 120,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 10,
-        "cost": 200,
+        "cost": 240,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 110,
+        "cost": 130,
         "unit_count_min": 3,
-        "unit_count_max": null,
-        "models_max": 9
+        "unit_count_max": null
       },
       {
         "models": 10,
-        "cost": 210,
+        "cost": 250,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -11333,17 +9996,12 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "grav-pistol",
-      "hand-flamer",
-      "inferno-pistol",
       "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
-      "vanguard-veteran-weapon",
-      "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
       "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
       "power-fist-vanguard-veteran-squad-with-jump-packs",
       "relic-blade-vanguard-veteran-squad-with-jump-packs",
-      "thunder-hammer-vanguard-veteran-squad-with-jump-packs"
+      "thunder-hammer-vanguard-veteran-squad-with-jump-packs",
+      "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs"
     ],
     "ability_ids": [
       "vanguard-assault-adeptus-astartes",
@@ -11429,7 +10087,15 @@
     "points": [
       {
         "models": 4,
-        "cost": 105
+        "cost": 135,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "cost": 150,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -11450,13 +10116,11 @@
       "max": 4
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "bolt-rifle",
       "master-crafted-bolt-rifle",
       "master-crafted-heavy-bolter",
       "master-crafted-power-weapon-company-heroes",
       "combat-knife-company-heroes",
-      "bolt-pistol-company-heroes"
+      "master-crafted-bolt-pistol"
     ],
     "ability_ids": [
       "command-squad-adeptus-astartes",
@@ -11502,29 +10166,11 @@
     "points": [
       {
         "models": 3,
-        "cost": 80,
-        "unit_count_min": 1,
-        "unit_count_max": 2
+        "cost": 90
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 165,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "cost": 90,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 175,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "models": 6,
+        "cost": 180
       }
     ],
     "keywords": [
@@ -11678,7 +10324,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 90
       }
     ],
     "keywords": [
@@ -11700,7 +10346,6 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol-captain",
       "heavy-bolt-pistol-captain",
       "master-crafted-bolter",
       "master-crafted-power-weapon-captain",
@@ -11740,90 +10385,6 @@
     ]
   },
   {
-    "id": "predator-annihilator",
-    "name": "Predator Annihilator",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Predator Annihilator",
-        "M": 10,
-        "T": 10,
-        "W": 11,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 135,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 145,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Smoke",
-      "Imperium",
-      "Predator Annihilator"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-predator-annihilator",
-      "heavy-bolter-predator-annihilator",
-      "hunter-killer-missile",
-      "lascannon",
-      "predator-twin-lascannon",
-      "storm-bolter"
-    ],
-    "ability_ids": [
-      "annihilator-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      },
-      "damaged-1-4-wounds-remaining-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "31a-6c3e-5843-4023"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "ae8823f4-1e44-58db-a791-de6260571359"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d1981bef-c632-43d3-91cb-9994d3cda75c"
-      }
-    ]
-  },
-  {
     "id": "chaplain-on-bike",
     "name": "Chaplain on Bike",
     "faction_id": "adeptus-astartes",
@@ -11843,7 +10404,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 80
       }
     ],
     "keywords": [
@@ -12003,85 +10564,6 @@
     ]
   },
   {
-    "id": "lieutenant-in-reiver-armour",
-    "name": "Lieutenant in Reiver Armour",
-    "faction_id": "adeptus-astartes",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Lieutenant in Reiver Armour",
-        "M": 6,
-        "T": 4,
-        "W": 4,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 45
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Smoke",
-      "Grenades",
-      "Imperium",
-      "Phobos",
-      "Lieutenant",
-      "Lieutenant in Reiver Armour"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "combat-knife-lieutenant-in-reiver-armour",
-      "master-crafted-special-issue-bolt-pistol"
-    ],
-    "ability_ids": [
-      "deadly-terror-adeptus-astartes",
-      {
-        "id": "scouts",
-        "value": 6
-      },
-      "support",
-      "tactical-precision-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "support",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "6dfd-beb0-5b01-b21e"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "650280f3-5fbf-59de-bdbb-845a78097c41"
-      },
-      {
-        "namespace": "mfm",
-        "id": "bcb796c0-5af9-4605-b30c-53e1035fe946"
-      }
-    ]
-  },
-  {
     "id": "captain-in-phobos-armour",
     "name": "Captain in Phobos Armour",
     "faction_id": "adeptus-astartes",
@@ -12101,7 +10583,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -12177,7 +10659,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 80
       }
     ],
     "keywords": [
@@ -12202,16 +10684,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "boltgun",
-      "combi-weapon-chaplain-with-jump-pack",
       "crozius-arcanum-chaplain-with-jump-pack",
-      "grav-pistol",
-      "hand-flamer",
-      "inferno-pistol",
-      "plasma-pistol-chaplain-with-jump-pack",
-      "power-fist-chaplain-with-jump-pack",
-      "storm-bolter",
       "absolvor-bolt-pistol-chaplain-with-jump-pack"
     ],
     "ability_ids": [
@@ -12269,12 +10742,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 80
+        "cost": 95
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 150
+        "models": 10,
+        "cost": 175
       }
     ],
     "keywords": [
@@ -12296,18 +10768,16 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-intercessor-squad",
-      "astartes-grenade-launcher",
       "bolt-pistol-intercessor-squad",
       "bolt-rifle-intercessor-squad",
-      "close-combat-weapon",
       "hand-flamer-intercessor-squad",
       "plasma-pistol-intercessor-squad",
       "power-fist-intercessor-squad",
       "power-weapon-intercessor-squad",
       "thunder-hammer-intercessor-squad",
-      "astartes-grenade-launcher-intercessor-squad",
-      "close-combat-weapon-intercessor-squad"
+      "knives-and-fists",
+      "grenade-launcher",
+      "chainsword"
     ],
     "ability_ids": [
       "hail-of-bolts-adeptus-astartes",
@@ -12319,15 +10789,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "astartes-grenade-launcher"
-        ],
-        "count": 2,
-        "per_models": 10
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -12363,13 +10824,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 525,
+        "cost": 550,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 575,
+        "cost": 650,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -12393,13 +10854,13 @@
     },
     "weapon_ids": [
       "armoured-hull-astraeus",
-      "astraeus-las-ripper",
       "ironhail-heavy-stubber",
       "plasma-eradicator",
       "storm-bolter",
       "twin-heavy-bolter",
       "twin-lascannon",
-      "twin-macro-accelerator-cannon"
+      "twin-macro-accelerator-cannon",
+      "astareus-las-ripper"
     ],
     "ability_ids": [
       {
@@ -12449,13 +10910,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 260,
+        "cost": 245,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 280,
+        "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -12544,7 +11005,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 840
+        "cost": 850,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 950,
+        "unit_count_min": 2,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -12630,13 +11099,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 65,
+        "cost": 70,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 1,
-        "cost": 75,
+        "cost": 80,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -12704,86 +11173,6 @@
     ]
   },
   {
-    "id": "invader-atv",
-    "name": "Invader ATV",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Invader ATV",
-        "M": 10,
-        "T": 6,
-        "W": 8,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 60
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Vehicle",
-      "Frame",
-      "Imperium"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "bolt-pistol-invader-atv",
-      "multi-melta-invader-atv",
-      "onslaught-gatling-cannon-invader-atv",
-      "twin-bolt-rifle-invader-atv",
-      "armoured-impact-invader-atv"
-    ],
-    "ability_ids": [
-      "outrider-escort-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Ravenwing",
-        "required_faction_keyword": "Dark Angels"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8d7b-3dfe-7b91-2490"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "bb3d-11c0-7a1e-d7ab"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "c3990430-965c-5f21-a1ea-2a17fdb07961"
-      },
-      {
-        "namespace": "mfm",
-        "id": "aa6a8aac-523d-4373-ae57-40d2a5673aa6"
-      }
-    ]
-  },
-  {
     "id": "infiltrator-squad",
     "name": "Infiltrator Squad",
     "faction_id": "adeptus-astartes",
@@ -12802,29 +11191,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
-        "unit_count_min": 1,
-        "unit_count_max": 2
+        "cost": 80
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 180,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 120,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "models": 10,
+        "cost": 150
       }
     ],
     "keywords": [
@@ -12873,13 +11244,6 @@
       {
         "items": [
           "helix-gauntlet"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "infiltrator-comms-array"
         ],
         "count": 1,
         "per_models": 0
@@ -12951,7 +11315,7 @@
       "armoured-feet",
       "ballistus-lascannon",
       "ballistus-missile-launcher",
-      "storm-bolters-ballistus-dreadnought"
+      "storm-bolter"
     ],
     "ability_ids": [
       "ballistus-strike-adeptus-astartes",
@@ -13007,12 +11371,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 85
+        "cost": 100,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 180
+        "models": 10,
+        "cost": 200,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 110,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 10,
+        "cost": 210,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -13035,7 +11414,7 @@
     "weapon_ids": [
       "bolt-pistol-infernus-squad",
       "pyreblaster-infernus-squad",
-      "close-combat-weapon-infernus-squad"
+      "ceramite-fists"
     ],
     "ability_ids": [
       "incendiary-terror-adeptus-astartes"
@@ -13081,7 +11460,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 95
       }
     ],
     "keywords": [
@@ -13108,7 +11487,7 @@
     },
     "weapon_ids": [
       "blackout",
-      "the-ravens-talons"
+      "ravens-talons"
     ],
     "ability_ids": [
       "echo-of-the-ravenspire-adeptus-astartes",
@@ -13142,82 +11521,6 @@
     ]
   },
   {
-    "id": "uriel-ventris",
-    "name": "Uriel Ventris",
-    "faction_id": "adeptus-astartes",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Uriel Ventris",
-        "M": 6,
-        "T": 4,
-        "W": 5,
-        "Sv": 3,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 105
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Imperium",
-      "Tacticus",
-      "Captain",
-      "Uriel Ventris"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes",
-      "Ultramarines"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "bolt-pistol-uriel-ventris",
-      "invictus",
-      "sword-of-idaeus"
-    ],
-    "ability_ids": [
-      "leader",
-      "master-of-the-fleet-adeptus-astartes",
-      "unorthodox-strategist-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "169a-7229-ea50-1c4f"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "896d350b-6346-59b7-941d-7164cdb4cf36"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5657fe03-7e74-4e43-b1b5-f5156016b5f8"
-      }
-    ]
-  },
-  {
     "id": "lieutenant-in-phobos-armour",
     "name": "Lieutenant in Phobos Armour",
     "faction_id": "adeptus-astartes",
@@ -13237,7 +11540,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 45
+        "cost": 40
       }
     ],
     "keywords": [
@@ -13260,9 +11563,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol-lieutenant-in-phobos-armour",
       "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
-      "monomolecular-combat-blades-lieutenant-in-phobos-armour"
+      "monomolecular-combat-blades-lieutenant-in-phobos-armour",
+      "special-issue-bolt-pistol"
     ],
     "ability_ids": [
       "strategic-dispersal-adeptus-astartes",
@@ -13316,12 +11619,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 75
+        "cost": 85
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 150
+        "models": 10,
+        "cost": 165
       }
     ],
     "keywords": [
@@ -13344,10 +11646,8 @@
     },
     "weapon_ids": [
       "bolt-carbine",
-      "close-combat-weapon",
-      "combat-knife",
       "special-issue-bolt-pistol-reiver-squad",
-      "combat-knife-reiver-squad"
+      "monomolecular-combat-knife"
     ],
     "ability_ids": [
       "fearsome-assault-adeptus-astartes",
@@ -13406,7 +11706,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 70
       }
     ],
     "keywords": [
@@ -13478,7 +11778,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 125
+        "cost": 140
       }
     ],
     "keywords": [
@@ -13505,7 +11805,7 @@
       "incendium-cannon",
       "invictor-fist",
       "twin-ironhail-autocannon",
-      "ironhail-heavy-stubbers-invictor-tactical-warsuit"
+      "ironhail-heavy-stubber"
     ],
     "ability_ids": [
       {
@@ -13560,7 +11860,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 40
+        "cost": 60
       }
     ],
     "keywords": [
@@ -13638,13 +11938,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 125,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -13671,12 +11971,18 @@
     },
     "weapon_ids": [
       "assault-cannon",
-      "dreadnought-combat-weapon",
       "heavy-flamer",
       "multi-melta",
       "storm-bolter",
-      "fenrisian-great-axe",
-      "helfrost-cannon"
+      "armoured-feet",
+      "dreadnought-fist",
+      "twin-autocannon",
+      "dreadnought-inferno-cannon",
+      "heavy-plasma-cannon",
+      "twin-heavy-flamer",
+      "twin-lascannon",
+      "twin-heavy-bolter",
+      "missile-launcher"
     ],
     "ability_ids": [
       {
@@ -13746,7 +12052,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 100
       }
     ],
     "keywords": [
@@ -13821,27 +12127,25 @@
     "points": [
       {
         "models": 3,
-        "cost": 100,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 200,
+        "models": 6,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 130,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 230,
+        "models": 6,
+        "cost": 260,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -13884,12 +12188,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "storm-shield",
-        "cost": 5
-      }
-    ],
     "wargear_budgets": [
       {
         "items": [
@@ -13934,7 +12232,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 165
+        "cost": 180
       }
     ],
     "keywords": [
@@ -13958,12 +12256,12 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-chainsword-grey-hunters",
       "bolt-carbine-grey-hunters",
       "bolt-pistol",
       "plasma-pistol-grey-hunters",
       "power-fist",
-      "power-weapon"
+      "power-weapon",
+      "chainsword"
     ],
     "ability_ids": [
       "cunning-hunters-space-wolves"
@@ -14013,8 +12311,7 @@
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
+        "models": 10,
         "cost": 75,
         "unit_count_min": 1,
         "unit_count_max": 2
@@ -14026,8 +12323,7 @@
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
+        "models": 10,
         "cost": 80,
         "unit_count_min": 3,
         "unit_count_max": null
@@ -14098,7 +12394,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -14180,19 +12476,39 @@
     "points": [
       {
         "models": 3,
-        "cost": 85
+        "cost": 115,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
-        "cost": 170
-      },
-      {
-        "models": 6,
-        "cost": 110
+        "cost": 170,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 12,
-        "cost": 220
+        "cost": 230,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 125,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "cost": 180,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 12,
+        "cost": 240,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -14233,10 +12549,10 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": true,
+    "points_provisional": false,
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -14284,7 +12600,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 50
+        "cost": 60
       }
     ],
     "keywords": [
@@ -14358,7 +12674,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 100
       }
     ],
     "keywords": [
@@ -14434,12 +12750,11 @@
     "points": [
       {
         "models": 10,
-        "cost": 135
+        "cost": 150
       },
       {
-        "models": 11,
-        "models_max": 20,
-        "cost": 270
+        "models": 20,
+        "cost": 290
       }
     ],
     "keywords": [
@@ -14463,10 +12778,10 @@
       "max": 20
     },
     "weapon_ids": [
-      "astartes-chainsword-blood-claws",
       "bolt-pistol",
       "plasma-pistol-blood-claws",
-      "power-weapon"
+      "power-weapon",
+      "chainsword"
     ],
     "ability_ids": [
       "berserk-charge-space-wolves"
@@ -14512,7 +12827,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 90
       }
     ],
     "keywords": [
@@ -14591,7 +12906,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 150
       }
     ],
     "keywords": [
@@ -14668,27 +12983,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 155,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 310,
+        "models": 10,
+        "cost": 365,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 195,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 350,
+        "models": 10,
+        "cost": 405,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -14734,22 +13047,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "storm-shield",
-        "cost": 5
-      }
-    ],
-    "wargear_budgets": [
-      {
-        "items": [
-          "assault-cannon-wolf-guard-terminators",
-          "power-fist"
-        ],
-        "count": 4,
-        "per_models": 10
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -14784,13 +13081,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -14876,27 +13173,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 125,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 200,
+        "models": 10,
+        "cost": 250,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 110,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 210,
+        "models": 10,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -15056,7 +13351,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 105
       }
     ],
     "keywords": [
@@ -15130,7 +13425,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 80
       }
     ],
     "keywords": [
@@ -15154,8 +13449,6 @@
       "max": 1
     },
     "weapon_ids": [
-      "master-crafted-bolt-carbine-wolf-guard-battle-leader",
-      "master-crafted-heavy-bolt-pistol",
       "master-crafted-power-weapon-wolf-guard-battle-leader",
       "plasma-pistol-wolf-guard-battle-leader",
       "thunder-hammer-wolf-guard-battle-leader"
@@ -15220,11 +13513,27 @@
     "points": [
       {
         "models": 6,
-        "cost": 90
+        "cost": 95,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 12,
-        "cost": 180
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 105,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 12,
+        "cost": 200,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -15250,14 +13559,14 @@
     },
     "weapon_ids": [
       "bolt-pistol",
-      "combat-blade",
       "instigator-bolt-carbine",
       "plasma-gun",
       "plasma-pistol-wolf-scouts",
       "power-weapon",
       "runic-stave",
       "teeth-and-claws-wolf-scouts",
-      "thunderclap"
+      "thunderclap",
+      "combat-knife"
     ],
     "ability_ids": [
       "deadly-stalkers-space-wolves",
@@ -15291,6 +13600,22 @@
         "namespace": "mfm",
         "id": "f21a10ef-9b8b-4735-9d72-30000c0e92b1"
       }
+    ],
+    "wargear_budgets": [
+      {
+        "items": [
+          "haywire-mine-once-per-battle-per-unit"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instigator-bolt-carbine"
+        ],
+        "count": 1,
+        "per_models": 12
+      }
     ]
   },
   {
@@ -15312,27 +13637,25 @@
     "points": [
       {
         "models": 5,
-        "cost": 85,
+        "cost": 90,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 170,
+        "models": 10,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 95,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 180,
+        "models": 10,
+        "cost": 195,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -15493,7 +13816,27 @@
     "points": [
       {
         "models": 3,
-        "cost": 80
+        "cost": 95,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 200,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 110,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -15507,7 +13850,7 @@
     ],
     "model_count": {
       "min": 3,
-      "max": 3
+      "max": 6
     },
     "game_version": {
       "edition": "11th",
@@ -15561,7 +13904,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 105
+        "cost": 110
       }
     ],
     "keywords": [
@@ -15588,7 +13931,6 @@
       "onslaught-gatling-cannon",
       "multi-melta-land-speeder",
       "stormfury-missile-launcher",
-      "heavy-flamer",
       "armoured-impact",
       "pyrecannon"
     ],
@@ -15619,7 +13961,12 @@
         "namespace": "mfm",
         "id": "c56c8e39-c3b7-4e5e-83d9-62e07801563d"
       }
-    ]
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 105,
+      "length": 70
+    }
   },
   {
     "id": "assault-force-captain",
@@ -16885,17 +15232,27 @@
       "max": 1
     },
     "weapon_ids": [
-      "heavy-bolt-pistol-captain-on-bike",
       "plasma-pistol",
-      "twin-bolt-rifle",
-      "master-crafted-power-weapon-captain-on-bike",
-      "thunder-hammer-captain-on-bike"
+      "twin-bolt-rifle"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "is_legend": false
+    "is_legend": false,
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
+    "points": [
+      {
+        "models": 1,
+        "cost": 110
+      }
+    ],
+    "points_provisional": false,
+    "attachment_role": "leader"
   },
   {
     "id": "kaius-konorius",
@@ -16930,13 +15287,235 @@
       "max": 1
     },
     "weapon_ids": [
-      "heavy-bolt-pistol-kaius-konorius",
+      "heavy-bolt-pistol",
       "severance-and-rebuke"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "is_legend": false
+    "is_legend": false,
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "points": [
+      {
+        "models": 1,
+        "cost": 100
+      }
+    ],
+    "points_provisional": false,
+    "attachment_role": "support"
+  },
+  {
+    "id": "eradicator-squad-with-melta-rifles",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "258c4554-ef84-418a-9125-ca1ccd5e8d03"
+      }
+    ],
+    "name": "Eradicator Squad with melta rifles",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Eradicator",
+        "M": 5,
+        "T": 6,
+        "W": 3,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 90,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 105,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "cost": 205,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Explosives",
+      "Gravis",
+      "Imperium",
+      "Infantry"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "melta-rifle",
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "invader-atvs",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "aa6a8aac-523d-4373-ae57-40d2a5673aa6"
+      }
+    ],
+    "name": "Invader ATVs",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Invader ATV",
+        "M": 10,
+        "T": 6,
+        "W": 8,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 65,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 2,
+        "cost": 130,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 75,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 2,
+        "cost": 140,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Imperium",
+      "Mounted",
+      "Vehicle"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "onslaught-gatling-cannon",
+      "multi-melta"
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 5
+      }
+    ]
+  },
+  {
+    "id": "marneus-calgar",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "de36bfa7-9cc5-4875-b9d8-d3940027b48c"
+      }
+    ],
+    "name": "Marneus Calgar",
+    "faction_id": "adeptus-astartes",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Marneus Calgar",
+        "M": 6,
+        "T": 6,
+        "W": 6,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 180
+      }
+    ],
+    "keywords": [
+      "Chapter Master",
+      "Character",
+      "Epic Hero",
+      "Imperium",
+      "Infantry",
+      "Terminator"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Ultramarines"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "attachment_role": "leader"
   }
 ]

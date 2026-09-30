@@ -67,8 +67,8 @@
         },
         {
           "ref": {
-            "id": "lancer-laser-destroyer",
-            "raw_name": "Lancer laser destroyer",
+            "id": "laser-destroyer",
+            "raw_name": "Laser Destroyer",
             "resolved": true,
             "candidates": []
           },
@@ -92,7 +92,7 @@
       "wargear": [
         {
           "ref": {
-            "id": "fragstorm-grenade-launchers-redemptor-dreadnought",
+            "id": "fragstorm-grenade-launcher",
             "raw_name": "Fragstorm Grenade Launchers",
             "resolved": true,
             "candidates": []
@@ -125,15 +125,6 @@
             "candidates": []
           },
           "count": 1
-        },
-        {
-          "ref": {
-            "id": "storm-bolters-redemptor-dreadnought",
-            "raw_name": "Storm Bolters",
-            "resolved": true,
-            "candidates": []
-          },
-          "count": 1
         }
       ],
       "leader_attachment": null
@@ -146,7 +137,7 @@
   "diagnostics": {
     "resolved_units": 2,
     "unresolved_units": 0,
-    "resolved_weapons": 8,
+    "resolved_weapons": 7,
     "unresolved_weapons": 0,
     "warnings": [
       {

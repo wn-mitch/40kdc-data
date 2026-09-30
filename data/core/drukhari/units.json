@@ -1056,25 +1056,25 @@
     "points": [
       {
         "models": 1,
-        "cost": 75,
+        "cost": 70,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 2,
-        "cost": 150,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 85,
+        "cost": 80,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 2,
-        "cost": 160,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1175,17 +1175,17 @@
     "points": [
       {
         "models": 5,
-        "cost": 60
+        "cost": 55
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 100
+        "cost": 90
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [

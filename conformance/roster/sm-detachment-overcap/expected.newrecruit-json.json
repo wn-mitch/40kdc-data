@@ -123,7 +123,7 @@
               },
               {
                 "id": "w-2",
-                "name": "Lancer laser destroyer",
+                "name": "Laser Destroyer",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -193,18 +193,6 @@
               {
                 "id": "w-3",
                 "name": "Redemptor fist",
-                "type": "upgrade",
-                "number": 1,
-                "categories": [
-                  {
-                    "name": "Ranged Weapon",
-                    "primary": false
-                  }
-                ]
-              },
-              {
-                "id": "w-4",
-                "name": "Storm Bolters",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [

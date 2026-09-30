@@ -203,6 +203,31 @@
     ]
   },
   {
+    "id": "angels-defiant-fist-of-the-god-emperor-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b0325e80-b3d5-4c14-9e6a-143793ff2a4d"
+      }
+    ],
+    "name": "Angels Defiant",
+    "category": "detachment",
+    "detachment_id": "fist-of-the-god-emperor",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "angels-defiant-fist-of-the-god-emperor-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "anti-grav-surge-fulguris-task-force-adeptus-astartes",
     "name": "Anti-grav Surge",
     "category": "detachment",
@@ -288,6 +313,30 @@
         "id": "b9894e70-4267-4344-aeb6-038746a63de3"
       }
     ]
+  },
+  {
+    "id": "avowed-destruction-fist-of-the-god-emperor-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bc719a21-f0f4-4a42-81cf-74be4ac9d9ed"
+      }
+    ],
+    "name": "Avowed Destruction",
+    "category": "detachment",
+    "detachment_id": "fist-of-the-god-emperor",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "avowed-destruction-fist-of-the-god-emperor-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "battle-drill-recall-anvil-siege-force-adeptus-astartes",
@@ -771,6 +820,54 @@
     ]
   },
   {
+    "id": "devout-push-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a9385439-1ff8-43df-8c2e-510ad42dc580"
+      }
+    ],
+    "name": "Devout Push",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "devout-push-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "doctrinal-flexibility-fist-of-the-god-emperor-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8f92f849-2ed0-45c0-b46e-fbd14fd530e0"
+      }
+    ],
+    "name": "Doctrinal Flexibility",
+    "category": "detachment",
+    "detachment_id": "fist-of-the-god-emperor",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "doctrinal-flexibility-fist-of-the-god-emperor-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "dread-crusaders-companions-of-vehemence-black-templars",
     "name": "DREAD CRUSADERS",
     "category": "detachment",
@@ -798,6 +895,30 @@
         "id": "9b8cb2c4-3f0c-4088-8129-973f9eecb3fa"
       }
     ]
+  },
+  {
+    "id": "dread-crusaders-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c91a0c7-1439-41b4-b5aa-e573612acb17"
+      }
+    ],
+    "name": "Dread Crusaders",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "dread-crusaders-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "duty-and-honour-1st-company-task-force-adeptus-astartes",
@@ -914,6 +1035,30 @@
         "id": "7902554f-4d97-4939-823f-12d54bc02d4c"
       }
     ]
+  },
+  {
+    "id": "for-the-emperors-honour-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3049dd10-948d-4042-b610-380a95a659d2"
+      }
+    ],
+    "name": "For the Emperor's Honour!",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "for-the-emperors-honour-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "fuelled-by-faith-wrathful-procession-black-templars",
@@ -1174,6 +1319,30 @@
         "id": "11d7f8c7-9529-4eeb-af78-05b0e5373450"
       }
     ]
+  },
+  {
+    "id": "heresy-begets-retribution-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4815673e-eece-4dee-95b2-8e8289914be9"
+      }
+    ],
+    "name": "Heresy Begets Retribution",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "heresy-begets-retribution-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "heresy-undone-bastion-task-force-adeptus-astartes",
@@ -1735,6 +1904,30 @@
     ]
   },
   {
+    "id": "pious-enmity-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9c26a89a-47bb-4f08-b026-63ae01cbf51d"
+      }
+    ],
+    "name": "Pious Enmity",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "pious-enmity-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "name": "POWER OF THE MACHINE SPIRIT",
     "category": "detachment",
@@ -2262,6 +2455,31 @@
     ]
   },
   {
+    "id": "spoor-of-the-unholy-vow-sworn-crusaders-black-templars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8e95ae53-58fb-47ea-98d2-36463944e6ae"
+      }
+    ],
+    "name": "Spoor of the Unholy",
+    "category": "detachment",
+    "detachment_id": "vow-sworn-crusaders",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "spoor-of-the-unholy-vow-sworn-crusaders-black-templars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "squad-tactics-gladius-task-force-adeptus-astartes",
     "name": "SQUAD TACTICS",
     "category": "detachment",
@@ -2681,7 +2899,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

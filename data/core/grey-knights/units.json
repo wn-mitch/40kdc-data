@@ -109,13 +109,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 200,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 215,
+        "cost": 225,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -303,7 +303,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -468,27 +468,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 130,
+        "cost": 145,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 290,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 140,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 270,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -576,13 +576,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 195,
+        "cost": 205,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 210,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -855,7 +855,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1021,7 +1021,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -1097,12 +1097,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 115
+        "cost": 125
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 230
+        "cost": 250
       }
     ],
     "keywords": [
@@ -1193,7 +1193,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -1270,13 +1270,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 100,
+        "cost": 105,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1354,7 +1354,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -1427,27 +1427,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 105,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 115,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 240,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1617,27 +1617,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 250,
+        "cost": 270,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1726,7 +1726,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1799,53 +1799,53 @@
     "points": [
       {
         "models": 4,
-        "cost": 170,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 215,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 360,
+        "cost": 385,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 460,
+        "cost": 490,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 4,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 5,
-        "cost": 255,
+        "cost": 270,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 400,
+        "cost": 425,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 500,
+        "cost": 530,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2023,7 +2023,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 125
+        "cost": 130
       }
     ],
     "keywords": [
@@ -2099,21 +2099,21 @@
     "points": [
       {
         "models": 4,
-        "cost": 140
+        "cost": 150
       },
       {
         "models": 5,
-        "cost": 175
+        "cost": 185
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 300
+        "cost": 315
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 360
+        "cost": 380
       }
     ],
     "keywords": [
@@ -2351,6 +2351,12 @@
       {
         "namespace": "mfm",
         "id": "74899fa9-1678-4669-9dce-ffcade67a8a2"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "hurricane-bolter",
+        "cost": 10
       }
     ]
   },
@@ -2600,8 +2606,8 @@
     },
     "weapon_ids": [
       "black-blade-of-antwyr",
-      "purifying-flame-castellan-crowe",
-      "storm-bolter-castellan-crowe"
+      "purifying-flame",
+      "storm-bolter"
     ],
     "ability_ids": [
       "foesight-sanctifiers-castellan-crowe-grey-knights"

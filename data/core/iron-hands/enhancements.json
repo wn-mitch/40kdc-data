@@ -230,7 +230,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1476,10 +1476,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1504,10 +1504,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1532,10 +1532,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1699,6 +1699,78 @@
         "namespace": "mfm",
         "id": "a1a228a3-4faf-4a78-8c83-519af462b425"
       }
+    ]
+  },
+  {
+    "id": "the-flesh-is-weak-medusas-wrath-iron-hands",
+    "name": "The Flesh is Weak",
+    "detachment_id": "medusas-wrath",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "target-augury-web-medusas-wrath-iron-hands",
+    "name": "Target Augury Web",
+    "detachment_id": "medusas-wrath",
+    "cost": 30,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Techmarine"
+    ]
+  },
+  {
+    "id": "master-of-the-machine-war-medusas-wrath-iron-hands",
+    "name": "Master of the Machine War",
+    "detachment_id": "medusas-wrath",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
+    ]
+  },
+  {
+    "id": "adept-of-the-omnissiah-medusas-wrath-iron-hands",
+    "name": "Adept of the Omnissiah",
+    "detachment_id": "medusas-wrath",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Techmarine"
     ]
   }
 ]

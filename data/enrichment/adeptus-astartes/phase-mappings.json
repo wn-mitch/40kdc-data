@@ -1324,18 +1324,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "total-obliteration-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "rampart-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -1344,31 +1332,6 @@
       "shooting",
       "charge",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wisdom-of-the-ancients-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "destructor-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",
@@ -1574,98 +1537,11 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "fortification-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ceramite-cover-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "defensive-array-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "suppression-fire-suppressor-squad-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "veil-of-time-adeptus-astartes",
     "source_type": "ability",
     "phases": [
       "shooting",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "signum-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "armorium-cherub-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "decimator-protocols-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",
@@ -1692,32 +1568,6 @@
       "command",
       "shooting",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inspiring-leader-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-tactician-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",
@@ -1919,67 +1769,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "annihilator-protocols-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "centurion-assault-launcher-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "siege-shield-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combat-squads-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pinning-bombardment-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "knight-champion-of-macragge-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -2008,44 +1797,6 @@
     "source_type": "ability",
     "phases": [
       "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "oath-of-rynn-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "to-the-last-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "crimson-fists-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",
@@ -2196,18 +1947,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "annihilator-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "catechism-of-fire-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -2282,18 +2021,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "outrider-escort-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "omni-scramblers-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -2345,31 +2072,6 @@
     "source_id": "echo-of-the-ravenspire-adeptus-astartes",
     "source_type": "ability",
     "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unorthodox-strategist-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "master-of-the-fleet-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command",
       "movement"
     ],
     "game_version": {

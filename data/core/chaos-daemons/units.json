@@ -2000,7 +2000,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 200,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -2013,7 +2013,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 240,
+        "cost": 250,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2154,14 +2154,14 @@
       },
       {
         "models": 3,
-        "cost": 105,
+        "cost": 115,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 205,
+        "cost": 215,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2250,7 +2250,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 315
+        "cost": 330
       }
     ],
     "keywords": [
@@ -2306,6 +2306,13 @@
       {
         "namespace": "mfm",
         "id": "093e7b61-40cb-4318-901e-ecda04fe2d35"
+      }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 315,
+        "host_faction": "world-eaters"
       }
     ]
   },
@@ -4390,7 +4397,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 75
+        "cost": 80
       },
       {
         "models": 6,
@@ -4447,6 +4454,19 @@
       {
         "namespace": "mfm",
         "id": "207d1da6-aabd-40cc-96ff-6ba0f2facf95"
+      }
+    ],
+    "allied_points": [
+      {
+        "models": 5,
+        "cost": 75,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 150,
+        "host_faction": "world-eaters"
       }
     ]
   },

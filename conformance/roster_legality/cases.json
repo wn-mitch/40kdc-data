@@ -170,11 +170,6 @@
     "expected": []
   },
   {
-    "name": "atc-exceeds-allowance-death-company-marines-with-jump-packs",
-    "args": { "unitId": "death-company-marines-with-jump-packs", "modelCount": 10, "counts": { "astartes-chainsword-death-company-marines-with-jump-packs": 5, "eviscerator": 2, "heavy-bolt-pistol": 6, "inferno-pistol": 2, "plasma-pistol-death-company-marines-with-jump-packs": 2, "power-fist": 3 } },
-    "expected": []
-  },
-  {
     "name": "atc-exceeds-allowance-deathwatch-kill-team",
     "args": { "unitId": "deathwatch-kill-team", "modelCount": 10, "counts": { "astartes-shield": 2, "black-shield-blades": 1, "close-combat-weapon-deathwatch-kill-team": 2, "combi-weapon-deathwatch-kill-team": 1, "deathwatch-thunder-hammer": 4, "infernus-heavy-bolter": 2, "power-weapon": 2, "xenophase-blade": 1 } },
     "expected": []
@@ -188,11 +183,6 @@
     "name": "atc-exceeds-allowance-dominion-squad",
     "args": { "unitId": "dominion-squad", "modelCount": 10, "counts": { "artificer-crafted-storm-bolter": 4, "bolt-pistol": 10, "boltgun-dominion-squad": 5, "close-combat-weapon-dominion-squad": 10, "condemnor-boltgun": 1, "power-weapon-dominion-squad": 1, "simulacrum-imperialis": 1 } },
     "expected": []
-  },
-  {
-    "name": "atc-exceeds-allowance-eradicator-squad",
-    "args": { "unitId": "eradicator-squad", "modelCount": 6, "counts": { "bolt-pistol-eradicator-squad": 6, "ceramite-fists-eradicator-squad": 6, "melta-rifle-eradicator-squad": 4, "multi-melta-eradicator-squad": 3 } },
-    "expected": ["exceeds-max:multi-melta-eradicator-squad", "swap-conflict:melta-rifle-eradicator-squad"]
   },
   {
     "name": "atc-exceeds-allowance-exceeds-max-atalan-jackals",
@@ -292,11 +282,6 @@
   {
     "name": "atc-exceeds-allowance-strike-squad",
     "args": { "unitId": "strike-squad", "modelCount": 5, "counts": { "close-combat-weapon": 1, "nemesis-force-weapon-strike-squad": 4, "psycannon-strike-squad": 1, "storm-bolter": 4 } },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-allowance-swap-conflict-crusader-squad",
-    "args": { "unitId": "crusader-squad", "modelCount": 10, "counts": { "astartes-chainsword-crusader-squad": 7, "bolt-pistol": 9, "close-combat-weapon": 5, "heavy-bolt-pistol": 5, "master-crafted-power-weapon-crusader-squad": 1, "power-fist": 2, "pyre-pistol": 1 } },
     "expected": []
   },
   {
@@ -465,16 +450,6 @@
     "expected": []
   },
   {
-    "name": "atc-exceeds-max-predator-annihilator",
-    "args": { "unitId": "predator-annihilator", "factionId": "adeptus-astartes", "modelCount": 1, "counts": { "armoured-tracks-predator-annihilator": 1, "hunter-killer-missile": 1, "lascannon": 2, "predator-twin-lascannon": 1, "storm-bolter": 1 } },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-predator-destructor",
-    "args": { "unitId": "predator-destructor", "factionId": "adeptus-astartes", "modelCount": 1, "counts": { "armoured-tracks-predator-destructor": 1, "hunter-killer-missile": 1, "lascannon": 2, "predator-autocannon": 1, "storm-bolter": 1 } },
-    "expected": []
-  },
-  {
     "name": "atc-exceeds-max-pteraxii-sterylizors",
     "args": { "unitId": "pteraxii-sterylizors", "factionId": "adeptus-mechanicus", "modelCount": 10, "counts": { "flechette-blaster": 1, "phosphor-torch": 9, "pteraxii-talons": 10, "taser-goad-pteraxii-sterylizors": 1 } },
     "expected": []
@@ -497,11 +472,6 @@
   {
     "name": "atc-exceeds-max-sanctifiers",
     "args": { "unitId": "sanctifiers", "modelCount": 9, "counts": { "burning-hands": 1, "close-combat-weapon": 3, "death-cult-blades": 1, "holy-fire": 2, "ministorum-flamer": 1, "ministorum-hand-flamer": 5, "plasma-gun": 1, "sanctifier-melee-weapon": 4, "simulacrum-imperialis": 1 } },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-scout-squad",
-    "args": { "unitId": "scout-squad", "modelCount": 5, "counts": { "astartes-chainsword-scout-squad": 1, "bolt-pistol": 5, "close-combat-weapon-scout-squad": 5, "combat-knife-scout-squad": 4 } },
     "expected": []
   },
   {
@@ -622,11 +592,6 @@
   {
     "name": "atc-exceeds-max-decimus-kill-team",
     "args": { "unitId": "decimus-kill-team", "factionId": "adeptus-astartes", "modelCount": 10, "counts": { "bolt-pistol-decimus-kill-team": 6, "close-combat-weapon": 6, "deathwatch-marksman-bolt-carbine": 2, "heavy-thunder-hammer": 2, "infernus-heavy-bolter-decimus-kill-team": 2, "plasma-incinerator": 2, "plasma-pistol-decimus-kill-team": 1, "power-weapon-decimus-kill-team": 1, "special-issue-bolt-pistol": 3, "xenophase-blade": 1 } },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-indomitor-kill-team",
-    "args": { "unitId": "indomitor-kill-team", "factionId": "adeptus-astartes", "modelCount": 10, "counts": { "auto-boltstorm-gauntlets": 3, "bolt-pistol": 7, "close-combat-weapon": 7, "deathwatch-heavy-bolt-rifle": 2, "deathwatch-heavy-bolter": 2, "fragstorm-grenade-launcher": 3, "melta-rifle": 2, "multi-melta-indomitor-kill-team": 1, "twin-power-fists": 3 } },
     "expected": []
   },
   {

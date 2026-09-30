@@ -6336,5 +6336,33 @@
         "id": "284608b3-0062-4e04-b773-53c3f040f3a8"
       }
     ]
+  },
+  {
+    "id": "knives-and-fists",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cd05b4f5-1059-4b96-b2e2-431477bc5224"
+      }
+    ],
+    "name": "Knives and Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Knives and Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

@@ -562,7 +562,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 120
+        "cost": 115
       }
     ],
     "keywords": [
@@ -1322,7 +1322,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 200
+        "cost": 215
       }
     ],
     "keywords": [
@@ -1787,13 +1787,13 @@
     "points": [
       {
         "models": 3,
-        "cost": 180,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 190,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1881,7 +1881,7 @@
       },
       {
         "models": 1,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1961,12 +1961,12 @@
         "models": 1,
         "cost": 180,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
         "cost": 220,
-        "unit_count_min": 2,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -2504,7 +2504,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 150
+        "cost": 135
       }
     ],
     "keywords": [

@@ -102,7 +102,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 155
+        "cost": 150
       }
     ],
     "keywords": [
@@ -263,7 +263,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 25
+        "cost": 20
       }
     ],
     "keywords": [
@@ -527,11 +527,11 @@
       },
       {
         "models": 2,
-        "cost": 100
+        "cost": 95
       },
       {
         "models": 3,
-        "cost": 150
+        "cost": 140
       }
     ],
     "keywords": [
@@ -696,13 +696,13 @@
     "points": [
       {
         "models": 9,
-        "cost": 65,
+        "cost": 75,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 9,
-        "cost": 75,
+        "cost": 85,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -795,12 +795,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 70
+        "cost": 65
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -959,7 +959,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 50
+        "cost": 45
       }
     ],
     "keywords": [
@@ -1509,12 +1509,12 @@
     "points": [
       {
         "models": 3,
-        "cost": 150
+        "cost": 140
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 310
+        "cost": 290
       }
     ],
     "keywords": [
@@ -1749,12 +1749,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 65
+        "cost": 60
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -1834,7 +1834,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 110
+        "cost": 105
       }
     ],
     "keywords": [
@@ -2010,7 +2010,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 100
+        "cost": 95
       }
     ],
     "keywords": [
@@ -2325,26 +2325,26 @@
         "models": 2,
         "cost": 150,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 3,
         "models_max": 4,
         "cost": 300,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 2,
         "cost": 180,
-        "unit_count_min": 2,
+        "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 3,
         "models_max": 4,
         "cost": 330,
-        "unit_count_min": 2,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -2721,13 +2721,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 105,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 115,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2799,13 +2799,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 115,
+        "cost": 105,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3039,8 +3039,8 @@
     "weapon_ids": [
       "flechette-blaster",
       "phosphor-torch",
-      "pteraxii-talons",
-      "taser-goad-pteraxii-sterylizors"
+      "taser-goad",
+      "talons"
     ],
     "ability_ids": [
       "searing-conflagration-purge-corps-pteraxii-sterylizors-adeptus-mechanicus"
@@ -3171,12 +3171,12 @@
       "max": 10
     },
     "weapon_ids": [
-      "alpha-combat-weapon",
       "arc-rifle",
-      "close-combat-weapon-skitarii-vanguard",
-      "mechanicus-pistol-skitarii-vanguard",
       "plasma-caliver",
-      "radium-carbine"
+      "radium-carbine",
+      "alphas-combat-artefact",
+      "mechanicus-pistol",
+      "gun-stocks"
     ],
     "ability_ids": [
       "omnispex-purge-corps-skitarii-vanguard-adeptus-mechanicus",

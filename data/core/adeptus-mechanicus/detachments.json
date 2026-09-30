@@ -56,7 +56,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
     ],
@@ -253,7 +253,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 1,
+    "detachment_points": 2,
     "force_dispositions": [
       "priority-assets"
     ],
@@ -320,7 +320,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "purge-the-foe"
     ],

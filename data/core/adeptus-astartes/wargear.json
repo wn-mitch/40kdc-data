@@ -163,14 +163,6 @@
     ]
   },
   {
-    "id": "orbital-comms-array",
-    "name": "orbital comms array",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    }
-  },
-  {
     "id": "shield-dome",
     "name": "shield dome",
     "game_version": {
@@ -227,14 +219,6 @@
     ]
   },
   {
-    "id": "master-of-the-ravenwing",
-    "name": "Master of the Ravenwing",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    }
-  },
-  {
     "id": "death-totem",
     "name": "death totem",
     "game_version": {
@@ -245,34 +229,6 @@
       {
         "namespace": "mfm",
         "id": "992338e2-057a-4b7a-90ef-164c360d1da4"
-      }
-    ]
-  },
-  {
-    "id": "banner-of-macragge",
-    "name": "Banner of Macragge",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b0e2ebc8-9362-401b-86f4-0b59b4f57752"
-      }
-    ]
-  },
-  {
-    "id": "centurion-assault-launcher",
-    "name": "Centurion assault launcher",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "9c41682e-4ea0-4fdf-810b-c3a9d4d822a3"
       }
     ]
   },
@@ -305,20 +261,6 @@
     ]
   },
   {
-    "id": "refractor-field",
-    "name": "Refractor Field",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b1c5d835-f70f-439c-9449-aa447771540a"
-      }
-    ]
-  },
-  {
     "id": "the-lion-helm",
     "name": "The Lion Helm",
     "game_version": {
@@ -345,5 +287,61 @@
         "id": "a298ee2e-4181-43e7-81a7-158bdc457d53"
       }
     ]
+  },
+  {
+    "id": "orbital-comms-array",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "64d82cf9-78be-4f8b-a123-c65c5d9d359c"
+      }
+    ],
+    "name": "Orbital Comms Array",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "grav-chutes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c6dcf2b4-2fd6-4784-b165-c228216fdb22"
+      }
+    ],
+    "name": "Grav-chutes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "banner-of-macragge",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3199cd19-2500-4eca-be01-4db87caf8b79"
+      }
+    ],
+    "name": "Banner of Macragge",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "haywire-mine-once-per-battle-per-unit",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d7da062b-2690-46d2-8a08-24a660c49dd5"
+      }
+    ],
+    "name": "Haywire Mine (Once per battle, per unit)",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

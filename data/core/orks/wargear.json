@@ -156,5 +156,19 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "id": "pulsa-rokkit-once-per-battle-per-unit",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3fff9f1f-547f-4e75-9549-b8cdcf17ff97"
+      }
+    ],
+    "name": "Pulsa Rokkit (Once per battle, per unit)",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

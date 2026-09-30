@@ -1,9 +1,9 @@
 [
   {
-    "id": "immolator-forgefathers-seekers-adeptus-astartes",
+    "id": "immolator-forgefathers-seekers-salamanders",
     "name": "Immolator",
     "detachment_id": "forgefathers-seekers",
-    "cost": 10,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -28,13 +28,12 @@
     ]
   },
   {
-    "id": "war-tempered-artifice-forgefathers-seekers-adeptus-astartes",
-    "name": "War-tempered Artifice",
+    "id": "war-tempered-artifice-forgefathers-seekers-salamanders",
+    "name": "War Tempered Artifice",
     "detachment_id": "forgefathers-seekers",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Infantry"
+      "Adeptus Astartes"
     ],
     "ability_id": "war-tempered-artifice-forgefathers-seekers-adeptus-astartes",
     "is_unique": true,
@@ -57,10 +56,10 @@
     ]
   },
   {
-    "id": "forged-in-battle-forgefathers-seekers-adeptus-astartes",
+    "id": "forged-in-battle-forgefathers-seekers-salamanders",
     "name": "Forged in Battle",
     "detachment_id": "forgefathers-seekers",
-    "cost": 15,
+    "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -85,7 +84,7 @@
     ]
   },
   {
-    "id": "adamantine-mantle-forgefathers-seekers-adeptus-astartes",
+    "id": "adamantine-mantle-forgefathers-seekers-salamanders",
     "name": "Adamantine Mantle",
     "detachment_id": "forgefathers-seekers",
     "cost": 20,
@@ -230,7 +229,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1391,10 +1390,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1419,10 +1418,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1447,10 +1446,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

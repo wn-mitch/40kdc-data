@@ -18,13 +18,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 230,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -107,7 +107,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 145
+        "cost": 155
       }
     ],
     "keywords": [
@@ -289,13 +289,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 100,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -525,13 +525,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 185,
+        "cost": 180,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -608,13 +608,13 @@
     "points": [
       {
         "models": 6,
-        "cost": 145,
+        "cost": 160,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
-        "cost": 160,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -696,12 +696,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 80
+        "cost": 85
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 160
+        "cost": 170
       }
     ],
     "keywords": [
@@ -889,7 +889,7 @@
       },
       {
         "models": 1,
-        "cost": 235,
+        "cost": 225,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1050,7 +1050,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 130
       }
     ],
     "keywords": [
@@ -1205,12 +1205,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 85
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 160
+        "cost": 175
       }
     ],
     "keywords": [
@@ -1466,7 +1466,7 @@
     },
     "weapon_ids": [
       "blissblade",
-      "bolt-pistol-callous-blades"
+      "bolt-pistol"
     ],
     "game_version": {
       "edition": "11th",
@@ -1528,9 +1528,9 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol-callous-blades",
       "duelling-sabre",
-      "power-sword-infractors"
+      "bolt-pistol",
+      "power-sword"
     ],
     "ability_ids": [
       "excessive-assault-callous-blades-infractors-emperors-children",
@@ -1597,7 +1597,7 @@
     },
     "weapon_ids": [
       "phoenix-power-spear",
-      "power-fist-lord-exultant"
+      "power-fist"
     ],
     "ability_ids": [
       "peerless-killer-emperors-children"

@@ -61,7 +61,7 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "take-and-hold"
     ],
     "detachment_rule_ids": [
       "the-blood-of-martyrs-adepta-sororitas"

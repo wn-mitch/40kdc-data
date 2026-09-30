@@ -168,9 +168,9 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 1,
     "force_dispositions": [
-      "disruption"
+      "reconnaissance"
     ],
     "external_refs": [
       {
@@ -365,9 +365,9 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
-      "take-and-hold"
+      "purge-the-foe"
     ],
     "external_refs": [
       {
@@ -524,7 +524,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "take-and-hold"
     ],
@@ -587,6 +587,269 @@
         "namespace": "mfm",
         "id": "63c87e85-fd1a-4dc3-8bc9-226db3e966d6"
       }
+    ]
+  },
+  {
+    "id": "assault-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6fead3ce-6ab9-4637-9c53-70af7ee47328"
+      }
+    ],
+    "name": "Assault Brethren",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "deathwatch-support",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4fde4216-b0dd-4665-8556-2d394d293ed6"
+      }
+    ],
+    "name": "Deathwatch Support",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "restrictions": {
+      "required_keywords": []
+    }
+  },
+  {
+    "id": "devastator-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "31cf4080-95f4-44a4-acfc-9ac9e2c93c62"
+      }
+    ],
+    "name": "Devastator Brethren",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "gauntlet-task-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e27a3395-01d7-4d89-aa99-cc333d833217"
+      }
+    ],
+    "name": "Gauntlet Task Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "gravis-linebreaker-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c36cda66-a994-4354-aa2a-fb4fd2338efa"
+      }
+    ],
+    "name": "Gravis Linebreaker Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "gravis-siege-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2fc4c2ed-d11d-40a5-8b56-2339e226203c"
+      }
+    ],
+    "name": "Gravis Siege Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "ironclad-champions",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1f9b6d20-1a56-4a45-8621-4ee2648e029a"
+      }
+    ],
+    "name": "Ironclad Champions",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "phobos-shadow-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ad2c163a-82ee-4279-8dde-b36217f3e5d3"
+      }
+    ],
+    "name": "Phobos Shadow Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "phobos-shock-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "55db5c18-2a63-4cbb-8ed4-542525cf600a"
+      }
+    ],
+    "name": "Phobos Shock Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "tactical-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2df70179-96ad-4f64-b5fd-a0ee2b7a904d"
+      }
+    ],
+    "name": "Tactical Brethren",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "tacticus-attack-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fe1cc3f3-76af-4036-9709-629374090134"
+      }
+    ],
+    "name": "Tacticus Attack Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "tacticus-firestorm-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "40603815-0ddb-4180-bd06-143ab40f0985"
+      }
+    ],
+    "name": "Tacticus Firestorm Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "terminator-storm-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "32355f5d-db41-4589-ad75-e2801b5d8afb"
+      }
+    ],
+    "name": "Terminator Storm Force",
+    "faction_id": "ultramarines",
+    "enhancement_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
     ]
   }
 ]

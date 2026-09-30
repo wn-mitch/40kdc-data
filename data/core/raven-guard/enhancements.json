@@ -1,6 +1,6 @@
 [
   {
-    "id": "blackwing-shroud-shadowmark-talon-adeptus-astartes",
+    "id": "blackwing-shroud-shadowmark-talon-raven-guard",
     "name": "Blackwing Shroud",
     "detachment_id": "shadowmark-talon",
     "cost": 25,
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "coronal-susurrant-shadowmark-talon-adeptus-astartes",
+    "id": "coronal-susurrant-shadowmark-talon-raven-guard",
     "name": "Coronal Susurrant",
     "detachment_id": "shadowmark-talon",
     "cost": 30,
@@ -57,12 +57,13 @@
     ]
   },
   {
-    "id": "umbral-raptor-shadowmark-talon-adeptus-astartes",
+    "id": "umbral-raptor-shadowmark-talon-raven-guard",
     "name": "Umbral Raptor",
     "detachment_id": "shadowmark-talon",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Infantry"
     ],
     "ability_id": "umbral-raptor-shadowmark-talon-adeptus-astartes",
     "is_unique": true,
@@ -85,8 +86,8 @@
     ]
   },
   {
-    "id": "hunters-instincts-shadowmark-talon-adeptus-astartes",
-    "name": "Hunter’s Instincts",
+    "id": "hunters-instincts-shadowmark-talon-raven-guard",
+    "name": "Hunter's Instincts",
     "detachment_id": "shadowmark-talon",
     "cost": 25,
     "keyword_restrictions": [
@@ -230,7 +231,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1447,10 +1448,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1475,10 +1476,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1503,10 +1504,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

@@ -526,7 +526,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -653,7 +653,8 @@
       "shuriken-pistol",
       "shuriken-rifle",
       "witch-staff",
-      "wraithcannon"
+      "wraithcannon",
+      "close-combat-weapon"
     ],
     "ability_ids": [
       {
@@ -817,7 +818,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1003,7 +1004,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 120,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1016,7 +1017,7 @@
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -1299,12 +1300,12 @@
         "models": 1,
         "cost": 110,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 125,
-        "unit_count_min": 2,
+        "cost": 130,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -1535,7 +1536,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -1688,7 +1689,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 245
+        "cost": 230
       }
     ],
     "keywords": [
@@ -1845,7 +1846,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 115
+        "cost": 105
       }
     ],
     "keywords": [
@@ -2417,7 +2418,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 80
       }
     ],
     "keywords": [
@@ -4023,7 +4024,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 175
+        "cost": 165
       }
     ],
     "keywords": [
@@ -4341,7 +4342,7 @@
       {
         "models": 3,
         "models_max": 4,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -4415,7 +4416,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -4488,14 +4489,14 @@
     "points": [
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 190,
-        "unit_count_min": 2,
+        "cost": 195,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -5432,12 +5433,12 @@
     "points": [
       {
         "models": 2,
-        "cost": 95
+        "cost": 90
       },
       {
         "models": 3,
         "models_max": 4,
-        "cost": 190
+        "cost": 180
       }
     ],
     "keywords": [
@@ -6432,8 +6433,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "shuriken-pistol-spiritseer",
-      "witch-staff"
+      "witch-staff",
+      "shuriken-pistol"
     ],
     "ability_ids": [
       "spirit-mark-psychic-aeldari",
@@ -6559,12 +6560,29 @@
     "points": [
       {
         "models": 3,
-        "cost": 90
+        "cost": 85,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 180
+        "cost": 180,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 95,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 190,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -6605,8 +6623,8 @@
         "items": [
           "drakolithe-once-per-battle-per-token"
         ],
-        "count": 2,
-        "per_models": 3
+        "count": 4,
+        "per_models": 6
       }
     ],
     "external_refs": [
@@ -6644,7 +6662,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 75
       }
     ],
     "keywords": [
@@ -6721,7 +6739,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 55
       }
     ],
     "keywords": [

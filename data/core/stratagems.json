@@ -38,7 +38,7 @@
     "phases": [
       "fight"
     ],
-    "player_turn": "either",
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "counteroffensive",

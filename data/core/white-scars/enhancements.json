@@ -1,6 +1,6 @@
 [
   {
-    "id": "spearpoint-paragon-spearpoint-task-force-adeptus-astartes",
+    "id": "spearpoint-paragon-spearpoint-task-force-white-scars",
     "name": "Spearpoint Paragon",
     "detachment_id": "spearpoint-task-force",
     "cost": 25,
@@ -28,8 +28,8 @@
     ]
   },
   {
-    "id": "stormseers-wisdom-spearpoint-task-force-adeptus-astartes",
-    "name": "Stormseers' Wisdom",
+    "id": "stormseers-wisdom-spearpoint-task-force-white-scars",
+    "name": "Stormseer's Wisdom",
     "detachment_id": "spearpoint-task-force",
     "cost": 15,
     "keyword_restrictions": [
@@ -56,10 +56,10 @@
     ]
   },
   {
-    "id": "hunters-eye-spearpoint-task-force-adeptus-astartes",
-    "name": "Hunter’s Eye",
+    "id": "hunters-eye-spearpoint-task-force-white-scars",
+    "name": "Hunter's Eye",
     "detachment_id": "spearpoint-task-force",
-    "cost": 20,
+    "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -84,14 +84,10 @@
     ]
   },
   {
-    "id": "chogorian-huntmaster-spearpoint-task-force-adeptus-astartes",
-    "name": "Chogorian Huntmaster",
+    "id": "chogorian-huntmaster-upgrade-spearpoint-task-force-white-scars",
+    "name": "Chogorian Huntmaster (Upgrade)",
     "detachment_id": "spearpoint-task-force",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Mounted"
-    ],
+    "cost": 20,
     "ability_id": "chogorian-huntmaster-spearpoint-task-force-adeptus-astartes",
     "is_unique": true,
     "game_version": {
@@ -99,8 +95,8 @@
       "dataslate": "launch"
     },
     "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1,
+    "upgrade_tag": true,
+    "max_targets": 3,
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -110,6 +106,16 @@
         "namespace": "mfm",
         "id": "2c86c706-80ac-49ab-ba3f-27e647de53a1"
       }
+    ],
+    "keyword_restriction_groups": [
+      [
+        "Adeptus Astartes",
+        "Mounted"
+      ],
+      [
+        "Adeptus Astartes",
+        "Speeder"
+      ]
     ]
   },
   {
@@ -230,7 +236,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1476,10 +1482,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1504,10 +1510,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1532,10 +1538,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

@@ -4,14 +4,15 @@
   "mapping_version": 1,
   "root_tables": [
     "detachment",
-    "detachment_faction_detachment_points_cost",
     "detachment_force_disposition"
   ],
   "fields": {
     "/external_refs": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.detachment.id"],
+      "sources": [
+        "data.detachment.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -34,7 +35,9 @@
     "/external_refs/*": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.detachment.id"],
+      "sources": [
+        "data.detachment.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -42,8 +45,12 @@
           "operation": "Create one unique namespace/id pair."
         }
       ],
-      "filters": ["Only exact routed detachment matches."],
-      "precedence": ["Additive; exact duplicate pairs are ignored."],
+      "filters": [
+        "Only exact routed detachment matches."
+      ],
+      "precedence": [
+        "Additive; exact duplicate pairs are ignored."
+      ],
       "consumers": [
         "tools/src/mfm/external-refs.ts#runMfmExternalRefs",
         "tools/src/mfm/seed-detachments.ts#runSeedDetachments"
@@ -53,10 +60,14 @@
     "/external_refs/*/id": {
       "provenance": "direct",
       "coverage": "implemented",
-      "sources": ["data.detachment.id"],
+      "sources": [
+        "data.detachment.id"
+      ],
       "joins": [],
       "transforms": [],
-      "filters": ["Only exact routed detachment matches."],
+      "filters": [
+        "Only exact routed detachment matches."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/external-refs.ts#runMfmExternalRefs",
@@ -67,7 +78,9 @@
     "/external_refs/*/namespace": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.detachment.id"],
+      "sources": [
+        "data.detachment.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -86,7 +99,9 @@
     "/id": {
       "provenance": "derived",
       "coverage": "partial",
-      "sources": ["data.detachment.localisations.*.name"],
+      "sources": [
+        "data.detachment.localisations.*.name"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -107,14 +122,18 @@
     "/name": {
       "provenance": "direct",
       "coverage": "partial",
-      "sources": ["data.detachment.localisations.*.name"],
+      "sources": [
+        "data.detachment.localisations.*.name"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [
         "Seed missing detachments only for supported repository faction directories."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#collectSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#collectSeedDetachments"
+      ],
       "reason": "The source-backed detachment seeder copies the English display name."
     },
     "/faction_id": {
@@ -147,13 +166,17 @@
         "Seed missing detachments only when publication ownership resolves to a known repository faction directory."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#collectSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#collectSeedDetachments"
+      ],
       "reason": "Ownership follows detachment publication ownership; applicability associations do not establish faction_id."
     },
     "/detachment_rule_id": {
       "provenance": "joined",
       "coverage": "partial",
-      "sources": ["data.detachment_rule.localisations.*.name"],
+      "sources": [
+        "data.detachment_rule.localisations.*.name"
+      ],
       "joins": [
         {
           "relation": "detachment_rule.detachmentId",
@@ -171,13 +194,17 @@
         "The deprecated singular link is verified against the dump join but never rewritten; new links are written to detachment_rule_ids."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Deprecated single-rule link. The dump's detachment_rule join confirms or surfaces it for review; it is folded into the authored-link set but is not the write target."
     },
     "/detachment_rule_ids": {
       "provenance": "joined",
       "coverage": "partial",
-      "sources": ["data.detachment_rule.localisations.*.name"],
+      "sources": [
+        "data.detachment_rule.localisations.*.name"
+      ],
       "joins": [
         {
           "relation": "detachment_rule.detachmentId",
@@ -198,13 +225,17 @@
       "precedence": [
         "Existing authored links win; fill only when the detachment has no authored rule link and the dump slug resolves to an authored ability."
       ],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Structural named-rule → ability links are joined from detachment_rule. PARTIAL: detachments whose rule ability is not yet authored (chiefly the new 11e chapter detachments) are surfaced as an authoring worklist rather than filled, since the ability entity — and its prose — is authored separately."
     },
     "/detachment_rule_ids/*": {
       "provenance": "joined",
       "coverage": "partial",
-      "sources": ["data.detachment_rule.localisations.*.name"],
+      "sources": [
+        "data.detachment_rule.localisations.*.name"
+      ],
       "joins": [
         {
           "relation": "detachment_rule.detachmentId",
@@ -222,46 +253,35 @@
         "Each member is emitted only when it resolves to an authored enrichment ability."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Each member is a joined named-rule → ability link, emitted only after enrichment resolution."
     },
     "/detachment_points": {
       "provenance": "derived",
       "coverage": "implemented",
       "sources": [
-        "data.detachment.detachmentPointsCost",
-        "data.detachment_faction_detachment_points_cost.detachmentPointsCost",
-        "data.detachment_faction_detachment_points_cost.factionKeywordId"
+        "data.detachment.detachmentPointsCost"
       ],
-      "joins": [
-        {
-          "relation": "detachment_faction_detachment_points_cost.detachmentId",
-          "direction": "children",
-          "purpose": "applicability"
-        },
-        {
-          "relation": "detachment_faction_detachment_points_cost.factionKeywordId",
-          "direction": "parent",
-          "purpose": "applicability"
-        }
-      ],
+      "joins": [],
       "transforms": [
         {
           "symbol": "tools/src/mfm/dispositions.ts#buildCanon",
-          "operation": "Build base detachment points and faction-directory overrides."
+          "operation": "Build base detachment points."
         }
       ],
       "filters": [
-        "Match entities by slug and apply an override only for the resolved repository faction directory."
+        "Match entities by slug."
       ],
       "precedence": [
-        "The matching detachment_faction_detachment_points_cost row overrides detachment.detachmentPointsCost; otherwise retain the base cost."
+        "detachment.detachmentPointsCost is the cost; the dump's per-faction override table (detachment_faction_detachment_points_cost) is empty from data version 963."
       ],
       "consumers": [
         "tools/src/mfm/dispositions.ts#runDispositions",
         "tools/src/mfm/seed-detachments.ts#collectSeedDetachments"
       ],
-      "reason": "The reconciler and source-backed detachment seeder use the authoritative base cost plus scoped override."
+      "reason": "The reconciler and source-backed detachment seeder use the authoritative base cost."
     },
     "/force_dispositions": {
       "provenance": "derived",
@@ -288,7 +308,9 @@
           "operation": "Slug English force-disposition names into repository ids."
         }
       ],
-      "filters": ["Use the association rows for the current detachment."],
+      "filters": [
+        "Use the association rows for the current detachment."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/dispositions.ts#buildCanon",
@@ -321,7 +343,9 @@
           "operation": "Slug an English force-disposition name into one repository id."
         }
       ],
-      "filters": ["Use the association rows for the current detachment."],
+      "filters": [
+        "Use the association rows for the current detachment."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/dispositions.ts#buildCanon",
@@ -360,7 +384,9 @@
       "precedence": [
         "The current MFM unique-keyword relation is authoritative for matched detachments."
       ],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "The unique-keyword rows are GW's 'at most one detachment per shared tag' grouping; the reconcile derives the lowercase tag slug from them."
     },
     "/tags/*": {
@@ -394,7 +420,9 @@
       "precedence": [
         "The current MFM unique-keyword relation is authoritative for matched detachments."
       ],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Each mutual-exclusivity tag is the slug of one unique-keyword label."
     },
     "/enhancement_ids": {
@@ -422,7 +450,9 @@
         "Only Combat Patrol enhancements selected while seeding a new Combat Patrol detachment."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#collectSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#collectSeedDetachments"
+      ],
       "reason": "Only the Combat Patrol seeder currently derives and writes enhancement links from MFM."
     },
     "/enhancement_ids/*": {
@@ -450,7 +480,9 @@
         "Only Combat Patrol enhancements selected while seeding a new Combat Patrol detachment."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#collectSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#collectSeedDetachments"
+      ],
       "reason": "Only the Combat Patrol seeder currently derives and writes enhancement links from MFM."
     },
     "/stratagem_ids": {
@@ -504,13 +536,17 @@
         "Only required_keywords is projected; the object's other members stay authored."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "The restrictions object is partially projected: its required_keywords is derived from the chapter-lock applicability, while excluded_keywords and notes remain authored."
     },
     "/restrictions/excluded_keywords": {
       "provenance": "unresolved-candidate",
       "coverage": "unimplemented",
-      "sources": ["data.detachment_excluded_datasheet.datasheetId"],
+      "sources": [
+        "data.detachment_excluded_datasheet.datasheetId"
+      ],
       "joins": [
         {
           "relation": "detachment_excluded_datasheet.detachmentId",
@@ -527,7 +563,9 @@
     "/restrictions/excluded_keywords/*": {
       "provenance": "unresolved-candidate",
       "coverage": "unimplemented",
-      "sources": ["data.detachment_excluded_datasheet.datasheetId"],
+      "sources": [
+        "data.detachment_excluded_datasheet.datasheetId"
+      ],
       "joins": [
         {
           "relation": "detachment_excluded_datasheet.detachmentId",
@@ -581,7 +619,9 @@
         "Fill-only: only a genuine sub-faction lock is emitted (applicability that narrows below the roster); roster-wide enumerations and umbrella broadenings yield none. A populated authored value that differs is surfaced for review."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Applicability IS a required-keyword restriction precisely when it excludes the owning roster keyword — the chapter-lock case the transform isolates."
     },
     "/restrictions/required_keywords/*": {
@@ -613,7 +653,9 @@
         "Fill-only; a populated authored value that differs is surfaced for review."
       ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/detachment-fields.ts#runDetachmentFields"],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
       "reason": "Each required keyword is one sub-faction applicability label narrower than the owning roster."
     },
     "/granted_keywords": {
@@ -734,7 +776,9 @@
       "transforms": [],
       "filters": [],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#runSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#runSeedDetachments"
+      ],
       "reason": "Game version is repository release context, not inferred from dump metadata."
     },
     "/game_version/edition": {
@@ -745,7 +789,9 @@
       "transforms": [],
       "filters": [],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#runSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#runSeedDetachments"
+      ],
       "reason": "Edition is repository release context, not inferred from dump metadata."
     },
     "/game_version/dataslate": {
@@ -756,13 +802,17 @@
       "transforms": [],
       "filters": [],
       "precedence": [],
-      "consumers": ["tools/src/mfm/seed-detachments.ts#runSeedDetachments"],
+      "consumers": [
+        "tools/src/mfm/seed-detachments.ts#runSeedDetachments"
+      ],
       "reason": "Dataslate is repository release context, not inferred from dump metadata."
     },
     "/game_modes": {
       "provenance": "derived",
       "coverage": "partial",
-      "sources": ["data.detachment.isCombatPatrol"],
+      "sources": [
+        "data.detachment.isCombatPatrol"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -770,7 +820,9 @@
           "operation": "Stamp matched Combat Patrol detachments with the Combat Patrol game-mode reference."
         }
       ],
-      "filters": ["Only detachment rows marked Combat Patrol."],
+      "filters": [
+        "Only detachment rows marked Combat Patrol."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/dispositions.ts#runDispositions",
@@ -781,7 +833,9 @@
     "/game_modes/*": {
       "provenance": "derived",
       "coverage": "partial",
-      "sources": ["data.detachment.isCombatPatrol"],
+      "sources": [
+        "data.detachment.isCombatPatrol"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -789,7 +843,9 @@
           "operation": "Emit the Combat Patrol game-mode reference for a marked detachment."
         }
       ],
-      "filters": ["Only detachment rows marked Combat Patrol."],
+      "filters": [
+        "Only detachment rows marked Combat Patrol."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/dispositions.ts#runDispositions",

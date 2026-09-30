@@ -125,14 +125,14 @@
           <selections>
             <selection id="unit1-m0" name="Assault Intercessor Sergeant" type="model" number="1">
               <selections>
-                <selection id="unit1-m0-w0" name="Astartes chainsword" type="upgrade" number="1">
+                <selection id="unit1-m0-w0" name="Chainsword" type="upgrade" number="1">
                   <profiles>
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">4</characteristic>
+                        <characteristic name="A">5</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">5</characteristic>
+                        <characteristic name="S">4</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>
@@ -159,14 +159,14 @@
             </selection>
             <selection id="unit1-m1" name="Assault Intercessor" type="model" number="4">
               <selections>
-                <selection id="unit1-m1-w0" name="Astartes chainsword" type="upgrade" number="4">
+                <selection id="unit1-m1-w0" name="Chainsword" type="upgrade" number="4">
                   <profiles>
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">4</characteristic>
+                        <characteristic name="A">5</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">5</characteristic>
+                        <characteristic name="S">4</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>

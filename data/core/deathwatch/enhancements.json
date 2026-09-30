@@ -28,10 +28,10 @@
     ]
   },
   {
-    "id": "osseus-key-black-spear-task-force-deathwatch",
-    "name": "Osseus Key",
+    "id": "osseus-key-aura-black-spear-task-force-deathwatch",
+    "name": "Osseus Key (Aura)",
     "detachment_id": "black-spear-task-force",
-    "cost": 15,
+    "cost": 20,
     "ability_id": "osseus-key-black-spear-task-force-deathwatch",
     "is_unique": true,
     "game_version": {
@@ -43,11 +43,9 @@
     "max_targets": 1,
     "keyword_restriction_groups": [
       [
-        "Adeptus Astartes",
         "Watch Master"
       ],
       [
-        "Adeptus Astartes",
         "Techmarine"
       ]
     ],
@@ -85,13 +83,16 @@
         "namespace": "mfm",
         "id": "6ff6b048-2cc3-4ccb-bccd-5293599fd77e"
       }
+    ],
+    "keyword_restrictions": [
+      "Adeptus Astartes"
     ]
   },
   {
     "id": "the-tome-of-ectoclades-black-spear-task-force-deathwatch",
     "name": "The Tome of Ectoclades",
     "detachment_id": "black-spear-task-force",
-    "cost": 30,
+    "cost": 15,
     "ability_id": "the-tome-of-ectoclades-black-spear-task-force-deathwatch",
     "is_unique": true,
     "game_version": {
@@ -103,11 +104,9 @@
     "max_targets": 1,
     "keyword_restriction_groups": [
       [
-        "Adeptus Astartes",
         "Watch Master"
       ],
       [
-        "Adeptus Astartes",
         "Captain"
       ]
     ],
@@ -240,7 +239,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1486,10 +1485,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1514,10 +1513,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1542,10 +1541,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1709,6 +1708,29 @@
         "namespace": "mfm",
         "id": "a1a228a3-4faf-4a78-8c83-519af462b425"
       }
+    ]
+  },
+  {
+    "id": "the-thief-of-secrets-black-spear-task-force-deathwatch",
+    "name": "The Thief of Secrets",
+    "detachment_id": "black-spear-task-force",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Watch Master"
+      ],
+      [
+        "Captain"
+      ]
     ]
   }
 ]

@@ -29,6 +29,30 @@
     ]
   },
   {
+    "id": "adamantine-terror-ironclad-champions-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "39a0c18a-025a-4c19-a65e-c572484ad2d4"
+      }
+    ],
+    "name": "Adamantine Terror",
+    "category": "detachment",
+    "detachment_id": "ironclad-champions",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "adamantine-terror-ironclad-champions-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "adaptive-operations-subversion-assets-adeptus-astartes",
     "name": "Adaptive Operations",
     "category": "detachment",
@@ -115,6 +139,34 @@
     ]
   },
   {
+    "id": "aggressive-disembarkation-gauntlet-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a1f4fc0d-3706-4680-ac4b-ad3fcff9bda0"
+      }
+    ],
+    "name": "Aggressive Disembarkation",
+    "category": "detachment",
+    "detachment_id": "gauntlet-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "aggressive-disembarkation-gauntlet-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "ancient-fury-ironstorm-spearhead-adeptus-astartes",
     "name": "ANCIENT FURY",
     "category": "detachment",
@@ -172,6 +224,56 @@
         "id": "8aa79799-c501-4907-858c-63559c810778"
       }
     ]
+  },
+  {
+    "id": "annihilating-force-gravis-linebreaker-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c0f4bf53-fc82-4bd5-8dd4-40145bcbb7ab"
+      }
+    ],
+    "name": "Annihilating Force",
+    "category": "detachment",
+    "detachment_id": "gravis-linebreaker-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "annihilating-force-gravis-linebreaker-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "annihilating-force-gravis-siege-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "06eabc83-38ee-4cdd-865d-7c2ec0df09d3"
+      }
+    ],
+    "name": "Annihilating Force",
+    "category": "detachment",
+    "detachment_id": "gravis-siege-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "annihilating-force-gravis-siege-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "anti-grav-surge-fulguris-task-force-adeptus-astartes",
@@ -292,6 +394,31 @@
     ]
   },
   {
+    "id": "armour-of-contempt-assault-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2231de02-6135-415d-b7aa-75d50cce64c0"
+      }
+    ],
+    "name": "Armour of Contempt",
+    "category": "detachment",
+    "detachment_id": "assault-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "armour-of-contempt-assault-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "armour-of-contempt-ceramite-sentinels-adeptus-astartes",
     "name": "Armour of Contempt",
     "category": "detachment",
@@ -320,6 +447,31 @@
         "id": "9fea9da4-6943-4686-b51b-a49eb3073574"
       }
     ]
+  },
+  {
+    "id": "armour-of-contempt-devastator-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "320443fe-cbed-43e8-a842-39031851521e"
+      }
+    ],
+    "name": "Armour of Contempt",
+    "category": "detachment",
+    "detachment_id": "devastator-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "armour-of-contempt-devastator-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "armour-of-contempt-firestorm-assault-force-adeptus-astartes",
@@ -498,6 +650,31 @@
     ]
   },
   {
+    "id": "armour-of-contempt-tactical-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "033c22a0-7a34-425e-9748-fd8f90170bc0"
+      }
+    ],
+    "name": "Armour of Contempt",
+    "category": "detachment",
+    "detachment_id": "tactical-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "armour-of-contempt-tactical-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "armour-of-contempt-vanguard-spearhead-adeptus-astartes",
     "name": "Armour of Contempt",
     "category": "detachment",
@@ -526,6 +703,30 @@
         "id": "bacb38b9-888e-4a2b-8ae8-1a80fe451742"
       }
     ]
+  },
+  {
+    "id": "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c04f8ece-528c-4ca7-bc81-955d12ad2b37"
+      }
+    ],
+    "name": "Armoured Impact",
+    "category": "detachment",
+    "detachment_id": "gravis-linebreaker-force",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "augmented-targeting-ceramite-sentinels-adeptus-astartes",
@@ -901,6 +1102,30 @@
     ]
   },
   {
+    "id": "domination-fire-tactical-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5763bb5f-fa76-4c84-908b-b7a02e376a46"
+      }
+    ],
+    "name": "Domination Fire",
+    "category": "detachment",
+    "detachment_id": "tactical-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "domination-fire-tactical-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "duty-and-honour-1st-company-task-force-adeptus-astartes",
     "name": "DUTY AND HONOUR",
     "category": "detachment",
@@ -928,6 +1153,54 @@
         "id": "64923c21-5845-4888-9aa9-9038bdce515a"
       }
     ]
+  },
+  {
+    "id": "duty-in-death-assault-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8323f047-e762-4062-b66f-8825b3fcc1bc"
+      }
+    ],
+    "name": "Duty in Death",
+    "category": "detachment",
+    "detachment_id": "assault-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "duty-in-death-assault-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "duty-is-never-done-gauntlet-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c03750b6-f0d2-42ae-b169-7717ebe8e555"
+      }
+    ],
+    "name": "Duty is Never Done",
+    "category": "detachment",
+    "detachment_id": "gauntlet-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "duty-is-never-done-gauntlet-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "evasive-repositioning-ceramite-sentinels-adeptus-astartes",
@@ -959,6 +1232,30 @@
     ]
   },
   {
+    "id": "for-the-emperor-tacticus-firestorm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7b259994-1663-40d6-8449-d43895a65923"
+      }
+    ],
+    "name": "For the Emperor!",
+    "category": "detachment",
+    "detachment_id": "tacticus-firestorm-force",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "for-the-emperor-tacticus-firestorm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "full-throttle-stormlance-task-force-adeptus-astartes",
     "name": "FULL THROTTLE",
     "category": "detachment",
@@ -986,6 +1283,30 @@
         "id": "b1a41a8f-ad96-4a14-9794-5549fef75ede"
       }
     ]
+  },
+  {
+    "id": "gene-wrought-might-assault-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c905c51-e046-4fdd-9af0-9db2c3264f09"
+      }
+    ],
+    "name": "Gene-wrought Might",
+    "category": "detachment",
+    "detachment_id": "assault-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "gene-wrought-might-assault-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
@@ -1047,6 +1368,30 @@
     ]
   },
   {
+    "id": "gunship-extraction-terminator-storm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7b102d91-54b7-4ee6-a4df-aa0188cc26f7"
+      }
+    ],
+    "name": "Gunship Extraction",
+    "category": "detachment",
+    "detachment_id": "terminator-storm-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "gunship-extraction-terminator-storm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "hail-of-vengeance-anvil-siege-force-adeptus-astartes",
     "name": "HAIL OF VENGEANCE",
     "category": "detachment",
@@ -1074,6 +1419,30 @@
         "id": "a8a38f4c-44fd-4620-84d5-221c143fdbce"
       }
     ]
+  },
+  {
+    "id": "hail-of-vengeance-devastator-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cda664ca-d831-4cb6-8f1b-de7a126ea9e7"
+      }
+    ],
+    "name": "Hail of Vengeance",
+    "category": "detachment",
+    "detachment_id": "devastator-brethren",
+    "cp_cost": 2,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "hail-of-vengeance-devastator-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "heresy-undone-bastion-task-force-adeptus-astartes",
@@ -1372,6 +1741,79 @@
     ]
   },
   {
+    "id": "masterful-tactics-tactical-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4ed6e469-b0e1-4d1a-9902-67196a2a53d8"
+      }
+    ],
+    "name": "Masterful Tactics",
+    "category": "detachment",
+    "detachment_id": "tactical-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "masterful-tactics-tactical-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "merciless-veterans-terminator-storm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a126a2b4-c29e-4fc3-af04-09b209ba265c"
+      }
+    ],
+    "name": "Merciless Veterans",
+    "category": "detachment",
+    "detachment_id": "terminator-storm-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "merciless-veterans-terminator-storm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "mercy-is-weakness-ironclad-champions-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e2c7a1f9-a7ac-43f5-b524-46a7d99e4b7e"
+      }
+    ],
+    "name": "Mercy is Weakness",
+    "category": "detachment",
+    "detachment_id": "ironclad-champions",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "mercy-is-weakness-ironclad-champions-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
     "name": "MERCY IS WEAKNESS",
     "category": "detachment",
@@ -1428,6 +1870,30 @@
         "id": "a32cbb8e-1369-4178-bf49-b68c9e39100c"
       }
     ]
+  },
+  {
+    "id": "mortis-snares-phobos-shadow-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7770d373-caad-434b-9dd9-60ceaf6189a4"
+      }
+    ],
+    "name": "Mortis Snares",
+    "category": "detachment",
+    "detachment_id": "phobos-shadow-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "mortis-snares-phobos-shadow-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "no-threat-too-great-anvil-siege-force-adeptus-astartes",
@@ -1604,6 +2070,30 @@
     ]
   },
   {
+    "id": "point-blank-brutality-tacticus-firestorm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1cf96ea6-54b8-4cd2-a106-0d08f78c032c"
+      }
+    ],
+    "name": "Point-blank Brutality",
+    "category": "detachment",
+    "detachment_id": "tacticus-firestorm-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "point-blank-brutality-tacticus-firestorm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "name": "POWER OF THE MACHINE SPIRIT",
     "category": "detachment",
@@ -1690,6 +2180,30 @@
         "id": "2915804d-209d-48e9-95e1-8a1ca387ad8c"
       }
     ]
+  },
+  {
+    "id": "purgation-push-gravis-linebreaker-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "38f6e8fc-84fb-4897-aa19-901f2bb8d405"
+      }
+    ],
+    "name": "Purgation Push",
+    "category": "detachment",
+    "detachment_id": "gravis-linebreaker-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "purgation-push-gravis-linebreaker-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "purge-by-sectors-vengeful-hosts-adeptus-astartes",
@@ -1886,6 +2400,56 @@
         "id": "1e2fb13f-4840-482b-bf14-d9d5571448df"
       }
     ]
+  },
+  {
+    "id": "relentless-assault-tacticus-attack-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f14c4922-09c2-43ed-b556-0e344787d72e"
+      }
+    ],
+    "name": "Relentless Assault",
+    "category": "detachment",
+    "detachment_id": "tacticus-attack-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "relentless-assault-tacticus-attack-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "relentless-assault-tacticus-firestorm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b46f148a-5ee4-4e6a-8061-8fcc19616660"
+      }
+    ],
+    "name": "Relentless Assault",
+    "category": "detachment",
+    "detachment_id": "tacticus-firestorm-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "relentless-assault-tacticus-firestorm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
@@ -2092,6 +2656,78 @@
     ]
   },
   {
+    "id": "stand-unyielding-gravis-siege-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4a4009e7-7c3f-41b9-b4ad-bf5cf43495ed"
+      }
+    ],
+    "name": "Stand Unyielding",
+    "category": "detachment",
+    "detachment_id": "gravis-siege-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "stand-unyielding-gravis-siege-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "storm-and-secure-gauntlet-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "127558e2-2c16-4795-a677-bc6b148e4165"
+      }
+    ],
+    "name": "Storm and Secure",
+    "category": "detachment",
+    "detachment_id": "gauntlet-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "storm-and-secure-gauntlet-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "storm-of-fire-devastator-brethren-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3fabbfae-be83-4875-b4a3-4fb4fe636946"
+      }
+    ],
+    "name": "Storm of Fire",
+    "category": "detachment",
+    "detachment_id": "devastator-brethren",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "storm-of-fire-devastator-brethren-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "storm-of-fire-gladius-task-force-adeptus-astartes",
     "name": "STORM OF FIRE",
     "category": "detachment",
@@ -2119,6 +2755,56 @@
         "id": "07ce705a-e059-48a8-8dec-1d83b27162f0"
       }
     ]
+  },
+  {
+    "id": "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f45a0e70-edb7-4ad8-ad8a-b57ae034d2e2"
+      }
+    ],
+    "name": "Strike from the Shadows",
+    "category": "detachment",
+    "detachment_id": "phobos-shadow-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "92753f7c-096e-4131-8d40-1b5ac200c4bb"
+      }
+    ],
+    "name": "Strike from the Shadows",
+    "category": "detachment",
+    "detachment_id": "phobos-shock-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "strike-from-the-shadows-subversion-assets-adeptus-astartes",
@@ -2207,6 +2893,30 @@
     ]
   },
   {
+    "id": "suppression-volleys-gravis-siege-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2dbf66dc-670a-47ad-884c-7ec7ae80d4e2"
+      }
+    ],
+    "name": "Suppression Volleys",
+    "category": "detachment",
+    "detachment_id": "gravis-siege-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "suppression-volleys-gravis-siege-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "surgical-strikes-vanguard-spearhead-adeptus-astartes",
     "name": "SURGICAL STRIKES",
     "category": "detachment",
@@ -2264,6 +2974,79 @@
         "id": "7cac734b-0aa3-4cc8-a869-0c52cddac5b5"
       }
     ]
+  },
+  {
+    "id": "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0ae3eb6a-9b3a-4aaf-9159-0d94b0adfe46"
+      }
+    ],
+    "name": "Tactical Dreadnought Fortitude",
+    "category": "detachment",
+    "detachment_id": "terminator-storm-force",
+    "cp_cost": 2,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "tactical-focus-tacticus-attack-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5e245b9f-09f5-4afc-af74-69730bc2889b"
+      }
+    ],
+    "name": "Tactical Focus",
+    "category": "detachment",
+    "detachment_id": "tacticus-attack-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "tactical-focus-tacticus-attack-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a2d2355d-9d6a-45e0-a943-78b32bc56a43"
+      }
+    ],
+    "name": "Tactical withdrawal",
+    "category": "detachment",
+    "detachment_id": "phobos-shadow-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "target-weak-point-headhunter-task-force-adeptus-astartes",
@@ -2348,6 +3131,78 @@
     ]
   },
   {
+    "id": "transhuman-reactions-phobos-shock-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "99a20287-ee47-4b33-8fcf-7975fd51c041"
+      }
+    ],
+    "name": "Transhuman Reactions",
+    "category": "detachment",
+    "detachment_id": "phobos-shock-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "transhuman-reactions-phobos-shock-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "transhuman-swiftness-tacticus-attack-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2027496a-5e84-4b25-947a-41c81d0326b2"
+      }
+    ],
+    "name": "Transhuman Swiftness",
+    "category": "detachment",
+    "detachment_id": "tacticus-attack-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "transhuman-swiftness-tacticus-attack-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "umbral-evasion-phobos-shock-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "62544bb7-258b-4a42-8caa-36312f28f68f"
+      }
+    ],
+    "name": "Umbral Evasion",
+    "category": "detachment",
+    "detachment_id": "phobos-shock-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "umbral-evasion-phobos-shock-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
     "name": "UNBOWED CONVICTION",
     "category": "detachment",
@@ -2406,6 +3261,30 @@
     ]
   },
   {
+    "id": "upstoppable-advance-ironclad-champions-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3c47ee8-903a-4812-9ca6-eba3b017ef05"
+      }
+    ],
+    "name": "Upstoppable Advance",
+    "category": "detachment",
+    "detachment_id": "ironclad-champions",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "upstoppable-advance-ironclad-champions-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
     "name": "VENGEFUL ANIMUS",
     "category": "detachment",
@@ -2448,7 +3327,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

@@ -1,118 +1,100 @@
 {
   "categories": {
     "detachments": {
-      "adeptus-astartes": [
-        "blade-of-ultramar",
-        "emperors-shield",
-        "forgefathers-seekers",
-        "hammer-of-avernii",
-        "reclamation-force",
-        "shadowmark-talon",
-        "spearpoint-task-force"
+      "deathwatch": [
+        "deathwatch-support"
       ],
       "orks": [
         "ardmob"
       ]
     },
     "enhancements": {
-      "adeptus-astartes": [
-        "adamantine-mantle-forgefathers-seekers-adeptus-astartes",
-        "armour-of-antoninus-blade-of-ultramar-adeptus-astartes",
-        "avenging-avatar-aura-reclamation-force-adeptus-astartes",
-        "blackwing-shroud-shadowmark-talon-adeptus-astartes",
-        "champion-of-the-feast-emperors-shield-adeptus-astartes",
-        "chogorian-huntmaster-spearpoint-task-force-adeptus-astartes",
-        "coronal-susurrant-shadowmark-talon-adeptus-astartes",
-        "disciple-of-rhetoricus-emperors-shield-adeptus-astartes",
-        "forged-in-battle-forgefathers-seekers-adeptus-astartes",
-        "hunters-eye-spearpoint-task-force-adeptus-astartes",
-        "hunters-instincts-shadowmark-talon-adeptus-astartes",
-        "immolator-forgefathers-seekers-adeptus-astartes",
-        "indomitable-champion-emperors-shield-adeptus-astartes",
-        "iron-laurel-hammer-of-avernii-adeptus-astartes",
-        "liberatum-reclamation-force-adeptus-astartes",
-        "malodraxian-standard-emperors-shield-adeptus-astartes",
-        "medusan-roar-aura-hammer-of-avernii-adeptus-astartes",
-        "oath-of-macragge-blade-of-ultramar-adeptus-astartes",
-        "scroll-of-proclamation-reclamation-force-adeptus-astartes",
-        "seals-of-reconquest-reclamation-force-adeptus-astartes",
-        "spearpoint-paragon-spearpoint-task-force-adeptus-astartes",
-        "spiritus-ferrum-hammer-of-avernii-adeptus-astartes",
-        "steel-font-hammer-of-avernii-adeptus-astartes",
-        "stormseers-wisdom-spearpoint-task-force-adeptus-astartes",
-        "student-of-the-codex-blade-of-ultramar-adeptus-astartes",
-        "umbral-raptor-shadowmark-talon-adeptus-astartes",
-        "veteran-of-behemoth-blade-of-ultramar-adeptus-astartes",
-        "war-tempered-artifice-forgefathers-seekers-adeptus-astartes"
+      "deathwatch": [
+        "beacon-angelis-deathwatch-support-deathwatch"
+      ],
+      "imperial-fists": [
+        "spy-skull-data-link-ceramite-sentinels-imperial-fists"
       ],
       "orks": [
-        "boss-boomer-upgrade-blitz-brigade-orks",
-        "cybork-boosta-dread-mob-orks",
         "extra-platin-ardmob-orks",
-        "ferocious-show-off-green-tide-orks",
-        "follow-me-ladz-war-horde-orks",
-        "glory-hog-da-big-hunt-orks",
-        "headwoppas-killchoppa-war-horde-orks",
-        "kill-kommanda-taktikal-brigade-orks",
-        "kunnin-but-brutal-war-horde-orks",
-        "rallying-war-cry-ardmob-orks",
-        "targetin-gizmos-upgrade-blitz-brigade-orks"
+        "rallying-war-cry-ardmob-orks"
       ]
     },
     "stratagems": {
       "adeptus-astartes": [
-        "armour-of-contempt-blade-of-ultramar-adeptus-astartes",
-        "armour-of-contempt-emperors-shield-adeptus-astartes",
-        "armour-of-contempt-forgefathers-seekers-adeptus-astartes",
-        "armour-of-contempt-hammer-of-avernii-adeptus-astartes",
-        "armour-of-contempt-spearpoint-task-force-adeptus-astartes",
-        "augmetic-fortitude-hammer-of-avernii-adeptus-astartes",
-        "blazing-earth-forgefathers-seekers-adeptus-astartes",
-        "burning-vengeance-forgefathers-seekers-adeptus-astartes",
-        "cogitated-ferocity-hammer-of-avernii-adeptus-astartes",
-        "courage-and-honour-blade-of-ultramar-adeptus-astartes",
-        "crucible-of-battle-forgefathers-seekers-adeptus-astartes",
-        "crusading-conquerors-reclamation-force-adeptus-astartes",
-        "disciplined-extermination-emperors-shield-adeptus-astartes",
-        "dominator-beacon-hammer-of-avernii-adeptus-astartes",
-        "dropship-extraction-emperors-shield-adeptus-astartes",
-        "dropship-extraction-hammer-of-avernii-adeptus-astartes",
-        "evasive-manoeuvres-spearpoint-task-force-adeptus-astartes",
-        "exemplary-vigilance-blade-of-ultramar-adeptus-astartes",
-        "feint-and-thrust-shadowmark-talon-adeptus-astartes",
-        "fight-to-the-end-reclamation-force-adeptus-astartes",
-        "furious-dedication-reclamation-force-adeptus-astartes",
-        "fury-of-the-first-emperors-shield-adeptus-astartes",
-        "hunters-instincts-spearpoint-task-force-adeptus-astartes",
-        "immolation-protocols-forgefathers-seekers-adeptus-astartes",
-        "into-darkness-shadowmark-talon-adeptus-astartes",
-        "lay-low-the-tyrants-shadowmark-talon-adeptus-astartes",
-        "marching-ever-on-reclamation-force-adeptus-astartes",
-        "mobile-lethality-spearpoint-task-force-adeptus-astartes",
-        "obdurate-vengeance-emperors-shield-adeptus-astartes",
-        "practical-tactics-blade-of-ultramar-adeptus-astartes",
-        "raptorial-vigilance-shadowmark-talon-adeptus-astartes",
-        "ruthless-butchery-hammer-of-avernii-adeptus-astartes",
-        "scions-of-guilliman-reclamation-force-adeptus-astartes",
-        "spear-thrust-and-sabre-swing-spearpoint-task-force-adeptus-astartes",
-        "stunning-fusillade-shadowmark-talon-adeptus-astartes",
-        "tactical-foresight-blade-of-ultramar-adeptus-astartes",
-        "ultramarian-adaptivity-blade-of-ultramar-adeptus-astartes",
-        "ultramarian-destiny-reclamation-force-adeptus-astartes",
-        "withdraw-and-regroup-spearpoint-task-force-adeptus-astartes",
-        "wrathful-conquerors-emperors-shield-adeptus-astartes",
-        "wrathful-inferno-forgefathers-seekers-adeptus-astartes"
+        "a-worthy-death-gladius-task-force-adeptus-astartes",
+        "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
+        "hurtling-targets-stormlance-task-force-adeptus-astartes",
+        "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+        "might-of-angels-gladius-task-force-adeptus-astartes",
+        "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+        "responsive-tactics-gladius-task-force-adeptus-astartes",
+        "storm-of-devastation-gladius-task-force-adeptus-astartes",
+        "sudden-onslaught-stormlance-task-force-adeptus-astartes"
       ],
       "blood-angels": [
-        "armour-of-contempt-liberator-assault-group-blood-angels"
+        "measured-strategist-angelic-inheritors-blood-angels"
+      ],
+      "chaos-daemons": [
+        "rapturous-agony-legion-of-excess-chaos-daemons"
       ],
       "dark-angels": [
-        "armour-of-contempt-company-of-hunters-dark-angels"
+        "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
+        "knights-of-iron-wrath-of-the-rock-dark-angels"
+      ],
+      "imperial-fists": [
+        "augmented-targeting-ceramite-sentinels-imperial-fists",
+        "establish-supremacy-ceramite-sentinels-imperial-fists",
+        "evasive-repositioning-ceramite-sentinels-imperial-fists",
+        "priority-strike-ceramite-sentinels-imperial-fists",
+        "stand-to-the-end-ceramite-sentinels-imperial-fists",
+        "unyielding-might-ceramite-sentinels-imperial-fists"
       ],
       "orks": [
         "get-stuck-in-ardmob-orks",
         "krump-em-ardmob-orks",
         "medi-squigs-ardmob-orks"
+      ],
+      "raven-guard": [
+        "feint-and-thrust-shadowmark-talon-raven-guard",
+        "into-darkness-shadowmark-talon-raven-guard",
+        "lay-low-the-tyrants-shadowmark-talon-raven-guard",
+        "murderous-fusillade-shadowmark-talon-raven-guard",
+        "raptorial-vigilance-shadowmark-talon-raven-guard",
+        "suppressed-weapons-shadowmark-talon-raven-guard"
+      ],
+      "salamanders": [
+        "blazing-earth-forgefathers-seekers-salamanders",
+        "burning-vengeance-forgefathers-seekers-salamanders",
+        "crucible-of-battle-forgefathers-seekers-salamanders",
+        "forged-in-fire-forgefathers-seekers-salamanders",
+        "immolation-protocols-forgefathers-seekers-salamanders",
+        "wrath-and-ruin-forgefathers-seekers-salamanders"
+      ],
+      "space-wolves": [
+        "birth-of-a-saga-champions-of-fenris-space-wolves",
+        "champions-guidance-champions-of-fenris-space-wolves",
+        "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
+        "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
+        "heroic-resolve-champions-of-fenris-space-wolves",
+        "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
+        "wolf-totems-saga-of-the-great-wolf-space-wolves"
+      ],
+      "ultramarines": [
+        "armour-of-contempt-blade-of-ultramar-ultramarines",
+        "courage-and-honour-blade-of-ultramar-ultramarines",
+        "exemplary-vigilance-blade-of-ultramar-ultramarines",
+        "practical-tactics-blade-of-ultramar-ultramarines",
+        "tactical-foresight-blade-of-ultramar-ultramarines",
+        "ultramarian-adaptivity-blade-of-ultramar-ultramarines"
+      ],
+      "white-scars": [
+        "evasive-manoeuvers-spearpoint-task-force-white-scars",
+        "flawless-riders-spearpoint-task-force-white-scars",
+        "hunters-instincts-spearpoint-task-force-white-scars",
+        "mobile-lethality-spearpoint-task-force-white-scars",
+        "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
+        "withdraw-and-regroup-spearpoint-task-force-white-scars"
       ]
     },
     "unit_compositions": {
@@ -133,7 +115,10 @@
         "assault-force-vanguard-veteran-squad-with-jump-packs",
         "captain-raldeo",
         "emperors-champion-vedrenn",
+        "eradicator-squad-with-melta-rifles",
         "fyrri-askar",
+        "invader-atvs",
+        "marneus-calgar",
         "master-zacharial",
         "sanguinary-spearhead-assault-intercessor-squad",
         "sanguinary-spearhead-sanguinary-guard",
@@ -166,13 +151,10 @@
         "gladiator-valiant",
         "high-marshal-helbrecht",
         "impulsor",
-        "land-raider-crusader",
         "marshal",
         "repulsor",
         "repulsor-executioner",
-        "sternguard-veteran-squad",
         "sword-brethren-squad",
-        "terminator-squad",
         "vow-sworn-bladeguard-veteran-squad",
         "vow-sworn-crusader-squad",
         "vow-sworn-sword-brethren-squad"
@@ -188,7 +170,6 @@
         "death-company-captain-with-jump-pack",
         "death-company-dreadnought",
         "death-company-marines",
-        "death-company-marines-with-bolt-rifles",
         "death-company-marines-with-jump-packs",
         "lemartes",
         "sanguinary-guard",
@@ -301,28 +282,23 @@
         "simulacrum-imperialis"
       ],
       "adeptus-astartes": [
-        "astartes-shield",
         "auspex-array",
         "banner-of-macragge",
         "blizzard-shield",
-        "book-of-salvation",
-        "centurion-assault-launcher",
+        "combat-shield",
         "death-totem",
         "grapnel-launcher",
-        "haywire-mine",
+        "grav-chutes",
+        "haywire-mine-once-per-battle-per-unit",
+        "heavy-bolt-pistol-captain-on-bike",
         "helix-gauntlet",
-        "infernum-halo-launcher",
-        "infiltrator-comms-array",
-        "orbital-comms-array-aura",
-        "refractor-field",
-        "reiver-grav-chute",
+        "master-crafted-power-weapon-captain-on-bike",
+        "orbital-comms-array",
         "relic-shield",
-        "sanguinary-banner",
         "shield-dome",
         "storm-shield",
-        "terminator-storm-shield",
         "the-lion-helm",
-        "thunderhawk-cluster-bombs",
+        "thunder-hammer-captain-on-bike",
         "watcher-in-the-dark"
       ],
       "adeptus-custodes": [
@@ -356,22 +332,22 @@
       "agents-of-the-imperium": [
         "ancients-banner",
         "arbites-medi-kit",
-        "astartes-shield",
         "auspex-array",
         "blessed-wardings",
         "endurant-shield",
         "glovodan-psyber-eagle",
         "healing-serum",
-        "infernum-halo-launcher",
         "narthecium",
         "nuncio-acquila",
         "psychic-gifts",
         "salvationist-medikit",
         "simulacrum-imperialis",
         "soulguilt-scanner",
+        "storm-shield",
         "tome-skull"
       ],
       "astra-militarum": [
+        "alchemyk-counteragents",
         "aquiline-prow",
         "brute-shield",
         "command-rod",
@@ -383,6 +359,7 @@
         "ratling-battlemutt",
         "regimental-standard",
         "remote-mine",
+        "servo-scribes",
         "slabshield",
         "vox-caster",
         "vox-relay-beacon"
@@ -455,7 +432,7 @@
         "blastajet-force-field",
         "kustom-force-field",
         "paired-krumpas",
-        "pulsa-rokkit"
+        "pulsa-rokkit-once-per-battle-per-unit"
       ],
       "tau-empire": [
         "advanced-guardian-drone",
@@ -488,7 +465,7 @@
       ]
     }
   },
-  "data_version": 946,
+  "data_version": 963,
   "modes": {
     "detachments": {
       "orks": {

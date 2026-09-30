@@ -578,15 +578,11 @@ describe("unit-scoped weapon profiles", () => {
     expect(unit).toBeDefined();
     expect(unit!.raw.weapon_ids).toContain(id);
     expect(unit!.raw.weapon_ids).not.toContain("master-crafted-power-weapon");
-    const option = unit!.wargearOptions.find(
-      (entry) =>
-        entry.id === "vanguard-veteran-squad-with-jump-packs-wgo-mfm-2",
-    );
-    expect(option).toBeDefined();
-    expect(option!.replacement_choice).toEqual([
-      [id, "plasma-pistol-vanguard-veteran-squad-with-jump-packs"],
-      [id, "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs"],
-    ]);
+    // Each Vanguard Veteran carries it by default; the sergeant's options swap his relic blade.
+    const veteran = dataset.unitCompositions
+      .find((entry) => entry.unit_id === "vanguard-veteran-squad-with-jump-packs")
+      ?.models.find((model) => model.name === "Vanguard Veteran");
+    expect(veteran?.default_weapon_ids).toContain(id);
 
     const scoped = unit!.weapons.find((weapon) => weapon.id === id);
     expect(scoped?.profiles).toHaveLength(1);

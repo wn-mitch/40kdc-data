@@ -3,7 +3,7 @@
     "id": "dreadherder-dread-mob-orks",
     "name": "Dreadherder",
     "detachment_id": "dread-mob",
-    "cost": 20,
+    "cost": 30,
     "points_provisional": false,
     "ability_id": "dreadherder-dread-mob-orks",
     "is_unique": true,
@@ -56,6 +56,9 @@
         "namespace": "game-datacards",
         "id": "80146bd1-15f6-5c74-9918-42cc8316ca3a"
       }
+    ],
+    "keyword_restrictions": [
+      "Warboss"
     ]
   },
   {
@@ -141,6 +144,9 @@
         "namespace": "game-datacards",
         "id": "6a9773e3-4d52-5397-8d9b-dcb221d02f44"
       }
+    ],
+    "keyword_restrictions": [
+      "Warboss"
     ]
   },
   {
@@ -328,6 +334,10 @@
       [
         "Infantry",
         "Warboss"
+      ],
+      [
+        "Big Mek",
+        "Infantry"
       ]
     ],
     "attachment_bodyguard_ids": [
@@ -403,6 +413,9 @@
         "namespace": "game-datacards",
         "id": "19c9ab6a-485b-55de-bfd9-f3a838260656"
       }
+    ],
+    "keyword_restrictions": [
+      "Warboss"
     ]
   },
   {
@@ -422,6 +435,9 @@
         "namespace": "game-datacards",
         "id": "f1497cd3-88a4-5d88-ac95-f6b8cab6c831"
       }
+    ],
+    "keyword_restrictions": [
+      "Warboss"
     ]
   },
   {
@@ -478,7 +494,7 @@
     "id": "supa-snazz-dakka-upgrade-wreckas-orks",
     "name": "Supa-Snazz Dakka Upgrade",
     "detachment_id": "wreckas",
-    "cost": 20,
+    "cost": 25,
     "points_provisional": false,
     "ability_id": "supa-snazz-dakka-upgrade-wreckas-orks",
     "is_unique": true,
@@ -671,6 +687,183 @@
         "namespace": "game-datacards",
         "id": "788fa53f-2377-51d0-902f-0d58c77e7fa8"
       }
+    ]
+  },
+  {
+    "id": "glory-hog-da-big-hunt-orks",
+    "name": "Glory Hog",
+    "detachment_id": "da-big-hunt",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Beast Snagga"
+    ]
+  },
+  {
+    "id": "headwoppas-killchoppa-war-horde-orks",
+    "name": "Headwoppa's Killchoppa",
+    "detachment_id": "war-horde",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
+    ]
+  },
+  {
+    "id": "kill-kommanda-taktikal-brigade-orks",
+    "name": "Kill Kommanda",
+    "detachment_id": "taktikal-brigade",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Infantry",
+        "Warboss"
+      ]
+    ],
+    "attachment_bodyguard_ids": [
+      "kommandos"
+    ]
+  },
+  {
+    "id": "ferocious-show-off-green-tide-orks",
+    "name": "Ferocious Show-off",
+    "detachment_id": "green-tide",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ]
+  },
+  {
+    "id": "boss-boomer-upgrade-blitz-brigade-orks",
+    "name": "Boss Boomer (Upgrade)",
+    "detachment_id": "blitz-brigade",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Wagon"
+    ]
+  },
+  {
+    "id": "kunnin-but-brutal-war-horde-orks",
+    "name": "Kunnin’ But Brutal",
+    "detachment_id": "war-horde",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
+    ]
+  },
+  {
+    "id": "targetin-gizmos-upgrade-blitz-brigade-orks",
+    "name": "Targetin’ Gizmos (Upgrade)",
+    "detachment_id": "blitz-brigade",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Wagon"
+    ]
+  },
+  {
+    "id": "cybork-boosta-dread-mob-orks",
+    "name": "Cybork Boosta",
+    "detachment_id": "dread-mob",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Mek"
+      ]
+    ]
+  },
+  {
+    "id": "follow-me-ladz-war-horde-orks",
+    "name": "Follow Me Ladz",
+    "detachment_id": "war-horde",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
     ]
   }
 ]

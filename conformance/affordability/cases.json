@@ -21,7 +21,7 @@
       },
       {
         "unitId": "goremongers",
-        "nextCopyCost": 75,
+        "nextCopyCost": 70,
         "affordable": true
       },
       {
@@ -31,7 +31,7 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 165,
+        "nextCopyCost": 175,
         "affordable": true
       },
       {
@@ -63,7 +63,7 @@
     "expected": [
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 175,
+        "nextCopyCost": 185,
         "affordable": true
       }
     ]
@@ -91,7 +91,7 @@
       },
       {
         "unitId": "goremongers",
-        "nextCopyCost": 75,
+        "nextCopyCost": 70,
         "affordable": true
       },
       {
@@ -101,7 +101,7 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 165,
+        "nextCopyCost": 175,
         "affordable": false
       },
       {
@@ -116,7 +116,7 @@
     "args": {
       "factionId": "world-eaters",
       "battleSize": "incursion",
-      "pointsLimitOverride": 300,
+      "pointsLimitOverride": 297,
       "units": [
         {
           "unitId": "daemon-prince-of-khorne",
@@ -138,7 +138,7 @@
       },
       {
         "unitId": "goremongers",
-        "nextCopyCost": 75,
+        "nextCopyCost": 70,
         "affordable": false
       },
       {
@@ -170,7 +170,7 @@
       },
       {
         "unitId": "goremongers",
-        "nextCopyCost": 75,
+        "nextCopyCost": 70,
         "affordable": true
       },
       {
@@ -180,7 +180,7 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 165,
+        "nextCopyCost": 175,
         "affordable": true
       },
       {
@@ -205,13 +205,13 @@
     },
     "expected": [
       {
-        "unitId": "death-company-marines",
+        "unitId": "exaction-squad",
         "nextCopyCost": 85,
         "affordable": true
       },
       {
-        "unitId": "exaction-squad",
-        "nextCopyCost": 85,
+        "unitId": "death-company-marines",
+        "nextCopyCost": 90,
         "affordable": true
       },
       {

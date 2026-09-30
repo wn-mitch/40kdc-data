@@ -724,7 +724,7 @@
         }
       },
       {
-        "name": "Deathwatch Veterans",
+        "name": "Deathwatch Veteran",
         "profile_name": "Deathwatch Veterans",
         "min": 4,
         "max": 9,
@@ -752,7 +752,7 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
+            "name": "Deathwatch Veteran",
             "min": 4,
             "max": 4
           }
@@ -766,8 +766,8 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
-            "min": 5,
+            "name": "Deathwatch Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -780,7 +780,7 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
+            "name": "Deathwatch Veteran",
             "min": 4,
             "max": 4
           }
@@ -794,8 +794,8 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
-            "min": 5,
+            "name": "Deathwatch Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -904,56 +904,225 @@
     "faction_id": "agents-of-the-imperium",
     "models": [
       {
-        "name": "Watch Sergeant",
-        "profile_name": "Deathwatch Veteran",
+        "name": "Kill Team Sergeant",
         "min": 1,
         "max": 1,
-        "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon-aquila-kill-team",
-          "plasma-pistol-aquila-kill-team",
-          "plasma-pistol"
-        ],
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
-      },
-      {
-        "name": "Deathwatch Veteran",
-        "min": 2,
-        "max": 7,
+        },
         "default_weapon_ids": [
-          "special-issue-bolt-pistol",
-          "xenophase-blade"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
+          "plasma-pistol-aquila-kill-team",
+          "power-weapon-aquila-kill-team"
+        ]
       },
       {
         "name": "Gravis Veteran",
-        "min": 2,
+        "min": 1,
         "max": 2,
         "default_weapon_ids": [
           "bolt-pistol-aquila-kill-team",
-          "close-combat-weapon-aquila-kill-team",
-          "infernus-heavy-bolter-aquila-kill-team"
+          "infernus-heavy-bolter-aquila-kill-team",
+          "knives-and-fists"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         }
+      },
+      {
+        "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-aquila-kill-team",
+          "heavy-thunder-hammer"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "deathwatch-marksman-bolt-carbine",
+          "knives-and-fists",
+          "special-issue-bolt-pistol"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-aquila-kill-team",
+          "knives-and-fists",
+          "stalker-bolt-rifle"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+        "min": 0,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "special-issue-bolt-pistol",
+          "xenophase-blade"
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Kill Team Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Gravis Veteran",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "vindicare-assassin",
@@ -1936,9 +2105,10 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "blackstar-rocket-launcher",
-          "blackstar-rocket-launcher",
           "armoured-hull",
+          "auspex-array",
+          "blackstar-rocket-launcher",
+          "blackstar-rocket-launcher",
           "twin-assault-cannon"
         ]
       }
@@ -2220,7 +2390,7 @@
         },
         "default_weapon_ids": [
           "agents-implement",
-          "heavy-bolter-inquisitorial-agents"
+          "heavy-bolter"
         ]
       },
       {
@@ -2249,8 +2419,8 @@
         },
         "default_weapon_ids": [
           "agent-firearm",
-          "agents-implement",
-          "plasma-pistol-standard-inquisitors-hand"
+          "plasma-pistol",
+          "agents-implement"
         ]
       },
       {
@@ -2341,9 +2511,9 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "grenade-launcher-frag-inquisitors-hand",
-          "gun-stocks",
-          "shotpistol"
+          "grenade-launcher",
+          "shotpistol",
+          "gun-stocks"
         ]
       },
       {
@@ -2356,9 +2526,9 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "gun-stocks",
           "shotpistol",
-          "webber-inquisitors-hand"
+          "webber",
+          "gun-stocks"
         ]
       },
       {

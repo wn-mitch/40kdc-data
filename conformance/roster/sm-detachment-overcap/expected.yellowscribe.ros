@@ -82,7 +82,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit0-m0-w2" name="Lancer laser destroyer" type="upgrade" number="1">
+                <selection id="unit0-m0-w2" name="Laser Destroyer" type="upgrade" number="1">
                   <profiles>
                     <profile name="Laser Destroyer" typeName="Ranged Weapons">
                       <characteristics>
@@ -90,7 +90,7 @@
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">14</characteristic>
-                        <characteristic name="AP">-5</characteristic>
+                        <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">D6+3</characteristic>
                         <characteristic name="Keywords">Heavy</characteristic>
                       </characteristics>
@@ -150,12 +150,12 @@
                     <profile name="Fragstorm Grenade Launchers" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">18"</characteristic>
-                        <characteristic name="A">6</characteristic>
+                        <characteristic name="A">D6</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="AP">0</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Blast 2</characteristic>
+                        <characteristic name="Keywords">Blast</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -201,21 +201,6 @@
                         <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">D3+3</characteristic>
                         <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit1-m0-w4" name="Storm Bolters" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Storm Bolters" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">24"</characteristic>
-                        <characteristic name="A">4</characteristic>
-                        <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-1</characteristic>
-                        <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Rapid Fire 4</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

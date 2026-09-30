@@ -1058,7 +1058,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 230
+        "cost": 240
       }
     ],
     "keywords": [
@@ -1354,7 +1354,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 90
+        "cost": 80
       }
     ],
     "keywords": [
@@ -4071,8 +4071,8 @@
     },
     "weapon_ids": [
       "airbursting-fragmentation-projector",
-      "battlesuit-fists-commander-in-enforcer-battlesuit",
-      "plasma-rifle-commander-in-enforcer-battlesuit"
+      "battlesuit-fists",
+      "plasma-rifle"
     ],
     "ability_ids": [
       "shield-drone-commander-cloudspear-tau-empire",
@@ -4203,8 +4203,8 @@
     },
     "weapon_ids": [
       "accelerator-burst-cannon",
-      "armoured-hull-devilfish",
-      "twin-pulse-carbine"
+      "twin-pulse-carbine",
+      "armoured-hull"
     ],
     "transport_capacity": {
       "capacity": 12

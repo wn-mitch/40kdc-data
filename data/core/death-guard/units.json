@@ -430,7 +430,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -503,13 +503,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 135,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -589,13 +589,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -764,12 +764,12 @@
         "models": 1,
         "cost": 170,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
         "cost": 200,
-        "unit_count_min": 2,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -936,7 +936,7 @@
       {
         "models": 8,
         "models_max": 10,
-        "cost": 180
+        "cost": 175
       }
     ],
     "keywords": [
@@ -1109,7 +1109,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 195
+        "cost": 185
       }
     ],
     "keywords": [
@@ -1184,7 +1184,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 160,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1197,7 +1197,7 @@
       },
       {
         "models": 3,
-        "cost": 170,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -1281,7 +1281,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -1515,7 +1515,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 170
+        "cost": 160
       }
     ],
     "keywords": [
@@ -1663,7 +1663,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 110
+        "cost": 105
       }
     ],
     "keywords": [
@@ -2323,7 +2323,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2397,17 +2397,43 @@
     "points": [
       {
         "models": 3,
-        "cost": 115
+        "cost": 115,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 5,
-        "cost": 180
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 360
+        "cost": 370,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 145,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 400,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -2572,8 +2598,8 @@
       "max": 3
     },
     "weapon_ids": [
-      "manreaper-strike-maggot-lords",
-      "plaguespurt-gauntlet-maggot-lords"
+      "manreaper",
+      "plaguespurt-gauntlet"
     ],
     "ability_ids": [
       "obstinate-resistance-death-guard"
@@ -2639,10 +2665,10 @@
     "weapon_ids": [
       "blight-launcher",
       "boltgun",
-      "plague-knives-plague-marines",
       "plague-spewer",
-      "plasma-pistol-maggot-lords",
-      "power-fist"
+      "power-fist",
+      "plasma-pistol",
+      "plague-knives"
     ],
     "ability_ids": [
       "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
@@ -2707,7 +2733,7 @@
     },
     "weapon_ids": [
       "numerological-artefacts",
-      "plasma-pistol-maggot-lords"
+      "plasma-pistol"
     ],
     "ability_ids": [
       "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",

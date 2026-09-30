@@ -1849,8 +1849,8 @@
         },
         "default_weapon_ids": [
           "black-blade-of-antwyr",
-          "purifying-flame-castellan-crowe",
-          "storm-bolter-castellan-crowe"
+          "purifying-flame",
+          "storm-bolter"
         ]
       }
     ],

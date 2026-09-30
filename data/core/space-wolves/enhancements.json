@@ -225,11 +225,11 @@
   },
   {
     "id": "wolf-touched-saga-of-the-beastslayer-space-wolves",
-    "name": "Wolf-touched",
+    "name": "Wolf-Touched",
     "detachment_id": "saga-of-the-beastslayer",
     "cost": 15,
     "keyword_restrictions": [
-      "Space Wolves"
+      "Adeptus Astartes"
     ],
     "ability_id": "wolf-touched-saga-of-the-beastslayer-space-wolves",
     "is_unique": true,
@@ -257,7 +257,7 @@
   },
   {
     "id": "hunters-guile-saga-of-the-beastslayer-space-wolves",
-    "name": "Hunter’s Guile",
+    "name": "Hunter's Guile",
     "detachment_id": "saga-of-the-beastslayer",
     "cost": 20,
     "keyword_restrictions": [
@@ -399,14 +399,9 @@
   },
   {
     "id": "grimnars-mark-saga-of-the-great-wolf-space-wolves",
-    "name": "Grimnar’s Mark",
+    "name": "Grimnar's Mark",
     "detachment_id": "saga-of-the-great-wolf",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Captain",
-      "Terminator"
-    ],
+    "cost": 15,
     "ability_id": "grimnars-mark-saga-of-the-great-wolf-space-wolves",
     "is_unique": true,
     "game_version": {
@@ -416,9 +411,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "attachment_bodyguard_ids": [
-      "wolf-guard-terminators"
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -428,6 +420,16 @@
         "namespace": "mfm",
         "id": "afbaac37-76ad-44c7-beca-a5362b8d10d0"
       }
+    ],
+    "keyword_restriction_groups": [
+      [
+        "Captain in Terminator Armour"
+      ],
+      [
+        "Adeptus Astartes",
+        "Captain",
+        "Terminator"
+      ]
     ]
   },
   {
@@ -488,13 +490,9 @@
   },
   {
     "id": "skjalds-foretelling-saga-of-the-great-wolf-space-wolves",
-    "name": "Skjald’s Foretelling",
+    "name": "Skjald's Foretelling",
     "detachment_id": "saga-of-the-great-wolf",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Battle Leader",
-      "Wolf Guard"
-    ],
+    "cost": 20,
     "ability_id": "skjalds-foretelling-saga-of-the-great-wolf-space-wolves",
     "is_unique": true,
     "game_version": {
@@ -513,6 +511,15 @@
         "namespace": "mfm",
         "id": "aa4fc796-1ecd-49c1-8b30-fd0d09f4292e"
       }
+    ],
+    "keyword_restriction_groups": [
+      [
+        "Battle Leader",
+        "Wolf Guard"
+      ],
+      [
+        "Wolf Guard Battle Leader"
+      ]
     ]
   },
   {
@@ -749,7 +756,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1995,10 +2002,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -2023,10 +2030,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2051,10 +2058,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

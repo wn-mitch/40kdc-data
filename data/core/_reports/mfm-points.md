@@ -6,7 +6,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | Dir | Matched | Points changed | Allied added | Ambiguous (kept) | Repo-only (Legends/FW) |
 |---|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 194 | 0 | 0 | 10 | 0 |
+| adeptus-astartes | 177 | 0 | 0 | 0 | 4 |
 | adeptus-custodes | 35 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 38 | 0 | 0 | 0 | 0 |
 | aeldari | 80 | 0 | 0 | 0 | 0 |
@@ -23,89 +23,67 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | imperial-knights | 23 | 0 | 0 | 0 | 0 |
 | leagues-of-votann | 26 | 0 | 0 | 0 | 0 |
 | necrons | 57 | 0 | 0 | 4 | 0 |
-| orks | 60 | 0 | 0 | 1 | 0 |
+| orks | 60 | 0 | 0 | 0 | 0 |
 | tau-empire | 47 | 0 | 0 | 0 | 0 |
 | thousand-sons | 32 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 0 | 0 | 0 | 0 |
 | world-eaters | 29 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1094** | **0** | **0** | **19** | **0** |
-
-## adeptus-astartes
-
-**Ambiguous (multiple same-size base comps — kept repo value):**
-- bladeguard-veteran-squad
-- assault-intercessor-squad
-- repulsor-executioner
-- centurion-devastator-squad
-- captain-with-jump-pack
-- assault-intercessors-with-jump-packs
-- outrider-squad
-- chaplain-with-jump-pack
-- vanguard-veteran-squad-with-jump-packs
-- wolf-guard-headtakers
+| **TOTAL** | **1077** | **0** | **0** | **8** | **4** |
 
 ## agents-of-the-imperium
 
 **Ambiguous (multiple same-size base comps — kept repo value):**
 - callidus-assassin
 - eversor-assassin
-- culexus-assassin
 - vindicare-assassin
+- culexus-assassin
 
 ## necrons
 
 **Ambiguous (multiple same-size base comps — kept repo value):**
-- ctan-shard-of-the-nightbringer
-- ctan-shard-of-the-deceiver
 - transcendent-ctan
+- ctan-shard-of-the-deceiver
 - ctan-shard-of-the-void-dragon
+- ctan-shard-of-the-nightbringer
 
-## orks
+## New units in dump (no repo entity — author in a follow-up): 38
 
-**Ambiguous (multiple same-size base comps — kept repo value):**
-- gargantuan-squiggoth
-
-## New units in dump (no repo entity — author in a follow-up): 41
-
-- astra-militarum/draydens-lance-attilan-rough-riders
-- blood-angels/sanguinary-spearhead-sanguinary-guard
-- genestealer-cults/claw-of-ascension-hybrid-metamorphs
-- aeldari/kygharils-protectors-dire-avengers
 - emperors-children/shalaxi-helbane
-- agents-of-the-imperium/inquisitors-hand-vigilant-squad
 - death-guard/plague-drones
 - death-guard/plaguebearers
 - black-templars/gladiator-lancer
 - death-guard/nurglings
 - black-templars/repulsor-executioner
-- emperors-children/callous-blades-flawless-blades
-- black-templars/terminator-squad
 - thousand-sons/blue-horrors
 - death-guard/beasts-of-nurgle
+- black-templars/repulsor
 - thousand-sons/kairos-fateweaver
 - black-templars/gladiator-reaper
+- astra-militarum/draydens-lance-attilan-rough-riders
+- emperors-children/callous-blades-flawless-blades
 - world-eaters/bloodcrushers
-- tyranids/vardenghast-swarm-termagants
 - death-guard/rotigus
-- black-templars/repulsor
 - thousand-sons/pink-horrors
 - thousand-sons/screamers
 - emperors-children/keeper-of-secrets
+- emperors-children/defiler
 - black-templars/gladiator-valiant
-- black-templars/land-raider-crusader
+- genestealer-cults/claw-of-ascension-hybrid-metamorphs
 - world-eaters/skarbrand
 - death-guard/great-unclean-one
 - black-templars/impulsor
+- agents-of-the-imperium/inquisitors-hand-vigilant-squad
 - emperors-children/daemonettes
+- tyranids/vardenghast-swarm-termagants
 - thousand-sons/lord-of-change
+- blood-angels/sanguinary-spearhead-sanguinary-guard
 - thousand-sons/flamers
 - world-eaters/flesh-hounds
+- drukhari/coven-of-agonies-wracks
 - emperors-children/seekers
-- black-templars/sternguard-veteran-squad
 - world-eaters/bloodletters
 - emperors-children/fiends
-- world-eaters/bloodthirster
-- emperors-children/defiler
 - orks/ardmob-boyz
-- drukhari/coven-of-agonies-wracks
+- aeldari/kygharils-protectors-dire-avengers
+- world-eaters/bloodthirster
 

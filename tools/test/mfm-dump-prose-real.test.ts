@@ -8,6 +8,17 @@ import { REPO_ROOT } from "../src/mfm/repo-files.js";
 
 // Pins dump-prose against the real (gitignored) dump. Asserts row ids and structure, never GW prose.
 const COVERAGE = path.join(REPO_ROOT, "_private", "phase4", "mfm-coverage.json");
+// That analysis describes one dump: it pins row ids only while the dump is the one it analysed.
+const dumpVersion = (file: string): number | null => {
+  if (!fs.existsSync(file)) return null;
+  const head = Buffer.alloc(256);
+  const fd = fs.openSync(file, "r");
+  try { fs.readSync(fd, head, 0, 256, 0); } finally { fs.closeSync(fd); }
+  const match = /"data_version"\s*:\s*(\d+)/u.exec(head.toString("utf8"));
+  return match ? Number(match[1]) : null;
+};
+const coverageCurrent = fs.existsSync(COVERAGE)
+  && (JSON.parse(fs.readFileSync(COVERAGE, "utf8")) as { dump_data_version?: number }).dump_data_version === dumpVersion(DEFAULT_DUMP_PATH);
 
 describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dump", () => {
   let prose: DumpProse;
@@ -34,7 +45,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
     expect(refs(unit("chaos-space-marines", "helbrute", "diseased-malice-death-guard"))).toBeNull();
   });
 
-  it.skipIf(!fs.existsSync(COVERAGE))("returns none of the 109 foreign-faction texts the global name index returned", () => {
+  it.skipIf(!coverageCurrent)("returns none of the 109 foreign-faction texts the global name index returned", () => {
     const coverage = JSON.parse(fs.readFileSync(COVERAGE, "utf8")) as {
       records_detail: { faction: string; ability_id: string; status: string; owners?: string[]; dump_prose_current?: { row_faction?: string; ref?: string } }[];
     };
@@ -103,7 +114,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
   it("files supplements and the Deathwatch index under their own factions", () => {
     const factionOf = new Map<string, Set<string>>();
     for (const r of prose.rows) if (r.publication) factionOf.set(r.publication.name, (factionOf.get(r.publication.name) ?? new Set()).add(r.faction));
-    expect([...factionOf.get("Index: Deathwatch")!]).toEqual(["deathwatch"]);
+    expect([...factionOf.get("Codex Supplement: Deathwatch")!]).toEqual(["deathwatch"]);
     expect([...factionOf.get("Codex Supplement: Dark Angels")!]).toEqual(["dark-angels"]);
     expect([...factionOf.get("Codex Supplement: Space Wolves")!]).toEqual(["space-wolves"]);
     expect([...factionOf.get("Codex Supplement: Black Templars")!]).toEqual(["black-templars"]);

@@ -3201,10 +3201,23 @@ function genEffectTranslation(): void {
     ["adepta-sororitas", ["sworn-protectors-adepta-sororitas","anguish-of-the-unredeemed-adepta-sororitas","anchorite-sarcophagus-adepta-sororitas","sacred-command-adepta-sororitas","divine-deliverance-adepta-sororitas","rapturous-blows-adepta-sororitas","ministorum-sermon-adepta-sororitas","cherub-adepta-sororitas","salvationist-medikit-adepta-sororitas","simulacrum-imperialis-adepta-sororitas","attached-unit-sanctifiers-adepta-sororitas","extremis-trigger-word-adepta-sororitas","rituale-nullificatus-adepta-sororitas","virtue-of-intolerance-adepta-sororitas","denuncia-oratory-adepta-sororitas","litany-of-deeds-adepta-sororitas","stanchion-of-holy-martyrs-adepta-sororitas","relics-of-the-matriarchs-adepta-sororitas","solemn-procession-adepta-sororitas","overseer-of-redemption-adepta-sororitas","laud-hailer-adepta-sororitas","stirring-rhetoric-adepta-sororitas","purge-and-cleanse-adepta-sororitas","sacred-healing-adepta-sororitas","righteous-repugnance-adepta-sororitas","cherubs-adepta-sororitas","storm-of-retribution-adepta-sororitas","impetuous-fervour-adepta-sororitas","sacred-banner-adepta-sororitas","holy-judgement-adepta-sororitas","mysterious-saviours-adepta-sororitas","self-repair-adepta-sororitas","righteous-paragons-adepta-sororitas","rites-of-castigation-adepta-sororitas","devastating-refrain-adepta-sororitas","fiery-conviction-adepta-sororitas","zealot-adepta-sororitas","holy-mission-adepta-sororitas","embodied-prophecy-adepta-sororitas","righteous-awareness-adepta-sororitas","lifewards-adepta-sororitas","defenders-of-the-faith-adepta-sororitas","null-rod-adepta-sororitas","judged-for-execution-adepta-sororitas","angelic-judgement-adepta-sororitas","clarion-of-urgency-chorus-of-condemnation-adepta-sororitas","inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas","harmonised-exorcism-chorus-of-condemnation-adepta-sororitas","devastating-reprise-chorus-of-condemnation-adepta-sororitas","holy-quest-adepta-sororitas"]],
     ["adeptus-astartes", ["techmarine-adeptus-astartes", "blessing-of-the-omnissiah-adeptus-astartes", "wisdom-of-the-ancients-adeptus-astartes"]],
   ];
+  // Pins whose ability has left the dataset (its datasheet was removed by an MFM release) keep
+  // their frozen DSL here, so the describer shape they pin stays covered.
+  const retiredFidelityAbilities: Record<string, Record<string, unknown>> = {
+    // The Dreadnought datasheet left the dump at MFM data version 963.
+    "adeptus-astartes/wisdom-of-the-ancients-adeptus-astartes": {
+      effect: {
+        type: "re-roll",
+        target: { owner: "friendly", all_of: ["ADEPTUS ASTARTES", "INFANTRY"], within: { range: { inches: 6 } } },
+        modifier: { roll: "hit", subset: "ones" },
+      },
+      scope: { duration: "permanent" },
+    },
+  };
   for (const [faction, ids] of fidelityWorklists) {
     const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;
     for (const id of ids) {
-      const raw = abilities.find((ability) => ability.ability_id === id);
+      const raw = abilities.find((ability) => ability.ability_id === id) ?? retiredFidelityAbilities[`${faction}/${id}`];
       if (!raw) throw new Error(`Missing fidelity case ability: ${faction}/${id}`);
       cases.push({
         caseId: `${faction}-fidelity/${id}`,

@@ -738,7 +738,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

@@ -124,7 +124,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the
   });
 
   it("derives player_turn/type/category for a known detachment stratagem", () => {
-    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
+    const c = canon.get("frenzied-resilience-berzerker-warband-world-eaters")!;
     expect(c.player_turn).toBe("either");
     expect(c.type).toBe("battle-tactic");
     expect(c.category).toBe("detachment");

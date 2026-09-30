@@ -50,7 +50,7 @@
         "default_weapon_ids": [
           "armoured-hull-gladiator-lancer",
           "defensive-array-gladiator-lancer",
-          "lancer-laser-destroyer"
+          "laser-destroyer"
         ]
       }
     ],
@@ -84,7 +84,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "power-fist-terminator-squad"
+          "power-fist-terminator-squad",
+          "storm-bolter-terminator-squad"
         ]
       },
       {
@@ -97,7 +98,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "power-fist-terminator-squad"
+          "power-fist-terminator-squad",
+          "storm-bolter-terminator-squad"
         ]
       }
     ],
@@ -129,7 +131,7 @@
           },
           {
             "name": "Terminator",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -186,14 +188,14 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "astartes-chainsword"
+          "chainsword"
         ],
         "loadout_variants": [
           {
             "name": "Sword Brother",
             "weapon_ids": [
               "heavy-bolt-pistol",
-              "astartes-chainsword"
+              "chainsword"
             ]
           },
           {
@@ -242,7 +244,7 @@
         "models": [
           {
             "name": "Sword Brother",
-            "min": 6,
+            "min": 9,
             "max": 9
           }
         ]
@@ -297,8 +299,8 @@
         "min": 4,
         "max": 8,
         "default_weapon_ids": [
-          "astartes-chainsword-crusader-squad",
-          "bolt-pistol"
+          "bolt-pistol",
+          "neophyte-chainsword"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -318,7 +320,7 @@
             "name": "Neophyte w/ Astartes Chainsword",
             "weapon_ids": [
               "bolt-pistol",
-              "astartes-chainsword-crusader-squad"
+              "neophyte-chainsword"
             ],
             "max_count": 8
           }
@@ -431,8 +433,8 @@
         },
         "default_weapon_ids": [
           "artificer-firearm-sternguard-veteran-squad",
-          "sternguard-bolt-pistol",
-          "ceramite-fists-sternguard-veteran-squad"
+          "bolt-pistol",
+          "chainsword"
         ]
       },
       {
@@ -446,7 +448,7 @@
         },
         "default_weapon_ids": [
           "artificer-firearm-sternguard-veteran-squad",
-          "sternguard-bolt-pistol",
+          "bolt-pistol",
           "ceramite-fists-sternguard-veteran-squad"
         ]
       }
@@ -479,7 +481,7 @@
           },
           {
             "name": "Sternguard Veteran",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -501,6 +503,7 @@
         },
         "default_weapon_ids": [
           "armoured-tracks",
+          "hurricane-bolter-land-raider-crusader",
           "hurricane-bolter-land-raider-crusader",
           "twin-assault-cannon-land-raider-crusader"
         ]
@@ -615,7 +618,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Emperor\u2019s Champion",
+        "name": "Emperor's Champion",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -637,7 +640,7 @@
       {
         "models": [
           {
-            "name": "Emperor\u2019s Champion",
+            "name": "Emperor's Champion",
             "min": 1,
             "max": 1
           }
@@ -694,11 +697,11 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "heavy-onslaught-gatling-cannon",
-          "twin-heavy-bolter-repulsor-executioner",
           "armoured-hull-repulsor-executioner",
-          "twin-icarus-ironhail-heavy-stubber",
-          "repulsor-executioner-defensive-array"
+          "defensive-array",
+          "heavy-laser-destroyer",
+          "heavy-onslaught-gatling-cannon",
+          "twin-heavy-bolter-repulsor-executioner"
         ]
       }
     ],
@@ -707,42 +710,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Repulsor Executioner",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Repulsor Executioner",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Repulsor Executioner",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Repulsor Executioner",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -770,6 +737,7 @@
         "default_weapon_ids": [
           "armoured-hull-gladiator-valiant",
           "defensive-array-gladiator-valiant",
+          "multi-melta-gladiator-valiant",
           "multi-melta-gladiator-valiant",
           "twin-las-talon"
         ]
@@ -841,7 +809,7 @@
         },
         "default_weapon_ids": [
           "armoured-hull-repulsor",
-          "repulsor-defensive-array",
+          "defensive-array",
           "heavy-onslaught-gatling-cannon-repulsor",
           "hunter-slayer-missile",
           "twin-heavy-bolter-repulsor"
@@ -952,7 +920,7 @@
         },
         "default_weapon_ids": [
           "absolvor-bolt-pistol",
-          "astartes-chainsword-sanguinary-priest"
+          "chainsword"
         ]
       }
     ],
@@ -987,7 +955,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol-death-company-captain-with-jump-pack",
-          "astartes-chainsword-death-company-captain-with-jump-pack"
+          "chainsword"
         ]
       }
     ],
@@ -1012,7 +980,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Death Company Marine",
+        "name": "Death Company Marines",
         "min": 5,
         "max": 10,
         "is_leader_model": false,
@@ -1022,7 +990,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "astartes-chainsword-death-company-marines"
+          "chainsword"
         ]
       }
     ],
@@ -1034,7 +1002,7 @@
       {
         "models": [
           {
-            "name": "Death Company Marine",
+            "name": "Death Company Marines",
             "min": 5,
             "max": 5
           }
@@ -1043,8 +1011,8 @@
       {
         "models": [
           {
-            "name": "Death Company Marine",
-            "min": 6,
+            "name": "Death Company Marines",
+            "min": 10,
             "max": 10
           }
         ]
@@ -1227,51 +1195,6 @@
     ]
   },
   {
-    "unit_id": "death-company-marines-with-bolt-rifles",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Death Company Marine with Bolt Rifle",
-        "min": 5,
-        "max": 10,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "bolt-rifle",
-          "close-combat-weapon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Death Company Marine with Bolt Rifle",
-            "min": 5,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Death Company Marine with Bolt Rifle",
-            "min": 6,
-            "max": 10
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "the-sanguinor",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -1319,8 +1242,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "encarmine-blade",
-          "angelus-boltgun"
+          "angelus-boltgun",
+          "encarmine-weapon"
         ]
       }
     ],
@@ -1342,7 +1265,7 @@
         "models": [
           {
             "name": "Sanguinary Guard",
-            "min": 4,
+            "min": 6,
             "max": 6
           }
         ]
@@ -1389,7 +1312,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Death Company Marine with Jump Packs",
+        "name": "Death Company Marines with Jump Packs",
         "min": 5,
         "max": 10,
         "is_leader_model": false,
@@ -1399,13 +1322,13 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "astartes-chainsword-death-company-marines-with-jump-packs"
+          "chainsword"
         ],
         "loadout_variants": [
           {
             "name": "Death Company Marine",
             "weapon_ids": [
-              "astartes-chainsword-death-company-marines-with-jump-packs",
+              "chainsword",
               "heavy-bolt-pistol"
             ],
             "max_count": 10
@@ -1421,7 +1344,7 @@
       {
         "models": [
           {
-            "name": "Death Company Marine with Jump Packs",
+            "name": "Death Company Marines with Jump Packs",
             "min": 5,
             "max": 5
           }
@@ -1430,8 +1353,8 @@
       {
         "models": [
           {
-            "name": "Death Company Marine with Jump Packs",
-            "min": 6,
+            "name": "Death Company Marines with Jump Packs",
+            "min": 10,
             "max": 10
           }
         ]
@@ -1491,7 +1414,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolter-ravenwing-darkshroud",
-          "close-combat-weapon-ravenwing-darkshroud"
+          "armoured-hull"
         ]
       }
     ],
@@ -1528,7 +1451,7 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "plasma-talon",
-          "black-knight-combat-weapon"
+          "corvus-hammers"
         ]
       },
       {
@@ -1542,9 +1465,9 @@
           "length": 42
         },
         "default_weapon_ids": [
-          "black-knight-combat-weapon",
           "bolt-pistol",
-          "plasma-talon"
+          "plasma-talon",
+          "corvus-hammers"
         ]
       }
     ],
@@ -1576,7 +1499,7 @@
           },
           {
             "name": "Ravenwing Black Knight",
-            "min": 3,
+            "min": 5,
             "max": 5
           }
         ]
@@ -1588,7 +1511,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Ezekial",
+        "name": "Ezekiel",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -1599,8 +1522,7 @@
         "default_weapon_ids": [
           "the-deliverer",
           "mind-wipe",
-          "traitors-bane",
-          "book-of-salvation"
+          "traitors-bane"
         ]
       }
     ],
@@ -1612,7 +1534,7 @@
       {
         "models": [
           {
-            "name": "Ezekial",
+            "name": "Ezekiel",
             "min": 1,
             "max": 1
           }
@@ -1635,11 +1557,11 @@
         },
         "default_weapon_ids": [
           "storm-bolter",
-          "power-weapon"
+          "power-fist"
         ]
       },
       {
-        "name": "Deathwing Terminator",
+        "name": "Deathwing Terminators",
         "min": 4,
         "max": 9,
         "is_leader_model": false,
@@ -1666,7 +1588,7 @@
             "max": 1
           },
           {
-            "name": "Deathwing Terminator",
+            "name": "Deathwing Terminators",
             "min": 4,
             "max": 4
           }
@@ -1680,8 +1602,8 @@
             "max": 1
           },
           {
-            "name": "Deathwing Terminator",
-            "min": 5,
+            "name": "Deathwing Terminators",
+            "min": 9,
             "max": 9
           }
         ]
@@ -1693,7 +1615,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Inner Circle Companion",
+        "name": "Inner Circle Companions",
         "min": 3,
         "max": 6,
         "is_leader_model": false,
@@ -1715,7 +1637,7 @@
       {
         "models": [
           {
-            "name": "Inner Circle Companion",
+            "name": "Inner Circle Companions",
             "min": 3,
             "max": 3
           }
@@ -1724,8 +1646,8 @@
       {
         "models": [
           {
-            "name": "Inner Circle Companion",
-            "min": 4,
+            "name": "Inner Circle Companions",
+            "min": 6,
             "max": 6
           }
         ]
@@ -1785,9 +1707,9 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "close-combat-weapon-land-speeder-vengeance",
+          "heavy-bolter-land-speeder-vengeance",
           "plasma-storm-battery",
-          "heavy-bolter-land-speeder-vengeance"
+          "armoured-hull"
         ]
       }
     ],
@@ -1898,7 +1820,7 @@
         ]
       },
       {
-        "name": "Deathwing Knight",
+        "name": "Deathwing Knights",
         "min": 4,
         "max": 4,
         "is_leader_model": false,
@@ -1924,7 +1846,7 @@
             "max": 1
           },
           {
-            "name": "Deathwing Knight",
+            "name": "Deathwing Knights",
             "min": 4,
             "max": 4
           }
@@ -1972,7 +1894,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Lion El\u2019Jonson",
+        "name": "Lion El'Jonson",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -1994,7 +1916,7 @@
       {
         "models": [
           {
-            "name": "Lion El\u2019Jonson",
+            "name": "Lion El'Jonson",
             "min": 1,
             "max": 1
           }
@@ -2035,7 +1957,7 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "plasma-talon",
-          "black-knight-combat-weapon"
+          "corvus-hammers"
         ]
       },
       {
@@ -2051,7 +1973,7 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "plasma-talon",
-          "black-knight-combat-weapon"
+          "corvus-hammers"
         ]
       }
     ],
@@ -2234,23 +2156,22 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Kill Team Heavy Intercessors",
-        "min": 3,
-        "max": 10,
+        "name": "Kill Team Heavy Intercessor with Deathwatch Heavy Bolt Rifle and Ceramite Fists.",
+        "min": 4,
+        "max": 4,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
-          "bolt-pistol",
-          "deathwatch-heavy-bolt-rifle"
+          "deathwatch-heavy-bolt-rifle",
+          "ceramite-fists"
         ]
       },
       {
-        "name": "Kill Team Heavy Intercessor with power fists",
-        "min": 0,
+        "name": "Kill Team Heavy Intercessor with Flamestorm Gauntlets and Twin Power Fists",
+        "min": 3,
         "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
@@ -2260,95 +2181,11 @@
         "default_weapon_ids": [
           "flamestorm-gauntlets",
           "twin-power-fists"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Kill Team Heavy Intercessor w/ melta rifle",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "melta-rifle"
-            ],
-            "max_count": 3
-          },
-          {
-            "name": "Kill Team Heavy Intercessor w/ multi-melta",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "multi-melta-indomitor-kill-team"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Kill Team Heavy Intercessor w/ power fists & auto boltstorm gauntlets",
-            "weapon_ids": [
-              "fragstorm-grenade-launcher",
-              "auto-boltstorm-gauntlets",
-              "twin-power-fists"
-            ],
-            "max_count": 3
-          },
-          {
-            "name": "Kill Team Heavy Intercessor w/ power fists & flamestorm gauntlets",
-            "weapon_ids": [
-              "flamestorm-gauntlets",
-              "twin-power-fists"
-            ],
-            "max_count": 3
-          },
-          {
-            "name": "Kill Team Heavy Intercessor",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-heavy-bolt-rifle"
-            ],
-            "max_count": 10
-          },
-          {
-            "name": "Kill Team Heavy Intercessor w/ heavy bolter",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-heavy-bolter"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Kill Team Heavy Intercessor w/ melta rifle",
-              "Kill Team Heavy Intercessor w/ multi-melta"
-            ],
-            "count": 3,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Kill Team Heavy Intercessor w/ power fists & auto boltstorm gauntlets",
-              "Kill Team Heavy Intercessor w/ power fists & flamestorm gauntlets"
-            ],
-            "count": 3,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Kill Team Heavy Intercessor",
-              "Kill Team Heavy Intercessor w/ heavy bolter"
-            ],
-            "count": 10,
-            "per_models": 0,
-            "scope": "model-row"
-          }
         ]
       },
       {
-        "name": "Kill Team Heavy Intercessor with melta rifle",
-        "min": 0,
+        "name": "Kill Team Heavy Intercessor with Melta Rifle, Bolt Pistol and Ceramite Fists",
+        "min": 3,
         "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
@@ -2356,9 +2193,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
           "melta-rifle",
-          "close-combat-weapon"
+          "ceramite-fists",
+          "bolt-pistol"
         ]
       }
     ],
@@ -2370,27 +2207,18 @@
       {
         "models": [
           {
-            "name": "Kill Team Heavy Intercessors",
-            "min": 10,
-            "max": 10
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Kill Team Heavy Intercessors",
-            "min": 3,
-            "max": 10
+            "name": "Kill Team Heavy Intercessor with Deathwatch Heavy Bolt Rifle and Ceramite Fists.",
+            "min": 4,
+            "max": 4
           },
           {
-            "name": "Kill Team Heavy Intercessor with power fists",
-            "min": 0,
+            "name": "Kill Team Heavy Intercessor with Flamestorm Gauntlets and Twin Power Fists",
+            "min": 3,
             "max": 3
           },
           {
-            "name": "Kill Team Heavy Intercessor with melta rifle",
-            "min": 0,
+            "name": "Kill Team Heavy Intercessor with Melta Rifle, Bolt Pistol and Ceramite Fists",
+            "min": 3,
             "max": 3
           }
         ]
@@ -2416,7 +2244,7 @@
         }
       },
       {
-        "name": "Deathwatch Veterans",
+        "name": "Deathwatch Veteran",
         "profile_name": "Deathwatch Veterans",
         "min": 4,
         "max": 9,
@@ -2444,7 +2272,7 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
+            "name": "Deathwatch Veteran",
             "min": 4,
             "max": 4
           }
@@ -2458,8 +2286,8 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veterans",
-            "min": 5,
+            "name": "Deathwatch Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -2486,59 +2314,13 @@
         }
       },
       {
-        "name": "Deathwatch Veteran with stalker bolt rifle",
-        "profile_name": "Deathwatch Veteran",
-        "min": 1,
-        "max": 2,
-        "default_weapon_ids": [
-          "close-combat-weapon",
-          "stalker-bolt-rifle",
-          "bolt-pistol-decimus-kill-team"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Deathwatch Veteran with heavy thunder hammer",
-        "profile_name": "Deathwatch Veteran",
-        "min": 1,
-        "max": 2,
-        "default_weapon_ids": [
-          "heavy-thunder-hammer",
-          "bolt-pistol-decimus-kill-team"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Deathwatch Veteran with xenophase blade",
-        "profile_name": "Deathwatch Veteran",
-        "min": 0,
-        "max": 1,
-        "default_weapon_ids": [
-          "special-issue-bolt-pistol",
-          "xenophase-blade"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Gravis Veteran",
         "min": 1,
         "max": 2,
         "default_weapon_ids": [
-          "close-combat-weapon",
           "infernus-heavy-bolter-decimus-kill-team",
-          "bolt-pistol-decimus-kill-team"
+          "bolt-pistol-decimus-kill-team",
+          "knives-and-fists"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -2547,20 +2329,62 @@
         }
       },
       {
-        "name": "Deathwatch Veteran with marksman bolt carbine",
-        "profile_name": "Deathwatch Veteran",
+        "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
         "min": 1,
         "max": 2,
-        "default_weapon_ids": [
-          "close-combat-weapon",
-          "deathwatch-marksman-bolt-carbine",
-          "special-issue-bolt-pistol"
-        ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "default_weapon_ids": [
+          "heavy-thunder-hammer",
+          "bolt-pistol-decimus-kill-team"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "deathwatch-marksman-bolt-carbine",
+          "special-issue-bolt-pistol",
+          "knives-and-fists"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+        "min": 1,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "stalker-bolt-rifle",
+          "bolt-pistol-decimus-kill-team",
+          "knives-and-fists"
+        ]
+      },
+      {
+        "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+        "min": 0,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "special-issue-bolt-pistol",
+          "xenophase-blade"
+        ]
       }
     ],
     "game_version": {
@@ -2576,22 +2400,22 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veteran with stalker bolt rifle",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Deathwatch Veteran with heavy thunder hammer",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Gravis Veteran",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Deathwatch Veteran with marksman bolt carbine",
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
             "min": 1,
             "max": 1
           }
@@ -2605,29 +2429,29 @@
             "max": 1
           },
           {
-            "name": "Deathwatch Veteran with stalker bolt rifle",
-            "min": 2,
-            "max": 2
-          },
-          {
-            "name": "Deathwatch Veteran with heavy thunder hammer",
-            "min": 2,
-            "max": 2
-          },
-          {
-            "name": "Deathwatch Veteran with xenophase blade",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Gravis Veteran",
             "min": 2,
             "max": 2
           },
           {
-            "name": "Deathwatch Veteran with marksman bolt carbine",
+            "name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
             "min": 2,
             "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -2648,16 +2472,16 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "astartes-chainsword-talonstrike-kill-team"
+          "chainsword"
         ]
       },
       {
         "name": "Kill Team Intercessor with Jump Pack",
-        "min": 2,
-        "max": 9,
+        "min": 5,
+        "max": 5,
         "default_weapon_ids": [
-          "astartes-chainsword-talonstrike-kill-team",
-          "heavy-bolt-pistol"
+          "heavy-bolt-pistol",
+          "chainsword"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -2667,11 +2491,11 @@
       },
       {
         "name": "Kill Team Heavy Intercessor with Jump Pack",
-        "min": 0,
-        "max": 5,
+        "min": 4,
+        "max": 4,
         "default_weapon_ids": [
-          "close-combat-weapon",
-          "assault-bolters"
+          "assault-bolters",
+          "ceramite-fists"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -2694,27 +2518,13 @@
           },
           {
             "name": "Kill Team Intercessor with Jump Pack",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Kill Team Sergeant with Jump Pack",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Kill Team Intercessor with Jump Pack",
-            "min": 2,
-            "max": 9
+            "min": 5,
+            "max": 5
           },
           {
             "name": "Kill Team Heavy Intercessor with Jump Pack",
-            "min": 0,
-            "max": 5
+            "min": 4,
+            "max": 4
           }
         ]
       }
@@ -2769,10 +2579,11 @@
           "length": 92
         },
         "default_weapon_ids": [
+          "blackstar-rocket-launcher",
+          "blackstar-rocket-launcher",
           "twin-assault-cannon",
-          "blackstar-rocket-launcher",
-          "blackstar-rocket-launcher",
-          "armoured-hull"
+          "armoured-hull",
+          "auspex-array"
         ]
       }
     ],
@@ -2853,7 +2664,7 @@
           },
           {
             "name": "Deathwatch Terminator",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -2876,159 +2687,12 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "deathwatch-bolt-rifle",
-          "close-combat-weapon"
+          "knives-and-fists"
         ]
       },
       {
-        "name": "Kill Team Intercessor",
+        "name": "Kill Team Intercessor with Deathwatch Bolt Rifle, Bolt Pistol and Knives and Fists",
         "min": 2,
-        "max": 9,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "deathwatch-bolt-rifle",
-          "close-combat-weapon"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Kill Team Intercessor",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-bolt-rifle"
-            ],
-            "max_count": 9
-          },
-          {
-            "name": "Kill Team Intercessor w/ grenade launcher",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-bolt-rifle",
-              "astartes-grenade-launcher"
-            ],
-            "max_count": 2
-          },
-          {
-            "name": "Kill Team Intercessor w/ heavy bolt pistol",
-            "weapon_ids": [
-              "astartes-chainsword-fortis-kill-team",
-              "heavy-bolt-pistol"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Intercessor w/ pyreblaster",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "pyreblaster"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Intercessor w/ plasma pistol and incinerator",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "plasma-pistol-fortis-kill-team",
-              "plasma-incinerator"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Kill Team Intercessor w/ bolt pistol and incinerator",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "bolt-pistol",
-              "plasma-incinerator"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Intercessor w/ vengor launcher",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "bolt-pistol",
-              "castellan-launcher",
-              "vengor-launcher"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Kill Team Intercessor",
-              "Kill Team Intercessor w/ grenade launcher",
-              "Kill Team Intercessor w/ heavy bolt pistol",
-              "Kill Team Intercessor w/ pyreblaster"
-            ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Kill Team Intercessor w/ plasma pistol and incinerator",
-              "Kill Team Intercessor w/ bolt pistol and incinerator"
-            ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
-          }
-        ]
-      },
-      {
-        "name": "Kill Team Intercessor with plasma incinerator",
-        "min": 0,
-        "max": 4,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "plasma-incinerator",
-          "close-combat-weapon"
-        ]
-      },
-      {
-        "name": "Kill Team Intercessor with heavy bolt pistol",
-        "min": 0,
-        "max": 4,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "heavy-bolt-pistol",
-          "astartes-chainsword-fortis-kill-team"
-        ]
-      },
-      {
-        "name": "Kill Team Intercessor with pyreblaster",
-        "min": 0,
-        "max": 4,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "pyreblaster",
-          "close-combat-weapon"
-        ]
-      },
-      {
-        "name": "Kill Team Intercessor with superfrag rocket launcher",
-        "min": 0,
         "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
@@ -3037,9 +2701,67 @@
         },
         "default_weapon_ids": [
           "bolt-pistol",
+          "deathwatch-bolt-rifle",
+          "knives-and-fists"
+        ]
+      },
+      {
+        "name": "Deathwatch Intercessor with Plasma Incinerator, Bolt Pistol and Knives and Fists",
+        "min": 2,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "plasma-incinerator",
+          "knives-and-fists"
+        ]
+      },
+      {
+        "name": "Kill Team Intercessor with Heavy Bolt Pistol and Chainsword",
+        "min": 2,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "heavy-bolt-pistol",
+          "chainsword"
+        ]
+      },
+      {
+        "name": "Kill Team Intercessor with Pyreblaster, Bolt Pistol and Knives and Fists",
+        "min": 2,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "pyreblaster",
+          "bolt-pistol",
+          "knives-and-fists"
+        ]
+      },
+      {
+        "name": "Kill Team Intercessor with Castellan Launcher, Superfrag Rocket Launcher and Knives and Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
           "castellan-launcher",
           "superfrag-rocket-launcher",
-          "close-combat-weapon"
+          "knives-and-fists"
         ]
       }
     ],
@@ -3056,43 +2778,29 @@
             "max": 1
           },
           {
-            "name": "Kill Team Intercessor",
-            "min": 9,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
+            "name": "Kill Team Intercessor with Deathwatch Bolt Rifle, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
           {
-            "name": "Kill Team Sergeant",
+            "name": "Deathwatch Intercessor with Plasma Incinerator, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Kill Team Intercessor with Heavy Bolt Pistol and Chainsword",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Kill Team Intercessor with Pyreblaster, Bolt Pistol and Knives and Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Kill Team Intercessor with Castellan Launcher, Superfrag Rocket Launcher and Knives and Fists",
             "min": 1,
             "max": 1
-          },
-          {
-            "name": "Kill Team Intercessor",
-            "min": 2,
-            "max": 9
-          },
-          {
-            "name": "Kill Team Intercessor with plasma incinerator",
-            "min": 0,
-            "max": 4
-          },
-          {
-            "name": "Kill Team Intercessor with heavy bolt pistol",
-            "min": 0,
-            "max": 4
-          },
-          {
-            "name": "Kill Team Intercessor with pyreblaster",
-            "min": 0,
-            "max": 4
-          },
-          {
-            "name": "Kill Team Intercessor with superfrag rocket launcher",
-            "min": 0,
-            "max": 2
           }
         ]
       }
@@ -3103,128 +2811,24 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Kill Team Infiltrator",
-        "min": 3,
-        "max": 10,
+        "name": "Kill Team Infiltrator with Deathwatch Marksman Bolt Carbine, Bolt Pistol and Ceramite Fists",
+        "min": 4,
+        "max": 4,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         },
         "default_weapon_ids": [
+          "bolt-pistol",
           "deathwatch-marksman-bolt-carbine",
-          "close-combat-weapon",
-          "bolt-pistol"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Kill Team Infiltrator",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-marksman-bolt-carbine"
-            ],
-            "max_count": 10
-          },
-          {
-            "name": "Kill Team Infiltrator w/ occulus bolt carbine",
-            "weapon_ids": [
-              "bolt-pistol",
-              "deathwatch-occulus-bolt-carbine",
-              "paired-combat-blades"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Infiltrator w/ wargear",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "deathwatch-marksman-bolt-carbine"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Kill Team Infiltrator w/ combat knife",
-            "weapon_ids": [
-              "special-issue-bolt-pistol-spectrus-kill-team",
-              "combat-knife"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Infiltrator w/ bolt carbine",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "special-issue-bolt-pistol-spectrus-kill-team",
-              "deathwatch-bolt-carbine"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Kill Team Infiltrator w/ instigator bolt carbine",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "instigator-bolt-carbine"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Kill Team Infiltrator w/ las fusil",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "las-fusil"
-            ],
-            "max_count": 3
-          },
-          {
-            "name": "Kill Team Infiltrator w/ bolt sniper rifle",
-            "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
-              "bolt-sniper-rifle"
-            ],
-            "max_count": 3
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Kill Team Infiltrator",
-              "Kill Team Infiltrator w/ occulus bolt carbine",
-              "Kill Team Infiltrator w/ wargear"
-            ],
-            "count": 10,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Kill Team Infiltrator w/ combat knife",
-              "Kill Team Infiltrator w/ bolt carbine"
-            ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Kill Team Infiltrator w/ instigator bolt carbine",
-              "Kill Team Infiltrator w/ las fusil",
-              "Kill Team Infiltrator w/ bolt sniper rifle"
-            ],
-            "count": 3,
-            "per_models": 0,
-            "scope": "model-row"
-          }
+          "ceramite-fists"
         ]
       },
       {
-        "name": "Kill Team Infiltrator with bolt sniper rifle",
-        "min": 0,
-        "max": 3,
+        "name": "Kill Team Infiltrator with Bolt Sniper Rifle, Bolt Pistol and Ceramite Fists",
+        "min": 2,
+        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -3233,13 +2837,13 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "bolt-sniper-rifle",
-          "close-combat-weapon"
+          "ceramite-fists"
         ]
       },
       {
-        "name": "Kill Team Infiltrator with Deathwatch occulus bolt carbine",
-        "min": 0,
-        "max": 4,
+        "name": "Kill Team Infiltrator with Deathwatch Occulus Bolt Carbine, Bolt Pistol and Paired Combat Blades",
+        "min": 2,
+        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -3252,9 +2856,9 @@
         ]
       },
       {
-        "name": "Kill Team Infiltrator with combat knife",
-        "min": 0,
-        "max": 4,
+        "name": "Kill Team Infiltrator with Special-issue Bolt Pistol and Combat Knife",
+        "min": 2,
+        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -3274,33 +2878,24 @@
       {
         "models": [
           {
-            "name": "Kill Team Infiltrator",
-            "min": 10,
-            "max": 10
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Kill Team Infiltrator",
-            "min": 3,
-            "max": 10
-          },
-          {
-            "name": "Kill Team Infiltrator with bolt sniper rifle",
-            "min": 0,
-            "max": 3
-          },
-          {
-            "name": "Kill Team Infiltrator with Deathwatch occulus bolt carbine",
-            "min": 0,
+            "name": "Kill Team Infiltrator with Deathwatch Marksman Bolt Carbine, Bolt Pistol and Ceramite Fists",
+            "min": 4,
             "max": 4
           },
           {
-            "name": "Kill Team Infiltrator with combat knife",
-            "min": 0,
-            "max": 4
+            "name": "Kill Team Infiltrator with Bolt Sniper Rifle, Bolt Pistol and Ceramite Fists",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Kill Team Infiltrator with Deathwatch Occulus Bolt Carbine, Bolt Pistol and Paired Combat Blades",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Kill Team Infiltrator with Special-issue Bolt Pistol and Combat Knife",
+            "min": 2,
+            "max": 2
           }
         ]
       }
@@ -3321,8 +2916,7 @@
         },
         "default_weapon_ids": [
           "master-crafted-heavy-bolt-rifle",
-          "master-crafted-power-weapon-captain-in-gravis-armour",
-          "power-fist-captain-in-gravis-armour"
+          "master-crafted-power-weapon-captain-in-gravis-armour"
         ]
       }
     ],
@@ -3391,8 +2985,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol-assault-intercessor-squad",
-          "astartes-chainsword-assault-intercessor-squad"
+          "chainsword",
+          "heavy-bolt-pistol-assault-intercessor-squad"
         ]
       },
       {
@@ -3405,8 +2999,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol-assault-intercessor-squad",
-          "astartes-chainsword-assault-intercessor-squad"
+          "chainsword",
+          "heavy-bolt-pistol-assault-intercessor-squad"
         ]
       }
     ],
@@ -3438,35 +3032,7 @@
           },
           {
             "name": "Assault Intercessor",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Assault Intercessor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Intercessor",
-            "min": 5,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Assault Intercessor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Intercessor",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -3534,7 +3100,7 @@
           },
           {
             "name": "Inceptor",
-            "min": 3,
+            "min": 5,
             "max": 5
           }
         ]
@@ -3555,6 +3121,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "master-crafted-power-weapon",
           "storm-bolter-ancient-in-terminator-armour"
         ]
       }
@@ -3628,8 +3195,7 @@
         "default_weapon_ids": [
           "forge-bolter",
           "grav-pistol-techmarine",
-          "omnissiah-power-axe",
-          "servo-arm"
+          "omnissian-power-axe-and-servo-arm"
         ]
       }
     ],
@@ -3654,7 +3220,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Kor\u2019sarro Khan",
+        "name": "Kor'sarro Khan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -3677,7 +3243,7 @@
       {
         "models": [
           {
-            "name": "Kor\u2019sarro Khan",
+            "name": "Kor'sarro Khan",
             "min": 1,
             "max": 1
           }
@@ -3759,76 +3325,6 @@
     ]
   },
   {
-    "unit_id": "eradicator-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Eradicator Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "bolt-pistol-eradicator-squad",
-          "ceramite-fists-eradicator-squad",
-          "melta-rifle-eradicator-squad"
-        ]
-      },
-      {
-        "name": "Eradicator",
-        "min": 2,
-        "max": 5,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "bolt-pistol-eradicator-squad",
-          "ceramite-fists-eradicator-squad",
-          "melta-rifle-eradicator-squad"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Eradicator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Eradicator",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Eradicator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Eradicator",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "librarian",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -3853,33 +3349,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Librarian",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Librarian",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Librarian",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -3926,47 +3395,11 @@
     ]
   },
   {
-    "unit_id": "dreadnought",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Dreadnought",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 60
-        },
-        "default_weapon_ids": [
-          "storm-bolter",
-          "assault-cannon",
-          "dreadnought-combat-weapon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Dreadnought",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "terminator-assault-squad",
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Assault Terminator Sergeant",
+        "name": "Terminator Sergeant",
         "min": 1,
         "max": 1,
         "is_leader_model": true,
@@ -3979,7 +3412,7 @@
         ]
       },
       {
-        "name": "Assault Terminator",
+        "name": "Terminator",
         "min": 4,
         "max": 9,
         "is_leader_model": false,
@@ -4000,12 +3433,12 @@
       {
         "models": [
           {
-            "name": "Assault Terminator Sergeant",
+            "name": "Terminator Sergeant",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Assault Terminator",
+            "name": "Terminator",
             "min": 4,
             "max": 4
           }
@@ -4014,49 +3447,14 @@
       {
         "models": [
           {
-            "name": "Assault Terminator Sergeant",
+            "name": "Terminator Sergeant",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Assault Terminator",
-            "min": 5,
+            "name": "Terminator",
+            "min": 9,
             "max": 9
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "predator-destructor",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Predator Destructor",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-tracks-predator-destructor",
-          "predator-autocannon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Predator Destructor",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -4077,7 +3475,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol-bladeguard-veteran-squad",
-          "master-crafted-power-weapon-bladeguard-veteran-squad"
+          "master-crafted-power-sword"
         ]
       },
       {
@@ -4091,7 +3489,7 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol-bladeguard-veteran-squad",
-          "master-crafted-power-weapon-bladeguard-veteran-squad"
+          "master-crafted-power-sword"
         ]
       }
     ],
@@ -4123,35 +3521,7 @@
           },
           {
             "name": "Bladeguard Veteran",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Bladeguard Veteran Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Bladeguard Veteran",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Bladeguard Veteran Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Bladeguard Veteran",
-            "min": 3,
+            "min": 5,
             "max": 5
           }
         ]
@@ -4163,7 +3533,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Firestrike Servo-turret",
+        "name": "Firestrike Servo-turrets",
         "min": 1,
         "max": 2,
         "is_leader_model": false,
@@ -4185,7 +3555,7 @@
       {
         "models": [
           {
-            "name": "Firestrike Servo-turret",
+            "name": "Firestrike Servo-turrets",
             "min": 1,
             "max": 1
           }
@@ -4194,7 +3564,7 @@
       {
         "models": [
           {
-            "name": "Firestrike Servo-turret",
+            "name": "Firestrike Servo-turrets",
             "min": 2,
             "max": 2
           }
@@ -4228,15 +3598,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Storm Speeder Hammerstrike",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -4419,24 +3780,6 @@
             "max": 1
           }
         ]
-      },
-      {
-        "models": [
-          {
-            "name": "Drop Pod",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Drop Pod",
-            "min": 1,
-            "max": 1
-          }
-        ]
       }
     ]
   },
@@ -4454,6 +3797,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "chainsword",
           "heavy-bolt-pistol-captain-with-jump-pack"
         ]
       }
@@ -4463,15 +3807,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Captain with Jump Pack",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -4521,153 +3856,6 @@
     ]
   },
   {
-    "unit_id": "hammerfall-bunker",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Hammerfall Bunker",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "hammerfall-missile-launcher",
-          "hammerfall-heavy-bolter-array"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Hammerfall Bunker",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "suppressor-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Suppressor Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "accelerator-autocannon",
-          "bolt-pistol",
-          "close-combat-weapon"
-        ]
-      },
-      {
-        "name": "Suppressor",
-        "min": 2,
-        "max": 2,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "close-combat-weapon",
-          "bolt-pistol",
-          "accelerator-autocannon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Suppressor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Suppressor",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Suppressor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Suppressor",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Suppressor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Suppressor",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Suppressor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Suppressor",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Suppressor Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Suppressor",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "librarian-in-terminator-armour",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -4682,7 +3870,8 @@
         },
         "default_weapon_ids": [
           "force-weapon",
-          "smite"
+          "smite",
+          "storm-bolter-librarian-in-terminator-armour"
         ]
       }
     ],
@@ -4697,103 +3886,6 @@
             "name": "Librarian in Terminator Armour",
             "min": 1,
             "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Librarian in Terminator Armour",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Librarian in Terminator Armour",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Librarian in Terminator Armour",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "devastator-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Devastator Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
-          "close-combat-weapon-devastator-squad"
-        ]
-      },
-      {
-        "name": "Devastator",
-        "min": 4,
-        "max": 9,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "close-combat-weapon-devastator-squad",
-          "bolt-pistol",
-          "boltgun"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Devastator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator",
-            "min": 5,
-            "max": 9
           }
         ]
       }
@@ -4804,7 +3896,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Vulkan He\u2019stan",
+        "name": "Vulkan He'stan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -4827,191 +3919,9 @@
       {
         "models": [
           {
-            "name": "Vulkan He\u2019stan",
+            "name": "Vulkan He'stan",
             "min": 1,
             "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "centurion-devastator-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Devastator Centurion Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 50
-        },
-        "default_weapon_ids": [
-          "grav-cannon-centurion-devastator-squad",
-          "centurion-bolters",
-          "centurion-fists"
-        ]
-      },
-      {
-        "name": "Devastator Centurion",
-        "min": 2,
-        "max": 5,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 50
-        },
-        "default_weapon_ids": [
-          "centurion-bolters",
-          "grav-cannon-centurion-devastator-squad",
-          "centurion-fists"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Devastator Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Devastator Centurion",
-            "min": 3,
-            "max": 5
           }
         ]
       }
@@ -5032,7 +3942,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-hellblaster-squad",
-          "close-combat-weapon-hellblaster-squad",
+          "ceramite-fists",
           "plasma-incinerator-hellblaster-squad"
         ]
       },
@@ -5047,7 +3957,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-hellblaster-squad",
-          "close-combat-weapon-hellblaster-squad",
+          "ceramite-fists",
           "plasma-incinerator-hellblaster-squad"
         ]
       }
@@ -5080,7 +3990,7 @@
           },
           {
             "name": "Hellblaster",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -5102,7 +4012,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-heavy-intercessor-squad",
-          "close-combat-weapon-heavy-intercessor-squad",
+          "ceramite-fists",
           "heavy-bolt-rifle"
         ]
       },
@@ -5117,7 +4027,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-heavy-intercessor-squad",
-          "close-combat-weapon-heavy-intercessor-squad",
+          "ceramite-fists",
           "heavy-bolt-rifle"
         ]
       }
@@ -5150,7 +4060,7 @@
           },
           {
             "name": "Heavy Intercessor",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -5209,7 +4119,8 @@
         },
         "default_weapon_ids": [
           "boltgun-scout-squad",
-          "bolt-pistol-scout-squad"
+          "bolt-pistol-scout-squad",
+          "combat-knife-scout-squad"
         ]
       },
       {
@@ -5223,7 +4134,8 @@
         },
         "default_weapon_ids": [
           "boltgun-scout-squad",
-          "bolt-pistol-scout-squad"
+          "bolt-pistol-scout-squad",
+          "combat-knife-scout-squad"
         ]
       }
     ],
@@ -5255,42 +4167,8 @@
           },
           {
             "name": "Scout",
-            "min": 5,
+            "min": 9,
             "max": 9
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "marneus-calgar-in-armour-of-antilochus",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Marneus Calgar in Armour of Antilochus",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 50
-        },
-        "default_weapon_ids": [
-          "gauntlets-of-ultramar"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Marneus Calgar in Armour of Antilochus",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -5311,7 +4189,7 @@
         },
         "default_weapon_ids": [
           "absolvor-bolt-pistol-apothecary-biologis",
-          "close-combat-weapon-apothecary-biologis"
+          "servo-armature"
         ]
       }
     ],
@@ -5345,7 +4223,7 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "brutalis-bolt-rifles",
+          "bolt-rifle",
           "brutalis-fists",
           "twin-heavy-bolter-brutalis-dreadnought",
           "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought"
@@ -5420,7 +4298,7 @@
         "default_weapon_ids": [
           "absolvor-bolt-pistol-apothecary",
           "reductor-pistol",
-          "close-combat-weapon-apothecary"
+          "servo-armature"
         ]
       }
     ],
@@ -5454,9 +4332,10 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "twin-heavy-bolter-land-raider",
+          "armoured-tracks",
           "godhammer-lascannon",
-          "armoured-tracks"
+          "godhammer-lascannon",
+          "twin-heavy-bolter-land-raider"
         ]
       }
     ],
@@ -5653,51 +4532,6 @@
             "max": 1
           }
         ]
-      },
-      {
-        "models": [
-          {
-            "name": "Razorback",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Razorback",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Razorback",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Razorback",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Razorback",
-            "min": 1,
-            "max": 1
-          }
-        ]
       }
     ]
   },
@@ -5762,49 +4596,32 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
+        "name": "Outrider",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "chainsword",
+          "heavy-bolt-pistol-outrider-squad",
+          "twin-bolt-rifle-outrider-squad"
+        ],
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
+      },
+      {
         "name": "Outrider Sergeant",
         "profile_name": "Outrider",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "astartes-chainsword-outrider-squad",
+          "chainsword",
           "heavy-bolt-pistol-outrider-squad",
-          "twin-bolt-rifle-outrider-squad",
-          "bolt-pistol"
+          "twin-bolt-rifle-outrider-squad"
         ],
         "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 90,
-          "length": 52.5
-        }
-      },
-      {
-        "name": "Outrider",
-        "min": 2,
-        "max": 5,
-        "default_weapon_ids": [
-          "astartes-chainsword-outrider-squad",
-          "heavy-bolt-pistol-outrider-squad",
-          "twin-bolt-rifle-outrider-squad"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 90,
-          "length": 52.5
-        }
-      },
-      {
-        "name": "Invader ATV",
-        "min": 0,
-        "max": 1,
-        "default_weapon_ids": [
-          "astartes-chainsword-outrider-squad",
-          "heavy-bolt-pistol-outrider-squad",
-          "twin-bolt-rifle-outrider-squad"
-        ],
-        "is_leader_model": false,
         "base_size_mm": {
           "shape": "oval",
           "width": 90,
@@ -5820,45 +4637,12 @@
       {
         "models": [
           {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Outrider",
             "min": 2,
             "max": 2
           },
           {
-            "name": "Invader ATV",
+            "name": "Outrider Sergeant",
             "min": 1,
             "max": 1
           }
@@ -5867,83 +4651,12 @@
       {
         "models": [
           {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Outrider",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 3,
+            "min": 5,
             "max": 5
           },
           {
-            "name": "Invader ATV",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
             "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 2,
-            "max": 2
-          },
-          {
-            "name": "Invader ATV",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Outrider Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Outrider",
-            "min": 3,
-            "max": 5
-          },
-          {
-            "name": "Invader ATV",
             "min": 1,
             "max": 1
           }
@@ -5967,7 +4680,7 @@
         "default_weapon_ids": [
           "bolt-pistol-desolation-squad",
           "castellan-launcher-desolation-squad",
-          "close-combat-weapon-desolation-squad",
+          "ceramite-fists",
           "superfrag-rocket-launcher-desolation-squad"
         ]
       },
@@ -5983,7 +4696,7 @@
         "default_weapon_ids": [
           "bolt-pistol-desolation-squad",
           "castellan-launcher-desolation-squad",
-          "close-combat-weapon-desolation-squad",
+          "ceramite-fists",
           "superfrag-rocket-launcher-desolation-squad"
         ]
       }
@@ -6004,186 +4717,6 @@
             "name": "Desolation Marine",
             "min": 4,
             "max": 4
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "centurion-assault-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Assault Centurion Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 50
-        },
-        "default_weapon_ids": [
-          "twin-flamer",
-          "siege-drills",
-          "centurion-bolters"
-        ]
-      },
-      {
-        "name": "Assault Centurion",
-        "min": 2,
-        "max": 5,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 50
-        },
-        "default_weapon_ids": [
-          "siege-drills",
-          "centurion-bolters",
-          "twin-flamer"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Assault Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Centurion",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Assault Centurion Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Centurion",
-            "min": 3,
-            "max": 5
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "vindicator",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Vindicator",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-tracks-vindicator",
-          "demolisher-cannon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Vindicator",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "tactical-squad",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Tactical Sergeant",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
-          "close-combat-weapon-tactical-squad"
-        ]
-      },
-      {
-        "name": "Tactical Marine",
-        "min": 9,
-        "max": 9,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "boltgun",
-          "bolt-pistol",
-          "close-combat-weapon-tactical-squad"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "unit_id": "whirlwind",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Whirlwind",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-tracks-whirlwind",
-          "whirlwind-vengeance-launcher"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Whirlwind",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -6234,15 +4767,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
           "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
-          "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
-          "heavy-bolt-pistol-wardens-of-ultramar",
-          "master-crafted-power-weapon-wardens-of-ultramar"
+          "ceramite-fists-wardens-of-ultramar"
         ],
         "is_leader_model": true
       },
@@ -6252,13 +4778,6 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
-          "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
-          "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
           "heavy-bolt-pistol-wardens-of-ultramar",
           "master-crafted-power-weapon-wardens-of-ultramar"
         ],
@@ -6270,14 +4789,7 @@
         "max": 1,
         "default_weapon_ids": [
           "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
-          "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
-          "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
-          "heavy-bolt-pistol-wardens-of-ultramar",
-          "master-crafted-power-weapon-wardens-of-ultramar"
+          "power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6287,14 +4799,7 @@
         "max": 1,
         "default_weapon_ids": [
           "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
-          "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
-          "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
-          "heavy-bolt-pistol-wardens-of-ultramar",
-          "master-crafted-power-weapon-wardens-of-ultramar"
+          "power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6303,15 +4808,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
-          "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
           "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
-          "heavy-bolt-pistol-wardens-of-ultramar",
-          "master-crafted-power-weapon-wardens-of-ultramar"
+          "force-stave"
         ],
         "is_leader_model": false
       },
@@ -6321,14 +4819,7 @@
         "max": 1,
         "default_weapon_ids": [
           "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar",
-          "bolt-rifle-wardens-of-ultramar",
-          "ceramite-fists-wardens-of-ultramar",
-          "astropathic-blast",
-          "force-stave",
-          "close-combat-weapon-wardens-of-ultramar",
-          "heavy-bolt-pistol-wardens-of-ultramar",
-          "master-crafted-power-weapon-wardens-of-ultramar"
+          "ultramarian-combat-weapons"
         ],
         "is_leader_model": false
       }
@@ -6388,11 +4879,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "fragstorm-grenade-launchers-redemptor-dreadnought",
+          "fragstorm-grenade-launcher",
           "heavy-flamer-redemptor-dreadnought",
           "heavy-onslaught-gatling-cannon",
-          "redemptor-fist",
-          "storm-bolters-redemptor-dreadnought"
+          "redemptor-fist"
         ]
       }
     ],
@@ -6441,41 +4931,6 @@
         "models": [
           {
             "name": "Ancient",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "pedro-kantor",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Pedro Kantor",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "dorns-arrow",
-          "fist-of-retribution"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Pedro Kantor",
             "min": 1,
             "max": 1
           }
@@ -6550,15 +5005,6 @@
             "max": 1
           }
         ]
-      },
-      {
-        "models": [
-          {
-            "name": "Lieutenant with Combi-weapon",
-            "min": 1,
-            "max": 1
-          }
-        ]
       }
     ]
   },
@@ -6625,7 +5071,7 @@
           },
           {
             "name": "Incursor",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -6646,12 +5092,12 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol-assault-intercessors-with-jump-packs",
-          "astartes-chainsword-assault-intercessors-with-jump-packs"
+          "chainsword",
+          "heavy-bolt-pistol-assault-intercessors-with-jump-packs"
         ]
       },
       {
-        "name": "Assault Intercessors with Jump Packs",
+        "name": "Assault Intercessor with Jump Pack",
         "min": 4,
         "max": 9,
         "is_leader_model": false,
@@ -6660,7 +5106,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "astartes-chainsword-assault-intercessors-with-jump-packs",
+          "chainsword",
           "heavy-bolt-pistol-assault-intercessors-with-jump-packs"
         ]
       }
@@ -6678,7 +5124,7 @@
             "max": 1
           },
           {
-            "name": "Assault Intercessors with Jump Packs",
+            "name": "Assault Intercessor with Jump Pack",
             "min": 4,
             "max": 4
           }
@@ -6692,36 +5138,8 @@
             "max": 1
           },
           {
-            "name": "Assault Intercessors with Jump Packs",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Assault Intercessor Sergeant with Jump Pack",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Intercessors with Jump Packs",
-            "min": 5,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Assault Intercessor Sergeant with Jump Pack",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Assault Intercessors with Jump Packs",
-            "min": 5,
+            "name": "Assault Intercessor with Jump Pack",
+            "min": 9,
             "max": 9
           }
         ]
@@ -6768,7 +5186,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Vanguard Veteran Sergeant with Jump Pack",
+        "name": "Vanguard Veteran Sergeant",
         "min": 1,
         "max": 1,
         "is_leader_model": true,
@@ -6777,11 +5195,12 @@
           "diameter": 32
         },
         "default_weapon_ids": [
+          "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
           "relic-blade-vanguard-veteran-squad-with-jump-packs"
         ]
       },
       {
-        "name": "Vanguard Veteran with Jump Pack",
+        "name": "Vanguard Veteran",
         "min": 4,
         "max": 9,
         "is_leader_model": false,
@@ -6790,7 +5209,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "relic-blade-vanguard-veteran-squad-with-jump-packs"
+          "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+          "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs"
         ]
       }
     ],
@@ -6802,12 +5222,12 @@
       {
         "models": [
           {
-            "name": "Vanguard Veteran Sergeant with Jump Pack",
+            "name": "Vanguard Veteran Sergeant",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Vanguard Veteran with Jump Pack",
+            "name": "Vanguard Veteran",
             "min": 4,
             "max": 4
           }
@@ -6816,41 +5236,13 @@
       {
         "models": [
           {
-            "name": "Vanguard Veteran Sergeant with Jump Pack",
+            "name": "Vanguard Veteran Sergeant",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Vanguard Veteran with Jump Pack",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Vanguard Veteran Sergeant with Jump Pack",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vanguard Veteran with Jump Pack",
-            "min": 5,
-            "max": 9
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Vanguard Veteran Sergeant with Jump Pack",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Vanguard Veteran with Jump Pack",
-            "min": 5,
+            "name": "Vanguard Veteran",
+            "min": 9,
             "max": 9
           }
         ]
@@ -6862,6 +5254,35 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
+        "name": "Company Champion",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "master-crafted-bolt-pistol",
+          "master-crafted-power-weapon-company-heroes"
+        ]
+      },
+      {
+        "name": "Company veteran with bolt rifle",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "combat-knife-company-heroes",
+          "master-crafted-bolt-pistol",
+          "master-crafted-bolt-rifle"
+        ]
+      },
+      {
         "name": "Ancient",
         "min": 1,
         "max": 1,
@@ -6872,35 +5293,14 @@
         },
         "default_weapon_ids": [
           "combat-knife-company-heroes",
-          "bolt-pistol-company-heroes",
-          "master-crafted-bolt-rifle",
-          "master-crafted-power-weapon-company-heroes",
-          "master-crafted-heavy-bolter",
-          "bolt-pistol",
-          "bolt-rifle"
+          "master-crafted-bolt-pistol",
+          "master-crafted-bolt-rifle"
         ]
       },
       {
-        "name": "Company Champion",
+        "name": "Company Veteran with heavy bolter",
         "min": 1,
         "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "combat-knife-company-heroes",
-          "bolt-pistol-company-heroes",
-          "master-crafted-bolt-rifle",
-          "master-crafted-power-weapon-company-heroes",
-          "master-crafted-heavy-bolter"
-        ]
-      },
-      {
-        "name": "Company Veteran",
-        "min": 2,
-        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -6908,9 +5308,7 @@
         },
         "default_weapon_ids": [
           "combat-knife-company-heroes",
-          "bolt-pistol-company-heroes",
-          "master-crafted-bolt-rifle",
-          "master-crafted-power-weapon-company-heroes",
+          "master-crafted-bolt-pistol",
           "master-crafted-heavy-bolter"
         ]
       }
@@ -6923,19 +5321,24 @@
       {
         "models": [
           {
-            "name": "Ancient",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Company Champion",
             "min": 1,
             "max": 1
           },
           {
-            "name": "Company Veteran",
-            "min": 2,
-            "max": 2
+            "name": "Company veteran with bolt rifle",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Ancient",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Company Veteran with heavy bolter",
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -7002,7 +5405,7 @@
           },
           {
             "name": "Aggressor",
-            "min": 3,
+            "min": 5,
             "max": 5
           }
         ]
@@ -7063,7 +5466,7 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol-captain",
           "master-crafted-bolter",
-          "bolt-pistol-captain"
+          "master-crafted-power-weapon-captain"
         ]
       }
     ],
@@ -7076,41 +5479,6 @@
         "models": [
           {
             "name": "Captain",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "predator-annihilator",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Predator Annihilator",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-tracks-predator-annihilator",
-          "predator-twin-lascannon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Predator Annihilator",
             "min": 1,
             "max": 1
           }
@@ -7195,41 +5563,6 @@
     ]
   },
   {
-    "unit_id": "lieutenant-in-reiver-armour",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Lieutenant in Reiver Armour",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "master-crafted-special-issue-bolt-pistol",
-          "combat-knife-lieutenant-in-reiver-armour"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Lieutenant in Reiver Armour",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "captain-in-phobos-armour",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -7279,6 +5612,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
+          "absolvor-bolt-pistol-chaplain-with-jump-pack",
           "crozius-arcanum-chaplain-with-jump-pack"
         ]
       }
@@ -7288,15 +5622,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Chaplain with Jump Pack",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -7324,8 +5649,7 @@
         "default_weapon_ids": [
           "bolt-pistol-intercessor-squad",
           "bolt-rifle-intercessor-squad",
-          "close-combat-weapon-intercessor-squad",
-          "astartes-grenade-launcher-intercessor-squad"
+          "knives-and-fists"
         ]
       },
       {
@@ -7340,7 +5664,7 @@
         "default_weapon_ids": [
           "bolt-pistol-intercessor-squad",
           "bolt-rifle-intercessor-squad",
-          "close-combat-weapon-intercessor-squad"
+          "knives-and-fists"
         ]
       }
     ],
@@ -7372,7 +5696,7 @@
           },
           {
             "name": "Intercessor",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -7393,13 +5717,13 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "ironhail-heavy-stubber",
-          "twin-heavy-bolter",
-          "astraeus-las-ripper",
-          "astraeus-las-ripper",
           "armoured-hull-astraeus",
-          "twin-macro-accelerator-cannon",
-          "storm-bolter"
+          "astareus-las-ripper",
+          "astareus-las-ripper",
+          "ironhail-heavy-stubber",
+          "storm-bolter",
+          "twin-heavy-bolter",
+          "twin-macro-accelerator-cannon"
         ]
       }
     ],
@@ -7435,6 +5759,7 @@
         "default_weapon_ids": [
           "armoured-tracks",
           "flamestorm-cannon",
+          "flamestorm-cannon",
           "twin-assault-cannon-land-raider-redeemer"
         ]
       }
@@ -7444,15 +5769,6 @@
       "dataslate": "pre-launch-provisional"
     },
     "tiers": [
-      {
-        "models": [
-          {
-            "name": "Land Raider Redeemer",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
       {
         "models": [
           {
@@ -7478,15 +5794,15 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "thunderhawk-cluster-bombs",
           "armoured-hull-thunderhawk-gunship",
+          "hellstrike-missile-battery",
           "lascannon",
           "lascannon",
+          "thunderhawk-heavy-cannon",
           "twin-heavy-bolter",
           "twin-heavy-bolter",
           "twin-heavy-bolter",
-          "twin-heavy-bolter",
-          "thunderhawk-heavy-cannon"
+          "twin-heavy-bolter"
         ]
       }
     ],
@@ -7534,43 +5850,6 @@
         "models": [
           {
             "name": "Rhino",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "invader-atv",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Invader ATV",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-impact-invader-atv",
-          "bolt-pistol-invader-atv",
-          "onslaught-gatling-cannon-invader-atv",
-          "twin-bolt-rifle-invader-atv"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Invader ATV",
             "min": 1,
             "max": 1
           }
@@ -7641,7 +5920,7 @@
           },
           {
             "name": "Infiltrator",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -7665,7 +5944,7 @@
           "armoured-feet",
           "ballistus-lascannon",
           "ballistus-missile-launcher",
-          "storm-bolters-ballistus-dreadnought"
+          "storm-bolter"
         ]
       }
     ],
@@ -7700,7 +5979,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-infernus-squad",
-          "close-combat-weapon-infernus-squad",
+          "ceramite-fists",
           "pyreblaster-infernus-squad"
         ]
       },
@@ -7715,7 +5994,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-infernus-squad",
-          "close-combat-weapon-infernus-squad",
+          "ceramite-fists",
           "pyreblaster-infernus-squad"
         ]
       }
@@ -7748,7 +6027,7 @@
           },
           {
             "name": "Infernus Marine",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -7770,7 +6049,7 @@
         },
         "default_weapon_ids": [
           "blackout",
-          "the-ravens-talons"
+          "ravens-talons"
         ]
       }
     ],
@@ -7783,42 +6062,6 @@
         "models": [
           {
             "name": "Kayvaan Shrike",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "uriel-ventris",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Uriel Ventris",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
-        },
-        "default_weapon_ids": [
-          "bolt-pistol-uriel-ventris",
-          "invictus",
-          "sword-of-idaeus"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Uriel Ventris",
             "min": 1,
             "max": 1
           }
@@ -7841,7 +6084,7 @@
         },
         "default_weapon_ids": [
           "monomolecular-combat-blades-lieutenant-in-phobos-armour",
-          "bolt-pistol-lieutenant-in-phobos-armour"
+          "special-issue-bolt-pistol"
         ]
       }
     ],
@@ -7875,7 +6118,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "combat-knife-reiver-squad",
+          "bolt-carbine",
+          "monomolecular-combat-knife",
           "special-issue-bolt-pistol-reiver-squad"
         ]
       },
@@ -7889,7 +6133,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "combat-knife-reiver-squad",
+          "bolt-carbine",
+          "monomolecular-combat-knife",
           "special-issue-bolt-pistol-reiver-squad"
         ]
       }
@@ -7922,7 +6167,7 @@
           },
           {
             "name": "Reiver",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -7982,7 +6227,7 @@
           "heavy-bolter-invictor-tactical-warsuit",
           "incendium-cannon",
           "invictor-fist",
-          "ironhail-heavy-stubbers-invictor-tactical-warsuit"
+          "ironhail-heavy-stubber"
         ]
       }
     ],
@@ -8051,9 +6296,10 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "dreadnought-combat-weapon",
-          "assault-cannon"
+          "armoured-feet",
+          "assault-cannon",
+          "dreadnought-fist",
+          "storm-bolter"
         ]
       }
     ],
@@ -8171,7 +6417,7 @@
           },
           {
             "name": "Thunderwolf Cavalry",
-            "min": 3,
+            "min": 5,
             "max": 5
           }
         ]
@@ -8194,7 +6440,7 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "bolt-carbine-grey-hunters",
-          "astartes-chainsword-grey-hunters"
+          "chainsword"
         ]
       },
       {
@@ -8207,9 +6453,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "astartes-chainsword-grey-hunters",
+          "bolt-pistol",
           "bolt-carbine-grey-hunters",
-          "bolt-pistol"
+          "chainsword"
         ]
       }
     ],
@@ -8270,7 +6516,7 @@
         "models": [
           {
             "name": "Fenrisian Wolf",
-            "min": 6,
+            "min": 10,
             "max": 10
           }
         ]
@@ -8322,8 +6568,7 @@
         "max": 6,
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "master-crafted-power-weapon-wolf-guard-headtakers",
-          "storm-shield"
+          "paired-master-crafted-power-weapons"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -8332,7 +6577,7 @@
         }
       },
       {
-        "name": "Hunting Wolves",
+        "name": "Hunting Wolf",
         "min": 0,
         "max": 6,
         "is_leader_model": false,
@@ -8363,11 +6608,20 @@
         "models": [
           {
             "name": "Wolf Guard Headtaker",
+            "min": 6,
+            "max": 6
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Wolf Guard Headtaker",
             "min": 3,
             "max": 3
           },
           {
-            "name": "Hunting Wolves",
+            "name": "Hunting Wolf",
             "min": 3,
             "max": 3
           }
@@ -8379,18 +6633,9 @@
             "name": "Wolf Guard Headtaker",
             "min": 6,
             "max": 6
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Wolf Guard Headtaker",
-            "min": 6,
-            "max": 6
           },
           {
-            "name": "Hunting Wolves",
+            "name": "Hunting Wolf",
             "min": 6,
             "max": 6
           }
@@ -8484,7 +6729,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol",
-          "astartes-chainsword-blood-claws"
+          "chainsword"
         ]
       },
       {
@@ -8498,7 +6743,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol",
-          "astartes-chainsword-blood-claws"
+          "chainsword"
         ]
       }
     ],
@@ -8530,7 +6775,7 @@
           },
           {
             "name": "Blood Claw",
-            "min": 10,
+            "min": 19,
             "max": 19
           }
         ]
@@ -8707,7 +6952,7 @@
           },
           {
             "name": "Wolf Guard Terminator",
-            "min": 5,
+            "min": 9,
             "max": 9
           }
         ]
@@ -8755,7 +7000,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Wulfen",
+        "name": "Wulfen with Storm Shield",
         "min": 5,
         "max": 10,
         "is_leader_model": false,
@@ -8764,8 +7009,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "death-totem",
-          "thunder-hammer-wulfen-with-storm-shields"
+          "thunder-hammer-wulfen-with-storm-shields",
+          "stormfrag-auto-launcher"
         ]
       }
     ],
@@ -8777,7 +7022,7 @@
       {
         "models": [
           {
-            "name": "Wulfen",
+            "name": "Wulfen with Storm Shield",
             "min": 5,
             "max": 5
           }
@@ -8786,8 +7031,8 @@
       {
         "models": [
           {
-            "name": "Wulfen",
-            "min": 6,
+            "name": "Wulfen with Storm Shield",
+            "min": 10,
             "max": 10
           }
         ]
@@ -8799,7 +7044,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Bjorn the Fell-Handed",
+        "name": "Bjorn the Fell-handed",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -8822,7 +7067,7 @@
       {
         "models": [
           {
-            "name": "Bjorn the Fell-Handed",
+            "name": "Bjorn the Fell-handed",
             "min": 1,
             "max": 1
           }
@@ -8879,7 +7124,7 @@
         },
         "default_weapon_ids": [
           "master-crafted-power-weapon-wolf-guard-battle-leader",
-          "storm-shield"
+          "plasma-pistol-wolf-guard-battle-leader"
         ]
       }
     ],
@@ -8924,8 +7169,8 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "combat-blade",
-          "plasma-pistol-wolf-scouts"
+          "plasma-pistol-wolf-scouts",
+          "combat-knife"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -9031,7 +7276,7 @@
         "models": [
           {
             "name": "Wulfen",
-            "min": 6,
+            "min": 10,
             "max": 10
           }
         ]
@@ -9091,7 +7336,7 @@
       {
         "name": "Eradicator",
         "min": 2,
-        "max": 2,
+        "max": 5,
         "default_weapon_ids": [
           "bolt-pistol-eradicator-squad-with-heavy-bolters",
           "ceramite-fists-eradicator-squad-with-heavy-bolters",
@@ -9127,36 +7372,8 @@
           },
           {
             "name": "Eradicator",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Eradicator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Eradicator",
-            "min": 2,
-            "max": 2
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Eradicator Sergeant",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Eradicator",
-            "min": 2,
-            "max": 2
+            "min": 5,
+            "max": 5
           }
         ]
       }
@@ -9174,8 +7391,7 @@
           "armoured-impact",
           "multi-melta-land-speeder",
           "onslaught-gatling-cannon",
-          "stormfury-missile-launcher",
-          "pyrecannon"
+          "stormfury-missile-launcher"
         ]
       }
     ],
@@ -9205,8 +7421,7 @@
         "max": 6,
         "default_weapon_ids": [
           "master-crafted-bolt-carbine",
-          "master-crafted-power-weapon-victrix-honour-guard",
-          "blades-of-honour"
+          "master-crafted-power-weapon-victrix-honour-guard"
         ]
       },
       {
@@ -9214,8 +7429,6 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
-          "master-crafted-bolt-carbine",
-          "master-crafted-power-weapon-victrix-honour-guard",
           "blades-of-honour"
         ]
       },
@@ -9224,13 +7437,46 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
+          "banner-of-macragge",
           "master-crafted-bolt-carbine",
-          "master-crafted-power-weapon-victrix-honour-guard",
-          "blades-of-honour"
+          "master-crafted-power-weapon-victrix-honour-guard"
         ]
       }
     ],
     "tiers": [
+      {
+        "models": [
+          {
+            "name": "Victrix Honour Guard",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Chapter Champion",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Victrix Honour Guard",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Chapter Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Chapter Ancient",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
       {
         "models": [
           {
@@ -9248,20 +7494,6 @@
             "max": 2
           },
           {
-            "name": "Chapter Champion",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Victrix Honour Guard",
-            "min": 2,
-            "max": 2
-          },
-          {
             "name": "Chapter Ancient",
             "min": 1,
             "max": 1
@@ -9272,16 +7504,20 @@
         "models": [
           {
             "name": "Victrix Honour Guard",
-            "min": 1,
-            "max": 1
+            "min": 6,
+            "max": 6
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Victrix Honour Guard",
+            "min": 5,
+            "max": 5
           },
           {
             "name": "Chapter Champion",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Chapter Ancient",
             "min": 1,
             "max": 1
           }
@@ -9292,30 +7528,12 @@
           {
             "name": "Victrix Honour Guard",
             "min": 4,
-            "max": 6
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Victrix Honour Guard",
-            "min": 3,
-            "max": 5
+            "max": 4
           },
           {
             "name": "Chapter Champion",
             "min": 1,
             "max": 1
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Victrix Honour Guard",
-            "min": 3,
-            "max": 5
           },
           {
             "name": "Chapter Ancient",
@@ -9328,13 +7546,8 @@
         "models": [
           {
             "name": "Victrix Honour Guard",
-            "min": 2,
-            "max": 4
-          },
-          {
-            "name": "Chapter Champion",
-            "min": 1,
-            "max": 1
+            "min": 5,
+            "max": 5
           },
           {
             "name": "Chapter Ancient",
@@ -9358,7 +7571,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "heavy-bolt-pistol-kaius-konorius",
+          "heavy-bolt-pistol",
           "severance-and-rebuke"
         ]
       }
@@ -9366,7 +7579,18 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kaius Konorius",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "captain-on-bike",

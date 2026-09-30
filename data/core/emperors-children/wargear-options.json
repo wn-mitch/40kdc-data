@@ -26,10 +26,10 @@
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-bolter"
       ],
       [
-        "combi-bolter"
+        "combi-weapon"
       ]
     ],
     "model_constraint": {

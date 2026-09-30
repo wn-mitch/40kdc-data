@@ -651,7 +651,7 @@
     "category": "detachment",
     "type": "wargear",
     "detachment_id": "rubricae-phalanx",
-    "cp_cost": 2,
+    "cp_cost": 1,
     "phases": [
       "shooting"
     ],

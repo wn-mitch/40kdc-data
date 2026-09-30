@@ -296,11 +296,16 @@ describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("keeps every '(Upgrade)'/'(Aura)'/'(Psychic)'-tagged name in lockstep with its id", () => {
     const tagged = ds.enhancements.all.filter((e) => /\((Upgrade|Aura|Psychic)\)$/.test(e.name ?? ""));
     expect(tagged.length).toBeGreaterThan(90);
+    const sharing = new Map<string, string[]>();
+    for (const e of tagged) sharing.set(e.name!, [...(sharing.get(e.name!) ?? []), e.id]);
     for (const e of tagged) {
       const tag = (e.name!.match(/\((Upgrade|Aura|Psychic)\)$/)![1]).toLowerCase();
       // id embeds the same lowercased tag token, so find() round-trips the RAW name.
       expect(e.id).toContain(`-${tag}-`);
-      expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      // Two detachments can print the same enhancement name; a name alone then finds one of them.
+      const owners = sharing.get(e.name!)!;
+      if (owners.length === 1) expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      else expect(owners).toContain(ds.enhancements.find(e.name!)?.id);
     }
   });
 });

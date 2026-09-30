@@ -3702,7 +3702,6 @@
       "death-company-captain-with-jump-pack",
       "death-company-dreadnought",
       "death-company-marines",
-      "death-company-marines-with-bolt-rifles",
       "death-company-marines-with-jump-packs"
     ],
     "ability_type": "unit",
@@ -4686,60 +4685,6 @@
           "inches": 6
         }
       }
-    },
-    "faction_id": "blood-angels"
-  },
-  {
-    "ability_id": "visions-of-heresy-blood-angels",
-    "name": "Visions of Heresy",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "156c9840f5e55df4fd5dbb37579cf9ebf1adc47701b1ce5c78b56af0637a7e0f",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "charge",
-              "subset": "all-failures"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "death-company-marines-with-bolt-rifles"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "usage": {
-      "frequency": "once-per-turn"
     },
     "faction_id": "blood-angels"
   },

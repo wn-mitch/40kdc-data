@@ -120,7 +120,7 @@
     "id": "champion-of-the-deathwing-inner-circle-task-force-dark-angels",
     "name": "Champion of the Deathwing",
     "detachment_id": "inner-circle-task-force",
-    "cost": 15,
+    "cost": 20,
     "keyword_restrictions": [
       "Deathwing"
     ],
@@ -380,7 +380,7 @@
     "id": "ancient-weapons-wrath-of-the-rock-dark-angels",
     "name": "Ancient Weapons",
     "detachment_id": "wrath-of-the-rock",
-    "cost": 25,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -408,7 +408,7 @@
     "id": "lord-of-the-ravenwing-wrath-of-the-rock-dark-angels",
     "name": "Lord of the Ravenwing",
     "detachment_id": "wrath-of-the-rock",
-    "cost": 10,
+    "cost": 15,
     "keyword_restrictions": [
       "Ravenwing"
     ],
@@ -494,10 +494,6 @@
     "name": "Thundercowl Turbines (Upgrade)",
     "detachment_id": "darkflight-pursuit",
     "cost": 15,
-    "keyword_restrictions": [
-      "Fly",
-      "Ravenwing"
-    ],
     "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",
     "is_unique": true,
     "game_version": {
@@ -516,15 +512,24 @@
         "namespace": "mfm",
         "id": "3acf1c14-1d0f-45ad-b54f-f1fc2217f7e8"
       }
+    ],
+    "keyword_restriction_groups": [
+      [
+        "Fly",
+        "Ravenwing"
+      ],
+      [
+        "Mounted",
+        "Ravenwing"
+      ]
     ]
   },
   {
-    "id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
-    "name": "Nightforged Battery (Upgrade)",
+    "id": "nightforged-battery-upgarde-darkflight-pursuit-dark-angels",
+    "name": "Nightforged Battery (Upgarde)",
     "detachment_id": "darkflight-pursuit",
-    "cost": 15,
+    "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels",
       "Land Speeder Vengeance"
     ],
     "ability_id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
@@ -535,7 +540,7 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3,
+    "max_targets": 1,
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -833,7 +838,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2079,10 +2084,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -2107,10 +2112,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2135,10 +2140,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

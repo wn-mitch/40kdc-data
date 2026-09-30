@@ -649,8 +649,8 @@
       "frag-bombard"
     ],
     "replacement": [
-      "bellatus-reaper-chainsword",
-      "thundershock-spear"
+      "thundershock-spear",
+      "bellatus-reaper-chainsword"
     ],
     "model_constraint": {
       "any_number": true

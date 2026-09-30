@@ -262,12 +262,12 @@
     "points": [
       {
         "models": 10,
-        "cost": 160
+        "cost": 170
       },
       {
         "models": 11,
         "models_max": 20,
-        "cost": 320
+        "cost": 330
       }
     ],
     "keywords": [
@@ -355,7 +355,7 @@
       },
       {
         "models": 20,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -587,13 +587,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1022,7 +1022,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 255,
+        "cost": 250,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1035,7 +1035,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 270,
+        "cost": 265,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1114,7 +1114,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -1198,7 +1198,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 265,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1211,7 +1211,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 280,
+        "cost": 275,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1793,27 +1793,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 165,
+        "cost": 175,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 330,
+        "cost": 350,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 340,
+        "cost": 360,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2089,7 +2089,7 @@
     "points": [
       {
         "models": 8,
-        "cost": 75
+        "cost": 70
       }
     ],
     "keywords": [

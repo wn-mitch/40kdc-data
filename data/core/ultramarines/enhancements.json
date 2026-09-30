@@ -1,9 +1,9 @@
 [
   {
-    "id": "armour-of-antoninus-blade-of-ultramar-adeptus-astartes",
+    "id": "armour-of-antoninus-blade-of-ultramar-ultramarines",
     "name": "Armour of Antoninus",
     "detachment_id": "blade-of-ultramar",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -28,10 +28,10 @@
     ]
   },
   {
-    "id": "oath-of-macragge-blade-of-ultramar-adeptus-astartes",
+    "id": "oath-of-macragge-blade-of-ultramar-ultramarines",
     "name": "Oath of Macragge",
     "detachment_id": "blade-of-ultramar",
-    "cost": 15,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -56,12 +56,12 @@
     ]
   },
   {
-    "id": "student-of-the-codex-blade-of-ultramar-adeptus-astartes",
+    "id": "student-of-the-codex-blade-of-ultramar-ultramarines",
     "name": "Student of the Codex",
     "detachment_id": "blade-of-ultramar",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Captain"
     ],
     "ability_id": "student-of-the-codex-blade-of-ultramar-adeptus-astartes",
     "is_unique": true,
@@ -84,10 +84,10 @@
     ]
   },
   {
-    "id": "veteran-of-behemoth-blade-of-ultramar-adeptus-astartes",
+    "id": "veteran-of-behemoth-blade-of-ultramar-ultramarines",
     "name": "Veteran of Behemoth",
     "detachment_id": "blade-of-ultramar",
-    "cost": 25,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -341,7 +341,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1587,10 +1587,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -1615,10 +1615,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -1643,10 +1643,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],

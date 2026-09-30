@@ -231,7 +231,7 @@
     "id": "prescient-flash-angelic-inheritors-blood-angels",
     "name": "Prescient Flash",
     "detachment_id": "angelic-inheritors",
-    "cost": 20,
+    "cost": 25,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -289,8 +289,7 @@
     "detachment_id": "angelic-inheritors",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Infantry"
+      "Adeptus Astartes"
     ],
     "ability_id": "blazing-icon-angelic-inheritors-blood-angels",
     "is_unique": true,
@@ -456,7 +455,7 @@
     "id": "angelic-executioner-encarmine-speartip-blood-angels",
     "name": "Angelic Executioner",
     "detachment_id": "encarmine-speartip",
-    "cost": 25,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Jump Pack"
@@ -485,7 +484,7 @@
     "id": "shadow-of-abomination-encarmine-speartip-blood-angels",
     "name": "Shadow of Abomination",
     "detachment_id": "encarmine-speartip",
-    "cost": 25,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Jump Pack"
@@ -825,7 +824,7 @@
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 20,
+    "cost": 15,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2071,10 +2070,10 @@
     ]
   },
   {
-    "id": "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
+    "id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
     "name": "Honour Indefatigable",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Gravis"
     ],
@@ -2099,10 +2098,10 @@
     ]
   },
   {
-    "id": "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
+    "id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
     "name": "Castellum Omnivox",
     "detachment_id": "ceramite-sentinels",
-    "cost": 20,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2127,10 +2126,10 @@
     ]
   },
   {
-    "id": "defensive-mastery-ceramite-sentinels-adeptus-astartes",
+    "id": "defensive-mastery-ceramite-sentinels-imperial-fists",
     "name": "Defensive Mastery",
     "detachment_id": "ceramite-sentinels",
-    "cost": 25,
+    "cost": 10,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
@@ -2374,6 +2373,24 @@
         "namespace": "mfm",
         "id": "99c9bba1-4e59-4d3e-b168-906e977bb05d"
       }
+    ]
+  },
+  {
+    "id": "unto-death-angelic-inheritors-blood-angels",
+    "name": "Unto Death",
+    "detachment_id": "angelic-inheritors",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Adeptus Astartes"
     ]
   }
 ]

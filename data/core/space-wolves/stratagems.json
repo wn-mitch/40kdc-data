@@ -1009,7 +1009,7 @@
     "phases": [
       "shooting"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "eye-of-the-pack-saga-of-the-great-wolf-space-wolves",
@@ -2879,7 +2879,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

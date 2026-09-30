@@ -2167,7 +2167,7 @@
         },
         "default_weapon_ids": [
           "gauss-flayer",
-          "close-combat-weapon"
+          "combat-attachments"
         ]
       },
       {
@@ -2181,7 +2181,7 @@
         },
         "default_weapon_ids": [
           "gauss-reaper",
-          "close-combat-weapon"
+          "combat-attachments"
         ]
       }
     ],
@@ -2223,7 +2223,7 @@
           "diameter": 50
         },
         "default_weapon_ids": [
-          "skorpekh-hyperphase-weapons"
+          "hyperphase-blades"
         ]
       },
       {
@@ -2236,7 +2236,7 @@
           "diameter": 50
         },
         "default_weapon_ids": [
-          "skorpekh-hyperphase-weapons"
+          "hyperphase-blades"
         ]
       }
     ],

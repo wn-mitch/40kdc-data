@@ -67,8 +67,8 @@
         },
         {
           "ref": {
-            "id": "lancer-laser-destroyer",
-            "raw_name": "Lancer laser destroyer",
+            "id": "laser-destroyer",
+            "raw_name": "Laser Destroyer",
             "resolved": true,
             "candidates": []
           },
@@ -119,7 +119,7 @@
         },
         {
           "ref": {
-            "id": "storm-bolters-ballistus-dreadnought",
+            "id": "storm-bolter",
             "raw_name": "Storm Bolters",
             "resolved": true,
             "candidates": []
