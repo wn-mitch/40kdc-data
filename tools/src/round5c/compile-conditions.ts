@@ -156,7 +156,7 @@ export function trigger(leaf: CompileLeaf): Node {
 /** The condition an attack leaf adds: only melee or only ranged attacks. */
 export function attackTypeCondition(leaf: CompileLeaf): Node | null {
   const type = closed(leaf, "attack_type");
-  return type === "melee" || type === "ranged" ? { type: "attack-is", parameters: { attack_type: type } } : null;
+  return type === "melee" || type === "ranged" || type === "psychic" ? { type: "attack-is", parameters: { attack_type: type } } : null;
 }
 
 /**

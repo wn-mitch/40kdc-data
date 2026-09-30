@@ -84,7 +84,7 @@ describe("Round 5C targeting families", () => {
         { family_id: "characteristic-modifier", parameters: { subject: "this-unit", characteristics: ["OC"], operation: "add", value: 1, weapon_type: "all" } },
         { family_id: "unit-state", parameters: { states: ["below-starting-strength"], subject: "target", negated: false } },
       ]);
-      expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 2 });
+      expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 3 });
       expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 4 });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, repointed_surfaces: 0 });
     } finally {

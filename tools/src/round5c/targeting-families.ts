@@ -13,6 +13,9 @@ export const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
 const ATTACK_UNITS_WITH_BEARER = ["this-model", "this-unit", "bearer", "bearers-unit", "that-unit"] as const;
 export const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit"] as const;
 export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
+/** Version 3: a Psychic Attack, and the unit an aura applies to as the one attacking. */
+export const ATTACK_TYPES_V3 = [...ATTACK_TYPES, "psychic"] as const;
+export const ATTACK_UNITS_V3 = [...ATTACK_UNITS, "recipient"] as const;
 export const SELECT_SCOPES = ["enemy", "friendly"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
 const MAX_INCHES = 48;
@@ -68,6 +71,21 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["direction", "unit", "attack_type"],
       properties: { direction: { enum: ATTACK_DIRECTIONS }, unit: { enum: ATTACK_UNITS }, attack_type: { enum: ATTACK_TYPES } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "attack",
+    version: 3,
+    role: "EVENT",
+    label: "Each time an attack is made",
+    description: "An attack made by the named model or unit, or an attack that targets it, optionally only melee, ranged or psychic. What the attack targets is a separate condition. \"The bearer\" is this model. recipient is the unit an aura applies to (\"while an enemy unit is within 12\\\" of this model, each time a model in that unit makes a Psychic Attack\").",
+    starter: { direction: "", unit: "", attack_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["direction", "unit", "attack_type"],
+      properties: { direction: { enum: ATTACK_DIRECTIONS }, unit: { enum: ATTACK_UNITS_V3 }, attack_type: { enum: ATTACK_TYPES_V3 } },
       additionalProperties: false,
     },
   },
@@ -196,8 +214,8 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       exactKeys(input, ["direction", "unit", "attack_type"], family);
       return {
         direction: enumValue(input.direction, ATTACK_DIRECTIONS, "attack.direction"),
-        unit: enumValue(input.unit, version === 1 ? ATTACK_UNITS_WITH_BEARER : ATTACK_UNITS, "attack.unit"),
-        attack_type: enumValue(input.attack_type, ATTACK_TYPES, "attack.attack_type"),
+        unit: enumValue(input.unit, version === 1 ? ATTACK_UNITS_WITH_BEARER : version >= 3 ? ATTACK_UNITS_V3 : ATTACK_UNITS, "attack.unit"),
+        attack_type: enumValue(input.attack_type, version >= 3 ? ATTACK_TYPES_V3 : ATTACK_TYPES, "attack.attack_type"),
       };
     case "instead":
       exactKeys(input, [], family);

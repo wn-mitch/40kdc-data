@@ -96,7 +96,7 @@ describe("Round 5C family version registry", () => {
   it("moves every event kind to version 6, and an old attack event through attack to its current version", () => {
     expect(mapToLatest("event", 5, { kind: "enemy-has-shot" })).toEqual({ family: "event", version: 9, parameters: { kind: "enemy-has-shot" } });
     expect(mapToLatest("event", 4, { kind: "phase-end", phase: "fight", turn: "your" })).toEqual({ family: "event", version: 9, parameters: { kind: "phase-end", phase: "fight", turn: "your" } });
-    expect(mapToLatest("event", 3, { kind: "attack-made" })).toEqual({ family: "attack", version: 2, parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } });
+    expect(mapToLatest("event", 3, { kind: "attack-made" })).toEqual({ family: "attack", version: 3, parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } });
     expect(normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 6)).toEqual({ kind: "this-model-destroyed" });
     expect(() => normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 5)).toThrow(/event.kind/u);
   });
@@ -120,7 +120,7 @@ describe("Round 5C family version upgrade", () => {
 
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 3, repointed_surfaces: 1, unmapped: [] });
-      const successor = validateFingerprint(db, "attack", { direction: "targeted", unit: "this-model", attack_type: "any" }, 2);
+      const successor = validateFingerprint(db, "attack", { direction: "targeted", unit: "this-model", attack_type: "any" }, 3);
       const active = db.prepare("SELECT span_id, fingerprint_id FROM annotations WHERE status = 'active' ORDER BY span_id").all() as Array<{ span_id: number; fingerprint_id: string }>;
       // One annotation per span, both on the one current fingerprint: no duplicate for the merged span.
       expect(active).toHaveLength(2);
@@ -179,7 +179,7 @@ describe("Round 5C family version upgrade", () => {
       // reroll also migrates now (its version 2 adds weapon_type, defaulting old leaves to "all").
       expect(report).toMatchObject({ migrated_proposal_pieces: 3, unmapped_proposal_pieces: 1 });
       expect(pieces(open)).toEqual([
-        piece("attack", 2, "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
+        piece("attack", 3, "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
         { text: "rest", family_id: null },
         piece("reroll", 2, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);

@@ -337,7 +337,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
       return effect(leaf, {
         attached,
-        attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "this-model" : "this-unit") : null,
+        attacker: attack && attack.parameters.direction === "makes"
+          ? (attack.parameters.unit === "this-model" ? "this-model" : attack.parameters.unit === "recipient" ? "recipient" : "this-unit") : null,
         incoming: attack?.parameters.direction === "targeted",
       });
     });

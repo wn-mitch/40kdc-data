@@ -20,7 +20,8 @@ import { surfaceWarnings } from "./surface-lint.js";
 
 
 /** Uncovered wording that joins leaves without meaning anything itself. */
-const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does"]);
+/** Joining words, and a bare "that unit" (a lead-in naming the unit the effects after it act on). */
+const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does", "that unit"]);
 const EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 /** HTML entity debris from the source extraction (a stray "&#x20;"); never a leaf. Coverage splits
  * the entity at its punctuation, so the bare "x20" left between must match too. */

@@ -106,7 +106,7 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
  * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
  * shape" (the conservative default) rather than being assumed out of scope. */
 /** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds"]);
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up"]);
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 
 function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
