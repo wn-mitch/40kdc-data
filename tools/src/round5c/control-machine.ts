@@ -1,4 +1,6 @@
-import { assertNotLiveWorkbench, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import type { DatabaseSync } from "node:sqlite";
+
+import { backupBeforeLiveRun, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
 import { runDeepSeekArm } from "./deepseek-pilot.js";
 import { buildTypeSafeClient } from "./jev-core.js";
 import { classifySpans, jevSpendFor } from "./jev-classify.js";
@@ -8,14 +10,36 @@ import { getAbilityCoverage } from "./coverage.js";
 
 /**
  * The pilot's paid stages as standalone commands over a named batch, for work outside a
- * Fibonacci step (a bulk segmentation pass the frontier then reviews). Both refuse the live
- * workbench, resume from the database (runs are tagged with the batch name, as a pilot step's
+ * Fibonacci step (a bulk segmentation pass the frontier then reviews). Both may run on the live
+ * workbench, which is copied to `<db>.pre-run` first; they resume from the database (runs are tagged with the batch name, as a pilot step's
  * are), and with `dryRun` plan only: no run rows, no request files, no calls.
  *
  * Neither writes a trusted row or decides a proposal; their output is proposals and Jev signals.
  */
 
 export type BatchOptions = { batch: string; abilities: number[]; spendCapUsd?: number; model?: string; concurrency?: number; dryRun: boolean };
+
+/**
+ * The next `count` distinct texts no segmenter has cut and no trusted leaf touches, one current
+ * record per text. Texts shared by more records come first (a decision on them reaches more
+ * records), then by record id, so the order is stable across runs.
+ */
+export function unsegmentedAbilities(db: DatabaseSync, count: number): number[] {
+  return (db.prepare(`
+    WITH texts AS (SELECT source_hash, min(id) AS id, count(*) AS records FROM abilities WHERE current = 1 GROUP BY source_hash)
+    SELECT texts.id FROM texts
+    WHERE NOT EXISTS (
+      SELECT 1 FROM abilities other JOIN source_spans ON source_spans.ability_version_id = other.id
+      JOIN proposals ON proposals.span_id = source_spans.id
+      WHERE other.source_hash = texts.source_hash AND other.current = 1 AND proposals.model_run_id IS NOT NULL
+    ) AND NOT EXISTS (
+      SELECT 1 FROM abilities other JOIN source_spans ON source_spans.ability_version_id = other.id
+      JOIN annotations ON annotations.span_id = source_spans.id
+      WHERE other.source_hash = texts.source_hash AND other.current = 1 AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
+    )
+    ORDER BY texts.records DESC, texts.id LIMIT ?
+  `).all(count) as Array<{ id: number }>).map((row) => row.id);
+}
 
 function checkBatch(batch: string): void {
   if (!/^[a-z0-9][a-z0-9-]{0,63}$/u.test(batch)) throw Object.assign(new Error("A batch name is lowercase letters, digits and hyphens."), { code: "INVALID_ARGUMENT" });
@@ -25,7 +49,6 @@ function checkBatch(batch: string): void {
 export async function segmentBatch(options: BatchOptions): Promise<Record<string, unknown>> {
   checkBatch(options.batch);
   const path = workbenchPath();
-  assertNotLiveWorkbench(path, "segment");
   const model = options.model ?? DEEPSEEK_FLASH_MODEL;
   const spendCapUsd = options.spendCapUsd ?? 0.5;
   if (options.dryRun) {
@@ -43,6 +66,7 @@ export async function segmentBatch(options: BatchOptions): Promise<Record<string
       db.close();
     }
   }
+  const backup = backupBeforeLiveRun(path);
   const db = openWorkbench(path);
   try {
     const done = new Set(stepRuns(db, options.batch).filter((run) => run.status === "completed").flatMap((run) => run.abilities));
@@ -54,7 +78,7 @@ export async function segmentBatch(options: BatchOptions): Promise<Record<string
       priorSpendUsd: runAccounting(stepRuns(db, options.batch)).cost_usd, pilot: { step: options.batch, model },
     });
     return {
-      batch: options.batch, requests: result.requests, cost_usd: result.total_cost_usd, budget_exhausted: result.budget_exhausted,
+      batch: options.batch, backup, requests: result.requests, cost_usd: result.total_cost_usd, budget_exhausted: result.budget_exhausted,
       unknown_cost_runs: result.unknown_cost_runs,
       failures: result.runs.filter((run) => run.failure).map((run) => `${run.run_id}: ${run.failure!.stage}/${run.failure!.reason_code}: ${run.failure!.message}`),
     };
@@ -67,7 +91,7 @@ export async function segmentBatch(options: BatchOptions): Promise<Record<string
 export async function classifyBatch(options: Omit<BatchOptions, "abilities" | "model" | "concurrency">): Promise<Record<string, unknown>> {
   checkBatch(options.batch);
   const path = workbenchPath();
-  assertNotLiveWorkbench(path, "classify");
+  const backup = options.dryRun ? null : backupBeforeLiveRun(path);
   const db = options.dryRun ? openWorkbenchReadOnly(path) : openWorkbench(path);
   try {
     const runIds = stepRuns(db, options.batch).filter((run) => run.status === "completed").map((run) => run.id);
@@ -83,7 +107,7 @@ export async function classifyBatch(options: Omit<BatchOptions, "abilities" | "m
     const priorSpendUsd = jevSpendFor(db, all.map((span) => span.span_id));
     if (options.dryRun) return { batch: options.batch, runs: runIds.length, spans_to_classify: spans.length, prior_spend_usd: priorSpendUsd, spend_cap_usd: spendCapUsd };
     const { report } = await classifySpans(db, buildTypeSafeClient(), spans, { spendCapUsd, priorSpendUsd });
-    return { batch: options.batch, runs: runIds.length, ...report };
+    return { batch: options.batch, backup, runs: runIds.length, ...report };
   } finally {
     db.close();
   }

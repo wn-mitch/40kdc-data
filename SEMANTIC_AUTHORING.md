@@ -33,6 +33,14 @@ model-assisted segmentation (proposals only)
    connectives, it is **leaf-complete**. The deterministic compiler (`compile.ts`) lowers its
    leaves to canonical DSL and the gates check it. No model writes canonical DSL.
 
+## Where work happens
+
+One live workbench database (`_private/round5c/workbench.sqlite`) holds all source, proposals,
+decisions and derived rows. All authoring runs through the `round5c` CLI: model stages
+(`segment`, `classify`) and mechanical copies (`propagate`) may write to it directly after keeping
+one rolling copy (`workbench.sqlite.pre-run`); human decisions arrive only through
+`review-apply <decisions.json>`, written from the reviewer's answers in chat. There is no review UI.
+
 ## Authority
 
 - Models propose; the human reviewer authorizes semantic truth.

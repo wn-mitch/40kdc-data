@@ -1,7 +1,6 @@
 /**
- * Test-only wrappers for the workbench's human decision functions. Fixtures act as Will through
- * the `test` channel, with the reviewer the request body names, exactly as the review bridge
- * does. Tests about authority itself import the real functions and pass actors explicitly.
+ * Test-only wrappers for the workbench's human decision functions. Fixtures act as the reviewer
+ * through the `test` channel, with the reviewer the request body names, as `review-apply` does. Tests about authority itself import the real functions and pass actors explicitly.
  */
 import type { DatabaseSync } from "node:sqlite";
 

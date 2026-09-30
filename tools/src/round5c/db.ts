@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
@@ -817,6 +817,24 @@ export function assertNotLiveWorkbench(path: string, command: string): void {
   if (isLiveWorkbench(path)) {
     throw Object.assign(new Error(`${command} writes machine results and runs only on a copy of the workbench; set ROUND5C_DB to a copy outside _private/round5c/.`), { code: "LIVE_DATABASE_REFUSED" });
   }
+}
+
+/**
+ * Before a proposing or deriving command writes to the live workbench, keep one rolling copy of
+ * it beside the database (`<db>.pre-run`), replaced by the next run. Copies are not made for other
+ * workbenches, which are themselves copies.
+ */
+export function backupBeforeLiveRun(path: string): string | null {
+  if (!isLiveWorkbench(path)) return null;
+  const backup = `${path}.pre-run`;
+  rmSync(backup, { force: true });
+  const db = new DatabaseSync(path);
+  try {
+    db.prepare("VACUUM INTO ?").run(backup);
+  } finally {
+    db.close();
+  }
+  return backup;
 }
 
 /**

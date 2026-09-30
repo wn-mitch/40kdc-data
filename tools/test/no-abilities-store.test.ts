@@ -8,7 +8,7 @@ import { REPO_ROOT } from "../src/mfm/repo-files.js";
 // (tools/src/mfm/record-prose.ts). This scan fails when any tool, agent, skill or workflow names
 // the store again, so a reader or writer cannot quietly come back.
 
-const ROOTS = ["tools/src", "tools/test", "tools/round5-review", "tools/package.json", ".omp", ".claude", "scripts", "examples", "crates", "python/src", "python/codegen", "go", ".github", "Justfile"];
+const ROOTS = ["tools/src", "tools/test", "tools/package.json", ".omp", ".claude", "scripts", "examples", "crates", "python/src", "python/codegen", "go", ".github", "Justfile"];
 const SKIP_DIRS = new Set(["node_modules", "dist", "target", ".venv", "__pycache__", ".svelte-kit", ".wrangler", "docs"]);
 // Agent and skill instructions (.md) count: they tell agents where to read prose from.
 const CODE = /\.(ts|tsx|js|mjs|cjs|svelte|json|py|rs|go|sh|ya?ml|toml|md)$|^Justfile$/;

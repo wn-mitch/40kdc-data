@@ -7,6 +7,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { frontier } from "../src/round5c/control-reads.js";
+import { unsegmentedAbilities } from "../src/round5c/control-machine.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { refreshSources } from "../src/round5c/source.js";
 
@@ -49,6 +50,22 @@ describe("Round 5C control-plane reads", () => {
       propose(db, "a3", 1);
       const [item] = frontier(db, "wording", 5);
       expect(item).toMatchObject({ surface: CP.toLowerCase(), texts: 3, occurrences: 4, purity: 0.75, weight: 2.25, parameters: { amount: 1 } });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("picks unsegmented distinct texts shared by the most records first, skipping texts with a trusted leaf", () => {
+    const db = fixture([`Lone ${CP}.`, `Shared ${CP}.`, `Shared ${CP}.`, `Decided ${CP}.`]);
+    try {
+      const id = (abilityId: string) => (db.prepare("SELECT id FROM abilities WHERE ability_id = ?").get(abilityId) as { id: number }).id;
+      const decided = db.prepare("SELECT source_text FROM abilities WHERE ability_id = 'a3'").get() as { source_text: string };
+      const start = Buffer.byteLength(decided.source_text.slice(0, decided.source_text.indexOf(CP)), "utf8");
+      const span = insertSpan(db, id("a3"), "RAW_TEXT", start, start + Buffer.byteLength(CP, "utf8"), CP);
+      const fingerprint = validateFingerprint(db, "resource-action", { resource: "command-point", operation: "gain", amount: 1 }, 1, CP);
+      db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('b', 'review', 'will', 'x')").run();
+      db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'will', 'b', 'x')").run(span, fingerprint);
+      expect(unsegmentedAbilities(db, 10)).toEqual([id("a1"), id("a0")]);
     } finally {
       db.close();
     }

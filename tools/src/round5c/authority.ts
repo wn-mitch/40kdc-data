@@ -1,8 +1,8 @@
 /**
  * Who may make which semantic decision. Three authorities, ranked:
  *
- * - `human`: a decision Will made on this row through a human channel (the review UI bridge or
- *   a TTY-confirmed `review apply`).
+ * - `human`: a decision the human reviewer made on this row through `review-apply` (the chat
+ *   review path).
  * - `derived`: a mechanical copy of a human decision (a human-founded leaf surface applied to
  *   another occurrence, a family-version migration of a human row). Trusted like `human`.
  * - `machine`: anything a model or pipeline decided. Never trusted: it never counts toward
@@ -49,7 +49,7 @@ export type MachineActor = { readonly authority: "machine"; readonly reviewer: s
 export type Actor = HumanActor | MachineActor;
 
 /** Where a human decision entered the system. `test` is for the test suite's own fixtures. */
-export type HumanChannel = "review-bridge" | "review-apply" | "test";
+export type HumanChannel = "review-apply" | "test";
 
 export class AuthorityError extends Error {
   readonly status = 403;
@@ -60,7 +60,7 @@ export class AuthorityError extends Error {
   }
 }
 
-/** Mint a human actor. Only the review bridge, `review apply`, and tests may call this. */
+/** Mint a human actor. Only `review-apply` and tests may call this. */
 export function humanActor(reviewer: string, channel: HumanChannel): HumanActor {
   if (!reviewer.trim()) throw new AuthorityError("A human decision needs a reviewer.");
   if (isMachineReviewer(reviewer) || reviewer === "system") throw new AuthorityError(`"${reviewer}" is a machine reviewer name.`);

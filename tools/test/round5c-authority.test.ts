@@ -71,7 +71,7 @@ describe("Round 5C authority boundary", () => {
     expect(rows(db, "one")).toEqual([]);
   });
 
-  it("mints human actors only in the review bridge, review apply, and tests", () => {
+  it("mints human actors only in review-apply and tests", () => {
     const tools = resolve(import.meta.dirname, "..");
     const callers: string[] = [];
     const walk = (dir: string): void => {
@@ -83,10 +83,9 @@ describe("Round 5C authority boundary", () => {
       }
     };
     walk(join(tools, "src"));
-    walk(join(tools, "round5-review"));
-    const allowed = new Set(["round5-review/vite.config.ts", "src/round5c/authority.ts", "src/round5c/review-apply.ts"]);
+    const allowed = new Set(["src/round5c/authority.ts", "src/round5c/review-apply.ts"]);
     expect(callers.filter((path) => !allowed.has(path))).toEqual([]);
-    expect(callers).toContain("round5-review/vite.config.ts");
+    expect(callers).toContain("src/round5c/review-apply.ts");
   });
 
   it("keeps machine rows out of trusted coverage and lets a human confirmation promote them", () => {

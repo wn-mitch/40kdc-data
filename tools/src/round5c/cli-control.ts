@@ -4,11 +4,11 @@ import type { DatabaseSync } from "node:sqlite";
 import { authorityAudit } from "./authority-migration.js";
 import { REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
-import { assertNotLiveWorkbench, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import { backupBeforeLiveRun, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
 import { applyChatReviewFile } from "./review-apply.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "./pilot.js";
 import { classificationHealth, familyStatus, frontier, FRONTIER_KINDS, gapsReport, leafCompleteTexts, readQuery, reviewSessions, segmentationHealth, type FrontierKind } from "./control-reads.js";
-import { classifyBatch, segmentBatch } from "./control-machine.js";
+import { classifyBatch, segmentBatch, unsegmentedAbilities } from "./control-machine.js";
 import { propagateDuplicateTexts } from "./propagate.js";
 import { runGatesOnly } from "./pipeline-8b.js";
 
@@ -199,24 +199,25 @@ const COMMANDS: Record<string, ControlCommand> = {
   propagate: {
     effect: (flags) => flags.switches.has("dry-run") ? "read" : "derive",
     usage: "propagate --duplicate-texts [--abilities id,id] [--dry-run]",
-    summary: "Copy trusted leaves and connectives onto byte-identical records as derived rows that follow their source.",
+    summary: "Copy trusted leaves and connectives onto byte-identical records as derived rows that follow their source. On the live workbench it keeps <db>.pre-run first.",
     run: (flags) => {
       if (!flags.switches.has("duplicate-texts")) throw Object.assign(new Error("propagate needs --duplicate-texts."), { code: "INVALID_ARGUMENT" });
       const abilities = idsFlag(flags, "abilities");
       const options = { dryRun: flags.switches.has("dry-run"), ...(abilities ? { abilityVersionIds: new Set(abilities) } : {}) };
       if (options.dryRun) return reading((db) => propagateDuplicateTexts(db, options));
-      assertNotLiveWorkbench(workbenchPath(), "propagate");
+      const backup = backupBeforeLiveRun(workbenchPath());
       const db = openWorkbench();
-      try { return propagateDuplicateTexts(db, options); } finally { db.close(); }
+      try { return { backup, ...propagateDuplicateTexts(db, options) }; } finally { db.close(); }
     },
   },
   segment: {
     effect: (flags) => flags.switches.has("dry-run") ? "read" : "propose",
-    usage: "segment <batch> --abilities id,id [--spend-cap USD] [--model id] [--concurrency N] [--dry-run]",
-    summary: "DeepSeek segmentation of the named abilities as a resumable batch on a copy of the workbench.",
+    usage: "segment <batch> (--abilities id,id | --unsegmented N) [--spend-cap USD] [--model id] [--concurrency N] [--dry-run]",
+    summary: "DeepSeek segmentation as a resumable batch: named abilities, or the next N never-segmented distinct texts. On the live workbench it keeps <db>.pre-run first.",
     run: (flags) => {
-      const abilities = idsFlag(flags, "abilities");
-      if (!abilities) throw Object.assign(new Error("segment needs --abilities."), { code: "INVALID_ARGUMENT" });
+      const unsegmented = numberFlag(flags, "unsegmented");
+      const abilities = idsFlag(flags, "abilities") ?? (unsegmented ? reading((db) => unsegmentedAbilities(db, unsegmented)) : undefined);
+      if (!abilities) throw Object.assign(new Error("segment needs --abilities or --unsegmented N."), { code: "INVALID_ARGUMENT" });
       return segmentBatch({ batch: batchName(flags, "segment"), abilities, spendCapUsd: numberFlag(flags, "spend-cap"), model: flags.values.get("model"), concurrency: numberFlag(flags, "concurrency"), dryRun: flags.switches.has("dry-run") });
     },
   },
