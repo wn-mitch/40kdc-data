@@ -10,6 +10,7 @@ import { leafSurfaceKey, normalizedProjection } from "./matching.js";
 import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
 import { describerGaps } from "./leaf-describer-audit.js";
 import { surfaceWarnings } from "./surface-lint.js";
+import { assertResolved } from "./placeholders.js";
 import { inScope, parseScope, ScopeError, scopeJson, type OccurrenceContext } from "./surface-scope.js";
 
 /**
@@ -330,6 +331,7 @@ function meaning(db: DatabaseSync, input: Record<string, unknown>, exactText: st
   const version = input.family_version === undefined ? currentFamilyVersion(familyId) : Number(input.family_version);
   if (!input.parameters || typeof input.parameters !== "object" || Array.isArray(input.parameters)) throw new LeafError(422, "parameters must be an object.");
   try {
+    assertResolved(input.parameters as Record<string, unknown>);
     return fingerprintRow(db, validateFingerprint(db, familyId, input.parameters as Record<string, unknown>, version, exactText));
   } catch (error) {
     if (error instanceof LeafError) throw error;

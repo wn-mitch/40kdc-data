@@ -3,6 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { exactSpan, LEAF_ROLES } from "./contracts.js";
 import { parseStoredFragments, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
 import { TRUSTED_ANNOTATION } from "./authority.js";
+import { RESOLVED_FINGERPRINT } from "./placeholders.js";
 import {
   normalized, overlapDiagnostics, overlapLength, partitionExclusive, subtractIntervals, totalLength,
   type Interval, type OverlapDiagnostic, type PartitionLayer, type TaggedInterval,
@@ -155,6 +156,8 @@ function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityIds?
     WHERE annotations.status = 'active'
       AND semantic_families.role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION')
       AND ${view.includeMachine ? "annotations.status = 'active'" : EFFECTIVE_ANNOTATION}
+      -- A leaf still holding the import placeholder has no meaning yet: it is not resolved source.
+      AND ${RESOLVED_FINGERPRINT}
       ${filter} ${idFilter}
   `).all(...args) as SpanRow[];
   for (const row of confirmedRows) {

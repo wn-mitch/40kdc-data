@@ -11,6 +11,7 @@ import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
 import { applyLeafUndo, assertLeafUndo } from "./leaves.js";
 import { retractOrphanedCopies } from "./propagate.js";
+import { assertResolved } from "./placeholders.js";
 import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
@@ -597,6 +598,7 @@ function fingerprintForDecision(db: DatabaseSync, decision: ParsedDecision): { i
   let role: string;
   try {
     const version = decision.family_version ?? currentFamilyVersion(decision.family_id);
+    assertResolved(decision.parameters);
     fingerprintId = validateFingerprint(db, decision.family_id, decision.parameters, version, decision.exact_text);
     role = familyRole(decision.family_id, version);
   } catch (error) {
