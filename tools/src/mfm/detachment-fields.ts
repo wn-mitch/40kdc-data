@@ -52,7 +52,7 @@ import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
 import { CORE_DIR, ENRICHMENT_DIR, readJsonArray } from "./repo-files.js";
-import { repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { CODEX_CHAPTERS, repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { keywordLabel, factionKeywordLabel } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 
@@ -107,8 +107,19 @@ export function requiredKeywordsForDetachment(
     else if (unresolved) unresolved.push(e.factionKeywordId);
   }
   if (labels.length === 0) return null;
+  // A detachment a codex chapter owns is locked to that chapter: an Adeptus Astartes roster may
+  // take Blade of Ultramar only with Ultramarines units. Since data version 963 the dump names
+  // the chapter as the owner instead of listing it beside the Adeptus Astartes owner. Chapters
+  // with their own codex also own their detachments but stay unlocked, so allies remain legal.
+  if (ownName && dir && CODEX_CHAPTERS.has(dir) && labels.length === 1 && labels[0] === ownName) {
+    return [ownName];
+  }
   // Ownership keyword present ⇒ roster-wide enumeration, not a restriction.
   if (ownName && labels.includes(ownName)) return null;
+  // Listing the parent army's keyword (Adeptus Astartes beside every chapter, as Deathwatch
+  // Support does, with no owner of its own) is also an enumeration of everyone: required keywords
+  // must ALL be held, so keeping the list would bar every unit.
+  if (labels.includes("Adeptus Astartes")) return null;
   // Ownership absent: a genuine lock keeps only labels narrower than the roster.
   // Drop the roster/home keyword (slug == dir) and the owner itself — requiring
   // the roster keyword restricts nothing.

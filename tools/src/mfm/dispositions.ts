@@ -104,9 +104,15 @@ export function buildCanon(dump: MfmDump): {
     });
   }
 
-  // Per-faction DP overrides → keyed by `${slug}@@${dir}`.
+  // Per-faction DP overrides → keyed by `${slug}@@${dir}`. The dump's override table is empty
+  // from data version 963 (its generated row type is `never`), so the rows are read untyped.
   const overrideBySlugDir = new Map<string, number>();
-  for (const row of dump.table("detachment_faction_detachment_points_cost")) {
+  const overrides = dump.table("detachment_faction_detachment_points_cost") as unknown as Array<{
+    detachmentId: string;
+    factionKeywordId: string;
+    detachmentPointsCost: number;
+  }>;
+  for (const row of overrides) {
     const slug = uuidToSlug.get(row.detachmentId);
     const fkName = dump.enName(dump.byId("faction_keyword").get(row.factionKeywordId));
     const dir = repoDirForFactionName(fkName);

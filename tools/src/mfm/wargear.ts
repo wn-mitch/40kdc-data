@@ -76,6 +76,8 @@ interface DerivedOption {
 export interface DerivedWargear {
   /** model-type display name → ordered default weapon/wargear ids (repeated by count). */
   defaultsByModel: Map<string, string[]>;
+  /** A name several miniatures share with different loadouts → each miniature's loadout. */
+  defaultsBySharedName: Map<string, string[][]>;
   options: DerivedOption[];
   unresolved: { name: string; context: string }[];
   notes: string[];
@@ -120,6 +122,8 @@ interface CompModel {
   min: number;
   max: number;
   default_weapon_ids?: string[];
+  /** Whole-loadout variants (from BSData, not the dump); renames carry into them. */
+  loadout_variants?: Array<{ name: string; weapon_ids: string[]; [k: string]: unknown }>;
   is_leader_model?: boolean;
   [k: string]: unknown;
 }
@@ -538,7 +542,7 @@ function deriveDefaults(
   resolve: (name: string) => string | null,
   unresolved: { name: string; context: string }[],
   notes: string[],
-): { byName: Map<string, string[]>; byMiniId: Map<string, string[]> } {
+): { byName: Map<string, string[]>; byMiniId: Map<string, string[]>; bySharedName: Map<string, string[][]> } {
   const miniById = dump.byId("miniature");
   const miniName = (id: string) => dump.enName(miniById.get(id)) ?? id;
   const wiName = dump.byId("wargear_item");
@@ -615,9 +619,24 @@ function deriveDefaults(
     if (!byMiniId.has(miniId)) byMiniId.set(miniId, ids);
   }
 
+  // Rows are matched to the repository by model name. Several miniatures can share a name with
+  // different loadouts (a command squad's veterans: one with the standard, one with the vox);
+  // one name cannot carry them all, so such names come back separately in `bySharedName` and
+  // are paired row by row (runWargear).
   const byName = new Map<string, string[]>();
-  for (const [miniId, ids] of byMiniId) byName.set(miniName(miniId), ids);
-  return { byName, byMiniId };
+  const ambiguous = new Set<string>();
+  for (const [miniId, ids] of byMiniId) {
+    const name = miniName(miniId);
+    const seen = byName.get(name);
+    if (seen && (seen.length !== ids.length || seen.some((id, index) => id !== ids[index]))) ambiguous.add(name);
+    byName.set(name, ids);
+  }
+  const bySharedName = new Map<string, string[][]>();
+  for (const name of ambiguous) {
+    byName.delete(name);
+    bySharedName.set(name, [...byMiniId].filter(([miniId]) => miniName(miniId) === name).map(([, ids]) => ids));
+  }
+  return { byName, byMiniId, bySharedName };
 }
 
 /**
@@ -1098,7 +1117,7 @@ export function deriveWargear(
 ): DerivedWargear {
   const unresolved: { name: string; context: string }[] = [];
   const notes: string[] = [];
-  const { byName: defaultsByModel, byMiniId: baseByMiniId } = deriveDefaults(
+  const { byName: defaultsByModel, byMiniId: baseByMiniId, bySharedName: defaultsBySharedName } = deriveDefaults(
     dump,
     datasheetId,
     resolve,
@@ -1356,7 +1375,7 @@ export function deriveWargear(
     }
   }
 
-  return { defaultsByModel, options, unresolved, notes };
+  return { defaultsByModel, defaultsBySharedName, options, unresolved, notes };
 }
 
 /** One miniature row of the dump's default unit composition. */
@@ -1649,6 +1668,14 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
 
   const results: DirWargearResult[] = [];
   const staged: StagedWrite[] = [];
+  // Equipment already recorded in some faction: a copy minted into another faction must be
+  // byte-identical (integrity.ts replicated-identical), so it reuses the recorded entity.
+  const recordedGear = new Map<string, CoreWargearRecord>();
+  for (const dir of [...dirs].sort()) {
+    for (const record of readJsonArray<CoreWargearRecord>(path.join(CORE_DIR, dir, "wargear.json"))) {
+      if (!recordedGear.has(record.id)) recordedGear.set(record.id, record);
+    }
+  }
   for (const dir of [...dirs].sort()) {
     if (onlyDir && dir !== onlyDir) continue;
     const upath = path.join(CORE_DIR, dir, "units.json");
@@ -1789,7 +1816,8 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         }
 
         if (item.wargearType !== "wargear" || existingId) continue;
-        gear.push(mintWargear({ dump, gv: { ...CONFIRMED }, warnings: [] }, item, itemId, itemName));
+        const recorded = recordedGear.get(itemId);
+        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...CONFIRMED }, warnings: [] }, item, itemId, itemName));
         validIds.add(itemId);
         res.wargearAdded++;
       }
@@ -1812,6 +1840,49 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
               res.defaultsChanged++;
               res.defaultChanges.push({ id, model: m.name, from: cur, to: expected });
               m.default_weapon_ids = expected;
+              compsChanged = true;
+              // A default that swapped exactly one id for another is the source renaming that
+              // item (astartes-chainsword → chainsword): the model's whole-loadout variants,
+              // which the dump does not carry, follow the rename instead of naming a retired id.
+              const removed = multisetDiff(cur, expected);
+              const added = multisetDiff(expected, cur);
+              if (removed.length === 1 && added.length === 1) {
+                for (const variant of m.loadout_variants ?? []) {
+                  if (!variant.weapon_ids.includes(removed[0]!)) continue;
+                  variant.weapon_ids = variant.weapon_ids.map((itemId) => (itemId === removed[0] ? added[0]! : itemId));
+                  res.notes.push({ id, note: `loadout variant "${variant.name}" follows rename ${removed[0]} → ${added[0]}` });
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // ── same-named rows (a command squad's veterans): pair each repository row with the dump
+      // miniature whose loadout shares the most items with the row's current defaults ──
+      for (const [name, loadouts] of derived.defaultsBySharedName) {
+        for (const comp of compsByUnit.get(id) ?? []) {
+          const rows = comp.models.filter((m) => m.name === name);
+          if (rows.length !== loadouts.length) {
+            res.notes.push({ id, note: `${name}: ${rows.length} row(s) for ${loadouts.length} distinct dump loadouts — defaults left as they are` });
+            continue;
+          }
+          const overlap = (a: string[], b: string[]) => a.length - multisetDiff(a, b).length;
+          const pairs = rows.flatMap((row, r) => loadouts.map((loadout, l) => ({ r, l, score: overlap(row.default_weapon_ids ?? [], loadout) })))
+            .sort((a, b) => b.score - a.score || a.r - b.r || a.l - b.l);
+          const takenRows = new Set<number>();
+          const takenLoadouts = new Set<number>();
+          for (const pair of pairs) {
+            if (takenRows.has(pair.r) || takenLoadouts.has(pair.l)) continue;
+            takenRows.add(pair.r);
+            takenLoadouts.add(pair.l);
+            const row = rows[pair.r]!;
+            const expected = loadouts[pair.l]!;
+            const cur = Array.isArray(row.default_weapon_ids) ? row.default_weapon_ids : [];
+            if (!sameMultiset(cur, expected)) {
+              res.defaultsChanged++;
+              res.defaultChanges.push({ id, model: row.name, from: cur, to: expected });
+              row.default_weapon_ids = [...expected];
               compsChanged = true;
             }
           }
@@ -1902,6 +1973,10 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         for (const model of comp.models) {
           for (const itemId of model.default_weapon_ids ?? []) {
             if (weaponEntityIds.has(itemId)) reachable.add(itemId);
+          }
+          // A whole-loadout variant is a legal build too: its weapons stay declared.
+          for (const variant of model.loadout_variants ?? []) {
+            for (const itemId of variant.weapon_ids) if (weaponEntityIds.has(itemId)) reachable.add(itemId);
           }
         }
       }
@@ -2068,6 +2143,7 @@ export function weaponInventory(dump: MfmDump): Map<string, Map<string, GoldenMo
       m.set(id, mergeMode(m.get(id), mode));
     };
     for (const ids of dw.defaultsByModel.values()) for (const id of ids) add(id);
+    for (const loadouts of dw.defaultsBySharedName.values()) for (const ids of loadouts) for (const id of ids) add(id);
     for (const o of dw.options) {
       for (const id of o.replaces ?? []) add(id);
       for (const id of o.replacement ?? []) add(id);
@@ -2524,7 +2600,8 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
           ...new Set(
             comp.models
               .filter((m) => !view.some((d) => normModelName(d.name) === normModelName(m.name)))
-              .flatMap((m) => m.default_weapon_ids ?? [])
+              // A dropped row's whole-loadout variants are dropped with it.
+              .flatMap((m) => [...(m.default_weapon_ids ?? []), ...(m.loadout_variants ?? []).flatMap((variant) => variant.weapon_ids)])
               .filter((wid) => !keptCoverage.has(wid)),
           ),
         ].sort();
