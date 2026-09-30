@@ -141,16 +141,16 @@
             <div class="dc-abilities">
               {#each d.stratagems as s (s.id)}
                 {@const ability = resolveAbility(s.ability_id, factionId)}
-                {@const tr = s.target_restrictions}
+                {@const trs = s.target_restrictions ? [s.target_restrictions].flat() : []}
                 <div class="dc-ability">
                   <div class="body">
                     <div class="ab-name strat-name">{s.name}</div>
                     <div class="meta-inline">{stratMeta(s)}</div>
-                    {#if tr}
+                    {#each trs as tr, i (i)}
                       {#if kwLine("Targets", tr.required_keywords)}<div class="ab-restrict">{kwLine("Targets", tr.required_keywords)}</div>{/if}
                       {#if kwLine("Targets any", tr.required_keywords_any)}<div class="ab-restrict">{kwLine("Targets any", tr.required_keywords_any)}</div>{/if}
                       {#if kwLine("Excludes", tr.excluded_keywords)}<div class="ab-restrict">{kwLine("Excludes", tr.excluded_keywords)}</div>{/if}
-                    {/if}
+                    {/each}
                     {#if ability?.description}<div class="ab-desc">{ability.description}</div>{/if}
                   </div>
                   {#if ability}{@render qaButtons(ability.id, ability.description)}{/if}

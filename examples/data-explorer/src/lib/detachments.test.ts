@@ -23,8 +23,8 @@ describe("resolveDetachment", () => {
     const d = find("adepta-sororitas", "hallowed-martyrs");
     // the-blood-of-martyrs exists in enrichment, so the rule resolves.
     expect(d.rules.map((r) => r.id)).toContain("the-blood-of-martyrs-adepta-sororitas");
-    expect(d.dispositions.map((x) => x.id)).toEqual(["priority-assets"]);
-    expect(d.dispositions[0].name).toBe("Priority Assets");
+    expect(d.dispositions.map((x) => x.id)).toEqual(["take-and-hold"]);
+    expect(d.dispositions[0].name).toBe("Take and Hold");
     expect(d.enhancements).toHaveLength(4);
     expect(d.stratagems).toHaveLength(6);
   });

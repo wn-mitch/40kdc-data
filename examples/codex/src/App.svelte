@@ -306,14 +306,14 @@
               {#if page.detachment.stratagems.length}
                 {#each page.detachment.stratagems as stratagem (stratagem.id)}
                   {@const ability = resolveAbility(stratagem.ability_id, page.faction.id)}
-                  {@const restrictions = stratagem.target_restrictions}
+                  {@const restrictions = stratagem.target_restrictions ? [stratagem.target_restrictions].flat() : []}
                   {@const sourceText = sourceDescription(ability?.id ?? "", ability?.description ?? "")}
                   <div class="rule-card"><h3>{stratagem.name}</h3><p class="meta">{stratagemMeta(stratagem)}</p>
-                    {#if restrictions}
-                      {#if keywordLine("Targets", restrictions.required_keywords)}<p class="restriction">{keywordLine("Targets", restrictions.required_keywords)}</p>{/if}
-                      {#if keywordLine("Targets any", restrictions.required_keywords_any)}<p class="restriction">{keywordLine("Targets any", restrictions.required_keywords_any)}</p>{/if}
-                      {#if keywordLine("Excludes", restrictions.excluded_keywords)}<p class="restriction">{keywordLine("Excludes", restrictions.excluded_keywords)}</p>{/if}
-                    {/if}
+                    {#each restrictions as restriction, i (i)}
+                      {#if keywordLine("Targets", restriction.required_keywords)}<p class="restriction">{keywordLine("Targets", restriction.required_keywords)}</p>{/if}
+                      {#if keywordLine("Targets any", restriction.required_keywords_any)}<p class="restriction">{keywordLine("Targets any", restriction.required_keywords_any)}</p>{/if}
+                      {#if keywordLine("Excludes", restriction.excluded_keywords)}<p class="restriction">{keywordLine("Excludes", restriction.excluded_keywords)}</p>{/if}
+                    {/each}
                     {#if sourceText}<p>{sourceText}</p>{/if}
                   </div>
                 {/each}

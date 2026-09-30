@@ -104,8 +104,8 @@ describe('builder points', () => {
 	it('prices every size of a range-priced unit and flags oversize (Venatari resize)', () => {
 		const fac = 'adeptus-custodes';
 		const raw = unitRaw('venatari-custodians', undefined, fac)!;
-		expect(baseUnitPoints(raw, 3)).toBe(160);
-		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(320);
+		expect(baseUnitPoints(raw, 3)).toBe(150);
+		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(300);
 		const mk = (mc: number, key: string): BuilderUnit => ({
 			key,
 			datasheetId: 'venatari-custodians',
@@ -114,8 +114,9 @@ describe('builder points', () => {
 			enhancementId: null,
 			isWarlord: false,
 		});
-		// A 5-model squad totals 320 (the regression priced it at 160).
-		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(320);
+		// A 5-model squad is priced at the 4-6 tier (the regression priced it at the 3-model 150),
+		// plus its five default Venatari lances at 5 each.
+		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(300 + 25);
 		// Below the floor and above the ceiling are flagged; legal sizes are not.
 		expect(pointsTierMissing(raw, 2)).toBe(true);
 		expect(pointsTierMissing(raw, 6)).toBe(false);
@@ -125,27 +126,25 @@ describe('builder points', () => {
 	});
 
 	// Issue 75: a unit's displayed cost includes its per-item MFM wargear costs
-	// summed over the final loadout. A Terminator Assault Squad's five thunder
-	// hammers (5 pts each) are a priced default, so unitPoints = base + 25.
-	it('charges wargear_costs over the loadout (Terminator Assault Squad hammers)', () => {
+	// summed over the final loadout. A Terminator Assault Squad's storm shields
+	// (5 pts each) are priced, so five of them add 25 to the base.
+	it('charges wargear_costs over the loadout (Terminator Assault Squad storm shields)', () => {
 		const fac = 'adeptus-astartes';
 		const raw = unitRaw('terminator-assault-squad', undefined, fac)!;
-		expect(raw.wargear_costs).toContainEqual({ item_id: 'thunder-hammer', cost: 5 });
+		expect(raw.wargear_costs).toContainEqual({ item_id: 'storm-shield', cost: 5 });
 		const bu: BuilderUnit = {
 			key: 'tas',
 			datasheetId: 'terminator-assault-squad',
 			modelCount: 5,
-			loadout: defaultLoadout(raw, 5), // five thunder hammers by default
+			loadout: new Map(defaultLoadout(raw, 5)).set('storm-shield', 5),
 			enhancementId: null,
 			isWarlord: false,
 		};
 		const base = baseUnitPoints(raw, 5);
-		const hammers = bu.loadout.get('thunder-hammer') ?? 0;
-		expect(hammers).toBe(5);
-		expect(unitPoints(bu, fac)).toBe(base + hammers * 5); // base + 25
-		// Swapping hammers away for free lightning claws drops the surcharge.
-		const noHammers: BuilderUnit = { ...bu, loadout: new Map(bu.loadout).set('thunder-hammer', 0) };
-		expect(unitPoints(noHammers, fac)).toBe(base);
+		expect(unitPoints(bu, fac)).toBe(base + 25);
+		// Dropping the shields drops the surcharge.
+		const noShields: BuilderUnit = { ...bu, loadout: new Map(bu.loadout).set('storm-shield', 0) };
+		expect(unitPoints(noShields, fac)).toBe(base);
 	});
 
 	it('sums unit points across the draft', () => {
@@ -807,8 +806,9 @@ describe('generated ally caps: keyword_limits and warlord allowlist', () => {
 		expect(issues.some((v) => /4 War Dog over the 3 allowed/.test(v.message))).toBe(true);
 	});
 
-	it('flags an ally Warlord absent from the pool’s warlord allowlist', () => {
-		// callidus-assassin is in the Imperial Agents pool but not its warlord allowlist.
+	it('flags any Imperial Agents ally as Warlord now that the pool has no allowlist', () => {
+		// Since MFM 963 the Imperial Agents pool bars every allied Warlord instead of listing
+		// the few that may be one.
 		const ally: BuilderUnit = {
 			key: 'cal',
 			datasheetId: 'callidus-assassin',
@@ -824,7 +824,8 @@ describe('generated ally caps: keyword_limits and warlord allowlist', () => {
 			factionId: 'astra-militarum',
 			units: [ally],
 		});
-		expect(issues.some((v) => /only specific units may be Warlord/.test(v.message))).toBe(true);
+		expect(issues.some((v) => v.unitKey === 'cal' && /allied units cannot be Warlord/.test(v.message))).toBe(true);
+		expect(issues.some((v) => /only specific units may be Warlord/.test(v.message))).toBe(false);
 	});
 });
 

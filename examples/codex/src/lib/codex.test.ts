@@ -64,9 +64,10 @@ describe("Codex routes", () => {
     const faction = resolveCodexRoute(parseCodexRoute("/factions/tyranids"));
     expect(faction.kind).toBe("faction");
     if (faction.kind === "faction") {
+      // In the order the dump prints them.
       expect(faction.factionRules.map((rule) => rule.id)).toEqual([
+        "synapse-tyranids",
         "shadow-in-the-warp-tyranids",
-        "synapse",
       ]);
     }
   });

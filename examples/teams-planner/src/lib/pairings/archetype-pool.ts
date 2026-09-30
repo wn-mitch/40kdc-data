@@ -46,8 +46,8 @@ export const ARCHETYPE_POOL: Archetype[] = [
   { id: "dread-mob-walkers", name: "Dread Mob Walkers", factionId: "orks", detachmentId: "dread-mob" },
   { id: "squighog-rodeo", name: "Squighog Rodeo", factionId: "orks", detachmentId: "da-big-hunt" },
   { id: "trukk-boyz", name: "Trukk Boyz", factionId: "orks", detachmentId: "war-horde" },
-  { id: "flash-gitz-freebooterz", name: "Flash Gitz Freebooterz", factionId: "orks", detachmentId: "freebooter-krew" },
-  { id: "battlewagon-rush", name: "Battlewagon Rush", factionId: "orks", detachmentId: "rollin-deff" },
+  { id: "flash-gitz-shootas", name: "Flash Gitz Shootas", factionId: "orks", detachmentId: "shoota-boyz" },
+  { id: "battlewagon-rush", name: "Battlewagon Rush", factionId: "orks", detachmentId: "blitz-brigade" },
 
   // ── Tyranids ───────────────────────────────────────────────────────────────
   { id: "gaunt-carpet", name: "Gaunt Carpet", factionId: "tyranids", detachmentId: "unending-swarm" },
@@ -177,19 +177,19 @@ export const ARCHETYPE_POOL: Archetype[] = [
 
   // ── Space Marine chapters ──────────────────────────────────────────────────
   { id: "bobby-g-gladius", name: "Bobby G Gladius", factionId: "ultramarines", detachmentId: "gladius-task-force" },
-  { id: "centurion-teleports", name: "Centurion Teleports", factionId: "ultramarines", detachmentId: "vanguard-spearhead" },
+  { id: "centurion-siege-line", name: "Centurion Siege Line", factionId: "ultramarines", detachmentId: "gravis-siege-force" },
   { id: "deathwing-brick", name: "Deathwing Brick", factionId: "dark-angels", detachmentId: "inner-circle-task-force" },
-  { id: "ravenwing-hunters", name: "Ravenwing Hunters", factionId: "dark-angels", detachmentId: "company-of-hunters" },
-  { id: "jump-pack-spam", name: "Jump Pack Spam", factionId: "blood-angels", detachmentId: "liberator-assault-group" },
-  { id: "death-company-rush", name: "Death Company Rush", factionId: "blood-angels", detachmentId: "the-lost-brethren" },
+  { id: "ravenwing-hunters", name: "Ravenwing Hunters", factionId: "dark-angels", detachmentId: "darkflight-pursuit" },
+  { id: "jump-pack-spam", name: "Jump Pack Spam", factionId: "blood-angels", detachmentId: "assault-brethren" },
+  { id: "death-company-rush", name: "Death Company Rush", factionId: "blood-angels", detachmentId: "wrath-of-the-doomed" },
   { id: "thunderwolf-cavalry", name: "Thunderwolf Cavalry", factionId: "space-wolves", detachmentId: "stormlance-task-force" },
   { id: "fenris-beastslayers", name: "Fenris Beastslayers", factionId: "space-wolves", detachmentId: "saga-of-the-beastslayer" },
-  { id: "templar-crusaders", name: "Templar Crusaders", factionId: "black-templars", detachmentId: "wrathful-procession" },
-  { id: "sword-brethren-raiders", name: "Sword Brethren Land Raiders", factionId: "black-templars", detachmentId: "companions-of-vehemence" },
+  { id: "templar-crusaders", name: "Templar Crusaders", factionId: "black-templars", detachmentId: "vow-sworn-crusaders" },
+  { id: "sword-brethren-raiders", name: "Sword Brethren Land Raiders", factionId: "black-templars", detachmentId: "marshals-household" },
   { id: "iron-hands-dreadnoughts", name: "Iron Hands Dreadnoughts", factionId: "iron-hands", detachmentId: "ironstorm-spearhead" },
   { id: "white-scars-bikes", name: "White Scars Bikes", factionId: "white-scars", detachmentId: "spearpoint-task-force" },
-  { id: "salamanders-flamers", name: "Salamanders Flame Aggressors", factionId: "salamanders", detachmentId: "firestorm-assault-force" },
-  { id: "fists-castle", name: "Fists Castle Gunline", factionId: "imperial-fists", detachmentId: "emperors-shield" },
+  { id: "salamanders-flamers", name: "Salamanders Flame Aggressors", factionId: "salamanders", detachmentId: "forgefathers-seekers" },
+  { id: "fists-castle", name: "Fists Castle Gunline", factionId: "imperial-fists", detachmentId: "ceramite-sentinels" },
   { id: "raven-guard-phobos", name: "Raven Guard Phobos Skew", factionId: "raven-guard", detachmentId: "shadowmark-talon" },
   { id: "deathwatch-kill-teams", name: "Deathwatch Kill Teams", factionId: "deathwatch", detachmentId: "black-spear-task-force" },
 ];

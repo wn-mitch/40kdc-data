@@ -32,11 +32,12 @@ import {
 // World Eaters span all five dispositions across their detachments, so they're
 // a stable fixture for both "covers everything" and "narrowed to a gap".
 //   goretrack-onslaught → take-and-hold      (2 DP)
-//   butchers-of-khorne  → disruption         (1 DP)
+//   butchers-of-khorne  → take-and-hold      (1 DP)
 //   khorne-daemonkin    → reconnaissance     (2 DP)
 //   vessels-of-wrath    → priority-assets    (1 DP)
-//   berzerker-warband   → purge-the-foe      (3 DP)
-//   brazen-engines      → purge-the-foe      (1 DP)
+//   berzerker-warband   → purge-the-foe      (2 DP)
+//   brazen-engines      → disruption         (1 DP)
+//   frenzied-reavers    → purge-the-foe      (1 DP)
 
 function army(over: Partial<Army>): Army {
   return { id: "a1", name: "Army 1", factionId: "world-eaters", detachmentIds: [], ...over };
@@ -71,7 +72,7 @@ describe("armyDispositions / armyDetachmentPoints", () => {
   });
 
   it("ignores unknown detachment ids in both", () => {
-    const a = army({ detachmentIds: ["not-real", "butchers-of-khorne"] });
+    const a = army({ detachmentIds: ["not-real", "brazen-engines"] });
     expect([...armyDispositions(a)]).toEqual(["disruption"]);
     expect(armyDetachmentPoints(a)).toBe(1);
   });
@@ -83,7 +84,7 @@ describe("playerCoverage", () => {
       player({
         armies: [
           army({ id: "a1", detachmentIds: ["goretrack-onslaught"] }), // take-and-hold
-          army({ id: "a2", detachmentIds: ["khorne-daemonkin", "butchers-of-khorne"] }), // recon + disruption
+          army({ id: "a2", detachmentIds: ["khorne-daemonkin", "brazen-engines"] }), // recon + disruption
         ],
       }),
     );
@@ -138,7 +139,7 @@ describe("effectivePlacement", () => {
   // The user's worked example transposed onto World Eaters: two armies, between
   // them fielding reconnaissance and take-and-hold; "vastly prefer recon".
   const reconTah = army({ id: "hil", name: "Daemonkin + Goretrack", detachmentIds: ["khorne-daemonkin", "goretrack-onslaught"] }); // recon + t&h
-  const reconPurge = army({ id: "kb", name: "Daemonkin + Brazen", detachmentIds: ["khorne-daemonkin", "brazen-engines"] }); // recon + purge
+  const reconPurge = army({ id: "kb", name: "Daemonkin + Reavers", detachmentIds: ["khorne-daemonkin", "frenzied-reavers"] }); // recon + purge
 
   it("returns the highest-banded copy, so the example reads recon=want, t&h=pref", () => {
     const p = player({
@@ -171,7 +172,7 @@ describe("effectivePlacement", () => {
 describe("teamCoverage", () => {
   const wholePool = [
     army({ id: "a1", detachmentIds: ["goretrack-onslaught"] }), // take-and-hold
-    army({ id: "a2", detachmentIds: ["butchers-of-khorne"] }), // disruption
+    army({ id: "a2", detachmentIds: ["brazen-engines"] }), // disruption
     army({ id: "a3", detachmentIds: ["khorne-daemonkin"] }), // reconnaissance
     army({ id: "a4", detachmentIds: ["vessels-of-wrath"] }), // priority-assets
     army({ id: "a5", detachmentIds: ["berzerker-warband"] }), // purge-the-foe
@@ -210,7 +211,7 @@ describe("teamCoverage", () => {
       players: [
         player({
           id: "a",
-          armies: [army({ id: "a1", detachmentIds: ["goretrack-onslaught", "butchers-of-khorne"] })],
+          armies: [army({ id: "a1", detachmentIds: ["goretrack-onslaught", "brazen-engines"] })],
           preferences: [
             { armyId: "a1", disposition: "take-and-hold", tier: "want" },
             { armyId: "a1", disposition: "disruption", tier: "could" },
@@ -495,7 +496,6 @@ describe("codex-supplement per-faction detachment views", () => {
     expect(ids("white-scars").has("spearpoint-task-force")).toBe(true);
     expect(ids("raven-guard").has("shadowmark-talon")).toBe(true);
     expect(ids("ultramarines").has("blade-of-ultramar")).toBe(true);
-    expect(ids("ultramarines").has("reclamation-force")).toBe(true);
     // The generic parent fields none of the chapter-locked detachments.
     expect(ids("adeptus-astartes").has("spearpoint-task-force")).toBe(false);
   });
