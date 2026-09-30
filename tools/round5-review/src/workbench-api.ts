@@ -1,3 +1,8 @@
+/** Items in alphabetical order of the text a select shows for each; the input is left unchanged. */
+export function alphabetical<T>(items: readonly T[], label: (item: T) => string = String): T[] {
+  return [...items].sort((left, right) => label(left).localeCompare(label(right), undefined, { sensitivity: "base", numeric: true }));
+}
+
 /** Render an unknown API value for display. */
 export const readable = (value: unknown): string => typeof value === "string" ? value : JSON.stringify(value, null, 2) ?? "Unknown";
 

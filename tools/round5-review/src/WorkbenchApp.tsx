@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { utf8Selection } from "./model";
-import { api, readable } from "./workbench-api";
+import { alphabetical, api, readable } from "./workbench-api";
 import { SourceWorkPanel, type SourceWorkAbility } from "./SourceWorkPanel";
 import { LeavesPage } from "./LeavesPage";
 import { ProposalsPage } from "./ProposalsPage";
@@ -713,7 +713,7 @@ export default function WorkbenchApp() {
       <label htmlFor="wb-faction">Faction</label>
       <select id="wb-faction" value={faction} disabled={view === "abilities" && editorDirty} onChange={(event) => {
         setFaction(event.target.value); setCursors([null]); setFocused(null); setDraft(null);
-      }}><option value="">All factions</option>{factions.map((id) => <option key={id} value={id}>{id}</option>)}</select>
+      }}><option value="">All factions</option>{alphabetical(factions).map((id) => <option key={id} value={id}>{id}</option>)}</select>
       <form className="wb-search" onSubmit={(event) => {
         event.preventDefault(); setSearch(searchInput.trim()); setCursors([null]); setFocused(null); setDraft(null);
       }}>
@@ -831,7 +831,7 @@ export default function WorkbenchApp() {
                     const role = event.target.value;
                     editDraft(families.some((item) => item.id === draft.family && item.role === role)
                       ? { role } : { role, family: "", version: "1", parameters: "{}" });
-                  }}>{[...ROLES, "UNRESOLVED"].map((role) => <option key={role} value={role}>{role === "UNRESOLVED" ? "Unresolved: record a gap" : ROLE_LABELS[role as Role]}</option>)}</select></label>}</div>
+                  }}>{[...alphabetical(ROLES, (role) => ROLE_LABELS[role]), "UNRESOLVED"].map((role) => <option key={role} value={role}>{role === "UNRESOLVED" ? "Unresolved: record a gap" : ROLE_LABELS[role as Role]}</option>)}</select></label>}</div>
               <div className="wb-boundary-tools"><button type="button" className="secondary" aria-pressed={reselecting} onClick={() => {
                 if (reselecting) { setReselecting(false); return; }
                 setReselecting(true); setError(null);
@@ -845,23 +845,23 @@ export default function WorkbenchApp() {
                 const choice = families.find((item) => item.id === event.target.value && item.role === draft.role);
                 editDraft({ family: choice?.id ?? "", version: String(choice?.version ?? 1), parameters: JSON.stringify(choice?.starter ?? {}, null, 2) });
               }}><option value="">Choose what this {draft.role.toLowerCase()} means</option>
-                {families.filter((item) => item.role === draft.role).map((item) => <option key={`${item.id}@${item.version}`} value={item.id}>{item.label}</option>)}
+                {alphabetical(families.filter((item) => item.role === draft.role), (item) => item.label).map((item) => <option key={`${item.id}@${item.version}`} value={item.id}>{item.label}</option>)}
               </select></label>
                 {selectedFamily && <p className="wb-help">{selectedFamily.description} <code>{selectedFamily.id}@{selectedFamily.version}</code></p>}
                 {draft.role === "CONDITION" && <p className="wb-help">Mark the condition separately from its effect. A reviewed condition family must express the entire condition, including named-model qualifiers; otherwise record Novel or Ambiguous.</p>}
                 {draft.family === "critical-hit-threshold" && <p className="wb-help">Critical hits are not the same as hits scored. If this text only changes which unmodified Hit rolls score hits, do not confirm it as a critical-hit threshold.</p>}
                 {draft.family === "characteristic-set" && <><div className="wb-editor-grid">
                   <label>Subject<select value={String(draftParameters?.subject ?? "")} onChange={(event) => editParameter("subject", event.target.value)}><option value="bearer">Bearer</option><option value="this-model">This model</option><option value="this-unit">This unit</option></select></label>
-                  <label>Characteristic<select value={String(draftParameters?.characteristic ?? "")} onChange={(event) => editParameter("characteristic", event.target.value)}><option value="">Choose a characteristic</option>{CHARACTERISTICS.map((stat) => <option key={stat} value={stat}>{stat}</option>)}</select></label>
+                  <label>Characteristic<select value={String(draftParameters?.characteristic ?? "")} onChange={(event) => editParameter("characteristic", event.target.value)}><option value="">Choose a characteristic</option>{alphabetical(CHARACTERISTICS).map((stat) => <option key={stat} value={stat}>{stat}</option>)}</select></label>
                   <label>Set to<input type="number" step={1} value={typeof draftParameters?.value === "number" ? draftParameters.value : ""} onChange={(event) => editParameter("value", event.target.value === "" ? null : Number(event.target.value))} placeholder="Numeric value from source" /></label>
                 </div><p className="wb-help">Sets the named characteristic; it does not add to a roll. Select the exact source region, including the bearer or other subject. The Save value 3 represents 3+ in the source. Source-qualified values can be entered in JSON.</p></>}
                 {draft.family === "weapon-ability-grant" && <><div className="wb-editor-grid">
                   <label>Whose weapons?<select value={String(draftParameters?.subject ?? "")} onChange={(event) => editParameter("subject", event.target.value)}>
-                    <option value="this-unit">Models in this unit</option><option value="this-model">This model</option><option value="bearer">Bearer</option>
+                    <option value="bearer">Bearer</option><option value="this-unit">Models in this unit</option><option value="this-model">This model</option>
                   </select></label>
                   <label>Weapon ability<select value={String(draftParameters?.keyword ?? "")} onChange={(event) => editParameter("keyword", event.target.value)}>
                     <option value="">Choose the ability named in the source</option>
-                    {selectedFamily?.parameterSchema.properties?.keyword?.enum?.map((keyword) => <option key={keyword} value={keyword}>{keyword}</option>)}
+                    {alphabetical(selectedFamily?.parameterSchema.properties?.keyword?.enum ?? []).map((keyword) => <option key={keyword} value={keyword}>{keyword}</option>)}
                   </select></label>
                 </div><p className="wb-help">This grants an ability to weapons, not to the unit. Select the exact effect clause; review a condition or named-model qualifier as a separate source span.</p>
                 {draftParameters?.keyword && !weaponReady && <p className="wb-help error">The chosen weapon ability must occur in the selected source text.</p>}</>}
@@ -875,7 +875,7 @@ export default function WorkbenchApp() {
                     const value = draftParameters?.[name];
                     return <label key={name}>{name.replaceAll("-", " ")}
                       {choices.length ? <select value={typeof value === "string" ? value : ""} onChange={(event) => editParameter(name, event.target.value)}>
-                        <option value="">Choose {name.replaceAll("-", " ")}</option>{choices.map((choice) => <option key={choice} value={choice}>{choice.replaceAll("-", " ")}</option>)}
+                        <option value="">Choose {name.replaceAll("-", " ")}</option>{alphabetical(choices, (choice) => choice.replaceAll("-", " ")).map((choice) => <option key={choice} value={choice}>{choice.replaceAll("-", " ")}</option>)}
                       </select> : <input type={numeric && !source ? "number" : "text"} step={numeric ? 1 : undefined}
                         value={source && value && typeof value === "object" && "source" in value ? String(value.source) : typeof value === "number" || typeof value === "string" ? value : ""}
                         onChange={(event) => editParameter(name, source ? { source: event.target.value } : numeric && event.target.value !== "" ? Number(event.target.value) : event.target.value || null)}

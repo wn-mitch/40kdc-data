@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { api } from "./workbench-api";
+import { alphabetical, api } from "./workbench-api";
 
 const STRUCTURAL_KINDS = ["participant", "selector", "usage", "binding"] as const;
 const CONNECTIVE_KINDS = ["and", "or", "if", "unless", "while", "until", "during", "before", "after", "then", "reference", "other"] as const;
@@ -201,11 +201,11 @@ export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, o
       <blockquote>{selection.exact_text}</blockquote>
       <label>Description<input value={description} onChange={(event) => setDescription(event.target.value)} placeholder="What this constituent does in the rule" /></label>
       <div className="wb-actions">
-        <select value={labelKind} onChange={(event) => setLabelKind(event.target.value)}>{STRUCTURAL_KINDS.map((kind) => <option key={kind} value={kind}>{kind}: {KIND_HELP[kind]}</option>)}</select>
+        <select value={labelKind} onChange={(event) => setLabelKind(event.target.value)}>{alphabetical(STRUCTURAL_KINDS).map((kind) => <option key={kind} value={kind}>{kind}: {KIND_HELP[kind]}</option>)}</select>
         <button className="secondary" disabled={busy || !description.trim()} onClick={() => propose(labelKind)}>Propose structural constituent</button>
       </div>
       <div className="wb-actions">
-        <select value={connectiveKind} onChange={(event) => setConnectiveKind(event.target.value)}>{CONNECTIVE_KINDS.map((kind) => <option key={kind}>{kind}</option>)}</select>
+        <select value={connectiveKind} onChange={(event) => setConnectiveKind(event.target.value)}>{alphabetical(CONNECTIVE_KINDS).map((kind) => <option key={kind}>{kind}</option>)}</select>
         <button className="secondary" disabled={busy || !description.trim()} onClick={() => propose("CONNECTIVE")}>Propose connective</button>
         <button className="secondary" disabled={busy || !description.trim()} onClick={() => propose("UNRESOLVED")}>Mark unresolved</button>
       </div>
@@ -221,11 +221,11 @@ export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, o
           <blockquote>{proposal.exact_text}</blockquote>
           <p className="wb-help">{proposal.description}</p>
           {parents.length > 0 && <label>Reviewed qualifier inside<select value={containers[proposal.id] ?? ""} onChange={(event) => setContainers((current) => ({ ...current, [proposal.id]: event.target.value }))}>
-            <option value="">Not contained</option>{parents.map((parent) => <option key={parent.id} value={parent.id}>{parent.role} · {parent.exact_text}</option>)}
+            <option value="">Not contained</option>{alphabetical(parents, (parent) => `${parent.role} · ${parent.exact_text}`).map((parent) => <option key={parent.id} value={parent.id}>{parent.role} · {parent.exact_text}</option>)}
           </select></label>}
           <div className="wb-actions">
             <button className="primary" disabled={busy} onClick={() => decide(proposal, "accept")}>Accept</button>
-            <select value={corrections[proposal.id] ?? proposal.kind} onChange={(event) => setCorrections((current) => ({ ...current, [proposal.id]: event.target.value }))}>{STRUCTURAL_KINDS.map((kind) => <option key={kind}>{kind}</option>)}</select>
+            <select value={corrections[proposal.id] ?? proposal.kind} onChange={(event) => setCorrections((current) => ({ ...current, [proposal.id]: event.target.value }))}>{alphabetical(STRUCTURAL_KINDS).map((kind) => <option key={kind}>{kind}</option>)}</select>
             <button className="secondary" disabled={busy || (corrections[proposal.id] ?? proposal.kind) === proposal.kind} onClick={() => decide(proposal, "correct")}>Correct kind</button>
             <button className="secondary danger" disabled={busy} onClick={() => decide(proposal, "reject")}>Reject</button>
           </div>

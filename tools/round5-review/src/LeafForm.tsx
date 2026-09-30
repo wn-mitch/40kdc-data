@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { choices, freeText, numeric, prefillFromSource, type Property } from "./leaf-prefill";
-import { api } from "./workbench-api";
+import { alphabetical, api } from "./workbench-api";
 
 /** One reviewed family as the bridge lists it (deprecated versions are never listed). */
 export type Family = {
@@ -125,8 +125,8 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
   return <form className="wb-leaf-form" onSubmit={(event) => { event.preventDefault(); if (complete) onSubmit(familyId, effective); }}>
     <label>Meaning<select value={familyId} onChange={(event) => choose(event.target.value)}>
       <option value="">Choose what this wording means</option>
-      {roles.map((item) => <optgroup key={item} label={ROLE_LABELS[item] ?? item}>
-        {families.filter((candidate) => candidate.role === item).map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.label}</option>)}
+      {alphabetical(roles, (item) => ROLE_LABELS[item] ?? item).map((item) => <optgroup key={item} label={ROLE_LABELS[item] ?? item}>
+        {alphabetical(families.filter((candidate) => candidate.role === item), (candidate) => candidate.label).map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.label}</option>)}
       </optgroup>)}
     </select></label>
     {family && <p className="wb-help">{family.description}</p>}
@@ -174,7 +174,7 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
         return <label key={name}>{label}<select value={isSource ? "__source" : typeof value === "string" ? value : ""}
           onChange={(event) => set(name, event.target.value === "__source" ? { source: exactText } : event.target.value)}>
           <option value="">Choose {label}</option>
-          {options.map((option) => <option key={option} value={option}>{option.replaceAll("-", " ")}</option>)}
+          {alphabetical(options, (option) => option.replaceAll("-", " ")).map((option) => <option key={option} value={option}>{option.replaceAll("-", " ")}</option>)}
           {sourceable(property) && <option value="__source">Exact words from the source…</option>}
         </select>
           {isSource && <input value={String((value as { source: unknown }).source)} onChange={(event) => set(name, { source: event.target.value })} aria-label={`${label} source words`} />}

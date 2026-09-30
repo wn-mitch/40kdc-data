@@ -4,7 +4,7 @@ import { LeafForm, leafLabel, type Family } from "./LeafForm";
 import { Examples } from "./Examples";
 import { SplitEditor } from "./SplitEditor";
 import type { DecisionQueue, QueueItem } from "./decision-queue";
-import { api } from "./workbench-api";
+import { alphabetical, api } from "./workbench-api";
 
 type Surface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; closes: number; warnings?: string[] };
 type Leaf = { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; retired_version: boolean; surfaces: Surface[]; closes: number; occurrences: number; describer_gaps?: string[] };
@@ -168,7 +168,7 @@ export function LeavesPage({ families, faction, revision, queue, queueItems, rev
             {group.length > 1 && <div className="wb-actions">
               <select aria-label="Merge into" value={mergeTarget[leaf.fingerprint_id] ?? ""} onChange={(event) => setMergeTarget((current) => ({ ...current, [leaf.fingerprint_id]: event.target.value }))}>
                 <option value="">Same meaning as…</option>
-                {group.filter((other) => other.fingerprint_id !== leaf.fingerprint_id).map((other) => <option key={other.fingerprint_id} value={other.fingerprint_id}>{leafLabel(families, other.family_id, other.parameters)}</option>)}
+                {alphabetical(group.filter((other) => other.fingerprint_id !== leaf.fingerprint_id), (other) => leafLabel(families, other.family_id, other.parameters)).map((other) => <option key={other.fingerprint_id} value={other.fingerprint_id}>{leafLabel(families, other.family_id, other.parameters)}</option>)}
               </select>
               <button className="secondary" disabled={waiting(`merge:${leaf.fingerprint_id}`) || !mergeTarget[leaf.fingerprint_id]} onClick={() => merge(leaf)}>Merge into it</button>
               {queueNote(`merge:${leaf.fingerprint_id}`)}
