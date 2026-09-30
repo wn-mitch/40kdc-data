@@ -6,48 +6,48 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 
 | faction | total | offensive | defensive | inert | stub* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
-| _core | 25 | 2 | 2 | 22 | 2 | 0 | 0 | 0 |
-| adepta-sororitas | 149 | 42 | 15 | 95 | 12 | 7 | 0 | 1 |
-| adeptus-astartes | 246 | 29 | 10 | 209 | 146 | 1 | 0 | 3 |
-| adeptus-custodes | 157 | 39 | 18 | 104 | 6 | 3 | 0 | 3 |
-| adeptus-mechanicus | 168 | 22 | 7 | 141 | 73 | 0 | 0 | 2 |
-| aeldari | 305 | 36 | 13 | 260 | 144 | 7 | 0 | 5 |
-| agents-of-the-imperium | 139 | 27 | 5 | 108 | 55 | 0 | 0 | 2 |
-| astra-militarum | 256 | 26 | 11 | 220 | 88 | 2 | 0 | 5 |
-| black-templars | 64 | 4 | 0 | 60 | 48 | 0 | 0 | 0 |
+| _core | 26 | 2 | 2 | 23 | 1 | 0 | 0 | 0 |
+| adepta-sororitas | 148 | 42 | 15 | 94 | 11 | 7 | 0 | 1 |
+| adeptus-astartes | 250 | 27 | 9 | 216 | 155 | 1 | 0 | 3 |
+| adeptus-custodes | 154 | 39 | 18 | 101 | 3 | 3 | 0 | 3 |
+| adeptus-mechanicus | 167 | 22 | 7 | 140 | 72 | 0 | 0 | 2 |
+| aeldari | 300 | 36 | 13 | 255 | 139 | 7 | 0 | 5 |
+| agents-of-the-imperium | 138 | 27 | 5 | 107 | 54 | 0 | 0 | 2 |
+| astra-militarum | 251 | 26 | 11 | 215 | 83 | 2 | 0 | 5 |
+| black-templars | 63 | 4 | 0 | 59 | 47 | 0 | 0 | 0 |
 | blood-angels | 61 | 17 | 3 | 43 | 15 | 1 | 0 | 0 |
-| chaos-daemons | 198 | 31 | 9 | 163 | 68 | 7 | 0 | 4 |
-| chaos-knights | 115 | 23 | 9 | 84 | 5 | 2 | 0 | 0 |
-| chaos-space-marines | 285 | 43 | 10 | 236 | 136 | 7 | 0 | 3 |
+| chaos-daemons | 195 | 31 | 9 | 160 | 65 | 7 | 0 | 4 |
+| chaos-knights | 110 | 23 | 9 | 79 | 0 | 2 | 0 | 0 |
+| chaos-space-marines | 281 | 43 | 10 | 232 | 132 | 7 | 0 | 3 |
 | dark-angels | 77 | 16 | 7 | 57 | 21 | 0 | 0 | 2 |
-| death-guard | 153 | 13 | 4 | 138 | 70 | 1 | 0 | 3 |
-| deathwatch | 37 | 5 | 1 | 31 | 24 | 1 | 0 | 0 |
-| drukhari | 166 | 24 | 5 | 138 | 75 | 5 | 0 | 1 |
-| emperors-children | 139 | 24 | 9 | 106 | 6 | 3 | 0 | 1 |
-| genestealer-cults | 148 | 18 | 5 | 127 | 75 | 1 | 0 | 1 |
-| grey-knights | 137 | 9 | 4 | 125 | 90 | 0 | 0 | 0 |
-| imperial-fists | 10 | 2 | 0 | 8 | 1 | 0 | 0 | 0 |
-| imperial-knights | 123 | 22 | 5 | 98 | 63 | 3 | 0 | 1 |
+| death-guard | 150 | 13 | 4 | 135 | 68 | 1 | 0 | 3 |
+| deathwatch | 36 | 5 | 1 | 30 | 23 | 1 | 0 | 0 |
+| drukhari | 164 | 24 | 5 | 136 | 73 | 5 | 0 | 1 |
+| emperors-children | 136 | 24 | 9 | 103 | 3 | 3 | 0 | 1 |
+| genestealer-cults | 147 | 18 | 5 | 126 | 74 | 1 | 0 | 1 |
+| grey-knights | 134 | 9 | 4 | 122 | 87 | 0 | 0 | 0 |
+| imperial-fists | 11 | 2 | 0 | 9 | 2 | 0 | 0 | 0 |
+| imperial-knights | 118 | 22 | 5 | 93 | 58 | 3 | 0 | 1 |
 | iron-hands | 11 | 2 | 2 | 8 | 4 | 0 | 0 | 0 |
-| leagues-of-votann | 156 | 24 | 6 | 127 | 83 | 0 | 0 | 0 |
-| necrons | 235 | 26 | 17 | 198 | 106 | 1 | 0 | 1 |
-| orks | 207 | 28 | 7 | 174 | 32 | 0 | 0 | 0 |
-| raven-guard | 9 | 0 | 0 | 9 | 8 | 0 | 0 | 0 |
-| salamanders | 9 | 3 | 0 | 6 | 3 | 0 | 0 | 0 |
-| space-wolves | 86 | 12 | 4 | 73 | 46 | 5 | 0 | 0 |
-| tau-empire | 172 | 39 | 8 | 126 | 14 | 3 | 0 | 3 |
-| thousand-sons | 148 | 30 | 13 | 108 | 10 | 3 | 0 | 1 |
-| tyranids | 190 | 18 | 7 | 167 | 88 | 4 | 0 | 5 |
+| leagues-of-votann | 155 | 24 | 6 | 126 | 82 | 0 | 0 | 0 |
+| necrons | 230 | 26 | 17 | 193 | 102 | 1 | 0 | 1 |
+| orks | 206 | 27 | 7 | 174 | 32 | 0 | 0 | 0 |
+| raven-guard | 11 | 0 | 0 | 11 | 10 | 0 | 0 | 0 |
+| salamanders | 11 | 3 | 0 | 8 | 5 | 0 | 0 | 0 |
+| space-wolves | 87 | 12 | 4 | 74 | 47 | 5 | 0 | 0 |
+| tau-empire | 166 | 39 | 8 | 120 | 8 | 3 | 0 | 3 |
+| thousand-sons | 145 | 30 | 13 | 105 | 8 | 3 | 0 | 1 |
+| tyranids | 186 | 18 | 7 | 163 | 84 | 4 | 0 | 5 |
 | ultramarines | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
-| white-scars | 9 | 0 | 0 | 9 | 9 | 0 | 0 | 0 |
-| world-eaters | 140 | 16 | 10 | 116 | 17 | 0 | 0 | 0 |
-| **TOTAL** | **4541** | **672** | **226** | **3705** | **1654** | **67** | **0** | **47** |
+| white-scars | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
+| world-eaters | 136 | 16 | 10 | 112 | 13 | 0 | 0 | 0 |
+| **TOTAL** | **4483** | **669** | **225** | **3651** | **1603** | **67** | **0** | **47** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `1664` — effect type "no-effect" is not modelled by the buff layer
+- `1613` — effect type "no-effect" is not modelled by the buff layer
 - `243` — conditional: cannot evaluate condition "undefined" against current context
 - `158` — effect type "permission" is not modelled by the buff layer
 - `108` — selection/history/model/attack predicates are not resolved by the buff engine
@@ -73,7 +73,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `25` — effect type "ignore-modifiers" is not modelled by the buff layer
 - `24` — effect type "roll-result" is not modelled by the buff layer
 - `24` — stat-modifier on "D" is outside the damage path
-- `23` — effect type "heal" is not modelled by the buff layer
+- `22` — effect type "heal" is not modelled by the buff layer
 - `21` — conditional: cannot evaluate condition "unit-state" against current context
 - `21` — stat-modifier on "M" is outside the damage path
 - `20` — stat-modifier: operation "set" not supported
@@ -100,7 +100,6 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `7` — stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer
 - `7` — effect type "weapon-grant" is not modelled by the buff layer
 - `6` — conditional: cannot evaluate condition "in-region" against current context
-- `5` — conditional: cannot evaluate condition "wounds" against current context
 - `5` — roll-modifier on "advance" is outside the damage path
 - `5` — effect type "transport-capacity" is not modelled by the buff layer
 - `5` — effect type "ability-activate" is not modelled by the buff layer
@@ -108,6 +107,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `5` — conditional: cannot evaluate condition "closest" against current context
 - `5` — stat-modifier on "WS" is outside the damage path
 - `5` — effect type "add-unit" is not modelled by the buff layer
+- `4` — conditional: cannot evaluate condition "wounds" against current context
 - `4` — conditional: cannot evaluate condition "attachment" against current context
 - `4` — re-roll on "attacks" (subset …) is outside the damage path
 - `4` — conditional: cannot evaluate condition "rule-active" against current context

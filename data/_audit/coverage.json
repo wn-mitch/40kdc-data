@@ -2,100 +2,100 @@
   "factions": [
     {
       "faction": "_core",
-      "total": 25,
+      "total": 26,
       "offensive": 2,
       "defensive": 2,
-      "inert": 22,
+      "inert": 23,
       "stub": 0,
-      "stubStructural": 2,
+      "stubStructural": 1,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "adepta-sororitas",
-      "total": 149,
+      "total": 148,
       "offensive": 42,
       "defensive": 15,
-      "inert": 95,
+      "inert": 94,
       "stub": 7,
-      "stubStructural": 12,
+      "stubStructural": 11,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "adeptus-astartes",
-      "total": 246,
-      "offensive": 29,
-      "defensive": 10,
-      "inert": 209,
+      "total": 250,
+      "offensive": 27,
+      "defensive": 9,
+      "inert": 216,
       "stub": 1,
-      "stubStructural": 146,
+      "stubStructural": 155,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
     {
       "faction": "adeptus-custodes",
-      "total": 157,
+      "total": 154,
       "offensive": 39,
       "defensive": 18,
-      "inert": 104,
+      "inert": 101,
       "stub": 3,
-      "stubStructural": 6,
+      "stubStructural": 3,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
     {
       "faction": "adeptus-mechanicus",
-      "total": 168,
+      "total": 167,
       "offensive": 22,
       "defensive": 7,
-      "inert": 141,
+      "inert": 140,
       "stub": 0,
-      "stubStructural": 73,
+      "stubStructural": 72,
       "gwTextLeak": 0,
       "defensiveSkipped": 2
     },
     {
       "faction": "aeldari",
-      "total": 305,
+      "total": 300,
       "offensive": 36,
       "defensive": 13,
-      "inert": 260,
+      "inert": 255,
       "stub": 7,
-      "stubStructural": 144,
+      "stubStructural": 139,
       "gwTextLeak": 0,
       "defensiveSkipped": 5
     },
     {
       "faction": "agents-of-the-imperium",
-      "total": 139,
+      "total": 138,
       "offensive": 27,
       "defensive": 5,
-      "inert": 108,
+      "inert": 107,
       "stub": 0,
-      "stubStructural": 55,
+      "stubStructural": 54,
       "gwTextLeak": 0,
       "defensiveSkipped": 2
     },
     {
       "faction": "astra-militarum",
-      "total": 256,
+      "total": 251,
       "offensive": 26,
       "defensive": 11,
-      "inert": 220,
+      "inert": 215,
       "stub": 2,
-      "stubStructural": 88,
+      "stubStructural": 83,
       "gwTextLeak": 0,
       "defensiveSkipped": 5
     },
     {
       "faction": "black-templars",
-      "total": 64,
+      "total": 63,
       "offensive": 4,
       "defensive": 0,
-      "inert": 60,
+      "inert": 59,
       "stub": 0,
-      "stubStructural": 48,
+      "stubStructural": 47,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -112,34 +112,34 @@
     },
     {
       "faction": "chaos-daemons",
-      "total": 198,
+      "total": 195,
       "offensive": 31,
       "defensive": 9,
-      "inert": 163,
+      "inert": 160,
       "stub": 7,
-      "stubStructural": 68,
+      "stubStructural": 65,
       "gwTextLeak": 0,
       "defensiveSkipped": 4
     },
     {
       "faction": "chaos-knights",
-      "total": 115,
+      "total": 110,
       "offensive": 23,
       "defensive": 9,
-      "inert": 84,
+      "inert": 79,
       "stub": 2,
-      "stubStructural": 5,
+      "stubStructural": 0,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "chaos-space-marines",
-      "total": 285,
+      "total": 281,
       "offensive": 43,
       "defensive": 10,
-      "inert": 236,
+      "inert": 232,
       "stub": 7,
-      "stubStructural": 136,
+      "stubStructural": 132,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
@@ -156,89 +156,89 @@
     },
     {
       "faction": "death-guard",
-      "total": 153,
+      "total": 150,
       "offensive": 13,
       "defensive": 4,
-      "inert": 138,
+      "inert": 135,
       "stub": 1,
-      "stubStructural": 70,
+      "stubStructural": 68,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
     {
       "faction": "deathwatch",
-      "total": 37,
+      "total": 36,
       "offensive": 5,
       "defensive": 1,
-      "inert": 31,
+      "inert": 30,
       "stub": 1,
-      "stubStructural": 24,
+      "stubStructural": 23,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "drukhari",
-      "total": 166,
+      "total": 164,
       "offensive": 24,
       "defensive": 5,
-      "inert": 138,
+      "inert": 136,
       "stub": 5,
-      "stubStructural": 75,
+      "stubStructural": 73,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "emperors-children",
-      "total": 139,
+      "total": 136,
       "offensive": 24,
       "defensive": 9,
-      "inert": 106,
+      "inert": 103,
       "stub": 3,
-      "stubStructural": 6,
+      "stubStructural": 3,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "genestealer-cults",
-      "total": 148,
+      "total": 147,
       "offensive": 18,
       "defensive": 5,
-      "inert": 127,
+      "inert": 126,
       "stub": 1,
-      "stubStructural": 75,
+      "stubStructural": 74,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "grey-knights",
-      "total": 137,
+      "total": 134,
       "offensive": 9,
       "defensive": 4,
-      "inert": 125,
+      "inert": 122,
       "stub": 0,
-      "stubStructural": 90,
+      "stubStructural": 87,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "imperial-fists",
-      "total": 10,
+      "total": 11,
       "offensive": 2,
       "defensive": 0,
-      "inert": 8,
+      "inert": 9,
       "stub": 0,
-      "stubStructural": 1,
+      "stubStructural": 2,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "imperial-knights",
-      "total": 123,
+      "total": 118,
       "offensive": 22,
       "defensive": 5,
-      "inert": 98,
+      "inert": 93,
       "stub": 3,
-      "stubStructural": 63,
+      "stubStructural": 58,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
@@ -255,30 +255,30 @@
     },
     {
       "faction": "leagues-of-votann",
-      "total": 156,
+      "total": 155,
       "offensive": 24,
       "defensive": 6,
-      "inert": 127,
+      "inert": 126,
       "stub": 0,
-      "stubStructural": 83,
+      "stubStructural": 82,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "necrons",
-      "total": 235,
+      "total": 230,
       "offensive": 26,
       "defensive": 17,
-      "inert": 198,
+      "inert": 193,
       "stub": 1,
-      "stubStructural": 106,
+      "stubStructural": 102,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "orks",
-      "total": 207,
-      "offensive": 28,
+      "total": 206,
+      "offensive": 27,
       "defensive": 7,
       "inert": 174,
       "stub": 0,
@@ -288,67 +288,67 @@
     },
     {
       "faction": "raven-guard",
-      "total": 9,
+      "total": 11,
       "offensive": 0,
       "defensive": 0,
-      "inert": 9,
+      "inert": 11,
       "stub": 0,
-      "stubStructural": 8,
+      "stubStructural": 10,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "salamanders",
-      "total": 9,
+      "total": 11,
       "offensive": 3,
       "defensive": 0,
-      "inert": 6,
+      "inert": 8,
       "stub": 0,
-      "stubStructural": 3,
+      "stubStructural": 5,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "space-wolves",
-      "total": 86,
+      "total": 87,
       "offensive": 12,
       "defensive": 4,
-      "inert": 73,
+      "inert": 74,
       "stub": 5,
-      "stubStructural": 46,
+      "stubStructural": 47,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "tau-empire",
-      "total": 172,
+      "total": 166,
       "offensive": 39,
       "defensive": 8,
-      "inert": 126,
+      "inert": 120,
       "stub": 3,
-      "stubStructural": 14,
+      "stubStructural": 8,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
     {
       "faction": "thousand-sons",
-      "total": 148,
+      "total": 145,
       "offensive": 30,
       "defensive": 13,
-      "inert": 108,
+      "inert": 105,
       "stub": 3,
-      "stubStructural": 10,
+      "stubStructural": 8,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "tyranids",
-      "total": 190,
+      "total": 186,
       "offensive": 18,
       "defensive": 7,
-      "inert": 167,
+      "inert": 163,
       "stub": 4,
-      "stubStructural": 88,
+      "stubStructural": 84,
       "gwTextLeak": 0,
       "defensiveSkipped": 5
     },
@@ -365,41 +365,41 @@
     },
     {
       "faction": "white-scars",
-      "total": 9,
+      "total": 11,
       "offensive": 0,
       "defensive": 0,
-      "inert": 9,
+      "inert": 11,
       "stub": 0,
-      "stubStructural": 9,
+      "stubStructural": 11,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "world-eaters",
-      "total": 140,
+      "total": 136,
       "offensive": 16,
       "defensive": 10,
-      "inert": 116,
+      "inert": 112,
       "stub": 0,
-      "stubStructural": 17,
+      "stubStructural": 13,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     }
   ],
   "totals": {
-    "total": 4541,
-    "offensive": 672,
-    "defensive": 226,
-    "inert": 3705,
+    "total": 4483,
+    "offensive": 669,
+    "defensive": 225,
+    "inert": 3651,
     "stub": 67,
-    "stubStructural": 1654,
+    "stubStructural": 1603,
     "gwTextLeak": 0,
     "defensiveSkipped": 47
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"no-effect\" is not modelled by the buff layer",
-      "count": 1664
+      "count": 1613
     },
     {
       "reason": "conditional: cannot evaluate condition \"undefined\" against current context",
@@ -503,7 +503,7 @@
     },
     {
       "reason": "effect type \"heal\" is not modelled by the buff layer",
-      "count": 23
+      "count": 22
     },
     {
       "reason": "conditional: cannot evaluate condition \"unit-state\" against current context",
@@ -610,10 +610,6 @@
       "count": 6
     },
     {
-      "reason": "conditional: cannot evaluate condition \"wounds\" against current context",
-      "count": 5
-    },
-    {
       "reason": "roll-modifier on \"advance\" is outside the damage path",
       "count": 5
     },
@@ -640,6 +636,10 @@
     {
       "reason": "effect type \"add-unit\" is not modelled by the buff layer",
       "count": 5
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"wounds\" against current context",
+      "count": 4
     },
     {
       "reason": "conditional: cannot evaluate condition \"attachment\" against current context",
@@ -1065,11 +1065,11 @@
       "faction": "_core",
       "ability_id": "damaged",
       "name": "Damaged",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "conditional",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "conditional: cannot evaluate condition \"wounds\" against current context"
     },
     {
       "faction": "_core",
@@ -1080,6 +1080,16 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "_core",
+      "ability_id": "damaged-objective-control",
+      "name": "Damaged Objective Control",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"wounds\" against current context"
     },
     {
       "faction": "adepta-sororitas",
@@ -2483,16 +2493,6 @@
     },
     {
       "faction": "adepta-sororitas",
-      "ability_id": "damaged-1-4-wounds-remaining-adepta-sororitas",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adepta-sororitas",
       "ability_id": "damaged-1-6-wounds-remaining-adepta-sororitas",
       "name": "DAMAGED: 1-6 WOUNDS REMAINING",
       "shape": "no-effect",
@@ -3043,16 +3043,6 @@
     },
     {
       "faction": "adeptus-astartes",
-      "ability_id": "strafing-run-adeptus-astartes",
-      "name": "Strafing Run",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": true,
-      "defensive": false,
-      "gap": null
-    },
-    {
-      "faction": "adeptus-astartes",
       "ability_id": "press-the-attack-adeptus-astartes",
       "name": "Press the Attack",
       "shape": "weapon-ability-grant",
@@ -3070,16 +3060,6 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"heal\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-astartes",
-      "ability_id": "fire-support-adeptus-astartes",
-      "name": "Fire Support",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": true,
-      "defensive": false,
-      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3203,16 +3183,6 @@
     },
     {
       "faction": "adeptus-astartes",
-      "ability_id": "interceptor-adeptus-astartes",
-      "name": "Interceptor",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": null
-    },
-    {
-      "faction": "adeptus-astartes",
       "ability_id": "catechism-of-fire-adeptus-astartes",
       "name": "Catechism of Fire",
       "shape": "select-units",
@@ -3220,16 +3190,6 @@
       "offensive": false,
       "defensive": false,
       "gap": "selection/history/model/attack predicates are not resolved by the buff engine"
-    },
-    {
-      "faction": "adeptus-astartes",
-      "ability_id": "armoured-resilience-adeptus-astartes",
-      "name": "Armoured Resilience",
-      "shape": "damage-reduction",
-      "stub": false,
-      "offensive": false,
-      "defensive": true,
-      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3260,16 +3220,6 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-astartes",
-      "ability_id": "self-repair-adeptus-astartes",
-      "name": "Self Repair",
-      "shape": "heal",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"heal\" is not modelled by the buff layer"
     },
     {
       "faction": "adeptus-astartes",
@@ -3603,16 +3553,6 @@
     },
     {
       "faction": "adeptus-astartes",
-      "ability_id": "damaged-adeptus-astartes",
-      "name": "DAMAGED",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-astartes",
       "ability_id": "decapitating-strike-assault-force-adeptus-astartes",
       "name": "Decapitating Strike",
       "shape": "no-effect",
@@ -3715,16 +3655,6 @@
       "faction": "adeptus-astartes",
       "ability_id": "relic-shield-assault-force-captain-adeptus-astartes",
       "name": "Relic Shield",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-astartes",
-      "ability_id": "rites-of-battle-adeptus-astartes",
-      "name": "Rites of Battle",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -4733,16 +4663,6 @@
     },
     {
       "faction": "adeptus-astartes",
-      "ability_id": "wisdom-of-the-ancients-venerable-dreadnought-adeptus-astartes",
-      "name": "Wisdom of the Ancients",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-astartes",
       "ability_id": "wrath-of-the-chapter-adeptus-astartes",
       "name": "Wrath of the Chapter",
       "shape": "no-effect",
@@ -5025,6 +4945,126 @@
       "faction": "adeptus-astartes",
       "ability_id": "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes",
       "name": "Venerable Champion (Aura) (Upgrade)",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "calgars-champion-adeptus-astartes",
+      "name": "Calgar’s Champion",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "into-the-fray-adeptus-astartes",
+      "name": "Into the Fray",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "veteran-bodyguard-adeptus-astartes",
+      "name": "Veteran Bodyguard",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "a-worthy-death-gladius-task-force-adeptus-astartes",
+      "name": "A Worthy Death",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
+      "name": "Headhunter Doctrine",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "hurtling-targets-stormlance-task-force-adeptus-astartes",
+      "name": "Hurtling Targets",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+      "name": "Layered Ceramite",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "might-of-angels-gladius-task-force-adeptus-astartes",
+      "name": "Might of angels",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+      "name": "Might of the machine Spirit",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "responsive-tactics-gladius-task-force-adeptus-astartes",
+      "name": "Responsive Tactics",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "storm-of-devastation-gladius-task-force-adeptus-astartes",
+      "name": "Storm of devastation",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-astartes",
+      "ability_id": "sudden-onslaught-stormlance-task-force-adeptus-astartes",
+      "name": "Sudden Onslaught",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -6543,36 +6583,6 @@
     },
     {
       "faction": "adeptus-custodes",
-      "ability_id": "damaged-1-4-wounds-remaining-adeptus-custodes",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-custodes",
-      "ability_id": "damaged-1-5-wounds-remaining-adeptus-custodes",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-custodes",
-      "ability_id": "damaged-1-7-wounds-remaining-adeptus-custodes",
-      "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-custodes",
       "ability_id": "daughters-of-the-abyss-anathema-psykana-rhino-adeptus-custodes",
       "name": "Daughters of the Abyss",
       "shape": "no-effect",
@@ -7755,16 +7765,6 @@
       "faction": "adeptus-mechanicus",
       "ability_id": "cognitive-reinforcement-haloscreed-battle-clade-adeptus-mechanicus",
       "name": "Cognitive Reinforcement",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "adeptus-mechanicus",
-      "ability_id": "damaged-1-4-wounds-remaining-adeptus-mechanicus",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -10103,56 +10103,6 @@
     },
     {
       "faction": "aeldari",
-      "ability_id": "damaged-1-10-wounds-remaining-aeldari",
-      "name": "DAMAGED: 1-10 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "aeldari",
-      "ability_id": "damaged-1-16-wounds-remaining-aeldari",
-      "name": "DAMAGED: 1-16 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "aeldari",
-      "ability_id": "damaged-1-4-wounds-remaining-aeldari",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "aeldari",
-      "ability_id": "damaged-1-5-wounds-remaining-aeldari",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "aeldari",
-      "ability_id": "damaged-1-6-wounds-remaining-aeldari",
-      "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "aeldari",
       "ability_id": "daring-riders-windrider-host-aeldari",
       "name": "Daring Riders",
       "shape": "no-effect",
@@ -12275,16 +12225,6 @@
       "faction": "agents-of-the-imperium",
       "ability_id": "daemon-slayer-ordo-malleus-daemon-hunters-agents-of-the-imperium",
       "name": "Daemon Slayer",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "agents-of-the-imperium",
-      "ability_id": "damaged-agents-of-the-imperium",
-      "name": "DAMAGED",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -14563,56 +14503,6 @@
     },
     {
       "faction": "astra-militarum",
-      "ability_id": "damaged-1-4-wounds-remaining-astra-militarum",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "astra-militarum",
-      "ability_id": "damaged-1-5-wounds-remaining-astra-militarum",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "astra-militarum",
-      "ability_id": "damaged-1-6-wounds-remaining-astra-militarum",
-      "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "astra-militarum",
-      "ability_id": "damaged-1-6-wounds-remaining-rogal-dorn-commander-astra-militarum",
-      "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "astra-militarum",
-      "ability_id": "damaged-1-8-wounds-remaining-astra-militarum",
-      "name": "DAMAGED: 1-8 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "astra-militarum",
       "ability_id": "death-mask-of-ollanius-combined-arms-astra-militarum",
       "name": "Death Mask of Ollanius",
       "shape": "no-effect",
@@ -15853,16 +15743,6 @@
     },
     {
       "faction": "black-templars",
-      "ability_id": "damaged-black-templars",
-      "name": "DAMAGED",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "black-templars",
       "ability_id": "doctrinal-flexibility-fist-of-the-god-emperor-black-templars",
       "name": "Doctrinal Flexibility",
       "shape": "no-effect",
@@ -16453,16 +16333,6 @@
     },
     {
       "faction": "blood-angels",
-      "ability_id": "damaged-blood-angels",
-      "name": "DAMAGED",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "blood-angels",
       "ability_id": "death-visions-of-sanguinius-blood-angels",
       "name": "Death Visions of Sanguinius",
       "shape": "no-effect",
@@ -16525,6 +16395,16 @@
       "faction": "blood-angels",
       "ability_id": "unto-death-angelic-inheritors-blood-angels",
       "name": "Unto Death",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "blood-angels",
+      "ability_id": "measured-strategist-angelic-inheritors-blood-angels",
+      "name": "Measured Strategist",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -17953,37 +17833,7 @@
     },
     {
       "faction": "chaos-daemons",
-      "ability_id": "damaged-1-5-wounds-remaining-chaos-daemons",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-daemons",
-      "ability_id": "damaged-1-6-wounds-remaining-chaos-daemons",
-      "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-daemons",
       "ability_id": "damaged-1-7-wounds-remaining-chaos-daemons",
-      "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-daemons",
-      "ability_id": "damaged-1-7-wounds-remaining-skarbrand-chaos-daemons",
       "name": "DAMAGED: 1-7 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
@@ -19610,56 +19460,6 @@
       "offensive": false,
       "defensive": true,
       "gap": null
-    },
-    {
-      "faction": "chaos-knights",
-      "ability_id": "damaged-1-10-wounds-remaining-chaos-knights",
-      "name": "DAMAGED: 1-10 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-knights",
-      "ability_id": "damaged-1-5-wounds-remaining-chaos-knights",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-knights",
-      "ability_id": "damaged-1-5-wounds-remaining-war-dog-moirax-chaos-knights",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-knights",
-      "ability_id": "damaged-1-9-wounds-remaining-chaos-knights",
-      "name": "DAMAGED: 1-9 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-knights",
-      "ability_id": "damaged-1-9-wounds-remaining-knight-ruinator-chaos-knights",
-      "name": "DAMAGED: 1‑9 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
     },
     {
       "faction": "chaos-space-marines",
@@ -21365,46 +21165,6 @@
       "faction": "chaos-space-marines",
       "ability_id": "daemonic-possession-soulforged-warpack-chaos-space-marines",
       "name": "Daemonic Possession",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-space-marines",
-      "ability_id": "damaged-1-4-wounds-remaining-chaos-space-marines",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-space-marines",
-      "ability_id": "damaged-1-5-wounds-remaining-chaos-space-marines",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-space-marines",
-      "ability_id": "damaged-1-6-wounds-remaining-chaos-space-marines",
-      "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "chaos-space-marines",
-      "ability_id": "damaged-1-8-wounds-remaining-chaos-space-marines",
-      "name": "DAMAGED: 1-8 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -23203,16 +22963,6 @@
     },
     {
       "faction": "dark-angels",
-      "ability_id": "damaged-dark-angels",
-      "name": "DAMAGED",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "dark-angels",
       "ability_id": "emnity-for-the-unworthy-dark-angels",
       "name": "Emnity for the Unworthy",
       "shape": "no-effect",
@@ -23275,6 +23025,16 @@
       "faction": "dark-angels",
       "ability_id": "watcher-in-the-dark-azrael-dark-angels",
       "name": "Watcher in the Dark (Once per battle, per unit)",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "dark-angels",
+      "ability_id": "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
+      "name": "In Sacrifice, Victory",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -24003,16 +23763,6 @@
     },
     {
       "faction": "death-guard",
-      "ability_id": "damaged-1-6-wounds-remaining-death-guard",
-      "name": "Damaged: 1-6 Wounds Remaining",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"wounds\" against current context"
-    },
-    {
-      "faction": "death-guard",
       "ability_id": "worldblight-death-guard",
       "name": "Worldblight",
       "shape": "conditional",
@@ -24245,26 +23995,6 @@
       "faction": "death-guard",
       "ability_id": "daemon-weapon-of-nurgle-virulent-vectorium-death-guard",
       "name": "Daemon Weapon of Nurgle",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "death-guard",
-      "ability_id": "damaged-1-4-wounds-remaining-death-guard",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "death-guard",
-      "ability_id": "damaged-1-5-wounds-remaining-death-guard",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -25065,16 +24795,6 @@
       "faction": "deathwatch",
       "ability_id": "combat-doctrines-deathwatch",
       "name": "Combat Doctrines",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "deathwatch",
-      "ability_id": "damaged-deathwatch",
-      "name": "DAMAGED",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -26175,26 +25895,6 @@
       "faction": "drukhari",
       "ability_id": "crucible-of-malediction-realspace-raiders-drukhari",
       "name": "Crucible of Malediction",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "drukhari",
-      "ability_id": "damaged-1-4-wounds-remaining-drukhari",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "drukhari",
-      "ability_id": "damaged-1-4-wounds-remaining-voidraven-bomber-drukhari",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -28183,36 +27883,6 @@
     },
     {
       "faction": "emperors-children",
-      "ability_id": "damaged-1-4-wounds-remaining-emperors-children",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "emperors-children",
-      "ability_id": "damaged-1-5-wounds-remaining-emperors-children",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "emperors-children",
-      "ability_id": "damaged-1-6-wounds-remaining-fulgrim-emperors-children",
-      "name": "DAMAGED: 1‑6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "emperors-children",
       "ability_id": "icon-of-excess-callous-blades-infractors-emperors-children",
       "name": "Icon of Excess",
       "shape": "no-effect",
@@ -29155,16 +28825,6 @@
       "faction": "genestealer-cults",
       "ability_id": "cult-zealotry-claw-of-ascension-genestealer-cults",
       "name": "Cult Zealotry",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "genestealer-cults",
-      "ability_id": "damaged-1-3-wounds-remaining-genestealer-cults",
-      "name": "DAMAGED: 1-3 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -30373,36 +30033,6 @@
     },
     {
       "faction": "grey-knights",
-      "ability_id": "damaged-1-10-wounds-remaining-grey-knights",
-      "name": "DAMAGED: 1-10 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "grey-knights",
-      "ability_id": "damaged-1-4-wounds-remaining-grey-knights",
-      "name": "Damaged: 1-4 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "grey-knights",
-      "ability_id": "damaged-1-5-wounds-remaining-grey-knights",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "grey-knights",
       "ability_id": "doomseers-amulet-augurium-task-force-grey-knights",
       "name": "Doomseer’s Amulet",
       "shape": "no-effect",
@@ -31182,6 +30812,16 @@
       "gap": "stat-modifier on \"OC\" is outside the damage path"
     },
     {
+      "faction": "imperial-fists",
+      "ability_id": "establish-supremacy-ceramite-sentinels-imperial-fists",
+      "name": "Establish Supremacy",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
       "faction": "imperial-knights",
       "ability_id": "sunderer-of-fortresses-imperial-knights",
       "name": "Sunderer of Fortresses",
@@ -31895,56 +31535,6 @@
       "faction": "imperial-knights",
       "ability_id": "crushing-condemnation-questoris-companions-imperial-knights",
       "name": "Crushing Condemnation",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "imperial-knights",
-      "ability_id": "damaged-1-10-wounds-remaining-imperial-knights",
-      "name": "DAMAGED: 1-10 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "imperial-knights",
-      "ability_id": "damaged-1-5-wounds-remaining-imperial-knights",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "imperial-knights",
-      "ability_id": "damaged-1-6-wounds-remaining-imperial-knights",
-      "name": "DAMAGED: 1‑6 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "imperial-knights",
-      "ability_id": "damaged-1-9-wounds-remaining-imperial-knights",
-      "name": "DAMAGED: 1-9 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "imperial-knights",
-      "ability_id": "damaged-1-9-wounds-remaining-knight-defender-imperial-knights",
-      "name": "DAMAGED: 1‑9 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -33405,16 +32995,6 @@
       "faction": "leagues-of-votann",
       "ability_id": "cyberstimm-infusion-delve-assault-shift-leagues-of-votann",
       "name": "Cyberstimm Infusion",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "leagues-of-votann",
-      "ability_id": "damaged-1-5-wounds-remaining-leagues-of-votann",
-      "name": "Damaged: 1-5 Wounds Remaining",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -35353,16 +34933,6 @@
     },
     {
       "faction": "necrons",
-      "ability_id": "damaged-1-4-wounds-remaining-necrons",
-      "name": "Damaged: 1-4 Wounds Remaining",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"wounds\" against current context"
-    },
-    {
-      "faction": "necrons",
       "ability_id": "iron-will-necrons",
       "name": "Iron Will",
       "shape": "dice-gated",
@@ -35523,16 +35093,6 @@
     },
     {
       "faction": "necrons",
-      "ability_id": "damaged-1-5-wounds-remaining-necrons",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "necrons",
       "ability_id": "damaged-1-6-wounds-remaining-necrons",
       "name": "DAMAGED: 1-6 WOUNDS REMAINING",
       "shape": "no-effect",
@@ -35543,38 +35103,8 @@
     },
     {
       "faction": "necrons",
-      "ability_id": "damaged-1-7-wounds-remaining-necrons",
-      "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "necrons",
       "ability_id": "damaged-1-8-wounds-remaining-necrons",
       "name": "DAMAGED: 1-8 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "necrons",
-      "ability_id": "damaged-1-8-wounds-remaining-tesseract-vault-necrons",
-      "name": "DAMAGED: 1-8 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "necrons",
-      "ability_id": "damaged-1-9-wounds-remaining-necrons",
-      "name": "DAMAGED: 1-9 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -36639,16 +36169,6 @@
       "stub": false,
       "offensive": false,
       "defensive": true,
-      "gap": null
-    },
-    {
-      "faction": "orks",
-      "ability_id": "speedboss-orks",
-      "name": "Speedboss",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": true,
-      "defensive": false,
       "gap": null
     },
     {
@@ -38233,16 +37753,6 @@
     },
     {
       "faction": "orks",
-      "ability_id": "damaged-orks",
-      "name": "DAMAGED",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "orks",
       "ability_id": "deff-from-the-shadows-orks",
       "name": "Deff from the Shadows (First battle round onwards)",
       "shape": "no-effect",
@@ -38502,6 +38012,16 @@
       "gap": "effect type \"no-effect\" is not modelled by the buff layer"
     },
     {
+      "faction": "orks",
+      "ability_id": "pulsa-rokkit-wargear-orks",
+      "name": "Pulsa Rokkit (Once per battle, per unit)",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
       "faction": "raven-guard",
       "ability_id": "blackwing-shroud-shadowmark-talon-raven-guard",
       "name": "Blackwing Shroud",
@@ -38585,6 +38105,26 @@
       "faction": "raven-guard",
       "ability_id": "shadow-tactics-raven-guard",
       "name": "Shadow Tactics",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "raven-guard",
+      "ability_id": "murderous-fusillade-shadowmark-talon-raven-guard",
+      "name": "Murderous Fusillade",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "raven-guard",
+      "ability_id": "suppressed-weapons-shadowmark-talon-raven-guard",
+      "name": "Suppressed Weapons",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -38680,6 +38220,26 @@
       "offensive": true,
       "defensive": false,
       "gap": null
+    },
+    {
+      "faction": "salamanders",
+      "ability_id": "forged-in-fire-forgefathers-seekers-salamanders",
+      "name": "Forged in Fire",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "salamanders",
+      "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",
+      "name": "Wrath and Ruin",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
     },
     {
       "faction": "space-wolves",
@@ -39535,6 +39095,16 @@
       "faction": "space-wolves",
       "ability_id": "transhuman-strategist-space-wolves",
       "name": "Transhuman Strategist",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "space-wolves",
+      "ability_id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
+      "name": "Unbridled Feroicity",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -41153,66 +40723,6 @@
     },
     {
       "faction": "tau-empire",
-      "ability_id": "damaged-1-10-wounds-remaining-tau-empire",
-      "name": "Damaged: 1-10 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
-      "ability_id": "damaged-1-20-wounds-remaining-tau-empire",
-      "name": "Damaged: 1-20 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
-      "ability_id": "damaged-1-4-wounds-remaining-tau-empire",
-      "name": "Damaged: 1-4 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
-      "ability_id": "damaged-1-5-wounds-remaining-stormsurge-tau-empire",
-      "name": "Damaged: 1-5 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
-      "ability_id": "damaged-1-5-wounds-remaining-tau-empire",
-      "name": "Damaged: 1-5 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
-      "ability_id": "damaged-1-6-wounds-remaining-tau-empire",
-      "name": "Damaged: 1-6 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tau-empire",
       "ability_id": "drones-sudden-dawn-cadre-tau-empire",
       "name": "Drones",
       "shape": "no-effect",
@@ -42023,16 +41533,6 @@
     },
     {
       "faction": "thousand-sons",
-      "ability_id": "damaged-1-6-wounds-remaining-thousand-sons",
-      "name": "Damaged: 1-6 Wounds Remaining",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"wounds\" against current context"
-    },
-    {
-      "faction": "thousand-sons",
       "ability_id": "infernal-pacts-thousand-sons",
       "name": "Infernal Pacts",
       "shape": "sequence",
@@ -42665,26 +42165,6 @@
       "faction": "thousand-sons",
       "ability_id": "committed-to-the-ritual-thousand-sons",
       "name": "Committed to the Ritual",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "thousand-sons",
-      "ability_id": "damaged-1-4-wounds-remaining-thousand-sons",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "thousand-sons",
-      "ability_id": "damaged-1-5-wounds-remaining-thousand-sons",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -43933,46 +43413,6 @@
     },
     {
       "faction": "tyranids",
-      "ability_id": "damaged-1-10-wounds-remaining-hierophant-tyranids",
-      "name": "Damaged: 1-10 wounds remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tyranids",
-      "ability_id": "damaged-1-10-wounds-remaining-tyranids",
-      "name": "Damaged 1-10 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tyranids",
-      "ability_id": "damaged-1-4-wounds-remaining-tyranids",
-      "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tyranids",
-      "ability_id": "damaged-1-5-wounds-remaining-tyranids",
-      "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "tyranids",
       "ability_id": "death-blow-terror-of-vardenghast-tyranids",
       "name": "Death Blow",
       "shape": "no-effect",
@@ -44835,6 +44275,26 @@
       "faction": "white-scars",
       "ability_id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
       "name": "Withdraw and Regroup",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "white-scars",
+      "ability_id": "evasive-manoeuvers-spearpoint-task-force-white-scars",
+      "name": "Evasive Manoeuvers",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "white-scars",
+      "ability_id": "flawless-riders-spearpoint-task-force-white-scars",
+      "name": "Flawless Riders",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -46125,46 +45585,6 @@
       "faction": "world-eaters",
       "ability_id": "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
       "name": "Blood Surge (Once per turn, per unit)",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "damaged-1-4-wounds-remaining-world-eaters",
-      "name": "Damaged: 1-4 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "damaged-1-5-wounds-remaining-world-eaters",
-      "name": "Damaged: 1-5 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "damaged-1-6-wounds-remaining-world-eaters",
-      "name": "Damaged: 1-6 Wounds Remaining",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "damaged-1-8-wounds-remaining-world-eaters",
-      "name": "Damaged: 1-8 Wounds Remaining",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
