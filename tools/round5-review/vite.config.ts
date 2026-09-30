@@ -7,6 +7,7 @@ import { defineConfig, type Plugin } from "vite";
 
 import { getWorkbenchRevision, openWorkbench } from "../src/round5c/db.js";
 import { repairRelatedVariantProposals } from "../src/round5c/migration.js";
+import { humanActor, type HumanActor } from "../src/round5c/authority.js";
 import { applyAnnotationBatch, getAbilities, getAbility, getDashboard, getFactions, reviewAbility, undoBatch } from "../src/round5c/review.js";
 import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, startLunaRun } from "../src/round5c/luna-run.js";
@@ -44,6 +45,16 @@ async function requestBody(request: import("node:http").IncomingMessage): Promis
     chunks.push(buffer);
   }
   return Buffer.concat(chunks).toString("utf8");
+}
+
+/**
+ * The bridge is Will's review surface: the one place a browser decision becomes a human actor.
+ * The reviewer comes from the request body, as the review functions expect.
+ */
+function withHuman<T>(input: unknown, decide: (input: unknown, actor: HumanActor) => T): T {
+  const reviewer = input !== null && typeof input === "object" && typeof (input as { reviewer?: unknown }).reviewer === "string"
+    ? (input as { reviewer: string }).reviewer : "";
+  return decide(input, humanActor(reviewer, "review-bridge"));
 }
 
 function round5WorkbenchBridge(): Plugin {
@@ -91,7 +102,7 @@ function round5WorkbenchBridge(): Plugin {
           };
           if (request.method === "GET" && path === "/abilities") {
             const limit = url.searchParams.has("limit") ? Number(url.searchParams.get("limit")) : undefined;
-            return json(response, 200, getAbilities(db, { limit, cursor: url.searchParams.get("cursor") ?? undefined, query: url.searchParams.get("query") ?? undefined, factionId: url.searchParams.get("faction") ?? undefined, reviewState: url.searchParams.get("reviewState") as "pending" | "reviewed" | undefined }));
+            return json(response, 200, getAbilities(db, { limit, cursor: url.searchParams.get("cursor") ?? undefined, query: url.searchParams.get("query") ?? undefined, factionId: url.searchParams.get("faction") ?? undefined, reviewState: url.searchParams.get("reviewState") as "pending" | "reviewed" | undefined, abilityVersionIds: url.searchParams.get("abilities")?.split(",").map(Number) }));
           }
           if (request.method === "GET" && path === "/factions") {
             return json(response, 200, getFactions(db));
@@ -103,7 +114,7 @@ function round5WorkbenchBridge(): Plugin {
             return json(response, 200, getAbility(db, Number(abilityMatch[1])));
           }
           if (request.method === "POST" && abilityMatch?.[2] === "/review") {
-            return json(response, 200, reviewAbility(db, Number(abilityMatch[1]), await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => reviewAbility(db!, Number(abilityMatch[1]), input, actor)));
           }
           if (request.method === "GET" && path === "/leaves") {
             return json(response, 200, leafBoard(db, { factionId: url.searchParams.get("faction") ?? undefined }));
@@ -115,19 +126,19 @@ function round5WorkbenchBridge(): Plugin {
             return json(response, 200, previewLeaf(await body()));
           }
           if (request.method === "POST" && path === "/leaves/confirm") {
-            return json(response, 200, confirmSurface(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => confirmSurface(db!, input, actor)));
           }
           if (request.method === "POST" && path === "/leaves/apply") {
             return json(response, 200, applyLeafSurfaces(db, await body()));
           }
           if (request.method === "POST" && path === "/leaves/move") {
-            return json(response, 200, moveSurface(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => moveSurface(db!, input, actor)));
           }
           if (request.method === "POST" && path === "/leaves/merge") {
-            return json(response, 200, mergeFingerprints(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => mergeFingerprints(db!, input, actor)));
           }
           if (request.method === "POST" && path === "/leaves/retire") {
-            return json(response, 200, retireSurface(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => retireSurface(db!, input, actor)));
           }
           if (request.method === "GET" && path === "/leaf-proposals") {
             const kinds = url.searchParams.get("kinds")?.split(",").filter(Boolean) as ProposalKind[] | undefined;
@@ -172,10 +183,10 @@ function round5WorkbenchBridge(): Plugin {
             return json(response, 200, getShape(db, url.searchParams.get("signature") ?? "", { factionId: url.searchParams.get("faction") ?? undefined }));
           }
           if (request.method === "POST" && path === "/shapes/approve") {
-            return json(response, 200, approveShape(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => approveShape(db!, input, actor)));
           }
           if (request.method === "POST" && path === "/shapes/reject") {
-            return json(response, 200, rejectShapeMembers(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => rejectShapeMembers(db!, input, actor)));
           }
           if (request.method === "GET" && path === "/publish/pending") {
             return json(response, 200, publishableEntries(db));
@@ -246,18 +257,18 @@ function round5WorkbenchBridge(): Plugin {
             return json(response, 200, proposeSourceAtom(db, await body()));
           }
           if (request.method === "POST" && path === "/source-atoms/batch") {
-            return json(response, 200, applySourceAtomBatch(db, await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => applySourceAtomBatch(db!, input, actor)));
           }
           if (request.method === "POST" && path === "/luna/import") {
             return json(response, 200, importLuna(db, await body() as { run_id: string; response: unknown }));
           }
           if (request.method === "POST" && path === "/annotations/batch") {
-            const result = applyAnnotationBatch(db, await body());
+            const result = withHuman(await body(), (input, actor) => applyAnnotationBatch(db!, input, actor));
             proposeLexical(db);
             return json(response, 200, result);
           }
           if (request.method === "POST" && undoMatch) {
-            return json(response, 200, undoBatch(db, decodeURIComponent(undoMatch[1]), await body()));
+            return json(response, 200, withHuman(await body(), (input, actor) => undoBatch(db!, decodeURIComponent(undoMatch[1]!), input, actor)));
           }
           return json(response, 404, { error: "Unknown workbench operation." });
         } catch (error) {

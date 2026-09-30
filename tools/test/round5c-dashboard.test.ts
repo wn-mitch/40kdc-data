@@ -7,7 +7,8 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench, openWorkbench } from "../src/round5c/db.js";
-import { applyAnnotationBatch, getDashboard, getPrivateExport } from "../src/round5c/review.js";
+import { getDashboard, getPrivateExport } from "../src/round5c/review.js";
+import { applyAnnotationBatch } from "./round5c-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -89,6 +90,23 @@ describe("Round 5C stamp retirement", () => {
       let db = openWorkbench(path);
       const [kept, dropped, human] = sources.map((source, index) => confirmReroll(db, addAbility(db, `fixture-${index}`, source), source, "Re-roll Hit rolls"));
       db.exec(LEGACY);
+      // Stamps only ever existed in databases that predate recorded authority: give the fixture
+      // that older annotations table, so reopening runs the stamp retirement, then the authority
+      // migration, in the order a real old database does.
+      db.exec(`
+        PRAGMA foreign_keys = OFF;
+        CREATE TABLE annotations_legacy (
+          id INTEGER PRIMARY KEY, span_id INTEGER NOT NULL, fingerprint_id TEXT NOT NULL,
+          status TEXT NOT NULL CHECK(status IN ('active', 'retracted', 'superseded')), origin TEXT NOT NULL,
+          authority_kind TEXT NOT NULL DEFAULT 'human' CHECK(authority_kind IN ('human', 'stamp')),
+          confirmed_by TEXT NOT NULL, batch_id TEXT NOT NULL, supersedes_id INTEGER, created_at TEXT NOT NULL
+        ) STRICT;
+        INSERT INTO annotations_legacy SELECT id, span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at FROM annotations;
+        DROP TABLE annotations;
+        ALTER TABLE annotations_legacy RENAME TO annotations;
+        PRAGMA foreign_keys = ON;
+        UPDATE annotation_batches SET reviewer = 'will' WHERE reviewer = 'fixture-reviewer';
+      `);
       const definition = { kind: "leaf", label: "fixture reroll", variants: [] };
       db.prepare("INSERT INTO stamps VALUES ('approved-leaf', 1, 'leaf', 'approved', ?), ('proposed-leaf', 1, 'leaf', 'proposed', '{}')").run(JSON.stringify(definition));
       db.prepare("INSERT INTO stamp_applications VALUES ('a1', 'approved-leaf', 1, ?, 'active'), ('a2', 'proposed-leaf', 1, ?, 'active')").run(kept!, dropped!);

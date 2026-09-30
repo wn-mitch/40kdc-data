@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { insertStructuralProposal } from "./atoms-store.js";
+import { assertReviewer, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
 import { LEAF_ROLES } from "./contracts.js";
 import {
   bumpWorkbenchRevision, insertSpan, invalidateWholeReview, withTransaction,
@@ -82,7 +83,7 @@ function authoritativeOverlaps(db: DatabaseSync, abilityVersionId: number, inter
   return db.prepare(`
     SELECT 'annotation' AS layer, annotations.id, source_spans.id AS span_id, source_spans.start_byte, source_spans.end_byte
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-    WHERE annotations.status = 'active' AND source_spans.ability_version_id = ? AND source_spans.fragment = ?
+    WHERE annotations.status = 'active' AND ${TRUSTED_ANNOTATION} AND source_spans.ability_version_id = ? AND source_spans.fragment = ?
       AND source_spans.start_byte < ? AND ? < source_spans.end_byte
     UNION ALL
     SELECT 'structural', source_atom_reviews.id, source_spans.id, source_spans.start_byte, source_spans.end_byte
@@ -269,9 +270,11 @@ function parseDecision(value: unknown, index: number): AtomDecision {
  * Atomically accept, correct, or reject structural proposals. Accepted and corrected
  * constituents become source-bound structural reviews that count toward `accounted_fraction`.
  */
-export function applySourceAtomBatch(db: DatabaseSync, body: unknown): { batch_id: string; applied: number } {
+export function applySourceAtomBatch(db: DatabaseSync, body: unknown, actor: Actor): { batch_id: string; applied: number } {
+  requireHuman(actor, "decide structural constituents");
   const input = record(body, "body");
   const reviewer = text(input.reviewer, "reviewer", 100);
+  assertReviewer(actor, reviewer);
   if (!Array.isArray(input.decisions) || input.decisions.length === 0) invalid("decisions must be a nonempty array.");
   const decisions = (input.decisions as unknown[]).map(parseDecision);
   return withTransaction(db, () => {

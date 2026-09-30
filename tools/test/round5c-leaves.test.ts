@@ -8,9 +8,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, reapplyLeafSurfaces, retireSurface } from "../src/round5c/leaves.js";
-import { applyAnnotationBatch, getAbility, undoBatch } from "../src/round5c/review.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
+import { getAbility } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { applyAnnotationBatch, confirmSurface, mergeFingerprints, moveSurface, retireSurface, undoBatch } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };

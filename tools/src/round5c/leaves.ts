@@ -5,7 +5,8 @@ import { currentFamilyVersion, exactSpan, validateFingerprint } from "./contract
 import { sourcesClosed } from "./board-ranking.js";
 import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
-import { normalizedProjection, normalizedSurface } from "./matching.js";
+import { mayReplace, propagatedAuthority, requireHuman, assertReviewer, type Actor, type Authority } from "./authority.js";
+import { leafSurfaceKey, normalizedProjection } from "./matching.js";
 import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
 import { describerGaps } from "./leaf-describer-audit.js";
 import { surfaceWarnings } from "./surface-lint.js";
@@ -63,7 +64,7 @@ export function qualifiedAt(sourceText: string, startByte: number): boolean {
 
 /** The surface key of source wording: normalized, without edge punctuation. */
 export function leafSurface(text: string): string {
-  return normalizedSurface(text.replace(EDGE_PUNCTUATION, ""));
+  return leafSurfaceKey(text);
 }
 
 /** Uncovered runs that still need a leaf: everything except punctuation and glue words. */
@@ -74,14 +75,18 @@ export function untiledRuns(coverage: AbilityCoverage): UncoveredInterval[] {
   });
 }
 
-export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_id: string; status: string; batch_id: string };
+export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_id: string; status: string; batch_id: string; authority_kind: "human" | "machine" };
+
+const SURFACE_COLUMNS = "id, normalized_surface, fingerprint_id, status, batch_id, authority_kind";
 
 type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
 
 export type ApplyReport = {
   applied: number;
   already: number;
-  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" }>;
+  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" }>;
+  /** Machine rows at the same bytes and meaning that a trusted surface row replaced. */
+  promoted?: number;
 };
 
 function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
@@ -116,7 +121,7 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
   };
   const query = ftsQuery(surface);
   if (query) {
-    for (const chunk of candidateChunks(db, query)) {
+    for (const chunk of candidateChunks(db, query, abilityVersionIds)) {
       const projection = normalizedProjection(exactSpan(chunk.source_text, chunk.start_byte, chunk.end_byte));
       for (const match of matchesAt(projection, surface)) {
         const start = chunk.start_byte + match.start_byte;
@@ -135,21 +140,28 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND proposals.status IN ('pending', 'unresolved') AND source_spans.normalized_surface = ?
+      ${abilityVersionIds ? `AND abilities.id IN (${[...abilityVersionIds].map(Number).filter(Number.isSafeInteger).join(",") || "NULL"})` : ""}
   `).all(surface) as Occurrence[];
   for (const proposal of proposals) add(proposal);
   return [...found.values()].sort((left, right) => left.ability_version_id - right.ability_version_id || left.start_byte - right.start_byte);
 }
 
 /**
- * Annotate every current occurrence of one active surface that nothing contradicts. An
- * occurrence already carrying this leaf is left alone; one overlapping a different active leaf,
- * or where a human rejected this meaning, is reported and not written.
+ * Annotate every current occurrence of one active surface that nothing contradicts. Rows carry
+ * the surface's propagated authority (`derived` from a human surface, `machine` from a machine
+ * one) and link the surface. Machine rows are a separate layer: a trusted write ignores them,
+ * except that one at the same bytes and meaning is promoted (superseded by the trusted row). A
+ * machine write never lands on trusted bytes (`TRUSTED_HERE`). An occurrence already carrying
+ * this leaf at this authority, one overlapping a different leaf of its layer, or where a human
+ * rejected this meaning, is reported and not written.
  */
 function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, batchId: string, abilityVersionIds?: ReadonlySet<number>): ApplyReport & { touched: Set<number> } {
   const fingerprint = fingerprintRow(db, surface.fingerprint_id);
-  const report: ApplyReport & { touched: Set<number> } = { applied: 0, already: 0, blocked: [], touched: new Set() };
+  const authority = propagatedAuthority(surface.authority_kind);
+  const trusted = authority !== "machine";
+  const report: ApplyReport & { touched: Set<number> } = { applied: 0, already: 0, blocked: [], promoted: 0, touched: new Set() };
   const overlapping = db.prepare(`
-    SELECT annotations.id, annotations.origin, annotations.fingerprint_id, source_spans.start_byte, source_spans.end_byte
+    SELECT annotations.id, annotations.origin, annotations.fingerprint_id, annotations.authority_kind, source_spans.start_byte, source_spans.end_byte
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ? AND source_spans.fragment = ?
       AND source_spans.start_byte < ? AND ? < source_spans.end_byte
@@ -166,42 +178,57 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
       AND proposals.fingerprint_id = ? AND proposals.status IN ('pending', 'unresolved')
   `);
   const insert = db.prepare(`
-    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
-    VALUES (?, ?, 'active', 'leaf-surface', 'human', ?, ?, NULL, ?)
+    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
+    VALUES (?, ?, 'active', 'leaf-surface', ?, ?, ?, ?, ?, ?)
   `);
   const sourceText = db.prepare("SELECT source_text FROM abilities WHERE id = ?");
   const now = new Date().toISOString();
   for (const occurrence of surfaceOccurrences(db, surface.normalized_surface, abilityVersionIds)) {
     const args = [occurrence.ability_version_id, occurrence.fragment, occurrence.end_byte, occurrence.start_byte] as const;
-    let others = overlapping.all(...args) as Array<{ id: number; origin: string; fingerprint_id: string; start_byte: number; end_byte: number }>;
-    if (others.some((other) => other.fingerprint_id === fingerprint.id && other.start_byte === occurrence.start_byte && other.end_byte === occurrence.end_byte)) {
+    const all = overlapping.all(...args) as Array<{ id: number; origin: string; fingerprint_id: string; authority_kind: Authority; start_byte: number; end_byte: number }>;
+    const exact = (other: { fingerprint_id: string; start_byte: number; end_byte: number }) => other.fingerprint_id === fingerprint.id
+      && other.start_byte === occurrence.start_byte && other.end_byte === occurrence.end_byte;
+    // A trusted write sees only the trusted layer; a machine write sees both.
+    let others = trusted ? all.filter((other) => other.authority_kind !== "machine") : all;
+    if (others.some((other) => exact(other) && mayReplace(other.authority_kind, authority))) {
       report.already += 1;
       continue;
     }
     const blocked = (reason: ApplyReport["blocked"][number]["reason"]) => report.blocked.push({
       ability_version_id: occurrence.ability_version_id, faction_id: occurrence.faction_id, ability_id: occurrence.ability_id, exact_text: occurrence.exact_text, reason,
     });
-    // Longer wording wins: a leaf another surface decision made strictly inside this occurrence
-    // (for example "weapons … have [X]" inside "melee weapons … have [X]") gives way to it.
+    // Longer wording wins: a leaf of no higher authority that another surface decision made
+    // strictly inside this occurrence (for example "weapons … have [X]" inside "melee weapons …
+    // have [X]") gives way to it.
     const inside = others.filter((other) => other.origin === "leaf-surface"
       && other.start_byte >= occurrence.start_byte && other.end_byte <= occurrence.end_byte
       && other.end_byte - other.start_byte < occurrence.end_byte - occurrence.start_byte);
     if (inside.length === others.length && inside.length > 0) {
+      if (!inside.every((other) => mayReplace(authority, other.authority_kind))) { blocked("TRUSTED_HERE"); continue; }
       for (const other of inside) {
         db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(other.id);
         addMember(db, batchId, "annotation-superseded-by-surface", other.id);
       }
       others = [];
     }
-    if (others.length > 0) { blocked("OTHER_LEAF_HERE"); continue; }
+    if (others.length > 0) { blocked(!trusted && others.some((other) => other.authority_kind !== "machine") ? "TRUSTED_HERE" : "OTHER_LEAF_HERE"); continue; }
     if (qualifiedAt((sourceText.get(occurrence.ability_version_id) as { source_text: string }).source_text, occurrence.start_byte)) { blocked("QUALIFIED_HERE"); continue; }
     if (refused.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id)) { blocked("REJECTED_HERE"); continue; }
+    // Promotion: the machine row this trusted row confirms, same bytes and meaning.
+    const promoted = trusted ? all.find((other) => other.authority_kind === "machine" && exact(other)) : undefined;
+    if (promoted) {
+      db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(promoted.id);
+      report.promoted! += 1;
+    }
     const spanId = insertSpan(db, occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, occurrence.exact_text);
-    const annotation = insert.run(spanId, fingerprint.id, reviewer, batchId, now);
+    const annotation = insert.run(spanId, fingerprint.id, authority, reviewer, batchId, promoted?.id ?? null, surface.id, now);
     addMember(db, batchId, "annotation", Number(annotation.lastInsertRowid));
-    for (const proposal of pendingHere.all(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id) as Array<{ id: number; status: string }>) {
-      db.prepare("UPDATE proposals SET status = 'accepted' WHERE id = ?").run(proposal.id);
-      addMember(db, batchId, proposal.status === "unresolved" ? "proposal-accepted-unresolved" : "proposal-accepted", proposal.id);
+    // Machines never decide proposals; only a trusted row settles the proposals it restates.
+    if (trusted) {
+      for (const proposal of pendingHere.all(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id) as Array<{ id: number; status: string }>) {
+        db.prepare("UPDATE proposals SET status = 'accepted' WHERE id = ?").run(proposal.id);
+        addMember(db, batchId, proposal.status === "unresolved" ? "proposal-accepted-unresolved" : "proposal-accepted", proposal.id);
+      }
     }
     report.applied += 1;
     report.touched.add(occurrence.ability_version_id);
@@ -210,14 +237,14 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
 }
 
 function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefined {
-  return db.prepare("SELECT id, normalized_surface, fingerprint_id, status, batch_id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as SurfaceRow | undefined;
+  return db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'`).get(surface) as SurfaceRow | undefined;
 }
 
-function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string): SurfaceRow {
-  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, batch_id, created_at) VALUES (?, ?, 'active', ?, ?)")
-    .run(surface, fingerprintId, batchId, new Date().toISOString());
+function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null): SurfaceRow {
+  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at) VALUES (?, ?, 'active', ?, ?, ?, ?)")
+    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString());
   addMember(db, batchId, "leaf-surface-created", Number(inserted.lastInsertRowid));
-  return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId };
+  return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId, authority_kind: authority };
 }
 
 function finish(db: DatabaseSync, touched: Iterable<number>): void {
@@ -233,6 +260,13 @@ function body(value: unknown): Record<string, unknown> {
 function text(value: unknown, label: string): string {
   if (typeof value !== "string" || !value.trim()) throw new LeafError(422, `${label} is required.`);
   return value;
+}
+
+/** Optional `ability_version_ids` scope: restricts an application to those source versions. */
+function scopeOf(input: Record<string, unknown>): ReadonlySet<number> | undefined {
+  if (input.ability_version_ids === undefined) return undefined;
+  if (!Array.isArray(input.ability_version_ids)) throw new LeafError(422, "ability_version_ids must be an array.");
+  return new Set(input.ability_version_ids.map(Number));
 }
 
 function meaning(db: DatabaseSync, input: Record<string, unknown>, exactText: string): Fingerprint {
@@ -251,9 +285,10 @@ function meaning(db: DatabaseSync, input: Record<string, unknown>, exactText: st
  * Decide that source wording means one leaf everywhere, then apply it corpus-wide. The wording
  * is taken exactly from a source occurrence so parameter snippets can be checked against it.
  */
-export function confirmSurface(db: DatabaseSync, value: unknown): ApplyReport & { batch_id: string; surface_id: number } {
+export function confirmSurface(db: DatabaseSync, value: unknown, actor: Actor): ApplyReport & { batch_id: string; surface_id: number } {
   const input = body(value);
-  const reviewer = text(input.reviewer, "reviewer");
+  assertReviewer(actor, input.reviewer);
+  const reviewer = actor.reviewer;
   const exactText = text(input.exact_text, "exact_text");
   const surface = leafSurface(exactText);
   if (!surface || GLUE.has(surface)) throw new LeafError(422, "A leaf needs wording beyond punctuation and joining words.");
@@ -265,8 +300,14 @@ export function confirmSurface(db: DatabaseSync, value: unknown): ApplyReport & 
       throw new LeafError(409, `"${surface}" already means ${current.family_id} ${JSON.stringify(current.parameters)}; move it to change its meaning.`);
     }
     const batchId = newBatch(db, reviewer, { action: "confirm-surface", surface });
-    const row = existing ?? insertSurface(db, surface, fingerprint.id, batchId);
-    const report = applySurface(db, row, reviewer, batchId);
+    let row = existing ?? insertSurface(db, surface, fingerprint.id, batchId, actor.authority);
+    // A human confirming a machine-founded surface re-founds it as human; its later applications
+    // are then derived. The machine rows it wrote stay machine until this application promotes them.
+    if (existing && existing.authority_kind === "machine" && actor.authority === "human") {
+      retire(db, batchId, existing);
+      row = insertSurface(db, surface, fingerprint.id, batchId, "human");
+    }
+    const report = applySurface(db, row, reviewer, batchId, scopeOf(input));
     finish(db, report.touched);
     const { touched: _touched, ...result } = report;
     return { ...result, batch_id: batchId, surface_id: row.id };
@@ -278,16 +319,18 @@ export function applyLeafSurfaces(db: DatabaseSync, value: unknown): ApplyReport
   const input = body(value);
   const reviewer = text(input.reviewer, "reviewer");
   const ids = input.surface_ids === undefined ? null : new Set((input.surface_ids as unknown[]).map(Number));
+  const scope = scopeOf(input);
   return withTransaction(db, () => {
-    const batchId = newBatch(db, reviewer, { action: "apply-surfaces" });
-    const total: ApplyReport = { applied: 0, already: 0, blocked: [] };
+    const batchId = newBatch(db, reviewer, { action: "apply-surfaces", ...(scope ? { ability_version_ids: [...scope] } : {}) });
+    const total: ApplyReport = { applied: 0, already: 0, blocked: [], promoted: 0 };
     const touched = new Set<number>();
-    const rows = db.prepare("SELECT id, normalized_surface, fingerprint_id, status, batch_id FROM leaf_surfaces WHERE status = 'active' ORDER BY id").all() as SurfaceRow[];
+    const rows = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE status = 'active' ORDER BY id`).all() as SurfaceRow[];
     for (const row of rows) {
       if (ids && !ids.has(row.id)) continue;
-      const report = applySurface(db, row, reviewer, batchId);
+      const report = applySurface(db, row, reviewer, batchId, scope);
       total.applied += report.applied;
       total.already += report.already;
+      total.promoted! += report.promoted ?? 0;
       total.blocked.push(...report.blocked);
       for (const id of report.touched) touched.add(id);
     }
@@ -301,30 +344,34 @@ export function applyLeafSurfaces(db: DatabaseSync, value: unknown): ApplyReport
  * versions after a refresh, and occurrences an earlier decision missed. Idempotent; a run that
  * annotates nothing leaves no batch behind.
  */
-export function reapplyLeafSurfaces(db: DatabaseSync): ApplyReport {
-  const report = applyLeafSurfaces(db, { reviewer: "system" });
+export function reapplyLeafSurfaces(db: DatabaseSync, abilityVersionIds?: ReadonlySet<number>): ApplyReport {
+  const report = applyLeafSurfaces(db, { reviewer: "system", ...(abilityVersionIds ? { ability_version_ids: [...abilityVersionIds] } : {}) });
   if (!db.prepare("SELECT 1 FROM batch_members WHERE batch_id = ? LIMIT 1").get(report.batch_id)) {
     db.prepare("DELETE FROM annotation_batches WHERE id = ?").run(report.batch_id);
   }
-  return { applied: report.applied, already: report.already, blocked: report.blocked };
+  return { applied: report.applied, already: report.already, blocked: report.blocked, promoted: report.promoted };
 }
 
-/** Supersede active annotations of one fingerprint on the given spans with another fingerprint. */
-function repoint(db: DatabaseSync, batchId: string, reviewer: string, from: string, to: string, surface?: string): Set<number> {
+/**
+ * Supersede active annotations of one fingerprint on the given spans with another fingerprint.
+ * A human re-meaning of trusted rows keeps each row's authority; machine rows stay machine and
+ * are left for their own review. `surfaceId` links rows to the surface now carrying the meaning.
+ */
+function repoint(db: DatabaseSync, batchId: string, reviewer: string, from: string, to: string, surface?: string, surfaceId?: number): Set<number> {
   const rows = db.prepare(`
-    SELECT annotations.id, annotations.span_id, source_spans.exact_text, source_spans.ability_version_id
+    SELECT annotations.id, annotations.span_id, annotations.authority_kind, annotations.derived_from_surface_id, source_spans.exact_text, source_spans.ability_version_id
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-    WHERE annotations.fingerprint_id = ? AND annotations.status = 'active'
-  `).all(from) as Array<{ id: number; span_id: number; exact_text: string; ability_version_id: number }>;
+    WHERE annotations.fingerprint_id = ? AND annotations.status = 'active' AND annotations.authority_kind != 'machine'
+  `).all(from) as Array<{ id: number; span_id: number; authority_kind: Authority; derived_from_surface_id: number | null; exact_text: string; ability_version_id: number }>;
   const touched = new Set<number>();
   const now = new Date().toISOString();
   for (const row of rows) {
     if (surface !== undefined && leafSurface(row.exact_text) !== surface) continue;
     db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(row.id);
     const inserted = db.prepare(`
-      INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
-      VALUES (?, ?, 'active', 'leaf-surface', 'human', ?, ?, ?, ?)
-    `).run(row.span_id, to, reviewer, batchId, row.id, now);
+      INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
+      VALUES (?, ?, 'active', 'leaf-surface', ?, ?, ?, ?, ?, ?)
+    `).run(row.span_id, to, row.authority_kind, reviewer, batchId, row.id, surfaceId ?? row.derived_from_surface_id, now);
     addMember(db, batchId, "annotation", Number(inserted.lastInsertRowid));
     touched.add(row.ability_version_id);
   }
@@ -340,12 +387,14 @@ function retire(db: DatabaseSync, batchId: string, row: SurfaceRow): void {
  * Give one surface a different meaning: retire it, record the new one, and move every active
  * annotation with that wording from the old leaf to the new one.
  */
-export function moveSurface(db: DatabaseSync, value: unknown): ApplyReport & { batch_id: string; surface_id: number } {
+export function moveSurface(db: DatabaseSync, value: unknown, actor: Actor): ApplyReport & { batch_id: string; surface_id: number } {
   const input = body(value);
-  const reviewer = text(input.reviewer, "reviewer");
+  requireHuman(actor, "change what a surface means");
+  assertReviewer(actor, input.reviewer);
+  const reviewer = actor.reviewer;
   const surfaceId = Number(input.surface_id);
   return withTransaction(db, () => {
-    const row = db.prepare("SELECT id, normalized_surface, fingerprint_id, status, batch_id FROM leaf_surfaces WHERE id = ?").get(surfaceId) as SurfaceRow | undefined;
+    const row = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE id = ?`).get(surfaceId) as SurfaceRow | undefined;
     if (!row || row.status !== "active") throw new LeafError(404, `No active surface ${surfaceId}.`);
     const sample = db.prepare(`
       SELECT source_spans.exact_text FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
@@ -356,8 +405,8 @@ export function moveSurface(db: DatabaseSync, value: unknown): ApplyReport & { b
     if (target.role !== fingerprintRow(db, row.fingerprint_id).role) throw new LeafError(422, "Moving a surface cannot change its role; retire it and confirm it again instead.");
     const batchId = newBatch(db, reviewer, { action: "move-surface", surface: row.normalized_surface });
     retire(db, batchId, row);
-    const created = insertSurface(db, row.normalized_surface, target.id, batchId);
-    const touched = repoint(db, batchId, reviewer, row.fingerprint_id, target.id, row.normalized_surface);
+    const created = insertSurface(db, row.normalized_surface, target.id, batchId, "human");
+    const touched = repoint(db, batchId, reviewer, row.fingerprint_id, target.id, row.normalized_surface, created.id);
     const report = applySurface(db, created, reviewer, batchId);
     for (const id of report.touched) touched.add(id);
     finish(db, touched);
@@ -367,19 +416,21 @@ export function moveSurface(db: DatabaseSync, value: unknown): ApplyReport & { b
 }
 
 /** Two fingerprints mean the same thing: move every surface and annotation of `from` onto `to`. */
-export function mergeFingerprints(db: DatabaseSync, value: unknown): { batch_id: string; surfaces: number; annotations: number } {
+export function mergeFingerprints(db: DatabaseSync, value: unknown, actor: Actor): { batch_id: string; surfaces: number; annotations: number } {
   const input = body(value);
-  const reviewer = text(input.reviewer, "reviewer");
+  requireHuman(actor, "merge two leaves");
+  assertReviewer(actor, input.reviewer);
+  const reviewer = actor.reviewer;
   const from = fingerprintRow(db, text(input.from_fingerprint_id, "from_fingerprint_id"));
   const to = fingerprintRow(db, text(input.to_fingerprint_id, "to_fingerprint_id"));
   if (from.id === to.id) throw new LeafError(422, "Choose two different leaves to merge.");
   if (from.role !== to.role) throw new LeafError(422, "Only leaves with the same role can be merged.");
   return withTransaction(db, () => {
     const batchId = newBatch(db, reviewer, { action: "merge", from: from.id, to: to.id });
-    const surfaces = db.prepare("SELECT id, normalized_surface, fingerprint_id, status, batch_id FROM leaf_surfaces WHERE fingerprint_id = ? AND status = 'active'").all(from.id) as SurfaceRow[];
+    const surfaces = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE fingerprint_id = ? AND status = 'active'`).all(from.id) as SurfaceRow[];
     for (const row of surfaces) {
       retire(db, batchId, row);
-      insertSurface(db, row.normalized_surface, to.id, batchId);
+      insertSurface(db, row.normalized_surface, to.id, batchId, row.authority_kind);
     }
     const touched = repoint(db, batchId, reviewer, from.id, to.id);
     for (const proposal of db.prepare("SELECT id FROM proposals WHERE fingerprint_id = ? AND status IN ('pending', 'unresolved')").all(from.id) as Array<{ id: number }>) {
@@ -395,12 +446,14 @@ export function mergeFingerprints(db: DatabaseSync, value: unknown): { batch_id:
 }
 
 /** Stop applying a surface. Annotations it already made stay; undo their batch to remove them. */
-export function retireSurface(db: DatabaseSync, value: unknown): { batch_id: string } {
+export function retireSurface(db: DatabaseSync, value: unknown, actor: Actor): { batch_id: string } {
   const input = body(value);
-  const reviewer = text(input.reviewer, "reviewer");
+  requireHuman(actor, "retire a surface");
+  assertReviewer(actor, input.reviewer);
+  const reviewer = actor.reviewer;
   const surfaceId = Number(input.surface_id);
   return withTransaction(db, () => {
-    const row = db.prepare("SELECT id, normalized_surface, fingerprint_id, status, batch_id FROM leaf_surfaces WHERE id = ?").get(surfaceId) as SurfaceRow | undefined;
+    const row = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE id = ?`).get(surfaceId) as SurfaceRow | undefined;
     if (!row || row.status !== "active") throw new LeafError(404, `No active surface ${surfaceId}.`);
     const batchId = newBatch(db, reviewer, { action: "retire-surface", surface: row.normalized_surface });
     retire(db, batchId, row);
@@ -437,6 +490,27 @@ function mergeMetadata(db: DatabaseSync, batchId: string): { from: string; to: s
   return metadata.action === "merge" && metadata.from && metadata.to ? { from: metadata.from, to: metadata.to } : null;
 }
 
+/**
+ * Undoing a surface's founding also undoes every row that surface wrote in later batches (a
+ * reapply after a source refresh, a scoped pilot propagation): each is retracted and the row it
+ * promoted or replaced comes back. Rows in the undone batch itself are handled by the caller.
+ */
+function retractDerivedRows(db: DatabaseSync, reversalId: string, surfaceId: number): void {
+  const rows = db.prepare(`
+    SELECT id, supersedes_id FROM annotations WHERE derived_from_surface_id = ? AND status = 'active'
+      AND NOT EXISTS (SELECT 1 FROM batch_members WHERE batch_members.batch_id = annotations.batch_id
+        AND batch_members.entity_kind = 'leaf-surface-created' AND batch_members.entity_id = CAST(? AS TEXT))
+  `).all(surfaceId, surfaceId) as Array<{ id: number; supersedes_id: number | null }>;
+  for (const row of rows) {
+    db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(row.id);
+    addMember(db, reversalId, "annotation-retracted-with-surface", row.id);
+    if (row.supersedes_id !== null) {
+      const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(row.supersedes_id);
+      if (restored.changes === 1) addMember(db, reversalId, "annotation-restored", row.supersedes_id);
+    }
+  }
+}
+
 /** Reverse surface rows: created ones retire, retired ones return (created ones first, so a move swaps back). */
 export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
   for (const member of members.filter((item) => item.entity_kind === "annotation-superseded-by-surface")) {
@@ -453,6 +527,7 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
   for (const member of members.filter((item) => item.entity_kind === "leaf-surface-created")) {
     db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
+    retractDerivedRows(db, reversalId, Number(member.entity_id));
   }
   for (const member of members.filter((item) => item.entity_kind === "leaf-surface-retired")) {
     const row = db.prepare("SELECT normalized_surface FROM leaf_surfaces WHERE id = ?").get(Number(member.entity_id)) as { normalized_surface: string };
@@ -463,7 +538,11 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
 }
 
 export type BoardSurface = {
-  surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number;
+  /** The human surface deciding this spelling; null when undecided (or decided only by a machine). */
+  surface_id: number | null;
+  /** A machine-founded surface for this spelling, awaiting review. */
+  machine_surface_id?: number;
+  surface: string; sample_text: string; annotations: number; pending: number; sources: number;
   /** Sources that applying this spelling's pending occurrences would finish. */
   closes: number;
   warnings?: string[];
@@ -531,7 +610,7 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string; limit
     FROM annotations ${fingerprintJoin.replaceAll("X.", "annotations.")}
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE annotations.status = 'active' AND abilities.current = 1 AND (? IS NULL OR abilities.faction_id = ?)
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND abilities.current = 1 AND (? IS NULL OR abilities.faction_id = ?)
   `).all(faction, faction) as Row[]) {
     const surface = leafSurface(row.exact_text);
     surfaceEntry(leaf(row), surface, row.exact_text).annotations += 1;
@@ -552,12 +631,15 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string; limit
     pendingSpans(`${row.fingerprint_id}\u0000${surface}`).push(row);
   }
   for (const row of db.prepare(`
-    SELECT leaf_surfaces.id, leaf_surfaces.normalized_surface, ${fingerprintColumns}
+    SELECT leaf_surfaces.id, leaf_surfaces.normalized_surface, leaf_surfaces.authority_kind AS surface_authority, ${fingerprintColumns}
     FROM leaf_surfaces ${fingerprintJoin.replaceAll("X.", "leaf_surfaces.")}
     WHERE leaf_surfaces.status = 'active'
-  `).all() as Array<Omit<Row, "exact_text" | "ability_version_id"> & { id: number; normalized_surface: string }>) {
+  `).all() as Array<Omit<Row, "exact_text" | "ability_version_id"> & { id: number; normalized_surface: string; surface_authority: "human" | "machine" }>) {
     if (faction !== null && !leaves.has(row.fingerprint_id)) continue;
-    surfaceEntry(leaf(row), row.normalized_surface, row.normalized_surface).surface_id = row.id;
+    // Only a human surface is a decision; a machine one is shown for review, never used as one.
+    const entry = surfaceEntry(leaf(row), row.normalized_surface, row.normalized_surface);
+    if (row.surface_authority === "human") entry.surface_id = row.id;
+    else entry.machine_surface_id = row.id;
   }
   for (const entry of leaves.values()) {
     for (const surface of entry.surfaces) surface.sources = sourcesBySurface.get(`${entry.fingerprint_id}\u0000${surface.surface}`)?.size ?? 0;
@@ -659,17 +741,19 @@ export function backfillLeafSurfaces(db: DatabaseSync): { created: number; confl
   return withTransaction(db, () => {
     if (db.prepare("SELECT 1 FROM annotation_batches WHERE operation = 'migration-leaf-surfaces'").get()) return { created: 0, conflicting: 0 };
     const meanings = new Map<string, Set<string>>();
+    const trustedEvidence = new Map<string, number>();
     for (const row of db.prepare(`
-      SELECT source_spans.exact_text, annotations.fingerprint_id
+      SELECT annotations.id, annotations.authority_kind, source_spans.exact_text, annotations.fingerprint_id
       FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
       JOIN abilities ON abilities.id = source_spans.ability_version_id
       JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
       JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
       WHERE annotations.status = 'active' AND abilities.current = 1
         AND fingerprints.status = 'active' AND semantic_families.status = 'active'
-    `).all() as Array<{ exact_text: string; fingerprint_id: string }>) {
+    `).all() as Array<{ id: number; authority_kind: Authority; exact_text: string; fingerprint_id: string }>) {
       const surface = leafSurface(row.exact_text);
       if (!surface || GLUE.has(surface)) continue;
+      if (row.authority_kind !== "machine" && !trustedEvidence.has(surface)) trustedEvidence.set(surface, row.id);
       const set = meanings.get(surface) ?? new Set<string>();
       set.add(row.fingerprint_id);
       meanings.set(surface, set);
@@ -681,7 +765,9 @@ export function backfillLeafSurfaces(db: DatabaseSync): { created: number; confl
     for (const [surface, fingerprints] of [...meanings].sort(([left], [right]) => left.localeCompare(right))) {
       if (fingerprints.size !== 1) { conflicting += 1; continue; }
       if (activeSurface(db, surface)) continue;
-      insertSurface(db, surface, [...fingerprints][0]!, batchId);
+      // A backfilled surface is human only when a trusted row founds it; otherwise it stays machine.
+      const evidence = trustedEvidence.get(surface) ?? null;
+      insertSurface(db, surface, [...fingerprints][0]!, batchId, evidence === null ? "machine" : "human", evidence);
       created += 1;
     }
     if (created > 0) bumpWorkbenchRevision(db);

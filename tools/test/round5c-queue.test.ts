@@ -11,8 +11,9 @@ import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { prepareLuna } from "../src/round5c/proposal.js";
 import { getQueue, type QueueItem } from "../src/round5c/queue.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
-import { applyAnnotationBatch, getAbility, getDashboard, undoBatch } from "../src/round5c/review.js";
+import { getAbility, getDashboard } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { applyAnnotationBatch, undoBatch } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -64,8 +65,8 @@ function seed(db: DatabaseSync, abilityId: string, exactText: string, familyId: 
   const batchId = `seed-${abilityId}-${bytes.start}`;
   db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'fixture', 'reviewer', '2026-01-01T00:00:00.000Z')").run(batchId);
   const inserted = db.prepare(`
-    INSERT INTO annotations (span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at)
-    VALUES (?, ?, 'active', 'fixture', 'reviewer', ?, NULL, '2026-01-01T00:00:00.000Z')
+    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
+    VALUES (?, ?, 'active', 'fixture', 'human', 'reviewer', ?, NULL, '2026-01-01T00:00:00.000Z')
   `).run(spanId, fingerprintId, batchId);
   return Number(inserted.lastInsertRowid);
 }
@@ -178,7 +179,6 @@ describe("Round 5C greedy work queue", () => {
       db.close();
     }
   });
-
 
   it("keeps a faction-scoped queue target inside that faction's Family page", () => {
     const db = fixture([

@@ -3,8 +3,8 @@ import type { DatabaseSync } from "node:sqlite";
 import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
-import { getCurrentCoverage } from "./coverage.js";
-import { untiledRuns } from "./leaves.js";
+import type { CoverageView } from "./coverage.js";
+import { tiledSources } from "./leaf-view.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
@@ -54,42 +54,17 @@ export type CompileGateReport = {
   all_gates_pass: number;
   failures: GateFailure[];
   lever_diffs: LeverDiff[];
+  /** One row per fully tiled ability: what compiled and which gates it passed. */
+  abilities: AbilityGateResult[];
 };
 
-/** Leaves for every ability whose source is now fully tiled, keyed by ability_version_id. */
-function tiledLeaves(
-  db: DatabaseSync, abilityVersionIds?: ReadonlySet<number>,
-): Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }> {
-  const coverage = getCurrentCoverage(db);
-  const abilities = (db.prepare(`SELECT id, faction_id, ability_id, source_text FROM abilities WHERE current = 1`)
-    .all() as Array<{ id: number; faction_id: string; ability_id: string; source_text: string }>)
-    .filter((ability) => !abilityVersionIds || abilityVersionIds.has(ability.id));
-  const leaves = new Map<number, CompileLeaf[]>();
-  for (const row of db.prepare(`
-    SELECT source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
-      fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
-    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
-    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active'
-  `).all() as Array<{ ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string; family_id: string; family_version: number; parameters_json: string }>) {
-    const list = leaves.get(row.ability_version_id) ?? [];
-    list.push({
-      role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
-      start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
-    });
-    leaves.set(row.ability_version_id, list);
-  }
-  const result = new Map<number, { faction_id: string; ability_id: string; source_text: string; leaves: CompileLeaf[] }>();
-  for (const ability of abilities) {
-    const view = coverage.get(ability.id);
-    const own = leaves.get(ability.id);
-    if (!view || !own?.length || untiledRuns(view).length > 0) continue;
-    result.set(ability.id, { faction_id: ability.faction_id, ability_id: ability.ability_id, source_text: ability.source_text, leaves: own });
-  }
-  return result;
-}
+export type AbilityGateResult = {
+  ability_version_id: number; faction_id: string; ability_id: string;
+  /** Leaves from machine rows or overlay proposals; any nonzero value makes the result a pilot result, never an approval. */
+  machine_leaves: number;
+  compile_errors: string[];
+  gates: null | { status: "gated" | "no-data-entry"; schema: boolean; core_checks: boolean; integrity: boolean; describer: boolean; describer_score: number | null; crunch_shape: boolean; all: boolean };
+};
 
 /**
  * Cosine similarity of two texts under the same local embedder used for leaf proposals — the
@@ -224,30 +199,47 @@ async function gateCompiledAbility(
   return { status: "gated", schema, coreChecks, integrity, describer, describerScore, crunchShapeOk, honestUnknown, outsideDamagePath, unrecognizedShape, leverDiff, failures };
 }
 
+/**
+ * Compile and gate every fully tiled ability (or only `abilityVersionIds`) under a leaf view. The
+ * default trusted view is what approval sees; pipelines that gate their own machine output pass
+ * a machine view (see `tiledSources`), and their results carry `machine_leaves`.
+ */
 export async function runCompileGates(
-  db: DatabaseSync, embedder: Embedder, floor: number, abilityVersionIds?: ReadonlySet<number>,
+  db: DatabaseSync, embedder: Embedder, floor: number, abilityVersionIds?: ReadonlySet<number>, view: CoverageView = {},
 ): Promise<CompileGateReport> {
   const dataRoot = round5cDataRoot();
-  const tiled = tiledLeaves(db, abilityVersionIds);
+  const tiled = new Map(tiledSources(db, { ...view, abilityVersionIds }).map((source) => [source.id, source]));
   const abilitiesTotal = abilityVersionIds
     ? abilityVersionIds.size
     : (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
   const report: CompileGateReport = {
     abilities_total: abilitiesTotal, fully_tiled: tiled.size, compile_attempted: 0, compile_ok: 0, compile_errors: {},
     gated: 0, no_data_entry: 0, schema_pass: 0, core_checks_pass: 0, integrity_pass: 0, describer_pass: 0, describer_scores: [],
-    cruncher_honest_unknown: 0, cruncher_outside_damage_path: 0, cruncher_unrecognized_shape: 0, cruncher_shape_pass: 0, all_gates_pass: 0, failures: [], lever_diffs: [],
+    cruncher_honest_unknown: 0, cruncher_outside_damage_path: 0, cruncher_unrecognized_shape: 0, cruncher_shape_pass: 0, all_gates_pass: 0, failures: [], lever_diffs: [], abilities: [],
   };
   for (const [, ability] of tiled) {
     report.compile_attempted += 1;
+    const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
+    report.abilities.push(row);
     const compiled = compileLeaves(ability.leaves, ability.source_text);
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;
+      row.compile_errors = compiled.errors;
       continue;
     }
     report.compile_ok += 1;
     const gate = await gateCompiledAbility(db, embedder, dataRoot, ability.faction_id, ability.ability_id, compiled, ability.source_text, floor);
-    if (gate.status === "no-data-entry") { report.no_data_entry += 1; continue; }
+    if (gate.status === "no-data-entry") {
+      row.gates = { status: "no-data-entry", schema: false, core_checks: false, integrity: false, describer: false, describer_score: null, crunch_shape: false, all: false };
+      report.no_data_entry += 1;
+      continue;
+    }
+    row.gates = {
+      status: "gated", schema: gate.schema, core_checks: gate.coreChecks, integrity: gate.integrity, describer: gate.describer,
+      describer_score: gate.describerScore, crunch_shape: gate.crunchShapeOk,
+      all: gate.schema && gate.coreChecks && gate.integrity && gate.describer && gate.crunchShapeOk,
+    };
     report.gated += 1;
     if (gate.schema) report.schema_pass += 1;
     if (gate.coreChecks) report.core_checks_pass += 1;

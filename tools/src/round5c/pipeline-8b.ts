@@ -7,9 +7,10 @@ import { createRequire } from "node:module";
 import { openWorkbench } from "./db.js";
 import { refreshSources, type SourceRefreshReport } from "./source.js";
 import { reapplyLeafSurfaces, untiledRuns, type ApplyReport } from "./leaves.js";
-import { getCurrentCoverage } from "./coverage.js";
+import { getCurrentCoverage, type CoverageView } from "./coverage.js";
 import { localEmbedder, type Embedder } from "./embeddings.js";
 import { runLeafProposals, listLeafProposals, type ListedProposal, type ProposalPiece } from "./leaf-proposals.js";
+import { machineActor } from "./authority.js";
 import { confirmSurface, LeafError } from "./leaves.js";
 import { prepareLuna, serializeLunaRequest, type PrepareLunaOptions, type PreparedRequest } from "./proposal.js";
 import { lunaStdinEnvelope } from "./luna-schema.js";
@@ -113,8 +114,8 @@ async function confirmRound(db: DatabaseSync, embedder: Embedder, reviewer: stri
       for (const piece of pieces) {
         try {
           confirmSurface(db, {
-            reviewer, exact_text: piece.text, family_id: piece.family_id, family_version: piece.family_version, parameters: piece.parameters,
-          });
+            exact_text: piece.text, family_id: piece.family_id, family_version: piece.family_version, parameters: piece.parameters,
+          }, machineActor(reviewer));
           confirmed += 1;
         } catch (error) {
           const reason = error instanceof LeafError ? error.message : error instanceof Error ? error.message : String(error);
@@ -142,7 +143,8 @@ async function runAutoConfirm(db: DatabaseSync, embedder: Embedder, reviewer: st
 }
 
 function residueReport(db: DatabaseSync): ResidueReport {
-  const coverage = getCurrentCoverage(db);
+  // The residue left after this pipeline's own machine confirmations.
+  const coverage = getCurrentCoverage(db, { includeMachine: true });
   let untiledAbilities = 0;
   let untiledSpans = 0;
   for (const view of coverage.values()) {
@@ -197,7 +199,7 @@ async function costEstimate(db: DatabaseSync): Promise<CostEstimate> {
       // changes between these ~400 read-only `prepareLuna` calls, so recomputing the full-corpus
       // coverage on every one of them (prepareLuna's own default when no snapshot is given) is
       // pure waste here — see PrepareLunaOptions.coverage.
-      const coverage = getCurrentCoverage(clone);
+      const coverage = getCurrentCoverage(clone, { includeMachine: true });
       for (;;) {
         let prepared;
         try {
@@ -263,7 +265,8 @@ export async function runPipeline8b(db: DatabaseSync, options: Pipeline8bOptions
   const reapply = reapplyLeafSurfaces(db);
   const autoConfirm = await runAutoConfirm(db, embedder, opts.reviewer, opts.maxConfirmRounds);
   reapplyLeafSurfaces(db); // corpus-wide sweep so every ability sees every surface just confirmed
-  const compile = await runCompileGates(db, embedder, opts.describerSimilarityFloor);
+  // This pipeline gates its own machine confirmations, so it reads the machine view.
+  const compile = await runCompileGates(db, embedder, opts.describerSimilarityFloor, undefined, { includeMachine: true });
   const residue = residueReport(db);
   const cost_estimate = await costEstimate(db);
   return { refresh, reapply, auto_confirm: autoConfirm, compile, residue, cost_estimate };
@@ -283,6 +286,8 @@ export type GatesOnlyReport = { compile: CompileGateReport };
 export type GatesOnlyOptions = Pick<Pipeline8bOptions, "describerSimilarityFloor"> & {
   /** Restrict compile+gate to this set of ability versions (a pilot sample, for example). */
   abilityVersionIds?: ReadonlySet<number>;
+  /** Leaf view; the default trusted view gates only human and derived leaves. */
+  view?: CoverageView;
 };
 
 /**
@@ -297,7 +302,7 @@ export type GatesOnlyOptions = Pick<Pipeline8bOptions, "describerSimilarityFloor
 export async function runGatesOnly(db: DatabaseSync, options: GatesOnlyOptions = {}): Promise<GatesOnlyReport> {
   const floor = options.describerSimilarityFloor ?? DEFAULT_OPTIONS.describerSimilarityFloor;
   const embedder = localEmbedder();
-  const compile = await runCompileGates(db, embedder, floor, options.abilityVersionIds);
+  const compile = await runCompileGates(db, embedder, floor, options.abilityVersionIds, options.view ?? {});
   return { compile };
 }
 

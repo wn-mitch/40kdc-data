@@ -5,10 +5,11 @@ import type { Questions, SystemOneResult } from "@typesafe-ai/sdk";
 import { describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import type { Embedder } from "../src/round5c/embeddings.js";
-import { confirmSurface } from "../src/round5c/leaves.js";
+
 import { runJevV2Proposer } from "../src/round5c/jev-v2.js";
 import type { JevClient } from "../src/round5c/jev-core.js";
 import type { Span } from "../src/round5c/jev-proposer.js";
+import { confirmSurface } from "./round5c-human.js";
 
 // Fabricated wording only; no GW rule prose.
 

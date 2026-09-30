@@ -116,7 +116,7 @@ describe("Round 5C family version upgrade", () => {
       db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = 'attack' AND version = 1").run();
       db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'r', 'legacy', 'x')").run(bearer.span, model);
       legacyLeaf(db, "hide", TARGETED_MODEL, "attack", 1, { direction: "targeted", unit: "this-model", attack_type: "any" });
-      db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, batch_id, created_at) VALUES (?, ?, 'active', 'legacy', 'x')").run(TARGETED.toLowerCase(), bearer.fingerprint);
+      db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, batch_id, created_at) VALUES (?, ?, 'active', 'human', 'legacy', 'x')").run(TARGETED.toLowerCase(), bearer.fingerprint);
 
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 3, repointed_surfaces: 1, unmapped: [] });

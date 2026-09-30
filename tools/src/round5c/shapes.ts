@@ -9,6 +9,8 @@ import { getCurrentCoverage } from "./coverage.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
 import { untiledRuns } from "./leaves.js";
+import { assertReviewer, requireHuman, type Actor } from "./authority.js";
+import { tiledSources } from "./leaf-view.js";
 
 /**
  * Shapes: sources fully described by leaves, grouped by the order of their leaf roles and
@@ -28,36 +30,9 @@ export class ShapeError extends Error {
 
 type Member = { id: number; faction_id: string; ability_id: string; name: string | null; source_hash: string; source_text: string; leaves: CompileLeaf[] };
 
-/** Current, fully described sources and their leaves, optionally for one faction. */
+/** Current sources fully described by trusted leaves, optionally for one faction. */
 function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
-  const coverage = getCurrentCoverage(db);
-  const abilities = db.prepare(`
-    SELECT id, faction_id, ability_id, name, source_hash, source_text FROM abilities
-    WHERE current = 1 AND (? IS NULL OR faction_id = ?) ORDER BY faction_id, ability_id
-  `).all(factionId, factionId) as Array<Omit<Member, "leaves">>;
-  const leaves = new Map<number, CompileLeaf[]>();
-  for (const row of db.prepare(`
-    SELECT source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
-      fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
-    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
-    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active'
-  `).all() as Array<{ ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string; family_id: string; family_version: number; parameters_json: string }>) {
-    const list = leaves.get(row.ability_version_id) ?? [];
-    list.push({
-      role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
-      start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
-    });
-    leaves.set(row.ability_version_id, list);
-  }
-  return abilities.flatMap((ability) => {
-    const view = coverage.get(ability.id);
-    const own = leaves.get(ability.id);
-    if (!view || !own?.length || untiledRuns(view).length > 0) return [];
-    return [{ ...ability, leaves: own }];
-  });
+  return tiledSources(db, { factionId });
 }
 
 type EntryState = { status: string; inputs_hash: string; mechanics_hash: string };
@@ -175,8 +150,10 @@ function parse(value: unknown): { reviewer: string; signature: string; ids: numb
   return { reviewer: input.reviewer, signature: input.signature, ids: [...new Set(input.ability_version_ids as number[])] };
 }
 
-function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected"): { batch_id: string; recorded: number } {
+function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected", actor: Actor): { batch_id: string; recorded: number } {
+  requireHuman(actor, `${status === "approved" ? "approve" : "reject"} compiled shapes`);
   const input = parse(value);
+  assertReviewer(actor, input.reviewer);
   return withTransaction(db, () => {
     const members = new Map(tiledMembers(db, null).map((member) => [member.id, member]));
     const batchId = `batch_${randomUUID()}`;
@@ -217,13 +194,13 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
 }
 
 /** Approve the compiled entry of each listed member of one shape. */
-export function approveShape(db: DatabaseSync, value: unknown): { batch_id: string; recorded: number } {
-  return decide(db, value, "approved");
+export function approveShape(db: DatabaseSync, value: unknown, actor: Actor): { batch_id: string; recorded: number } {
+  return decide(db, value, "approved", actor);
 }
 
 /** Refuse the compiled entry of each listed member until its leaves change. */
-export function rejectShapeMembers(db: DatabaseSync, value: unknown): { batch_id: string; recorded: number } {
-  return decide(db, value, "rejected");
+export function rejectShapeMembers(db: DatabaseSync, value: unknown, actor: Actor): { batch_id: string; recorded: number } {
+  return decide(db, value, "rejected", actor);
 }
 
 /** Text-keyed batch members this module owns. */

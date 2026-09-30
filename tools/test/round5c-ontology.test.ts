@@ -11,7 +11,7 @@ import { getWorkbenchRevision, initializeWorkbench } from "../src/round5c/db.js"
 import { getFamilyCandidate, getOntology, judgeCandidate, mapCandidate, setCandidateState } from "../src/round5c/ontology.js";
 import { backfillFamilyCandidates } from "../src/round5c/ontology-store.js";
 import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
-import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
+import { applyAnnotationBatch, undoBatch } from "./round5c-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;

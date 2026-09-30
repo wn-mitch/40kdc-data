@@ -103,6 +103,13 @@ export function normalizedSurface(source: string): string {
   return normalizedProjection(source).text;
 }
 
+const SURFACE_EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
+
+/** The leaf-surface key of source wording: normalized, without edge punctuation. */
+export function leafSurfaceKey(text: string): string {
+  return normalizedSurface(text.replace(SURFACE_EDGE_PUNCTUATION, ""));
+}
+
 function record(value: unknown, label: string): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError(`${label} must be an object.`);
   return value as Record<string, unknown>;

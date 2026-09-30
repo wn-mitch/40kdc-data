@@ -87,7 +87,7 @@ function conflictItem(db: DatabaseSync, factionId: string | null): QueueItem | n
         JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
         JOIN semantic_families ON semantic_families.id = fingerprints.family_id
           AND semantic_families.version = fingerprints.family_version
-        WHERE annotations.status = 'active'
+        WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
           AND annotation_spans.ability_version_id = abilities.id
           AND annotation_spans.fragment = source_spans.fragment
           AND annotation_spans.start_byte < source_spans.end_byte
@@ -181,7 +181,7 @@ function broadSeedItems(db: DatabaseSync, factionId: string | null): QueueItem[]
   const spans = db.prepare(`
     SELECT source_spans.exact_text FROM annotations
     JOIN source_spans ON source_spans.id = annotations.span_id
-    WHERE annotations.status = 'active'
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
     UNION ALL
     SELECT source_spans.exact_text FROM proposals
     JOIN source_spans ON source_spans.id = proposals.span_id
@@ -258,7 +258,7 @@ function unparsedSourceItems(db: DatabaseSync, factionId: string | null, pending
     WHERE abilities.current = 1 AND (? IS NULL OR abilities.faction_id = ?)
       AND NOT EXISTS (
         SELECT 1 FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-        WHERE source_spans.ability_version_id = abilities.id AND annotations.status = 'active'
+        WHERE source_spans.ability_version_id = abilities.id AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
       )
       AND NOT EXISTS (
         SELECT 1 FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id

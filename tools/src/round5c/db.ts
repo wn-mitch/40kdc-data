@@ -12,6 +12,7 @@ import { COMPILED_SCHEMA, COMPILED_TABLES, upgradeCompiledCore } from "./compile
 import { LEAF_PROPOSAL_KINDS_MARKER, LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { normalizedSurface } from "./matching.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
+import { AUTHORITY_INDEXES, needsAuthorityMigration, upgradeAuthority } from "./authority-migration.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string): DatabaseType };
@@ -138,15 +139,21 @@ CREATE TABLE IF NOT EXISTS annotations (
   fingerprint_id TEXT NOT NULL,
   status TEXT NOT NULL CHECK(status IN ('active', 'retracted', 'superseded')),
   origin TEXT NOT NULL CHECK(length(trim(origin)) > 0),
-  authority_kind TEXT NOT NULL DEFAULT 'human' CHECK(authority_kind IN ('human', 'stamp')),
+  -- human: Will decided this row; derived: a mechanical copy of a human decision (a human-founded
+  -- surface applied elsewhere, a version migration); machine: a model or pipeline. No default, so
+  -- a writer that forgets to say fails. See authority.ts.
+  authority_kind TEXT NOT NULL CHECK(authority_kind IN ('human', 'derived', 'machine')),
   confirmed_by TEXT NOT NULL,
   batch_id TEXT NOT NULL,
   supersedes_id INTEGER,
+  -- The surface whose application wrote this row; undoing that surface's founding retracts it.
+  derived_from_surface_id INTEGER,
   created_at TEXT NOT NULL,
   FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(fingerprint_id) REFERENCES fingerprints(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(supersedes_id) REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+  FOREIGN KEY(supersedes_id) REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+  FOREIGN KEY(derived_from_surface_id) REFERENCES leaf_surfaces(id) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) STRICT;
 
 CREATE INDEX IF NOT EXISTS annotations_active_span_fingerprint_lookup
@@ -188,7 +195,7 @@ CREATE TABLE IF NOT EXISTS ability_reviews (
 CREATE TABLE IF NOT EXISTS gaps (
   id INTEGER PRIMARY KEY,
   ability_version_id INTEGER NOT NULL,
-  type TEXT NOT NULL CHECK(type IN ('LEAF_GAP', 'RELATION_GAP', 'COMPOSITION_GAP', 'DSL_GAP')),
+  type TEXT NOT NULL CHECK(type IN ('LEAF_GAP', 'RELATION_GAP', 'COMPOSITION_GAP', 'DSL_GAP', 'SOURCE_AMBIGUITY')),
   status TEXT NOT NULL CHECK(status IN ('open', 'resolved')),
   description TEXT NOT NULL CHECK(length(trim(description)) > 0),
   batch_id TEXT,
@@ -291,15 +298,15 @@ export function withTransaction<T>(db: DatabaseSync, fn: () => T): T {
 }
 
 /**
- * SQL predicate: this pending proposal restates an active annotation, the same fingerprint on the
- * same exact bytes. Such a proposal is not a decision anyone needs to make, so every review
+ * SQL predicate: this pending proposal restates an active trusted annotation, the same fingerprint
+ * on the same exact bytes. A machine row restating it does not settle it: Will still reviews it. Such a proposal is not a decision anyone needs to make, so every review
  * surface treats it as resolved. It stays a derived condition rather than a status write, so
  * undoing the annotation makes the proposal reviewable again.
  */
 export const RESTATES_ACTIVE_ANNOTATION = `EXISTS (
   SELECT 1 FROM annotations AS restated
   JOIN source_spans AS restated_span ON restated_span.id = restated.span_id
-  WHERE restated.status = 'active'
+  WHERE restated.status = 'active' AND restated.authority_kind IN ('human', 'derived')
     AND restated.fingerprint_id = proposals.fingerprint_id
     AND restated_span.ability_version_id = source_spans.ability_version_id
     AND restated_span.fragment = source_spans.fragment
@@ -748,6 +755,10 @@ export function initializeWorkbench(db: DatabaseSync): void {
     upgradeDataEpoch(db);
     upgradeOntologyBackfill(db);
   });
+  // After the stamp retirement and version migrations above, which still write the old shape.
+  upgradeAuthority(db);
+  db.exec(AUTHORITY_INDEXES);
+  withTransaction(db, () => upgradeDataEpoch(db));
   initialized.add(db);
 }
 
@@ -758,6 +769,14 @@ export function initializeWorkbench(db: DatabaseSync): void {
 function backupBeforeStampRetirement(db: DatabaseSync, databasePath: string): void {
   if (!tableExists(db, "stamps")) return;
   const backup = `${databasePath}.pre5e`;
+  if (existsSync(backup)) return;
+  db.prepare("VACUUM INTO ?").run(backup);
+}
+
+/** Keep a copy of a database before the one-way authority migration (`*.pre5d`). */
+function backupBeforeAuthority(db: DatabaseSync, databasePath: string): void {
+  if (!needsAuthorityMigration(db)) return;
+  const backup = `${databasePath}.pre5d`;
   if (existsSync(backup)) return;
   db.prepare("VACUUM INTO ?").run(backup);
 }
@@ -783,6 +802,7 @@ export function openWorkbench(path?: string): DatabaseSync {
       }
     }
     if (databasePath !== ":memory:") backupBeforeStampRetirement(db, databasePath);
+    if (databasePath !== ":memory:") backupBeforeAuthority(db, databasePath);
     initializeWorkbench(db);
     return db;
   } catch (error) {

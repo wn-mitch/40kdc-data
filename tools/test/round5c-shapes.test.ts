@@ -6,12 +6,13 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
-import { confirmSurface, moveSurface } from "../src/round5c/leaves.js";
+
 import { preparePublication, publishPublication } from "../src/round5c/publish.js";
 import { publishableEntries } from "../src/round5c/publish-queue.js";
-import { undoBatch } from "../src/round5c/review.js";
-import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/round5c/shapes.js";
+
+import { getShape, listShapes } from "../src/round5c/shapes.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };

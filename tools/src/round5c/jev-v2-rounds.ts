@@ -4,6 +4,7 @@ import type { LeafRole } from "./contracts.js";
 import type { Embedder } from "./embeddings.js";
 import { type CompileLeaf, leafFragment } from "./compile.js";
 import { CompileError } from "./compile-fragments.js";
+import { machineActor } from "./authority.js";
 import { confirmSurface, LeafError, reapplyLeafSurfaces } from "./leaves.js";
 import { pilotSpans, type Span } from "./jev-proposer.js";
 import { runJevV2Proposer, type JevV2PieceResult, type JevV2Result } from "./jev-v2.js";
@@ -121,7 +122,7 @@ export async function runJevV2Rounds(
   for (let round = 1; round <= maxRounds; round += 1) {
     if (budget.exhausted()) break;
     reapplyLeafSurfaces(db); // idempotent; propagates every prior round's stamps first
-    const spansAtStart: Span[] = pilotSpans(db, sample);
+    const spansAtStart: Span[] = pilotSpans(db, sample, { includeMachine: true });
     if (spansAtStart.length === 0) break; // nothing left in the sample to ask about
     const askedKeys = new Set(spansAtStart.map((span) => spanKey(span)));
 
@@ -137,9 +138,8 @@ export async function runJevV2Rounds(
         if (!compileFragmentValidates(piece, { role: resolution.role, family_id: resolution.family_id!, family_version: resolution.family_version!, parameters: resolution.parameters })) continue;
         try {
           const confirmed = confirmSurface(db, {
-            reviewer: `${options.reviewerPrefix ?? "jev-v2"}-round-${round}`, exact_text: piece.text,
-            family_id: resolution.family_id, family_version: resolution.family_version, parameters: resolution.parameters,
-          });
+            exact_text: piece.text, family_id: resolution.family_id, family_version: resolution.family_version, parameters: resolution.parameters,
+          }, machineActor(`${options.reviewerPrefix ?? "jev-v2"}-round-${round}`));
           stamps.push({
             round, batch_id: confirmed.batch_id, ability_id: piece.ability_id, faction_id: piece.faction_id,
             start_byte: piece.start_byte, end_byte: piece.end_byte, text: piece.text,
@@ -153,13 +153,13 @@ export async function runJevV2Rounds(
     }
 
     reapplyLeafSurfaces(db); // spread this round's stamps before measuring what's left
-    const spansAtEnd: Span[] = pilotSpans(db, sample);
+    const spansAtEnd: Span[] = pilotSpans(db, sample, { includeMachine: true });
     const stillUntiledAskedSpans = spansAtEnd.filter((span) => askedKeys.has(spanKey(span))).length;
     const askedSpansClosedDirectly = askedKeys.size - stillUntiledAskedSpans;
     const totalClosedThisRound = spansAtStart.length - spansAtEnd.length;
     const spreadResolvedSpans = Math.max(0, totalClosedThisRound - askedSpansClosedDirectly);
 
-    const gateReport: CompileGateReport = await runCompileGates(db, embedder, options.describerSimilarityFloor ?? 0.55, abilityVersionIds);
+    const gateReport: CompileGateReport = await runCompileGates(db, embedder, options.describerSimilarityFloor ?? 0.55, abilityVersionIds, { includeMachine: true });
     rounds.push({
       round, untiled_spans_at_start: spansAtStart.length, jev_requests: jevResult.requests,
       jev_cost_usd: Math.round((budget.totalCostUsd - costBefore) * 1e8) / 1e8, multi_role_pieces: jevResult.multi_role_pieces,

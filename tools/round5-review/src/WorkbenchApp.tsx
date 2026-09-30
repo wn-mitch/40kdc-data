@@ -24,7 +24,7 @@ type Span = {
 type Annotation = Span & {
   span_id: number;
   confirmed_by: string;
-  authority_kind: "human" | "stamp";
+  authority_kind: "human" | "derived" | "machine";
   rule_authorized_by: string | null;
 };
 type Proposal = Span & { reason: unknown; score: number | null; status: string };
@@ -75,6 +75,8 @@ const ROLE_LABELS: Record<Role, string> = {
 };
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"];
 const REVIEWER = "local-reviewer";
+/** `?abilities=1,2,3` limits the Sources list to those source versions (one pilot step's cohort). */
+const ONLY_ABILITIES = new URLSearchParams(window.location.search).get("abilities")?.replace(/[^0-9,]/g, "") || null;
 const VIEWS: { id: View; label: string }[] = [
   { id: "leaves", label: "Leaves" },
   { id: "proposals", label: "AI leaf proposals" },
@@ -202,8 +204,8 @@ function SourceFragment({ ability, fragment, active, inspect, select }: {
           ? <span key={segment.start} className={`wb-paint wb-role-${role} wb-proposal wb-selected wb-draft-preview`}>{segment.text}</span>
           : <span key={segment.start} className="wb-unpainted">{segment.text}</span>;
         return <span key={segment.start} role="button" tabIndex={0}
-          className={`wb-paint wb-role-${role} wb-${paint.kind}${selected ? " wb-selected" : ""}`}
-          title={`${paint.kind === "annotation" ? paint.span.authority_kind === "stamp" ? "Rule-derived" : "Confirmed" : "Unconfirmed proposal"}: ${paint.span.role}, ${paint.span.family_id ?? "unresolved"}. Bytes ${segment.start}–${segment.end}${segment.paints.length > 1 ? ". Multiple overlapping spans; use the inspector list." : ""}`}
+          className={`wb-paint wb-role-${role} wb-${paint.kind}${paint.kind === "annotation" && paint.span.authority_kind === "machine" ? " wb-machine" : ""}${selected ? " wb-selected" : ""}`}
+          title={`${paint.kind === "annotation" ? paint.span.authority_kind === "machine" ? "Machine label, not reviewed" : paint.span.authority_kind === "derived" ? "Confirmed (applied from a decided wording)" : "Confirmed" : "Unconfirmed proposal"}: ${paint.span.role}, ${paint.span.family_id ?? "unresolved"}. Bytes ${segment.start}–${segment.end}${segment.paints.length > 1 ? ". Multiple overlapping spans; use the inspector list." : ""}`}
           onClick={() => { if (window.getSelection()?.isCollapsed !== false) inspect(ability, paint.span, paint.kind); }}
           onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); inspect(ability, paint.span, paint.kind); } }}>
           {segment.text}
@@ -351,7 +353,7 @@ export default function WorkbenchApp() {
   useEffect(() => {
     const controller = new AbortController();
     setPageLoading(true); setError(null);
-    api<AbilityPage>(`/abilities?limit=12&reviewState=${reviewState}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}${search ? `&query=${encodeURIComponent(search)}` : ""}${faction ? `&faction=${encodeURIComponent(faction)}` : ""}`, undefined, controller.signal)
+    api<AbilityPage>(`/abilities?limit=12&reviewState=${reviewState}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}${search ? `&query=${encodeURIComponent(search)}` : ""}${faction ? `&faction=${encodeURIComponent(faction)}` : ""}${ONLY_ABILITIES ? `&abilities=${ONLY_ABILITIES}` : ""}`, undefined, controller.signal)
       .then((result) => {
         setPage((current) => ({
           ...result,
@@ -816,10 +818,10 @@ export default function WorkbenchApp() {
               onChanged={async () => { await refreshAbilities([ability.id]); }}
               setStatus={setStatus} />
             <div className="wb-span-list"><h3>Source spans</h3>{[...ability.annotations.map((span) => ({ span, kind: "annotation" as const })), ...ability.proposals.filter(pending).map((span) => ({ span, kind: "proposal" as const }))].map(({ span, kind }) => <button key={`${kind}-${span.id}`} className={`wb-span-row${draft?.span?.id === span.id && draft.kind === kind ? " current" : ""}`} onClick={() => inspect(ability, span, kind)}>
-              <span>{span.exact_text}</span><small>{kind === "annotation" ? span.authority_kind === "stamp" ? "Rule-derived" : "Confirmed" : "Proposal"} · {span.role} · {span.start_byte}–{span.end_byte}</small></button>)}
+              <span>{span.exact_text}</span><small>{kind === "annotation" ? span.authority_kind === "machine" ? "Machine" : span.authority_kind === "derived" ? "Applied" : "Confirmed" : "Proposal"} · {span.role} · {span.start_byte}–{span.end_byte}</small></button>)}
               {!ability.annotations.length && !ability.proposals.filter(pending).length && <p className="wb-help">Select a source phrase to create a grounded annotation or flag a leaf gap.</p>}
             </div>
-            {draft && draft.ability_id === ability.id && <section className="wb-editor" aria-labelledby="wb-edit-title"><h3 id="wb-edit-title">{draft.kind === "annotation" ? (draft.span as Annotation).authority_kind === "stamp" ? "Correct rule-derived span" : "Correct confirmed span" : draft.kind === "proposal" ? "Review proposal" : "Paint selected source"}</h3>
+            {draft && draft.ability_id === ability.id && <section className="wb-editor" aria-labelledby="wb-edit-title"><h3 id="wb-edit-title">{draft.kind === "annotation" ? (draft.span as Annotation).authority_kind === "machine" ? "Review machine label" : "Correct confirmed span" : draft.kind === "proposal" ? "Review proposal" : "Paint selected source"}</h3>
               {boundaryError ? <p className="error" role="alert">{boundaryError}</p> : <blockquote>{selectedText}</blockquote>}
               <div className="wb-editor-grid"><label>Fragment<select value={draft.fragment} onChange={(event) => editDraft({ fragment: event.target.value })}>{ability.fragments.map((fragment) => <option key={fragment.fragment}>{fragment.fragment}</option>)}</select></label>
                 {connectiveProposal
@@ -885,7 +887,7 @@ export default function WorkbenchApp() {
                 <details><summary>Parameters JSON · advanced</summary><textarea rows={5} spellCheck={false} value={draft.parameters} onChange={(event) => editDraft({ parameters: event.target.value })} /></details>
                 <label className="wb-check"><input type="checkbox" checked={draft.overlap} onChange={(event) => editDraft({ overlap: event.target.checked })} /><span>Approve shared qualifier / containment with a different role</span></label></>}
               {draft.span && <details><summary>Span evidence and provenance</summary><dl><dt>Origin</dt><dd>{draft.span.origin}</dd><dt>Decision / proposal</dt><dd>{draft.span.id}</dd>
-                {draft.kind === "annotation" && <><dt>{(draft.span as Annotation).authority_kind === "stamp" ? "Rule authorized by" : "Confirmed by"}</dt><dd>{(draft.span as Annotation).rule_authorized_by ?? (draft.span as Annotation).confirmed_by}</dd></>}
+                {draft.kind === "annotation" && <><dt>{(draft.span as Annotation).authority_kind === "machine" ? "Labelled by (machine)" : "Confirmed by"}</dt><dd>{(draft.span as Annotation).rule_authorized_by ?? (draft.span as Annotation).confirmed_by}</dd></>}
                 {draft.kind === "proposal" && <><dt>Status</dt><dd>{(draft.span as Proposal).status}</dd><dt>Score</dt><dd>{(draft.span as Proposal).score ?? "Unknown"}</dd><dt>Reason</dt><dd><pre>{readable((draft.span as Proposal).reason)}</pre></dd></>}
               </dl></details>}
               <div className="wb-decision-actions">{connectiveProposal ? <>{pendingConnectiveProposal && <button className="primary" disabled={!canWrite || reselecting || !!boundaryError || !!draftChanged} onClick={() => decide("confirm-connective")}>Confirm connective <kbd>A</kbd></button>}

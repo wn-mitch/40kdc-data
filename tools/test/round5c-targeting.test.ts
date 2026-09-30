@@ -11,8 +11,9 @@ import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
 import { getAbility } from "../src/round5c/review.js";
 import { surfaceWarnings } from "../src/round5c/surface-lint.js";
-import { confirmSurface, leafBoard, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
+import { leafBoard, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { confirmSurface } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -52,7 +53,7 @@ function legacyLeaf(db: DatabaseSync, abilityId: string, exactText: string, fami
   db.prepare("INSERT OR IGNORE INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', 'r', 'x')").run();
   db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'r', 'legacy', 'x')").run(spanId, fingerprint);
   if (surface) {
-    db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, batch_id, created_at) VALUES (?, ?, 'active', 'legacy', 'x')").run(exactText.toLowerCase(), fingerprint);
+    db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, batch_id, created_at) VALUES (?, ?, 'active', 'human', 'legacy', 'x')").run(exactText.toLowerCase(), fingerprint);
   }
   return fingerprint;
 }

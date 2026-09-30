@@ -6,7 +6,8 @@ import { hashJson } from "../src/round4/hash.js";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
-import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
+import { applyAnnotationBatch, undoBatch } from "./round5c-human.js";
+
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 
@@ -56,8 +57,8 @@ describe("Round 5C connective coverage", () => {
         VALUES ('human-review', 'review', 'reviewer', '2026-01-01T00:00:00.000Z')
       `).run();
       db.prepare(`
-        INSERT INTO annotations (span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at)
-        VALUES (?, ?, 'active', 'manual', 'reviewer', 'human-review', NULL, '2026-01-01T00:00:00.000Z')
+        INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
+        VALUES (?, ?, 'active', 'manual', 'human', 'reviewer', 'human-review', NULL, '2026-01-01T00:00:00.000Z')
       `).run(effectSpanId, fingerprintId);
 
       const pending = getAbilityCoverage(db, abilityId);

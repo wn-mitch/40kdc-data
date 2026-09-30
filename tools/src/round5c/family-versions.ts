@@ -192,6 +192,7 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
     return batchId;
   };
   const member = db.prepare("INSERT OR IGNORE INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)");
+  const recordsAuthority = (db.prepare("PRAGMA table_info(annotations)").all() as Array<{ name: string }>).some((column) => column.name === "derived_from_surface_id");
   const sources = [...new Map(FAMILY_VERSION_MAPPINGS.map((item) => [`${item.family}@${item.from}`, item])).values()];
   for (const mapping of sources) {
     const fingerprints = db.prepare(`
@@ -201,9 +202,9 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
     `).all(mapping.family, mapping.from) as Array<{ id: string; parameters_json: string }>;
     for (const fingerprint of fingerprints) {
       const annotations = db.prepare(`
-        SELECT id, span_id, origin, confirmed_by FROM annotations
+        SELECT id, span_id, origin, confirmed_by, ${recordsAuthority ? "authority_kind, derived_from_surface_id" : "'human' AS authority_kind, NULL AS derived_from_surface_id"} FROM annotations
         WHERE fingerprint_id = ? AND status = 'active' ORDER BY id
-      `).all(fingerprint.id) as Array<{ id: number; span_id: number; origin: string; confirmed_by: string }>;
+      `).all(fingerprint.id) as Array<{ id: number; span_id: number; origin: string; confirmed_by: string; authority_kind: string; derived_from_surface_id: number | null }>;
       const mapped = mapToLatest(mapping.family, mapping.from, JSON.parse(fingerprint.parameters_json) as Record<string, unknown>);
       if (!mapped) {
         if (annotations.length > 0) {
@@ -224,10 +225,18 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
           report.migrated_annotations += 1;
           continue;
         }
-        const inserted = db.prepare(`
-          INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
-          VALUES (?, ?, 'active', ?, 'human', ?, ?, ?, ?)
-        `).run(annotation.span_id, successor, annotation.origin, annotation.confirmed_by, batch(), annotation.id, now);
+        // A migrated copy keeps the authority and surface link of the row it replaces. A database
+        // that predates recorded authority is migrated right after (authority-migration.ts),
+        // which classifies these copies by the row they supersede.
+        const inserted = recordsAuthority
+          ? db.prepare(`
+            INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
+            VALUES (?, ?, 'active', ?, ?, ?, ?, ?, ?, ?)
+          `).run(annotation.span_id, successor, annotation.origin, annotation.authority_kind, annotation.confirmed_by, batch(), annotation.id, annotation.derived_from_surface_id, now)
+          : db.prepare(`
+            INSERT INTO annotations (span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at)
+            VALUES (?, ?, 'active', ?, ?, ?, ?, ?)
+          `).run(annotation.span_id, successor, annotation.origin, annotation.confirmed_by, batch(), annotation.id, now);
         member.run(batch(), "annotation-migrated", String(inserted.lastInsertRowid));
         report.migrated_annotations += 1;
       }

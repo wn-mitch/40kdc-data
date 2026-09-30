@@ -145,13 +145,15 @@ function prototypeRows(db: DatabaseSync): Prototype[] {
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active' AND abilities.current = 1
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND abilities.current = 1
       AND fingerprints.status = 'active' AND semantic_families.status = 'active'
     ORDER BY annotations.id
   `).all() as unknown as Prototype[];
 }
 
-export function candidateChunks(db: DatabaseSync, query: string): ChunkMatch[] {
+/** Chunks matching an FTS query, optionally only within the given source versions (filtered in SQL). */
+export function candidateChunks(db: DatabaseSync, query: string, abilityVersionIds?: ReadonlySet<number>): ChunkMatch[] {
+  const scope = abilityVersionIds ? `AND source_chunks.ability_version_id IN (${[...abilityVersionIds].map(Number).filter(Number.isSafeInteger).join(",") || "NULL"})` : "";
   return db.prepare(`
     SELECT source_chunks.ability_version_id, abilities.faction_id, abilities.ability_id,
       abilities.source_hash, abilities.source_text, source_chunks.fragment,
@@ -160,7 +162,7 @@ export function candidateChunks(db: DatabaseSync, query: string): ChunkMatch[] {
     FROM source_chunks_fts
     JOIN source_chunks ON source_chunks.id = source_chunks_fts.rowid
     JOIN abilities ON abilities.id = source_chunks.ability_version_id
-    WHERE source_chunks_fts MATCH ? AND abilities.current = 1
+    WHERE source_chunks_fts MATCH ? AND abilities.current = 1 ${scope}
     ORDER BY bm25(source_chunks_fts), source_chunks.id
   `).all(query) as unknown as ChunkMatch[];
 }
@@ -184,7 +186,7 @@ function existingDecision(
           JOIN semantic_families ON semantic_families.id = fingerprints.family_id
             AND semantic_families.version = fingerprints.family_version
           WHERE annotations.span_id = source_spans.id
-            AND annotations.status = 'active' AND semantic_families.role = ?
+            AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND semantic_families.role = ?
             AND source_spans.start_byte < ? AND ? < source_spans.end_byte
         )
         OR EXISTS (
@@ -565,7 +567,7 @@ export function unresolvedClusters(db: DatabaseSync): Array<{ signature: string;
       AND proposals.status IN ('pending', 'unresolved')
       AND NOT EXISTS (
         SELECT 1 FROM annotations
-        WHERE annotations.span_id = source_spans.id AND annotations.status = 'active'
+        WHERE annotations.span_id = source_spans.id AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
       )
     ORDER BY proposals.id
   `).all() as FrontierRow[];
@@ -643,7 +645,7 @@ export function getFrontier(db: DatabaseSync): {
           JOIN semantic_families AS annotation_families
             ON annotation_families.id = annotation_fingerprints.family_id
             AND annotation_families.version = annotation_fingerprints.family_version
-          WHERE annotations.status = 'active'
+          WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
             AND annotation_spans.ability_version_id = abilities.id
             AND annotation_spans.fragment = source_spans.fragment
             AND annotation_spans.start_byte < source_spans.end_byte

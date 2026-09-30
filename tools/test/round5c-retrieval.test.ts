@@ -8,8 +8,9 @@ import { afterEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { insertSpan, initializeWorkbench } from "../src/round5c/db.js";
 import { getFrontier, proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
-import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
+
 import { refreshSources } from "../src/round5c/source.js";
+import { applyAnnotationBatch, undoBatch } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -62,8 +63,8 @@ function confirmReroll(db: DatabaseSync, abilityId: string, subset: "ones" | "fa
     VALUES (?, 'fixture', 'reviewer', '2026-01-01T00:00:00.000Z')
   `).run(batchId);
   const annotation = db.prepare(`
-    INSERT INTO annotations (span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at)
-    VALUES (?, ?, 'active', 'fixture', 'reviewer', ?, NULL, '2026-01-01T00:00:00.000Z')
+    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
+    VALUES (?, ?, 'active', 'fixture', 'human', 'reviewer', ?, NULL, '2026-01-01T00:00:00.000Z')
   `).run(spanId, fingerprintId, batchId);
   return Number(annotation.lastInsertRowid);
 }

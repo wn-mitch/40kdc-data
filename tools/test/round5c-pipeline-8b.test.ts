@@ -6,9 +6,10 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
-import { confirmSurface } from "../src/round5c/leaves.js";
+
 import { refreshSources } from "../src/round5c/source.js";
 import { runGatesOnly, runPipeline8b } from "../src/round5c/pipeline-8b.js";
+import { confirmSurface } from "./round5c-human.js";
 
 // Fabricated wording only; no GW rule prose.
 
@@ -150,7 +151,7 @@ describe("pipeline-8b", () => {
       const cachedAfterFull = embeddingRows();
       expect(cachedAfterFull).toBeGreaterThan(0);
 
-      const gatesOnly = await runGatesOnly(db, { describerSimilarityFloor: 0 });
+      const gatesOnly = await runGatesOnly(db, { describerSimilarityFloor: 0, view: { includeMachine: true } });
       expect(gatesOnly.compile).toEqual(full.compile);
       // Every text `runGatesOnly` needed to embed (each gated ability's rendered/source pair) was
       // already cached by the full run above — a re-gate embeds nothing new.
@@ -164,7 +165,7 @@ describe("pipeline-8b", () => {
     const db = new DatabaseSyncCtor(":memory:") as DatabaseSync;
     initializeWorkbench(db);
     try {
-      const result = await runGatesOnly(db);
+      const result = await runGatesOnly(db, { view: { includeMachine: true } });
       expect(result.compile).toMatchObject({ abilities_total: 0, fully_tiled: 0, compile_attempted: 0 });
     } finally {
       db.close();
@@ -178,7 +179,7 @@ describe("pipeline-8b", () => {
       expect(full.compile.fully_tiled).toBe(2); // CLOSABLE and CLOSABLE_BAD_SHAPE
       const closableOnlyId = db.prepare("SELECT id FROM abilities WHERE ability_id = ? AND current = 1").get(CLOSABLE) as { id: number };
 
-      const scoped = await runGatesOnly(db, { describerSimilarityFloor: 0, abilityVersionIds: new Set([closableOnlyId.id]) });
+      const scoped = await runGatesOnly(db, { describerSimilarityFloor: 0, abilityVersionIds: new Set([closableOnlyId.id]), view: { includeMachine: true } });
       expect(scoped.compile.abilities_total).toBe(1);
       expect(scoped.compile.fully_tiled).toBe(1);
       expect(scoped.compile.compile_attempted).toBe(1);

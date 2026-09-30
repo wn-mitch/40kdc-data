@@ -64,15 +64,19 @@ const embedText = (text: string) => text.replace(/\*\*/gu, "").replace(/\s+/gu, 
 function pools(db: DatabaseSync): { labelled: Labelled[]; wordings: Wording[] } {
   const board = leafBoard(db, { limit: Infinity });
   const labelled: Labelled[] = [];
+  // Spellings a machine surface already labels: not examples (only trusted labels are), but
+  // not wording to propose again either, so a machine pipeline stays idempotent.
+  const machineLabelled = new Set<string>();
   for (const leaf of board.leaves) {
     if (leaf.retired_version) continue;
     for (const surface of leaf.surfaces) {
+      if (surface.machine_surface_id !== undefined) machineLabelled.add(surface.surface);
       // Only spellings a reviewer decided or annotated; a pending retrieval guess is not a label.
       if (surface.surface_id === null && surface.annotations === 0) continue;
       labelled.push({ surface: surface.surface, text: surface.sample_text, family_id: leaf.family_id, family_version: leaf.family_version, role: leaf.role, parameters: leaf.parameters });
     }
   }
-  const decided = new Set(labelled.map((item) => item.surface));
+  const decided = new Set([...labelled.map((item) => item.surface), ...machineLabelled]);
   const wordings = new Map<string, Wording>();
   for (const item of [...board.untiled, ...board.unlabeled]) {
     if (decided.has(item.surface) || wordings.has(item.surface)) continue;

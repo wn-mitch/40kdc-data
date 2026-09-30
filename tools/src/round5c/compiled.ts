@@ -42,16 +42,17 @@ export function compiledIdentity(mechanics: Mechanics, core: unknown): unknown {
 
 /**
  * Identity of everything a compilation read: the source version and its active leaves (exact
- * bytes and fingerprint). Any leaf change or source change yields a different hash.
+ * bytes, fingerprint and authority). Any leaf, authority or source change yields a different
+ * hash, so an approval never survives a row's authority changing under it.
  */
 export function compilationInputsHash(db: DatabaseSync, abilityVersionId: number): string {
   const ability = db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(abilityVersionId) as { source_hash: string } | undefined;
   if (!ability) throw new RangeError(`Unknown ability version ${abilityVersionId}.`);
   const leaves = db.prepare(`
-    SELECT source_spans.fragment, source_spans.start_byte, source_spans.end_byte, annotations.fingerprint_id
+    SELECT source_spans.fragment, source_spans.start_byte, source_spans.end_byte, annotations.fingerprint_id, annotations.authority_kind
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
-    ORDER BY source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id
+    ORDER BY source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id, annotations.authority_kind
   `).all(abilityVersionId);
   return hashJson({ source_hash: ability.source_hash, leaves });
 }

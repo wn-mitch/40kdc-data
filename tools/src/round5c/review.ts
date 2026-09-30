@@ -14,6 +14,7 @@ import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
 import { RELATION_TYPES } from "../round4b/contracts.js";
+import { assertReviewer, MACHINE_REVIEWERS, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
 
 /** Relations a reviewer may record on a confirmed connective: Round 4B's set plus plain conjunction. */
 const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
@@ -43,7 +44,7 @@ export type AnnotationView = {
   parameters: Record<string, unknown>;
   origin: string;
   confirmed_by: string;
-  authority_kind: "human" | "stamp";
+  authority_kind: "human" | "derived" | "machine";
   rule_authorized_by: string | null;
 };
 
@@ -450,12 +451,27 @@ function activeAnnotationsOverlapping(
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active'
+    WHERE annotations.status = 'active' AND ${TRUSTED_ANNOTATION}
       AND source_spans.ability_version_id = ?
       AND source_spans.start_byte < ?
       AND ? < source_spans.end_byte
     ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(abilityVersionId, endByte, startByte) as AnnotationRow[];
+}
+
+/**
+ * The active machine row a human decision confirms: the same bytes and meaning. The human row
+ * supersedes it (promotion), so undoing the decision brings the machine row back.
+ */
+function machineRowConfirmed(db: DatabaseSync, spanId: number, fingerprintId: string): AnnotationRow | null {
+  return (db.prepare(`
+    SELECT annotations.id, annotations.span_id, source_spans.start_byte, source_spans.end_byte, semantic_families.role, annotations.fingerprint_id
+    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+    JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
+    WHERE annotations.span_id = ? AND annotations.fingerprint_id = ? AND annotations.status = 'active' AND annotations.authority_kind = 'machine'
+    LIMIT 1
+  `).get(spanId, fingerprintId) as AnnotationRow | undefined) ?? null;
 }
 
 function correctionTarget(
@@ -595,8 +611,8 @@ function annotationForDecision(
   createdAt: string,
 ): number {
   const inserted = db.prepare(`
-    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
-    VALUES (?, ?, 'active', ?, 'human', ?, ?, ?, ?)
+    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
+    VALUES (?, ?, 'active', ?, 'human', ?, ?, ?, NULL, ?)
   `).run(
     spanId,
     fingerprintId,
@@ -734,7 +750,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
   const annotationViews = annotations.map(({ parameters_json, ...annotation }) => ({
     ...annotation,
     parameters: parseJsonObject(parameters_json, "annotation parameters"),
-    rule_authorized_by: annotation.authority_kind === "stamp" ? annotation.confirmed_by : null,
+    rule_authorized_by: annotation.authority_kind === "machine" ? annotation.confirmed_by : null,
   }));
   return {
     id: ability.id,
@@ -773,7 +789,7 @@ export function getFactions(db: DatabaseSync): string[] {
 /** Return at most 15 complete current abilities after an opaque source-version cursor. */
 export function getAbilities(
   db: DatabaseSync,
-  options: { limit?: number; cursor?: string; query?: string; factionId?: string; reviewState?: "pending" | "reviewed" } = {},
+  options: { limit?: number; cursor?: string; query?: string; factionId?: string; reviewState?: "pending" | "reviewed"; abilityVersionIds?: readonly number[] } = {},
 ): { items: AbilityView[]; next_cursor: string | null } {
   const limit = options.limit ?? 12;
   if (!Number.isSafeInteger(limit) || limit < 10 || limit > 15) invalid("Ability page size must be an integer from 10 through 15.");
@@ -783,7 +799,9 @@ export function getAbilities(
   if (factionId && factionId.length > 100) invalid("Faction filter is limited to 100 characters.");
   const reviewState = options.reviewState ?? "pending";
   if (reviewState !== "pending" && reviewState !== "reviewed") invalid("Review state must be pending or reviewed.");
-  const scope = hashJson({ query, factionId, reviewState });
+  const only = options.abilityVersionIds?.filter((id) => Number.isSafeInteger(id) && id > 0) ?? null;
+  if (only && only.length > 200) invalid("An ability filter is limited to 200 source versions.");
+  const scope = hashJson({ query, factionId, reviewState, only });
   const search = `%${query.replace(/[\\%_]/g, "\\$&")}%`;
   let after = 0;
   if (options.cursor !== undefined) {
@@ -803,6 +821,7 @@ export function getAbilities(
     SELECT id, faction_id, ability_id, source_hash, source_text, source_type, source_kind, name, fragments_json, current
     FROM abilities WHERE current = 1 AND id > ?
       AND (? IS NULL OR faction_id = ?)
+      ${only ? `AND id IN (${only.join(",") || "NULL"})` : ""}
       AND ${reviewState === "reviewed" ? "" : "NOT "}EXISTS (
         SELECT 1 FROM ability_reviews
         WHERE ability_reviews.ability_version_id = abilities.id
@@ -827,9 +846,11 @@ export function getAbility(db: DatabaseSync, abilityVersionId: number): AbilityV
 }
 
 /** Record the separate whole-context review action for a current source version. */
-export function reviewAbility(db: DatabaseSync, abilityVersionId: number, body: unknown): AbilityView {
+export function reviewAbility(db: DatabaseSync, abilityVersionId: number, body: unknown, actor: Actor): AbilityView {
   if (!Number.isSafeInteger(abilityVersionId) || abilityVersionId < 1) invalid("Ability version id must be positive.");
+  requireHuman(actor, "record a whole-context review");
   const review = parseReviewBody(body);
+  assertReviewer(actor, review.reviewer);
   return withTransaction(db, () => {
     const ability = requireCurrentAbility(db, abilityVersionId, review.source_hash);
     const existing = db.prepare(`
@@ -874,8 +895,11 @@ function proposalTransitionMember(
 export function applyAnnotationBatch(
   db: DatabaseSync,
   body: unknown,
+  actor: Actor,
 ): { batch_id: string; applied: number } {
+  requireHuman(actor, "decide proposals and annotations");
   const batch = parseBatchBody(body);
+  assertReviewer(actor, batch.reviewer);
   return withTransaction(db, () => {
     const batchId = `batch_${randomUUID()}`;
     const createdAt = new Date().toISOString();
@@ -948,6 +972,7 @@ export function applyAnnotationBatch(
 
       const corrected = decision.action === "correct" ? correctionTarget(db, decision) : null;
       validateOverlap(db, decision, corrected);
+      const promoted = corrected ? null : machineRowConfirmed(db, spanId, fingerprint.id);
 
       if (proposal) {
         const outcome = decision.action === "confirm" ? "accepted" : "corrected";
@@ -962,7 +987,7 @@ export function applyAnnotationBatch(
         batch.reviewer,
         batchId,
         proposal?.origin ?? (decision.action === "correct" ? "manual-correction" : "manual"),
-        corrected,
+        corrected ?? promoted,
         createdAt,
       );
       addMember(db, batchId, "annotation", annotationId);
@@ -1032,9 +1057,11 @@ export function undoBatch(
   db: DatabaseSync,
   batchId: string,
   body: unknown,
+  actor: Actor,
 ): { batch_id: string; reversed_batch_id: string } {
   if (!batchId.trim()) invalid("batch id must be nonblank.");
   const undo = parseUndoBody(body);
+  assertReviewer(actor, undo.reviewer);
   return withTransaction(db, () => {
     const original = db.prepare(`
       SELECT id, operation, reviewer
@@ -1193,7 +1220,7 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND annotations.status = 'active'
-      AND annotations.authority_kind = 'human'
+      AND annotations.authority_kind IN ('human', 'derived')
   `);
   const pendingProposals = currentCount(db, `
     SELECT count(*) AS total FROM proposals
@@ -1231,7 +1258,8 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
   // Imports and migrations are not decisions a reviewer made here.
   const humanDecisionBatches = currentCount(db, `
     SELECT count(*) AS total FROM annotation_batches
-    WHERE operation IN ('review', 'undo')
+    WHERE operation IN ('review', 'undo') AND reviewer NOT IN ('system', ${[...MACHINE_REVIEWERS].map((name) => `'${name}'`).join(", ")})
+      AND reviewer NOT GLOB 'jev-v2-round-*'
   `);
   const importBatches = currentCount(db, `
     SELECT count(*) AS total FROM annotation_batches WHERE operation LIKE 'import-%'
@@ -1240,7 +1268,7 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     SELECT count(*) AS total FROM annotations
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE abilities.current = 1 AND annotations.status = 'active' AND annotations.origin = 'luna'
+    WHERE abilities.current = 1 AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND annotations.origin = 'luna'
   `);
 
   const openLeafGaps = (db.prepare(`
@@ -1256,7 +1284,7 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE annotations.status = 'active' AND abilities.current = 1
-      AND annotations.authority_kind = 'human'
+      AND annotations.authority_kind IN ('human', 'derived')
     ORDER BY annotation_batches.created_at, annotations.id
   `).all() as Array<{ id: number; family_id: string; family_version: number; parameters_json: string }>;
   const seenFamilies = new Set<string>();
@@ -1332,7 +1360,7 @@ export function getPrivateExport(db: DatabaseSync): Record<string, unknown> {
       source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all() as Array<{
     id: number;
-    authority_kind: "human" | "stamp";
+    authority_kind: "human" | "derived" | "machine";
     origin: string;
     confirmed_by: string;
     batch_id: string;

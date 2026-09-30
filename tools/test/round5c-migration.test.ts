@@ -318,8 +318,8 @@ describe("Round 5C historical Hit train migration", () => {
       db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(original.id);
       const corrected = db.prepare(`
         INSERT INTO annotations (
-          span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at
-        ) VALUES (?, ?, 'active', 'review', 'reviewer', 'batch-correction', ?, '2026-09-23T00:00:00.000Z')
+          span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at
+        ) VALUES (?, ?, 'active', 'review', 'human', 'reviewer', 'batch-correction', ?, '2026-09-23T00:00:00.000Z')
       `).run(original.span_id, correction.id, original.id);
 
       const afterSupersede = importHitTrain(db, fixture.root);

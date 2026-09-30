@@ -83,7 +83,8 @@ async function run(command: string | undefined): Promise<void> {
         ? new Set((JSON.parse(readFileSync(samplePath, "utf8")) as PilotSample).abilities.map((ability) => ability.ability_version_id))
         : undefined;
       const started = Date.now();
-      const result = await runGatesOnly(db, { abilityVersionIds });
+      // pipeline-8b gates its own machine confirmations: read the machine view.
+      const result = await runGatesOnly(db, { abilityVersionIds, view: { includeMachine: true } });
       console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "pilot-sample") {
       const seed = process.argv[3] ? Number(process.argv[3]) : undefined;

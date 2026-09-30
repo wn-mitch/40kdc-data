@@ -10,8 +10,9 @@ import { validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { getQueue } from "../src/round5c/queue.js";
-import { applyAnnotationBatch, getAbilities, getAbility, getDashboard, getFactions, reviewAbility, undoBatch, WorkbenchError } from "../src/round5c/review.js";
+import { getAbilities, getAbility, getDashboard, getFactions, WorkbenchError } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { applyAnnotationBatch, reviewAbility, undoBatch } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };

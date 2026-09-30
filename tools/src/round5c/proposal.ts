@@ -192,7 +192,7 @@ function confirmedSpans(db: DatabaseSync, abilityVersionId: number): ConfirmedSp
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND source_spans.ability_version_id = ?
     ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(abilityVersionId) as Array<{
     fragment: string;
@@ -227,7 +227,7 @@ function selectedExamples(db: DatabaseSync): PreparedRequest["confirmed_examples
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active' AND abilities.current = 1
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND abilities.current = 1
     ORDER BY annotations.id
     LIMIT 24
   `).all() as Array<{
@@ -460,7 +460,10 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
         if (pending.has(abilityVersionId)) throw new LunaRunError(409, `Ability version ${abilityVersionId} already belongs to a pending Luna run.`);
         if (retryScope && !retryScope.has(abilityVersionId)) throw new LunaRunError(422, `Run ${retryOf} did not request ability version ${abilityVersionId}.`);
       }
-      const coverage = options.coverage ?? getCurrentCoverage(db);
+      // Coverage only for the source versions this request may draw from, when the caller scoped
+      // it: a pilot step never pays for a corpus-wide pass.
+      const scope = abilityVersionId !== undefined ? new Set([abilityVersionId]) : options.abilityVersionIds ?? retryScope ?? undefined;
+      const coverage = options.coverage ?? getCurrentCoverage(db, { abilityVersionIds: scope });
       const candidates = currentAbilities(db)
         .filter((ability) => abilityVersionId === undefined || ability.id === abilityVersionId)
         .filter((ability) => !options.abilityVersionIds || options.abilityVersionIds.has(ability.id))
@@ -1065,7 +1068,7 @@ function assertNoPersistentConflicts(db: DatabaseSync, parsed: ParsedResponse): 
       SELECT source_spans.fragment, source_spans.start_byte, source_spans.end_byte
       FROM annotations
       JOIN source_spans ON source_spans.id = annotations.span_id
-      WHERE source_spans.ability_version_id = ? AND annotations.status = 'active'
+      WHERE source_spans.ability_version_id = ? AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
       UNION ALL
       SELECT source_spans.fragment, source_spans.start_byte, source_spans.end_byte
       FROM source_atom_reviews

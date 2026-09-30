@@ -486,8 +486,8 @@ function insertActiveAnnotation(
   `).get(spanId, fingerprintId, origin) as JsonRecord | undefined;
   if (existing) return { id: requireInteger(existing.id, "annotations.id"), inserted: false };
   const result = db.prepare(`
-    INSERT INTO annotations (span_id, fingerprint_id, status, origin, confirmed_by, batch_id, supersedes_id, created_at)
-    VALUES (?, ?, 'active', ?, ?, ?, NULL, ?)
+    INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
+    VALUES (?, ?, 'active', ?, 'human', ?, ?, NULL, ?)
   `).run(spanId, fingerprintId, origin, confirmedBy ?? "round5b-import", batchId, createdAt ?? "1970-01-01T00:00:00.000Z");
   return { id: getNumber(result.lastInsertRowid), inserted: true };
 }

@@ -2,7 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { LEAF_ROLES, REVIEWED_FAMILY_REGISTRY, normalizeFingerprintParameters, type LeafRole, type SemanticFamilyDefinition } from "./contracts.js";
 import { choices, freeText, numeric, prefillFromSource, type Property } from "./leaf-prefill.js";
-import { getCurrentCoverage } from "./coverage.js";
+import { getCurrentCoverage, type CoverageView } from "./coverage.js";
 import { untiledRuns } from "./leaves.js";
 import type { PilotAbility } from "./pilot-sample.js";
 import {
@@ -70,8 +70,8 @@ export type JevProposerResult = {
 export type Span = { ability_version_id: number; faction_id: string; ability_id: string; fragment: string; start_byte: number; end_byte: number; text: string };
 
 /** Every untiled span for the abilities in a pilot sample. */
-export function pilotSpans(db: DatabaseSync, sample: readonly PilotAbility[]): Span[] {
-  const coverage = getCurrentCoverage(db);
+export function pilotSpans(db: DatabaseSync, sample: readonly PilotAbility[], view: CoverageView = {}): Span[] {
+  const coverage = getCurrentCoverage(db, { ...view, abilityVersionIds: new Set(sample.map((ability) => ability.ability_version_id)) });
   const spans: Span[] = [];
   for (const ability of sample) {
     const view = coverage.get(ability.ability_version_id);

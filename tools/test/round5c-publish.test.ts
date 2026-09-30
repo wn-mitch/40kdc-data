@@ -16,10 +16,11 @@ import {
   publishPublication,
   reconcilePublicationBatches,
 } from "../src/round5c/publish.js";
-import { applyAnnotationBatch } from "../src/round5c/review.js";
+
 import { refreshSources } from "../src/round5c/source.js";
 import { hashJson } from "../src/round4/hash.js";
 import { sourceDigest } from "../src/source-digest.js";
+import { applyAnnotationBatch } from "./round5c-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;

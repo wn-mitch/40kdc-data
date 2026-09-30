@@ -195,7 +195,7 @@ function tiledCalibrationSample(db: DatabaseSync, embedder: Embedder, maxAbiliti
     if (!view || untiledRuns(view).length > 0) continue; // only fully-tiled abilities are ground truth
     const spans = db.prepare(`
       SELECT source_spans.start_byte, source_spans.end_byte FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-      WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
+      WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND source_spans.ability_version_id = ?
       ORDER BY source_spans.start_byte
     `).all(row.id) as Array<{ start_byte: number; end_byte: number }>;
     if (spans.length < 2) continue; // need at least one real internal boundary to be informative

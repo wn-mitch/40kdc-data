@@ -9,8 +9,9 @@ import { initializeWorkbench } from "../src/round5c/db.js";
 import type { Embedder } from "../src/round5c/embeddings.js";
 import { dismissLeafProposal, listLeafProposals, runLeafProposals, type ProposalSettings } from "../src/round5c/leaf-proposals.js";
 import { askModelAboutClusters } from "../src/round5c/leaf-proposals-llm.js";
-import { confirmSurface } from "../src/round5c/leaves.js";
+
 import { refreshSources } from "../src/round5c/source.js";
+import { confirmSurface } from "./round5c-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };

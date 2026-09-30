@@ -140,6 +140,8 @@
 .wb-paint.wb-role-connective { --wb-paint-color: var(--wb-role-connective); }
 .wb-annotation { background: color-mix(in oklch, var(--wb-paint-color) 7%, transparent); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--wb-paint-color) 45%, transparent); text-underline-offset: var(--space-1); }
 .wb-paint.wb-annotation { color: color-mix(in oklch, var(--wb-paint-color) 55%, var(--muted)); }
+/* A machine label: painted like a leaf, but dotted so it never reads as a decision. */
+.wb-annotation.wb-machine { text-decoration-style: dotted; background: repeating-linear-gradient(135deg, color-mix(in oklch, var(--wb-paint-color) 10%, transparent) 0 4px, transparent 4px 8px); }
 .wb-proposal { outline: 1px dashed color-mix(in oklch, var(--wb-paint-color) 65%, transparent); outline-offset: 1px; background: color-mix(in oklch, var(--wb-paint-color) 12%, transparent); }
 .wb-paint:hover, .wb-paint.wb-selected { background: color-mix(in oklch, var(--wb-paint-color) 25%, var(--panel)); color: var(--text); }
 .wb-draft-preview { cursor: text; }

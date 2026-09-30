@@ -4,8 +4,9 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import type { Embedder } from "../src/round5c/embeddings.js";
-import { confirmSurface } from "../src/round5c/leaves.js";
+
 import { decidedSurfaces, segmentSpans } from "../src/round5c/jev-v2-segment.js";
+import { confirmSurface } from "./round5c-human.js";
 
 // Fabricated wording only; no GW rule prose.
 

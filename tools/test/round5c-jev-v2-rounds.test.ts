@@ -8,11 +8,12 @@ import type { Questions, SystemOneResult } from "@typesafe-ai/sdk";
 import { afterEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import type { Embedder } from "../src/round5c/embeddings.js";
-import { confirmSurface } from "../src/round5c/leaves.js";
+
 import { refreshSources } from "../src/round5c/source.js";
 import { runJevV2Rounds } from "../src/round5c/jev-v2-rounds.js";
 import type { JevClient } from "../src/round5c/jev-core.js";
 import type { PilotAbility } from "../src/round5c/pilot-sample.js";
+import { confirmSurface } from "./round5c-human.js";
 
 // Fabricated wording only; no GW rule prose.
 

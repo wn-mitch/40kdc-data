@@ -86,7 +86,7 @@ function loadCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, Co
     SELECT abilities.id, count(*) AS total FROM annotations
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE ${filter} AND annotations.status = 'active'
+    WHERE ${filter} AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
     GROUP BY abilities.id
   `, args, (entry, total) => { entry.leaves = total; }, counts);
   countRows(db, `
@@ -97,7 +97,7 @@ function loadCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, Co
       AND source_atom_reviews.contained_by_annotation_id IS NOT NULL
       AND NOT EXISTS (
         SELECT 1 FROM annotations
-        WHERE annotations.id = source_atom_reviews.contained_by_annotation_id AND annotations.status = 'active'
+        WHERE annotations.id = source_atom_reviews.contained_by_annotation_id AND annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
       )
     GROUP BY abilities.id
   `, args, (entry, total) => { entry.unsupported = total; }, counts);

@@ -5,9 +5,14 @@ CREATE TABLE IF NOT EXISTS leaf_surfaces (
   normalized_surface TEXT NOT NULL CHECK(length(trim(normalized_surface)) > 0),
   fingerprint_id TEXT NOT NULL,
   status TEXT NOT NULL CHECK(status IN ('active', 'retired')),
+  -- human: founded by Will's decision; machine: founded by a model or pipeline (authority.ts).
+  authority_kind TEXT NOT NULL CHECK(authority_kind IN ('human', 'machine')),
+  -- The human annotation a backfilled surface was founded on, when it was not a direct decision.
+  authorizing_annotation_id INTEGER,
   batch_id TEXT NOT NULL,
   created_at TEXT NOT NULL,
   FOREIGN KEY(fingerprint_id) REFERENCES fingerprints(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+  FOREIGN KEY(authorizing_annotation_id) REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) STRICT;
 
@@ -23,6 +28,22 @@ export const LEAVES_TABLES = ["leaf_surfaces"] as const;
  * outside the data epoch, so a proposal run never invalidates coverage caches or the review.
  */
 export const LEAF_PROPOSALS_SCHEMA = `
+CREATE TABLE IF NOT EXISTS span_signals (
+  id INTEGER PRIMARY KEY,
+  span_id INTEGER NOT NULL,
+  -- Which signal: jev-family, jev-parameters, deepseek, knn, exact-surface, prefill, ...
+  source TEXT NOT NULL CHECK(length(trim(source)) > 0),
+  family_id TEXT,
+  family_version INTEGER,
+  rank INTEGER,
+  score REAL,
+  payload_json TEXT NOT NULL CHECK(json_valid(payload_json)),
+  model_run_id INTEGER,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+) STRICT;
+CREATE INDEX IF NOT EXISTS span_signals_span ON span_signals(span_id, source);
+
 CREATE TABLE IF NOT EXISTS text_embeddings (
   model TEXT NOT NULL,
   text_hash TEXT NOT NULL CHECK(length(text_hash) = 64),

@@ -2,6 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { exactSpan, LEAF_ROLES } from "./contracts.js";
 import { parseStoredFragments, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
+import { TRUSTED_ANNOTATION } from "./authority.js";
 import {
   normalized, overlapDiagnostics, overlapLength, partitionExclusive, subtractIntervals, totalLength,
   type Interval, type OverlapDiagnostic, type PartitionLayer, type TaggedInterval,
@@ -35,8 +36,11 @@ export type PartitionBytes = Record<PartitionLayer | "residue", number>;
  * all meaningful bytes). Pending and unresolved claims own queue work, never coverage.
  */
 export type AbilityCoverage = {
+  /** Trusted (human or derived) leaf bytes, plus machine and overlay leaves in a machine view. */
   leaf_fraction: number;
+  /** Bytes painted by direct human decisions only. */
   human_leaf_fraction: number;
+  /** Always 0: stamps are retired. Kept so existing readers keep their shape. */
   stamp_leaf_fraction: number;
   proposal_fraction: number;
   accounted_fraction: number;
@@ -69,7 +73,7 @@ type SpanRow = {
   id: number;
   start_byte: number;
   end_byte: number;
-  authority_kind?: "human" | "stamp";
+  authority_kind?: "human" | "derived" | "machine";
   stamp_supported?: number;
   contained_by_annotation_id?: number | null;
 };
@@ -95,8 +99,22 @@ function pushInterval<T extends Interval>(index: Map<number, T[]>, abilityId: nu
   else index.set(abilityId, [interval]);
 }
 
-/** SQL predicate over `annotations`: the row currently carries semantic authority. */
-const EFFECTIVE_ANNOTATION = "(annotations.status = 'active')";
+/** SQL predicate over `annotations`: the row currently carries trusted semantic authority. */
+const EFFECTIVE_ANNOTATION = `(annotations.status = 'active' AND ${TRUSTED_ANNOTATION})`;
+
+/**
+ * Which rows coverage counts. The default is the trusted view: human and derived rows and human
+ * structural and connective decisions only. `includeMachine` adds machine annotations (a machine
+ * row a trusted row overlaps is shadowed by it). `overlayRunIds` additionally treats the pending
+ * proposals of those model runs as decided: semantic proposals with a meaning as leaves, pending
+ * connectives as connectives, pending structural atoms as structure. The machine and overlay
+ * views exist for pilot gates; nothing trusted reads them.
+ */
+export type CoverageView = { includeMachine?: boolean; overlayRunIds?: readonly number[] };
+
+function idList(ids: Iterable<number>): string {
+  return [...ids].map(Number).filter(Number.isSafeInteger).join(",") || "NULL";
+}
 
 /**
  * SQL predicate over `source_atom_reviews`: the structural review is active and, when it is a
@@ -114,10 +132,10 @@ export const EFFECTIVE_STRUCTURAL_REVIEW = `(
   )
 )`;
 
-function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityId?: number): CoverageIndexes {
+function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityIds?: ReadonlySet<number>, view: CoverageView = {}): CoverageIndexes {
   const filter = currentOnly ? "AND abilities.current = 1" : "";
-  const idFilter = abilityId === undefined ? "" : "AND source_spans.ability_version_id = ?";
-  const args = abilityId === undefined ? [] : [abilityId];
+  const idFilter = abilityIds === undefined ? "" : `AND source_spans.ability_version_id IN (${idList(abilityIds)})`;
+  const args: number[] = [];
   const indexes: CoverageIndexes = {
     confirmed: new Map(), human: new Map(), stamp: new Map(), proposed: new Map(),
     pending: new Map(), unresolved: new Map(), connective: new Map(), structural: new Map(),
@@ -135,7 +153,7 @@ function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityId?:
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active'
       AND semantic_families.role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR', 'RESTRICTION')
-      AND ${EFFECTIVE_ANNOTATION}
+      AND ${view.includeMachine ? "annotations.status = 'active'" : EFFECTIVE_ANNOTATION}
       ${filter} ${idFilter}
   `).all(...args) as SpanRow[];
   for (const row of confirmedRows) {
@@ -143,6 +161,29 @@ function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityId?:
     pushInterval(indexes.confirmed, row.ability_version_id, { ...interval, id: row.id });
     if (row.authority_kind === "human") pushInterval(indexes.human, row.ability_version_id, interval);
     if (row.stamp_supported === 1) pushInterval(indexes.stamp, row.ability_version_id, interval);
+  }
+  const overlay = view.overlayRunIds && view.overlayRunIds.length > 0 ? idList(view.overlayRunIds) : null;
+  if (overlay) {
+    for (const row of db.prepare(`
+      SELECT source_spans.ability_version_id, proposals.id, source_spans.start_byte, source_spans.end_byte, proposals.role
+      FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+      JOIN abilities ON abilities.id = source_spans.ability_version_id
+      WHERE proposals.model_run_id IN (${overlay}) AND proposals.status = 'pending'
+        AND (proposals.fingerprint_id IS NOT NULL OR proposals.role = 'CONNECTIVE')
+        ${filter} ${idFilter}
+    `).all(...args) as Array<SpanRow & { role: string }>) {
+      const interval = { start: row.start_byte, end: row.end_byte, id: -row.id };
+      pushInterval(row.role === "CONNECTIVE" ? indexes.connective : indexes.confirmed, row.ability_version_id, interval);
+    }
+    for (const row of db.prepare(`
+      SELECT source_spans.ability_version_id, source_atom_proposals.id, source_spans.start_byte, source_spans.end_byte
+      FROM source_atom_proposals JOIN source_spans ON source_spans.id = source_atom_proposals.span_id
+      JOIN abilities ON abilities.id = source_spans.ability_version_id
+      WHERE source_atom_proposals.model_run_id IN (${overlay}) AND source_atom_proposals.status = 'pending'
+        ${filter} ${idFilter}
+    `).all(...args) as SpanRow[]) {
+      pushInterval(indexes.structural, row.ability_version_id, { start: row.start_byte, end: row.end_byte, id: -row.id });
+    }
   }
 
   const proposalRows = db.prepare(`
@@ -306,22 +347,26 @@ function wholeReviewStates(db: DatabaseSync, currentOnly: boolean, abilityId?: n
 }
 
 /** Calculate source-byte coverage for one persisted ability version. */
-export function getAbilityCoverage(db: DatabaseSync, abilityVersionId: number): AbilityCoverage {
+export function getAbilityCoverage(db: DatabaseSync, abilityVersionId: number, view: CoverageView = {}): AbilityCoverage {
   const ability = db.prepare(
     "SELECT id, source_text, fragments_json FROM abilities WHERE id = ?",
   ).get(abilityVersionId) as AbilitySource | undefined;
   if (!ability) throw new RangeError(`Unknown ability version ${abilityVersionId}.`);
-  const indexes = loadCoverageIndexes(db, false, abilityVersionId);
+  const indexes = loadCoverageIndexes(db, false, new Set([abilityVersionId]), view);
   const wholeReviewed = wholeReviewStates(db, false, abilityVersionId).get(abilityVersionId) ?? false;
   return coverageFor(ability, indexes, wholeReviewed);
 }
 
-/** Calculate coverage for every current source version without N+1 database queries. */
-export function getCurrentCoverage(db: DatabaseSync): Map<number, AbilityCoverage> {
+/**
+ * Calculate coverage for every current source version without N+1 database queries, or only for
+ * `abilityVersionIds` (filtered in SQL, so a scoped call never reads the whole corpus).
+ */
+export function getCurrentCoverage(db: DatabaseSync, options: CoverageView & { abilityVersionIds?: ReadonlySet<number> } = {}): Map<number, AbilityCoverage> {
+  const scope = options.abilityVersionIds ? `AND id IN (${idList(options.abilityVersionIds)})` : "";
   const abilities = db.prepare(
-    "SELECT id, source_text, fragments_json FROM abilities WHERE current = 1 ORDER BY id",
+    `SELECT id, source_text, fragments_json FROM abilities WHERE current = 1 ${scope} ORDER BY id`,
   ).all() as AbilitySource[];
-  const indexes = loadCoverageIndexes(db, true);
+  const indexes = loadCoverageIndexes(db, true, options.abilityVersionIds, options);
   const wholeReviewed = wholeReviewStates(db, true);
   return new Map(abilities.map((ability) => [
     ability.id,
