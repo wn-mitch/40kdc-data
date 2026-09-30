@@ -406,7 +406,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (partStarts.some((part, position) => !planned.some((item) => item.index > part.index && (partStarts[position + 1] === undefined || item.index < partStarts[position + 1]!.index)))) {
     errors.push("A moment ends the ability with no effect after it.");
   }
-  if (partStarts.length && selections.length) errors.push("A unit is selected in an ability with parts; the compiler binds a selection only for one moment.");
+  // A plain selection ("select one enemy unit … that unit suffers …") binds inside the part that
+  // holds it. A selection that limits attacks to that unit (designation) still needs one moment.
+  if (partStarts.length && selections.length && planned.some((item) => item.selected)) {
+    errors.push("A unit is selected for attacks in an ability with parts; the compiler binds that only for one moment.");
+  }
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   const target = attempt(() => targetRestrictions(targetParts, targetEligibility));
@@ -427,11 +431,17 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part),
   )));
   if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
+  // In a compound ability, a selection wraps only its own part's effects.
+  const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
+  if (selectionPart !== null && selectionPart > 0) {
+    const own = pieces[selectionPart]!;
+    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own })];
+  }
   const steps = pieces[0]!;
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
-  else if (selections.length === 1) body = selectUnit(selections[0]!, body);
+  else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) body = selectUnit(selections[0]!, body);
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
   if (!body) return { ok: false, signature, errors };
   if (auraLeaf) { const aura = auraLeaf; body = attempt(() => wrapAura(aura, body!)); }

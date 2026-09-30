@@ -41,6 +41,18 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 }
 
 describe("Round 5C leaf compiler", () => {
+  it("binds a selection inside the part of a compound ability that holds it", () => {
+    const result = compiled([
+      leaf("EFFECT", "reroll", { roll: "charge", subset: "all", weapon_type: "all" }, 2),
+      leaf("EVENT", "event", { kind: "move-ended", owner: "friendly", move_types: ["charge"] }, 9),
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "that-unit", count: "D3" }),
+    ]);
+    const parts = (result.mechanics.effect as { steps: Array<{ trigger: unknown; effect: { type: string } }> }).steps;
+    expect(parts).toHaveLength(2);
+    expect(parts[1]!.effect.type).toBe("select-units");
+  });
+
   it("folds \"must end that move either … or …\" into the move's end condition, gating nothing", () => {
     const result = compiled([
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "fall-back", distance: 6 }, 2),
