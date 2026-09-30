@@ -10,6 +10,7 @@ import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
 import { applyLeafUndo, assertLeafUndo } from "./leaves.js";
+import { retractOrphanedCopies } from "./propagate.js";
 import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
@@ -1206,6 +1207,8 @@ export function undoBatch(
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
     applyLeafUndo(db, batchId, reversalId, members);
     applyShapeUndo(db, reversalId, members);
+    // Copies of what this undo retracted, on byte-identical records, go with it.
+    retractOrphanedCopies(db, reversalId);
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, reversed_batch_id: reversalId };

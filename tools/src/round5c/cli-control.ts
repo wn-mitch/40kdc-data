@@ -1,11 +1,16 @@
+import { resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
 import { authorityAudit } from "./authority-migration.js";
 import { REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
-import { getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import { assertNotLiveWorkbench, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
 import { applyChatReviewFile } from "./review-apply.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "./pilot.js";
+import { classificationHealth, familyStatus, frontier, FRONTIER_KINDS, gapsReport, leafCompleteTexts, readQuery, reviewSessions, segmentationHealth, type FrontierKind } from "./control-reads.js";
+import { classifyBatch, segmentBatch } from "./control-machine.js";
+import { propagateDuplicateTexts } from "./propagate.js";
+import { runGatesOnly } from "./pipeline-8b.js";
 
 /**
  * The control-plane commands an agent drives: every one prints a single JSON envelope
@@ -117,11 +122,110 @@ export function projectStatus(db: DatabaseSync): Record<string, unknown> {
     },
     open_gaps: Object.fromEntries((db.prepare("SELECT type, count(*) AS n FROM gaps WHERE status = 'open' GROUP BY 1").all() as Array<{ type: string; n: number }>).map((row) => [row.type, row.n])),
     model_spend_usd: count("SELECT COALESCE(SUM(cost_usd), 0) AS n FROM model_runs"),
+    // Horizontal-to-vertical trigger: composition work waits for 300 trusted leaf-complete texts.
+    leaf_complete_texts: { count: leafCompleteTexts(db), trigger_at: 300 },
+    recent_sessions: reviewSessions(db, 5),
     authority_migration: audit ? { flagged_rows: audit.flagged.length, reverted: audit.reverted, machine_surfaces: audit.surfaces.filter((surface) => surface.authority === "machine").length } : null,
   };
 }
 
+/** Run `read` against a read-only connection. */
+function reading<T>(read: (db: DatabaseSync) => T): T {
+  const db = openWorkbenchReadOnly();
+  try { return read(db); } finally { db.close(); }
+}
+
+function artifactDirectory(): string {
+  return resolve(process.env.ROUND5C_ARTIFACT_DIR ?? resolve(workbenchPath(), ".."));
+}
+
+function limitFlag(flags: Flags, fallback: number): number {
+  const limit = numberFlag(flags, "limit") ?? fallback;
+  if (!Number.isSafeInteger(limit) || limit < 1) throw Object.assign(new Error("--limit must be a positive integer."), { code: "INVALID_ARGUMENT" });
+  return limit;
+}
+
+function batchName(flags: Flags, command: string): string {
+  const batch = flags.positional[0];
+  if (!batch) throw Object.assign(new Error(`${command} needs a batch name.`), { code: "INVALID_ARGUMENT" });
+  return batch;
+}
+
 const COMMANDS: Record<string, ControlCommand> = {
+  frontier: {
+    effect: () => "read", usage: `frontier [--kind ${FRONTIER_KINDS.join("|")}] [--limit N]`,
+    summary: "Where the next human decision buys the most, weighted; each item names its action.",
+    run: (flags) => {
+      const kind = (flags.values.get("kind") ?? "wording") as FrontierKind;
+      if (!FRONTIER_KINDS.includes(kind)) throw Object.assign(new Error(`--kind is one of ${FRONTIER_KINDS.join(", ")}.`), { code: "INVALID_ARGUMENT" });
+      return reading((db) => frontier(db, kind, limitFlag(flags, 25)));
+    },
+  },
+  "family-status": {
+    effect: () => "read", usage: "family-status [--state DEFINED|OBSERVED|SUPPORTED|MATURE|DEPRECATED]",
+    summary: "Every family's derived state and its trusted, machine and pending evidence.",
+    run: (flags) => reading((db) => familyStatus(db).filter((family) => !flags.values.has("state") || family.state === flags.values.get("state"))),
+  },
+  "segmentation-health": {
+    effect: () => "read", usage: "segmentation-health", summary: "Repair classes across every pilot step's frozen proposals, over reviewed texts.",
+    run: () => reading((db) => segmentationHealth(db, artifactDirectory())),
+  },
+  "classification-health": {
+    effect: () => "read", usage: "classification-health [--limit N]", summary: "Model and Jev family agreement with Will's decisions, and the top confusions.",
+    run: (flags) => reading((db) => classificationHealth(db, limitFlag(flags, 15))),
+  },
+  gaps: {
+    effect: () => "read", usage: "gaps [--limit N]", summary: "Recorded open gaps, plus derived leaf, composition and DSL gaps.",
+    run: (flags) => reading((db) => gapsReport(db, limitFlag(flags, 15))),
+  },
+  query: {
+    effect: () => "read", usage: "query <sql> [--limit N]", summary: "One SQL statement on a read-only connection.",
+    run: (flags) => reading((db) => readQuery(db, flags.positional.join(" "), limitFlag(flags, 200))),
+  },
+  gates: {
+    effect: () => "read", usage: "gates --abilities id,id [--machine] [--overlay-runs id,id]",
+    summary: "Compile and gate the named abilities (trusted leaves; --machine adds machine rows, --overlay-runs pending proposals).",
+    run: async (flags) => {
+      const abilities = idsFlag(flags, "abilities");
+      if (!abilities) throw Object.assign(new Error("gates needs --abilities."), { code: "INVALID_ARGUMENT" });
+      const db = openWorkbenchReadOnly();
+      try {
+        const overlay = idsFlag(flags, "overlay-runs");
+        const result = await runGatesOnly(db, { abilityVersionIds: new Set(abilities), view: { includeMachine: flags.switches.has("machine"), ...(overlay ? { overlayRunIds: overlay } : {}) } });
+        return { fully_tiled: result.compile.fully_tiled, abilities: result.compile.abilities, failures: result.compile.failures };
+      } finally { db.close(); }
+    },
+  },
+  propagate: {
+    effect: (flags) => flags.switches.has("dry-run") ? "read" : "derive",
+    usage: "propagate --duplicate-texts [--abilities id,id] [--dry-run]",
+    summary: "Copy trusted leaves and connectives onto byte-identical records as derived rows that follow their source.",
+    run: (flags) => {
+      if (!flags.switches.has("duplicate-texts")) throw Object.assign(new Error("propagate needs --duplicate-texts."), { code: "INVALID_ARGUMENT" });
+      const abilities = idsFlag(flags, "abilities");
+      const options = { dryRun: flags.switches.has("dry-run"), ...(abilities ? { abilityVersionIds: new Set(abilities) } : {}) };
+      if (options.dryRun) return reading((db) => propagateDuplicateTexts(db, options));
+      assertNotLiveWorkbench(workbenchPath(), "propagate");
+      const db = openWorkbench();
+      try { return propagateDuplicateTexts(db, options); } finally { db.close(); }
+    },
+  },
+  segment: {
+    effect: (flags) => flags.switches.has("dry-run") ? "read" : "propose",
+    usage: "segment <batch> --abilities id,id [--spend-cap USD] [--model id] [--concurrency N] [--dry-run]",
+    summary: "DeepSeek segmentation of the named abilities as a resumable batch on a copy of the workbench.",
+    run: (flags) => {
+      const abilities = idsFlag(flags, "abilities");
+      if (!abilities) throw Object.assign(new Error("segment needs --abilities."), { code: "INVALID_ARGUMENT" });
+      return segmentBatch({ batch: batchName(flags, "segment"), abilities, spendCapUsd: numberFlag(flags, "spend-cap"), model: flags.values.get("model"), concurrency: numberFlag(flags, "concurrency"), dryRun: flags.switches.has("dry-run") });
+    },
+  },
+  classify: {
+    effect: (flags) => flags.switches.has("dry-run") ? "read" : "propose",
+    usage: "classify <batch> [--spend-cap USD] [--dry-run]",
+    summary: "Jev family ranking and parameters for every unclassified span a batch's runs proposed.",
+    run: (flags) => classifyBatch({ batch: batchName(flags, "classify"), spendCapUsd: numberFlag(flags, "spend-cap"), dryRun: flags.switches.has("dry-run") }),
+  },
   "review-apply": {
     effect: () => "human", usage: "review-apply <decisions.json>",
     summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective; pilot-reviewed marks) as his own.",

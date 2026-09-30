@@ -148,6 +148,8 @@ CREATE TABLE IF NOT EXISTS annotations (
   supersedes_id INTEGER,
   -- The surface whose application wrote this row; undoing that surface's founding retracts it.
   derived_from_surface_id INTEGER,
+  -- The row this one copies onto a byte-identical record (propagate.ts); it follows that row out.
+  derived_from_annotation_id INTEGER REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   created_at TEXT NOT NULL,
   FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(fingerprint_id) REFERENCES fingerprints(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
@@ -757,9 +759,19 @@ export function initializeWorkbench(db: DatabaseSync): void {
   });
   // After the stamp retirement and version migrations above, which still write the old shape.
   upgradeAuthority(db);
+  upgradeDuplicateCopyLink(db);
   db.exec(AUTHORITY_INDEXES);
   withTransaction(db, () => upgradeDataEpoch(db));
   initialized.add(db);
+}
+
+/** Link a duplicate-text copy to the row it copies; nullable, so `ADD COLUMN` suffices. */
+function upgradeDuplicateCopyLink(db: DatabaseSync): void {
+  const columns = new Set((db.prepare("PRAGMA table_info(annotations)").all() as Array<{ name: string }>).map((column) => column.name));
+  if (!columns.has("derived_from_annotation_id")) {
+    db.exec("ALTER TABLE annotations ADD COLUMN derived_from_annotation_id INTEGER REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT");
+  }
+  db.exec("CREATE INDEX IF NOT EXISTS annotations_derived_from_annotation ON annotations(derived_from_annotation_id) WHERE derived_from_annotation_id IS NOT NULL");
 }
 
 /**

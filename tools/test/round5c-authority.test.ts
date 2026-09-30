@@ -12,6 +12,7 @@ import { initializeWorkbench, openWorkbench } from "../src/round5c/db.js";
 import { confirmSurface, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
 import { applyChatReview } from "../src/round5c/review-apply.js";
+import { propagateDuplicateTexts } from "../src/round5c/propagate.js";
 import { refreshSources } from "../src/round5c/source.js";
 
 type DatabaseSync = DatabaseType;
@@ -209,6 +210,23 @@ describe("Round 5C authority boundary", () => {
       expect(result.failed).toEqual([]);
       const active = db.prepare("SELECT source_spans.exact_text, annotations.authority_kind FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active'").all();
       expect(active).toEqual([{ exact_text: `${CP} next turn`, authority_kind: "human" }]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("copies a trusted leaf onto a byte-identical record as derived, and undoing the source retracts the copy", () => {
+    const db = fixture([{ ability_id: "first", raw_text: `Then ${CP}.` }, { ability_id: "second", raw_text: `Then ${CP}.` }]);
+    try {
+      const batch = applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "first", CP)] }, WILL);
+      const planned = propagateDuplicateTexts(db, { dryRun: true });
+      expect(planned).toMatchObject({ groups: 1, leaves: { planned: 1 }, batch_id: null });
+      expect(rows(db, "second")).toEqual([]);
+      propagateDuplicateTexts(db, { dryRun: false });
+      expect(rows(db, "second")).toEqual([{ authority_kind: "derived", status: "active", derived_from_surface_id: null }]);
+      expect(propagateDuplicateTexts(db, { dryRun: true }).leaves).toMatchObject({ planned: 0, already: 1 });
+      undoBatch(db, batch.batch_id, { reviewer: "will" }, WILL);
+      expect(rows(db, "second")).toEqual([{ authority_kind: "derived", status: "retracted", derived_from_surface_id: null }]);
     } finally {
       db.close();
     }
