@@ -51,7 +51,7 @@ type LeafProgress = {
   readiness: SourceWorkAbility["progress"]["readiness"];
 };
 type UncoveredSelection = Fragment & { ability_version_id: number; source_hash: string; ability_id: string; faction_id: string };
-type ParameterProperty = { enum?: string[]; anyOf?: Array<{ enum?: string[]; type?: string; const?: string }>; type?: string };
+type ParameterProperty = { enum?: string[]; anyOf?: Array<{ enum?: string[]; type?: string; const?: string }>; type?: string; items?: { enum?: string[] } };
 type ReviewedFamily = {
   id: string; version: number; role: Role; label: string; description: string;
   starter: Record<string, unknown>;
@@ -873,6 +873,20 @@ export default function WorkbenchApp() {
                     const numeric = property.type === "integer" || property.anyOf?.some((item) => item.type === "integer");
                     const source = property.type === "object" || property.anyOf?.some((item) => item.type === "object");
                     const value = draftParameters?.[name];
+                    // A list of closed values (for example several characteristics changed together): pick each one.
+                    if (property.type === "array" && property.items?.enum) {
+                      const selected = Array.isArray(value) ? value.map(String) : [];
+                      return <fieldset key={name} className="wb-field-wide"><legend>{name.replaceAll("-", " ")} (every one that applies)</legend>
+                        <div className="wb-chips" role="group" aria-label={name}>{alphabetical(property.items.enum, (option) => option.replaceAll("-", " ")).map((option) => {
+                          const on = selected.includes(option);
+                          return <button key={option} type="button" role="checkbox" aria-checked={on} className={on ? "wb-chip wb-chip-on" : "wb-chip"}
+                            onClick={() => editParameter(name, on ? selected.filter((item) => item !== option) : [...selected, option])}>{option.replaceAll("-", " ")}</button>;
+                        })}</div></fieldset>;
+                    }
+                    if (property.type === "boolean") {
+                      return <label key={name}>{name.replaceAll("-", " ")}<select value={value === true ? "yes" : value === false ? "no" : ""} onChange={(event) => editParameter(name, event.target.value === "" ? null : event.target.value === "yes")}>
+                        <option value="">Choose {name.replaceAll("-", " ")}</option><option value="no">no</option><option value="yes">yes</option></select></label>;
+                    }
                     return <label key={name}>{name.replaceAll("-", " ")}
                       {choices.length ? <select value={typeof value === "string" ? value : ""} onChange={(event) => editParameter(name, event.target.value)}>
                         <option value="">Choose {name.replaceAll("-", " ")}</option>{alphabetical(choices, (choice) => choice.replaceAll("-", " ")).map((choice) => <option key={choice} value={choice}>{choice.replaceAll("-", " ")}</option>)}
