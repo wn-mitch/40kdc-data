@@ -5,7 +5,7 @@ use serde_json::Value;
 
 use super::placement::{place_phrase, placement_limits, placement_phrase};
 use super::words::*;
-use crate::translate::condition::{and_list, nn, obj, range_phrase, P};
+use crate::translate::condition::{and_list, describe_condition_value, nn, obj, range_phrase, P};
 use crate::translate::dekebab;
 
 pub(super) fn move_verb(t: &str) -> String {
@@ -149,6 +149,12 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
                 ""
             },
             range_phrase(ends.get("range"))
+        ));
+    }
+    if let Some(c) = nn(m, "ends_when") {
+        s.push_str(&format!(
+            "; it must end that move where {}",
+            describe_condition_value(c)
         ));
     }
     if is_true(m, "allow_engagement") {

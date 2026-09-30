@@ -212,6 +212,9 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		s += ", ending that move " + wholly + "within " + rangePhrase(ends["range"]) + " of " + endsOf(ends["of"], ctx)
 	}
+	if when, ok := asMap(m["ends_when"]); ok && when != nil {
+		s += "; it must end that move where " + describeCondition(when)
+	}
 	if m["allow_engagement"] == true {
 		s += "; it can end that move within Engagement Range of enemy units"
 	}

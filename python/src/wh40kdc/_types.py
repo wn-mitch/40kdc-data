@@ -3652,6 +3652,7 @@ class Modifier33(TypedDict):
         ]
     ]
     ends_within: NotRequired[EndsWithin]
+    ends_when: NotRequired[Condition]
     keeps_eligible: NotRequired[Literal[True]]
 
 

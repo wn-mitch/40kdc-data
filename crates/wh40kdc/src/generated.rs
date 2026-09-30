@@ -26171,6 +26171,10 @@ for MortalWoundsEffectModifierRollPerModel {
 ///    "distance": {
 ///      "$ref": "#/$defs/quantity"
 ///    },
+///    "ends_when": {
+///      "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within.",
+///      "$ref": "#/$defs/condition"
+///    },
 ///    "ends_within": {
 ///      "type": "object",
 ///      "required": [
@@ -26283,6 +26287,9 @@ pub struct MoveEffectModifier {
     pub counts_as_move: ::std::option::Option<MoveEffectModifierCountsAsMove>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<Quantity>,
+    ///Where the moving unit must be when the move ends, as a condition on it: "your unit must end that move either wholly within your deployment zone or within range of an objective marker". For a single distance to a place, use ends_within.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_when: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_within: ::std::option::Option<MoveEffectModifierEndsWithin>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

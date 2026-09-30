@@ -3585,6 +3585,23 @@ function genEffectTranslation(): void {
       },
       effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
     } },
+    // A move that must end where a condition holds ("… either wholly within your deployment zone
+    // or within range of an objective marker"): the move's ends_when.
+    { caseId: "fidelity/move-ends-when-either", effect: {
+      type: "move",
+      target: "this-unit",
+      modifier: {
+        move_type: "fall-back",
+        distance: 6,
+        ends_when: {
+          operator: "or",
+          operands: [
+            { type: "in-region", parameters: { subject: "this-unit", region: { territory: "your-deployment-zone" }, wholly: true } },
+            { type: "within", parameters: { of: { objective: {} }, range: "objective-control" } },
+          ],
+        },
+      },
+    } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

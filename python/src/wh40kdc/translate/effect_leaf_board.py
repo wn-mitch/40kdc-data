@@ -11,6 +11,7 @@ import re
 from collections.abc import Callable
 from typing import Any
 
+from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
 from wh40kdc.translate.condition_refs import _objective_phrase
 from wh40kdc.translate.effect_leaf_army import (
@@ -371,6 +372,8 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         of = _ends_of(ends.get("of"), ctx)
         wholly = "wholly " if ends.get("wholly") is True else ""
         s += f", ending that move {wholly}within {range_phrase(ends.get('range'))} of {of}"
+    if m.get("ends_when") is not None:
+        s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}"
     if m.get("allow_engagement") is True:
         s += "; it can end that move within Engagement Range of enemy units"
     if m.get("counts_as_move") is not None:

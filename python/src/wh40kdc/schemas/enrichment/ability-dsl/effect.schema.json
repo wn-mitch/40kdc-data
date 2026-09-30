@@ -3049,6 +3049,10 @@
                     "range"
                   ]
                 },
+                "ends_when": {
+                  "$ref": "condition.schema.json",
+                  "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within."
+                },
                 "keeps_eligible": {
                   "const": true
                 }
