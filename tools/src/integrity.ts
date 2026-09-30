@@ -3,6 +3,7 @@ import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ValidationResult } from "./validate.js";
+import { checkTargetProfiles } from "./integrity-target-profiles.js";
 import { checkDslShapes } from "./integrity-shapes.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
 import type { Unit, WargearOption } from "./generated.js";
@@ -557,6 +558,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   checkMissionCardLinks(root, result);
   await checkAbilityUnitRefs(root, result);
   await checkDslShapes(root, result);
+  await checkTargetProfiles(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();

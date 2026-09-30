@@ -5,7 +5,9 @@ import {
   variantWeaponOwner,
   FACTION_HOME_KEYWORD,
 } from "../src/integrity.js";
-import { resolve } from "node:path";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -41,6 +43,26 @@ describe("referential integrity", () => {
     expect(messages.some((m) => m.includes('faction_keyword "Emperor’s Children"'))).toBe(true);
     // The legal "World Eaters" keyword on the same unit must NOT be flagged.
     expect(messages.some((m) => m.includes('faction_keyword "World Eaters"'))).toBe(false);
+  });
+
+  it("flags a target profile whose unit its faction no longer has, not one another faction has", async () => {
+    const root = mkdtempSync(join(tmpdir(), "integrity-profiles-"));
+    try {
+      mkdirSync(join(root, "core/alpha"), { recursive: true });
+      mkdirSync(join(root, "core/beta"), { recursive: true });
+      writeFileSync(join(root, "core/alpha/units.json"), JSON.stringify([{ id: "tank" }]));
+      writeFileSync(join(root, "core/beta/units.json"), JSON.stringify([{ id: "walker" }]));
+      writeFileSync(join(root, "core/target-profiles.json"), JSON.stringify([
+        { id: "live", faction_id: "alpha", unit_id: "tank" },
+        { id: "retired", faction_id: "alpha", unit_id: "old-tank" },
+        { id: "wrong-faction", faction_id: "alpha", unit_id: "walker" },
+      ]));
+      const result = await checkReferentialIntegrity(root);
+      const flagged = result.errors.filter((e) => e.file.endsWith("target-profiles.json")).map((e) => e.index);
+      expect(flagged).toEqual([1, 2]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("passes a clean single-unit fixture", async () => {
