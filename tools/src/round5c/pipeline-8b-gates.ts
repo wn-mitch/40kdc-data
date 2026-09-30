@@ -106,7 +106,10 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
  * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
  * shape" (the conservative default) rather than being assumed out of scope. */
 /** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up"]);
+// Effects that change no attack's damage: healing, moving, placement, eligibility permissions.
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission"]);
+// Which objective an ability picks decides control, never an attack's damage.
+const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 
 function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
@@ -116,6 +119,7 @@ function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): bo
     const roll = fragment?.modifier?.roll;
     return typeof roll !== "string" || !DAMAGE_ROLLS.has(roll);
   }
+  if (OBJECTIVE_SELECTION.test(item.reason)) return true;
   const unmodelled = UNMODELLED_EFFECT_TYPE.exec(item.reason);
   if (unmodelled) return NON_DAMAGE_EFFECT_TYPES.has(unmodelled[1]!);
   return false;

@@ -23,6 +23,13 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
+  it("counts an eligibility permission as outside the damage path, but keeps an unmodelled core-ability grant a real gap", () => {
+    const permission = effectToBuffs({ type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true } }, source, ctx).unsupported;
+    const grant = effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } }, source, ctx).unsupported;
+    expect(classifyUnsupported(permission)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    expect(classifyUnsupported(grant)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("counts a Wounds stat-modifier as outside the damage path (A/S/T/Sv are the damage-path stats)", () => {
     const { unsupported } = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "W", operation: "add", value: 1 } }, source, ctx);
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
