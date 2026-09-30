@@ -124,8 +124,9 @@ export function planPilotStep(options: PilotStepOptions): Record<string, unknown
   try {
     const planned = plan(db, options);
     const model = options.model ?? DEEPSEEK_FLASH_MODEL;
-    const residue = planned.ids.map((id) => ({ ability_version_id: id, residue_regions: getAbilityCoverage(db, id).residue.length }));
-    const requests = Math.ceil(residue.filter((item) => item.residue_regions > 0).length / 2);
+    const done = new Set(stepRuns(db, options.step).filter((run) => run.status === "completed").flatMap((run) => run.abilities));
+    const residue = planned.ids.map((id) => ({ ability_version_id: id, residue_regions: getAbilityCoverage(db, id).residue.length, already_segmented: done.has(id) }));
+    const requests = Math.ceil(residue.filter((item) => item.residue_regions > 0 && !item.already_segmented).length / 2);
     const typical = db.prepare(`
       SELECT AVG(cost_usd) AS average FROM model_runs WHERE status = 'completed' AND cost_usd IS NOT NULL AND json_extract(output_json, '$.usage') IS NOT NULL AND model = ?
     `).get(model) as { average: number | null };

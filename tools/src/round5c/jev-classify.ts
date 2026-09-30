@@ -134,7 +134,9 @@ export async function classifySpans(
   const budget = new JevBudget(Math.max(0, options.spendCapUsd - (options.priorSpendUsd ?? 0)));
   const wordings = trustedWordings(db);
   const done = db.prepare("SELECT 1 FROM span_signals WHERE span_id = ? AND source = 'jev-family' LIMIT 1");
-  const pending = spans.filter((span) => !done.get(span.span_id));
+  // One question per span: two runs (or two proposals) on the same bytes share one answer.
+  const unique = [...new Map(spans.map((span) => [span.span_id, span])).values()];
+  const pending = unique.filter((span) => !done.get(span.span_id));
   const results: JevClassification[] = [];
   let unanswered = 0;
   await mapWithConcurrency(pending, options.concurrency ?? 8, async (span) => {
@@ -189,7 +191,7 @@ export async function classifySpans(
   return {
     results,
     report: {
-      model: JEV_MODEL, spans: spans.length, classified: results.length, already: spans.length - pending.length, unanswered,
+      model: JEV_MODEL, spans: unique.length, classified: results.length, already: unique.length - pending.length, unanswered,
       cost_usd: budget.totalCostUsd, requests: budget.requests, cache_hits: budget.cacheHits, latency_ms: budget.totalLatencyMs,
       budget_exhausted: budget.exhausted(),
     },

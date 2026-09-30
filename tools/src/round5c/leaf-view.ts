@@ -21,6 +21,8 @@ export type TiledSource = {
 type LeafRow = {
   ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string;
   family_id: string; family_version: number; parameters_json: string; trusted: number;
+  /** For an overlay proposal, its model run; later runs win overlaps. 0 for annotations. */
+  run: number;
 };
 
 function idList(ids: Iterable<number>): string {
@@ -44,13 +46,13 @@ export function tiledSources(
     JOIN fingerprints ON fingerprints.id = X.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version`;
   const rows = db.prepare(`
-    SELECT ${columns}, CASE WHEN annotations.authority_kind = 'machine' THEN 0 ELSE 1 END AS trusted
+    SELECT ${columns}, CASE WHEN annotations.authority_kind = 'machine' THEN 0 ELSE 1 END AS trusted, 0 AS run
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id ${joins.replaceAll("X.", "annotations.")}
     WHERE annotations.status = 'active' ${options.includeMachine ? "" : "AND annotations.authority_kind != 'machine'"} ${scope}
   `).all() as LeafRow[];
   if (options.overlayRunIds && options.overlayRunIds.length > 0) {
     rows.push(...db.prepare(`
-      SELECT ${columns}, 0 AS trusted
+      SELECT ${columns}, 0 AS trusted, proposals.model_run_id AS run
       FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id ${joins.replaceAll("X.", "proposals.")}
       WHERE proposals.status = 'pending' AND proposals.model_run_id IN (${idList(options.overlayRunIds)}) ${scope}
     `).all() as LeafRow[]);
@@ -79,18 +81,16 @@ export function tiledSources(
   return result;
 }
 
-/** Drop untrusted leaves a trusted leaf overlaps, and exact duplicates among the untrusted. */
+/**
+ * Drop untrusted leaves a trusted leaf overlaps. Among untrusted leaves, the latest model run
+ * wins an overlap (a corrective re-run replaces the cut it corrects); machine annotations rank
+ * below every overlay proposal.
+ */
 function shadowed(rows: LeafRow[]): LeafRow[] {
-  const trusted = rows.filter((row) => row.trusted === 1);
-  const kept = [...trusted];
-  const seen = new Set<string>();
-  for (const row of rows) {
-    if (row.trusted === 1) continue;
-    if (trusted.some((other) => other.fragment === row.fragment && other.start_byte < row.end_byte && row.start_byte < other.end_byte)) continue;
-    const key = `${row.fragment}:${row.start_byte}:${row.end_byte}:${row.family_id}:${row.family_version}:${row.parameters_json}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    kept.push(row);
-  }
+  const overlapsAny = (row: LeafRow, others: readonly LeafRow[]) =>
+    others.some((other) => other.fragment === row.fragment && other.start_byte < row.end_byte && row.start_byte < other.end_byte);
+  const kept = rows.filter((row) => row.trusted === 1);
+  const untrusted = rows.filter((row) => row.trusted === 0).sort((left, right) => right.run - left.run || left.start_byte - right.start_byte);
+  for (const row of untrusted) if (!overlapsAny(row, kept)) kept.push(row);
   return kept.sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte);
 }
