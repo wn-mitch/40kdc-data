@@ -47,6 +47,31 @@ const DEEPSEEK_PRICE_PER_MILLION_USD: Record<string, { cacheHitInput: number; ca
   "deepseek-flash": { cacheHitInput: 0.003, cacheMissInput: 0.15, output: 0.6 },
 };
 
+/**
+ * A DeepSeek call that billed (or may have billed) without a usable answer: a truncated reply, an
+ * HTTP error after the model ran, invalid JSON, or a timeout. Carries whatever accounting the API
+ * returned, so the run records its real cost; a timeout's cost is unknown, never zero.
+ */
+export class DeepSeekCallError extends Error {
+  constructor(
+    message: string,
+    readonly accounting: { usage: DeepSeekUsage | null; cost_usd: number | null; latency_ms: number; cost_unknown: boolean },
+  ) {
+    super(message);
+    this.name = "DeepSeekCallError";
+  }
+}
+
+/**
+ * The most one request can cost: every request byte priced as an uncached input token (~3 bytes
+ * per token is a floor for JSON-heavy English) plus the full `maxTokens` of output. Reserved
+ * against a spend cap before the request is sent, so concurrent requests cannot overshoot it.
+ */
+export function deepseekReservationUsd(requestBytes: number, maxTokens: number, model: string = DEEPSEEK_MODEL): number {
+  const price = DEEPSEEK_PRICE_PER_MILLION_USD[model] ?? DEEPSEEK_PRICE_PER_MILLION_USD[DEEPSEEK_MODEL]!;
+  return (Math.ceil(requestBytes / 3) / 1_000_000) * price.cacheMissInput + (maxTokens / 1_000_000) * price.output;
+}
+
 /** Cost of one DeepSeek reply from its own usage accounting, at the off-peak published prices. */
 export function deepseekCostUsd(usage: DeepSeekUsage, model: string = DEEPSEEK_MODEL): number {
   const price = DEEPSEEK_PRICE_PER_MILLION_USD[model] ?? DEEPSEEK_PRICE_PER_MILLION_USD[DEEPSEEK_MODEL]!;
@@ -96,7 +121,7 @@ export function deepseekKey(): string {
  * sat *below* the model's own thinking-mode default and caused exactly that truncation.
  */
 export const DEEPSEEK_MAX_TOKENS_CEILING = 393216;
-const DEFAULT_MAX_TOKENS = 100000;
+export const DEFAULT_MAX_TOKENS = 100000;
 
 /** Hard wall-clock budget for one DeepSeek HTTP call; a timeout is a transport failure like any other. */
 const DEFAULT_REQUEST_TIMEOUT_MS = 5 * 60 * 1000;
@@ -122,7 +147,9 @@ export function deepseekModelCall(
       });
     } catch (error) {
       if (error instanceof Error && error.name === "TimeoutError") {
-        throw new Error(`DeepSeek request timed out after ${Math.round(timeoutMs / 1000)}s.`);
+        throw new DeepSeekCallError(`DeepSeek request timed out after ${Math.round(timeoutMs / 1000)}s.`, {
+          usage: null, cost_usd: null, latency_ms: Date.now() - started, cost_unknown: true,
+        });
       }
       throw error;
     }
@@ -133,18 +160,7 @@ export function deepseekModelCall(
         completion_tokens_details?: { reasoning_tokens?: unknown };
       };
     } | null;
-    if (!response.ok) throw new Error(`DeepSeek HTTP ${response.status}: ${String(payload?.error?.message ?? response.statusText).slice(0, 300)}`);
-    const choice = payload?.choices?.[0];
-    if (choice?.finish_reason !== "stop") throw new Error(`DeepSeek stopped with ${String(choice?.finish_reason)}.`);
-    const content = typeof choice.message?.content === "string" ? choice.message.content.trim() : "";
-    let body: unknown;
-    try {
-      body = JSON.parse(content);
-    } catch {
-      throw new Error("DeepSeek's reply is not valid JSON.");
-    }
-    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("DeepSeek's reply is not a JSON object.");
-    const returned = typeof payload?.model === "string" ? payload.model : model;
+    // Usage first: a truncated or malformed reply was still billed, and its run records the cost.
     const rawUsage = payload?.usage;
     const num = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
     const reasoningTokens = rawUsage?.completion_tokens_details?.reasoning_tokens;
@@ -153,6 +169,21 @@ export function deepseekModelCall(
       prompt_cache_miss_tokens: num(rawUsage.prompt_cache_miss_tokens), completion_tokens: num(rawUsage.completion_tokens),
       ...(reasoningTokens !== undefined ? { reasoning_tokens: num(reasoningTokens) } : {}),
     } : undefined;
+    const failed = (message: string) => new DeepSeekCallError(message, {
+      usage: usage ?? null, cost_usd: usage ? deepseekCostUsd(usage, model) : null, latency_ms: Date.now() - started, cost_unknown: !usage && response.ok,
+    });
+    if (!response.ok) throw failed(`DeepSeek HTTP ${response.status}: ${String(payload?.error?.message ?? response.statusText).slice(0, 300)}`);
+    const choice = payload?.choices?.[0];
+    if (choice?.finish_reason !== "stop") throw failed(`DeepSeek stopped with ${String(choice?.finish_reason)}.`);
+    const content = typeof choice.message?.content === "string" ? choice.message.content.trim() : "";
+    let body: unknown;
+    try {
+      body = JSON.parse(content);
+    } catch {
+      throw failed("DeepSeek's reply is not valid JSON.");
+    }
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw failed("DeepSeek's reply is not a JSON object.");
+    const returned = typeof payload?.model === "string" ? payload.model : model;
     return {
       body: body as Record<string, unknown>, model: returned, model_version: returned, latency_ms: Date.now() - started,
       cost_usd: usage ? deepseekCostUsd(usage, model) : null, usage,

@@ -11,7 +11,7 @@ import {
   extractAssistantJson, OMP_KILL_GRACE_MS, OMP_MAX_TIME_MS, ompArgs, ompBinary, OmpTransportError, ompVersion,
   overlayYaml, runOmpProcess,
 } from "./omp-driver.js";
-import { deepseekKey, deepseekModelCall, DEEPSEEK_MODEL, type DeepSeekUsage, type ModelCall } from "./leaf-proposals-llm.js";
+import { DeepSeekCallError, deepseekKey, deepseekModelCall, DEEPSEEK_MODEL, type DeepSeekUsage, type ModelCall } from "./leaf-proposals-llm.js";
 import { failLunaRun, importLuna, serializeLunaRequest, type LunaExecution, type LunaFailure, type LunaImportSummary, type PreparedRequest } from "./proposal.js";
 
 /** A claimed run may be abandoned only after the subprocess deadline plus this grace. */
@@ -336,7 +336,8 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
     // overlay it on the view this function returns.
     let liveDroppedCoveredSpans: number | null = null;
     if ("error" in outcome) {
-      failLunaRun(db, claimed.run_id, claimed.execution.owner, transportFailure(outcome.error));
+      const accounting = outcome.error instanceof DeepSeekCallError ? outcome.error.accounting : undefined;
+      failLunaRun(db, claimed.run_id, claimed.execution.owner, transportFailure(outcome.error), accounting);
     } else {
       const version = transport === "deepseek" ? outcome.response.model : claimed.execution.omp_version ?? "unknown";
       try {
@@ -364,6 +365,15 @@ export async function finishLunaRun(openDb: () => DatabaseSync, claimed: Claimed
           failLunaRun(db, claimed.run_id, claimed.execution.owner, { stage: "import", reason_code: "SOURCE_STALE", message: error.message });
         }
       }
+    }
+    if (!("error" in outcome)) {
+      // The reply was billed whether or not it imported: keep its usage and cost on the run, also
+      // when import rejected the response and closed the run without them.
+      db.prepare(`
+        UPDATE model_runs SET cost_usd = COALESCE(cost_usd, ?), latency_ms = COALESCE(latency_ms, ?),
+          output_json = json_set(COALESCE(output_json, '{}'), '$.usage', json(?))
+        WHERE id = ?
+      `).run(outcome.response.cost_usd, outcome.response.latency_ms, JSON.stringify(outcome.response.usage ?? null), claimed.run_id);
     }
     const view = lunaRunView(db, claimed.run_id);
     return liveDroppedCoveredSpans !== null && view.summary

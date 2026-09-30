@@ -179,6 +179,29 @@ export async function askChoice(
   return { selected: answer.choice, confidence: answer.confidence };
 }
 
+/** One choice question answered with every option's probability, most probable first. */
+export async function askChoiceRanked(
+  client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
+  state: Record<string, JsonValue>, prompt: string, criteria: ChoiceCriteria, cache?: JevCache,
+): Promise<Array<{ value: string; probability: number }> | null> {
+  const questions: Questions = { answer: choice(prompt, criteria) };
+  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
+  const answer = result?.answers.answer;
+  if (!answer || answer.type !== "choice") return null;
+  return Object.entries(answer.probabilities as Record<string, number>)
+    .map(([value, probability]) => ({ value, probability }))
+    .sort((left, right) => right.probability - left.probability || left.value.localeCompare(right.value));
+}
+
+/** Several questions in one request (one billed state); the raw answers, or null when unanswered. */
+export async function askMany(
+  client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
+  state: Record<string, JsonValue>, questions: Questions, cache?: JevCache,
+): Promise<SystemOneResult<Questions>["answers"] | null> {
+  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
+  return result?.answers ?? null;
+}
+
 export async function askYesNo(
   client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string,
   state: Record<string, JsonValue>, prompt: string, cache?: JevCache,

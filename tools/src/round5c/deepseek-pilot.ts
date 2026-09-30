@@ -1,9 +1,9 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { mapWithConcurrency } from "./concurrency.js";
-import { deepseekModelCall, DEEPSEEK_MODEL, DEEPSEEK_PRICE_SOURCE, type DeepSeekReasoningEffort, type DeepSeekUsage, type ModelCall } from "./leaf-proposals-llm.js";
+import { DeepSeekCallError, deepseekModelCall, deepseekReservationUsd, DEEPSEEK_MODEL, DEEPSEEK_PRICE_SOURCE, DEFAULT_MAX_TOKENS, type DeepSeekReasoningEffort, type DeepSeekUsage, type ModelCall } from "./leaf-proposals-llm.js";
 import { runLuna, type LunaRunView } from "./luna-run.js";
-import { DEFAULT_OUTPUT_BUDGET_TOKENS, prepareLuna, type PreparedLuna } from "./proposal.js";
+import { DEFAULT_OUTPUT_BUDGET_TOKENS, failLunaRun, prepareLuna, type PilotTag, type PreparedLuna } from "./proposal.js";
 
 /** A "stopped with length" transport failure: the reply was truncated before finishing its JSON. */
 const LENGTH_STOP_PATTERN = /stopped with length/iu;
@@ -36,6 +36,8 @@ export type DeepSeekArmResult = {
   total_cost_usd: number;
   usage_totals: DeepSeekUsage;
   budget_exhausted: boolean;
+  /** Runs whose cost the API never reported (a timeout); `total_cost_usd` excludes them. */
+  unknown_cost_runs: number;
   runs: DeepSeekRunLog[];
 };
 
@@ -56,6 +58,10 @@ export type DeepSeekPilotOptions = {
   maxTokens?: number;
   /** `reasoning_effort` sent on every request, when set. */
   reasoningEffort?: DeepSeekReasoningEffort;
+  /** Spend already committed to this budget by earlier runs (a resumed step counts it against the cap). */
+  priorSpendUsd?: number;
+  /** Tag every prepared run with this pilot step. */
+  pilot?: PilotTag;
 };
 
 /**
@@ -64,12 +70,13 @@ export type DeepSeekPilotOptions = {
  * `outputBudgetTokens` still caps the actual batch below this count for any unusually large
  * ability text.
  */
-const DEFAULT_OPTIONS: Required<Omit<DeepSeekPilotOptions, "deepseekCall" | "model" | "maxTokens" | "reasoningEffort">> = {
+const DEFAULT_OPTIONS: Required<Omit<DeepSeekPilotOptions, "deepseekCall" | "model" | "maxTokens" | "reasoningEffort" | "pilot">> = {
   maxRequests: 12,
   spendCapUsd: 3,
   abilitiesPerRequest: 2,
   outputBudgetTokens: DEFAULT_OUTPUT_BUDGET_TOKENS,
   concurrency: 1,
+  priorSpendUsd: 0,
 };
 
 const emptyUsage = (): DeepSeekUsage => ({ prompt_tokens: 0, prompt_cache_hit_tokens: 0, prompt_cache_miss_tokens: 0, completion_tokens: 0, reasoning_tokens: 0 });
@@ -91,10 +98,15 @@ export async function runDeepSeekArm(
 ): Promise<DeepSeekArmResult> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const usageTotals = emptyUsage();
-  let totalCost = 0;
+  let totalCost = opts.priorSpendUsd;
+  // Worst-case cost of requests in flight, reserved before each is sent (see deepseekReservationUsd).
+  let reservedUsd = 0;
+  let unknownCostRuns = 0;
   let budgetExhausted = false;
+  const model = options.model ?? DEEPSEEK_MODEL;
+  const maxTokens = options.maxTokens ?? DEFAULT_MAX_TOKENS;
   let noMoreCandidates = false;
-  const baseCall = options.deepseekCall ?? deepseekModelCall(options.model ?? DEEPSEEK_MODEL, options.maxTokens, options.reasoningEffort);
+  const baseCall = options.deepseekCall ?? deepseekModelCall(model, options.maxTokens, options.reasoningEffort);
 
   /** Runs one already-prepared request and folds its usage/cost into the shared totals. */
   async function runOnePreparedRequest(prepared: PreparedLuna): Promise<DeepSeekRunLog> {
@@ -104,22 +116,41 @@ export async function runDeepSeekArm(
       .config_json;
     const abilityVersionIdsForRun = (JSON.parse(requestAbilities) as { request_abilities: Array<{ ability_version_id: number }> })
       .request_abilities.map((item) => item.ability_version_id);
-    const captured: { usage: DeepSeekUsage | null; latencyMs: number | null; costUsd: number | null } = { usage: null, latencyMs: null, costUsd: null };
-    const view = await runLuna(openDb, prepared.run_id, {
-      transport: "deepseek",
-      deepseekModel: options.model ?? DEEPSEEK_MODEL,
-      deepseekCall: async (instructions, requestText) => {
-        const reply = await baseCall(instructions, requestText);
-        captured.usage = reply.usage ?? null;
-        captured.latencyMs = reply.latency_ms;
-        // Priced against whatever model actually answered (deepseekModelCall already resolves
-        // this correctly per-model); recomputing here without the model would silently default
-        // to deepseek-v4-pro's price table even for a deepseek-flash reply.
-        captured.costUsd = reply.cost_usd;
-        return reply;
-      },
-    });
+    const captured: { usage: DeepSeekUsage | null; latencyMs: number | null; costUsd: number | null; costUnknown: boolean } = { usage: null, latencyMs: null, costUsd: null, costUnknown: false };
+    const reservation = deepseekReservationUsd(Buffer.byteLength(JSON.stringify(prepared.request), "utf8"), maxTokens, model);
+    reservedUsd += reservation;
+    let view: LunaRunView;
+    try {
+      view = await runLuna(openDb, prepared.run_id, {
+        transport: "deepseek",
+        deepseekModel: model,
+        deepseekCall: async (instructions, requestText) => {
+          try {
+            const reply = await baseCall(instructions, requestText);
+            captured.usage = reply.usage ?? null;
+            captured.latencyMs = reply.latency_ms;
+            // Priced against whatever model actually answered (deepseekModelCall already resolves
+            // this correctly per-model); recomputing here without the model would silently default
+            // to deepseek-v4-pro's price table even for a deepseek-flash reply.
+            captured.costUsd = reply.cost_usd;
+            return reply;
+          } catch (error) {
+            // A truncated or timed-out call may still have billed: count what it reports.
+            if (error instanceof DeepSeekCallError) {
+              captured.usage = error.accounting.usage;
+              captured.latencyMs = error.accounting.latency_ms;
+              captured.costUsd = error.accounting.cost_usd;
+              captured.costUnknown = error.accounting.cost_unknown;
+            }
+            throw error;
+          }
+        },
+      });
+    } finally {
+      reservedUsd -= reservation;
+    }
     const costUsd = captured.costUsd;
+    if (captured.costUnknown) unknownCostRuns += 1;
     // Synchronous updates after the only await in this function: safe against the other
     // concurrent slots, which cannot interleave with this code between awaits.
     if (captured.usage) {
@@ -130,7 +161,7 @@ export async function runDeepSeekArm(
       usageTotals.reasoning_tokens = (usageTotals.reasoning_tokens ?? 0) + (captured.usage.reasoning_tokens ?? 0);
     }
     if (costUsd !== null) totalCost += costUsd;
-    if (totalCost >= opts.spendCapUsd) budgetExhausted = true;
+    if (totalCost + reservedUsd >= opts.spendCapUsd) budgetExhausted = true;
     return {
       run_id: prepared.run_id, state: view.state,
       ability_version_ids: abilityVersionIdsForRun,
@@ -151,6 +182,19 @@ export async function runDeepSeekArm(
    * transactional, so concurrent slots never race over which abilities each one claims — only the
    * actual transport call (the `await runLuna`) overlaps between slots.
    */
+  /**
+   * Whether the cap still admits this request's worst case. A refused request is closed as
+   * failed at the budget stage before anything is sent, so it costs nothing and a later resume
+   * prepares its abilities again.
+   */
+  function admits(prepared: PreparedLuna): boolean {
+    const worst = deepseekReservationUsd(Buffer.byteLength(JSON.stringify(prepared.request), "utf8"), maxTokens, model);
+    if (totalCost + reservedUsd + worst <= opts.spendCapUsd) return true;
+    budgetExhausted = true;
+    failLunaRun(db, Number(prepared.run_id), null, { stage: "abandon", reason_code: "SPEND_CAP", message: "The spend cap cannot admit this request's worst-case cost; nothing was sent." });
+    return false;
+  }
+
   async function runOneSlot(): Promise<DeepSeekRunLog[]> {
     if (budgetExhausted || noMoreCandidates) return [];
     let prepared: PreparedLuna;
@@ -160,11 +204,13 @@ export async function runDeepSeekArm(
         limit: opts.abilitiesPerRequest,
         abilityVersionIds,
         outputBudgetTokens: opts.outputBudgetTokens,
+        ...(options.pilot ? { pilot: options.pilot } : {}),
       });
     } catch (error) {
       if (error instanceof RangeError) { noMoreCandidates = true; return []; } // no more candidates in the sample
       throw error;
     }
+    if (!admits(prepared)) return [];
     const result = await runOnePreparedRequest(prepared);
     // Only a transport failure (the reply itself never finished) is worth retrying split into
     // singles. An INVALID_RESPONSE import rejection means the model answered in full and the
@@ -181,10 +227,11 @@ export async function runDeepSeekArm(
       if (budgetExhausted) break;
       let singleton: PreparedLuna;
       try {
-        singleton = prepareLuna(db, { ability_version_id: abilityVersionId, outputBudgetTokens: opts.outputBudgetTokens });
+        singleton = prepareLuna(db, { ability_version_id: abilityVersionId, outputBudgetTokens: opts.outputBudgetTokens, ...(options.pilot ? { pilot: options.pilot } : {}) });
       } catch {
         continue; // this one ability no longer has unclaimed uncovered source; nothing to retry
       }
+      if (!admits(singleton)) break;
       retryResults.push(await runOnePreparedRequest(singleton));
     }
     return retryResults;
@@ -196,6 +243,6 @@ export async function runDeepSeekArm(
 
   return {
     max_requests: opts.maxRequests, spend_cap_usd: opts.spendCapUsd, price_source: DEEPSEEK_PRICE_SOURCE,
-    requests: runs.length, total_cost_usd: totalCost, usage_totals: usageTotals, budget_exhausted: budgetExhausted, runs,
+    requests: runs.length, total_cost_usd: totalCost, usage_totals: usageTotals, budget_exhausted: budgetExhausted, unknown_cost_runs: unknownCostRuns, runs,
   };
 }

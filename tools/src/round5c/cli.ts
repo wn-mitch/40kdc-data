@@ -2,7 +2,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { openWorkbench } from "./db.js";
+import { assertNotLiveWorkbench, openWorkbench, workbenchPath } from "./db.js";
+import { runControlCommand } from "./cli-control.js";
 import { importHitTrain, repairRelatedVariantProposals } from "./migration.js";
 import { abandonLunaRun, lunaRunView, runLuna } from "./luna-run.js";
 import { importLuna, prepareLuna, type LunaMode, type PrepareLunaOptions } from "./proposal.js";
@@ -51,10 +52,15 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
   return { faction_id: factionId, entry_ids: serializedEntryIds.split(",").map((id) => id.trim()).filter(Boolean) };
 }
 
+/** Legacy commands that write machine results; they run only against a copy of the workbench. */
+const MACHINE_EFFECT_COMMANDS = new Set(["pipeline-8b", "jev-v2-pilot"]);
+
 async function run(command: string | undefined): Promise<void> {
+  if (await runControlCommand(command, process.argv.slice(3))) return;
+  if (command && MACHINE_EFFECT_COMMANDS.has(command)) assertNotLiveWorkbench(workbenchPath(), command);
   const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals", "pipeline-8b", "pipeline-8b-gates-only", "pilot-sample", "jev-pilot", "deepseek-pilot", "calibrate-segmentation", "jev-v2-pilot"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only [sample.json]|pilot-sample [seed] [target-size]|jev-pilot <sample.json> [spend-cap-usd]|deepseek-pilot <sample.json> [max-requests] [spend-cap-usd] [abilities-per-request] [concurrency]|calibrate-segmentation [max-abilities]|jev-v2-pilot <sample.json> <threshold> [spend-cap-usd] [max-rounds]>");
+    throw new Error("Usage: round5c <commands|status|pilot-step (see `round5c commands`)|init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals|pipeline-8b|pipeline-8b-gates-only [sample.json]|pilot-sample [seed] [target-size]|jev-pilot <sample.json> [spend-cap-usd]|deepseek-pilot <sample.json> [max-requests] [spend-cap-usd] [abilities-per-request] [concurrency]|calibrate-segmentation [max-abilities]|jev-v2-pilot <sample.json> <threshold> [spend-cap-usd] [max-rounds]>");
   }
   if (command === "leaf-describer-audit") {
     // Depends only on the registry and the describer, not on the workbench database.

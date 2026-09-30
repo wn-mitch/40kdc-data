@@ -135,6 +135,8 @@ type ModelRunConfig = {
   system_prompt_hash?: string;
   predecessor_run_id?: number | null;
   execution?: LunaExecution | null;
+  /** The pilot step that prepared this run, for resuming and reporting a step from the database. */
+  pilot?: PilotTag;
   request_abilities: RequestAbilityConfig[];
   manual_review_abilities: Array<{
     ability_version_id: number;
@@ -378,8 +380,13 @@ function residueBytes(regions: readonly UncoveredInterval[]): number {
   return regions.reduce((total, region) => total + region.end_byte - region.start_byte, 0);
 }
 
+/** Which pilot step a run belongs to. */
+export type PilotTag = { step: string; model: string };
+
 /** Options for one prepared source-decomposition request. */
 export type PrepareLunaOptions = {
+  /** Record the run as part of this pilot step. */
+  pilot?: PilotTag;
   limit?: number;
   mode?: LunaMode;
   faction_id?: string;
@@ -552,6 +559,7 @@ export function prepareLuna(db: DatabaseSync, options: PrepareLunaOptions = {}):
         system_prompt_hash: hashJson({ instructions: request.instructions }),
         predecessor_run_id: retryOf ?? null,
         execution: null,
+        ...(options.pilot ? { pilot: options.pilot } : {}),
         request_abilities: selected.map((item): RequestAbilityConfig => ({
           ability_version_id: item.ability.id,
           faction_id: item.ability.faction_id,
@@ -1282,18 +1290,24 @@ export type LunaImportSummary = {
 };
 
 /** A redacted, source-free reason a run closed without importing anything. */
+/** What a failed call cost, when the transport knows: billed usage, or an explicitly unknown cost. */
+export type RunAccounting = { usage: Record<string, number> | null; cost_usd: number | null; latency_ms: number | null; cost_unknown: boolean };
+
 export type LunaFailure = { stage: "transport" | "parse" | "import" | "abandon"; reason_code: string; message: string; exit_code?: number | null };
 
 /**
  * Close a still-pending run as failed. The owner guard ensures a late or competing runner
  * cannot fail (or later complete) a run it no longer holds. Returns whether this call closed it.
  */
-export function failLunaRun(db: DatabaseSync, runId: number, owner: string | null, failure: LunaFailure): boolean {
+export function failLunaRun(db: DatabaseSync, runId: number, owner: string | null, failure: LunaFailure, accounting?: RunAccounting): boolean {
   return withTransaction(db, () => {
     const changed = db.prepare(`
-      UPDATE model_runs SET status = 'failed', output_json = ?
+      UPDATE model_runs SET status = 'failed', output_json = ?, cost_usd = ?, latency_ms = ?
       WHERE id = ? AND status = 'pending' AND json_extract(config_json, '$.execution.owner') IS ?
-    `).run(JSON.stringify({ failure: { ...failure, ended_at: new Date().toISOString() } }), runId, owner);
+    `).run(
+      JSON.stringify({ failure: { ...failure, ended_at: new Date().toISOString() }, ...(accounting ? { usage: accounting.usage, cost_unknown: accounting.cost_unknown } : {}) }),
+      accounting?.cost_usd ?? null, accounting?.latency_ms ?? null, runId, owner,
+    );
     if (changed.changes === 1) bumpWorkbenchRevision(db);
     return changed.changes === 1;
   });

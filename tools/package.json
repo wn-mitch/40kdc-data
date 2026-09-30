@@ -107,6 +107,7 @@
     "round5-review:dev": "vite --config round5-review/vite.config.ts",
     "round5-review:build": "vite build --config round5-review/vite.config.ts",
     "round5-review:test": "vitest run round5-review/src/model.test.ts",
+    "round5c": "tsx src/round5c/cli.ts",
     "round5c:init": "tsx src/round5c/cli.ts init",
     "round5c:refresh": "tsx src/round5c/cli.ts refresh",
     "round5c:import-hit-train": "tsx src/round5c/cli.ts import-hit-train",

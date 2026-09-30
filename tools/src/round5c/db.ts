@@ -15,7 +15,7 @@ import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 import { AUTHORITY_INDEXES, needsAuthorityMigration, upgradeAuthority } from "./authority-migration.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
-const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string): DatabaseType };
+const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string, options?: { readOnly?: boolean }): DatabaseType };
 
 const initialized = new WeakSet<DatabaseSync>();
 const transactionDepth = new WeakMap<DatabaseSync, number>();
@@ -779,6 +779,40 @@ function backupBeforeAuthority(db: DatabaseSync, databasePath: string): void {
   const backup = `${databasePath}.pre5d`;
   if (existsSync(backup)) return;
   db.prepare("VACUUM INTO ?").run(backup);
+}
+
+/** The database a command acts on: the explicit path, else `ROUND5C_DB`, else the live workbench. */
+export function workbenchPath(path?: string): string {
+  return resolve(path ?? process.env.ROUND5C_DB ?? defaultDatabasePath);
+}
+
+/** Whether a path is the live workbench, or any database kept beside it. */
+export function isLiveWorkbench(path: string): boolean {
+  const live = dirname(defaultDatabasePath);
+  const target = resolve(path);
+  return target === defaultDatabasePath || dirname(target) === live;
+}
+
+/** Refuse a machine-effect command against the live workbench; pilots run on a copy. */
+export function assertNotLiveWorkbench(path: string, command: string): void {
+  if (isLiveWorkbench(path)) {
+    throw Object.assign(new Error(`${command} writes machine results and runs only on a copy of the workbench; set ROUND5C_DB to a copy outside _private/round5c/.`), { code: "LIVE_DATABASE_REFUSED" });
+  }
+}
+
+/**
+ * Open a workbench for reading only: no schema creation, no migration, no writes of any kind.
+ * A database that predates the current schema is refused; open it once read-write to migrate.
+ */
+export function openWorkbenchReadOnly(path?: string): DatabaseSync {
+  const databasePath = workbenchPath(path);
+  if (!existsSync(databasePath)) throw Object.assign(new Error(`No workbench database at ${databasePath}.`), { code: "DATABASE_MISSING" });
+  const db = new DatabaseSync(databasePath, { readOnly: true });
+  if (!tableExists(db, "annotations") || needsAuthorityMigration(db)) {
+    db.close();
+    throw Object.assign(new Error(`${databasePath} predates the current schema; open it read-write once to migrate it.`), { code: "SCHEMA_OUTDATED" });
+  }
+  return db;
 }
 
 /** Open the ignored local workbench and initialize its schema on first use. */
