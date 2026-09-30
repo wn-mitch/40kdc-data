@@ -11,7 +11,7 @@ import { confirmSurface } from "./leaves.js";
  * database, so a decision file only carries the judgement.
  *
  * `confirm` takes the proposal's label as it stands; `correct` gives the family and parameters
- * (and optionally new bytes as `exact_text`, found within the proposal's fragment); `reject`,
+ * (and optionally new bytes as `exact_text`, found within the proposal's or annotation's fragment); `reject`,
  * `novel` and `ambiguous` record the refusal or the gap. `connective` confirms a connective.
  */
 
@@ -48,7 +48,7 @@ function located(row: ProposalRow, text: string): { start_byte: number; end_byte
   const bytes = Buffer.from(row.source_text, "utf8");
   const scope = bytes.subarray(fragment.start_byte, fragment.end_byte).toString("utf8");
   const index = scope.indexOf(text);
-  if (index < 0 || scope.indexOf(text, index + 1) >= 0) throw new Error(`"${text}" must occur exactly once in fragment ${row.fragment} of proposal ${row.id}.`);
+  if (index < 0 || scope.indexOf(text, index + 1) >= 0) throw new Error(`"${text}" must occur exactly once in fragment ${row.fragment} of row ${row.id}.`);
   const start = fragment.start_byte + Buffer.byteLength(scope.slice(0, index), "utf8");
   return { start_byte: start, end_byte: start + Buffer.byteLength(text, "utf8") };
 }
@@ -61,20 +61,23 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
   const annotationId = item.annotation_id!;
   const row = db.prepare(`
     SELECT annotations.authority_kind, source_spans.ability_version_id, abilities.source_hash, source_spans.fragment, source_spans.start_byte,
-      source_spans.end_byte, source_spans.exact_text, semantic_families.role, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
+      source_spans.end_byte, source_spans.exact_text, semantic_families.role, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json,
+      abilities.source_text, abilities.fragments_json
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id JOIN abilities ON abilities.id = source_spans.ability_version_id
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
     WHERE annotations.id = ? AND annotations.status = 'active'
-  `).get(annotationId) as (Omit<ProposalRow, "id" | "source_text" | "fragments_json"> & { authority_kind: string }) | undefined;
+  `).get(annotationId) as (Omit<ProposalRow, "id"> & { authority_kind: string }) | undefined;
   if (!row) throw new Error(`No active annotation ${annotationId}.`);
   const base = {
     ability_version_id: row.ability_version_id, source_hash: row.source_hash, fragment: row.fragment,
     start_byte: row.start_byte, end_byte: row.end_byte, exact_text: row.exact_text,
   };
   if (item.action === "correct") {
+    // New wording (widened or narrowed) must still overlap the row it replaces.
+    const bytes = item.exact_text ? { ...located({ ...row, id: annotationId }, item.exact_text), exact_text: item.exact_text } : {};
     return {
-      ...base, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role,
+      ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role,
       family_id: item.family_id ?? row.family_id, ...(item.family_id ? {} : { family_version: row.family_version }),
       parameters: item.parameters ?? JSON.parse(row.parameters_json!) as Record<string, unknown>,
     };

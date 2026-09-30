@@ -11,6 +11,7 @@ import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, openWorkbench } from "../src/round5c/db.js";
 import { confirmSurface, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
+import { applyChatReview } from "../src/round5c/review-apply.js";
 import { refreshSources } from "../src/round5c/source.js";
 
 type DatabaseSync = DatabaseType;
@@ -194,6 +195,20 @@ describe("Round 5C authority boundary", () => {
       expect(audit.reverted.proposals).toBe(1);
       expect(audit.surfaces.map((surface) => surface.authority).sort()).toEqual(["human", "machine"]);
       expect(readdirSync(directory)).toContain("workbench.sqlite.pre5d");
+    } finally {
+      db.close();
+    }
+  });
+
+  it("widens a trusted leaf through a chat correction that gives new wording, replacing the old row", () => {
+    const db = fixture([{ ability_id: "wide", raw_text: `Then ${CP} next turn.` }]);
+    try {
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "wide", CP)] }, WILL);
+      const old = db.prepare("SELECT id FROM annotations WHERE status = 'active'").get() as { id: number };
+      const result = applyChatReview(db, { reviewer: "will", decisions: [{ annotation_id: old.id, action: "correct", exact_text: `${CP} next turn` }] });
+      expect(result.failed).toEqual([]);
+      const active = db.prepare("SELECT source_spans.exact_text, annotations.authority_kind FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active'").all();
+      expect(active).toEqual([{ exact_text: `${CP} next turn`, authority_kind: "human" }]);
     } finally {
       db.close();
     }
