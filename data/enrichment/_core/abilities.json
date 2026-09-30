@@ -764,12 +764,29 @@
       "edition": "11th",
       "dataslate": "launch"
     },
-    "stub": true,
     "unit_ids": [],
     "detachment_id": null,
     "ability_type": "core",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "remaining_max": {
+            "rating": true
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -789,6 +806,42 @@
     "ability_type": "core",
     "effect": {
       "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-objective-control",
+    "name": "Damaged Objective Control",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "damaged": true
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "OC",
+          "operation": "subtract",
+          "value": {
+            "rating": true
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"

@@ -2277,29 +2277,6 @@
     }
   },
   {
-    "ability_id": "damaged-blood-angels",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "baal-predator",
-      "death-company-dreadnought"
-    ],
-    "faction_id": "blood-angels",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "death-visions-of-sanguinius-blood-angels",
     "name": "Death Visions of Sanguinius",
     "authored_by": "40kdc-community",

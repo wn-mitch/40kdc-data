@@ -52,7 +52,14 @@
         "value": "D3"
       },
       "huntsman-chaos-knights",
-      "damaged-1-5-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -135,7 +142,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -218,7 +232,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -306,7 +327,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -399,7 +427,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-war-dog-moirax-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -481,7 +516,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -585,7 +627,14 @@
       },
       "dread-dominion-chaos-knights",
       "seething-hatred-chaos-knights",
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -684,7 +733,14 @@
       },
       "searing-flames-chaos-knights",
       "unrestrained-terror-chaos-knights",
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -773,7 +829,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-knight-ruinator-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -863,7 +926,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -951,7 +1021,14 @@
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1038,7 +1115,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1124,7 +1208,14 @@
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1212,7 +1303,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1298,7 +1396,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1387,7 +1492,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1477,7 +1589,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1570,7 +1689,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1661,7 +1787,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1751,7 +1884,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-chaos-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",

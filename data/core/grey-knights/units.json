@@ -63,7 +63,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
@@ -159,7 +162,10 @@
       },
       "deep-strike",
       "surge-of-wrath-grey-knights",
-      "damaged-1-4-wounds-remaining-grey-knights",
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights"
     ],
     "game_version": {
@@ -257,7 +263,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 16
@@ -621,7 +630,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -719,7 +731,10 @@
         "id": "thunderhawk-cluster-bombs-grey-knights",
         "wargear": "thunderhawk-cluster-bombs"
       },
-      "damaged-1-10-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      }
     ],
     "transport_capacity": {
       "capacity": 30
@@ -1977,7 +1992,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2328,7 +2346,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-grey-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12

@@ -4725,50 +4725,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-4-wounds-remaining-drukhari",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "ravager"
-    ],
-    "faction_id": "drukhari",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-4-wounds-remaining-voidraven-bomber-drukhari",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "voidraven-bomber"
-    ],
-    "faction_id": "drukhari",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "dance-macabre-reapers-wager-drukhari",
     "name": "Dance Macabre",
     "authored_by": "40kdc-community",

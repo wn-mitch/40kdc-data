@@ -3304,46 +3304,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-6-wounds-remaining-death-guard",
-    "name": "Damaged: 1-6 Wounds Remaining",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "wounds",
-        "parameters": {
-          "subject": "this-model",
-          "lost": true
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-model",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "defiler",
-      "mortarion"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "death-guard"
-  },
-  {
     "ability_id": "worldblight-death-guard",
     "name": "Worldblight",
     "authored_by": "40kdc-community",
@@ -4276,52 +4236,6 @@
     "faction_id": "death-guard",
     "detachment_id": "virulent-vectorium",
     "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-4-wounds-remaining-death-guard",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "chaos-predator-annihilator",
-      "chaos-predator-destructor",
-      "plagueburst-crawler"
-    ],
-    "faction_id": "death-guard",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-5-wounds-remaining-death-guard",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "chaos-land-raider"
-    ],
-    "faction_id": "death-guard",
-    "detachment_id": null,
-    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },

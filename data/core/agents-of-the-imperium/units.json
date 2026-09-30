@@ -2521,14 +2521,13 @@
       },
       "hover",
       "stealth",
-      "damaged-agents-of-the-imperium",
-      {
-        "id": "auspex-array-wargear-agents-of-the-imperium",
-        "wargear": "auspex-array"
-      },
       {
         "id": "damaged",
         "value": 5
+      },
+      {
+        "id": "auspex-array-wargear-agents-of-the-imperium",
+        "wargear": "auspex-array"
       }
     ],
     "transport_capacity": {

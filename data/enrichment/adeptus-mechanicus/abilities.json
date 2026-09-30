@@ -5515,29 +5515,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-4-wounds-remaining-adeptus-mechanicus",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "onager-dunecrawler",
-      "skorpius-disintegrator"
-    ],
-    "faction_id": "adeptus-mechanicus",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
     "name": "Data-blessed Autosermon",
     "authored_by": "40kdc-community",

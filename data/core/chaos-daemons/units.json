@@ -65,7 +65,10 @@
       },
       "deep-strike",
       "scuttling-walker-chaos-daemons",
-      "damaged-1-5-wounds-remaining-chaos-daemons"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -299,7 +302,10 @@
       "greater-daemon-of-nurgle-chaos-daemons",
       "virulent-blessing-chaos-daemons",
       "deep-strike",
-      "damaged-1-7-wounds-remaining-chaos-daemons"
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1162,7 +1168,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-chaos-daemons"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1249,8 +1258,11 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-chaos-daemons",
-      "greater-daemon-of-slaanesh-chaos-daemons"
+      "greater-daemon-of-slaanesh-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1696,7 +1708,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-chaos-daemons"
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1944,8 +1959,11 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-chaos-daemons",
-      "greater-daemon-of-nurgle-chaos-daemons"
+      "greater-daemon-of-nurgle-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2286,7 +2304,7 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-skarbrand-chaos-daemons"
+      "damaged-1-7-wounds-remaining-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2375,7 +2393,10 @@
       "supreme-commander-chaos-daemons",
       "the-dark-master-chaos-daemons",
       "the-shadow-of-chaos-chaos-daemons",
-      "damaged-1-7-wounds-remaining-chaos-daemons"
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2991,7 +3012,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 6
+      },
       "greater-daemon-of-khorne-chaos-daemons"
     ],
     "game_version": {
@@ -3867,8 +3891,11 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-chaos-daemons",
-      "greater-daemon-of-tzeentch-chaos-daemons"
+      "greater-daemon-of-tzeentch-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",

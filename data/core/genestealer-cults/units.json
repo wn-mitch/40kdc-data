@@ -1815,7 +1815,10 @@
         "id": "firing-deck",
         "value": 6
       },
-      "damaged-1-3-wounds-remaining-genestealer-cults"
+      {
+        "id": "damaged",
+        "value": 3
+      }
     ],
     "transport_capacity": {
       "capacity": 6

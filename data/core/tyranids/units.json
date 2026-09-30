@@ -46,7 +46,10 @@
     "ability_ids": [
       "deep-strike",
       "subterranean-tunnels-tyranids",
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -122,7 +125,10 @@
     "ability_ids": [
       "terror-from-the-deep-tyranids",
       "deep-strike",
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -392,7 +398,10 @@
       },
       "frenzied-metabolism-tyranids",
       "hover",
-      "damaged-1-10-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 10
+      }
     ],
     "transport_capacity": {
       "capacity": 20
@@ -478,7 +487,10 @@
       },
       "singular-purpose-tyranids",
       "unnatural-resilience-tyranids",
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -712,7 +724,14 @@
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-1-10-wounds-remaining-hierophant-tyranids"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 6
+      }
     ],
     "transport_capacity": {
       "capacity": 20
@@ -875,7 +894,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1586,7 +1608,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-tyranids",
+      {
+        "id": "damaged",
+        "value": 5
+      },
       "singular-purpose-tyranids"
     ],
     "game_version": {
@@ -1741,7 +1766,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2139,7 +2167,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3326,7 +3357,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3404,7 +3438,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3562,7 +3599,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3888,7 +3928,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-tyranids"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",

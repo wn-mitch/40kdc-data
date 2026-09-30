@@ -1096,7 +1096,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1611,7 +1614,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2084,7 +2090,10 @@
         "value": "D6"
       },
       "scuttling-walker-chaos-space-marines",
-      "damaged-1-6-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2198,7 +2207,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2553,7 +2565,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2637,7 +2652,10 @@
         "value": "D3"
       },
       "siege-shield-chaos-space-marines",
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2740,7 +2758,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3930,7 +3951,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4497,7 +4521,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4980,7 +5007,14 @@
         "value": "D6+2"
       },
       "plough-through-the-enemy-chaos-space-marines",
-      "damaged-1-8-wounds-remaining-chaos-space-marines"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

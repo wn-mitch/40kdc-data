@@ -155,7 +155,10 @@
         "value": "3D6"
       },
       "hover",
-      "damaged-1-20-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 20
+      }
     ],
     "transport_capacity": {
       "capacity": 200
@@ -573,7 +576,10 @@
         "value": "D3"
       },
       "pulse-bombs-tau-empire",
-      "damaged-1-4-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -777,7 +783,14 @@
       },
       "for-the-greater-good-tau-empire",
       "super-heavy-walker",
-      "damaged-1-10-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1311,7 +1324,10 @@
         "id": "transport-bay-tau-empire",
         "wargear": "transport-bay"
       },
-      "damaged-1-6-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1500,7 +1516,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-5-wounds-remaining-stormsurge-tau-empire"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1840,7 +1863,10 @@
       },
       "nova-charge-tau-empire",
       "weapon-support-system-riptide-battlesuit-tau-empire",
-      "damaged-1-4-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2183,7 +2209,10 @@
         "id": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire",
         "wargear": "battlesuit-support-system"
       },
-      "damaged-1-4-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2273,7 +2302,10 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-6-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2352,7 +2384,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3160,7 +3195,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-tau-empire"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3414,7 +3452,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-tau-empire",
+      {
+        "id": "damaged",
+        "value": 5
+      },
       "targeting-array-tau-empire"
     ],
     "game_version": {

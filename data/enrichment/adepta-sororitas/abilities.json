@@ -6483,29 +6483,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-4-wounds-remaining-adepta-sororitas",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "castigator",
-      "exorcist"
-    ],
-    "faction_id": "adepta-sororitas",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "damaged-1-6-wounds-remaining-adepta-sororitas",
     "name": "DAMAGED: 1-6 WOUNDS REMAINING",
     "authored_by": "40kdc-community",

@@ -39,9 +39,9 @@
   -&gt; You can re-roll the Damage roll for attacks made by this model with melee weapons.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Damaged: 1-4 Wounds Remaining" typeName="Abilities">
+            <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Warrior Strategist" typeName="Abilities">

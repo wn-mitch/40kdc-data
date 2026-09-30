@@ -4325,41 +4325,6 @@
     }
   },
   {
-    "ability_id": "damaged-adeptus-astartes",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "astraeus",
-      "ballistus-dreadnought",
-      "brutalis-dreadnought",
-      "gladiator-lancer",
-      "gladiator-reaper",
-      "gladiator-valiant",
-      "invictor-tactical-warsuit",
-      "land-raider",
-      "land-raider-crusader",
-      "land-raider-redeemer",
-      "redemptor-dreadnought",
-      "repulsor",
-      "repulsor-executioner",
-      "thunderhawk-gunship"
-    ],
-    "faction_id": "adeptus-astartes",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "decapitating-strike-assault-force-adeptus-astartes",
     "name": "Decapitating Strike",
     "authored_by": "40kdc-community",
@@ -7624,26 +7589,6 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "stormlance-task-force",
     "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "wisdom-of-the-ancients-venerable-dreadnought-adeptus-astartes",
-    "name": "Wisdom of the Ancients",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "adeptus-astartes",
-    "detachment_id": null,
-    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },

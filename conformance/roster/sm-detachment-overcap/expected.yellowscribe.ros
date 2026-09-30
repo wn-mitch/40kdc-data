@@ -31,19 +31,9 @@
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="DAMAGED" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -134,14 +124,9 @@
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

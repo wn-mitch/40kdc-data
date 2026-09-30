@@ -12489,39 +12489,6 @@
     }
   },
   {
-    "ability_id": "damaged-orks",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "battlewagon",
-      "blitza-bommer",
-      "burna-bommer",
-      "dakkajet",
-      "gargantuan-squiggoth",
-      "gorkanaut",
-      "gunwagon",
-      "hunta-rig",
-      "kill-rig",
-      "morkanaut",
-      "stompa",
-      "wazbom-blastajet"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "deff-from-the-shadows-orks",
     "name": "Deff from the Shadows (First battle round onwards)",
     "authored_by": "40kdc-community",

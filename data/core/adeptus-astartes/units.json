@@ -134,12 +134,10 @@
         "value": "D3"
       },
       "aquilon-optics-black-templars",
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 4
-      },
-      "damaged-black-templars"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -884,7 +882,6 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 6
@@ -1365,12 +1362,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 6
       },
-      "damaged-black-templars",
       "executioner-black-templars"
     ],
     "transport_capacity": {
@@ -1548,13 +1543,11 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
-      "priority-target-acquisition-black-templars",
       {
         "id": "damaged",
         "value": 4
       },
-      "damaged-black-templars"
+      "priority-target-acquisition-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1737,14 +1730,12 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-adeptus-astartes",
-      "combat-embarkation-adeptus-astartes",
-      "combat-embarkation-black-templars",
       {
         "id": "damaged",
         "value": 6
       },
-      "damaged-black-templars"
+      "combat-embarkation-adeptus-astartes",
+      "combat-embarkation-black-templars"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -1842,13 +1833,11 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
-      "reaping-tally-black-templars",
       {
         "id": "damaged",
         "value": 4
       },
-      "damaged-black-templars"
+      "reaping-tally-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1967,8 +1956,7 @@
       {
         "id": "damaged",
         "value": 4
-      },
-      "damaged-blood-angels"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2930,8 +2918,7 @@
       {
         "id": "damaged",
         "value": 4
-      },
-      "damaged-blood-angels"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3837,8 +3824,7 @@
       {
         "id": "damaged",
         "value": 3
-      },
-      "damaged-dark-angels"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4408,8 +4394,7 @@
       {
         "id": "damaged",
         "value": 3
-      },
-      "damaged-dark-angels"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5126,8 +5111,7 @@
       {
         "id": "damaged",
         "value": 5
-      },
-      "damaged-deathwatch"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -8157,7 +8141,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 4
@@ -8417,7 +8400,6 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 6
@@ -9222,7 +9204,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 4
@@ -10548,12 +10529,11 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-adeptus-astartes",
-      "suppression-fire-adeptus-astartes",
       {
         "id": "damaged",
         "value": 8
-      }
+      },
+      "suppression-fire-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10639,7 +10619,6 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 6
@@ -10742,7 +10721,6 @@
         "value": "D6+2"
       },
       "hover",
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 10
@@ -11009,7 +10987,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 4
@@ -11501,7 +11478,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-adeptus-astartes",
       {
         "id": "damaged",
         "value": 4

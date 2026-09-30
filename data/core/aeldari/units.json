@@ -56,7 +56,14 @@
       "revenant-jet-pack-aeldari",
       "titanic-advance-aeldari",
       "towering-wraith-construct-revenant-titan-aeldari",
-      "damaged-1-10-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 8
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -477,7 +484,10 @@
         "value": "D3"
       },
       "wave-serpent-shield-aeldari",
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -775,7 +785,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2219,9 +2232,16 @@
         "value": "D6+6"
       },
       "flawless-poise-aeldari",
-      "damaged-1-16-wounds-remaining-aeldari",
+      {
+        "id": "damaged",
+        "value": 16
+      },
       "titanic-advance-aeldari",
-      "towering-wraith-construct-aeldari"
+      "towering-wraith-construct-aeldari",
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2296,7 +2316,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2525,7 +2548,10 @@
     ],
     "ability_ids": [
       "mindshock-pod-aeldari",
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2618,7 +2644,14 @@
         "wargear": "scattershield"
       },
       "titanic-strides-aeldari",
-      "damaged-1-6-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4220,10 +4253,17 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-aeldari",
+      {
+        "id": "damaged",
+        "value": 6
+      },
       {
         "id": "scattershield-aeldari",
         "wargear": "scattershield"
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
       }
     ],
     "game_version": {
@@ -4532,7 +4572,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4898,7 +4941,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 6,
@@ -5213,7 +5259,10 @@
     ],
     "ability_ids": [
       "skyhunter-aeldari",
-      "damaged-1-4-wounds-remaining-aeldari"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

@@ -6411,79 +6411,7 @@
     }
   },
   {
-    "ability_id": "damaged-1-5-wounds-remaining-chaos-daemons",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "soul-grinder"
-    ],
-    "faction_id": "chaos-daemons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-6-wounds-remaining-chaos-daemons",
-    "name": "DAMAGED: 1-6 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "bloodthirster",
-      "keeper-of-secrets"
-    ],
-    "faction_id": "chaos-daemons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "damaged-1-7-wounds-remaining-chaos-daemons",
-    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "belakor",
-      "great-unclean-one",
-      "kairos-fateweaver",
-      "lord-of-change",
-      "rotigus",
-      "shalaxi-helbane"
-    ],
-    "faction_id": "chaos-daemons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-7-wounds-remaining-skarbrand-chaos-daemons",
     "name": "DAMAGED: 1-7 WOUNDS REMAINING",
     "authored_by": "40kdc-community",
     "game_version": {

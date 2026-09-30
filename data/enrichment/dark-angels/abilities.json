@@ -2625,29 +2625,6 @@
     }
   },
   {
-    "ability_id": "damaged-dark-angels",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "nephilim-jetfighter",
-      "ravenwing-dark-talon"
-    ],
-    "faction_id": "dark-angels",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "emnity-for-the-unworthy-dark-angels",
     "name": "Emnity for the Unworthy",
     "authored_by": "40kdc-community",

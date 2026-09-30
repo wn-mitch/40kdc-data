@@ -3716,28 +3716,6 @@
     }
   },
   {
-    "ability_id": "damaged-agents-of-the-imperium",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "faction_id": "agents-of-the-imperium",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "digital-weapons-imperialis-fleet-agents-of-the-imperium",
     "name": "Digital Weapons",
     "authored_by": "40kdc-community",

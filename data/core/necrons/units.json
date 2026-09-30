@@ -138,8 +138,15 @@
         "value": "D6+2"
       },
       "terrifying-monstrosity-necrons",
-      "damaged-1-9-wounds-remaining-necrons",
-      "super-heavy-walker"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "super-heavy-walker",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -522,7 +529,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 1
@@ -745,7 +755,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1044,7 +1057,7 @@
         "value": "D6+3"
       },
       "powers-of-the-ctan-necrons",
-      "damaged-1-8-wounds-remaining-tesseract-vault-necrons"
+      "damaged-1-8-wounds-remaining-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1896,7 +1909,14 @@
       },
       "gravitic-pulse-necrons",
       "deep-strike",
-      "damaged-1-8-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2327,7 +2347,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3412,7 +3439,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3721,7 +3751,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-necrons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4196,9 +4229,7 @@
       "twin-gauss-flayer",
       "doomstalker-limbs"
     ],
-    "ability_ids": [
-      "damaged-1-4-wounds-remaining-necrons"
-    ],
+    "ability_ids": [],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

@@ -147,7 +147,10 @@
       },
       "immaterial-flare-thousand-sons",
       "mutating-vortex-thousand-sons",
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -233,7 +236,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
@@ -559,7 +565,10 @@
         "value": "D3"
       },
       "siege-shield-thousand-sons",
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1283,7 +1292,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1369,7 +1381,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1461,7 +1476,10 @@
       },
       "destroyer-of-futures-thousand-sons",
       "scuttling-walker-thousand-sons",
-      "damaged-1-6-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1928,7 +1946,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2175,7 +2196,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2261,7 +2285,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2343,7 +2370,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-thousand-sons"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

@@ -53,9 +53,9 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
                 <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED: 1-7 WOUNDS REMAINING" typeName="Abilities">
+            <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -161,14 +161,14 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED: 1-7 WOUNDS REMAINING" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Greater Daemon of Nurgle (Aura)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">If the unit is a NURGLE LEGIONES DAEMONICA unit, for the rest of the battle, friendly units within 6" count as being within The Shadow of Chaos.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

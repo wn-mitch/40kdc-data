@@ -724,28 +724,6 @@
     }
   },
   {
-    "ability_id": "damaged-deathwatch",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "faction_id": "deathwatch",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "dragonfire-rounds-deathwatch-support-deathwatch",
     "name": "Dragonfire Rounds",
     "authored_by": "40kdc-community",

@@ -5852,46 +5852,6 @@
     "faction_id": "necrons"
   },
   {
-    "ability_id": "damaged-1-4-wounds-remaining-necrons",
-    "name": "Damaged: 1-4 Wounds Remaining",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "unit_ids": [
-      "amonhotekhs-guard-canoptek-doomstalker",
-      "canoptek-doomstalker",
-      "doom-scythe",
-      "night-scythe"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "wounds",
-        "parameters": {
-          "subject": "this-model",
-          "remaining_max": 4
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-model",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "faction_id": "necrons"
-  },
-  {
     "ability_id": "iron-will-necrons",
     "name": "Iron Will",
     "authored_by": "40kdc-community",
@@ -6256,28 +6216,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-5-wounds-remaining-necrons",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "doomsday-ark"
-    ],
-    "faction_id": "necrons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "damaged-1-6-wounds-remaining-necrons",
     "name": "DAMAGED: 1-6 WOUNDS REMAINING",
     "authored_by": "40kdc-community",
@@ -6300,28 +6238,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-7-wounds-remaining-necrons",
-    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "monolith"
-    ],
-    "faction_id": "necrons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "damaged-1-8-wounds-remaining-necrons",
     "name": "DAMAGED: 1-8 WOUNDS REMAINING",
     "authored_by": "40kdc-community",
@@ -6331,51 +6247,7 @@
     },
     "stub": true,
     "unit_ids": [
-      "obelisk"
-    ],
-    "faction_id": "necrons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-8-wounds-remaining-tesseract-vault-necrons",
-    "name": "DAMAGED: 1-8 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
       "tesseract-vault"
-    ],
-    "faction_id": "necrons",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-9-wounds-remaining-necrons",
-    "name": "DAMAGED: 1-9 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "seraptek-heavy-construct"
     ],
     "faction_id": "necrons",
     "detachment_id": null,

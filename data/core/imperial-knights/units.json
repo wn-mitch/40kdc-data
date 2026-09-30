@@ -62,7 +62,14 @@
         "value": "2D6"
       },
       "sunderer-of-fortresses-imperial-knights",
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -152,8 +159,15 @@
         "value": "D6"
       },
       "selfless-protector-imperial-knights",
-      "damaged-1-9-wounds-remaining-knight-defender-imperial-knights",
-      "defenders-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "defenders-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -242,7 +256,14 @@
       },
       "searing-flames-imperial-knights",
       "acherons-duty-imperial-knights",
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -330,7 +351,14 @@
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -418,7 +446,14 @@
         "value": "D6+2"
       },
       "castigators-duty-imperial-knights",
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -511,8 +546,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "paladins-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "paladins-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -605,8 +647,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "errants-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "errants-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -702,7 +751,14 @@
         "value": "D6"
       },
       "crusaders-duty-imperial-knights",
-      "damaged-1-9-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -802,8 +858,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "wardens-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "wardens-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -898,7 +961,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -983,8 +1053,15 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-imperial-knights",
-      "lancers-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "lancers-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1071,7 +1148,14 @@
         "value": "D3"
       },
       "protection-protocols-imperial-knights",
-      "damaged-1-5-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1169,8 +1253,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "gallants-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "gallants-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1245,7 +1336,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1343,7 +1441,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1490,8 +1595,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "using-sir-hekhtur-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "using-sir-hekhtur-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1586,8 +1698,15 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-imperial-knights",
-      "ion-aegis-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "ion-aegis-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1663,7 +1782,14 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1758,8 +1884,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "magaeras-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "magaeras-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1848,8 +1981,15 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-9-wounds-remaining-imperial-knights",
-      "styrixs-duty-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "styrixs-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1936,7 +2076,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-10-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2029,7 +2176,14 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-imperial-knights"
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

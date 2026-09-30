@@ -3759,28 +3759,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-3-wounds-remaining-genestealer-cults",
-    "name": "DAMAGED: 1-3 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "goliath-rockgrinder"
-    ],
-    "faction_id": "genestealer-cults",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "darting-attacks-final-day-genestealer-cults",
     "name": "Darting Attacks",
     "authored_by": "40kdc-community",

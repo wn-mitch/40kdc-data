@@ -61,7 +61,10 @@
       },
       "devoted-to-destruction-adeptus-custodes",
       "guardian-eternal-adeptus-custodes",
-      "damaged-1-4-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -463,7 +466,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-5-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -991,7 +997,10 @@
         "value": "D6"
       },
       "infernus-firebombs-adeptus-custodes",
-      "damaged-1-7-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1185,7 +1194,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1601,7 +1613,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 6
@@ -2359,7 +2374,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-adeptus-custodes"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 8

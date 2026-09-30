@@ -144,7 +144,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-adeptus-mechanicus"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -910,7 +913,10 @@
         "value": "D3"
       },
       "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus",
-      "damaged-1-4-wounds-remaining-adeptus-mechanicus"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

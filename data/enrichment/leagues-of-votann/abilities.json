@@ -3837,28 +3837,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-5-wounds-remaining-leagues-of-votann",
-    "name": "Damaged: 1-5 Wounds Remaining",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "hekaton-land-fortress"
-    ],
-    "faction_id": "leagues-of-votann",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "dead-reckoning-needgaard-oathband-leagues-of-votann",
     "name": "Dead Reckoning",
     "authored_by": "40kdc-community",

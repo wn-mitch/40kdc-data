@@ -62,12 +62,11 @@
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-orks",
-      "waaagh-orks",
       {
         "id": "damaged",
         "value": 10
       },
+      "waaagh-orks",
       "super-heavy-walker"
     ],
     "transport_capacity": {
@@ -1162,7 +1161,6 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -1255,8 +1253,7 @@
       {
         "id": "damaged",
         "value": 6
-      },
-      "damaged-orks"
+      }
     ],
     "transport_capacity": {
       "capacity": 22
@@ -1427,7 +1424,6 @@
         "id": "damaged",
         "value": 7
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -1681,7 +1677,6 @@
         "id": "damaged",
         "value": 10
       },
-      "damaged-orks",
       "super-heavy-walker"
     ],
     "transport_capacity": {
@@ -2311,7 +2306,6 @@
         "id": "damaged",
         "value": 7
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -2682,7 +2676,6 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -2918,7 +2911,6 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -3654,7 +3646,6 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -4055,7 +4046,6 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -4144,7 +4134,6 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -4642,7 +4631,6 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"

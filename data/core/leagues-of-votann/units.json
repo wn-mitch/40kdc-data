@@ -728,7 +728,10 @@
         "value": "D6"
       },
       "multicog-targeting-leagues-of-votann",
-      "damaged-1-5-wounds-remaining-leagues-of-votann",
+      {
+        "id": "damaged",
+        "value": 5
+      },
       {
         "id": "panspectral-scanner-leagues-of-votann",
         "wargear": "panspectral-scanner"

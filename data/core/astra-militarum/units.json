@@ -1032,7 +1032,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1130,7 +1133,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1469,7 +1479,10 @@
         "value": "D6"
       },
       "vox-net-astra-militarum",
-      "damaged-1-6-wounds-remaining-rogal-dorn-commander-astra-militarum",
+      {
+        "id": "damaged",
+        "value": 6
+      },
       "orders-leman-russ-commander-astra-militarum"
     ],
     "game_version": {
@@ -1559,7 +1572,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1986,7 +2002,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2298,7 +2321,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2546,7 +2572,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2778,7 +2807,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 40
@@ -3335,7 +3371,14 @@
         "id": "firing-deck",
         "value": 12
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 26
@@ -3427,7 +3470,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-6-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3692,7 +3738,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3777,7 +3830,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3968,7 +4024,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4057,7 +4116,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4349,7 +4411,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4768,7 +4833,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 26
@@ -4954,7 +5026,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum",
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "orders-leman-russ-commander-astra-militarum",
       "vox-net-astra-militarum"
     ],
@@ -5062,7 +5137,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -5223,7 +5301,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5308,7 +5393,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5480,7 +5568,10 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-5-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5569,7 +5660,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5668,7 +5762,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5755,7 +5852,14 @@
         "id": "deadly-demise",
         "value": "D6+2"
       },
-      "damaged-1-8-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5964,7 +6068,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -6053,7 +6160,10 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "damaged-1-4-wounds-remaining-astra-militarum"
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",

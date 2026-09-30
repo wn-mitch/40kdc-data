@@ -1657,32 +1657,6 @@
     }
   },
   {
-    "ability_id": "damaged-black-templars",
-    "name": "DAMAGED",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "gladiator-lancer",
-      "gladiator-reaper",
-      "gladiator-valiant",
-      "repulsor",
-      "repulsor-executioner"
-    ],
-    "faction_id": "black-templars",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "doctrinal-flexibility-fist-of-the-god-emperor-black-templars",
     "name": "Doctrinal Flexibility",
     "authored_by": "40kdc-community",
