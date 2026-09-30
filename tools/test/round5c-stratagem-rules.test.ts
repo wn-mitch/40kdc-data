@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { assertKnownKeywords } from "../src/round5c/core-keywords.js";
 import { rewriteStratagemSpan, stratagemWhenWindow } from "../src/round5c/stratagem-rules.js";
 
 // Fabricated fixture phrasing only.
@@ -17,5 +18,11 @@ describe("Round 5C Stratagem conventions", () => {
     expect(rewriteStratagemSpan(span, context).span.parameters).toEqual({ subject: "this-unit", move_type: "fall-back" });
     expect(rewriteStratagemSpan(span, { ...context, abilitySelects: true }).rewrites).toEqual([]);
     expect(rewriteStratagemSpan(span, { ...context, sourceType: "unit" }).span).toBe(span);
+  });
+
+  it("accepts a keyword phrase that splits into keywords units carry, and refuses one that does not", () => {
+    const index = new Map([["ADEPTUS ASTARTES", "Adeptus Astartes"], ["INFANTRY", "Infantry"]]);
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["ADEPTUS ASTARTES INFANTRY"], excluded_keywords: [] }, index)).not.toThrow();
+    expect(() => assertKnownKeywords("stratagem-target", { keywords: ["ADEPTUS ASTARTES BIKERS"], excluded_keywords: [] }, index)).toThrow(/BIKERS/u);
   });
 });

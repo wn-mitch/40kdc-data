@@ -16,6 +16,10 @@ const CHARACTERISTICS = [...MODEL_CHARACTERISTICS, ...WEAPON_CHARACTERISTICS] as
 const CHARACTERISTIC_SUBJECTS_WITH_BEARER = [...SUBJECTS_WITH_BEARER, "attack"] as const;
 const CHARACTERISTIC_SUBJECTS = [...SUBJECTS, "attack"] as const;
 const CHARACTERISTIC_OPERATIONS = ["add", "subtract", "improve", "worsen"] as const;
+/** Version 4: 11th edition's detection range (15" by default, 12" while the unit has gone to ground) is a model characteristic too. */
+const CHARACTERISTICS_V4 = [...CHARACTERISTICS, "detection-range"] as const;
+/** Version 4: a unit the ability selected can have its characteristics changed ("that enemy unit has +9\" detection range"). */
+const CHARACTERISTIC_SUBJECTS_V4 = [...CHARACTERISTIC_SUBJECTS, "selected-unit"] as const;
 const WEAPON_SCOPES = ["all", "melee", "ranged"] as const;
 
 export const MOVES = ["advance", "fall-back"] as const;
@@ -145,6 +149,28 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 4,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "Adds, subtracts, improves or worsens one or more characteristics, for example the Armour Penetration of melee weapons, the Strength of the attack being made, or a unit's detection range (\"that enemy unit has +9\\\" detection range\": subject selected-unit, detection-range, add 9). Setting a value is a different leaf. \"The bearer\" is this model.",
+    starter: { subject: "", characteristics: [], operation: "", value: null, weapon_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "characteristics", "operation", "value", "weapon_type"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        // Which weapons carry the change; melee or ranged only for weapon characteristics.
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "regain-wounds",
@@ -214,10 +240,10 @@ export function normalizeEffectParameters(family: string, input: Record<string, 
       return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "act-after-move.subject"), moves: enumSet(input.moves, MOVES, "act-after-move.moves"), acts: enumSet(input.acts, ACTS, "act-after-move.acts") };
     case "characteristic-modifier": {
       exactKeys(input, ["subject", "characteristics", "operation", "value", "weapon_type"], family);
-      const characteristics = enumSet(input.characteristics, CHARACTERISTICS, "characteristic-modifier.characteristics");
+      const characteristics = enumSet(input.characteristics, version >= 4 ? CHARACTERISTICS_V4 : CHARACTERISTICS, "characteristic-modifier.characteristics");
       const weaponType = enumValue(input.weapon_type, WEAPON_SCOPES, "characteristic-modifier.weapon_type");
-      const subject = enumValue(input.subject, version === 2 ? CHARACTERISTIC_SUBJECTS_WITH_BEARER : CHARACTERISTIC_SUBJECTS, "characteristic-modifier.subject");
-      if (weaponType !== "all" && characteristics.some((item) => (MODEL_CHARACTERISTICS as readonly string[]).includes(item))) {
+      const subject = enumValue(input.subject, version === 2 ? CHARACTERISTIC_SUBJECTS_WITH_BEARER : version >= 4 ? CHARACTERISTIC_SUBJECTS_V4 : CHARACTERISTIC_SUBJECTS, "characteristic-modifier.subject");
+      if (weaponType !== "all" && characteristics.some((item) => !(WEAPON_CHARACTERISTICS as readonly string[]).includes(item))) {
         throw new TypeError("characteristic-modifier: only weapon characteristics (A, WS, BS, S, AP, D) can be limited to melee or ranged weapons.");
       }
       // An attack is already melee or ranged by its attack leaf; saying it here too would say it twice.

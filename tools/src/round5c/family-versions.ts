@@ -90,6 +90,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "act-after-move", from: 1, to: 2, map: bearerIsThisModel("subject") },
   { family: "regain-wounds", from: 1, to: 2, map: bearerIsThisModel("subject") },
   { family: "characteristic-modifier", from: 2, to: 3, map: bearerIsThisModel("subject") },
+  // Version 4 only adds detection range and the selected unit; version 3 parameters still fit.
+  { family: "characteristic-modifier", from: 3, to: 4, map: (parameters) => parameters },
   { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
   { family: "optional-use", from: 1, to: 2, map: bearerIsThisModel("who") },
   // Version 3 only adds amounts (D3+1, D3+2) and an optional per; existing parameters still fit.
@@ -144,6 +146,14 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Version 3 only widens which subjects within/beyond accept; every version 2 leaf's subject
   // (never more than "target" for those two kinds under v2's own rule) still fits.
   { family: "unit-position", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 makes within/beyond say what they measure from. Earlier versions always meant the
+  // distance between this unit and the attack's target, so that is what they become.
+  {
+    family: "unit-position", from: 3, to: 4,
+    map: (parameters) => parameters.kind === "within" || parameters.kind === "beyond"
+      ? { ...parameters, ...(parameters.subject === "target" ? { of: "this-unit" } : { of: "target" }) }
+      : parameters,
+  },
 ];
 
 export type FamilyVersionReport = {

@@ -236,8 +236,11 @@ export function condition(leaf: CompileLeaf): Node {
         return polarity(leaf, pred("closest", parameters, subject));
       }
       if (kind === "within" || kind === "beyond") {
-        // Distance from the attacking model to its target, as the authored data measures it.
-        const node = pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
+        // Version 4 names what the distance is measured from; earlier versions always meant the
+        // distance from this unit to the attack's target, as the authored data measures it.
+        const node = leaf.parameters.of !== undefined
+          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") } }, subject)
+          : pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
       const controlled = closed(leaf, "controlled_by");

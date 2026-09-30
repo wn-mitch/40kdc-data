@@ -27,7 +27,7 @@ const RESOURCE_POOLS: Record<string, string> = {
 };
 
 /** Whose models an effect changes. "The bearer" is this-model; leaves still spelling it bearer are on a retired version. */
-const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model" };
+const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit" };
 
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model" };
 
@@ -51,7 +51,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
   const target = (subject: unknown) => {
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
-    return context.attached ? "this-unit" : found;
+    // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
+    return context.attached && found !== "selected-unit" ? "this-unit" : found;
   };
   const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {

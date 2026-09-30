@@ -53,7 +53,8 @@ describe("Round 5C leaf describer audit", () => {
       "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
-      "unit-position": { unrendered: [], colliding: ["subject", "to"], problems: 0 },
+      // Version 4's `of`: "of this unit" and "of the recipient" both read "of the unit".
+      "unit-position": { unrendered: [], colliding: ["subject", "to", "of"], problems: 0 },
       // Batch 7a: be-selected always reads "at the end of the opponent's previous turn", so `at`
       // never shows; the omitted-subject collision is the same one every widened predicate has.
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },

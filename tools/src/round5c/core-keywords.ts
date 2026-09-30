@@ -79,3 +79,26 @@ export function coreTargetKeywords(
   if (exclusions.length) out.excluded_keywords = exclusions;
   return out;
 }
+
+/** Keyword-list parameters, by family, whose every phrase must split into keywords units carry. */
+const KEYWORD_PARAMETERS: Record<string, readonly string[]> = {
+  "stratagem-target": ["keywords", "excluded_keywords"],
+  "triggering-target": ["keywords"],
+  "bearer-eligibility": ["keywords"],
+  "unit-keyword": ["keywords"],
+};
+
+/**
+ * Refuse a labelled keyword no unit in core carries: every keyword phrase a keyword-list
+ * parameter holds must split into core keywords ("ADEPTUS ASTARTES INFANTRY" is Adeptus Astartes
+ * and Infantry). Throws with the first phrase that does not.
+ */
+export function assertKnownKeywords(familyId: string, parameters: Record<string, unknown>, index: ReadonlyMap<string, string>): void {
+  for (const key of KEYWORD_PARAMETERS[familyId] ?? []) {
+    const phrases = parameters[key];
+    if (!Array.isArray(phrases)) continue;
+    for (const phrase of phrases) {
+      if (typeof phrase === "string") splitKeywords(phrase, index);
+    }
+  }
+}

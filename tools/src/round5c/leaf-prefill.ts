@@ -138,6 +138,12 @@ function predicateFromSource(familyId: string, text: string): Record<string, unk
     else if (/more than \d/iu.test(text)) result.kind = "beyond";
     else if (/within \d/iu.test(text)) result.kind = "within";
     if (inches && (result.kind === "within" || result.kind === "beyond")) result.inches = Number(inches);
+    // What the distance is measured from, when the words say it plainly: "of this model", "of this
+    // unit", or a bare "12\" away" (away from this unit). "Of that enemy unit" is left to review.
+    if (result.kind === "within" || result.kind === "beyond") {
+      if (/\bof this model\b/iu.test(text)) result.of = "this-model";
+      else if (/\bof (?:this|your) unit\b/iu.test(text) || (/\baway\b/iu.test(text) && !/\bof\b/iu.test(text))) result.of = "this-unit";
+    }
     if (result.kind === "objective-range") result.controlled_by = /you control/iu.test(text) ? "you" : /opponent controls/iu.test(text) ? "opponent" : "any";
   }
   return result;

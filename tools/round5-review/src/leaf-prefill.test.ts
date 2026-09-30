@@ -18,7 +18,7 @@ describe("Leaf prefill", () => {
     expect(normalizeFingerprintParameters("unit-keyword", { ...keyword, negated: false }, 1)).toMatchObject({ keywords: ["MONSTER", "VEHICLE"] });
     expect(prefillFromSource(family("unit-keyword"), "that targets a unit that cannot fly")).toEqual({ subject: "target", negated: true, keywords: ["FLY"] });
     expect(prefillFromSource(family("unit-state"), "that targets a unit that is not below half-strength")).toEqual({ subject: "target", negated: true, states: ["below-half-strength"] });
-    expect(prefillFromSource(family("unit-position"), "that targets a unit more than 12\" away")).toEqual({ subject: "target", kind: "beyond", inches: 12 });
+    expect(prefillFromSource(family("unit-position"), "that targets a unit more than 12\" away")).toEqual({ subject: "target", kind: "beyond", inches: 12, of: "this-unit" });
     expect(prefillFromSource(family("select-unit"), "select one visible enemy unit within 18\"")).toEqual({ scope: "enemy", distance: "within", inches: 18, visible: true });
     expect(prefillFromSource(family("characteristic-modifier"), "improve the Armour Penetration characteristic of melee weapons equipped by models in that unit by 1"))
       .toEqual({ characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee", subject: "this-unit" });

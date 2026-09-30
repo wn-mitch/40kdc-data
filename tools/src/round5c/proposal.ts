@@ -28,6 +28,8 @@ import {
 } from "./luna-schema.js";
 import { anchorExactText, parseHypothesis, parseQualifiersV2, parseStructuralSpans } from "./luna-v2.js";
 import { rewriteStratagemSpan, spansSelectAUnit } from "./stratagem-rules.js";
+import { assertKnownKeywords, keywordIndex } from "./core-keywords.js";
+import { round5cDataRoot } from "./entries.js";
 
 /**
  * Bytes of ability payload one request may carry, over its fixed instructions, examples and
@@ -726,6 +728,7 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
 
     if (!Array.isArray(item.spans)) throw new TypeError(`response.abilities[${abilityIndex}].spans must be an array.`);
     const abilitySelects = spansSelectAUnit(item.spans);
+    const index = keywordIndex(round5cDataRoot());
     for (const [spanIndex, value] of item.spans.entries()) {
       const span = asRecord(value, `response.abilities[${abilityIndex}].spans[${spanIndex}]`);
       assertExactKeys(
@@ -794,6 +797,8 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
           if (!familyDefinition || !familyFitsKind(familyDefinition, configured.ability.source_type)) {
             throw new TypeError(`${familyId}@${familyVersion} does not apply to a ${configured.ability.source_type} ability.`);
           }
+          // A keyword no unit carries is a misreading, not a new keyword.
+          if (index.size > 0) assertKnownKeywords(familyId, parameters, index);
           fingerprintId = validateFingerprint(db, familyId, parameters, familyVersion, exactText, {
             wholeSourceText: configured.ability.source_text,
             bindingSurfaces,

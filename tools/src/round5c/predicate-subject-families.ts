@@ -255,6 +255,29 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-position",
+    version: 4,
+    role: "CONDITION",
+    label: "Unit's position",
+    description: "Where a unit is. within/beyond say what the distance is measured from with `of`: \"one enemy unit within 24\" of this unit\" is subject selected-unit, of this-unit; \"a unit within 8\" of that enemy unit\" (the unit whose move triggered the ability) is of event-subject. objective-range and closest-eligible are as version 3.",
+    starter: { kind: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["kind", "subject", "negated"],
+      properties: {
+        kind: { enum: POSITION_KINDS },
+        inches: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: DISTANCE_KINDS } },
+        of: { enum: WIDE_SUBJECTS, "x-only-when": { kind: DISTANCE_KINDS } },
+        controlled_by: { enum: OBJECTIVE_CONTROLLERS, "x-only-when": { kind: ["objective-range"] } },
+        to: { enum: WIDE_SUBJECTS, "x-only-when": { kind: ["closest-eligible"] } },
+        range: { type: "integer", minimum: 1, maximum: MAX_INCHES, "x-only-when": { kind: ["closest-eligible"] } },
+        ...wideSubjectAndNegation,
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "target-is-selected",
@@ -312,8 +335,12 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
         : version >= 2 ? kind === "objective-range" || kind === "closest-eligible" : kind === "objective-range";
       if (!subjectFree && common.subject !== "target") throw new TypeError(`unit-position ${kind} describes the attack's target; its subject must be target.`);
       if ((DISTANCE_KINDS as readonly string[]).includes(kind)) {
-        exactKeys(input, ["kind", "inches", "subject", "negated"], family);
-        return { kind, inches: boundedInteger(input.inches, 1, MAX_INCHES, "unit-position.inches"), ...common };
+        // Version 4: what the distance is measured from is required, never assumed.
+        exactKeys(input, ["kind", "inches", "subject", "negated", ...(version >= 4 ? ["of"] : [])], family);
+        return {
+          kind, inches: boundedInteger(input.inches, 1, MAX_INCHES, "unit-position.inches"),
+          ...(version >= 4 ? { of: enumValue(input.of, WIDE_SUBJECTS, "unit-position.of") } : {}), ...common,
+        };
       }
       if (kind === "objective-range") {
         exactKeys(input, ["kind", "controlled_by", "subject", "negated"], family);
