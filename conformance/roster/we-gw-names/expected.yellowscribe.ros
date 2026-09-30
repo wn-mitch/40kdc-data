@@ -26,6 +26,11 @@
 Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have, after which all your Bloodshed points are lost.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Murderous Charge" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: World Eaters"/>

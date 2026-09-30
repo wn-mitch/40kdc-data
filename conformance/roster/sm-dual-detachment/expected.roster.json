@@ -8,21 +8,21 @@
   "detachments": [
     {
       "ref": {
-        "id": "1st-company-task-force",
+        "id": null,
         "raw_name": "1st Company Task Force",
-        "resolved": true,
+        "resolved": false,
         "candidates": []
       },
-      "dp_cost": 2
+      "dp_cost": null
     },
     {
       "ref": {
-        "id": "librarius-conclave",
+        "id": null,
         "raw_name": "Librarius Conclave",
-        "resolved": true,
+        "resolved": false,
         "candidates": []
       },
-      "dp_cost": 1
+      "dp_cost": null
     }
   ],
   "battle_size": "strike-force",
@@ -139,6 +139,17 @@
     "unresolved_units": 0,
     "resolved_weapons": 7,
     "unresolved_weapons": 0,
-    "warnings": []
+    "warnings": [
+      {
+        "code": "detachment-unresolved",
+        "message": "Detachment name did not match any 40kdc detachment.",
+        "raw_name": "1st Company Task Force"
+      },
+      {
+        "code": "detachment-unresolved",
+        "message": "Detachment name did not match any 40kdc detachment.",
+        "raw_name": "Librarius Conclave"
+      }
+    ]
   }
 }

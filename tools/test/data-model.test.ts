@@ -253,7 +253,7 @@ describe("Collection.find / findAll", () => {
     expect(abilities.get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")?.raw.faction_id).toBe("world-eaters");
     // The pre-mirror bare ids carry no alias (D6): a stale reference misses rather than guessing a faction.
     expect(abilities.get("idol-of-blessed-blood")).toBeUndefined();
-    expect(abilities.get("berzerker-frenzy")).toBeUndefined();
+    expect(abilities.get("berzerker-frenzy")).toBeUndefined(); // mfm:mirror keep — the stale bare id
     expect(abilities.get("berzerker-frenzy-world-eaters")).toBeDefined();
     expect(abilities.get("deadly-demise-d3")).toBeUndefined();
   });
@@ -330,7 +330,7 @@ describe("Collection id-alias resolution (renamed ids)", () => {
       expect(enhancements.getAny(renamed)?.id).toBe(current);
       expect(enhancements.has(renamed)).toBe(true);
     }
-    expect(enhancements.get("a-chink-in-their-armour-host-of-ascension")).toBeUndefined();
+    expect(enhancements.get("a-chink-in-their-armour-host-of-ascension")).toBeUndefined(); // mfm:mirror keep — the stale id
   });
 
   it("returns the record unchanged for a current (non-aliased) id", () => {

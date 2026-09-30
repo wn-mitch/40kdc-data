@@ -79,10 +79,17 @@ fn run_dsl_corpus(filename: &str) {
     let mut failures = Vec::new();
     for case in cases {
         let id = case["abilityId"].as_str().expect("abilityId");
-        let ability = ds
-            .abilities
-            .get_any(id)
-            .unwrap_or_else(|| panic!("unknown ability {id}"));
+        // A specimen whose ability left the dataset carries its frozen DSL inline.
+        let raw_effect = match case.get("effect") {
+            Some(frozen) => frozen.clone(),
+            None => {
+                let ability = ds
+                    .abilities
+                    .get_any(id)
+                    .unwrap_or_else(|| panic!("unknown ability {id}"));
+                serde_json::to_value(&ability.effect).unwrap()
+            }
+        };
         let source: BuffSource = serde_json::from_value(case["source"].clone()).expect("source");
         let context: EngineContext =
             serde_json::from_value(case["context"].clone()).expect("context");
@@ -91,10 +98,7 @@ fn run_dsl_corpus(filename: &str) {
             _ => TranslationPerspective::Attacker,
         };
         // A rated rule reads the unit's printed rating; the case supplies it.
-        let effect = with_rating(
-            &serde_json::to_value(&ability.effect).unwrap(),
-            case.get("rating").filter(|r| !r.is_null()),
-        );
+        let effect = with_rating(&raw_effect, case.get("rating").filter(|r| !r.is_null()));
         let result = effect_to_buffs(&effect, &source, &context, perspective);
         let expected = &case["expected"];
         let applied: Vec<Value> = result

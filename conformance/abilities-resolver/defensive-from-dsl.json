@@ -1,5 +1,5 @@
 {
-  "name": "DSL\u2192Buff translations under target perspective (defender-side)",
+  "name": "DSL→Buff translations under target perspective (defender-side)",
   "cases": [
     {
       "abilityId": "feel-no-pain",
@@ -58,7 +58,7 @@
       }
     },
     {
-      "_comment": "Core rule 19.04: a model-scoped effect (target self/bearer) read as the chosen unit's own ability still buffs it \u2014 the Archon's personal 4+ invulnerable save applies when the Archon is the unit being crunched.",
+      "_comment": "Core rule 19.04: a model-scoped effect (target self/bearer) read as the chosen unit's own ability still buffs it — the Archon's personal 4+ invulnerable save applies when the Archon is the unit being crunched.",
       "abilityId": "shadowfield-drukhari",
       "source": {
         "kind": "ability",
@@ -80,7 +80,7 @@
       }
     },
     {
-      "_comment": "\u2026but the same effect pooled in from an attached member stays on that model: no buff on the combined unit, one diagnostic instead.",
+      "_comment": "…but the same effect pooled in from an attached member stays on that model: no buff on the combined unit, one diagnostic instead.",
       "abilityId": "shadowfield-drukhari",
       "source": {
         "kind": "ability",
@@ -100,8 +100,25 @@
       }
     },
     {
-      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit \u2014 'models in that unit have a 4+ invulnerable save') still reaches the whole combined unit from an attached source. Guards against the 19.04 gate over-reaching.",
+      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit \u2014 a unit-wide invulnerable save) still reaches the whole combined unit from an attached source. Guards against the 19.04 gate over-reaching.",
       "abilityId": "mental-fortress-adeptus-astartes",
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "subject": "this-model",
+            "role": "leading"
+          }
+        },
+        "effect": {
+          "type": "invulnerable-save",
+          "target": "this-unit",
+          "modifier": {
+            "invuln_sv": 4
+          }
+        }
+      },
       "source": {
         "kind": "ability",
         "abilityId": "mental-fortress-adeptus-astartes",

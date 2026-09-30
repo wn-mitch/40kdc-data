@@ -12,9 +12,6 @@
       "deathwatch": [
         "beacon-angelis-deathwatch-support-deathwatch"
       ],
-      "imperial-fists": [
-        "spy-skull-data-link-ceramite-sentinels-imperial-fists"
-      ],
       "orks": [
         "extra-platin-ardmob-orks",
         "rallying-war-cry-ardmob-orks"
@@ -35,20 +32,12 @@
       "blood-angels": [
         "measured-strategist-angelic-inheritors-blood-angels"
       ],
-      "chaos-daemons": [
-        "rapturous-agony-legion-of-excess-chaos-daemons"
-      ],
       "dark-angels": [
         "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
         "knights-of-iron-wrath-of-the-rock-dark-angels"
       ],
       "imperial-fists": [
-        "augmented-targeting-ceramite-sentinels-imperial-fists",
-        "establish-supremacy-ceramite-sentinels-imperial-fists",
-        "evasive-repositioning-ceramite-sentinels-imperial-fists",
-        "priority-strike-ceramite-sentinels-imperial-fists",
-        "stand-to-the-end-ceramite-sentinels-imperial-fists",
-        "unyielding-might-ceramite-sentinels-imperial-fists"
+        "establish-supremacy-ceramite-sentinels-imperial-fists"
       ],
       "orks": [
         "get-stuck-in-ardmob-orks",
@@ -56,19 +45,11 @@
         "medi-squigs-ardmob-orks"
       ],
       "raven-guard": [
-        "feint-and-thrust-shadowmark-talon-raven-guard",
-        "into-darkness-shadowmark-talon-raven-guard",
-        "lay-low-the-tyrants-shadowmark-talon-raven-guard",
         "murderous-fusillade-shadowmark-talon-raven-guard",
-        "raptorial-vigilance-shadowmark-talon-raven-guard",
         "suppressed-weapons-shadowmark-talon-raven-guard"
       ],
       "salamanders": [
-        "blazing-earth-forgefathers-seekers-salamanders",
-        "burning-vengeance-forgefathers-seekers-salamanders",
-        "crucible-of-battle-forgefathers-seekers-salamanders",
         "forged-in-fire-forgefathers-seekers-salamanders",
-        "immolation-protocols-forgefathers-seekers-salamanders",
         "wrath-and-ruin-forgefathers-seekers-salamanders"
       ],
       "space-wolves": [
@@ -80,21 +61,9 @@
         "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
         "wolf-totems-saga-of-the-great-wolf-space-wolves"
       ],
-      "ultramarines": [
-        "armour-of-contempt-blade-of-ultramar-ultramarines",
-        "courage-and-honour-blade-of-ultramar-ultramarines",
-        "exemplary-vigilance-blade-of-ultramar-ultramarines",
-        "practical-tactics-blade-of-ultramar-ultramarines",
-        "tactical-foresight-blade-of-ultramar-ultramarines",
-        "ultramarian-adaptivity-blade-of-ultramar-ultramarines"
-      ],
       "white-scars": [
         "evasive-manoeuvers-spearpoint-task-force-white-scars",
-        "flawless-riders-spearpoint-task-force-white-scars",
-        "hunters-instincts-spearpoint-task-force-white-scars",
-        "mobile-lethality-spearpoint-task-force-white-scars",
-        "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
-        "withdraw-and-regroup-spearpoint-task-force-white-scars"
+        "flawless-riders-spearpoint-task-force-white-scars"
       ]
     },
     "unit_compositions": {

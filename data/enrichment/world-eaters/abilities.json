@@ -8400,5 +8400,27 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "murderous-charge-world-eaters",
+    "name": "Murderous Charge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "khorne-berzerkers"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

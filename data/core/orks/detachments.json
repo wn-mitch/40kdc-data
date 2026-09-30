@@ -9,7 +9,10 @@
     ],
     "name": "Blitz Brigade",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "boss-boomer-upgrade-blitz-brigade-orks",
+      "targetin-gizmos-upgrade-blitz-brigade-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -78,7 +81,9 @@
     ],
     "name": "Da Big Hunt",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "glory-hog-da-big-hunt-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -101,7 +106,9 @@
     ],
     "name": "Dread Mob",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "cybork-boosta-dread-mob-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -147,7 +154,9 @@
     ],
     "name": "Green Tide",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "ferocious-show-off-green-tide-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -262,7 +271,9 @@
     ],
     "name": "Taktikal Brigade",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "kill-kommanda-taktikal-brigade-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -285,7 +296,11 @@
     ],
     "name": "War Horde",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "headwoppas-killchoppa-war-horde-orks",
+      "kunnin-but-brutal-war-horde-orks",
+      "follow-me-ladz-war-horde-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

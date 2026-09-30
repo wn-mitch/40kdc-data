@@ -64,7 +64,7 @@ describe("stratagem canon derivation (synthetic)", () => {
   const canon = buildStratCanon(fixture());
 
   it("maps the first-class key to player_turn (eitherPlayer => either)", () => {
-    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
+    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!; // mfm:mirror keep — the synthetic dump's id
     expect(c.player_turn).toBe("either");
     expect(c.type).toBe("battle-tactic");
     expect(c.category).toBe("detachment");
@@ -85,7 +85,7 @@ describe("stratagem canon derivation (synthetic)", () => {
   });
 
   it("derives review-only phases from whenRules prose (both phases of an 'or' idiom)", () => {
-    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!;
+    const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!; // mfm:mirror keep — the synthetic dump's id
     expect(c.phases_review).toEqual(expect.arrayContaining(["shooting", "fight"]));
   });
 });
@@ -144,7 +144,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the
   it("reflects the applied dump player_turn in the data (idempotent end-state)", () => {
     const file = path.join(CORE_DIR, "adeptus-astartes", "stratagems.json");
     const rec = JSON.parse(fs.readFileSync(file, "utf8")).find(
-      (s: { id: string }) => s.id === "codex-discipline-bastion-task-force-adeptus-astartes",
+      (s: { id: string }) => s.id === "armour-of-contempt-assault-brethren-adeptus-astartes",
     ) as { player_turn: string };
     expect(rec.player_turn).toBe("either");
   });

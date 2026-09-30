@@ -1,0 +1,443 @@
+[
+  {
+    "ability_id": "adept-of-the-omnissiah-medusas-wrath-iron-hands",
+    "name": "Adept of the Omnissiah",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2bb49ae72f5ddfafdca6072fd047f36e771430a2a82fd14d648bb8915f9e3b7f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "enhancement",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "roll": "save"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 6
+        }
+      }
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    },
+    "effect": {
+      "type": "stat-modifier",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "modifier": {
+        "stat": "D",
+        "operation": "set",
+        "value": 0,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "TECHMARINE"
+      ]
+    },
+    "community_notes": "Once per battle round, when a saving throw is failed for a friendly Vehicle model within 6\", change that attack's Damage to 0"
+  },
+  {
+    "ability_id": "ancient-fury-medusas-wrath-iron-hands",
+    "name": "Ancient Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "df881baff6859923a7ec14c0aaea6c59a68932e7091d556a90240707eeb0a979",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "subtract",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "this-model",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "Walker model only; Leadership improves by 1 (lower is better)"
+  },
+  {
+    "ability_id": "armoured-wrath-iron-hands",
+    "name": "Armoured Wrath",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "85b936c8f7a6437be7c58fe02b26f03706ed14a42ec3f17938781f0d9d323e3e",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "detachment",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Armoured Wrath re-roll",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "all-failures"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "all-failures"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "damage",
+            "subset": "all-failures"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "community_notes": "[APPROX] Once per phase, each ADEPTUS ASTARTES unit may re-roll one Hit, Wound, or Damage roll (see 'usage'). The single-roll re-roll is modeled with subset 'all-failures' per the sibling convention. Full rule in raw-text store.",
+    "usage": {
+      "frequency": "once-per-phase"
+    }
+  },
+  {
+    "ability_id": "target-augury-web-medusas-wrath-iron-hands",
+    "name": "Target Augury Web",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "70b600c38edbfe5cd9a15860cb42062f4d70b35e59df564d92b243970b306dc9",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "VEHICLE"
+              ]
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": {
+          "owner": "friendly",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
+        "modifier": {
+          "abilities": [
+            "Lethal Hits"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "TECHMARINE"
+      ]
+    },
+    "community_notes": "In your Command phase, select one Vehicle model within 6\" of the bearer"
+  },
+  {
+    "ability_id": "the-flesh-is-weak-medusas-wrath-iron-hands",
+    "name": "The Flesh Is Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3724b8c44c930f1bc5cfc2aaeea219d1974277745cc3bf28eb396e27cb88c798",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 4
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES"
+      ]
+    }
+  },
+  {
+    "ability_id": "unbowed-conviction-medusas-wrath-iron-hands",
+    "name": "Unbowed Conviction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2f06ba5be95c944ea4abb6c009658203510791a1ba06b6def315e9b2096dbb6c",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics"
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "any"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "community_notes": "Unit below Starting Strength; may ignore any or all modifiers to characteristics and rolls/tests, excluding saving throws"
+  },
+  {
+    "ability_id": "vengeful-animus-medusas-wrath-iron-hands",
+    "name": "Vengeful Animus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "4b9c05003345d4bdea7b29e06bb80bc37b4994a3fe0c0bcb65aff9e660d57de1",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": "this-unit"
+    },
+    "effect": {
+      "type": "roll-result",
+      "target": "this-model",
+      "modifier": {
+        "roll": "deadly-demise",
+        "result": "pass"
+      }
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "community_notes": "Vehicle model with Deadly Demise, used as it is destroyed: mortal wounds are inflicted automatically instead of rolling the D6"
+  },
+  {
+    "ability_id": "methodical-brutality-medusas-wrath-iron-hands",
+    "name": "Methodical Brutality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "medusas-wrath",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "power-of-the-machine-spirit-medusas-wrath-iron-hands",
+    "name": "Power of the Machine Spirit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "medusas-wrath",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "spirits-of-iron-medusas-wrath-iron-hands",
+    "name": "Spirits of Iron",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "medusas-wrath",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-of-the-machine-war-medusas-wrath-iron-hands",
+    "name": "Master of the Machine War",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "iron-hands",
+    "detachment_id": "medusas-wrath",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

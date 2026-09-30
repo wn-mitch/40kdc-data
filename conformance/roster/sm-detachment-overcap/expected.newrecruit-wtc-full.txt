@@ -3,6 +3,7 @@
 + FACTION KEYWORD: Adeptus Astartes
 + DETACHMENT: Gladius Task Force
 + DETACHMENT: 1st Company Task Force
++ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 365pts
 + POINTS LIMIT: 2000pts
 +

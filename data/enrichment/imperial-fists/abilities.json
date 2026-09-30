@@ -1,0 +1,463 @@
+[
+  {
+    "ability_id": "adaptive-defence-imperial-fists",
+    "name": "Adaptive Defence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1f1e60311a37473f91243ea51260940d017ce366c0b15678b87fac7487ff60c2",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "community_notes": "[APPROX] Models the re-roll of Hit rolls of 1 and Wound rolls of 1. The gating condition — the attacking unit being within a terrain feature — has no DSL predicate and is not modeled, nor is the separate conditional ENTRENCHED keyword grant. Full rule in raw-text store."
+  },
+  {
+    "ability_id": "augmented-targeting-ceramite-sentinels-imperial-fists",
+    "name": "Augmented Targeting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "460e8d7dca88ed24928e86147c54d1edbb5fdb94d524f7ebc692e9f7e2438e5f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Weapon ability",
+      "options": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "abilities": [
+              "Sustained Hits 1"
+            ],
+            "weapon_type": "ranged"
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "abilities": [
+              "Lethal Hits"
+            ],
+            "weapon_type": "ranged"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "designated",
+            "parameters": {
+              "tag": "entrenched"
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "abilities": [
+                "Sustained Hits 1",
+                "Lethal Hits"
+              ],
+              "weapon_type": "ranged"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Select Sustained Hits 1 or Lethal Hits; an Entrenched unit gets both instead. Target must not have been selected to shoot this phase"
+  },
+  {
+    "ability_id": "castellum-omnivox-ceramite-sentinels-imperial-fists",
+    "name": "Castellum Omnivox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "43cd051b425f7522a23fdd38192ba936d154651792a4c6b8d6cd1684e025d57b",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Castellum Omnivox",
+      "options": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "start-action",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
+              }
+            },
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "fall-back"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "Each time the bearer's unit Falls Back, choose one option to apply until the end of the turn"
+  },
+  {
+    "ability_id": "defensive-mastery-ceramite-sentinels-imperial-fists",
+    "name": "Defensive Mastery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "06901ad618c83119935982ab557943138d5294f0dc920aea76b55dcc6e63cb1f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "max_count": 3,
+        "owner": "friendly",
+        "keywords": [
+          "ADEPTUS ASTARTES"
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield",
+              "from": "battlefield"
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "from": "battlefield",
+              "ignore_limits": true
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "After both players deploy, redeploy up to three Adeptus Astartes units; they may be placed in Strategic Reserves regardless of the reserves limit"
+  },
+  {
+    "ability_id": "evasive-repositioning-ceramite-sentinels-imperial-fists",
+    "name": "Evasive Repositioning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ab53475b63efabd10278d712d4ae52f57bccb3eda6b998b7f7bab9abf29fdbed",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": "D6"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Usable on an Infantry or Mounted unit targeted by the attacking unit; an Entrenched unit may re-roll the D6 move distance"
+  },
+  {
+    "ability_id": "honour-indefatigable-ceramite-sentinels-imperial-fists",
+    "name": "Honour Indefatigable",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "cdad995271bdb341e8e8ef58b5d0f3ac9c7a0dc32be74760ed698854b8ba3694",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "return-models",
+        "target": "this-model",
+        "modifier": {
+          "count": 1,
+          "wounds_remaining": "full",
+          "placement": "closest-to-destruction"
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "GRAVIS"
+      ]
+    },
+    "community_notes": "The first time the bearer is destroyed, roll at the end of the phase: on a 2+ set it back up as close as possible to where it was destroyed, outside Engagement Range, with full wounds"
+  },
+  {
+    "ability_id": "priority-strike-ceramite-sentinels-imperial-fists",
+    "name": "Priority Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "4e422064deeb9e60fe41f0cedb868607b27ab53f4fe0f318ecad0aca6fd45de0",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "CHARACTER",
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "result_scope": "any-result"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Infantry or Mounted unit not yet selected to shoot or fight this phase"
+  },
+  {
+    "ability_id": "spy-skull-data-link-ceramite-sentinels-imperial-fists",
+    "name": "Spy-skull Data Link",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "stand-to-the-end-ceramite-sentinels-imperial-fists",
+    "name": "Stand To The End",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ba042271ba452e74cd497a8f673c8144f8e9b9f349eae1b9861f6ae66470b52b",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "filter": {
+        "kind": "attack"
+      },
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_success": {
+        "type": "act-on-death",
+        "target": "this-unit",
+        "modifier": {
+          "act": "fight"
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Roll per destroyed model that has not yet fought, adding 1 if the unit is Entrenched; on a 4+ the model fights after the attacking unit finishes, then is removed"
+  },
+  {
+    "ability_id": "unyielding-might-ceramite-sentinels-imperial-fists",
+    "name": "Unyielding Might",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "69960d85df994c3356c782b05ca156435e2a8ca90fd05d20d6e26761ccd27c90",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "Target: one unit within Engagement Range of enemy units"
+  }
+]

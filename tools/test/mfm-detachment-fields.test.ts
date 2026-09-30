@@ -167,10 +167,10 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
 
   it("locks chapter-specific detachments in their routed directories", () => {
     expect(byDir.get("iron-hands")?.matched).toBeGreaterThan(0);
-    const hammer = JSON.parse(
+    const medusa = JSON.parse(
       fs.readFileSync(path.join(CORE_DIR, "iron-hands", "detachments.json"), "utf8"),
-    ).find((d: { id: string }) => d.id === "hammer-of-avernii") as { restrictions?: { required_keywords?: string[] } };
-    expect(hammer.restrictions?.required_keywords).toEqual(["Iron Hands"]);
+    ).find((d: { id: string }) => d.id === "medusas-wrath") as { restrictions?: { required_keywords?: string[] } };
+    expect(medusa.restrictions?.required_keywords).toEqual(["Iron Hands"]);
   });
 
   it("does not spuriously lock the Aeldari Combat-Patrol detachment to its own roster", () => {
@@ -211,9 +211,9 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
     expect(reviews.some((r) => r.id === "more-dakka-orks")).toBe(false);
   });
 
-  it("surfaces detachments whose dump rule has no authored ability as a worklist", () => {
-    // The new 11e chapter detachments carry a dump rule the repo has not authored an
-    // ability for yet — reported, never filled (prose is authored separately).
-    expect(sum((d) => d.ruleUnauthored.length)).toBeGreaterThan(0);
+  it("leaves no detachment whose dump rule lacks an ability record", () => {
+    // `mfm:mirror` stubs every rule the dump prints, so the unauthored worklist is empty; an
+    // entry here means a detachment the mirror did not see (seeded after it, never re-mirrored).
+    expect(report.dirs.flatMap((d) => d.ruleUnauthored)).toEqual([]);
   });
 });

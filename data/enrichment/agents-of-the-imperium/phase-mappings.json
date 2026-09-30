@@ -411,18 +411,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "attached-unit-agents-of-the-imperium",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "stealth",
     "source_type": "ability",
     "phases": [
@@ -626,32 +614,6 @@
     "phases": [
       "command",
       "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strategic-knowledge-agents-of-the-imperium",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rites-of-battle-agents-of-the-imperium",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",

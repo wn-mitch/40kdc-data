@@ -144,75 +144,6 @@
     "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "attached-unit-agents-of-the-imperium",
-    "name": "Attached Unit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9216ab16de6014f5b93d492d7ddde76e2352e1161d48f9d868f4ba107517f23a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "army-rule",
-            "target": "this-unit",
-            "modifier": {
-              "rule": "attachment",
-              "with": {
-                "all_of": [
-                  "BATTLE SISTERS SQUAD"
-                ]
-              },
-              "led_by": "ministorum-priest"
-            }
-          },
-          {
-            "type": "leader-model-ability-grant",
-            "source": "bearer-unit",
-            "beneficiary": "leading-leader-model",
-            "attached_unit_filter": null,
-            "duration": "while-leading",
-            "grant": {
-              "recipient": "beneficiary",
-              "effect": {
-                "type": "ability-grant",
-                "modifier": {
-                  "ability": "scouts",
-                  "value": 6
-                }
-              }
-            },
-            "recipient_binding": "beneficiary-only",
-            "leader_filter": {
-              "keywords": [
-                "MINISTORUM PRIEST"
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "agents-of-the-imperium"
-  },
-  {
     "ability_id": "tactical-instinct-agents-of-the-imperium",
     "name": "Tactical Instinct",
     "authored_by": "40kdc-community",
@@ -1031,34 +962,6 @@
       "modifier": {
         "roll": "hit",
         "subset": "ones"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deathwatch-kill-team",
-      "aquila-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "agents-of-the-imperium"
-  },
-  {
-    "ability_id": "astartes-shield-agents-of-the-imperium",
-    "name": "Astartes shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1932a9069a89679fec8c06bb0995adab086eddeb56e983cbdfab4519f04a5538",
-    "version": "2025-q3",
-    "effect": {
-      "type": "invulnerable-save",
-      "target": "this-model",
-      "modifier": {
-        "invuln_sv": 4
       }
     },
     "scope": {
@@ -1934,74 +1837,6 @@
     "faction_id": "agents-of-the-imperium"
   },
   {
-    "ability_id": "strategic-knowledge-agents-of-the-imperium",
-    "name": "Strategic Knowledge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "02eae04bc55a7f857659ed986a1c91238563178293db341777cf85cebe356850",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "shoot",
-          "allow": true,
-          "after": [
-            "fall-back"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "watch-master"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "agents-of-the-imperium"
-  },
-  {
-    "ability_id": "rites-of-battle-agents-of-the-imperium",
-    "name": "Rites of Battle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
-    "version": "2025-q3",
-    "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "watch-master"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "agents-of-the-imperium"
-  },
-  {
     "ability_id": "malefic-wardings-agents-of-the-imperium",
     "name": "Malefic Wardings (Psychic)",
     "authored_by": "40kdc-community",
@@ -2189,35 +2024,6 @@
       "modifier": {
         "abilities": [
           "Ignores Cover"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "agents-of-the-imperium"
-  },
-  {
-    "ability_id": "infernum-halo-launcher-agents-of-the-imperium",
-    "name": "Infernum Halo-launcher",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2966068a5e9674328be11b29d8c87aab75d736797205a5d57438f70435f50a13",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "abilities": [
-          "Smoke"
         ]
       }
     },
@@ -3910,8 +3716,8 @@
     }
   },
   {
-    "ability_id": "damaged-1-5-wounds-remaining-agents-of-the-imperium",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "ability_id": "damaged-agents-of-the-imperium",
+    "name": "DAMAGED",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4686,6 +4492,117 @@
     "faction_id": "agents-of-the-imperium",
     "detachment_id": "ordo-hereticus-purgation-force",
     "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "auspex-array-wargear-agents-of-the-imperium",
+    "name": "Auspex Array",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "storm-shield-agents-of-the-imperium",
+    "name": "Storm Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "aquila-kill-team",
+      "deathwatch-kill-team"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "strategic-acumen-agents-of-the-imperium",
+    "name": "Strategic Acumen",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "watch-master-agents-of-the-imperium",
+    "name": "Watch Master",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "watch-that-agents-of-the-imperium",
+    "name": "Watch That (new)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },

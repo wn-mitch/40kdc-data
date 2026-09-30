@@ -128,88 +128,6 @@
       }
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#vengeance-of-the-omnissiah-adeptus-astartes#effect/condition/operands/0": {
-    "type": "happened",
-    "parameters": {
-      "event": "model-destroyed",
-      "object": {
-        "owner": "friendly",
-        "all_of": [
-          "ADEPTUS ASTARTES",
-          "VEHICLE"
-        ],
-        "level": "model"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 12
-        }
-      },
-      "window": "battle"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#vengeance-of-the-omnissiah-adeptus-astartes#effect/condition": {
-    "type": "happened",
-    "parameters": {
-      "event": "model-destroyed",
-      "object": {
-        "owner": "friendly",
-        "all_of": [
-          "ADEPTUS ASTARTES",
-          "VEHICLE"
-        ],
-        "level": "model"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 12
-        }
-      },
-      "window": "battle"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#extremis-level-threat-adeptus-astartes#effect/effect/condition/operands/0": {
-    "type": "has-ability",
-    "parameters": {
-      "ability": "oath-of-moment"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#skystrike-adeptus-astartes#effect/steps/1/condition/operands/2": {
-    "operator": "and",
-    "operands": [
-      {
-        "type": "player-turn-is",
-        "parameters": {
-          "turn": "your-turn"
-        }
-      },
-      {
-        "type": "battle-round",
-        "parameters": {
-          "min": 1,
-          "max": 1
-        }
-      }
-    ]
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#calculated-feint-vanguard-spearhead-adeptus-astartes#effect/steps/1/condition/operands/1": {
-    "type": "has-keyword",
-    "parameters": {
-      "all_of": [
-        "SCOUT SQUAD"
-      ]
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#ceramite-sledgehammer-armoured-speartip-adeptus-astartes#effect/steps/1/condition": {
-    "type": "has-keyword",
-    "parameters": {
-      "all_of": [
-        "HEAVY TRANSPORT"
-      ]
-    }
-  },
   "data/enrichment/adeptus-mechanicus/abilities.json#neurostatic-interference-adeptus-mechanicus#effect/effect/condition/operands/0": {
     "type": "within",
     "parameters": {
@@ -1491,15 +1409,6 @@
       }
     ]
   },
-  "data/enrichment/adeptus-astartes/abilities.json#designers-note-adeptus-astartes#effect": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "subject": "models-on-this-model",
-      "placement": "closest-to-original"
-    }
-  },
   "data/enrichment/genestealer-cults/abilities.json#cloaked-assassin-genestealer-cults#effect": {
     "type": "rule-state",
     "target": "this-unit",
@@ -2249,13 +2158,6 @@
     },
     "modifier": {
       "ability": "cabal-of-sorcerers-thousand-sons"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#last-survivor-adeptus-astartes#effect": {
-    "type": "army-rule",
-    "target": "this-model",
-    "modifier": {
-      "rule": "warlord-forbidden"
     }
   },
   "data/enrichment/adeptus-custodes/abilities.json#jump-packs-adeptus-custodes#effect": {
@@ -3186,53 +3088,6 @@
     "target": "this-unit",
     "modifier": {
       "move_type": "embark"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#onward-for-the-emperor-orbital-assault-force-adeptus-astartes#effect": {
-    "type": "conditional",
-    "condition": {
-      "type": "within",
-      "parameters": {
-        "of": {
-          "owner": "friendly",
-          "all_of": [
-            "TRANSPORT"
-          ]
-        },
-        "range": {
-          "inches": 6
-        },
-        "wholly": true
-      }
-    },
-    "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "embark",
-        "allow": true,
-        "into": {
-          "owner": "friendly",
-          "all_of": [
-            "TRANSPORT"
-          ]
-        }
-      }
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#rapid-embarkation-firestorm-assault-force-adeptus-astartes#effect": {
-    "type": "permission",
-    "target": "this-unit",
-    "modifier": {
-      "activity": "embark",
-      "allow": true,
-      "into": {
-        "owner": "friendly",
-        "all_of": [
-          "ADEPTUS ASTARTES",
-          "TRANSPORT"
-        ]
-      }
     }
   },
   "data/enrichment/world-eaters/abilities.json#endless-pursuit-of-violence-goretrack-onslaught-world-eaters#effect/effect": {
@@ -4939,40 +4794,6 @@
       ]
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#master-of-deceit-adeptus-astartes#effect": {
-    "type": "select-units",
-    "selector": {
-      "owner": "friendly",
-      "max_count": 3,
-      "keywords": [
-        "ADEPTUS ASTARTES",
-        "INFANTRY"
-      ]
-    },
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "battlefield",
-            "placement": "deployment-zone"
-          }
-        },
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "from": "battlefield",
-            "ignore_limits": true
-          }
-        }
-      ]
-    }
-  },
   "data/enrichment/adeptus-astartes/abilities.json#strategium-command-adeptus-astartes#effect": {
     "type": "conditional",
     "condition": {
@@ -5234,70 +5055,6 @@
       ]
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#emergency-combat-embarkation-adeptus-astartes#effect/effect": {
-    "type": "select-units",
-    "selector": {
-      "owner": "friendly",
-      "count": 1,
-      "keywords": [
-        "ADEPTUS ASTARTES"
-      ],
-      "eligibility": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
-          },
-          {
-            "type": "within",
-            "parameters": {
-              "of": "this-unit",
-              "range": {
-                "inches": 3
-              },
-              "models": "every"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "targets-selected",
-              "subject": "event-subject",
-              "window": "event"
-            }
-          }
-        ]
-      }
-    },
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "selected-unit",
-          "modifier": {
-            "move_type": "embark"
-          }
-        },
-        {
-          "type": "targeting",
-          "target": "event-subject",
-          "modifier": {
-            "may": "target",
-            "kind": "charge"
-          }
-        }
-      ]
-    }
-  },
   "data/enrichment/chaos-space-marines/abilities.json#fleet-command-chaos-space-marines#effect/effect": {
     "type": "select-units",
     "selector": {
@@ -5432,21 +5189,6 @@
     "modifier": {
       "to": "battlefield",
       "from": "strategic-reserves",
-      "turns": [
-        1,
-        2,
-        3
-      ],
-      "ignore_limits": true
-    }
-  },
-  "data/enrichment/dark-angels/abilities.json#deathwing-assault-inner-circle-task-force-dark-angels#effect": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "from": "strategic-reserves",
-      "via": "deep-strike",
       "turns": [
         1,
         2,
@@ -5765,17 +5507,6 @@
       ]
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#adaptive-operations-subversion-assets-adeptus-astartes#effect": {
-    "type": "permission",
-    "target": "this-unit",
-    "modifier": {
-      "activity": "shoot",
-      "allow": true,
-      "despite": [
-        "performing-action"
-      ]
-    }
-  },
   "data/enrichment/adeptus-mechanicus/abilities.json#analytic-reprisals-eradication-cohort-adeptus-mechanicus#effect": {
     "type": "sequence",
     "steps": [
@@ -6056,45 +5787,6 @@
         }
       }
     ]
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#thunderhawk-adeptus-astartes#effect": {
-    "type": "transport-capacity",
-    "target": "this-model",
-    "modifier": {
-      "capacity": 30,
-      "eligible": {
-        "all_of": [
-          "ADEPTUS ASTARTES"
-        ],
-        "any_of": [
-          "INFANTRY",
-          "MOUNTED"
-        ]
-      },
-      "space_per_model": [
-        {
-          "any_of": [
-            "JUMP PACK",
-            "WULFEN",
-            "GRAVIS",
-            "TERMINATOR"
-          ],
-          "slots": 2
-        },
-        {
-          "any_of": [
-            "CENTURION"
-          ],
-          "slots": 3
-        },
-        {
-          "any_of": [
-            "MOUNTED"
-          ],
-          "slots": 4
-        }
-      ]
-    }
   },
   "data/enrichment/chaos-space-marines/abilities.json#bestial-raiders-chaos-space-marines#effect/steps/1/effect": {
     "type": "set-up",
@@ -6771,21 +6463,6 @@
     "target": "this-model",
     "modifier": {
       "rule": "warlord-forbidden"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#demetrian-titus-adeptus-astartes#effect": {
-    "type": "army-rule",
-    "target": {
-      "owner": "friendly"
-    },
-    "modifier": {
-      "rule": "unique",
-      "with": {
-        "all_of": [
-          "TITUS"
-        ]
-      },
-      "max": 1
     }
   },
   "data/enrichment/aeldari/abilities.json#travelling-players-aeldari#effect": {
@@ -7571,15 +7248,6 @@
       "min_enemy_distance": 6
     }
   },
-  "data/enrichment/blood-angels/abilities.json#descent-of-angels-the-angelic-host-blood-angels#effect": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "via": "deep-strike",
-      "min_enemy_distance": 6
-    }
-  },
   "data/enrichment/chaos-space-marines/abilities.json#akshurs-binding-runes-warpstrike-champions-chaos-space-marines#effect": {
     "type": "set-up",
     "target": "this-unit",
@@ -7635,55 +7303,6 @@
           "target": "event-subject",
           "modifier": {
             "test": "desperate-escape"
-          }
-        }
-      }
-    ]
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#advanced-deployment-armoured-speartip-adeptus-astartes#effect": {
-    "type": "sequence",
-    "steps": [
-      {
-        "type": "permission",
-        "target": "this-unit",
-        "modifier": {
-          "activity": "disembark",
-          "allow": true,
-          "after": [
-            "advance"
-          ]
-        }
-      },
-      {
-        "type": "ability-part",
-        "trigger": {
-          "event": "disembarked",
-          "subject": {
-            "owner": "friendly"
-          },
-          "object": "this-unit"
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-ability",
-                "parameters": {
-                  "subject": "this-unit",
-                  "ability": "assault-ramp-adeptus-astartes"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "permission",
-            "target": "event-subject",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": false
-            }
           }
         }
       }
@@ -8116,38 +7735,6 @@
       }
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#combat-disembarkation-adeptus-astartes#effect": {
-    "type": "ability-part",
-    "trigger": {
-      "event": "disembarked",
-      "subject": {
-        "owner": "friendly"
-      },
-      "object": "this-model"
-    },
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "set-up",
-          "subject": "this-model",
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "permission",
-        "target": "event-subject",
-        "modifier": {
-          "activity": "declare-charge",
-          "allow": true,
-          "after": [
-            "disembark"
-          ]
-        }
-      }
-    }
-  },
   "data/enrichment/adeptus-custodes/abilities.json#assault-dropship-adeptus-custodes#effect": {
     "type": "ability-part",
     "trigger": {
@@ -8184,56 +7771,6 @@
         }
       }
     }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#assault-vehicle-adeptus-astartes#effect": {
-    "type": "sequence",
-    "steps": [
-      {
-        "type": "permission",
-        "target": "this-model",
-        "modifier": {
-          "activity": "disembark",
-          "allow": true,
-          "after": [
-            "advance"
-          ]
-        }
-      },
-      {
-        "type": "ability-part",
-        "trigger": {
-          "event": "disembarked",
-          "subject": {
-            "owner": "friendly"
-          },
-          "object": "this-model"
-        },
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "subject": "this-model",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ]
-              },
-              "window": "turn"
-            }
-          },
-          "effect": {
-            "type": "permission",
-            "target": "event-subject",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": false
-            }
-          }
-        }
-      }
-    ]
   },
   "data/enrichment/emperors-children/abilities.json#assault-vehicle-emperors-children#effect": {
     "type": "sequence",
@@ -8553,17 +8090,6 @@
       "threshold": 5
     }
   },
-  "data/enrichment/blood-angels/abilities.json#sanguinius-grace-the-lost-brethren-blood-angels#effect/effect": {
-    "type": "permission",
-    "target": "this-model",
-    "modifier": {
-      "activity": "fight",
-      "allow": true,
-      "despite": [
-        "fought-this-phase"
-      ]
-    }
-  },
   "data/enrichment/world-eaters/abilities.json#bloodthirsty-horde-cult-of-blood-world-eaters#effect/effect": {
     "type": "permission",
     "target": "this-unit",
@@ -8661,17 +8187,6 @@
         }
       }
     ]
-  },
-  "data/enrichment/blood-angels/abilities.json#archangels-shard-the-angelic-host-blood-angels#effect": {
-    "type": "weapon-ability-grant",
-    "target": "this-model",
-    "modifier": {
-      "abilities": [
-        "Anti-Chaos 5+",
-        "Lance"
-      ],
-      "weapon_type": "melee"
-    }
   },
   "data/enrichment/chaos-space-marines/abilities.json#rain-of-ruin-chaos-space-marines#effect": {
     "type": "weapon-ability-grant",
@@ -9393,39 +8908,7 @@
       "distance": 6
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#defensive-mastery-ceramite-sentinels-adeptus-astartes#effect": {
-    "type": "select-units",
-    "selector": {
-      "max_count": 3,
-      "owner": "friendly",
-      "keywords": [
-        "ADEPTUS ASTARTES"
-      ]
-    },
-    "effect": {
-      "type": "choice",
-      "options": [
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "battlefield"
-          }
-        },
-        {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "from": "battlefield",
-            "ignore_limits": true
-          }
-        }
-      ]
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes#effect": {
+  "data/enrichment/imperial-fists/abilities.json#defensive-mastery-ceramite-sentinels-imperial-fists#effect": {
     "type": "select-units",
     "selector": {
       "max_count": 3,
@@ -9522,41 +9005,6 @@
       "distance": "D6+2"
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#rapid-deployment-adeptus-astartes#effect/effect": {
-    "type": "move",
-    "target": "this-unit",
-    "modifier": {
-      "move_type": "normal",
-      "distance": "D6"
-    }
-  },
-  "data/enrichment/black-templars/abilities.json#stabilised-disembarkation-black-templars#effect/effect": {
-    "type": "for-each-unit",
-    "selector": {
-      "owner": "friendly",
-      "eligibility": {
-        "type": "unit-state",
-        "parameters": {
-          "state": "embarked",
-          "with": "this-unit"
-        }
-      }
-    },
-    "effect": {
-      "type": "move",
-      "target": "recipient",
-      "modifier": {
-        "move_type": "disembark",
-        "ends_within": {
-          "range": {
-            "inches": 6
-          },
-          "of": "this-unit",
-          "wholly": true
-        }
-      }
-    }
-  },
   "data/enrichment/world-eaters/abilities.json#blood-surge-world-eaters#effect/effect": {
     "type": "move",
     "target": "this-unit",
@@ -9621,14 +9069,6 @@
         }
       }
     ]
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#rigid-discipline-anvil-siege-force-adeptus-astartes#effect": {
-    "type": "move",
-    "target": "this-unit",
-    "modifier": {
-      "move_type": "fall-back",
-      "distance": 6
-    }
   },
   "data/enrichment/genestealer-cults/abilities.json#planted-explosives-genestealer-cults#effect": {
     "type": "conditional",
@@ -10014,54 +9454,6 @@
       "count": 1
     }
   },
-  "data/enrichment/dark-angels/abilities.json#shroud-of-heroes-unforgiven-task-force-dark-angels#effect/on_success": {
-    "type": "sequence",
-    "steps": [
-      {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "unit-state",
-              "parameters": {
-                "subject": "this-model",
-                "state": "battle-shocked"
-              }
-            }
-          ]
-        },
-        "effect": {
-          "type": "return-models",
-          "target": "this-model",
-          "modifier": {
-            "count": 1,
-            "wounds_remaining": 3,
-            "placement": "closest-to-destruction"
-          }
-        }
-      },
-      {
-        "type": "conditional",
-        "condition": {
-          "type": "unit-state",
-          "parameters": {
-            "subject": "this-model",
-            "state": "battle-shocked"
-          }
-        },
-        "effect": {
-          "type": "return-models",
-          "target": "this-model",
-          "modifier": {
-            "count": 1,
-            "wounds_remaining": "full",
-            "placement": "closest-to-destruction"
-          }
-        }
-      }
-    ]
-  },
   "data/enrichment/adepta-sororitas/abilities.json#divine-intervention-hallowed-martyrs-adepta-sororitas#effect": {
     "type": "sequence",
     "steps": [
@@ -10119,21 +9511,6 @@
     "target": "this-unit",
     "modifier": {
       "amount": "D6"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#armour-of-fate-adeptus-astartes#effect": {
-    "type": "dice-gated",
-    "dice": "D6",
-    "threshold": 3,
-    "comparison": "gte",
-    "on_success": {
-      "type": "return-models",
-      "target": "this-model",
-      "modifier": {
-        "count": 1,
-        "wounds_remaining": 6,
-        "placement": "closest-to-destruction"
-      }
     }
   },
   "data/enrichment/adeptus-custodes/abilities.json#unyielding-ancient-adeptus-custodes#effect": {
@@ -10195,16 +9572,7 @@
       }
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#honour-indefatigable-ceramite-sentinels-adeptus-astartes#effect/on_success": {
-    "type": "return-models",
-    "target": "this-model",
-    "modifier": {
-      "count": 1,
-      "wounds_remaining": "full",
-      "placement": "closest-to-destruction"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#indomitable-fury-anvil-siege-force-adeptus-astartes#effect/on_success": {
+  "data/enrichment/imperial-fists/abilities.json#honour-indefatigable-ceramite-sentinels-imperial-fists#effect/on_success": {
     "type": "return-models",
     "target": "this-model",
     "modifier": {
@@ -10219,15 +9587,6 @@
     "modifier": {
       "count": 1,
       "wounds_remaining": "D3",
-      "placement": "closest-to-destruction"
-    }
-  },
-  "data/enrichment/blood-angels/abilities.json#blood-shard-the-lost-brethren-blood-angels#effect/on_success": {
-    "type": "return-models",
-    "target": "this-model",
-    "modifier": {
-      "count": 1,
-      "wounds_remaining": 3,
       "placement": "closest-to-destruction"
     }
   },
@@ -12841,24 +12200,6 @@
       ]
     }
   },
-  "data/enrichment/dark-angels/abilities.json#entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal-dark-angels#effect": {
-    "type": "conditional",
-    "condition": {
-      "type": "attack-is",
-      "parameters": {
-        "shooting_type": "snap"
-      }
-    },
-    "effect": {
-      "type": "roll-result",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "hit",
-        "succeeds_on": 5,
-        "weapon_type": "ranged"
-      }
-    }
-  },
   "data/enrichment/leagues-of-votann/abilities.json#purge-response-leagues-of-votann#effect": {
     "type": "conditional",
     "condition": {
@@ -13133,26 +12474,7 @@
       }
     ]
   },
-  "data/enrichment/adeptus-astartes/abilities.json#target-sighted-adeptus-astartes#effect/steps/0/effect": {
-    "type": "move-modifier",
-    "target": "this-unit",
-    "modifier": {
-      "advance": "fixed-6"
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#interlocking-tactics-adeptus-astartes#effect/effect/steps/1": {
-    "type": "permission",
-    "target": "this-unit",
-    "modifier": {
-      "activity": "start-action",
-      "allow": true,
-      "after": [
-        "advance",
-        "fall-back"
-      ]
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#castellum-omnivox-ceramite-sentinels-adeptus-astartes#effect/options/0": {
+  "data/enrichment/imperial-fists/abilities.json#castellum-omnivox-ceramite-sentinels-imperial-fists#effect/options/0": {
     "type": "permission",
     "target": "this-unit",
     "modifier": {
@@ -13830,27 +13152,6 @@
       "placement": "anywhere"
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#orbital-teleportarium-1st-company-task-force-adeptus-astartes#effect/steps/1": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "from": "strategic-reserves",
-      "via": "deep-strike",
-      "turns": [
-        1
-      ]
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#temporal-corridor-librarius-conclave-adeptus-astartes#effect/steps/1/steps/1": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "from": "strategic-reserves",
-      "ignore_limits": true
-    }
-  },
   "data/enrichment/tau-empire/abilities.json#earth-caste-modifications-sudden-dawn-cadre-tau-empire#effect/steps/1": {
     "type": "sequence",
     "steps": [
@@ -14335,14 +13636,6 @@
       }
     }
   },
-  "data/enrichment/dark-angels/abilities.json#master-of-manoeuvre-company-of-hunters-dark-angels#effect/steps/0": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "strategic-reserves",
-      "ignore_limits": true
-    }
-  },
   "data/enrichment/emperors-children/abilities.json#tactical-perfection-mercurial-host-emperors-children#effect/steps/1": {
     "type": "set-up",
     "target": "this-unit",
@@ -14624,15 +13917,6 @@
   "data/enrichment/world-eaters/abilities.json#rampaging-terrors-world-eaters#effect/steps/0": {
     "type": "no-effect"
   },
-  "data/enrichment/dark-angels/abilities.json#master-of-manoeuvre-company-of-hunters-dark-angels#effect/steps/1": {
-    "type": "set-up",
-    "target": "this-unit",
-    "modifier": {
-      "to": "battlefield",
-      "from": "strategic-reserves",
-      "round_offset": 1
-    }
-  },
   "data/enrichment/orks/abilities.json#burna-bomb-orks#effect/effect/on_success/steps/1": {
     "type": "designate",
     "target": "this-unit",
@@ -14686,27 +13970,6 @@
       "target": "this-model",
       "modifier": {
         "ability": "lone-operative"
-      }
-    }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#obfuscation-librarius-conclave-adeptus-astartes#effect/steps/0": {
-    "type": "conditional",
-    "condition": {
-      "type": "attack-is",
-      "parameters": {
-        "shooting_type": "snap"
-      }
-    },
-    "effect": {
-      "type": "targeting",
-      "target": "this-unit",
-      "modifier": {
-        "by": {
-          "owner": "enemy"
-        },
-        "may": "cannot-target",
-        "target": "this-unit",
-        "kind": "shoot"
       }
     }
   },
@@ -15150,7 +14413,7 @@
       }
     }
   },
-  "data/enrichment/adeptus-astartes/abilities.json#burning-vengeance-firestorm-assault-force-adeptus-astartes#effect/steps/0": {
+  "data/enrichment/salamanders/abilities.json#burning-vengeance-forgefathers-seekers-salamanders#effect/steps/0": {
     "type": "select-units",
     "selector": {
       "count": 1,
@@ -15556,45 +14819,6 @@
         "threshold": 5
       }
     }
-  },
-  "data/enrichment/adeptus-astartes/abilities.json#machine-wrath-armoured-speartip-adeptus-astartes#effect/steps/0": {
-    "type": "sequence",
-    "steps": [
-      {
-        "type": "move-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "applies_to_moves": [
-            "normal",
-            "fall-back"
-          ],
-          "passthrough": [
-            "enemy-models-excluding-monster-vehicle"
-          ],
-          "no_end_in_engagement": true
-        }
-      },
-      {
-        "type": "choice",
-        "choice_label": "normal-or-fall-back",
-        "options": [
-          {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "normal"
-            }
-          },
-          {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "fall-back"
-            }
-          }
-        ]
-      }
-    ]
   },
   "data/enrichment/adeptus-astartes/abilities.json#teleport-homer-adeptus-astartes#effect/steps/0": {
     "type": "marker",

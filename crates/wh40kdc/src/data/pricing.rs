@@ -235,16 +235,16 @@ mod tests {
     fn ordinal_bands_we_chaos_terminators() {
         let ct = we_chaos_terminators();
         // 1st–2nd copy: lower band.
-        assert_eq!(base_unit_points(ct, 5, 1), 165);
-        assert_eq!(base_unit_points(ct, 5, 2), 165);
-        assert_eq!(base_unit_points(ct, 10, 1), 330);
+        assert_eq!(base_unit_points(ct, 5, 1), 175);
+        assert_eq!(base_unit_points(ct, 5, 2), 175);
+        assert_eq!(base_unit_points(ct, 10, 1), 350);
         // 3rd+ copy: higher band (open-ended top).
-        assert_eq!(base_unit_points(ct, 5, 3), 175);
-        assert_eq!(base_unit_points(ct, 10, 3), 340);
-        assert_eq!(base_unit_points(ct, 5, 7), 175);
-        // The second build is a 6–10 range tier, so 7 models prices at it (330),
+        assert_eq!(base_unit_points(ct, 5, 3), 185);
+        assert_eq!(base_unit_points(ct, 10, 3), 360);
+        assert_eq!(base_unit_points(ct, 5, 7), 185);
+        // The second build is a 6–10 range tier, so 7 models prices at it (350),
         // not the 5-model tier — a count inside a range resolves to that range.
-        assert_eq!(base_unit_points(ct, 7, 1), 330);
+        assert_eq!(base_unit_points(ct, 7, 1), 350);
     }
 
     #[test]

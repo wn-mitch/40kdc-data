@@ -15,15 +15,15 @@ def _we_chaos_terminators(dataset: Any) -> dict[str, Any]:
 def test_ordinal_bands(dataset: Any) -> None:
     ct = _we_chaos_terminators(dataset)
     # 1st-2nd army copy: lower band.
-    assert base_unit_points(ct, 5, 1) == 165
-    assert base_unit_points(ct, 5, 2) == 165
-    assert base_unit_points(ct, 10, 1) == 330
+    assert base_unit_points(ct, 5, 1) == 175
+    assert base_unit_points(ct, 5, 2) == 175
+    assert base_unit_points(ct, 10, 1) == 350
     # 3rd+ copy: higher band (open-ended top).
-    assert base_unit_points(ct, 5, 3) == 175
-    assert base_unit_points(ct, 10, 3) == 340
-    assert base_unit_points(ct, 5, 7) == 175
+    assert base_unit_points(ct, 5, 3) == 185
+    assert base_unit_points(ct, 10, 3) == 360
+    assert base_unit_points(ct, 5, 7) == 185
     # Defaults to the 1st copy.
-    assert base_unit_points(ct, 5) == 165
+    assert base_unit_points(ct, 5) == 175
 
 
 def test_unbanded_unit_ignores_ordinal(dataset: Any) -> None:

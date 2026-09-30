@@ -41,11 +41,16 @@ def test_eligible_abilities(dataset: Any, case_file: str) -> None:
 def _run_dsl_corpus(dataset: Any, filename: str) -> None:
     dsl = json.loads((_DIR / filename).read_text(encoding="utf-8"))
     for c in dsl["cases"]:
-        ability = dataset.abilities.get_any(c["abilityId"])
-        assert ability is not None, f"unknown ability {c['abilityId']}"
+        # A specimen whose ability left the dataset carries its frozen DSL inline.
+        if "effect" in c:
+            raw_effect = c["effect"]
+        else:
+            ability = dataset.abilities.get_any(c["abilityId"])
+            assert ability is not None, f"unknown ability {c['abilityId']}"
+            raw_effect = ability.raw.get("effect")
         perspective = c.get("perspective", "attacker")
         # A rated rule reads the unit's printed rating; the case supplies it.
-        effect = with_rating(ability.raw.get("effect"), c.get("rating"))
+        effect = with_rating(raw_effect, c.get("rating"))
         result = effect_to_buffs(effect, c["source"], c["context"], perspective)
         applied_contribs = [b["contribution"] for b in result["applied"]]
         assert applied_contribs == c["expected"]["applied"], f"{c['abilityId']} ({perspective})"

@@ -11,41 +11,41 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | (core) | 10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adepta-sororitas | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 42 | 0 | 0 | 0 | 0 | 0 | 1 | 79 |
+| adeptus-astartes | 42 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | adeptus-custodes | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aeldari | 81 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | agents-of-the-imperium | 33 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | astra-militarum | 60 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| black-templars | 17 | 0 | 0 | 0 | 0 | 0 | 1 | 85 |
-| blood-angels | 16 | 0 | 0 | 0 | 0 | 0 | 1 | 90 |
-| chaos-daemons | 45 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| black-templars | 17 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| blood-angels | 16 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| chaos-daemons | 46 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | chaos-knights | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 96 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| crimson-fists | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 63 |
-| dark-angels | 15 | 0 | 0 | 0 | 0 | 0 | 3 | 91 |
+| crimson-fists | 7 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
+| dark-angels | 15 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
 | death-guard | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| deathwatch | 12 | 0 | 0 | 0 | 0 | 0 | 1 | 63 |
+| deathwatch | 12 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | drukhari | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emperors-children | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | genestealer-cults | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | grey-knights | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| imperial-fists | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 69 |
+| imperial-fists | 7 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
 | imperial-knights | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| iron-hands | 8 | 0 | 0 | 0 | 0 | 0 | 1 | 69 |
+| iron-hands | 8 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | leagues-of-votann | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | necrons | 66 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | orks | 40 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| raven-guard | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 69 |
-| salamanders | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 66 |
-| space-wolves | 10 | 0 | 0 | 0 | 0 | 0 | 3 | 92 |
+| raven-guard | 6 | 0 | 0 | 0 | 0 | 0 | 2 | 0 |
+| salamanders | 6 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| space-wolves | 10 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
 | tau-empire | 34 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | thousand-sons | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tyranids | 54 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ultramarines | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 75 |
-| white-scars | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 69 |
+| ultramarines | 8 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| white-scars | 6 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | world-eaters | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1260** | **0** | **0** | **0** | **0** | **0** | **17** | **981** |
+| **TOTAL** | **1289** | **0** | **0** | **0** | **0** | **0** | **23** | **0** |
 
 ## adeptus-astartes
 
@@ -62,10 +62,17 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
 
+## chaos-daemons
+
+**Phases — authored vs prose-derived (review only, NOT applied):**
+- rapturous-agony-legion-of-excess-chaos-daemons: [command,movement,shooting,charge,fight] vs [shooting,fight]
+
 ## crimson-fists
 
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
+- stand-to-the-end-ceramite-sentinels-imperial-fists: [fight] vs [shooting,fight]
+- augmented-targeting-ceramite-sentinels-imperial-fists: [shooting] vs [shooting,fight]
 
 ## dark-angels
 
@@ -83,6 +90,8 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
+- stand-to-the-end-ceramite-sentinels-imperial-fists: [fight] vs [shooting,fight]
+- augmented-targeting-ceramite-sentinels-imperial-fists: [shooting] vs [shooting,fight]
 
 ## iron-hands
 
@@ -92,6 +101,7 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 ## raven-guard
 
 **Phases — authored vs prose-derived (review only, NOT applied):**
+- feint-and-thrust-shadowmark-talon-raven-guard: [movement] vs [command]
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
 
 ## salamanders
@@ -116,5 +126,5 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
 
-Stratagems in dump with no repo match (author via faction-pack flow): 53
+Stratagems in dump with no repo match (author via faction-pack flow): 29
 

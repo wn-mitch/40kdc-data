@@ -55,16 +55,20 @@
     "ability_ids": [
       {
         "id": "firing-deck",
-        "value": 20
+        "value": 11
       },
-      "gargantuan-orks",
       "walking-bastion-orks",
       {
         "id": "deadly-demise",
         "value": "2D6"
       },
-      "damaged-1-10-wounds-remaining-orks",
-      "waaagh-gargantuan-squiggoth-orks"
+      "damaged-orks",
+      "waaagh-orks",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "super-heavy-walker"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -1144,15 +1148,12 @@
       "dual-supa-shoota"
     ],
     "ability_ids": [
-      {
-        "id": "blastajet-force-field-orks",
-        "wargear": "blastajet-force-field"
-      },
+      "blastajet-force-field-orks",
       {
         "id": "damaged",
         "value": 4
       },
-      "damaged-1-4-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -1246,7 +1247,7 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-1-5-wounds-remaining-orks"
+      "damaged-orks"
     ],
     "transport_capacity": {
       "capacity": 22
@@ -1417,7 +1418,7 @@
         "id": "damaged",
         "value": 7
       },
-      "damaged-1-7-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -1671,7 +1672,7 @@
         "id": "damaged",
         "value": 10
       },
-      "damaged-1-10-wound-remaining-orks",
+      "damaged-orks",
       "super-heavy-walker"
     ],
     "transport_capacity": {
@@ -2282,7 +2283,7 @@
         "id": "damaged",
         "value": 7
       },
-      "damaged-1-7-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -2653,7 +2654,7 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-1-4-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -2889,7 +2890,7 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-1-4-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -2967,10 +2968,7 @@
     ],
     "ability_ids": [
       "fix-dat-armour-up-orks",
-      {
-        "id": "kustom-force-field-orks",
-        "wargear": "kustom-force-field"
-      },
+      "kustom-force-field-orks",
       "more-dakka-orks",
       "leader"
     ],
@@ -3623,7 +3621,7 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-1-5-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -4015,7 +4013,7 @@
         "id": "damaged",
         "value": 4
       },
-      "damaged-1-4-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -4104,7 +4102,7 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-1-5-wound-remaining-test-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"
@@ -4602,7 +4600,7 @@
         "id": "damaged",
         "value": 6
       },
-      "damaged-1-5-wounds-remaining-orks",
+      "damaged-orks",
       {
         "id": "deadly-demise",
         "value": "D6"

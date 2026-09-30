@@ -1,57 +1,16 @@
 [
   {
-    "id": "the-lost-brethren",
-    "name": "The Lost Brethren",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "sanguinius-grace-the-lost-brethren-blood-angels",
-      "blood-shard-the-lost-brethren-blood-angels",
-      "to-slay-the-warmaster-the-lost-brethren-blood-angels",
-      "vengeful-onslaught-the-lost-brethren-blood-angels"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "furious-onslaught-the-lost-brethren-blood-angels",
-      "lost-to-rage-the-lost-brethren-blood-angels",
-      "glorious-sacrifice-the-lost-brethren-blood-angels",
-      "final-retribution-the-lost-brethren-blood-angels",
-      "wrathful-rampage-the-lost-brethren-blood-angels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "tags": [
-      "doomed"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "0002bcde-4fd1-4bcc-99ea-7edbd5809792"
-      }
-    ],
-    "detachment_rule_ids": [
-      "a-noble-death-in-combat-blood-angels"
-    ]
-  },
-  {
     "id": "angelic-inheritors",
     "name": "Angelic Inheritors",
     "faction_id": "blood-angels",
     "detachment_rule_id": null,
     "enhancement_ids": [
       "prescient-flash-angelic-inheritors-blood-angels",
-      "troubling-visions-angelic-inheritors-blood-angels",
       "blazing-icon-angelic-inheritors-blood-angels",
-      "ordained-sacrifice-angelic-inheritors-blood-angels"
+      "ordained-sacrifice-angelic-inheritors-blood-angels",
+      "unto-death-angelic-inheritors-blood-angels"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
       "strike-now-for-glory-angelic-inheritors-blood-angels",
       "focused-fury-angelic-inheritors-blood-angels",
       "in-the-shadow-of-great-wings-angelic-inheritors-blood-angels",
@@ -70,7 +29,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "2de2e2bc-8c9a-415e-ad61-11a8c2704590"
+        "id": "a8e82e32-5105-4997-b035-32b590145109"
       }
     ],
     "detachment_rule_ids": [
@@ -79,83 +38,6 @@
     "restrictions": {
       "required_keywords": []
     }
-  },
-  {
-    "id": "the-angelic-host",
-    "name": "The Angelic Host",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "artisan-of-war-the-angelic-host-blood-angels",
-      "visage-of-death-the-angelic-host-blood-angels",
-      "archangels-shard-the-angelic-host-blood-angels",
-      "gleaming-pinions-the-angelic-host-blood-angels"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "angels-sacrifice-the-angelic-host-blood-angels",
-      "martial-examplars-the-angelic-host-blood-angels",
-      "unbridled-ardour-the-angelic-host-blood-angels",
-      "descent-of-angels-the-angelic-host-blood-angels",
-      "death-from-the-skies-the-angelic-host-blood-angels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "8351fbfa-edd6-4db9-a21d-400c05f1e9f1"
-      }
-    ],
-    "detachment_rule_ids": [
-      "upon-wings-of-fire-blood-angels"
-    ]
-  },
-  {
-    "id": "rage-cursed-onslaught",
-    "name": "Rage-cursed Onslaught",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "carmine-reliquary-rage-cursed-onslaught-blood-angels",
-      "master-of-the-red-thirst-rage-cursed-onslaught-blood-angels",
-      "sanguinary-tear-aura-rage-cursed-onslaught-blood-angels",
-      "angels-fang-rage-cursed-onslaught-blood-angels"
-    ],
-    "stratagem_ids": [
-      "a-grim-warning-rage-cursed-onslaught-blood-angels",
-      "limb-from-limb-rage-cursed-onslaught-blood-angels",
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "deathless-duty-rage-cursed-onslaught-blood-angels",
-      "insensate-rampage-rage-cursed-onslaught-blood-angels",
-      "red-wrath-rage-cursed-onslaught-blood-angels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "tags": [
-      "doomed"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "98d89ce1-bf5b-49f5-bbcc-cba5e32659e5"
-      }
-    ],
-    "detachment_rule_ids": [
-      "maddened-ferocity-blood-angels"
-    ]
   },
   {
     "id": "encarmine-speartip",
@@ -182,7 +64,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "ce2408b7-6810-4219-9f28-3c20499f0e13"
+        "id": "a8367074-525c-4caa-9840-5aab3dc7f661"
       }
     ],
     "detachment_rule_ids": [
@@ -191,40 +73,6 @@
     "restrictions": {
       "required_keywords": []
     }
-  },
-  {
-    "id": "legacy-of-grace",
-    "name": "Legacy of Grace",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "blood-boil-legacy-of-grace-blood-angels",
-      "aureole-of-the-angel-legacy-of-grace-blood-angels"
-    ],
-    "stratagem_ids": [
-      "martial-paragon-legacy-of-grace-blood-angels",
-      "aura-of-the-angels-grace-legacy-of-grace-blood-angels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "tags": [
-      "grace"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "6c2b0c94-4bce-40ba-b6cc-8effe9e5efff"
-      }
-    ],
-    "detachment_rule_ids": [
-      "legacy-of-the-angel-legacy-of-grace-blood-angels"
-    ]
   },
   {
     "id": "wrath-of-the-doomed",
@@ -251,86 +99,15 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "b5a5858b-3187-44f3-95af-e34dfe7eb7c9"
+        "id": "a952ab50-aa3d-425c-808f-c12dade0a80f"
       }
     ],
     "detachment_rule_ids": [
-      "fanatical-celerity-blood-angels"
+      "sanguinius-fury-blood-angels"
     ],
     "restrictions": {
       "required_keywords": []
     }
-  },
-  {
-    "id": "liberator-assault-group",
-    "name": "Liberator Assault Group",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "speed-of-the-primarch-liberator-assault-group-blood-angels",
-      "rage-fuelled-warrior-liberator-assault-group-blood-angels",
-      "icon-of-the-angel-liberator-assault-group-blood-angels",
-      "gift-of-foresight-liberator-assault-group-blood-angels"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "savage-echoes-liberator-assault-group-blood-angels",
-      "red-rampage-liberator-assault-group-blood-angels",
-      "angelic-grace-liberator-assault-group-blood-angels",
-      "aggressive-onslaught-liberator-assault-group-blood-angels",
-      "relentless-assault-liberator-assault-group-blood-angels"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "5f032619-a925-4e61-8d52-5d2e5f81311f"
-      }
-    ],
-    "detachment_rule_ids": [
-      "red-thirst-blood-angels"
-    ]
-  },
-  {
-    "id": "1st-company-task-force",
-    "name": "1st Company Task Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
-      "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
-      "rites-of-war-1st-company-task-force-adeptus-astartes",
-      "iron-resolve-1st-company-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
-      "legendary-fortitude-1st-company-task-force-adeptus-astartes",
-      "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
-      "duty-and-honour-1st-company-task-force-adeptus-astartes",
-      "orbital-teleportarium-1st-company-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "01c7258d-72a9-4df9-bea2-b4f7bfdaebb8"
-      }
-    ]
   },
   {
     "id": "gladius-task-force",
@@ -339,17 +116,10 @@
     "detachment_rule_id": null,
     "enhancement_ids": [
       "artificer-armour-gladius-task-force-adeptus-astartes",
-      "the-honour-vehement-gladius-task-force-adeptus-astartes",
-      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
-      "fire-discipline-gladius-task-force-adeptus-astartes"
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "honour-the-chapter-gladius-task-force-adeptus-astartes",
-      "storm-of-fire-gladius-task-force-adeptus-astartes",
-      "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
-      "adaptive-strategy-gladius-task-force-adeptus-astartes",
-      "squad-tactics-gladius-task-force-adeptus-astartes"
+      "adaptive-strategy-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -362,7 +132,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "047e97fc-2e78-4db6-b401-1f8bb65d9162"
+        "id": "114dee6f-802a-49f4-a0db-0296eb5434b3"
       }
     ]
   },
@@ -371,19 +141,9 @@
     "name": "Stormlance Task Force",
     "faction_id": "blood-angels",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
-      "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
-      "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
-      "hunters-instincts-stormlance-task-force-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
     "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
-      "shock-assault-stormlance-task-force-adeptus-astartes",
-      "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
-      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
-      "full-throttle-stormlance-task-force-adeptus-astartes"
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -396,170 +156,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "0854459d-3909-4621-8073-46d54d1a0464"
-      }
-    ]
-  },
-  {
-    "id": "librarius-conclave",
-    "name": "Librarius Conclave",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "celerity-librarius-conclave-adeptus-astartes",
-      "prescience-librarius-conclave-adeptus-astartes",
-      "obfuscation-librarius-conclave-adeptus-astartes",
-      "temporal-corridor-librarius-conclave-adeptus-astartes",
-      "fusillade-librarius-conclave-adeptus-astartes"
-    ],
-    "stratagem_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "9492c5aa-1baf-49d0-a587-c332d6119d10"
-      }
-    ]
-  },
-  {
-    "id": "vanguard-spearhead",
-    "name": "Vanguard Spearhead",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
-      "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
-      "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
-      "shadow-war-veteran-vanguard-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "surgical-strikes-vanguard-spearhead-adeptus-astartes",
-      "calculated-feint-vanguard-spearhead-adeptus-astartes",
-      "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
-      "a-deadly-prize-vanguard-spearhead-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "720ee5b2-2412-43f4-b145-bec27a90b6d5"
-      }
-    ]
-  },
-  {
-    "id": "orbital-assault-force",
-    "name": "Orbital Assault Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
-      "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
-      "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
-      "dedicated-gunship-orbital-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force-adeptus-astartes",
-      "blind-screen-orbital-assault-force-adeptus-astartes",
-      "tactical-decapitation-orbital-assault-force-adeptus-astartes",
-      "shock-onslaught-orbital-assault-force-adeptus-astartes",
-      "onward-for-the-emperor-orbital-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "dd0c31ee-65db-4143-b1f9-60aaea303b1c"
-      }
-    ]
-  },
-  {
-    "id": "anvil-siege-force",
-    "name": "Anvil Siege Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force-adeptus-astartes",
-      "fleet-commander-anvil-siege-force-adeptus-astartes",
-      "stoic-defender-anvil-siege-force-adeptus-astartes",
-      "architect-of-war-anvil-siege-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force-adeptus-astartes",
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "no-threat-too-great-anvil-siege-force-adeptus-astartes",
-      "rigid-discipline-anvil-siege-force-adeptus-astartes",
-      "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
-      "hail-of-vengeance-anvil-siege-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "e544168f-0535-4b58-ac04-c5f3793ea56b"
-      }
-    ]
-  },
-  {
-    "id": "firestorm-assault-force",
-    "name": "Firestorm Assault Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
-      "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
-      "forged-in-battle-firestorm-assault-force-adeptus-astartes",
-      "adamantine-mantle-firestorm-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
-      "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
-      "burning-vengeance-firestorm-assault-force-adeptus-astartes",
-      "immolation-protocols-firestorm-assault-force-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "fcc5de05-5825-4af5-9484-38af6358ff2b"
+        "id": "0a2a5520-e6cc-4f3f-ac87-b00addae1023"
       }
     ]
   },
@@ -568,20 +165,8 @@
     "name": "Ironstorm Spearhead",
     "faction_id": "blood-angels",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead-adeptus-astartes",
-      "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
-      "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
-      "master-of-machine-war-ironstorm-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
-      "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
-      "ancient-fury-ironstorm-spearhead-adeptus-astartes",
-      "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
+    "stratagem_ids": [],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -593,200 +178,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "fe7ac957-dfdf-4025-bd77-c387cd6c62a5"
-      }
-    ]
-  },
-  {
-    "id": "fulguris-task-force",
-    "name": "Fulguris Task Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "data-link-augury-fulguris-task-force-adeptus-astartes",
-      "reactive-evasion-fulguris-task-force-adeptus-astartes",
-      "anti-grav-surge-fulguris-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a65dba8d-ae69-4e3e-a72e-afeb748a98ca"
-      }
-    ]
-  },
-  {
-    "id": "subversion-assets",
-    "name": "Subversion Assets",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "shroud-field-subversion-assets-adeptus-astartes",
-      "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "adaptive-operations-subversion-assets-adeptus-astartes",
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "cloaked-position-subversion-assets-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b87e2dfa-d598-4fbb-a4ac-e08fdba03391"
-      }
-    ]
-  },
-  {
-    "id": "armoured-speartip",
-    "name": "Armoured Speartip",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "liberator-armoured-speartip-adeptus-astartes",
-      "tip-of-the-spear-armoured-speartip-adeptus-astartes",
-      "shock-deployment-armoured-speartip-adeptus-astartes",
-      "armoured-commander-armoured-speartip-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "machine-wrath-armoured-speartip-adeptus-astartes",
-      "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
-      "advanced-deployment-armoured-speartip-adeptus-astartes",
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "purgation-doctrine-armoured-speartip-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "2816281c-0f5d-4c0c-a63b-9be13599e674"
-      }
-    ]
-  },
-  {
-    "id": "bastion-task-force",
-    "name": "Bastion Task Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
-      "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
-      "blades-of-valour-bastion-task-force-adeptus-astartes",
-      "bombast-omnivox-bastion-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "codex-discipline-bastion-task-force-adeptus-astartes",
-      "shock-bombardment-bastion-task-force-adeptus-astartes",
-      "guided-disruption-bastion-task-force-adeptus-astartes",
-      "angels-defiant-bastion-task-force-adeptus-astartes",
-      "light-of-vengeance-bastion-task-force-adeptus-astartes",
-      "heresy-undone-bastion-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b0cdcaeb-2e58-46e3-83c5-a1ece9ad4e66"
-      }
-    ]
-  },
-  {
-    "id": "ceramite-sentinels",
-    "name": "Ceramite Sentinels",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
-      "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
-      "defensive-mastery-ceramite-sentinels-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels-adeptus-astartes",
-      "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
-      "priority-strike-ceramite-sentinels-adeptus-astartes",
-      "augmented-targeting-ceramite-sentinels-adeptus-astartes",
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "evasive-repositioning-ceramite-sentinels-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "3f2130dc-e858-45a7-b42c-4cd5953b9b43"
-      }
-    ]
-  },
-  {
-    "id": "headhunter-task-force",
-    "name": "Headhunter Task Force",
-    "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
-      "gunnery-honours-headhunter-task-force-adeptus-astartes",
-      "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
-      "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-the-lost-brethren-blood-angels",
-      "rapid-gunnery-headhunter-task-force-adeptus-astartes",
-      "reactive-repositioning-headhunter-task-force-adeptus-astartes",
-      "target-weak-point-headhunter-task-force-adeptus-astartes",
-      "kill-shot-headhunter-task-force-adeptus-astartes",
-      "machine-vengeance-headhunter-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a5da316c-604e-4aca-b5ac-53517dcd01b3"
+        "id": "b9473893-6dae-43fd-a3f2-e27a93a56c95"
       }
     ]
   },
@@ -821,26 +213,6 @@
     "restrictions": {
       "required_keywords": []
     }
-  },
-  {
-    "id": "vengeful-hosts",
-    "name": "Vengeful Hosts",
-    "faction_id": "blood-angels",
-    "enhancement_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "63c87e85-fd1a-4dc3-8bc9-226db3e966d6"
-      }
-    ]
   },
   {
     "id": "assault-brethren",

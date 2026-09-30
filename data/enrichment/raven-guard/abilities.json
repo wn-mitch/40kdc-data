@@ -1,0 +1,197 @@
+[
+  {
+    "ability_id": "blackwing-shroud-shadowmark-talon-raven-guard",
+    "name": "Blackwing Shroud",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "coronal-susurrant-shadowmark-talon-raven-guard",
+    "name": "Coronal Susurrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "feint-and-thrust-shadowmark-talon-raven-guard",
+    "name": "Feint and Thrust",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hunters-instincts-shadowmark-talon-raven-guard",
+    "name": "Hunter’s Instincts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "26d038fbb7c5a91e667d5a097fb296e5ef45e1fcdb7ab0cede020c6f737b6126",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "stormlance-task-force",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "from": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES",
+        "MOUNTED"
+      ]
+    },
+    "community_notes": "While the bearer's unit is in Strategic Reserves, treat the battle round as one higher for set-up purposes"
+  },
+  {
+    "ability_id": "into-darkness-shadowmark-talon-raven-guard",
+    "name": "Into Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
+    "name": "Lay Low the Tyrants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "raptorial-vigilance-shadowmark-talon-raven-guard",
+    "name": "Raptorial Vigilance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "umbral-raptor-shadowmark-talon-raven-guard",
+    "name": "Umbral Raptor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shadow-tactics-raven-guard",
+    "name": "Shadow Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

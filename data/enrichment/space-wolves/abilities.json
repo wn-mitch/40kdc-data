@@ -233,7 +233,6 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "venerable-dreadnought",
       "wulfen-dreadnought"
     ],
     "ability_type": "unit",
@@ -449,38 +448,6 @@
     "faction_id": "space-wolves"
   },
   {
-    "ability_id": "embarking-within-transports-space-wolves",
-    "name": "Embarking Within Transports",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "8107ee6d5ee029f3f054e97209949561845dae3573040b6edaccd3e5a7e81ca2",
-    "version": "2025-q3",
-    "effect": {
-      "type": "transport-capacity",
-      "target": "this-model",
-      "modifier": {
-        "occupancy_kind": "fixed-model-spaces",
-        "subject_kind": "single-model",
-        "spaces_per_model": 4,
-        "transport_eligibility": {
-          "requires_capacity_keyword": "TERMINATOR"
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "logan-grimnar"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "space-wolves"
-  },
-  {
     "ability_id": "fervour-of-the-ancients-space-wolves",
     "name": "Fervour of the Ancients (Aura)",
     "authored_by": "40kdc-community",
@@ -509,9 +476,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "venerable-dreadnought"
-    ],
+    "unit_ids": [],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "space-wolves"
@@ -920,7 +885,8 @@
       "duration": "battle-round"
     },
     "unit_ids": [
-      "fenrisian-wolves"
+      "wolf-guard-headtakers",
+      "wolf-scouts"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -1816,26 +1782,6 @@
     }
   },
   {
-    "ability_id": "alpha-strike-saga-of-the-bold-space-wolves",
-    "name": "Alpha Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "battle-instincts-saga-of-the-great-wolf-space-wolves",
     "name": "Battle Instincts",
     "authored_by": "40kdc-community",
@@ -1898,7 +1844,7 @@
     }
   },
   {
-    "ability_id": "birth-of-a-saga-saga-of-the-bold-space-wolves",
+    "ability_id": "birth-of-a-saga-champions-of-fenris-space-wolves",
     "name": "Birth of a Saga",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1909,26 +1855,6 @@
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-bold",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "blade-keen-senses-veterans-of-the-fang-space-wolves",
-    "name": "Blade-keen Senses",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "veterans-of-the-fang",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1958,46 +1884,6 @@
     }
   },
   {
-    "ability_id": "bounding-advance-saga-of-the-hunter-space-wolves",
-    "name": "Bounding Advance",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "braggarts-steel-saga-of-the-bold-space-wolves",
-    "name": "Braggart’s Steel",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "bring-it-down-askars-wolfpack-space-wolves",
     "name": "Bring It Down",
     "authored_by": "40kdc-community",
@@ -2018,7 +1904,7 @@
     }
   },
   {
-    "ability_id": "champions-guidance-saga-of-the-bold-space-wolves",
+    "ability_id": "champions-guidance-champions-of-fenris-space-wolves",
     "name": "Champion’s Guidance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2058,48 +1944,8 @@
     }
   },
   {
-    "ability_id": "chilling-howl-legends-of-saga-and-song-space-wolves",
-    "name": "Chilling Howl",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "chosen-prey-saga-of-the-hunter-space-wolves",
-    "name": "Chosen Prey",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "coordinated-strike-saga-of-the-beastslayer-space-wolves",
-    "name": "Coordinated Strike",
+    "ability_id": "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
+    "name": "Co-ordinated Strike",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2109,26 +1955,6 @@
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "countercharge-saga-of-the-bold-space-wolves",
-    "name": "Countercharge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -2160,66 +1986,6 @@
     }
   },
   {
-    "ability_id": "elders-guidance-saga-of-the-beastslayer-space-wolves",
-    "name": "Elder’s Guidance",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "envelop-and-ensnare-saga-of-the-hunter-space-wolves",
-    "name": "Envelop and Ensnare",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "eye-of-the-hunter-veterans-of-the-fang-space-wolves",
-    "name": "Eye of the Hunter",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "veterans-of-the-fang",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "eye-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "name": "Eye of the Pack",
     "authored_by": "40kdc-community",
@@ -2240,7 +2006,7 @@
     }
   },
   {
-    "ability_id": "fangs-of-the-pack-legends-of-saga-and-song-space-wolves",
+    "ability_id": "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "name": "Fangs of the Pack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2272,66 +2038,6 @@
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "fenrisian-grit-saga-of-the-hunter-space-wolves",
-    "name": "Fenrisian Grit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "feral-rage-saga-of-the-hunter-space-wolves",
-    "name": "Feral Rage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "fierce-example-upgrade-legends-of-saga-and-song-space-wolves",
-    "name": "Fierce Example (Upgrade)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
-    "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
     },
@@ -2380,26 +2086,6 @@
     }
   },
   {
-    "ability_id": "grizzled-killers-veterans-of-the-fang-space-wolves",
-    "name": "Grizzled Killers",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "veterans-of-the-fang",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "haywire-mine-space-wolves",
     "name": "Haywire Mine",
     "authored_by": "40kdc-community",
@@ -2414,46 +2100,6 @@
     "faction_id": "space-wolves",
     "detachment_id": null,
     "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "helm-of-the-beastslayer-saga-of-the-beastslayer-space-wolves",
-    "name": "Helm of the Beastslayer",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "heroes-all-space-wolves",
-    "name": "Heroes All",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "detachment",
     "effect": {
       "type": "no-effect"
     },
@@ -2484,7 +2130,7 @@
     }
   },
   {
-    "ability_id": "heroic-resolve-saga-of-the-bold-space-wolves",
+    "ability_id": "heroic-resolve-champions-of-fenris-space-wolves",
     "name": "Heroic Resolve",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2515,46 +2161,6 @@
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "askars-wolfpack",
-    "ability_type": "detachment",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "hordeslayer-saga-of-the-bold-space-wolves",
-    "name": "Hordeslayer",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "howling-onslaught-space-wolves",
-    "name": "Howling Onslaught",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "detachment",
     "effect": {
       "type": "no-effect"
@@ -2604,70 +2210,6 @@
     }
   },
   {
-    "ability_id": "hunting-hounds-wolf-guard-headtakers-space-wolves",
-    "name": "Hunting Hounds",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "wolf-guard-headtakers"
-    ],
-    "faction_id": "space-wolves",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "hunting-hounds-wolf-scouts-space-wolves",
-    "name": "Hunting Hounds",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "wolf-scouts"
-    ],
-    "faction_id": "space-wolves",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "icy-calm-veterans-of-the-fang-space-wolves",
-    "name": "Icy Calm",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "veterans-of-the-fang",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "impetuosity-saga-of-the-beastslayer-space-wolves",
     "name": "Impetuosity",
     "authored_by": "40kdc-community",
@@ -2679,26 +2221,6 @@
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "inspiring-presence-saga-of-the-bold-space-wolves",
-    "name": "Inspiring Presence",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -2770,46 +2292,6 @@
     }
   },
   {
-    "ability_id": "loping-charge-space-wolves",
-    "name": "Loping Charge",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
-    "ability_type": "detachment",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "marked-for-destruction-saga-of-the-hunter-space-wolves",
-    "name": "Marked for Destruction",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "master-of-wolves-space-wolves",
     "name": "Master of Wolves",
     "authored_by": "40kdc-community",
@@ -2858,70 +2340,10 @@
       "dataslate": "launch"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["grey-hunters"],
     "faction_id": "space-wolves",
     "detachment_id": "veterans-of-the-fang",
     "ability_type": "detachment",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "overwhelming-onslaught-saga-of-the-hunter-space-wolves",
-    "name": "Overwhelming Onslaught",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "packs-quarry-space-wolves",
-    "name": "Pack’s Quarry",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "detachment",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "pinning-fire-saga-of-the-beastslayer-space-wolves",
-    "name": "Pinning Fire",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
     },
@@ -2972,26 +2394,6 @@
     }
   },
   {
-    "ability_id": "runes-of-claiming-champions-of-fenris-space-wolves",
-    "name": "Runes Of Claiming",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "champions-of-fenris",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "savage-frenzy-askars-wolfpack-wulfen-space-wolves",
     "name": "Savage Frenzy",
     "authored_by": "40kdc-community",
@@ -3014,46 +2416,6 @@
     }
   },
   {
-    "ability_id": "shock-cavalry-saga-of-the-beastslayer-space-wolves",
-    "name": "Shock Cavalry",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "skjald-saga-of-the-bold-space-wolves",
-    "name": "Skjald",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "skjalds-foretelling-saga-of-the-great-wolf-space-wolves",
     "name": "Skjald’s Foretelling",
     "authored_by": "40kdc-community",
@@ -3066,26 +2428,6 @@
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "stalk-between-worlds-champions-of-fenris-space-wolves",
-    "name": "Stalk Between Worlds",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "champions-of-fenris",
-    "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
     },
@@ -3148,93 +2490,12 @@
     },
     "stub": true,
     "unit_ids": [
-      "wolf-guard-battle-leader"
-    ],
-    "faction_id": "space-wolves",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "storm-shield-wolf-guard-terminators-space-wolves",
-    "name": "Storm Shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
+      "wolf-guard-battle-leader",
       "wolf-guard-terminators"
     ],
     "faction_id": "space-wolves",
     "detachment_id": null,
     "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "swift-hunter-saga-of-the-hunter-space-wolves",
-    "name": "Swift Hunter",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "territorial-advantage-saga-of-the-hunter-space-wolves",
-    "name": "Territorial Advantage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "the-foe-foreseen-saga-of-the-great-wolf-space-wolves",
-    "name": "The Foe Foreseen",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-great-wolf",
-    "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
     },
@@ -3263,167 +2524,7 @@
     }
   },
   {
-    "ability_id": "thirst-for-glory-upgrade-legends-of-saga-and-song-space-wolves",
-    "name": "Thirst for Glory (Upgrade)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "thunderous-pursuit-saga-of-the-beastslayer-space-wolves",
-    "name": "Thunderous Pursuit",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "thunderwolfs-fortitude-saga-of-the-bold-space-wolves",
-    "name": "Thunderwolf’s Fortitude",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "unbridled-ferocity-saga-of-the-beastslayer-space-wolves",
-    "name": "Unbridled Ferocity",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-beastslayer",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "unrelenting-hunters-saga-of-the-great-wolf-space-wolves",
-    "name": "Unrelenting Hunters",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-great-wolf",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "weaver-of-sagas-veterans-of-the-fang-space-wolves",
-    "name": "Weaver of Sagas",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "veterans-of-the-fang",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "wings-of-the-blizzard-legends-of-saga-and-song-space-wolves",
-    "name": "Wings of the Blizzard",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
-    "ability_type": "stratagem",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "wolf-master-saga-of-the-hunter-space-wolves",
-    "name": "Wolf Master",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
-    "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-hunter",
-    "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "wolf-totems-champions-of-fenris-space-wolves",
+    "ability_id": "wolf-totems-saga-of-the-great-wolf-space-wolves",
     "name": "Wolf Totems",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3455,6 +2556,130 @@
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-beastslayer",
     "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-doctrines-space-wolves",
+    "name": "Combat Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "curse-of-the-wulfen-askars-wolfpack-space-wolves",
+    "name": "Curse of the Wulfen",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "high-rune-priest-space-wolves",
+    "name": "High Rune Priest (psyker level 3)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "njal-stormcaller"
+    ],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hunting-hounds-fenrisian-wolves-space-wolves",
+    "name": "Hunting Hounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "fenrisian-wolves"
+    ],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sons-of-russ-askars-wolfpack-space-wolves",
+    "name": "Sons of Russ",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transhuman-strategist-space-wolves",
+    "name": "Transhuman Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "space-wolves",
+    "detachment_id": null,
+    "ability_type": "faction",
     "effect": {
       "type": "no-effect"
     },

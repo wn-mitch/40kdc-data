@@ -232,7 +232,7 @@ fn ability_get_is_exact_and_an_old_bare_faction_id_resolves_to_nothing() {
         Some("world-eaters")
     );
     assert!(ds.abilities.get("idol-of-blessed-blood").is_none());
-    assert!(ds.abilities.get("berzerker-frenzy").is_none());
+    assert!(ds.abilities.get("berzerker-frenzy").is_none()); // mfm:mirror keep — the stale bare id
     assert!(ds.abilities.get("berzerker-frenzy-world-eaters").is_some());
     assert!(ds.abilities.get("deadly-demise-d3").is_none());
 }

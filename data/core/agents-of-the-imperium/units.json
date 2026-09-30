@@ -1078,11 +1078,8 @@
       "heavy-thunder-hammer"
     ],
     "ability_ids": [
-      {
-        "id": "astartes-shield-agents-of-the-imperium",
-        "wargear": "astartes-shield"
-      },
-      "death-to-the-alien-agents-of-the-imperium"
+      "death-to-the-alien-agents-of-the-imperium",
+      "storm-shield-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1399,11 +1396,8 @@
     ],
     "ability_ids": [
       "kill-team-agents-of-the-imperium",
-      {
-        "id": "astartes-shield-agents-of-the-imperium",
-        "wargear": "astartes-shield"
-      },
-      "death-to-the-alien-agents-of-the-imperium"
+      "death-to-the-alien-agents-of-the-imperium",
+      "storm-shield-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2223,8 +2217,9 @@
     ],
     "ability_ids": [
       "leader",
-      "rites-of-battle-agents-of-the-imperium",
-      "strategic-knowledge-agents-of-the-imperium"
+      "strategic-acumen-agents-of-the-imperium",
+      "watch-master-agents-of-the-imperium",
+      "watch-that-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2512,22 +2507,23 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      {
-        "id": "auspex-array-agents-of-the-imperium",
-        "wargear": "auspex-array"
-      },
+      "auspex-array-agents-of-the-imperium",
       "blackstar-cluster-launcher-agents-of-the-imperium",
       {
         "id": "deadly-demise",
         "value": "D6"
       },
       "hover",
-      {
-        "id": "infernum-halo-launcher-agents-of-the-imperium",
-        "wargear": "infernum-halo-launcher"
-      },
       "stealth",
-      "damaged-1-5-wounds-remaining-agents-of-the-imperium"
+      "damaged-agents-of-the-imperium",
+      {
+        "id": "auspex-array-wargear-agents-of-the-imperium",
+        "wargear": "auspex-array"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12

@@ -300,7 +300,8 @@
       {
         "id": "icon-of-khorne-world-eaters",
         "wargear": "icon-of-khorne"
-      }
+      },
+      "murderous-charge-world-eaters"
     ],
     "game_version": {
       "edition": "11th",

@@ -7,6 +7,7 @@ Faction: Adeptus Astartes
 Battle Size: Strike Force (2000 Point limit)
 Detachment: Gladius Task Force
 Detachment: 1st Company Task Force
+Force Disposition: Priority Assets
 
 ## Battleline [365 pts]
 Gladiator Lancer [160 pts]: Armoured Hull, Defensive Array, Laser Destroyer

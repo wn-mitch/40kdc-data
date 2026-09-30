@@ -9,7 +9,7 @@
       "disposition": null,
       "units": []
     },
-    "token": "ARsAAgEAAAA"
+    "token": "ARwAAgEAAAA"
   },
   {
     "name": "warlord-enhancement-grants",
@@ -17,7 +17,7 @@
       "name": "Strîke Force 🔨",
       "factionId": "adeptus-astartes",
       "detachmentIds": [
-        "1st-company-task-force"
+        "assault-brethren"
       ],
       "battleSize": "strike-force",
       "disposition": "disruption",
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "token": "ARsSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUTsQ8BCUNoYXJhY3RlcgIPAhEBDgoAAREK"
+    "token": "ARwSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAasCAgoFE7EPAQlDaGFyYWN0ZXICDwIRAQ4KAAERCg"
   },
   {
     "name": "allies-attachment",
@@ -70,8 +70,8 @@
       "name": "Soup",
       "factionId": "adeptus-astartes",
       "detachmentIds": [
-        "1st-company-task-force",
-        "anvil-siege-force"
+        "assault-brethren",
+        "assault-force"
       ],
       "battleSize": "incursion",
       "disposition": "disruption",
@@ -118,7 +118,7 @@
         }
       ]
     },
-    "token": "ARsEU291cAIAAQIABQMKAQUBAA4FAAAQARgKGQEKQmF0dGxlbGluZQHlGgE"
+    "token": "ARwEU291cAIAAQKrAo0CAwoBBQEADgUAABABGAoZAQpCYXR0bGVsaW5lAeUaAQ"
   },
   {
     "name": "malformed-bad-format-byte",
@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "ARsAgIl6",
+    "decode_token": "ARwAgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

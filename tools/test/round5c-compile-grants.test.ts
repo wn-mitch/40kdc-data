@@ -86,13 +86,13 @@ describe("Round 5C grants & ability control families", () => {
   });
 
   it("changes a named ability's range, uses, or other measured aspect (@1, frozen)", () => {
-    const widenRange = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "add", value: 3 });
+    const widenRange = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 });
     expect(compiled([widenRange]).mechanics.effect).toEqual({
-      type: "ability-modifier", target: "this-unit", modifier: { ability: "voice-of-command", aspect: "range", operation: "add", value: 3 },
+      type: "ability-modifier", target: "this-unit", modifier: { ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 },
     });
-    const extraUse = leaf("EFFECT", "ability-modifier", { subject: "this-model", ability: "voice-of-command", aspect: "uses", operation: "set", value: 2 });
+    const extraUse = leaf("EFFECT", "ability-modifier", { subject: "this-model", ability: "voice-of-command-astra-militarum", aspect: "uses", operation: "set", value: 2 });
     expect(compiled([extraUse]).mechanics.effect).toEqual({
-      type: "ability-modifier", target: "this-model", modifier: { ability: "voice-of-command", aspect: "uses", operation: "set", value: 2 },
+      type: "ability-modifier", target: "this-model", modifier: { ability: "voice-of-command-astra-militarum", aspect: "uses", operation: "set", value: 2 },
     });
     expect(rendered(base, [widenRange]).length).toBeGreaterThan(0);
     expect(rendered(base, [extraUse]).length).toBeGreaterThan(0);
@@ -148,11 +148,11 @@ describe("Round 5C grants & ability control families", () => {
   });
 
   it("migrates ability-modifier@1 leaves to @2 with no data loss", () => {
-    const v1 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "add", value: 3 }, 1);
-    const v2 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "add", value: 3 }, 2);
+    const v1 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 1);
+    const v2 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 2);
     expect(compiled([v1]).mechanics.effect).toEqual(compiled([v2]).mechanics.effect);
-    expect(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "add", value: 3 }, 1))
-      .toEqual(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command", aspect: "range", operation: "add", value: 3 }, 2));
+    expect(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 1))
+      .toEqual(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 2));
   });
 
   it("grants a non-core ability record, distinct from core-ability-grant", () => {
@@ -160,16 +160,16 @@ describe("Round 5C grants & ability control families", () => {
     expect(compiled([plain]).mechanics.effect).toEqual({ type: "ability-grant", target: "this-unit", modifier: { ability: "blessings-of-khorne-world-eaters" } });
     const rated = leaf("EFFECT", "ability-record-grant", { subject: "this-model", ability: "riled-up", value: { rating: true } });
     expect(compiled([rated]).mechanics.effect).toEqual({ type: "ability-grant", target: "this-model", modifier: { ability: "riled-up", value: { rating: true } } });
-    const bundle = leaf("EFFECT", "ability-record-grant", { subject: "this-unit", ability: "author-of-the-codex", rules_bundle: true });
-    expect(compiled([bundle]).mechanics.effect).toEqual({ type: "ability-grant", target: "this-unit", modifier: { ability: "author-of-the-codex", rules_bundle: true } });
+    const bundle = leaf("EFFECT", "ability-record-grant", { subject: "this-unit", ability: "author-of-the-codex-adeptus-astartes", rules_bundle: true });
+    expect(compiled([bundle]).mechanics.effect).toEqual({ type: "ability-grant", target: "this-unit", modifier: { ability: "author-of-the-codex-adeptus-astartes", rules_bundle: true } });
     for (const input of [plain, rated, bundle]) expect(rendered(base, [input]).length).toBeGreaterThan(0);
     // A core ability belongs to core-ability-grant, not this family.
     expect(() => normalizeFingerprintParameters("ability-record-grant", { subject: "this-unit", ability: "fights-first" })).toThrow();
   });
 
   it("activates a named ability now, or one of its options exclusively", () => {
-    const now = leaf("EFFECT", "ability-activate", { subject: "this-unit", ability: "voice-of-command" });
-    expect(compiled([now]).mechanics.effect).toEqual({ type: "ability-activate", target: "this-unit", modifier: { ability: "voice-of-command" } });
+    const now = leaf("EFFECT", "ability-activate", { subject: "this-unit", ability: "voice-of-command-astra-militarum" });
+    expect(compiled([now]).mechanics.effect).toEqual({ type: "ability-activate", target: "this-unit", modifier: { ability: "voice-of-command-astra-militarum" } });
     const option = leaf("EFFECT", "ability-activate", { subject: "this-model", ability: "stratagem-x", option: "advance", exclusive: true });
     expect(compiled([option]).mechanics.effect).toEqual({
       type: "ability-activate", target: "this-model", modifier: { ability: "stratagem-x", option: "advance", exclusive: true },

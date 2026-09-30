@@ -1,48 +1,15 @@
 [
   {
-    "id": "1st-company-task-force",
-    "name": "1st Company Task Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
-      "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
-      "rites-of-war-1st-company-task-force-adeptus-astartes",
-      "iron-resolve-1st-company-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
-      "legendary-fortitude-1st-company-task-force-adeptus-astartes",
-      "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
-      "duty-and-honour-1st-company-task-force-adeptus-astartes",
-      "orbital-teleportarium-1st-company-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ]
-  },
-  {
     "id": "gladius-task-force",
     "name": "Gladius Task Force",
     "faction_id": "crimson-fists",
     "detachment_rule_id": null,
     "enhancement_ids": [
       "artificer-armour-gladius-task-force-adeptus-astartes",
-      "the-honour-vehement-gladius-task-force-adeptus-astartes",
-      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
-      "fire-discipline-gladius-task-force-adeptus-astartes"
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "honour-the-chapter-gladius-task-force-adeptus-astartes",
-      "storm-of-fire-gladius-task-force-adeptus-astartes",
-      "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
-      "adaptive-strategy-gladius-task-force-adeptus-astartes",
-      "squad-tactics-gladius-task-force-adeptus-astartes"
+      "adaptive-strategy-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -58,18 +25,9 @@
     "name": "Stormlance Task Force",
     "faction_id": "crimson-fists",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
-      "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
-      "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
-      "hunters-instincts-stormlance-task-force-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
     "stratagem_ids": [
-      "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
-      "shock-assault-stormlance-task-force-adeptus-astartes",
-      "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
-      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
-      "full-throttle-stormlance-task-force-adeptus-astartes"
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -78,136 +36,6 @@
     "detachment_points": 1,
     "force_dispositions": [
       "reconnaissance"
-    ]
-  },
-  {
-    "id": "librarius-conclave",
-    "name": "Librarius Conclave",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "celerity-librarius-conclave-adeptus-astartes",
-      "prescience-librarius-conclave-adeptus-astartes",
-      "obfuscation-librarius-conclave-adeptus-astartes",
-      "temporal-corridor-librarius-conclave-adeptus-astartes",
-      "fusillade-librarius-conclave-adeptus-astartes"
-    ],
-    "stratagem_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ]
-  },
-  {
-    "id": "vanguard-spearhead",
-    "name": "Vanguard Spearhead",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
-      "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
-      "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
-      "shadow-war-veteran-vanguard-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "surgical-strikes-vanguard-spearhead-adeptus-astartes",
-      "calculated-feint-vanguard-spearhead-adeptus-astartes",
-      "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
-      "a-deadly-prize-vanguard-spearhead-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "reconnaissance"
-    ]
-  },
-  {
-    "id": "orbital-assault-force",
-    "name": "Orbital Assault Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
-      "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
-      "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
-      "dedicated-gunship-orbital-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force-adeptus-astartes",
-      "blind-screen-orbital-assault-force-adeptus-astartes",
-      "tactical-decapitation-orbital-assault-force-adeptus-astartes",
-      "shock-onslaught-orbital-assault-force-adeptus-astartes",
-      "onward-for-the-emperor-orbital-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ]
-  },
-  {
-    "id": "anvil-siege-force",
-    "name": "Anvil Siege Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force-adeptus-astartes",
-      "fleet-commander-anvil-siege-force-adeptus-astartes",
-      "stoic-defender-anvil-siege-force-adeptus-astartes",
-      "architect-of-war-anvil-siege-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force-adeptus-astartes",
-      "no-threat-too-great-anvil-siege-force-adeptus-astartes",
-      "rigid-discipline-anvil-siege-force-adeptus-astartes",
-      "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
-      "hail-of-vengeance-anvil-siege-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ]
-  },
-  {
-    "id": "firestorm-assault-force",
-    "name": "Firestorm Assault Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
-      "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
-      "forged-in-battle-firestorm-assault-force-adeptus-astartes",
-      "adamantine-mantle-firestorm-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
-      "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
-      "burning-vengeance-firestorm-assault-force-adeptus-astartes",
-      "immolation-protocols-firestorm-assault-force-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
     ]
   },
   {
@@ -215,19 +43,8 @@
     "name": "Ironstorm Spearhead",
     "faction_id": "crimson-fists",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead-adeptus-astartes",
-      "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
-      "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
-      "master-of-machine-war-ironstorm-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
-      "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
-      "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
-      "ancient-fury-ironstorm-spearhead-adeptus-astartes",
-      "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
+    "stratagem_ids": [],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -235,107 +52,6 @@
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
-    ]
-  },
-  {
-    "id": "fulguris-task-force",
-    "name": "Fulguris Task Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "data-link-augury-fulguris-task-force-adeptus-astartes",
-      "reactive-evasion-fulguris-task-force-adeptus-astartes",
-      "anti-grav-surge-fulguris-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ]
-  },
-  {
-    "id": "subversion-assets",
-    "name": "Subversion Assets",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "shroud-field-subversion-assets-adeptus-astartes",
-      "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "adaptive-operations-subversion-assets-adeptus-astartes",
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "cloaked-position-subversion-assets-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "disruption"
-    ]
-  },
-  {
-    "id": "armoured-speartip",
-    "name": "Armoured Speartip",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "liberator-armoured-speartip-adeptus-astartes",
-      "tip-of-the-spear-armoured-speartip-adeptus-astartes",
-      "shock-deployment-armoured-speartip-adeptus-astartes",
-      "armoured-commander-armoured-speartip-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "machine-wrath-armoured-speartip-adeptus-astartes",
-      "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
-      "advanced-deployment-armoured-speartip-adeptus-astartes",
-      "purgation-doctrine-armoured-speartip-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ]
-  },
-  {
-    "id": "bastion-task-force",
-    "name": "Bastion Task Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
-      "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
-      "blades-of-valour-bastion-task-force-adeptus-astartes",
-      "bombast-omnivox-bastion-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "codex-discipline-bastion-task-force-adeptus-astartes",
-      "shock-bombardment-bastion-task-force-adeptus-astartes",
-      "guided-disruption-bastion-task-force-adeptus-astartes",
-      "angels-defiant-bastion-task-force-adeptus-astartes",
-      "light-of-vengeance-bastion-task-force-adeptus-astartes",
-      "heresy-undone-bastion-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
     ]
   },
   {
@@ -349,11 +65,11 @@
       "defensive-mastery-ceramite-sentinels-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels-adeptus-astartes",
-      "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
-      "priority-strike-ceramite-sentinels-adeptus-astartes",
-      "augmented-targeting-ceramite-sentinels-adeptus-astartes",
-      "evasive-repositioning-ceramite-sentinels-adeptus-astartes"
+      "unyielding-might-ceramite-sentinels-imperial-fists",
+      "stand-to-the-end-ceramite-sentinels-imperial-fists",
+      "priority-strike-ceramite-sentinels-imperial-fists",
+      "augmented-targeting-ceramite-sentinels-imperial-fists",
+      "evasive-repositioning-ceramite-sentinels-imperial-fists"
     ],
     "game_version": {
       "edition": "11th",
@@ -362,33 +78,6 @@
     "detachment_points": 2,
     "force_dispositions": [
       "take-and-hold"
-    ]
-  },
-  {
-    "id": "headhunter-task-force",
-    "name": "Headhunter Task Force",
-    "faction_id": "crimson-fists",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
-      "gunnery-honours-headhunter-task-force-adeptus-astartes",
-      "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
-      "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "rapid-gunnery-headhunter-task-force-adeptus-astartes",
-      "reactive-repositioning-headhunter-task-force-adeptus-astartes",
-      "target-weak-point-headhunter-task-force-adeptus-astartes",
-      "kill-shot-headhunter-task-force-adeptus-astartes",
-      "machine-vengeance-headhunter-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
     ]
   }
 ]

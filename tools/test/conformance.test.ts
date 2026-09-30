@@ -437,6 +437,8 @@ describe("abilities-resolver conformance corpus", () => {
     abilityId: string;
     /** The rating a unit prints for a rated rule ({rating: true} in the record). */
     rating?: string | number;
+    /** Frozen DSL for a specimen whose ability left the dataset (used instead of a lookup). */
+    effect?: unknown;
     source: { kind: "ability"; abilityId: string; abilityKind: string };
     context: EngineContext;
     perspective?: "attacker" | "target";
@@ -451,11 +453,12 @@ describe("abilities-resolver conformance corpus", () => {
   function runDslCorpus(filename: string): void {
     const dsl = readJson(join(dir, filename)) as { cases: DslCase[] };
     for (const c of dsl.cases) {
-      const ability = ds.abilities.getAny(c.abilityId);
-      expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
+      // A specimen whose ability left the dataset carries its frozen DSL inline.
+      const ability = c.effect === undefined ? ds.abilities.getAny(c.abilityId) : undefined;
+      if (c.effect === undefined) expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
       // A rated rule reads the unit's printed rating; the case supplies it.
       const result = effectToBuffs(
-        withRating(ability!.raw.effect, c.rating),
+        withRating(c.effect ?? ability!.raw.effect, c.rating),
         c.source as never,
         c.context,
         c.perspective ?? "attacker",

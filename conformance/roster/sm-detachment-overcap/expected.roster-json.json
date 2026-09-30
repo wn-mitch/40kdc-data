@@ -17,16 +17,16 @@
     },
     {
       "ref": {
-        "id": "1st-company-task-force",
+        "id": null,
         "raw_name": "1st Company Task Force",
-        "resolved": true,
+        "resolved": false,
         "candidates": []
       },
-      "dp_cost": 2
+      "dp_cost": null
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "priority-assets",
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,
@@ -141,9 +141,9 @@
     "unresolved_weapons": 0,
     "warnings": [
       {
-        "code": "detachment-points-exceeded",
-        "message": "Detachments cost 5 detachment points but the strike-force budget is 3.",
-        "raw_name": null
+        "code": "detachment-unresolved",
+        "message": "Detachment name did not match any 40kdc detachment.",
+        "raw_name": "1st Company Task Force"
       }
     ]
   }

@@ -3213,6 +3213,25 @@ function genEffectTranslation(): void {
       },
       scope: { duration: "permanent" },
     },
+    // The codex Techmarine datasheet stopped printing it at MFM data version 963.
+    "adeptus-astartes/blessing-of-the-omnissiah-adeptus-astartes": {
+      effect: {
+        type: "conditional",
+        condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] },
+        effect: {
+          type: "select-units",
+          selector: { owner: "friendly", max_count: 1, target_kind: "model", keywords: ["ADEPTUS ASTARTES", "VEHICLE"], range_inches: 3, selection_limit: { count: 1, period: "turn" } },
+          effect: {
+            type: "sequence",
+            steps: [
+              { type: "heal", target: "selected-unit", modifier: { amount: "D3" } },
+              { type: "roll-modifier", target: "selected-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+            ],
+          },
+        },
+      },
+      scope: { duration: "until-next-command-phase" },
+    },
   };
   for (const [faction, ids] of fidelityWorklists) {
     const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;

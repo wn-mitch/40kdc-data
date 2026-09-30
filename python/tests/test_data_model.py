@@ -117,7 +117,7 @@ def test_ability_get_is_exact_and_old_bare_ids_miss(dataset: Any) -> None:
     assert idol is not None and idol.raw.get("faction_id") == "world-eaters"
     # The pre-mirror bare ids carry no alias: a stale reference misses rather than guessing.
     assert dataset.abilities.get("idol-of-blessed-blood") is None
-    assert dataset.abilities.get("berzerker-frenzy") is None
+    assert dataset.abilities.get("berzerker-frenzy") is None  # mfm:mirror keep — the stale bare id
     assert dataset.abilities.get("deadly-demise-d3") is None
     assert dataset.abilities.get("berzerker-frenzy-world-eaters") is not None
 
@@ -166,20 +166,20 @@ def test_leader_personal_invuln_does_not_buff_the_bodyguard_unit(dataset: Any) -
 
 
 def test_unit_scoped_leader_rule_still_buffs_the_attached_unit(dataset: Any) -> None:
-    """Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-    authored `target: "unit"`, so the model-scope gate must not touch it."""
+    """Epidemius's rule gives the whole unit he leads an invulnerable save — a
+    unit-wide rule, so the model-scope gate must not touch it."""
     attached = dataset.defensive_buffs_for(
         {
-            "unitId": "intercessor-squad",
-            "factionId": "adeptus-astartes",
-            "attachedUnitIds": ["librarian"],
+            "unitId": "plaguebearers",
+            "factionId": "chaos-daemons",
+            "attachedUnitIds": ["epidemius"],
         },
         {"phase": "fight"},
     )
-    buffs = _invulns(attached, "mental-fortress-adeptus-astartes")
+    buffs = _invulns(attached, "blessed-by-the-plague-god-chaos-daemons")
     assert len(buffs) == 1
     assert buffs[0]["source"]["abilityKind"] == "attached"
-    assert buffs[0]["source"]["sourceUnitId"] == "librarian"
+    assert buffs[0]["source"]["sourceUnitId"] == "epidemius"
 
 
 def test_dropped_model_scoped_effect_is_reported_as_unsupported(dataset: Any) -> None:
@@ -226,17 +226,17 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
     )
     assert keywords_from(alone, "psychic-gifts-agents-of-the-imperium") == ["psyker"]
 
-    # Surgical Precision is unit-scoped, so an attached Apothecary Biologis
-    # still grants [LETHAL HITS] to the squad it joined.
-    aggressors = dataset.buffs_for(
+    # A Palatine's rule grants [LETHAL HITS] to the whole unit she leads, so the
+    # attached Palatine still grants it.
+    sisters = dataset.buffs_for(
         {
-            "unitId": "aggressor-squad",
-            "factionId": "adeptus-astartes",
-            "attachedUnitIds": ["apothecary-biologis"],
+            "unitId": "battle-sisters-squad",
+            "factionId": "adepta-sororitas",
+            "attachedUnitIds": ["palatine"],
         },
         {"phase": "shooting"},
     )
-    assert keywords_from(aggressors, "surgical-precision-adeptus-astartes") == ["lethal-hits"]
+    assert keywords_from(sisters, "fury-of-the-righteous-adepta-sororitas") == ["lethal-hits"]
 
 
 def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:

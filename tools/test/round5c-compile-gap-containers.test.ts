@@ -190,7 +190,20 @@ describe("Round 5C persistent-designation compiler", () => {
   const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
   it("reproduces unbridled-ardour-the-angelic-host-blood-angels exactly", () => {
-    const entry = authored("blood-angels", "unbridled-ardour-the-angelic-host-blood-angels");
+    // Frozen authored DSL: the detachment left the dump at MFM data version 963.
+    const entry = {
+      effect: {
+        type: "persistent-designation", designation: "unbridled-ardour-slayer", duration: "battle",
+        select: { count: 1, scope: "enemy-unit", selection_policy: "one-time", timing: "on-unit-destroyed" },
+        consumer: {
+          beneficiary: "bearer", relation: "attacks-selected-unit",
+          effect: { type: "sequence", steps: [
+            { type: "re-roll", target: "this-model", modifier: { roll: "hit", result_scope: "any-result" } },
+            { type: "re-roll", target: "this-model", modifier: { roll: "wound", result_scope: "any-result" } },
+          ] },
+        },
+      },
+    };
     const result = compiled([
       leaf("EFFECT", "persistent-designation-open", { designation: "unbridled-ardour-slayer", scope: "enemy-unit", timing: "on-unit-destroyed", beneficiary: "this-model" }, "A"),
       leaf("EFFECT", "reroll", { roll: "hit", subset: "any", weapon_type: "all" }, "B"),

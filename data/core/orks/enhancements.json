@@ -691,10 +691,16 @@
   },
   {
     "id": "glory-hog-da-big-hunt-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1df273e2-8c2e-4516-b8ba-532ac3e4cc43"
+      }
+    ],
     "name": "Glory Hog",
     "detachment_id": "da-big-hunt",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "glory-hog-da-big-hunt-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -709,10 +715,16 @@
   },
   {
     "id": "headwoppas-killchoppa-war-horde-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "22f5eea7-c087-494c-a14a-303ab2b440f4"
+      }
+    ],
     "name": "Headwoppa's Killchoppa",
     "detachment_id": "war-horde",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "headwoppas-killchoppa-war-horde-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -727,10 +739,16 @@
   },
   {
     "id": "kill-kommanda-taktikal-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2de8b6d3-68fc-4c7b-a499-0bff89ab1e06"
+      }
+    ],
     "name": "Kill Kommanda",
     "detachment_id": "taktikal-brigade",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "kill-kommanda-taktikal-brigade-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -754,10 +772,16 @@
   },
   {
     "id": "ferocious-show-off-green-tide-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3ba8e0af-efa7-45ab-8628-b18c60e86d9c"
+      }
+    ],
     "name": "Ferocious Show-off",
     "detachment_id": "green-tide",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "ferocious-show-off-green-tide-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -773,10 +797,16 @@
   },
   {
     "id": "boss-boomer-upgrade-blitz-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "584a5878-ef08-4019-be80-6d2afab095af"
+      }
+    ],
     "name": "Boss Boomer (Upgrade)",
     "detachment_id": "blitz-brigade",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "boss-boomer-upgrade-blitz-brigade-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -791,10 +821,16 @@
   },
   {
     "id": "kunnin-but-brutal-war-horde-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5a50bac7-f468-47cb-8c4e-bf242c58e66f"
+      }
+    ],
     "name": "Kunnin’ But Brutal",
     "detachment_id": "war-horde",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "kunnin-but-brutal-war-horde-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -809,10 +845,16 @@
   },
   {
     "id": "targetin-gizmos-upgrade-blitz-brigade-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dfde7f26-fc85-4e16-879d-79fadb8db2e8"
+      }
+    ],
     "name": "Targetin’ Gizmos (Upgrade)",
     "detachment_id": "blitz-brigade",
     "cost": 25,
-    "ability_id": null,
+    "ability_id": "targetin-gizmos-upgrade-blitz-brigade-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -827,10 +869,16 @@
   },
   {
     "id": "cybork-boosta-dread-mob-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e7827a76-185e-441e-88ad-17b638605a40"
+      }
+    ],
     "name": "Cybork Boosta",
     "detachment_id": "dread-mob",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "cybork-boosta-dread-mob-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -850,10 +898,16 @@
   },
   {
     "id": "follow-me-ladz-war-horde-orks",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f17543af-103f-4f5d-8e4e-23941bb32dbb"
+      }
+    ],
     "name": "Follow Me Ladz",
     "detachment_id": "war-horde",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "follow-me-ladz-war-horde-orks",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

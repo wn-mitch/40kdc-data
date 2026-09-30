@@ -8,12 +8,13 @@
   "expected": {
     "army": [
       "combat-doctrines-assault-force-adeptus-astartes",
-      "oath-of-moment-adeptus-astartes",
-      "space-marine-chapters-adeptus-astartes"
+      "librarius-adeptus-astartes",
+      "special-move-types-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "unit": [
-      "hail-of-bolts-adeptus-astartes",
-      "objective-secured-adeptus-astartes"
+      "bolter-discipline-adeptus-astartes",
+      "tactical-mainstay-adeptus-astartes"
     ]
   }
 }

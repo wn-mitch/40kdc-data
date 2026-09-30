@@ -1,0 +1,308 @@
+[
+  {
+    "ability_id": "adamantine-mantle-forgefathers-seekers-salamanders",
+    "name": "Adamantine Mantle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9613a6e6f25eea52e858b50582de021e126f4c1c6a91b2f58596bd63bb812004",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "D",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "Attacks allocated to the bearer lose 1 Damage; attacks made with Melta or Torrent weapons have their Damage changed to 1 instead (weapon-keyword gate not modeled)"
+  },
+  {
+    "ability_id": "blazing-earth-forgefathers-seekers-salamanders",
+    "name": "Blazing Earth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "burning-vengeance-forgefathers-seekers-salamanders",
+    "name": "Burning Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "fdf2e70507b067d3ad65b2fb1224d9138980275aa78f37f1120ff9e384a4a5cc",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "select-units",
+          "selector": {
+            "count": 1,
+            "owner": "friendly",
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "embarked",
+                "with": "this-unit"
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "selected-unit",
+            "modifier": {
+              "move_type": "disembark"
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "as_if": "shooting-phase"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Used on a Transport targeted by the attacking unit: one embarked unit disembarks as if it were your Movement phase and shoots as if it were your Shooting phase, targeting only that enemy unit (if eligible)"
+  },
+  {
+    "ability_id": "crucible-of-battle-forgefathers-seekers-salamanders",
+    "name": "Crucible Of Battle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "280f09be68fa22d254bc508b4673051f9749a4feb31e8baf7170d7f56b4a632d",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Applies to attacks against the closest eligible target within 6\". Infantry unit not yet selected to shoot or fight this phase"
+  },
+  {
+    "ability_id": "forged-in-battle-forgefathers-seekers-salamanders",
+    "name": "Forged in Battle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "aa877a34ea5728bdea6670df4930ae52024dc9a202d85ef878eba2e371e12583",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "result": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "Once per turn, after making a Hit roll or a saving throw for a model in the led unit, change the result to an unmodified 6"
+  },
+  {
+    "ability_id": "immolation-protocols-forgefathers-seekers-salamanders",
+    "name": "Immolation Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "087fe43ce93967b81ca4249f02633a0192e6605c62f00bc72e7c8f9954ae6032",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "abilities": [
+          "Devastating Wounds"
+        ],
+        "weapon_keyword": "Torrent"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Torrent weapons only. Target must not have been selected to shoot this phase"
+  },
+  {
+    "ability_id": "immolator-forgefathers-seekers-salamanders",
+    "name": "Immolator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vulkans-quest-salamanders",
+    "name": "Vulkan’s Quest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "war-tempered-artifice-forgefathers-seekers-salamanders",
+    "name": "War-tempered Artifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2f34bd1c4c92340b0fcef13fa2abf579afd0a7223aec2bed3cdecd9dea799b47",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "firestorm-assault-force",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "S",
+        "operation": "add",
+        "value": 3,
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "ADEPTUS ASTARTES",
+        "INFANTRY"
+      ]
+    }
+  }
+]

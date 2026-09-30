@@ -193,6 +193,43 @@
     },
     {
       "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapon_type": "melee"
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "phase-started"
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapon_type": "melee"
+              }
+            },
+            "optional": true,
+            "duration": "phase",
+            "usage": {
+              "frequency": "n-per-battle",
+              "count": 1
+            }
+          }
+        ]
+      },
       "source": {
         "kind": "ability",
         "abilityId": "the-imperiums-sword-1st-company-task-force-adeptus-astartes",

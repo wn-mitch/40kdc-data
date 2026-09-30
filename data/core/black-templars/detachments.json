@@ -1,148 +1,5 @@
 [
   {
-    "id": "companions-of-vehemence",
-    "name": "Companions of Vehemence",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "incendiary-animus-companions-of-vehemence-black-templars",
-      "merciless-denunciation-companions-of-vehemence-black-templars",
-      "zealous-vanguard-companions-of-vehemence-black-templars",
-      "oathbound-exemplar-companions-of-vehemence-black-templars"
-    ],
-    "stratagem_ids": [
-      "devout-push-companions-of-vehemence-black-templars",
-      "for-the-emperors-honour-companions-of-vehemence-black-templars",
-      "pious-enmity-companions-of-vehemence-black-templars",
-      "hearts-hardened-to-duty-companions-of-vehemence-black-templars",
-      "heresy-begets-retribution-companions-of-vehemence-black-templars",
-      "dread-crusaders-companions-of-vehemence-black-templars"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "88882c56-6492-4cd0-8b73-34e1c80e55ae"
-      }
-    ],
-    "detachment_rule_ids": [
-      "righteous-fervour-black-templars"
-    ]
-  },
-  {
-    "id": "vindication-task-force",
-    "name": "Vindication Task Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "imperialis-of-the-eternal-crusade-vindication-task-force-black-templars",
-      "consecrating-aura-vindication-task-force-black-templars",
-      "orb-of-the-emperors-aegis-vindication-task-force-black-templars",
-      "warden-of-honour-vindication-task-force-black-templars"
-    ],
-    "stratagem_ids": [
-      "litanies-of-purgation-vindication-task-force-black-templars",
-      "spoor-of-the-unholy-vindication-task-force-black-templars",
-      "refusal-to-yield-vindication-task-force-black-templars",
-      "reclaim-our-honour-vindication-task-force-black-templars",
-      "recitation-of-the-revered-vindication-task-force-black-templars",
-      "perfervid-intervention-vindication-task-force-black-templars"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b22f1234-d890-401a-b6cb-cf03bc1b5505"
-      }
-    ],
-    "detachment_rule_ids": [
-      "purge-and-sanctify-black-templars"
-    ]
-  },
-  {
-    "id": "wrathful-procession",
-    "name": "Wrathful Procession",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "benediction-of-fury-wrathful-procession-black-templars",
-      "adaptable-executioner-wrathful-procession-black-templars"
-    ],
-    "stratagem_ids": [
-      "fuelled-by-faith-wrathful-procession-black-templars",
-      "castigate-the-demagogues-wrathful-procession-black-templars",
-      "rite-of-perfervid-wrath-wrathful-procession-black-templars"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "aab75a4c-d486-47e0-b800-caf0028b62c8"
-      }
-    ],
-    "detachment_rule_ids": [
-      "chant-of-deathless-devotion-black-templars"
-    ]
-  },
-  {
-    "id": "godhammer-assault-force",
-    "name": "Godhammer Assault Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "paragon-of-fury-godhammer-assault-force-black-templars",
-      "battle-psalm-precentor-godhammer-assault-force-black-templars",
-      "augury-servo-host-godhammer-assault-force-black-templars",
-      "herald-of-sacred-slaughter-godhammer-assault-force-black-templars"
-    ],
-    "stratagem_ids": [
-      "condemnatory-info-screed-godhammer-assault-force-black-templars",
-      "blessed-hull-godhammer-assault-force-black-templars",
-      "a-ceaseless-cause-godhammer-assault-force-black-templars",
-      "uncompromising-egress-godhammer-assault-force-black-templars",
-      "gauntlet-of-the-god-emperor-godhammer-assault-force-black-templars",
-      "focused-hatred-godhammer-assault-force-black-templars"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "d8ec92c4-5d86-4e48-a27e-fab751c097ac"
-      }
-    ],
-    "detachment_rule_ids": [
-      "shock-and-awe-black-templars"
-    ]
-  },
-  {
     "id": "marshals-household",
     "name": "Marshal's Household",
     "faction_id": "black-templars",
@@ -167,7 +24,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "b78cbc68-a012-494f-bd72-91873b382204"
+        "id": "58c695ca-ad6f-45ea-b7d9-722053b6482c"
       }
     ],
     "detachment_rule_ids": [
@@ -178,78 +35,16 @@
     }
   },
   {
-    "id": "the-living-miracle",
-    "name": "The Living Miracle",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "guiding-omens-the-living-miracle-black-templars"
-    ],
-    "stratagem_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "287d753d-cc67-40da-a7f4-9d2db2abdb67"
-      }
-    ],
-    "detachment_rule_ids": [
-      "anointed-champion-black-templars"
-    ]
-  },
-  {
-    "id": "1st-company-task-force",
-    "name": "1st Company Task Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-imperiums-sword-1st-company-task-force-adeptus-astartes",
-      "fear-made-manifest-aura-1st-company-task-force-adeptus-astartes",
-      "rites-of-war-1st-company-task-force-adeptus-astartes",
-      "iron-resolve-1st-company-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "heroes-of-the-chapter-1st-company-task-force-adeptus-astartes",
-      "legendary-fortitude-1st-company-task-force-adeptus-astartes",
-      "terrifying-proficiency-1st-company-task-force-adeptus-astartes",
-      "duty-and-honour-1st-company-task-force-adeptus-astartes",
-      "orbital-teleportarium-1st-company-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "purge-the-foe"
-    ]
-  },
-  {
     "id": "gladius-task-force",
     "name": "Gladius Task Force",
     "faction_id": "black-templars",
     "detachment_rule_id": null,
     "enhancement_ids": [
       "artificer-armour-gladius-task-force-adeptus-astartes",
-      "the-honour-vehement-gladius-task-force-adeptus-astartes",
-      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
-      "fire-discipline-gladius-task-force-adeptus-astartes"
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "honour-the-chapter-gladius-task-force-adeptus-astartes",
-      "storm-of-fire-gladius-task-force-adeptus-astartes",
-      "only-in-death-does-duty-end-gladius-task-force-adeptus-astartes",
-      "adaptive-strategy-gladius-task-force-adeptus-astartes",
-      "squad-tactics-gladius-task-force-adeptus-astartes"
+      "adaptive-strategy-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -262,7 +57,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "047e97fc-2e78-4db6-b401-1f8bb65d9162"
+        "id": "114dee6f-802a-49f4-a0db-0296eb5434b3"
       }
     ]
   },
@@ -271,19 +66,9 @@
     "name": "Stormlance Task Force",
     "faction_id": "black-templars",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "fury-of-the-storm-stormlance-task-force-adeptus-astartes",
-      "portents-of-wisdom-stormlance-task-force-adeptus-astartes",
-      "feinting-withdrawal-stormlance-task-force-adeptus-astartes",
-      "hunters-instincts-stormlance-task-force-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
     "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "blitzing-fusillade-stormlance-task-force-adeptus-astartes",
-      "shock-assault-stormlance-task-force-adeptus-astartes",
-      "ride-hard-ride-fast-stormlance-task-force-adeptus-astartes",
-      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
-      "full-throttle-stormlance-task-force-adeptus-astartes"
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,164 +81,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "0854459d-3909-4621-8073-46d54d1a0464"
-      }
-    ]
-  },
-  {
-    "id": "librarius-conclave",
-    "name": "Librarius Conclave",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "celerity-librarius-conclave-adeptus-astartes",
-      "prescience-librarius-conclave-adeptus-astartes",
-      "obfuscation-librarius-conclave-adeptus-astartes",
-      "temporal-corridor-librarius-conclave-adeptus-astartes",
-      "fusillade-librarius-conclave-adeptus-astartes"
-    ],
-    "stratagem_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ]
-  },
-  {
-    "id": "vanguard-spearhead",
-    "name": "Vanguard Spearhead",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "the-blade-driven-deep-vanguard-spearhead-adeptus-astartes",
-      "ghostweave-cloak-vanguard-spearhead-adeptus-astartes",
-      "execute-and-redeploy-vanguard-spearhead-adeptus-astartes",
-      "shadow-war-veteran-vanguard-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "surgical-strikes-vanguard-spearhead-adeptus-astartes",
-      "calculated-feint-vanguard-spearhead-adeptus-astartes",
-      "guerrilla-tactics-vanguard-spearhead-adeptus-astartes",
-      "a-deadly-prize-vanguard-spearhead-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "720ee5b2-2412-43f4-b145-bec27a90b6d5"
-      }
-    ]
-  },
-  {
-    "id": "orbital-assault-force",
-    "name": "Orbital Assault Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "laurels-of-thunder-orbital-assault-force-adeptus-astartes",
-      "veteran-of-the-vanguard-orbital-assault-force-adeptus-astartes",
-      "orbital-uplink-reliquary-orbital-assault-force-adeptus-astartes",
-      "dedicated-gunship-orbital-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "suppression-strafing-orbital-assault-force-adeptus-astartes",
-      "blind-screen-orbital-assault-force-adeptus-astartes",
-      "tactical-decapitation-orbital-assault-force-adeptus-astartes",
-      "shock-onslaught-orbital-assault-force-adeptus-astartes",
-      "onward-for-the-emperor-orbital-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "dd0c31ee-65db-4143-b1f9-60aaea303b1c"
-      }
-    ]
-  },
-  {
-    "id": "anvil-siege-force",
-    "name": "Anvil Siege Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "indomitable-fury-anvil-siege-force-adeptus-astartes",
-      "fleet-commander-anvil-siege-force-adeptus-astartes",
-      "stoic-defender-anvil-siege-force-adeptus-astartes",
-      "architect-of-war-anvil-siege-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "battle-drill-recall-anvil-siege-force-adeptus-astartes",
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "no-threat-too-great-anvil-siege-force-adeptus-astartes",
-      "rigid-discipline-anvil-siege-force-adeptus-astartes",
-      "not-one-backwards-step-anvil-siege-force-adeptus-astartes",
-      "hail-of-vengeance-anvil-siege-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "e544168f-0535-4b58-ac04-c5f3793ea56b"
-      }
-    ]
-  },
-  {
-    "id": "firestorm-assault-force",
-    "name": "Firestorm Assault Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "champion-of-humanity-firestorm-assault-force-adeptus-astartes",
-      "war-tempered-artifice-firestorm-assault-force-adeptus-astartes",
-      "forged-in-battle-firestorm-assault-force-adeptus-astartes",
-      "adamantine-mantle-firestorm-assault-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "crucible-of-battle-firestorm-assault-force-adeptus-astartes",
-      "onslaught-of-fire-firestorm-assault-force-adeptus-astartes",
-      "burning-vengeance-firestorm-assault-force-adeptus-astartes",
-      "immolation-protocols-firestorm-assault-force-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "fcc5de05-5825-4af5-9484-38af6358ff2b"
+        "id": "0a2a5520-e6cc-4f3f-ac87-b00addae1023"
       }
     ]
   },
@@ -462,20 +90,8 @@
     "name": "Ironstorm Spearhead",
     "faction_id": "black-templars",
     "detachment_rule_id": null,
-    "enhancement_ids": [
-      "target-augury-web-ironstorm-spearhead-adeptus-astartes",
-      "the-flesh-is-weak-ironstorm-spearhead-adeptus-astartes",
-      "adept-of-the-omnissiah-ironstorm-spearhead-adeptus-astartes",
-      "master-of-machine-war-ironstorm-spearhead-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "unbowed-conviction-ironstorm-spearhead-adeptus-astartes",
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "mercy-is-weakness-ironstorm-spearhead-adeptus-astartes",
-      "vengeful-animus-ironstorm-spearhead-adeptus-astartes",
-      "ancient-fury-ironstorm-spearhead-adeptus-astartes",
-      "power-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes"
-    ],
+    "enhancement_ids": [],
+    "stratagem_ids": [],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -487,200 +103,7 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "fe7ac957-dfdf-4025-bd77-c387cd6c62a5"
-      }
-    ]
-  },
-  {
-    "id": "fulguris-task-force",
-    "name": "Fulguris Task Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "bellicose-weapon-spirits-upgrade-fulguris-task-force-adeptus-astartes",
-      "raptorial-cogitator-core-upgrade-fulguris-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "data-link-augury-fulguris-task-force-adeptus-astartes",
-      "reactive-evasion-fulguris-task-force-adeptus-astartes",
-      "anti-grav-surge-fulguris-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a65dba8d-ae69-4e3e-a72e-afeb748a98ca"
-      }
-    ]
-  },
-  {
-    "id": "subversion-assets",
-    "name": "Subversion Assets",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "shroud-field-subversion-assets-adeptus-astartes",
-      "death-in-the-dark-upgrade-subversion-assets-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "adaptive-operations-subversion-assets-adeptus-astartes",
-      "strike-from-the-shadows-vanguard-spearhead-adeptus-astartes",
-      "cloaked-position-subversion-assets-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "disruption"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b87e2dfa-d598-4fbb-a4ac-e08fdba03391"
-      }
-    ]
-  },
-  {
-    "id": "armoured-speartip",
-    "name": "Armoured Speartip",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "liberator-armoured-speartip-adeptus-astartes",
-      "tip-of-the-spear-armoured-speartip-adeptus-astartes",
-      "shock-deployment-armoured-speartip-adeptus-astartes",
-      "armoured-commander-armoured-speartip-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "machine-wrath-armoured-speartip-adeptus-astartes",
-      "ceramite-sledgehammer-armoured-speartip-adeptus-astartes",
-      "advanced-deployment-armoured-speartip-adeptus-astartes",
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "purgation-doctrine-armoured-speartip-adeptus-astartes",
-      "rapid-embarkation-firestorm-assault-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "2816281c-0f5d-4c0c-a63b-9be13599e674"
-      }
-    ]
-  },
-  {
-    "id": "bastion-task-force",
-    "name": "Bastion Task Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "eye-of-the-primarch-bastion-task-force-adeptus-astartes",
-      "hero-of-the-chapter-bastion-task-force-adeptus-astartes",
-      "blades-of-valour-bastion-task-force-adeptus-astartes",
-      "bombast-omnivox-bastion-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "codex-discipline-bastion-task-force-adeptus-astartes",
-      "shock-bombardment-bastion-task-force-adeptus-astartes",
-      "guided-disruption-bastion-task-force-adeptus-astartes",
-      "angels-defiant-bastion-task-force-adeptus-astartes",
-      "light-of-vengeance-bastion-task-force-adeptus-astartes",
-      "heresy-undone-bastion-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b0cdcaeb-2e58-46e3-83c5-a1ece9ad4e66"
-      }
-    ]
-  },
-  {
-    "id": "ceramite-sentinels",
-    "name": "Ceramite Sentinels",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "honour-indefatigable-ceramite-sentinels-adeptus-astartes",
-      "castellum-omnivox-ceramite-sentinels-adeptus-astartes",
-      "defensive-mastery-ceramite-sentinels-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "unyielding-might-ceramite-sentinels-adeptus-astartes",
-      "stand-to-the-end-ceramite-sentinels-adeptus-astartes",
-      "priority-strike-ceramite-sentinels-adeptus-astartes",
-      "augmented-targeting-ceramite-sentinels-adeptus-astartes",
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "evasive-repositioning-ceramite-sentinels-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "3f2130dc-e858-45a7-b42c-4cd5953b9b43"
-      }
-    ]
-  },
-  {
-    "id": "headhunter-task-force",
-    "name": "Headhunter Task Force",
-    "faction_id": "black-templars",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "redoubtable-machine-spirit-headhunter-task-force-adeptus-astartes",
-      "gunnery-honours-headhunter-task-force-adeptus-astartes",
-      "firestorm-coordinators-headhunter-task-force-adeptus-astartes",
-      "astartes-tank-ace-aura-headhunter-task-force-adeptus-astartes"
-    ],
-    "stratagem_ids": [
-      "armour-of-contempt-1st-company-task-force-adeptus-astartes",
-      "rapid-gunnery-headhunter-task-force-adeptus-astartes",
-      "reactive-repositioning-headhunter-task-force-adeptus-astartes",
-      "target-weak-point-headhunter-task-force-adeptus-astartes",
-      "kill-shot-headhunter-task-force-adeptus-astartes",
-      "machine-vengeance-headhunter-task-force-adeptus-astartes"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "a5da316c-604e-4aca-b5ac-53517dcd01b3"
+        "id": "b9473893-6dae-43fd-a3f2-e27a93a56c95"
       }
     ]
   },
@@ -715,26 +138,6 @@
     "restrictions": {
       "required_keywords": []
     }
-  },
-  {
-    "id": "vengeful-hosts",
-    "name": "Vengeful Hosts",
-    "faction_id": "black-templars",
-    "enhancement_ids": [],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "63c87e85-fd1a-4dc3-8bc9-226db3e966d6"
-      }
-    ]
   },
   {
     "id": "assault-brethren",
@@ -809,7 +212,10 @@
     ],
     "name": "Fist of the God-Emperor",
     "faction_id": "black-templars",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "oathbound-exemplar-fist-of-the-god-emperor-black-templars",
+      "righteous-fervour-upgrade-fist-of-the-god-emperor-black-templars"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1035,7 +441,12 @@
     ],
     "name": "Vow-sworn Crusaders",
     "faction_id": "black-templars",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "incendiary-animus-vow-sworn-crusaders-black-templars",
+      "consecrating-aura-vow-sworn-crusaders-black-templars",
+      "zealous-vanguard-vow-sworn-crusaders-black-templars",
+      "augury-servo-host-vow-sworn-crusaders-black-templars"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

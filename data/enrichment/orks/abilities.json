@@ -1614,35 +1614,6 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "gargantuan-orks",
-    "name": "Gargantuan",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "move-modifier",
-      "target": "this-model",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "gargantuan-squiggoth"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
     "ability_id": "walking-bastion-orks",
     "name": "Walking Bastion",
     "authored_by": "40kdc-community",
@@ -1971,6 +1942,7 @@
     "behavior": "activated",
     "unit_ids": [
       "bannernob",
+      "gargantuan-squiggoth",
       "nazdreg",
       "rukkatrukk-squigbuggies",
       "runtherd",
@@ -12565,99 +12537,8 @@
     }
   },
   {
-    "ability_id": "damaged-1-10-wound-remaining-orks",
-    "name": "DAMAGED: 1-10 WOUND REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "stompa"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-10-wounds-remaining-orks",
-    "name": "DAMAGED: 1-10 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "gargantuan-squiggoth"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-4-wounds-remaining-orks",
-    "name": "DAMAGED: 1-4 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "blitza-bommer",
-      "burna-bommer",
-      "dakkajet",
-      "wazbom-blastajet"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-5-wound-remaining-test-orks",
-    "name": "DAMAGED: 1-5 WOUND REMAINING TEST",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "hunta-rig"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-5-wounds-remaining-orks",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
+    "ability_id": "damaged-orks",
+    "name": "DAMAGED",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -12666,31 +12547,17 @@
     "stub": true,
     "unit_ids": [
       "battlewagon",
-      "gunwagon",
-      "kill-rig"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "damaged-1-7-wounds-remaining-orks",
-    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
+      "blitza-bommer",
+      "burna-bommer",
+      "dakkajet",
+      "gargantuan-squiggoth",
       "gorkanaut",
-      "morkanaut"
+      "gunwagon",
+      "hunta-rig",
+      "kill-rig",
+      "morkanaut",
+      "stompa",
+      "wazbom-blastajet"
     ],
     "faction_id": "orks",
     "detachment_id": null,
@@ -12939,28 +12806,6 @@
     }
   },
   {
-    "ability_id": "waaagh-gargantuan-squiggoth-orks",
-    "name": "Waaagh!",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "gargantuan-squiggoth"
-    ],
-    "faction_id": "orks",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "crazed-rampage-dread-mob-orks",
     "name": "Crazed Rampage",
     "authored_by": "40kdc-community",
@@ -13173,6 +13018,86 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "boss-boomer-upgrade-blitz-brigade-orks",
+    "name": "Boss Boomer (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cybork-boosta-dread-mob-orks",
+    "name": "Cybork Boosta",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "dread-mob",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "kill-kommanda-taktikal-brigade-orks",
+    "name": "Kill Kommanda",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "taktikal-brigade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "targetin-gizmos-upgrade-blitz-brigade-orks",
+    "name": "Targetin’ Gizmos (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "blitz-brigade",
+    "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
     },

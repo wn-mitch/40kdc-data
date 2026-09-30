@@ -35,7 +35,7 @@ func TestAbilityGetIsExact(t *testing.T) {
 	if !ok || getStr(idol.Raw, "faction_id") != "world-eaters" {
 		t.Fatalf("idol lookup = %v, %v", idol, ok)
 	}
-	for _, stale := range []string{"idol-of-blessed-blood", "berzerker-frenzy", "deadly-demise-d3"} {
+	for _, stale := range []string{"idol-of-blessed-blood", "berzerker-frenzy", "deadly-demise-d3"} { // mfm:mirror keep — stale bare ids
 		if _, ok := ds.Abilities.Get(stale); ok {
 			t.Errorf("stale id %q still resolves", stale)
 		}
@@ -236,16 +236,16 @@ func TestLeaderPersonalInvulnDoesNotBuffBodyguardUnit(t *testing.T) {
 
 func TestUnitScopedLeaderRuleStillBuffsAttachedUnit(t *testing.T) {
 	ds := EmbeddedDataset()
-	// Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-	// authored `target: "unit"`, so the model-scope gate must not touch it.
+	// Epidemius's rule gives the whole unit he leads an invulnerable save — a
+	// unit-wide rule, so the model-scope gate must not touch it.
 	attached := ds.defensiveBuffsFor(map[string]any{
-		"unitId":          "intercessor-squad",
-		"factionId":       "adeptus-astartes",
-		"attachedUnitIds": []any{"librarian"},
+		"unitId":          "plaguebearers",
+		"factionId":       "chaos-daemons",
+		"attachedUnitIds": []any{"epidemius"},
 	}, map[string]any{"phase": "fight"})
-	got := contribTypesFrom(attached, "mental-fortress-adeptus-astartes")
+	got := contribTypesFrom(attached, "blessed-by-the-plague-god-chaos-daemons")
 	if len(got) != 1 || asInt(got[0]["threshold"]) != 4 {
-		t.Errorf("mental-fortress-psychic buffs = %v, want one 4+ invulnerable-save", got)
+		t.Errorf("blessed-by-the-plague-god buffs = %v, want one 4+ invulnerable-save", got)
 	}
 }
 
@@ -309,15 +309,15 @@ func TestModelScopeGateIsAttackerSideTooAndSparesUnitScopedGrants(t *testing.T) 
 		t.Errorf("psychic-gifts keywords on the Inquisitor itself = %v, want [psyker]", got)
 	}
 
-	// Surgical Precision is unit-scoped, so an attached Apothecary Biologis
-	// still grants [LETHAL HITS] to the squad it joined.
-	aggressors := ds.buffsFor(map[string]any{
-		"unitId":          "aggressor-squad",
-		"factionId":       "adeptus-astartes",
-		"attachedUnitIds": []any{"apothecary-biologis"},
+	// A Palatine's rule grants [LETHAL HITS] to the whole unit she leads, so the
+	// attached Palatine still grants it.
+	sisters := ds.buffsFor(map[string]any{
+		"unitId":          "battle-sisters-squad",
+		"factionId":       "adepta-sororitas",
+		"attachedUnitIds": []any{"palatine"},
 	}, map[string]any{"phase": "shooting"})
-	if got := keywords(aggressors, "surgical-precision-adeptus-astartes"); len(got) != 1 || got[0] != "lethal-hits" {
-		t.Errorf("surgical-precision keywords = %v, want [lethal-hits]", got)
+	if got := keywords(sisters, "fury-of-the-righteous-adepta-sororitas"); len(got) != 1 || got[0] != "lethal-hits" {
+		t.Errorf("fury-of-the-righteous keywords = %v, want [lethal-hits]", got)
 	}
 }
 

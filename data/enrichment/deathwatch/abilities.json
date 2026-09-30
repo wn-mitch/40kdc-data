@@ -1,33 +1,5 @@
 [
   {
-    "ability_id": "astartes-shield-deathwatch",
-    "name": "Astartes shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1932a9069a89679fec8c06bb0995adab086eddeb56e983cbdfab4519f04a5538",
-    "version": "2025-q3",
-    "effect": {
-      "type": "invulnerable-save",
-      "target": "this-model",
-      "modifier": {
-        "invuln_sv": 4
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "deathwatch-veterans",
-      "decimus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "deathwatch"
-  },
-  {
     "ability_id": "auspex-array-deathwatch",
     "name": "Auspex Array",
     "authored_by": "40kdc-community",
@@ -259,119 +231,6 @@
     "faction_id": "deathwatch"
   },
   {
-    "ability_id": "infernum-halo-launcher-deathwatch",
-    "name": "Infernum Halo-launcher",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2966068a5e9674328be11b29d8c87aab75d736797205a5d57438f70435f50a13",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-model",
-      "modifier": {
-        "abilities": [
-          "Smoke"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "deathwatch"
-  },
-  {
-    "ability_id": "infiltrator-comms-array-deathwatch",
-    "name": "Infiltrator Comms Array",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "58fbcb829e38e968ccd5a3a462c7626738cebe80e9cfa53f54fa3e96bbed4888",
-    "version": "2025-q3",
-    "effect": {
-      "type": "cp-gain",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "spectrus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "deathwatch"
-  },
-  {
-    "ability_id": "instigator-bolt-carbine-deathwatch",
-    "name": "Instigator Bolt Carbine",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7d7846630ad11e85c388e594ea4ac8542c763bff91dfdfaa849dbe1d543cb64e",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "move",
-        "target": "this-unit",
-        "modifier": {
-          "move_type": "normal"
-        }
-      }
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "spectrus-kill-team"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "deathwatch"
-  },
-  {
-    "ability_id": "kill-teams-deathwatch",
-    "name": "Kill Teams",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "3a2cd1eca935ef75202f3a29f6b9378004fadec8120dc453d982fc0696336c22",
-    "version": "2025-q3",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "faction_id": "deathwatch",
-    "ability_type": "faction",
-    "behavior": "passive",
-    "unit_ids": []
-  },
-  {
     "ability_id": "mission-tactics-deathwatch",
     "name": "Mission Tactics",
     "authored_by": "40kdc-community",
@@ -387,9 +246,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [
-      "decimus-kill-team"
-    ],
+    "unit_ids": [],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "deathwatch"
@@ -443,7 +300,8 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "deathwatch-terminator-squad"
+      "deathwatch-veterans",
+      "decimus-kill-team"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -662,28 +520,6 @@
     }
   },
   {
-    "ability_id": "damaged-1-5-wounds-remaining-deathwatch",
-    "name": "DAMAGED: 1-5 WOUNDS REMAINING",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
-    "faction_id": "deathwatch",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
     "ability_id": "dragonfire-rounds-black-spear-task-force-deathwatch",
     "name": "Dragonfire Rounds",
     "authored_by": "40kdc-community",
@@ -744,7 +580,7 @@
     }
   },
   {
-    "ability_id": "osseus-key-black-spear-task-force-deathwatch",
+    "ability_id": "osseus-key-aura-black-spear-task-force-deathwatch",
     "name": "Osseus Key",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -756,28 +592,6 @@
     "faction_id": "deathwatch",
     "detachment_id": "black-spear-task-force",
     "ability_type": "enhancement",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "rites-of-battle-deathwatch",
-    "name": "Rites of Battle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "watch-master"
-    ],
-    "faction_id": "deathwatch",
-    "detachment_id": null,
-    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },
@@ -870,8 +684,256 @@
     }
   },
   {
-    "ability_id": "thief-of-secrets-black-spear-task-force-deathwatch",
-    "name": "Thief of Secrets",
+    "ability_id": "blackstar-extraction-deathwatch-support-deathwatch",
+    "name": "Blackstar Extraction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "deathwatch-support",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "combat-doctrines-deathwatch",
+    "name": "Combat Doctrines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-deathwatch",
+    "name": "DAMAGED",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "corvus-blackstar"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dragonfire-rounds-deathwatch-support-deathwatch",
+    "name": "Dragonfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "deathwatch-support",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hellfire-rounds-deathwatch-support-deathwatch",
+    "name": "Hellfire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "deathwatch-support",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "kraken-rounds-deathwatch-support-deathwatch",
+    "name": "Kraken Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "deathwatch-support",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mission-tactics-deathwatch-support-deathwatch",
+    "name": "Mission Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": "deathwatch-support",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "purgatus-quarry-deathwatch",
+    "name": "Purgatus Quarry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "storm-shield-deathwatch-terminator-squad-deathwatch",
+    "name": "Storm Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "deathwatch-terminator-squad"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transhuman-strategist-deathwatch",
+    "name": "Transhuman Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veteran-recruits-deathwatch",
+    "name": "Veteran Recruits",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "watch-master-deathwatch",
+    "name": "Watch Master",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "watch-master"
+    ],
+    "faction_id": "deathwatch",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "the-thief-of-secrets-black-spear-task-force-deathwatch",
+    "name": "The Thief of Secrets",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",

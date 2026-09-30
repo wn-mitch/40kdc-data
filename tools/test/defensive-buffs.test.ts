@@ -81,16 +81,15 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
   });
 
   it("a unit-scoped leader rule still buffs the whole attached unit", () => {
-    // Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-    // authored `target: "unit"`, so the gate must not touch it (issue #105's
-    // repro, which is a legitimately unit-wide rule).
+    // Epidemius's rule gives the whole unit he leads an invulnerable save — a
+    // legitimately unit-wide rule (issue #105's shape), so the gate must not touch it.
     const attached = ds.defensiveBuffsFor(
-      { unitId: "intercessor-squad", factionId: "adeptus-astartes", attachedUnitIds: ["librarian"] },
+      { unitId: "plaguebearers", factionId: "chaos-daemons", attachedUnitIds: ["epidemius"] },
       { phase: "fight" },
     );
-    const buffs = invulns(attached, "mental-fortress-adeptus-astartes");
+    const buffs = invulns(attached, "blessed-by-the-plague-god-chaos-daemons");
     expect(buffs).toHaveLength(1);
-    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "librarian" });
+    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "epidemius" });
   });
 
   it("the dropped effect is reported as unsupported, not silently discarded", () => {
@@ -135,17 +134,17 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
     );
     expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual(["psyker"]);
 
-    // Surgical Precision is unit-scoped ("that unit's ranged weapons have
-    // [LETHAL HITS]"), so an attached Apothecary Biologis still grants it.
-    const aggressors = ds.buffsFor(
+    // A Palatine's rule grants Lethal Hits to the whole unit she leads, so the
+    // attached Palatine still grants it.
+    const sisters = ds.buffsFor(
       {
-        unitId: "aggressor-squad",
-        factionId: "adeptus-astartes",
-        attachedUnitIds: ["apothecary-biologis"],
+        unitId: "battle-sisters-squad",
+        factionId: "adepta-sororitas",
+        attachedUnitIds: ["palatine"],
       },
       { phase: "shooting" },
     );
-    expect(keywordsFrom(aggressors, "surgical-precision-adeptus-astartes")).toEqual(["lethal-hits"]);
+    expect(keywordsFrom(sisters, "fury-of-the-righteous-adepta-sororitas")).toEqual(["lethal-hits"]);
   });
 });
 

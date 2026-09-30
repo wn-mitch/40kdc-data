@@ -31,12 +31,17 @@
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED: 1-4 WOUNDS REMAINING" typeName="Abilities">
+            <profile name="DAMAGED" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED: 1-4 WOUNDS REMAINING" typeName="Abilities">
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="DAMAGED" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
@@ -129,7 +134,12 @@
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="DAMAGED: 1-4 WOUNDS REMAINING" typeName="Abilities">
+            <profile name="DAMAGED" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>

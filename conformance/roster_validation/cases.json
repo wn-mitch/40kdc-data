@@ -680,10 +680,10 @@
     "args": {
       "factionId": "blood-angels",
       "battleSize": "strike-force",
-      "forceDisposition": "take-and-hold",
+      "forceDisposition": "disruption",
       "detachments": [
         {
-          "id": "orbital-assault-force"
+          "id": "encarmine-speartip"
         }
       ],
       "units": [
@@ -691,7 +691,7 @@
           "unitId": "chaplain",
           "modelCount": 1,
           "isWarlord": true,
-          "enhancementId": "dedicated-gunship-orbital-assault-force-adeptus-astartes",
+          "enhancementId": "angelic-executioner-encarmine-speartip-blood-angels",
           "leaderBodyguardId": null,
           "counts": {
             "crozius-arcanum": 1,
@@ -701,7 +701,7 @@
       ]
     },
     "expected": [
-      "u0|error|enhancement-keyword-mismatch:dedicated-gunship-orbital-assault-force-adeptus-astartes"
+      "u0|error|enhancement-keyword-mismatch:angelic-executioner-encarmine-speartip-blood-angels"
     ]
   },
   {
