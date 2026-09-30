@@ -41,6 +41,19 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 }
 
 describe("Round 5C leaf compiler", () => {
+  it("folds \"must end that move either … or …\" into the move's end condition, gating nothing", () => {
+    const result = compiled([
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "fall-back", distance: 6 }, 2),
+      leaf("RESTRICTION", "move-must-end", { match: "any" }),
+      leaf("CONDITION", "in-region", { subject: "this-unit", region_kind: "territory", territory: "your-deployment-zone", wholly: true }),
+      leaf("CONDITION", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false }, 3),
+    ]);
+    const effect = result.mechanics.effect as { type: string; modifier: { ends_when?: { operator: string; operands: unknown[] } } };
+    expect(effect.type).toBe("move");
+    expect(effect.modifier.ends_when?.operator).toBe("or");
+    expect(effect.modifier.ends_when?.operands).toHaveLength(2);
+  });
+
   it("gates a whole non-Stratagem ability on its own phase window, in the turn each phase belongs to", () => {
     const window = leaf("RESTRICTION", "activation-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: ["fight"] });
     const result = compiled([window, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);

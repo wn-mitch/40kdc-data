@@ -27,6 +27,7 @@ import {
   PROMPT_VERSION, REQUEST_SCHEMA_VERSION, RESPONSE_SCHEMA_V2,
 } from "./luna-schema.js";
 import { anchorExactText, parseHypothesis, parseQualifiersV2, parseStructuralSpans } from "./luna-v2.js";
+import { rewriteStratagemSpan, spansSelectAUnit } from "./stratagem-rules.js";
 
 /**
  * Bytes of ability payload one request may carry, over its fixed instructions, examples and
@@ -724,6 +725,7 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
     }
 
     if (!Array.isArray(item.spans)) throw new TypeError(`response.abilities[${abilityIndex}].spans must be an array.`);
+    const abilitySelects = spansSelectAUnit(item.spans);
     for (const [spanIndex, value] of item.spans.entries()) {
       const span = asRecord(value, `response.abilities[${abilityIndex}].spans[${spanIndex}]`);
       assertExactKeys(
@@ -757,17 +759,18 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
       // exact_text anchoring) can still fail the response: those aren't per-span classification
       // choices, they're whether the model followed the byte-offset contract at all.
       try {
-        const status = nonblank(span.status, `${spanLabel}.status`);
+        const { span: effective, rewrites } = rewriteStratagemSpan(span, { sourceType: configured.ability.source_type, fragment, exactText, abilitySelects });
+        const status = nonblank(effective.status, `${spanLabel}.status`);
         if (status !== "EXISTING" && status !== "NOVEL" && status !== "UNRESOLVED") {
           throw new TypeError(`${spanLabel}.status is invalid.`);
         }
-        const rawRole = nonblank(span.role, `${spanLabel}.role`);
+        const rawRole = nonblank(effective.role, `${spanLabel}.role`);
         const reportedRole = rawRole === "UNRESOLVED"
           ? "UNRESOLVED"
           : (LEAF_ROLES as readonly string[]).includes(rawRole)
             ? rawRole as LeafRole
             : (() => { throw new TypeError(`${spanLabel}.role is invalid.`); })();
-        const description = span.description === undefined ? null : nonblank(span.description, `${spanLabel}.description`);
+        const description = effective.description === undefined ? null : nonblank(effective.description, `${spanLabel}.description`);
         let qualifiers: ParsedQualifier[];
         if (version === 2) {
           const parsedQualifiers = parseQualifiersV2(span.qualifier_spans, configured.ability, startByte, endByte, `${spanLabel}.qualifier_spans`);
@@ -780,10 +783,10 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
         let role: LeafRole | "UNRESOLVED" = reportedRole;
         if (status === "EXISTING") {
           if (reportedRole === "UNRESOLVED") throw new TypeError("An EXISTING span must declare a semantic role.");
-          const familyId = nonblank(span.family_id, `${spanLabel}.family_id`);
-          const familyVersion = safeInteger(span.family_version, `${spanLabel}.family_version`);
+          const familyId = nonblank(effective.family_id, `${spanLabel}.family_id`);
+          const familyVersion = safeInteger(effective.family_version, `${spanLabel}.family_version`);
           if (familyVersion < 1) throw new RangeError("An EXISTING family_version must be positive.");
-          const parameters = parseParameters(span.parameters, `${spanLabel}.parameters`);
+          const parameters = parseParameters(effective.parameters, `${spanLabel}.parameters`);
           if (familyRole(familyId, familyVersion) !== reportedRole) {
             throw new TypeError(`${spanLabel} role does not match its reviewed family.`);
           }
@@ -798,18 +801,18 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
           role = reportedRole;
         } else {
           for (const field of ["family_id", "family_version", "parameters"] as const) {
-            if (span[field] !== undefined) throw new TypeError(`${field} is only allowed for EXISTING spans.`);
+            if (effective[field] !== undefined) throw new TypeError(`${field} is only allowed for EXISTING spans.`);
           }
           if (status === "NOVEL" && reportedRole === "UNRESOLVED") throw new TypeError("A NOVEL span must declare a semantic role.");
           if (status === "UNRESOLVED") role = "UNRESOLVED";
         }
-        if (version === 2 && status === "NOVEL" && span.hypothesis === undefined) {
+        if (version === 2 && status === "NOVEL" && effective.hypothesis === undefined) {
           throw new TypeError(`${spanLabel} is NOVEL and must carry a hypothesis; return an unresolved region instead if none is justified.`);
         }
-        if (status !== "NOVEL" && span.hypothesis !== undefined) throw new TypeError(`${spanLabel}.hypothesis is only allowed for NOVEL spans.`);
-        const hypothesis = span.hypothesis === undefined
+        if (status !== "NOVEL" && effective.hypothesis !== undefined) throw new TypeError(`${spanLabel}.hypothesis is only allowed for NOVEL spans.`);
+        const hypothesis = effective.hypothesis === undefined
           ? null
-          : parseHypothesis(span.hypothesis, configured.ability, startByte, endByte, `${spanLabel}.hypothesis`);
+          : parseHypothesis(effective.hypothesis, configured.ability, startByte, endByte, `${spanLabel}.hypothesis`);
         semanticSpans.push({
           kind: "semantic",
           ability: configured.ability,
@@ -826,6 +829,7 @@ function parseResponseBody(db: DatabaseSync, response: unknown, inputHash: strin
           hypothesis,
           index: spanIndex,
           offset_repaired: offsetRepaired,
+          ...(rewrites.length ? { rewrites } : {}),
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -1181,6 +1185,7 @@ function persistParsedResponse(db: DatabaseSync, run: ModelRun, parsed: ParsedRe
         description: span.description,
         ...(span.hypothesis ? { hypothesis: span.hypothesis } : {}),
         ...(span.offset_repaired ? { offset_repaired: true } : {}),
+        ...(span.rewrites ? { rewrites: span.rewrites } : {}),
       }),
       createdAt,
       origin,

@@ -3,7 +3,7 @@
  * resources, designation and army construction. One lowercase-initial clause, no period.
  */
 
-import type { Condition } from "./condition.js";
+import { describeCondition, type Condition } from "./condition.js";
 import { conditionLeadIn } from "./condition-leadin.js";
 import { objectivePhrase, type P } from "./condition-refs.js";
 import type { Inline, Leaf } from "./effect-leaf.js";
@@ -131,6 +131,8 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
+  // A condition on where the move ends (TypeScript describer only, for now).
+  if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}`;
   if (m.allow_engagement === true) s += "; it can end that move within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; that move counts as ${movedPhrase(m.counts_as_move)}`;
   if (m.keeps_eligible === true) s += "; doing so does not change what it is eligible to do this turn";

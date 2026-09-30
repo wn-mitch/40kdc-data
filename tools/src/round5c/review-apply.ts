@@ -45,8 +45,12 @@ function located(row: ProposalRow, text: string): { start_byte: number; end_byte
   return { start_byte: start, end_byte: start + Buffer.byteLength(text, "utf8") };
 }
 
-/** A machine row confirmed as it stands: the same bytes and meaning, now Will's (it is promoted). */
-function annotationDecision(db: DatabaseSync, annotationId: number): Record<string, unknown> {
+/**
+ * A decision on an existing row: `confirm` takes a machine row as it stands (it is promoted);
+ * `correct` replaces any row's meaning with the family and parameters given (it is superseded).
+ */
+function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string, unknown> {
+  const annotationId = item.annotation_id!;
   const row = db.prepare(`
     SELECT annotations.authority_kind, source_spans.ability_version_id, abilities.source_hash, source_spans.fragment, source_spans.start_byte,
       source_spans.end_byte, source_spans.exact_text, semantic_families.role, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
@@ -56,17 +60,25 @@ function annotationDecision(db: DatabaseSync, annotationId: number): Record<stri
     WHERE annotations.id = ? AND annotations.status = 'active'
   `).get(annotationId) as (Omit<ProposalRow, "id" | "source_text" | "fragments_json"> & { authority_kind: string }) | undefined;
   if (!row) throw new Error(`No active annotation ${annotationId}.`);
-  if (row.authority_kind !== "machine") throw new Error(`Annotation ${annotationId} is already trusted.`);
-  return {
-    action: "confirm", ability_version_id: row.ability_version_id, source_hash: row.source_hash, fragment: row.fragment,
-    start_byte: row.start_byte, end_byte: row.end_byte, exact_text: row.exact_text, role: row.role,
-    family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json!) as Record<string, unknown>,
+  const base = {
+    ability_version_id: row.ability_version_id, source_hash: row.source_hash, fragment: row.fragment,
+    start_byte: row.start_byte, end_byte: row.end_byte, exact_text: row.exact_text,
   };
+  if (item.action === "correct") {
+    return {
+      ...base, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role,
+      family_id: item.family_id ?? row.family_id, ...(item.family_id ? {} : { family_version: row.family_version }),
+      parameters: item.parameters ?? JSON.parse(row.parameters_json!) as Record<string, unknown>,
+    };
+  }
+  if (item.action !== "confirm") throw new Error(`An existing row can be confirmed or corrected, not ${item.action}.`);
+  if (row.authority_kind !== "machine") throw new Error(`Annotation ${annotationId} is already trusted.`);
+  return { ...base, action: "confirm", role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json!) as Record<string, unknown> };
 }
 
 /** Turn one conversational decision into the review batch's full decision shape. */
 function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown> {
-  if (item.annotation_id !== undefined) return annotationDecision(db, item.annotation_id);
+  if (item.annotation_id !== undefined) return annotationDecision(db, item);
   if (item.proposal_id === undefined) throw new Error("A decision names a proposal_id or an annotation_id.");
   const row = db.prepare(`
     SELECT proposals.id, source_spans.ability_version_id, abilities.source_hash, source_spans.fragment, source_spans.start_byte,

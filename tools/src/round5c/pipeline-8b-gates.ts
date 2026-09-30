@@ -105,7 +105,7 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
 /** Top-level effect `type`s the walk() dispatch has no case for that are non-damage by design.
  * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
  * shape" (the conservative default) rather than being assumed out of scope. */
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal"]);
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move"]);
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 
 function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {

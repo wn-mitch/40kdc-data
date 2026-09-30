@@ -195,10 +195,29 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "move-must-end",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Where a move must end",
+    description: "\"Your unit must end that move either wholly within your deployment zone or within range of an objective marker\": the conditions that follow it in the same sentence say where the unit must be when the move before it ends. match is any for \"either … or\", all when every condition must hold.",
+    starter: { match: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["match"],
+      properties: { match: { enum: ["any", "all"] } },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
+    case "move-must-end": {
+      const keys = Object.keys(input);
+      if (keys.length !== 1 || keys[0] !== "match") throw new TypeError("move-must-end parameters must be exactly: match.");
+      return { match: enumValue(input.match, ["any", "all"], "move-must-end.match") };
+    }
     case "make-move": {
       const optional = version >= 2 ? ["distance", "ends_within_inches", "counts_as_move"] : ["distance", "ends_within_inches"];
       keySet(input, ["subject", "move_type"], optional, family);

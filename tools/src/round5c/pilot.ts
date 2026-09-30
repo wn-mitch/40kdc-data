@@ -202,10 +202,10 @@ export async function runPilotStep(options: PilotStepOptions): Promise<PilotStep
     const runIds = stepRuns(db, options.step).filter((run) => run.status === "completed").map((run) => run.id);
 
     const spans = db.prepare(`
-      SELECT source_spans.id AS span_id, source_spans.exact_text AS text, abilities.source_type AS kind
+      SELECT source_spans.id AS span_id, source_spans.exact_text AS text, abilities.source_type AS kind, source_spans.fragment
       FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id JOIN abilities ON abilities.id = source_spans.ability_version_id
       WHERE proposals.model_run_id IN (${runIds.join(",") || "NULL"}) AND proposals.role NOT IN ('CONNECTIVE', 'RESOURCE')
-    `).all() as Array<{ span_id: number; text: string; kind: string | null }>;
+    `).all() as Array<{ span_id: number; text: string; kind: string | null; fragment: string }>;
     await timed("classify", async () => {
       const spent = jevSpendFor(db, spans.map((span) => span.span_id));
       return classifySpans(db, options.jevClient ?? buildTypeSafeClient(), spans, { spendCapUsd: options.jevCapUsd ?? 0.2, priorSpendUsd: spent });

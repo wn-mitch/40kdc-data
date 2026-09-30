@@ -22,7 +22,7 @@ export const EXAMPLES_PER_FAMILY = 3;
 const TIMEOUT_MS = 60_000;
 const STATE_CONTEXT = "A phrase cut from a Warhammer 40,000 rule. Which rule piece does it express?";
 
-export type ClassifySpan = { span_id: number; text: string; kind: string | null };
+export type ClassifySpan = { span_id: number; text: string; kind: string | null; fragment?: string };
 
 export type JevClassification = {
   span_id: number;
@@ -142,7 +142,8 @@ export async function classifySpans(
   await mapWithConcurrency(pending, options.concurrency ?? 8, async (span) => {
     if (budget.exhausted()) { unanswered += 1; return; }
     const surface = leafSurfaceKey(span.text);
-    const families = activeFamilies(span.kind);
+    // A Stratagem's WHEN line is its use window or a trigger, nothing else.
+    const families = activeFamilies(span.kind).filter((family) => span.kind !== "stratagem" || span.fragment !== "WHEN" || family.id === "use-window" || family.role === "EVENT");
     const state = { phrase: span.text, context: STATE_CONTEXT };
     const key = `span:${span.span_id}`;
     const ranked = await askChoiceRanked(client, TIMEOUT_MS, budget, key, "family", state, "Which rule piece does this phrase express?", familyCriteria(families, wordings, surface));

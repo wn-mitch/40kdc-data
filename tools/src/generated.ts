@@ -766,6 +766,10 @@ export type ScopeDuration =
  */
 export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
 /**
+ * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
+ */
+export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "transport-occupancy-subject-kind".
  */
@@ -784,7 +788,7 @@ export type TransportEligibility1 = {
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
@@ -796,7 +800,7 @@ export type KeywordList7 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
 /**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
@@ -895,7 +899,7 @@ export type AbilityUsage = AbilityUsageLimit | [AbilityUsageLimit, AbilityUsageL
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -2357,7 +2361,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition5;
+      restrictions?: AbilityDSLCondition6;
     },
     ...{
       /**
@@ -2391,7 +2395,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition5;
+      restrictions?: AbilityDSLCondition6;
     }[]
   ];
   /**
@@ -4874,6 +4878,7 @@ export interface MoveEffect {
       of?: PlaceRef;
       wholly?: true;
     };
+    ends_when?: AbilityDSLCondition5;
     keeps_eligible?: true;
   };
   scaling?: Scaling;
@@ -5829,7 +5834,7 @@ export interface StratagemTargetRestriction {
    * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
    */
   bound_to?: "triggering-unit" | "attacked-unit";
-  eligibility?: AbilityDSLCondition6;
+  eligibility?: AbilityDSLCondition7;
   notes?: string;
 }
 /**

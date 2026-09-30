@@ -47,6 +47,8 @@ export type ParsedSemanticSpan = {
   index: number;
   /** True when a v2 offset was re-anchored to its exact text; recorded for review. */
   offset_repaired: boolean;
+  /** Deterministic convention rewrites applied before validation (stratagem-rules.ts). */
+  rewrites?: string[];
 };
 
 export type ParsedHypothesis = {

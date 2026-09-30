@@ -153,6 +153,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
       : leaf.family_id === "optional-use" ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
         : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
           : leaf.family_id === "activation-window" ? "No separate text: the whole ability applies only in the phases it names."
+            : leaf.family_id === "move-must-end" ? "No separate text: the conditions after it become where the move before it must end."
             : "No separate text: checked against the core record, which already holds it." };
   }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
@@ -258,7 +259,16 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   let forEachLeaf: CompileLeaf | null = null;
   let rulesBundle = false;
 
+  // "Your unit must end that move either …": the conditions after a move-must-end in its sentence
+  // say where the preceding move ends, so they gate nothing and are taken out of clause binding.
+  const moveEnds = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" ? [{
+    index, match: String(leaf.parameters.match),
+    conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && places[at]!.sentence === places[index]!.sentence ? [at] : []),
+  }] : []);
+  const endConditions = new Set(moveEnds.flatMap((rule) => rule.conditions));
+
   list.forEach((leaf, index) => {
+    if (endConditions.has(index)) return;
     // A container opener's options are folded into its own node (`containerNodes.get(index)`,
     // used where planned effects are built below); the leaves that became those options never
     // separately reach condition/duration/event dispatch or their own planned effect.
@@ -299,6 +309,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
+        else if (leaf.family_id === "move-must-end") { /* folded into the preceding move below */ }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
       else if (leaf.role === "EVENT") {
@@ -339,6 +350,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     });
   });
   if (list.every((leaf) => leaf.role !== "EFFECT")) errors.push("There is no effect leaf to compile.");
+
+  for (const rule of moveEnds) {
+    const move = planned.filter((item) => item.index < rule.index && item.node.type === "move").at(-1);
+    if (!move) { errors.push("\"Must end that move\" has no move before it."); continue; }
+    if (rule.conditions.length === 0) { errors.push("\"Must end that move\" names no condition for where the move ends."); continue; }
+    const nodes = rule.conditions.map((at) => attempt(() => condition(list[at]!))).filter((node): node is Node => node !== null);
+    if (nodes.length !== rule.conditions.length) continue;
+    (move.node.modifier as Node).ends_when = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
+  }
 
   for (const combinator of combinators) {
     const clause = places[combinator]!.clause;
