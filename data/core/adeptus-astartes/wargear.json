@@ -10,6 +10,10 @@
       {
         "namespace": "mfm",
         "id": "5bbcf921-b6c6-400c-bf8e-9b0104322b21"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9cb2e570-6af8-4c6f-b89a-4951b094cc3c"
       }
     ]
   },
@@ -24,6 +28,14 @@
       {
         "namespace": "mfm",
         "id": "007d6307-976c-424b-871a-c3324c4f8b6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33ffd159-0227-4b14-a504-7452ad364393"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a8d5f30-60bd-457c-889a-dc6c3dbc200b"
       },
       {
         "namespace": "mfm",
@@ -45,21 +57,11 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "a19b0acf-cd48-425a-bd2c-395d84944116"
-      }
-    ]
-  },
-  {
-    "id": "infiltrator-comms-array",
-    "name": "Infiltrator comms array",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "external_refs": [
+        "id": "31d5ccd4-6345-4e83-acf9-1d587e1d40fb"
+      },
       {
         "namespace": "mfm",
-        "id": "02858fda-32d0-4a51-8767-2aeb9b10e1a4"
+        "id": "a19b0acf-cd48-425a-bd2c-395d84944116"
       }
     ]
   },
@@ -74,21 +76,6 @@
       {
         "namespace": "mfm",
         "id": "cddccdf8-164b-4a11-aa55-e39e8d7befe3"
-      }
-    ]
-  },
-  {
-    "id": "sanguinary-banner",
-    "name": "Sanguinary banner",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "category": "standard",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "98e6a22b-537f-48df-a078-327ce3569a5a"
       }
     ]
   },
@@ -121,48 +108,6 @@
     ]
   },
   {
-    "id": "infernum-halo-launcher",
-    "name": "infernum halo-launcher",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "d5028f22-7248-4d7e-8550-23ebbf37c0a5"
-      }
-    ]
-  },
-  {
-    "id": "haywire-mine",
-    "name": "haywire mine",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "d3047056-15d9-427e-bfaa-896ecf79d487"
-      }
-    ]
-  },
-  {
-    "id": "astartes-shield",
-    "name": "Astartes shield",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "bd82612d-1cc5-4408-bcdb-43affb04b068"
-      }
-    ]
-  },
-  {
     "id": "shield-dome",
     "name": "shield dome",
     "game_version": {
@@ -173,20 +118,10 @@
       {
         "namespace": "mfm",
         "id": "4376131c-0673-4ce5-84e3-6bda75cd6fd6"
-      }
-    ]
-  },
-  {
-    "id": "reiver-grav-chute",
-    "name": "Reiver grav-chute",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "external_refs": [
+      },
       {
         "namespace": "mfm",
-        "id": "2e184848-e984-48fd-88e8-743cdea21eb9"
+        "id": "be985406-cf2d-4f9f-a2ee-8d42ee57486b"
       }
     ]
   },
@@ -215,6 +150,10 @@
       {
         "namespace": "mfm",
         "id": "dbc80516-c93e-476a-8b61-f86f5be11ee8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6a2c8d7-9b59-45f4-a38c-1888a9e997c2"
       }
     ]
   },
@@ -228,35 +167,11 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "6805fb89-0cb9-44ca-ac49-4c49c6c281ae"
+      },
+      {
+        "namespace": "mfm",
         "id": "992338e2-057a-4b7a-90ef-164c360d1da4"
-      }
-    ]
-  },
-  {
-    "id": "orbital-comms-array-aura",
-    "name": "Orbital Comms Array (Aura)",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "c757aef1-9641-496f-ba93-c1bac9f7c7fa"
-      }
-    ]
-  },
-  {
-    "id": "terminator-storm-shield",
-    "name": "Terminator Storm Shield",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "8a57b803-6122-4d63-a1a8-526e49b73adf"
       }
     ]
   },
@@ -270,21 +185,11 @@
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "940380dd-af82-403b-ba52-1583f553b446"
-      }
-    ]
-  },
-  {
-    "id": "book-of-salvation",
-    "name": "Book of Salvation",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
+        "id": "929c0f7e-0053-4c56-aa6d-6b780ae7a816"
+      },
       {
         "namespace": "mfm",
-        "id": "a298ee2e-4181-43e7-81a7-158bdc457d53"
+        "id": "940380dd-af82-403b-ba52-1583f553b446"
       }
     ]
   },

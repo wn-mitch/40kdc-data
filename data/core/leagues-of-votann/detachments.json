@@ -5,18 +5,18 @@
     "faction_id": "leagues-of-votann",
     "detachment_rule_id": "optimal-application-leagues-of-votann",
     "enhancement_ids": [
+      "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",
       "calculated-tenacity-hearthfyre-arsenal-leagues-of-votann",
       "mantle-of-elders-hearthfyre-arsenal-leagues-of-votann",
-      "graviton-vault-hearthfyre-arsenal-leagues-of-votann",
-      "farstrydr-node-hearthfyre-arsenal-leagues-of-votann"
+      "graviton-vault-hearthfyre-arsenal-leagues-of-votann"
     ],
     "stratagem_ids": [
-      "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
       "unwavering-accuracy-hearthfyre-arsenal-leagues-of-votann",
       "first-concern-hearthfyre-arsenal-leagues-of-votann",
+      "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann",
+      "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
       "preventative-purge-hearthfyre-arsenal-leagues-of-votann",
-      "cogitated-need-hearthfyre-arsenal-leagues-of-votann",
-      "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann"
+      "cogitated-need-hearthfyre-arsenal-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -31,6 +31,9 @@
         "namespace": "mfm",
         "id": "2ddd7e9d-950f-4e3e-a709-8eb4beb83bd7"
       }
+    ],
+    "detachment_rule_ids": [
+      "optimal-application-leagues-of-votann"
     ]
   },
   {
@@ -45,12 +48,12 @@
       "nomad-strategist-persecution-prospect-leagues-of-votann"
     ],
     "stratagem_ids": [
-      "ranger-tactics-persecution-prospect-leagues-of-votann",
+      "adaptable-avarice-persecution-prospect-leagues-of-votann",
       "frontier-momentum-persecution-prospect-leagues-of-votann",
       "exposed-flaws-persecution-prospect-leagues-of-votann",
+      "ranger-tactics-persecution-prospect-leagues-of-votann",
       "claimstaker-reflex-persecution-prospect-leagues-of-votann",
-      "dispersed-formation-persecution-prospect-leagues-of-votann",
-      "adaptable-avarice-persecution-prospect-leagues-of-votann"
+      "dispersed-formation-persecution-prospect-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -65,6 +68,9 @@
         "namespace": "mfm",
         "id": "2fd1ea69-ba73-4a60-b09b-672cefd4d6f2"
       }
+    ],
+    "detachment_rule_ids": [
+      "assailed-from-every-angle-leagues-of-votann"
     ]
   },
   {
@@ -79,12 +85,12 @@
       "ancestral-crest-needgaard-oathband-leagues-of-votann"
     ],
     "stratagem_ids": [
+      "void-hardened-needgaard-oathband-leagues-of-votann",
       "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
+      "ordered-retreat-needgaard-oathband-leagues-of-votann",
       "ancestral-sentence-needgaard-oathband-leagues-of-votann",
       "huntrs-mark-needgaard-oathband-leagues-of-votann",
-      "ordered-retreat-needgaard-oathband-leagues-of-votann",
-      "reactive-reprisal-needgaard-oathband-leagues-of-votann",
-      "void-hardened-needgaard-oathband-leagues-of-votann"
+      "reactive-reprisal-needgaard-oathband-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -99,6 +105,9 @@
         "namespace": "mfm",
         "id": "36ff5ede-1c67-4cdd-9a51-f81eb47e4626"
       }
+    ],
+    "detachment_rule_ids": [
+      "martial-leverage-leagues-of-votann"
     ]
   },
   {
@@ -133,6 +142,9 @@
         "namespace": "mfm",
         "id": "38b6d9b5-8bee-4832-ac4b-79eb7f43e4a7"
       }
+    ],
+    "detachment_rule_ids": [
+      "fury-from-the-delve-leagues-of-votann"
     ]
   },
   {
@@ -148,11 +160,11 @@
     ],
     "stratagem_ids": [
       "brekkeknots-hearthband-leagues-of-votann",
-      "fury-of-the-hearth-hearthband-leagues-of-votann",
-      "superior-craftsmanship-hearthband-leagues-of-votann",
       "sure-of-purpose-hearthband-leagues-of-votann",
+      "superior-craftsmanship-hearthband-leagues-of-votann",
       "unyielding-aggression-hearthband-leagues-of-votann",
-      "materialisation-matrices-hearthband-leagues-of-votann"
+      "materialisation-matrices-hearthband-leagues-of-votann",
+      "fury-of-the-hearth-hearthband-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -170,6 +182,9 @@
         "namespace": "mfm",
         "id": "8698abd9-3176-4792-85f4-abdd6ad5b311"
       }
+    ],
+    "detachment_rule_ids": [
+      "methodical-annihilation-leagues-of-votann"
     ]
   },
   {
@@ -185,11 +200,11 @@
     ],
     "stratagem_ids": [
       "auxiliary-contract-mercenary-oathband-leagues-of-votann",
-      "grand-artifice-mercenary-oathband-leagues-of-votann",
-      "new-horizons-mercenary-oathband-leagues-of-votann",
-      "mobile-exploitation-mercenary-oathband-leagues-of-votann",
       "optimal-expenditure-mercenary-oathband-leagues-of-votann",
-      "privateer-arsenal-mercenary-oathband-leagues-of-votann"
+      "grand-artifice-mercenary-oathband-leagues-of-votann",
+      "privateer-arsenal-mercenary-oathband-leagues-of-votann",
+      "new-horizons-mercenary-oathband-leagues-of-votann",
+      "mobile-exploitation-mercenary-oathband-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -204,6 +219,9 @@
         "namespace": "mfm",
         "id": "bd5bc3a7-76dd-4a49-a1ec-a9a8f25dfdd9"
       }
+    ],
+    "detachment_rule_ids": [
+      "ruthless-reinvestment-leagues-of-votann"
     ]
   },
   {
@@ -218,12 +236,12 @@
       "signature-restoration-brandfast-oathband-leagues-of-votann"
     ],
     "stratagem_ids": [
-      "bastion-running-brandfast-oathband-leagues-of-votann",
       "secure-positions-brandfast-oathband-leagues-of-votann",
+      "bastion-running-brandfast-oathband-leagues-of-votann",
+      "illuminated-priority-brandfast-oathband-leagues-of-votann",
       "inexorable-efficiency-brandfast-oathband-leagues-of-votann",
       "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
-      "vengeance-flare-brandfast-oathband-leagues-of-votann",
-      "illuminated-priority-brandfast-oathband-leagues-of-votann"
+      "vengeance-flare-brandfast-oathband-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -238,6 +256,9 @@
         "namespace": "mfm",
         "id": "f36a7d83-dd08-461a-b4a1-58179deb7d96"
       }
+    ],
+    "detachment_rule_ids": [
+      "mobile-sensor-relays-leagues-of-votann"
     ]
   },
   {
@@ -267,6 +288,9 @@
         "namespace": "mfm",
         "id": "a752a222-2540-4e3b-9d70-423595d238e7"
       }
+    ],
+    "detachment_rule_ids": [
+      "sagitaur-spearhead-leagues-of-votann"
     ]
   },
   {
@@ -280,8 +304,8 @@
     ],
     "stratagem_ids": [
       "no-shot-wasted-farseekers-leagues-of-votann",
-      "scornful-analysis-farseekers-leagues-of-votann",
-      "economy-of-motion-farseekers-leagues-of-votann"
+      "economy-of-motion-farseekers-leagues-of-votann",
+      "scornful-analysis-farseekers-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,6 +320,9 @@
         "namespace": "mfm",
         "id": "513877e1-893c-41ab-b19b-7f84927ea8ed"
       }
+    ],
+    "detachment_rule_ids": [
+      "eye-of-the-hunt-leagues-of-votann"
     ]
   },
   {
@@ -304,12 +331,13 @@
     "faction_id": "leagues-of-votann",
     "detachment_rule_id": "avatars-of-the-ancestors-leagues-of-votann",
     "enhancement_ids": [
-      "ironskein-hearthguard-covenant-leagues-of-votann",
-      "high-kahl-hearthguard-covenant-leagues-of-votann"
+      "high-kahl-hearthguard-covenant-leagues-of-votann",
+      "ironskein-hearthguard-covenant-leagues-of-votann"
     ],
     "stratagem_ids": [
       "fury-of-the-hearth-hearthguard-covenant-leagues-of-votann",
-      "materialisation-matrices-hearthguard-covenant-leagues-of-votann"
+      "materialisation-matrices-hearthguard-covenant-leagues-of-votann",
+      "brekkeknots-hearthguard-covenant-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -327,6 +355,9 @@
         "namespace": "mfm",
         "id": "9e7516ff-e16f-4ad9-8e43-861ca9a6d955"
       }
+    ],
+    "detachment_rule_ids": [
+      "avatars-of-the-ancestors-leagues-of-votann"
     ]
   },
   {
@@ -334,8 +365,8 @@
     "name": "Bane-slayer’s Bulwark",
     "faction_id": "leagues-of-votann",
     "enhancement_ids": [
-      "brokhyr-barrage-bane-slayers-bulwark-leagues-of-votann",
-      "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann"
+      "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann",
+      "brokhyr-barrage-bane-slayers-bulwark-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -355,7 +386,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "secure-resources-leagues-of-votann"
+      "secure-resources-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
+    ],
+    "stratagem_ids": [
+      "opportune-advance-bane-slayers-bulwark-leagues-of-votann",
+      "point-blank-fusillade-bane-slayers-bulwark-leagues-of-votann",
+      "claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann"
     ]
   }
 ]

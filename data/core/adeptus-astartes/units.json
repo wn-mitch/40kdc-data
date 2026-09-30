@@ -1243,7 +1243,10 @@
         "id": "orbital-comms-array-adeptus-astartes",
         "wargear": "orbital-comms-array"
       },
-      "shield-dome-adeptus-astartes",
+      {
+        "id": "shield-dome-adeptus-astartes",
+        "wargear": "shield-dome"
+      },
       {
         "id": "deadly-demise",
         "value": "D3"
@@ -1252,7 +1255,10 @@
         "id": "orbital-comms-array-black-templars",
         "wargear": "orbital-comms-array"
       },
-      "shield-dome-black-templars",
+      {
+        "id": "shield-dome-black-templars",
+        "wargear": "shield-dome"
+      },
       "rapid-disembarkation-adeptus-astartes",
       "rapid-disembarkation-black-templars"
     ],
@@ -2129,7 +2135,10 @@
         "value": 6
       },
       "death-visions-of-sanguinius-blood-angels",
-      "relic-shield-blood-angels"
+      {
+        "id": "relic-shield-blood-angels",
+        "wargear": "relic-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3654,7 +3663,10 @@
       "leader",
       "masterful-tactician-dark-angels",
       "supreme-grand-master-dark-angels",
-      "the-lion-helm-dark-angels",
+      {
+        "id": "the-lion-helm-dark-angels",
+        "wargear": "the-lion-helm"
+      },
       "watcher-in-the-dark-azrael-dark-angels"
     ],
     "game_version": {
@@ -4739,7 +4751,10 @@
     ],
     "ability_ids": [
       "death-to-the-alien-deathwatch",
-      "storm-shield-deathwatch"
+      {
+        "id": "storm-shield-deathwatch",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4848,7 +4863,10 @@
     ],
     "ability_ids": [
       "death-to-the-alien-deathwatch",
-      "storm-shield-deathwatch"
+      {
+        "id": "storm-shield-deathwatch",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5212,7 +5230,10 @@
       "deep-strike",
       "teleport-homer-deathwatch",
       "terminatus-assault-deathwatch",
-      "storm-shield-deathwatch-terminator-squad-deathwatch"
+      {
+        "id": "storm-shield-deathwatch-terminator-squad-deathwatch",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -5424,7 +5445,10 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "helix-gauntlet-deathwatch",
+      {
+        "id": "helix-gauntlet-deathwatch",
+        "wargear": "helix-gauntlet"
+      },
       "infiltrators",
       {
         "id": "scouts",
@@ -6480,7 +6504,10 @@
       "deep-strike",
       "teleport-homer-adeptus-astartes",
       "terminatus-assault-adeptus-astartes",
-      "storm-shield-terminator-assault-squad-adeptus-astartes"
+      {
+        "id": "storm-shield-terminator-assault-squad-adeptus-astartes",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -7366,7 +7393,10 @@
     "ability_ids": [
       "angels-wrath-adeptus-astartes",
       "leader",
-      "relic-shield-adeptus-astartes",
+      {
+        "id": "relic-shield-adeptus-astartes",
+        "wargear": "relic-shield"
+      },
       "deep-strike",
       "strategic-acumen-adeptus-astartes"
     ],
@@ -8478,7 +8508,10 @@
     ],
     "ability_ids": [
       "tactical-precision-adeptus-astartes",
-      "storm-shield-adeptus-astartes",
+      {
+        "id": "storm-shield-adeptus-astartes",
+        "wargear": "storm-shield"
+      },
       "support",
       "demi-company-commander-adeptus-astartes"
     ],
@@ -8580,89 +8613,6 @@
     ]
   },
   {
-    "id": "stormtalon-gunship",
-    "name": "Stormtalon Gunship",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Stormtalon Gunship",
-        "M": 20,
-        "T": 8,
-        "W": 10,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 165
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Aircraft",
-      "Imperium",
-      "Stormtalon Gunship"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "skyhammer-missile-launcher",
-      "twin-assault-cannon",
-      "twin-heavy-bolter",
-      "twin-lascannon",
-      "typhoon-missile-launcher"
-    ],
-    "ability_ids": [
-      "strafing-run-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Ravenwing",
-        "required_faction_keyword": "Dark Angels"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "1bb6-878e-7af1-5bdb"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "76354f4a-b1a5-58d7-a0df-1066c75926e5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c6f75d3-4ad5-4042-9424-7e2a8eee08bf"
-      }
-    ]
-  },
-  {
     "id": "captain-titus",
     "name": "Captain Titus",
     "faction_id": "adeptus-astartes",
@@ -8740,97 +8690,6 @@
       {
         "namespace": "mfm",
         "id": "2d6d9a94-ad2f-425e-853e-4bce65e228c7"
-      }
-    ]
-  },
-  {
-    "id": "razorback",
-    "name": "Razorback",
-    "faction_id": "adeptus-astartes",
-    "role": "dedicated-transport",
-    "profiles": [
-      {
-        "name": "Razorback",
-        "M": 12,
-        "T": 9,
-        "W": 10,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 85,
-        "unit_count_min": 1,
-        "unit_count_max": 3
-      },
-      {
-        "models": 1,
-        "cost": 95,
-        "unit_count_min": 4,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Smoke",
-      "Transport",
-      "Dedicated Transport",
-      "Imperium",
-      "Razorback"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-razorback",
-      "hunter-killer-missile",
-      "storm-bolter",
-      "twin-heavy-bolter",
-      "twin-lascannon"
-    ],
-    "ability_ids": [
-      "fire-support-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      }
-    ],
-    "transport_capacity": {
-      "capacity": 6,
-      "exclusion_keywords": [
-        "Jump Pack"
-      ]
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ed11-25b9-a0eb-89f4"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "270018ea-69b6-553f-976f-7dff195a88bf"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f2484f5b-bf0e-4aec-a1f6-cb1c06e4e54f"
       }
     ]
   },
@@ -9529,7 +9388,10 @@
       "leader",
       "litany-of-hate-adeptus-astartes",
       "deep-strike",
-      "relic-shield-adeptus-astartes",
+      {
+        "id": "relic-shield-adeptus-astartes",
+        "wargear": "relic-shield"
+      },
       "zealous-fortitude-adeptus-astartes"
     ],
     "game_version": {
@@ -10218,91 +10080,6 @@
     ]
   },
   {
-    "id": "stormhawk-interceptor",
-    "name": "Stormhawk Interceptor",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Stormhawk Interceptor",
-        "M": 20,
-        "T": 9,
-        "W": 10,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 155
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Aircraft",
-      "Imperium",
-      "Smoke",
-      "Stormhawk Interceptor"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "icarus-stormcannon",
-      "las-talon",
-      "skyhammer-missile-launcher-stormhawk-interceptor",
-      "twin-assault-cannon",
-      "twin-heavy-bolter",
-      "typhoon-missile-launcher"
-    ],
-    "ability_ids": [
-      "interceptor-adeptus-astartes",
-      {
-        "id": "deadly-demise",
-        "value": "D3"
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Ravenwing",
-        "required_faction_keyword": "Dark Angels"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "3d99-47aa-8cf3-883f"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "3c3fb08c-0ecf-57c3-bcaf-dfc9ea67b744"
-      },
-      {
-        "namespace": "mfm",
-        "id": "71781c4b-b1ea-40dc-9bf6-fc0404689ca0"
-      }
-    ]
-  },
-  {
     "id": "captain",
     "name": "Captain",
     "faction_id": "adeptus-astartes",
@@ -10354,7 +10131,10 @@
     "ability_ids": [
       "leader",
       "finest-hour-adeptus-astartes",
-      "relic-shield-adeptus-astartes",
+      {
+        "id": "relic-shield-adeptus-astartes",
+        "wargear": "relic-shield"
+      },
       "strategic-acumen-adeptus-astartes"
     ],
     "game_version": {
@@ -10456,109 +10236,6 @@
       {
         "namespace": "mfm",
         "id": "5faa2f68-6a43-45d9-97d8-4f0e3d8146e4"
-      }
-    ]
-  },
-  {
-    "id": "stormraven-gunship",
-    "name": "Stormraven Gunship",
-    "faction_id": "adeptus-astartes",
-    "profiles": [
-      {
-        "name": "Stormraven Gunship",
-        "M": 14,
-        "T": 10,
-        "W": 14,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 280,
-        "unit_count_min": 1,
-        "unit_count_max": 1
-      },
-      {
-        "models": 1,
-        "cost": 300,
-        "unit_count_min": 2,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Transport",
-      "Imperium",
-      "Stormraven Gunship"
-    ],
-    "faction_keywords": [
-      "Adeptus Astartes"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull-stormraven-gunship",
-      "hurricane-bolter",
-      "stormstrike-missile-launcher",
-      "twin-assault-cannon",
-      "twin-heavy-bolter",
-      "twin-heavy-plasma-cannon",
-      "twin-lascannon",
-      "twin-multi-melta",
-      "typhoon-missile-launcher"
-    ],
-    "ability_ids": [
-      "armoured-resilience-adeptus-astartes",
-      "hover",
-      {
-        "id": "deadly-demise",
-        "value": "D6"
-      },
-      "damaged-adeptus-astartes",
-      {
-        "id": "damaged",
-        "value": 5
-      }
-    ],
-    "transport_capacity": {
-      "capacity": 12
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Ravenwing",
-        "required_faction_keyword": "Dark Angels"
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "469b-3370-30f3-473a"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "d3f766f6-109b-5002-bc61-d042afef6b75"
-      },
-      {
-        "namespace": "mfm",
-        "id": "47e790b3-2abd-4230-b280-ae87e036dad8"
       }
     ]
   },
@@ -11238,7 +10915,10 @@
     "ability_ids": [
       "omni-scramblers-adeptus-astartes",
       "infiltrators",
-      "helix-gauntlet-adeptus-astartes"
+      {
+        "id": "helix-gauntlet-adeptus-astartes",
+        "wargear": "helix-gauntlet"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -11998,7 +11678,11 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "wisdom-of-the-ancients-venerable-dreadnought-adeptus-astartes"
+      {
+        "id": "blizzard-shield-space-wolves",
+        "wargear": "blizzard-shield"
+      },
+      "fervour-of-the-ancients-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12030,6 +11714,10 @@
       {
         "namespace": "game-datacards",
         "id": "928a43b7-7178-5826-92ff-0a03ee4bf111"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc4efed1-2079-428e-a34b-fb75d835d2da"
       },
       {
         "namespace": "mfm",
@@ -12182,7 +11870,10 @@
     ],
     "ability_ids": [
       "thunderous-charge-space-wolves",
-      "storm-shield-space-wolves"
+      {
+        "id": "storm-shield-space-wolves",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -12544,7 +12235,10 @@
     "ability_ids": [
       "headhunters-space-wolves",
       "let-loose-the-wolves-space-wolves",
-      "storm-shield-space-wolves",
+      {
+        "id": "storm-shield-space-wolves",
+        "wargear": "storm-shield"
+      },
       "hunting-hounds-space-wolves"
     ],
     "game_version": {
@@ -13036,7 +12730,10 @@
     "ability_ids": [
       "rugged-resilience-space-wolves",
       "deep-strike",
-      "storm-shield-wolf-guard-battle-leader-space-wolves"
+      {
+        "id": "storm-shield-wolf-guard-battle-leader-space-wolves",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -13125,7 +12822,10 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "blizzard-shield-space-wolves"
+      {
+        "id": "blizzard-shield-space-wolves",
+        "wargear": "blizzard-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -13213,7 +12913,10 @@
       "thunder-hammer-wulfen-with-storm-shields"
     ],
     "ability_ids": [
-      "death-totem-space-wolves",
+      {
+        "id": "death-totem-space-wolves",
+        "wargear": "death-totem"
+      },
       "hammer-blow-space-wolves"
     ],
     "game_version": {
@@ -13448,7 +13151,10 @@
       "heroic-last-stand-space-wolves",
       "leader",
       "tempered-ferocity-space-wolves",
-      "storm-shield-wolf-guard-battle-leader-space-wolves"
+      {
+        "id": "storm-shield-wolf-guard-battle-leader-space-wolves",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -13670,7 +13376,10 @@
       "wulfen-weapons"
     ],
     "ability_ids": [
-      "death-totem-space-wolves",
+      {
+        "id": "death-totem-space-wolves",
+        "wargear": "death-totem"
+      },
       "savage-frenzy-space-wolves"
     ],
     "game_version": {
@@ -15237,7 +14946,18 @@
       }
     ],
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e3c0555-032d-4fb4-9935-ed71bb4df379"
+      }
+    ],
+    "ability_ids": [
+      "into-the-fray-adeptus-astartes",
+      "leader",
+      "strategic-acumen-adeptus-astartes"
+    ]
   },
   {
     "id": "kaius-konorius",
@@ -15291,7 +15011,18 @@
       }
     ],
     "points_provisional": false,
-    "attachment_role": "support"
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "637b3f46-60e0-4a59-9004-c5a0ea0d4148"
+      }
+    ],
+    "ability_ids": [
+      "calgars-champion-adeptus-astartes",
+      "support",
+      "veteran-bodyguard-adeptus-astartes"
+    ]
   },
   {
     "id": "eradicator-squad-with-melta-rifles",

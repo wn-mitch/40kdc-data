@@ -1954,63 +1954,6 @@
     "faction_id": "adeptus-astartes"
   },
   {
-    "ability_id": "strafing-run-adeptus-astartes",
-    "name": "Strafing Run",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "88b4c346494e86f75960d5ed916150df17265de4ab9e7aee76762e6e205b0a28",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "has-keyword",
-                "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "FLY"
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormtalon-gunship"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
-  },
-  {
     "ability_id": "press-the-attack-adeptus-astartes",
     "name": "Press the Attack",
     "authored_by": "40kdc-community",
@@ -2070,43 +2013,6 @@
     },
     "unit_ids": [
       "captain-titus"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
-  },
-  {
-    "ability_id": "fire-support-adeptus-astartes",
-    "name": "Fire Support",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "a14f7b7ffd3387e00fc9b9e71a35abe7e4f5d8a1cb778560e6f97acc60eaa68a",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "wound",
-          "subset": "all-failures"
-        }
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "razorback"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -2711,58 +2617,6 @@
     "faction_id": "adeptus-astartes"
   },
   {
-    "ability_id": "interceptor-adeptus-astartes",
-    "name": "Interceptor",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "36049ce61a9d40c2936dc47122d01f6f8ad4fe3c43d5d0b45efec40d7a87c6b1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "FLY"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormhawk-interceptor"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
-  },
-  {
     "ability_id": "catechism-of-fire-adeptus-astartes",
     "name": "Catechism of Fire",
     "authored_by": "40kdc-community",
@@ -2809,33 +2663,6 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
-  },
-  {
-    "ability_id": "armoured-resilience-adeptus-astartes",
-    "name": "Armoured Resilience",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "8345cb8d1ba9fb3d1a909a511f4f84c0fd5b2026060b5f8f36a7ac8eb243da18",
-    "version": "2025-q3",
-    "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
-      "modifier": {
-        "reduction": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "stormraven-gunship"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
     "faction_id": "adeptus-astartes"
   },
   {
@@ -2957,31 +2784,6 @@
     "unit_ids": [
       "thunderhawk-gunship"
     ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
-  },
-  {
-    "ability_id": "self-repair-adeptus-astartes",
-    "name": "Self Repair",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ee555d45e9499738d4ae837ce9afff7635f875ae64ac94a3d376def7f91e1915",
-    "version": "2025-q3",
-    "effect": {
-      "type": "heal",
-      "target": "this-model",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "adeptus-astartes"
@@ -4545,7 +4347,6 @@
       "redemptor-dreadnought",
       "repulsor",
       "repulsor-executioner",
-      "stormraven-gunship",
       "thunderhawk-gunship"
     ],
     "faction_id": "adeptus-astartes",
@@ -4786,26 +4587,6 @@
     "unit_ids": [
       "assault-force-captain"
     ],
-    "faction_id": "adeptus-astartes",
-    "detachment_id": null,
-    "ability_type": "unit",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "rites-of-battle-adeptus-astartes",
-    "name": "Rites of Battle",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": null,
     "ability_type": "unit",
@@ -6593,6 +6374,7 @@
       "captain-in-gravis-armour",
       "captain-in-phobos-armour",
       "captain-in-terminator-armour",
+      "captain-on-bike",
       "captain-with-jump-pack"
     ],
     "faction_id": "adeptus-astartes",
@@ -7012,28 +6794,6 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "gravis-linebreaker-force",
     "ability_type": "detachment",
-    "effect": {
-      "type": "no-effect"
-    },
-    "scope": {
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "wisdom-of-the-ancients-venerable-dreadnought-adeptus-astartes",
-    "name": "Wisdom of the Ancients",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "stub": true,
-    "unit_ids": [
-      "venerable-dreadnought"
-    ],
-    "faction_id": "adeptus-astartes",
-    "detachment_id": null,
-    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },
@@ -7618,6 +7378,272 @@
     "faction_id": "adeptus-astartes",
     "detachment_id": "ironclad-champions",
     "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "calgars-champion-adeptus-astartes",
+    "name": "Calgar’s Champion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kaius-konorius"
+    ],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "into-the-fray-adeptus-astartes",
+    "name": "Into the Fray",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "captain-on-bike"
+    ],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veteran-bodyguard-adeptus-astartes",
+    "name": "Veteran Bodyguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kaius-konorius"
+    ],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "a-worthy-death-gladius-task-force-adeptus-astartes",
+    "name": "A Worthy Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
+    "name": "Headhunter Doctrine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hurtling-targets-stormlance-task-force-adeptus-astartes",
+    "name": "Hurtling Targets",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "stormlance-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+    "name": "Layered Ceramite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "might-of-angels-gladius-task-force-adeptus-astartes",
+    "name": "Might of angels",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+    "name": "Might of the machine Spirit",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "ironstorm-spearhead",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "responsive-tactics-gladius-task-force-adeptus-astartes",
+    "name": "Responsive Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "storm-of-devastation-gladius-task-force-adeptus-astartes",
+    "name": "Storm of devastation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sudden-onslaught-stormlance-task-force-adeptus-astartes",
+    "name": "Sudden Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "stormlance-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wisdom-of-the-ancients-venerable-dreadnought-adeptus-astartes",
+    "name": "Wisdom of the Ancients",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": null,
+    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },

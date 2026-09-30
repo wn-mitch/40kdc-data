@@ -390,18 +390,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rites-of-battle-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "finest-hour-blood-angels",
     "source_type": "ability",
     "phases": [
@@ -1343,18 +1331,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strafing-run-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "press-the-attack-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -1371,20 +1347,6 @@
     "source_id": "honour-of-ultramar-adeptus-astartes",
     "source_type": "ability",
     "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fire-support-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "movement",
       "shooting",
       "fight"
     ],
@@ -1522,18 +1484,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "interceptor-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "catechism-of-fire-adeptus-astartes",
     "source_type": "ability",
     "phases": [
@@ -1576,18 +1526,6 @@
     "source_type": "ability",
     "phases": [
       "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "self-repair-adeptus-astartes",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",

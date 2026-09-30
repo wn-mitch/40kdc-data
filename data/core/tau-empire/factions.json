@@ -23,6 +23,7 @@
       }
     ],
     "faction_rule_ids": [
+      "drones-tau-empire",
       "for-the-greater-good-tau-empire"
     ]
   }

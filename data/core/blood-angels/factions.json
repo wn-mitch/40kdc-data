@@ -25,7 +25,8 @@
       }
     ],
     "faction_rule_ids": [
-      "combat-doctrines-assault-force-adeptus-astartes"
+      "combat-doctrines-blood-angels",
+      "transhuman-strategist-blood-angels"
     ],
     "army_construction_rules": [
       {

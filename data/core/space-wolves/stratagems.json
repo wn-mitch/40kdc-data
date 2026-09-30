@@ -83,6 +83,30 @@
     ]
   },
   {
+    "id": "birth-of-a-saga-champions-of-fenris-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fb9f50da-600b-49ab-9aec-f2bfb95da105"
+      }
+    ],
+    "name": "Birth of a Saga",
+    "category": "detachment",
+    "detachment_id": "champions-of-fenris",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "birth-of-a-saga-champions-of-fenris-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "born-hunters-askars-wolfpack-space-wolves",
     "name": "Born Hunters",
     "category": "detachment",
@@ -131,6 +155,54 @@
     ]
   },
   {
+    "id": "champions-guidance-champions-of-fenris-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4a462433-ebcb-46eb-934b-95f25876a812"
+      }
+    ],
+    "name": "Champion's Guidance",
+    "category": "detachment",
+    "detachment_id": "champions-of-fenris",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "champions-guidance-champions-of-fenris-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6697d0b4-a167-4302-943a-a1080e916346"
+      }
+    ],
+    "name": "Co-ordinated Strike",
+    "category": "detachment",
+    "detachment_id": "saga-of-the-beastslayer",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "eye-of-the-pack-saga-of-the-great-wolf-space-wolves",
     "name": "Eye of the Pack",
     "category": "detachment",
@@ -158,6 +230,30 @@
         "id": "2e09cb6f-ce4e-4f29-9a82-0d838679cb84"
       }
     ]
+  },
+  {
+    "id": "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f0bfde93-d8a5-4170-936a-c8208bc2ef43"
+      }
+    ],
+    "name": "Fangs of the Pack",
+    "category": "detachment",
+    "detachment_id": "saga-of-the-great-wolf",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "fenrisian-ferocity-saga-of-the-great-wolf-space-wolves",
@@ -219,6 +315,31 @@
     ]
   },
   {
+    "id": "heroic-resolve-champions-of-fenris-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fc6b154a-77e8-4c58-96ef-085df8efc6b3"
+      }
+    ],
+    "name": "Heroic Resolve",
+    "category": "detachment",
+    "detachment_id": "champions-of-fenris",
+    "cp_cost": 2,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "heroic-resolve-champions-of-fenris-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "impetuosity-saga-of-the-beastslayer-space-wolves",
     "name": "IMPETUOSITY",
     "category": "detachment",
@@ -248,6 +369,30 @@
     ]
   },
   {
+    "id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c5dc5810-b281-4544-b445-40bb13249e28"
+      }
+    ],
+    "name": "Unbridled Feroicity",
+    "category": "detachment",
+    "detachment_id": "saga-of-the-beastslayer",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "name": "WIND-SWIFT EVASION",
     "category": "detachment",
@@ -275,5 +420,33 @@
         "id": "25378f3a-afc0-4fa6-a087-2095bbebcfe9"
       }
     ]
+  },
+  {
+    "id": "wolf-totems-saga-of-the-great-wolf-space-wolves",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4eb79734-dc04-45a6-8ed5-b8632a7a8a85"
+      }
+    ],
+    "name": "Wolf Totems",
+    "category": "detachment",
+    "detachment_id": "saga-of-the-great-wolf",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "wolf-totems-saga-of-the-great-wolf-space-wolves",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

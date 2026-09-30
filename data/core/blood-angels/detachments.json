@@ -3,7 +3,7 @@
     "id": "angelic-inheritors",
     "name": "Angelic Inheritors",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "legacy-of-the-angel-blood-angels",
     "enhancement_ids": [
       "prescient-flash-angelic-inheritors-blood-angels",
       "blazing-icon-angelic-inheritors-blood-angels",
@@ -11,11 +11,12 @@
       "unto-death-angelic-inheritors-blood-angels"
     ],
     "stratagem_ids": [
-      "strike-now-for-glory-angelic-inheritors-blood-angels",
-      "focused-fury-angelic-inheritors-blood-angels",
-      "in-the-shadow-of-great-wings-angelic-inheritors-blood-angels",
       "unto-the-burning-skies-angelic-inheritors-blood-angels",
-      "instant-of-grace-angelic-inheritors-blood-angels"
+      "in-the-shadow-of-great-wings-angelic-inheritors-blood-angels",
+      "strike-now-for-glory-angelic-inheritors-blood-angels",
+      "instant-of-grace-angelic-inheritors-blood-angels",
+      "focused-fury-angelic-inheritors-blood-angels",
+      "measured-strategist-angelic-inheritors-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -43,10 +44,10 @@
     "id": "encarmine-speartip",
     "name": "Encarmine Speartip",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "wrath-of-angels-blood-angels",
     "enhancement_ids": [
-      "angelic-executioner-encarmine-speartip-blood-angels",
-      "shadow-of-abomination-encarmine-speartip-blood-angels"
+      "shadow-of-abomination-encarmine-speartip-blood-angels",
+      "angelic-executioner-encarmine-speartip-blood-angels"
     ],
     "stratagem_ids": [
       "inexorable-valour-encarmine-speartip-blood-angels",
@@ -78,14 +79,15 @@
     "id": "wrath-of-the-doomed",
     "name": "Wrath of the Doomed",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "sanguinius-fury-blood-angels",
     "enhancement_ids": [
       "instinctive-interception-wrath-of-the-doomed-blood-angels",
       "on-the-archtraitors-bridge-wrath-of-the-doomed-blood-angels"
     ],
     "stratagem_ids": [
       "no-barrier-to-retribution-wrath-of-the-doomed-blood-angels",
-      "death-begets-vengeance-wrath-of-the-doomed-blood-angels"
+      "death-begets-vengeance-wrath-of-the-doomed-blood-angels",
+      "rage-fuelled-response-wrath-of-the-doomed-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -113,13 +115,20 @@
     "id": "gladius-task-force",
     "name": "Gladius Task Force",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "codex-discipline-adeptus-astartes",
     "enhancement_ids": [
-      "artificer-armour-gladius-task-force-adeptus-astartes",
-      "adept-of-the-codex-gladius-task-force-adeptus-astartes"
+      "standard-of-the-emperor-ascendant-gladius-task-force-adeptus-astartes",
+      "laurels-of-triumph-gladius-task-force-adeptus-astartes",
+      "adept-of-the-codex-gladius-task-force-adeptus-astartes",
+      "artificer-armour-gladius-task-force-adeptus-astartes"
     ],
     "stratagem_ids": [
-      "adaptive-strategy-gladius-task-force-adeptus-astartes"
+      "armour-of-contempt-gladius-task-force-adeptus-astartes",
+      "adaptive-strategy-gladius-task-force-adeptus-astartes",
+      "a-worthy-death-gladius-task-force-adeptus-astartes",
+      "responsive-tactics-gladius-task-force-adeptus-astartes",
+      "storm-of-devastation-gladius-task-force-adeptus-astartes",
+      "might-of-angels-gladius-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -134,16 +143,24 @@
         "namespace": "mfm",
         "id": "114dee6f-802a-49f4-a0db-0296eb5434b3"
       }
+    ],
+    "detachment_rule_ids": [
+      "codex-discipline-adeptus-astartes"
     ]
   },
   {
     "id": "stormlance-task-force",
     "name": "Stormlance Task Force",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [],
+    "detachment_rule_id": "lightning-fast-strike-adeptus-astartes",
+    "enhancement_ids": [
+      "supercharged-engines-upgrade-stormlance-task-force-adeptus-astartes",
+      "auspex-triangulation-shrines-upgrade-stormlance-task-force-adeptus-astartes"
+    ],
     "stratagem_ids": [
-      "wind-swift-evasion-stormlance-task-force-adeptus-astartes"
+      "hurtling-targets-stormlance-task-force-adeptus-astartes",
+      "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
+      "sudden-onslaught-stormlance-task-force-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -158,15 +175,25 @@
         "namespace": "mfm",
         "id": "0a2a5520-e6cc-4f3f-ac87-b00addae1023"
       }
+    ],
+    "detachment_rule_ids": [
+      "lightning-fast-strike-adeptus-astartes"
     ]
   },
   {
     "id": "ironstorm-spearhead",
     "name": "Ironstorm Spearhead",
     "faction_id": "blood-angels",
-    "detachment_rule_id": null,
-    "enhancement_ids": [],
-    "stratagem_ids": [],
+    "detachment_rule_id": "ironstorm-auto-targeters-adeptus-astartes",
+    "enhancement_ids": [
+      "redoubtable-machine-spirit-upgrade-ironstorm-spearhead-adeptus-astartes",
+      "gunnery-honours-upgrade-ironstorm-spearhead-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+      "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+      "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -180,6 +207,9 @@
         "namespace": "mfm",
         "id": "b9473893-6dae-43fd-a3f2-e27a93a56c95"
       }
+    ],
+    "detachment_rule_ids": [
+      "ironstorm-auto-targeters-adeptus-astartes"
     ]
   },
   {
@@ -208,11 +238,18 @@
       }
     ],
     "detachment_rule_ids": [
-      "rapid-manoeuvres-blood-angels"
+      "rapid-manoeuvres-blood-angels",
+      "oath-of-moment-blood-angels",
+      "the-sons-of-sanguinius-blood-angels"
     ],
     "restrictions": {
       "required_keywords": []
-    }
+    },
+    "stratagem_ids": [
+      "angelic-terror-sanguinary-spearhead-blood-angels",
+      "dauntless-bravery-sanguinary-spearhead-blood-angels",
+      "show-no-mercy-sanguinary-spearhead-blood-angels"
+    ]
   },
   {
     "id": "assault-brethren",
@@ -224,7 +261,10 @@
     ],
     "name": "Assault Brethren",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "imperiums-sword-assault-brethren-adeptus-astartes",
+      "furious-assault-upgrade-assault-brethren-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -232,6 +272,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "assault-mastery-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "gene-wrought-might-assault-brethren-adeptus-astartes",
+      "armour-of-contempt-assault-brethren-adeptus-astartes",
+      "duty-in-death-assault-brethren-adeptus-astartes"
     ]
   },
   {
@@ -255,7 +303,16 @@
     ],
     "restrictions": {
       "required_keywords": []
-    }
+    },
+    "detachment_rule_ids": [
+      "mission-tactics-deathwatch-support-deathwatch"
+    ],
+    "stratagem_ids": [
+      "blackstar-extraction-deathwatch-support-deathwatch",
+      "kraken-rounds-deathwatch-support-deathwatch",
+      "dragonfire-rounds-deathwatch-support-deathwatch",
+      "hellfire-rounds-deathwatch-support-deathwatch"
+    ]
   },
   {
     "id": "devastator-brethren",
@@ -267,7 +324,10 @@
     ],
     "name": "Devastator Brethren",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "master-forged-firearms-devastator-brethren-adeptus-astartes",
+      "honour-of-vigilance-devastator-brethren-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -275,6 +335,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "devastator-mastery-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt-devastator-brethren-adeptus-astartes",
+      "storm-of-fire-devastator-brethren-adeptus-astartes",
+      "hail-of-vengeance-devastator-brethren-adeptus-astartes"
     ]
   },
   {
@@ -287,7 +355,10 @@
     ],
     "name": "Gauntlet Task Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "linebreaker-onslaught-gauntlet-task-force-adeptus-astartes",
+      "damocles-class-uplink-gauntlet-task-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -295,6 +366,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "reconnaissance"
+    ],
+    "detachment_rule_ids": [
+      "combined-deployment-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "storm-and-secure-gauntlet-task-force-adeptus-astartes",
+      "aggressive-disembarkation-gauntlet-task-force-adeptus-astartes",
+      "duty-is-never-done-gauntlet-task-force-adeptus-astartes"
     ]
   },
   {
@@ -307,7 +386,10 @@
     ],
     "name": "Gravis Linebreaker Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes",
+      "relentless-advance-gravis-linebreaker-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -315,6 +397,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "walking-fortress-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "purgation-push-gravis-linebreaker-force-adeptus-astartes",
+      "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
+      "annihilating-force-gravis-linebreaker-force-adeptus-astartes"
     ]
   },
   {
@@ -327,7 +417,10 @@
     ],
     "name": "Gravis Siege Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "immovable-conquerors-upgrade-gravis-siege-force-adeptus-astartes",
+      "narthecis-gauntlet-gravis-siege-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -335,6 +428,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "indomitable-defence-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "annihilating-force-gravis-siege-force-adeptus-astartes",
+      "suppression-volleys-gravis-siege-force-adeptus-astartes",
+      "stand-unyielding-gravis-siege-force-adeptus-astartes"
     ]
   },
   {
@@ -347,7 +448,10 @@
     ],
     "name": "Ironclad Champions",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "artificer-sarcophagus-upgrade-ironclad-champions-adeptus-astartes",
+      "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -355,6 +459,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "enduring-vengeance-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "adamantine-terror-ironclad-champions-adeptus-astartes",
+      "mercy-is-weakness-ironclad-champions-adeptus-astartes",
+      "upstoppable-advance-ironclad-champions-adeptus-astartes"
     ]
   },
   {
@@ -367,7 +479,10 @@
     ],
     "name": "Phobos Shadow Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "venator-omni-auspex-phobos-shadow-force-adeptus-astartes",
+      "execute-and-redeploy-phobos-shadow-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -375,6 +490,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "disruption"
+    ],
+    "detachment_rule_ids": [
+      "shadow-masters-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "mortis-snares-phobos-shadow-force-adeptus-astartes",
+      "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
+      "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes"
     ]
   },
   {
@@ -387,7 +510,10 @@
     ],
     "name": "Phobos Shock Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "seal-of-shrouding-phobos-shock-force-adeptus-astartes",
+      "venator-omni-auspex-phobos-shock-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -395,6 +521,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "disruption"
+    ],
+    "detachment_rule_ids": [
+      "vanguard-ambushers-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "umbral-evasion-phobos-shock-force-adeptus-astartes",
+      "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
+      "transhuman-reactions-phobos-shock-force-adeptus-astartes"
     ]
   },
   {
@@ -407,7 +541,10 @@
     ],
     "name": "Tactical Brethren",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "laurels-of-vigilance-tactical-brethren-adeptus-astartes",
+      "tactical-insight-tactical-brethren-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -415,6 +552,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "tactical-mastery-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt-tactical-brethren-adeptus-astartes",
+      "masterful-tactics-tactical-brethren-adeptus-astartes",
+      "domination-fire-tactical-brethren-adeptus-astartes"
     ]
   },
   {
@@ -427,7 +572,10 @@
     ],
     "name": "Tacticus Attack Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "martial-paragon-tacticus-attack-force-adeptus-astartes",
+      "spearpoint-war-leader-tacticus-attack-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -435,6 +583,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "wrath-of-the-chapter-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "transhuman-swiftness-tacticus-attack-force-adeptus-astartes",
+      "tactical-focus-tacticus-attack-force-adeptus-astartes",
+      "relentless-assault-tacticus-attack-force-adeptus-astartes"
     ]
   },
   {
@@ -447,7 +603,10 @@
     ],
     "name": "Tacticus Firestorm Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "cyber-familiar-tacticus-firestorm-force-adeptus-astartes",
+      "tempered-in-battle-aura-tacticus-firestorm-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -455,6 +614,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "codex-fire-patterns-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "point-blank-brutality-tacticus-firestorm-force-adeptus-astartes",
+      "for-the-emperor-tacticus-firestorm-force-adeptus-astartes",
+      "relentless-assault-tacticus-firestorm-force-adeptus-astartes"
     ]
   },
   {
@@ -467,7 +634,10 @@
     ],
     "name": "Terminator Storm Force",
     "faction_id": "blood-angels",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "champion-of-the-first-company-terminator-storm-force-adeptus-astartes",
+      "corporeum-reliquary-terminator-storm-force-adeptus-astartes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -475,6 +645,14 @@
     "detachment_points": 1,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "death-blow-adeptus-astartes"
+    ],
+    "stratagem_ids": [
+      "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes",
+      "gunship-extraction-terminator-storm-force-adeptus-astartes",
+      "merciless-veterans-terminator-storm-force-adeptus-astartes"
     ]
   }
 ]

@@ -281,6 +281,30 @@
     ]
   },
   {
+    "id": "measured-strategist-angelic-inheritors-blood-angels",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f2e1065f-d765-46dc-be77-25d494adc86f"
+      }
+    ],
+    "name": "Measured Strategist",
+    "category": "detachment",
+    "detachment_id": "angelic-inheritors",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "measured-strategist-angelic-inheritors-blood-angels",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "no-barrier-to-retribution-wrath-of-the-doomed-blood-angels",
     "name": "No Barrier to Retribution",
     "category": "detachment",

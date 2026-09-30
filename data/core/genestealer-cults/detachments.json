@@ -3,7 +3,7 @@
     "id": "brood-brothers-auxilia",
     "name": "Brood Brothers Auxilia",
     "faction_id": "genestealer-cults",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "integrated-tactics-genestealer-cults",
     "enhancement_ids": [
       "martial-espionage-brood-brothers-auxilia-genestealer-cults",
       "adaptive-reprisal-brood-brothers-auxilia-genestealer-cults",
@@ -11,12 +11,12 @@
       "fire-point-commander-brood-brothers-auxilia-genestealer-cults"
     ],
     "stratagem_ids": [
-      "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",
       "in-the-shadow-of-iron-brood-brothers-auxilia-genestealer-cults",
       "regimental-reinforcements-brood-brothers-auxilia-genestealer-cults",
       "suppress-and-overwhelm-brood-brothers-auxilia-genestealer-cults",
-      "a-dark-network-brood-brothers-auxilia-genestealer-cults",
-      "acceptable-losses-brood-brothers-auxilia-genestealer-cults"
+      "acceptable-losses-brood-brothers-auxilia-genestealer-cults",
+      "symbiotic-destruction-brood-brothers-auxilia-genestealer-cults",
+      "a-dark-network-brood-brothers-auxilia-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -49,11 +49,11 @@
       "alien-majesty-biosanctic-broodsurge-genestealer-cults"
     ],
     "stratagem_ids": [
+      "evasive-vanguard-biosanctic-broodsurge-genestealer-cults",
+      "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
       "gene-twisted-muscle-biosanctic-broodsurge-genestealer-cults",
       "hyper-metabolic-vigour-biosanctic-broodsurge-genestealer-cults",
       "stimulated-bio-surge-biosanctic-broodsurge-genestealer-cults",
-      "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
-      "evasive-vanguard-biosanctic-broodsurge-genestealer-cults",
       "bio-horror-revelation-biosanctic-broodsurge-genestealer-cults"
     ],
     "game_version": {
@@ -72,6 +72,9 @@
         "namespace": "mfm",
         "id": "37b534f4-135f-4d14-bfcb-3fa7ccf9469d"
       }
+    ],
+    "detachment_rule_ids": [
+      "hypermorphic-fury-genestealer-cults"
     ]
   },
   {
@@ -86,11 +89,11 @@
       "assault-commando-outlander-claw-genestealer-cults"
     ],
     "stratagem_ids": [
+      "along-shadowed-trails-outlander-claw-genestealer-cults",
       "devoted-crew-outlander-claw-genestealer-cults",
       "close-range-shoot-out-outlander-claw-genestealer-cults",
-      "deft-manoeuvring-outlander-claw-genestealer-cults",
-      "along-shadowed-trails-outlander-claw-genestealer-cults",
       "rapid-feint-outlander-claw-genestealer-cults",
+      "deft-manoeuvring-outlander-claw-genestealer-cults",
       "encircling-the-prey-outlander-claw-genestealer-cults"
     ],
     "game_version": {
@@ -106,6 +109,9 @@
         "namespace": "mfm",
         "id": "4448633e-99cf-4ada-8651-76dbf12b61c6"
       }
+    ],
+    "detachment_rule_ids": [
+      "rapid-takeover-genestealer-cults"
     ]
   },
   {
@@ -121,9 +127,9 @@
     ],
     "stratagem_ids": [
       "hyperferocity-final-day-genestealer-cults",
+      "psi-surge-final-day-genestealer-cults",
       "avenge-the-star-children-final-day-genestealer-cults",
       "divine-imperative-final-day-genestealer-cults",
-      "psi-surge-final-day-genestealer-cults",
       "darting-attacks-final-day-genestealer-cults",
       "resistance-tunnels-final-day-genestealer-cults"
     ],
@@ -140,6 +146,9 @@
         "namespace": "mfm",
         "id": "68478a72-0983-4fef-8cdb-e4536134d56e"
       }
+    ],
+    "detachment_rule_ids": [
+      "psionic-parasitism-genestealer-cults"
     ]
   },
   {
@@ -154,12 +163,12 @@
       "incendiary-inspiration-xenocreed-congregation-genestealer-cults"
     ],
     "stratagem_ids": [
-      "frenzied-devotion-xenocreed-congregation-genestealer-cults",
       "vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults",
+      "frenzied-devotion-xenocreed-congregation-genestealer-cults",
       "tireless-fervour-xenocreed-congregation-genestealer-cults",
       "transcendent-celerity-xenocreed-congregation-genestealer-cults",
-      "the-path-of-anguish-xenocreed-congregation-genestealer-cults",
-      "the-downtrodden-rise-xenocreed-congregation-genestealer-cults"
+      "the-downtrodden-rise-xenocreed-congregation-genestealer-cults",
+      "the-path-of-anguish-xenocreed-congregation-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -174,6 +183,9 @@
         "namespace": "mfm",
         "id": "71b5d36d-cfd6-48ee-b883-fbc73eac91cc"
       }
+    ],
+    "detachment_rule_ids": [
+      "unquestioning-fanaticism-genestealer-cults"
     ]
   },
   {
@@ -211,6 +223,9 @@
         "namespace": "mfm",
         "id": "f8ab87bf-ffeb-4dae-8708-5e04ed4d45c6"
       }
+    ],
+    "detachment_rule_ids": [
+      "a-perfect-ambush-genestealer-cults"
     ]
   },
   {
@@ -223,9 +238,9 @@
       "contraband-munitions-heroes-of-the-uprising-genestealer-cults"
     ],
     "stratagem_ids": [
-      "living-up-to-legend-heroes-of-the-uprising-genestealer-cults",
       "surging-broodworship-heroes-of-the-uprising-genestealer-cults",
-      "loyal-to-the-end-heroes-of-the-uprising-genestealer-cults"
+      "loyal-to-the-end-heroes-of-the-uprising-genestealer-cults",
+      "living-up-to-legend-heroes-of-the-uprising-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -240,6 +255,9 @@
         "namespace": "mfm",
         "id": "e0e6a94f-b219-43ec-95d0-f694f701df09"
       }
+    ],
+    "detachment_rule_ids": [
+      "killer-reputation-genestealer-cults"
     ]
   },
   {
@@ -252,9 +270,9 @@
       "talons-of-the-sire-purestrain-broodswarm-genestealer-cults"
     ],
     "stratagem_ids": [
-      "lurk-and-strike-purestrain-broodswarm-genestealer-cults",
+      "inhuman-reactions-purestrain-broodswarm-genestealer-cults",
       "crawling-horror-purestrain-broodswarm-genestealer-cults",
-      "inhuman-reactions-purestrain-broodswarm-genestealer-cults"
+      "lurk-and-strike-purestrain-broodswarm-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -272,6 +290,9 @@
         "namespace": "mfm",
         "id": "23ea0315-37ef-410f-a0a2-a6cf622e609f"
       }
+    ],
+    "detachment_rule_ids": [
+      "enemy-within-genestealer-cults"
     ]
   },
   {
@@ -284,9 +305,9 @@
       "devious-disguises-upgrade-xenocult-masses-genestealer-cults"
     ],
     "stratagem_ids": [
+      "slunk-from-the-underbelly-xenocult-masses-genestealer-cults",
       "eyes-of-the-cult-xenocult-masses-genestealer-cults",
-      "fanatical-hail-xenocult-masses-genestealer-cults",
-      "slunk-from-the-underbelly-xenocult-masses-genestealer-cults"
+      "fanatical-hail-xenocult-masses-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -304,6 +325,9 @@
         "namespace": "mfm",
         "id": "ef54b4ca-adca-4e8f-9427-ea1cd0e42ed5"
       }
+    ],
+    "detachment_rule_ids": [
+      "hordes-of-the-faithful-genestealer-cults"
     ]
   },
   {
@@ -311,8 +335,8 @@
     "name": "Claw of Ascension",
     "faction_id": "genestealer-cults",
     "enhancement_ids": [
-      "heavy-munitions-claw-of-ascension-genestealer-cults",
-      "practiced-eye-claw-of-ascension-genestealer-cults"
+      "practiced-eye-claw-of-ascension-genestealer-cults",
+      "heavy-munitions-claw-of-ascension-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -332,7 +356,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "xenos-resilience-genestealer-cults"
+      "xenos-resilience-genestealer-cults",
+      "cult-ambush-claw-of-ascension-genestealer-cults"
+    ],
+    "stratagem_ids": [
+      "cult-zealotry-claw-of-ascension-genestealer-cults",
+      "dedicated-to-the-end-claw-of-ascension-genestealer-cults",
+      "guerrilla-warriors-claw-of-ascension-genestealer-cults"
     ]
   }
 ]

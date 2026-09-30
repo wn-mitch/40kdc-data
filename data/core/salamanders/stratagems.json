@@ -1,77 +1,18 @@
 [
   {
-    "id": "crucible-of-battle-forgefathers-seekers-salamanders",
-    "name": "CRUCIBLE OF BATTLE",
+    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "name": "ADAPTIVE STRATEGY",
     "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "forgefathers-seekers",
+    "type": "strategic-ploy",
+    "detachment_id": "gladius-task-force",
     "cp_cost": 1,
     "phases": [
-      "fight",
-      "shooting"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "crucible-of-battle-forgefathers-seekers-salamanders",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "e048c3b3-883a-5370-99fd-9c5c0a29e4e4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a85d6aa1-ba58-4615-b2e7-47ccf26e0c2c"
-      }
-    ]
-  },
-  {
-    "id": "burning-vengeance-forgefathers-seekers-salamanders",
-    "name": "BURNING VENGEANCE",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "forgefathers-seekers",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "burning-vengeance-forgefathers-seekers-salamanders",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "c8f01181-e7a2-5512-b5db-aa346a1dc735"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e60ee008-f084-451e-a539-83cd0b28c5f5"
-      }
-    ]
-  },
-  {
-    "id": "immolation-protocols-forgefathers-seekers-salamanders",
-    "name": "IMMOLATION PROTOCOLS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "forgefathers-seekers",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
+      "command"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "immolation-protocols-forgefathers-seekers-salamanders",
+    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -79,11 +20,11 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "4a303d45-481c-54bb-9964-d6f440127239"
+        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
       },
       {
         "namespace": "mfm",
-        "id": "6e5c3837-a6cf-438f-b1d3-fd6c0870a19d"
+        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
       }
     ]
   },
@@ -117,19 +58,19 @@
     ]
   },
   {
-    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
-    "name": "ADAPTIVE STRATEGY",
+    "id": "burning-vengeance-forgefathers-seekers-salamanders",
+    "name": "BURNING VENGEANCE",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "gladius-task-force",
+    "type": "battle-tactic",
+    "detachment_id": "forgefathers-seekers",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "shooting"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "ability_id": "burning-vengeance-forgefathers-seekers-salamanders",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -137,11 +78,94 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
+        "id": "c8f01181-e7a2-5512-b5db-aa346a1dc735"
       },
       {
         "namespace": "mfm",
-        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
+        "id": "e60ee008-f084-451e-a539-83cd0b28c5f5"
+      }
+    ]
+  },
+  {
+    "id": "crucible-of-battle-forgefathers-seekers-salamanders",
+    "name": "CRUCIBLE OF BATTLE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "forgefathers-seekers",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "crucible-of-battle-forgefathers-seekers-salamanders",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e048c3b3-883a-5370-99fd-9c5c0a29e4e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a85d6aa1-ba58-4615-b2e7-47ccf26e0c2c"
+      }
+    ]
+  },
+  {
+    "id": "forged-in-fire-forgefathers-seekers-salamanders",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6d480005-4673-459f-9cb4-8ddae4cbe0ea"
+      }
+    ],
+    "name": "Forged in Fire",
+    "category": "detachment",
+    "detachment_id": "forgefathers-seekers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "forged-in-fire-forgefathers-seekers-salamanders",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "immolation-protocols-forgefathers-seekers-salamanders",
+    "name": "IMMOLATION PROTOCOLS",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "forgefathers-seekers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "immolation-protocols-forgefathers-seekers-salamanders",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4a303d45-481c-54bb-9964-d6f440127239"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e5c3837-a6cf-438f-b1d3-fd6c0870a19d"
       }
     ]
   },
@@ -173,5 +197,29 @@
         "id": "25378f3a-afc0-4fa6-a087-2095bbebcfe9"
       }
     ]
+  },
+  {
+    "id": "wrath-and-ruin-forgefathers-seekers-salamanders",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "63f70562-68dc-4bb6-b17e-55386424f8b5"
+      }
+    ],
+    "name": "Wrath and Ruin",
+    "category": "detachment",
+    "detachment_id": "forgefathers-seekers",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

@@ -21,7 +21,8 @@
       }
     ],
     "faction_rule_ids": [
-      "the-shadow-of-chaos-chaos-daemons"
+      "the-shadow-of-chaos-chaos-daemons",
+      "daemonic-pact-chaos-daemons"
     ]
   }
 ]

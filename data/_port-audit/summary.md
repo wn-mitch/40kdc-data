@@ -158,11 +158,6 @@ _47 units assigned._
 - Detachments needing DP + Force Disposition assignment (13): `hurons-marauders`, `cabal-of-chaos`, `renegade-raiders`, `fellhammer-siege-host`, `deceptors`, `soulforged-warpack`, `renegade-warband`, `dread-talons`, `chaos-cult`, `veterans-of-the-long-war`, `nightmare-hunt`, `pactbound-zealots`, `creations-of-bile`
 - Stratagems pending 11e type-enum reconciliation: 78
 
-### crimson-fists
-
-- Detachments needing DP + Force Disposition assignment (1): `liberator-assault-group`
-- Stratagems pending 11e type-enum reconciliation: 6
-
 ### dark-angels
 
 - Detachments needing DP + Force Disposition assignment (4): `inner-circle-task-force`, `unforgiven-task-force`, `lions-blade-task-force`, `wrath-of-the-rock`

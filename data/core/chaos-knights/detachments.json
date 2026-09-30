@@ -10,8 +10,8 @@
     ],
     "stratagem_ids": [
       "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
-      "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
-      "coursing-thralls-iconoclast-fiefdom-chaos-knights"
+      "coursing-thralls-iconoclast-fiefdom-chaos-knights",
+      "dark-sacrifice-iconoclast-fiefdom-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -26,6 +26,9 @@
         "namespace": "mfm",
         "id": "c7d24ce3-acdf-414d-af2a-81c602983045"
       }
+    ],
+    "detachment_rule_ids": [
+      "wretched-thralls-chaos-knights"
     ]
   },
   {
@@ -44,10 +47,10 @@
     "stratagem_ids": [
       "claimed-for-the-dark-gods-lords-of-dread-chaos-knights",
       "spiteful-demise-lords-of-dread-chaos-knights",
+      "runes-of-disdain-lords-of-dread-chaos-knights",
       "titanic-duel-lords-of-dread-chaos-knights",
       "trophy-hunter-lords-of-dread-chaos-knights",
-      "crushed-like-vermin-lords-of-dread-chaos-knights",
-      "runes-of-disdain-lords-of-dread-chaos-knights"
+      "crushed-like-vermin-lords-of-dread-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -62,6 +65,9 @@
         "namespace": "mfm",
         "id": "355721a8-7f31-4a55-94e0-cbc895fb2397"
       }
+    ],
+    "detachment_rule_ids": [
+      "tyrannical-court-chaos-knights"
     ]
   },
   {
@@ -96,6 +102,9 @@
         "namespace": "mfm",
         "id": "86620542-e27d-4e99-a70e-da69a673c9fb"
       }
+    ],
+    "detachment_rule_ids": [
+      "malefic-surge-chaos-knights"
     ]
   },
   {
@@ -110,10 +119,10 @@
       "panoply-of-the-cursed-knights-houndpack-lance-chaos-knights"
     ],
     "stratagem_ids": [
-      "hungry-for-combat-houndpack-lance-chaos-knights",
-      "animalistic-rage-houndpack-lance-chaos-knights",
       "vox-howl-houndpack-lance-chaos-knights",
+      "hungry-for-combat-houndpack-lance-chaos-knights",
       "cunning-hunter-houndpack-lance-chaos-knights",
+      "animalistic-rage-houndpack-lance-chaos-knights",
       "harrying-hounds-houndpack-lance-chaos-knights",
       "encircling-pack-houndpack-lance-chaos-knights"
     ],
@@ -152,6 +161,9 @@
         "namespace": "mfm",
         "id": "a634e475-384b-40cd-957d-cd99201ab3e4"
       }
+    ],
+    "detachment_rule_ids": [
+      "marked-prey-chaos-knights"
     ]
   },
   {
@@ -166,12 +178,12 @@
       "veil-of-medrengard-traitoris-lance-chaos-knights"
     ],
     "stratagem_ids": [
+      "pterrorshades-traitoris-lance-chaos-knights",
       "conquerors-without-mercy-traitoris-lance-chaos-knights",
-      "imperious-advance-traitoris-lance-chaos-knights",
       "disdain-for-the-weak-traitoris-lance-chaos-knights",
       "a-long-leash-traitoris-lance-chaos-knights",
-      "storm-of-darkness-traitoris-lance-chaos-knights",
-      "pterrorshades-traitoris-lance-chaos-knights"
+      "imperious-advance-traitoris-lance-chaos-knights",
+      "storm-of-darkness-traitoris-lance-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -186,6 +198,9 @@
         "namespace": "mfm",
         "id": "b40710c8-474d-402d-bb22-9903e280dcff"
       }
+    ],
+    "detachment_rule_ids": [
+      "paragons-of-terror-chaos-knights"
     ]
   },
   {
@@ -198,9 +213,9 @@
       "hate-filled-dominion-bastions-of-tyranny-chaos-knights"
     ],
     "stratagem_ids": [
-      "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights",
       "pitiless-focus-bastions-of-tyranny-chaos-knights",
-      "intimidating-reminder-bastions-of-tyranny-chaos-knights"
+      "intimidating-reminder-bastions-of-tyranny-chaos-knights",
+      "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -215,6 +230,9 @@
         "namespace": "mfm",
         "id": "993e9b23-3ade-4fb1-bb27-f9270de48978"
       }
+    ],
+    "detachment_rule_ids": [
+      "annihilate-the-unworthy-chaos-knights"
     ]
   },
   {
@@ -245,6 +263,9 @@
         "namespace": "mfm",
         "id": "e2637679-6163-4ea2-93cb-8c5a263ecc33"
       }
+    ],
+    "detachment_rule_ids": [
+      "scenting-fear-chaos-knights"
     ]
   },
   {
@@ -255,8 +276,8 @@
     "enhancement_ids": [
       "hunters-helm-helhunt-lance-chaos-knights",
       "octagram-of-conjuration-helhunt-lance-chaos-knights",
-      "throne-tyrannicus-helhunt-lance-chaos-knights",
-      "aspect-of-the-beast-helhunt-lance-chaos-knights"
+      "aspect-of-the-beast-helhunt-lance-chaos-knights",
+      "throne-tyrannicus-helhunt-lance-chaos-knights"
     ],
     "stratagem_ids": [
       "feral-arrogance-helhunt-lance-chaos-knights",
@@ -279,6 +300,9 @@
         "namespace": "mfm",
         "id": "9bef33d0-15fa-49f8-ac91-42496470641d"
       }
+    ],
+    "detachment_rule_ids": [
+      "masters-of-the-pack-chaos-knights"
     ]
   }
 ]

@@ -11,12 +11,12 @@
       "prototype-weapon-system-retaliation-cadre-tau-empire"
     ],
     "stratagem_ids": [
-      "the-arrokon-protocol-retaliation-cadre-tau-empire",
       "fail-safe-detonator-retaliation-cadre-tau-empire",
-      "the-torchstar-gambit-retaliation-cadre-tau-empire",
-      "grav-inhibitor-field-retaliation-cadre-tau-empire",
+      "stimm-injectors-retaliation-cadre-tau-empire",
       "the-shortened-blade-retaliation-cadre-tau-empire",
-      "stimm-injectors-retaliation-cadre-tau-empire"
+      "the-arrokon-protocol-retaliation-cadre-tau-empire",
+      "the-torchstar-gambit-retaliation-cadre-tau-empire",
+      "grav-inhibitor-field-retaliation-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -34,6 +34,9 @@
         "namespace": "mfm",
         "id": "0e473cae-5f5c-4f69-8134-b2bd70df0569"
       }
+    ],
+    "detachment_rule_ids": [
+      "bonded-heroes-tau-empire"
     ]
   },
   {
@@ -48,10 +51,10 @@
       "coordinated-exploitation-montka-tau-empire"
     ],
     "stratagem_ids": [
-      "focused-fire-montka-tau-empire",
-      "combat-debarkation-montka-tau-empire",
       "pinpoint-counter-offensive-montka-tau-empire",
       "aggressive-mobility-montka-tau-empire",
+      "focused-fire-montka-tau-empire",
+      "combat-debarkation-montka-tau-empire",
       "pulse-onslaught-montka-tau-empire",
       "counterfire-defence-systems-montka-tau-empire"
     ],
@@ -68,13 +71,16 @@
         "namespace": "mfm",
         "id": "24deeda2-032e-4f18-a7ce-d206044a1bd1"
       }
+    ],
+    "detachment_rule_ids": [
+      "killing-blow-tau-empire"
     ]
   },
   {
     "id": "kroot-hunting-pack",
     "name": "Kroot Hunting Pack",
     "faction_id": "tau-empire",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "hunters-instincts-tau-empire",
     "enhancement_ids": [
       "kroothawk-flock-kroot-hunting-pack-tau-empire",
       "nomadic-hunter-kroot-hunting-pack-tau-empire",
@@ -82,12 +88,12 @@
       "borthrod-gland-kroot-hunting-pack-tau-empire"
     ],
     "stratagem_ids": [
-      "a-trap-well-laid-kroot-hunting-pack-tau-empire",
       "join-the-hunt-kroot-hunting-pack-tau-empire",
+      "a-trap-well-laid-kroot-hunting-pack-tau-empire",
+      "emp-grenades-kroot-hunting-pack-tau-empire",
       "the-grisly-feast-kroot-hunting-pack-tau-empire",
       "guerrilla-warriors-kroot-hunting-pack-tau-empire",
-      "hidden-hunters-kroot-hunting-pack-tau-empire",
-      "emp-grenades-kroot-hunting-pack-tau-empire"
+      "hidden-hunters-kroot-hunting-pack-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -117,9 +123,9 @@
     "faction_id": "tau-empire",
     "detachment_rule_id": "superior-craftsmanship-tau-empire",
     "enhancement_ids": [
-      "supernova-launcher-experimental-prototype-cadre-tau-empire",
       "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
-      "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire"
+      "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
+      "supernova-launcher-experimental-prototype-cadre-tau-empire"
     ],
     "stratagem_ids": [
       "experimental-ammunition-experimental-prototype-cadre-tau-empire"
@@ -140,6 +146,9 @@
         "namespace": "mfm",
         "id": "c20f90be-bf55-4d26-97af-7bb642836256"
       }
+    ],
+    "detachment_rule_ids": [
+      "superior-craftsmanship-tau-empire"
     ]
   },
   {
@@ -157,9 +166,9 @@
       "a-tempting-trap-kauyon-tau-empire",
       "point-blank-ambush-kauyon-tau-empire",
       "coordinate-to-engage-kauyon-tau-empire",
-      "wall-of-mirrors-kauyon-tau-empire",
       "combat-embarkation-kauyon-tau-empire",
-      "photon-grenades-kauyon-tau-empire"
+      "photon-grenades-kauyon-tau-empire",
+      "wall-of-mirrors-kauyon-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -174,6 +183,9 @@
         "namespace": "mfm",
         "id": "e1b3fdde-652c-40a6-953d-e34e4af44fe5"
       }
+    ],
+    "detachment_rule_ids": [
+      "patient-hunter-tau-empire"
     ]
   },
   {
@@ -187,6 +199,7 @@
     ],
     "stratagem_ids": [
       "alien-expertise-auxiliary-cadre-tau-empire",
+      "guided-by-unity-auxiliary-cadre-tau-empire",
       "experimental-modifications-auxiliary-cadre-tau-empire"
     ],
     "game_version": {
@@ -205,6 +218,9 @@
         "namespace": "mfm",
         "id": "5bdc7f35-d1cc-4c58-9888-81ee3f0ee8ab"
       }
+    ],
+    "detachment_rule_ids": [
+      "integrated-command-structure-tau-empire"
     ]
   },
   {
@@ -234,6 +250,9 @@
         "namespace": "mfm",
         "id": "a45bd323-7d95-41b8-82ff-eba352aba663"
       }
+    ],
+    "detachment_rule_ids": [
+      "expert-fieldcraft-tau-empire"
     ]
   },
   {
@@ -241,8 +260,8 @@
     "name": "Sudden Dawn Cadre",
     "faction_id": "tau-empire",
     "enhancement_ids": [
-      "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
-      "proximity-scanners-sudden-dawn-cadre-tau-empire"
+      "proximity-scanners-sudden-dawn-cadre-tau-empire",
+      "earth-caste-modifications-sudden-dawn-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -262,7 +281,14 @@
       }
     ],
     "detachment_rule_ids": [
-      "co-ordinated-eradication-tau-empire"
+      "co-ordinated-eradication-tau-empire",
+      "drones-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
+    ],
+    "stratagem_ids": [
+      "suppressing-fire-sudden-dawn-cadre-tau-empire",
+      "rapid-acquisition-sudden-dawn-cadre-tau-empire",
+      "swift-embarkation-sudden-dawn-cadre-tau-empire"
     ]
   }
 ]

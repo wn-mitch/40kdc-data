@@ -1,18 +1,18 @@
 [
   {
-    "id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
-    "name": "Lay Low the Tyrants",
+    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "name": "ADAPTIVE STRATEGY",
     "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "shadowmark-talon",
+    "type": "strategic-ploy",
+    "detachment_id": "gladius-task-force",
     "cp_cost": 1,
     "phases": [
-      "fight"
+      "command"
     ],
-    "player_turn": "either",
+    "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
+    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -20,40 +20,11 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "535a220e-9d6c-57da-b43e-ac67b23a9ec6"
+        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
       },
       {
         "namespace": "mfm",
-        "id": "e6c5d317-d9d0-4089-8288-6832d8b6d9be"
-      }
-    ]
-  },
-  {
-    "id": "raptorial-vigilance-shadowmark-talon-raven-guard",
-    "name": "Raptorial Vigilance",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "shadowmark-talon",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "raptorial-vigilance-shadowmark-talon-raven-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "445fbecc-b3de-5225-ae37-c9d3b51eebb4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5701508b-0593-4171-8579-af4e655123ce"
+        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
       }
     ]
   },
@@ -116,19 +87,19 @@
     ]
   },
   {
-    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
-    "name": "ADAPTIVE STRATEGY",
+    "id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
+    "name": "Lay Low the Tyrants",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "gladius-task-force",
+    "type": "battle-tactic",
+    "detachment_id": "shadowmark-talon",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "fight"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "ability_id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -136,13 +107,90 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
+        "id": "535a220e-9d6c-57da-b43e-ac67b23a9ec6"
       },
       {
         "namespace": "mfm",
-        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
+        "id": "e6c5d317-d9d0-4089-8288-6832d8b6d9be"
       }
     ]
+  },
+  {
+    "id": "murderous-fusillade-shadowmark-talon-raven-guard",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "668f1ee2-27e1-4875-b8ba-1ff40e6fd618"
+      }
+    ],
+    "name": "Murderous Fusillade",
+    "category": "detachment",
+    "detachment_id": "shadowmark-talon",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "murderous-fusillade-shadowmark-talon-raven-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "raptorial-vigilance-shadowmark-talon-raven-guard",
+    "name": "Raptorial Vigilance",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "shadowmark-talon",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "raptorial-vigilance-shadowmark-talon-raven-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "445fbecc-b3de-5225-ae37-c9d3b51eebb4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5701508b-0593-4171-8579-af4e655123ce"
+      }
+    ]
+  },
+  {
+    "id": "suppressed-weapons-shadowmark-talon-raven-guard",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7f2d18b3-2007-40f0-b590-cd2c5afe659f"
+      }
+    ],
+    "name": "Suppressed Weapons",
+    "category": "detachment",
+    "detachment_id": "shadowmark-talon",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "suppressed-weapons-shadowmark-talon-raven-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",

@@ -18,52 +18,10 @@
       ]
     },
     "stratagems": {
-      "adeptus-astartes": [
-        "a-worthy-death-gladius-task-force-adeptus-astartes",
-        "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
-        "hurtling-targets-stormlance-task-force-adeptus-astartes",
-        "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
-        "might-of-angels-gladius-task-force-adeptus-astartes",
-        "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
-        "responsive-tactics-gladius-task-force-adeptus-astartes",
-        "storm-of-devastation-gladius-task-force-adeptus-astartes",
-        "sudden-onslaught-stormlance-task-force-adeptus-astartes"
-      ],
-      "blood-angels": [
-        "measured-strategist-angelic-inheritors-blood-angels"
-      ],
-      "dark-angels": [
-        "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
-        "knights-of-iron-wrath-of-the-rock-dark-angels"
-      ],
-      "imperial-fists": [
-        "establish-supremacy-ceramite-sentinels-imperial-fists"
-      ],
       "orks": [
         "get-stuck-in-ardmob-orks",
         "krump-em-ardmob-orks",
         "medi-squigs-ardmob-orks"
-      ],
-      "raven-guard": [
-        "murderous-fusillade-shadowmark-talon-raven-guard",
-        "suppressed-weapons-shadowmark-talon-raven-guard"
-      ],
-      "salamanders": [
-        "forged-in-fire-forgefathers-seekers-salamanders",
-        "wrath-and-ruin-forgefathers-seekers-salamanders"
-      ],
-      "space-wolves": [
-        "birth-of-a-saga-champions-of-fenris-space-wolves",
-        "champions-guidance-champions-of-fenris-space-wolves",
-        "co-ordinated-strike-saga-of-the-beastslayer-space-wolves",
-        "fangs-of-the-pack-saga-of-the-great-wolf-space-wolves",
-        "heroic-resolve-champions-of-fenris-space-wolves",
-        "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
-        "wolf-totems-saga-of-the-great-wolf-space-wolves"
-      ],
-      "white-scars": [
-        "evasive-manoeuvers-spearpoint-task-force-white-scars",
-        "flawless-riders-spearpoint-task-force-white-scars"
       ]
     },
     "unit_compositions": {

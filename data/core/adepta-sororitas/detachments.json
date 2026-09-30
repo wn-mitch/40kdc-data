@@ -11,10 +11,10 @@
       "catechism-of-divine-penitence-penitent-host-adepta-sororitas"
     ],
     "stratagem_ids": [
+      "final-redemption-penitent-host-adepta-sororitas",
+      "purity-of-suffering-penitent-host-adepta-sororitas",
       "passion-of-the-penitent-penitent-host-adepta-sororitas",
       "lash-of-guilt-penitent-host-adepta-sororitas",
-      "purity-of-suffering-penitent-host-adepta-sororitas",
-      "final-redemption-penitent-host-adepta-sororitas",
       "boundless-zeal-penitent-host-adepta-sororitas",
       "devout-fanaticism-penitent-host-adepta-sororitas"
     ],
@@ -48,12 +48,12 @@
       "mantle-of-ophelia-hallowed-martyrs-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "righteous-vengeance-hallowed-martyrs-adepta-sororitas",
       "divine-intervention-hallowed-martyrs-adepta-sororitas",
       "suffering-and-sacrifice-hallowed-martyrs-adepta-sororitas",
+      "righteous-vengeance-hallowed-martyrs-adepta-sororitas",
       "sanctified-immolation-hallowed-martyrs-adepta-sororitas",
-      "praise-the-fallen-hallowed-martyrs-adepta-sororitas",
-      "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas"
+      "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas",
+      "praise-the-fallen-hallowed-martyrs-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -87,10 +87,10 @@
     "stratagem_ids": [
       "shield-of-aversion-bringers-of-flame-adepta-sororitas",
       "righteous-blows-bringers-of-flame-adepta-sororitas",
-      "rites-of-fire-bringers-of-flame-adepta-sororitas",
+      "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas",
       "cleansing-flames-bringers-of-flame-adepta-sororitas",
-      "blazing-ire-bringers-of-flame-adepta-sororitas",
-      "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas"
+      "rites-of-fire-bringers-of-flame-adepta-sororitas",
+      "blazing-ire-bringers-of-flame-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -123,10 +123,10 @@
     ],
     "stratagem_ids": [
       "shield-of-denial-champions-of-faith-adepta-sororitas",
+      "suffer-not-the-unfaithful-champions-of-faith-adepta-sororitas",
       "to-the-heart-of-heresy-champions-of-faith-adepta-sororitas",
       "path-of-the-righteous-champions-of-faith-adepta-sororitas",
       "bastion-of-faith-champions-of-faith-adepta-sororitas",
-      "suffer-not-the-unfaithful-champions-of-faith-adepta-sororitas",
       "indefatigable-dedication-champions-of-faith-adepta-sororitas"
     ],
     "game_version": {
@@ -165,8 +165,8 @@
       "shield-of-faith-army-of-faith-adepta-sororitas",
       "light-of-the-emperor-army-of-faith-adepta-sororitas",
       "faith-and-fury-army-of-faith-adepta-sororitas",
-      "divine-guidance-army-of-faith-adepta-sororitas",
       "blinding-radiance-army-of-faith-adepta-sororitas",
+      "divine-guidance-army-of-faith-adepta-sororitas",
       "angelic-descent-army-of-faith-adepta-sororitas"
     ],
     "game_version": {
@@ -197,9 +197,9 @@
       "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas"
     ],
     "stratagem_ids": [
-      "inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas",
+      "devastating-reprise-chorus-of-condemnation-adepta-sororitas",
       "harmonised-exorcism-chorus-of-condemnation-adepta-sororitas",
-      "devastating-reprise-chorus-of-condemnation-adepta-sororitas"
+      "inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -231,8 +231,8 @@
     ],
     "stratagem_ids": [
       "sanctified-blows-sacred-champions-adepta-sororitas",
-      "faithful-fortitude-sacred-champions-adepta-sororitas",
-      "unflinching-determination-sacred-champions-adepta-sororitas"
+      "unflinching-determination-sacred-champions-adepta-sororitas",
+      "faithful-fortitude-sacred-champions-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -287,8 +287,8 @@
     "name": "Sanctuary Guardians",
     "faction_id": "adepta-sororitas",
     "enhancement_ids": [
-      "divine-miracle-sanctuary-guardians-adepta-sororitas",
-      "righteous-fervour-sanctuary-guardians-adepta-sororitas"
+      "righteous-fervour-sanctuary-guardians-adepta-sororitas",
+      "divine-miracle-sanctuary-guardians-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -308,7 +308,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "blessed-believers-adepta-sororitas"
+      "blessed-believers-adepta-sororitas",
+      "acts-of-faith-sanctuary-guardians-adepta-sororitas"
+    ],
+    "stratagem_ids": [
+      "take-cover-sanctuary-guardians-adepta-sororitas",
+      "fervent-devotion-sanctuary-guardians-adepta-sororitas",
+      "fires-of-damnation-sanctuary-guardians-adepta-sororitas"
     ]
   }
 ]

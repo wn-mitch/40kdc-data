@@ -106,6 +106,34 @@
     ]
   },
   {
+    "id": "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "16f13be2-cb40-454f-98ca-c51e196eb86b"
+      }
+    ],
+    "name": "In Sacrifice, Victory",
+    "category": "detachment",
+    "detachment_id": "wrath-of-the-rock",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "inescapable-justice-wrath-of-the-rock-dark-angels",
     "name": "Inescapable Justice",
     "category": "detachment",
@@ -137,6 +165,30 @@
         "id": "31721131-d7b4-4266-9f41-879d32f1ea75"
       }
     ]
+  },
+  {
+    "id": "knights-of-iron-wrath-of-the-rock-dark-angels",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "74601e3a-aa52-45aa-8243-7fb4159aa658"
+      }
+    ],
+    "name": "Knights of Iron",
+    "category": "detachment",
+    "detachment_id": "wrath-of-the-rock",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "knights-of-iron-wrath-of-the-rock-dark-angels",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "lions-will-wrath-of-the-rock-dark-angels",

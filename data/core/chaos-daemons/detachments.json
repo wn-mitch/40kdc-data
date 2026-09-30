@@ -3,7 +3,7 @@
     "id": "blood-legion",
     "name": "Blood Legion",
     "faction_id": "chaos-daemons",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "murdercall-chaos-daemons",
     "enhancement_ids": [
       "slaughterthirst-aura-blood-legion-chaos-daemons",
       "furys-cage-blood-legion-chaos-daemons",
@@ -11,12 +11,12 @@
       "gateway-unto-damnation-blood-legion-chaos-daemons"
     ],
     "stratagem_ids": [
-      "sheathed-in-brass-blood-legion-chaos-daemons",
-      "blood-begets-skulls-blood-legion-chaos-daemons",
       "wrath-undeniable-blood-legion-chaos-daemons",
       "gore-hungry-onslaught-blood-legion-chaos-daemons",
       "skulls-beget-blood-blood-legion-chaos-daemons",
-      "fools-flight-blood-legion-chaos-daemons"
+      "blood-begets-skulls-blood-legion-chaos-daemons",
+      "fools-flight-blood-legion-chaos-daemons",
+      "sheathed-in-brass-blood-legion-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -49,12 +49,12 @@
       "soulstealer-daemonic-incursion-chaos-daemons"
     ],
     "stratagem_ids": [
-      "draught-of-terror-daemonic-incursion-chaos-daemons",
-      "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
-      "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
       "corrupt-realspace-daemonic-incursion-chaos-daemons",
+      "draught-of-terror-daemonic-incursion-chaos-daemons",
       "warp-surge-daemonic-incursion-chaos-daemons",
-      "denizens-of-the-warp-daemonic-incursion-chaos-daemons"
+      "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
+      "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
+      "daemonic-invulnerability-daemonic-incursion-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -69,6 +69,9 @@
         "namespace": "mfm",
         "id": "5357f63c-7c70-459e-aa3b-1ea9c4ef48bb"
       }
+    ],
+    "detachment_rule_ids": [
+      "warp-rifts-chaos-daemons"
     ]
   },
   {
@@ -85,10 +88,10 @@
     "stratagem_ids": [
       "seeping-virulence-plague-legion-chaos-daemons",
       "fever-visions-plague-legion-chaos-daemons",
-      "murkshadows-plague-legion-chaos-daemons",
+      "foetid-resurgence-plague-legion-chaos-daemons",
       "rot-and-renewal-plague-legion-chaos-daemons",
-      "plague-of-woes-plague-legion-chaos-daemons",
-      "foetid-resurgence-plague-legion-chaos-daemons"
+      "murkshadows-plague-legion-chaos-daemons",
+      "plague-of-woes-plague-legion-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -103,6 +106,9 @@
         "namespace": "mfm",
         "id": "778d3486-9f71-4253-90b9-c7ca150fc011"
       }
+    ],
+    "detachment_rule_ids": [
+      "melancholic-miasma-chaos-daemons"
     ]
   },
   {
@@ -117,11 +123,11 @@
       "malice-made-manifest-shadow-legion-chaos-daemons"
     ],
     "stratagem_ids": [
+      "spiteful-demise-shadow-legion-chaos-daemons",
+      "channelled-wrath-shadow-legion-chaos-daemons",
       "death-denied-shadow-legion-chaos-daemons",
       "encroaching-darkness-shadow-legion-chaos-daemons",
       "shade-path-shadow-legion-chaos-daemons",
-      "spiteful-demise-shadow-legion-chaos-daemons",
-      "channelled-wrath-shadow-legion-chaos-daemons",
       "binding-shadow-shadow-legion-chaos-daemons"
     ],
     "game_version": {
@@ -137,6 +143,9 @@
         "namespace": "mfm",
         "id": "95dd7e2e-5318-4271-b9dc-38592794539f"
       }
+    ],
+    "detachment_rule_ids": [
+      "first-prince-of-chaos-chaos-daemons"
     ]
   },
   {
@@ -151,8 +160,8 @@
       "improbable-shield-aura-scintillating-legion-chaos-daemons"
     ],
     "stratagem_ids": [
-      "pyrogenesis-scintillating-legion-chaos-daemons",
       "impossible-eclipse-scintillating-legion-chaos-daemons",
+      "pyrogenesis-scintillating-legion-chaos-daemons",
       "flickering-reality-scintillating-legion-chaos-daemons",
       "fateborne-nightmares-scintillating-legion-chaos-daemons",
       "ficklefire-scintillating-legion-chaos-daemons",
@@ -171,13 +180,16 @@
         "namespace": "mfm",
         "id": "d7d52d0d-d7af-4bc4-9a77-6ca0250a1d2c"
       }
+    ],
+    "detachment_rule_ids": [
+      "fates-in-flux-chaos-daemons"
     ]
   },
   {
     "id": "legion-of-excess",
     "name": "Legion of Excess",
     "faction_id": "chaos-daemons",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "beguiling-aura-chaos-daemons",
     "enhancement_ids": [
       "false-majesty-aura-legion-of-excess-chaos-daemons",
       "dreaming-crown-aura-legion-of-excess-chaos-daemons",
@@ -185,12 +197,12 @@
       "soul-glutton-legion-of-excess-chaos-daemons"
     ],
     "stratagem_ids": [
-      "cavalcade-of-blades-legion-of-excess-chaos-daemons",
-      "overwhelming-excess-legion-of-excess-chaos-daemons",
-      "archagonists-legion-of-excess-chaos-daemons",
       "rapturous-agony-legion-of-excess-chaos-daemons",
+      "archagonists-legion-of-excess-chaos-daemons",
       "sensory-excruciation-legion-of-excess-chaos-daemons",
-      "phantasmal-longing-legion-of-excess-chaos-daemons"
+      "phantasmal-longing-legion-of-excess-chaos-daemons",
+      "cavalcade-of-blades-legion-of-excess-chaos-daemons",
+      "overwhelming-excess-legion-of-excess-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -222,8 +234,8 @@
     ],
     "stratagem_ids": [
       "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
-      "warp-riders-cavalcade-of-chaos-chaos-daemons",
-      "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons"
+      "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
+      "warp-riders-cavalcade-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -238,6 +250,9 @@
         "namespace": "mfm",
         "id": "b3ac1391-84a9-4f8b-8755-d75eccfa5b70"
       }
+    ],
+    "detachment_rule_ids": [
+      "unholy-avalanche-chaos-daemons"
     ]
   },
   {
@@ -249,9 +264,9 @@
       "swollen-with-power-upgrade-lords-of-the-warp-chaos-daemons"
     ],
     "stratagem_ids": [
+      "bilious-blessing-lords-of-the-warp-chaos-daemons",
       "carnival-of-excess-lords-of-the-warp-chaos-daemons",
       "call-to-murder-lords-of-the-warp-chaos-daemons",
-      "bilious-blessing-lords-of-the-warp-chaos-daemons",
       "skirling-magicks-lords-of-the-warp-chaos-daemons"
     ],
     "game_version": {
@@ -267,6 +282,9 @@
         "namespace": "mfm",
         "id": "fe916344-deef-4c81-99ed-2adae0a8c296"
       }
+    ],
+    "detachment_rule_ids": [
+      "loci-of-power-chaos-daemons"
     ]
   },
   {
@@ -279,9 +297,9 @@
       "soul-hungry-slaughterers-upgrade-warptide-chaos-daemons"
     ],
     "stratagem_ids": [
-      "daemonic-infestation-warptide-chaos-daemons",
       "soulseeing-warptide-chaos-daemons",
-      "incorporeal-entities-warptide-chaos-daemons"
+      "incorporeal-entities-warptide-chaos-daemons",
+      "daemonic-infestation-warptide-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,6 +314,9 @@
         "namespace": "mfm",
         "id": "bdbd5d64-bccf-4d77-bcac-2e19815d1516"
       }
+    ],
+    "detachment_rule_ids": [
+      "shudderblink-chaos-daemons"
     ]
   }
 ]

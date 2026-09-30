@@ -1,5 +1,82 @@
 [
   {
+    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "name": "ADAPTIVE STRATEGY",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
+      }
+    ]
+  },
+  {
+    "id": "evasive-manoeuvers-spearpoint-task-force-white-scars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0bcf50de-4702-4c4c-b3d4-3f45a1e476bd"
+      }
+    ],
+    "name": "Evasive Manoeuvers",
+    "category": "detachment",
+    "detachment_id": "spearpoint-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "evasive-manoeuvers-spearpoint-task-force-white-scars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "flawless-riders-spearpoint-task-force-white-scars",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "aaff4833-591d-4c0d-b08c-3df48c061c2a"
+      }
+    ],
+    "name": "Flawless Riders",
+    "category": "detachment",
+    "detachment_id": "spearpoint-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "flawless-riders-spearpoint-task-force-white-scars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "hunters-instincts-spearpoint-task-force-white-scars",
     "name": "Hunter’s Instincts",
     "category": "detachment",
@@ -25,64 +102,6 @@
       {
         "namespace": "mfm",
         "id": "ea5b27d1-b3bd-42ca-afd4-74741c853464"
-      }
-    ]
-  },
-  {
-    "id": "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
-    "name": "Spear Thrust and Sabre Swing",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "spearpoint-task-force",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "063f6d7a-3f24-5be3-ba30-72e5295f2947"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b398825e-7ae9-47cb-a399-3b97b846dabf"
-      }
-    ]
-  },
-  {
-    "id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
-    "name": "Withdraw and Regroup",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "spearpoint-task-force",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "0a3e9eb6-92d8-585d-b4fe-c4905c1f82d8"
-      },
-      {
-        "namespace": "mfm",
-        "id": "bbb03f7c-5b49-4aba-b322-c4ba911b286f"
       }
     ]
   },
@@ -116,19 +135,19 @@
     ]
   },
   {
-    "id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
-    "name": "ADAPTIVE STRATEGY",
+    "id": "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
+    "name": "Spear Thrust and Sabre Swing",
     "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "gladius-task-force",
+    "type": "battle-tactic",
+    "detachment_id": "spearpoint-task-force",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "fight"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "adaptive-strategy-gladius-task-force-adeptus-astartes",
+    "ability_id": "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -136,11 +155,11 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
+        "id": "063f6d7a-3f24-5be3-ba30-72e5295f2947"
       },
       {
         "namespace": "mfm",
-        "id": "4daab501-a02e-45f5-b9c2-7e70913308e5"
+        "id": "b398825e-7ae9-47cb-a399-3b97b846dabf"
       }
     ]
   },
@@ -170,6 +189,35 @@
       {
         "namespace": "mfm",
         "id": "25378f3a-afc0-4fa6-a087-2095bbebcfe9"
+      }
+    ]
+  },
+  {
+    "id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
+    "name": "Withdraw and Regroup",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "spearpoint-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0a3e9eb6-92d8-585d-b4fe-c4905c1f82d8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bbb03f7c-5b49-4aba-b322-c4ba911b286f"
       }
     ]
   }

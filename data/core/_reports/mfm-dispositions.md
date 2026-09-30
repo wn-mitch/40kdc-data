@@ -17,7 +17,6 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 | chaos-daemons | 9 | 0 | 0 | 0 |
 | chaos-knights | 8 | 0 | 0 | 0 |
 | chaos-space-marines | 18 | 0 | 0 | 0 |
-| crimson-fists | 4 | 0 | 0 | 0 |
 | dark-angels | 20 | 0 | 0 | 0 |
 | death-guard | 10 | 0 | 0 | 0 |
 | deathwatch | 16 | 0 | 0 | 0 |
@@ -40,7 +39,7 @@ Only those two fields change; `game_version` is left for a later confirm pass.
 | ultramarines | 17 | 0 | 0 | 0 |
 | white-scars | 17 | 0 | 0 | 0 |
 | world-eaters | 9 | 0 | 0 | 0 |
-| **TOTAL** | **454** | **0** | **0** | **0** |
+| **TOTAL** | **450** | **0** | **0** | **0** |
 
 ## New detachments in dump (no repo entity — author in a follow-up)
 

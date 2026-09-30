@@ -40,6 +40,10 @@
       {
         "namespace": "mfm",
         "id": "4af04934-aa88-41ac-bf07-f59c0573c0e9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80fcec79-757c-4d1c-80cc-fbd844935d1e"
       }
     ]
   },
@@ -85,47 +89,6 @@
       {
         "namespace": "mfm",
         "id": "f1538e9c-cba9-4e0f-9414-8b940bb317c9"
-      }
-    ]
-  },
-  {
-    "id": "lancer-laser-destroyer",
-    "name": "Lancer laser destroyer",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Laser Destroyer",
-        "range": 72,
-        "stats": {
-          "A": 2,
-          "BS": 3,
-          "S": 14,
-          "AP": -5,
-          "D": "D6+3"
-        },
-        "keywords": [
-          {
-            "keyword_id": "heavy"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2561-1f4b-4a08-3529"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "d3b4-b33-8c3d-a82f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a0a5681c-0ca2-4646-8ed7-125b5e811019"
       }
     ]
   },
@@ -349,6 +312,26 @@
       {
         "namespace": "mfm",
         "id": "3fb8f047-b5d7-41cf-b4c8-26ddd50e3f86"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ce7e16-affe-4c0e-ae78-8f0d8ac99784"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6fdec1e2-5f11-411d-85fc-cb5e1aca6dc2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "86fa5e34-6199-4efa-a9c8-844feecc489a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a30bdfc4-b4e1-414c-b724-5ffdcb7ed674"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f1b5cf91-50eb-4667-97f5-99057599333e"
       }
     ]
   },
@@ -559,11 +542,47 @@
       },
       {
         "namespace": "mfm",
+        "id": "068a3202-65f1-447c-bad0-62ef1a5e27dd"
+      },
+      {
+        "namespace": "mfm",
         "id": "165a6981-874b-4916-bdee-844ab9eb39fd"
       },
       {
         "namespace": "mfm",
+        "id": "208df04b-3f8a-4f76-a432-568eafa9062b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3ff433ad-a4a8-453f-8dfd-16fda24f4bff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4b51b372-f6ee-4cea-b494-364d50b1f095"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4f83171d-0ab2-43a9-8c24-f8a05bc82224"
+      },
+      {
+        "namespace": "mfm",
         "id": "89cccca8-2639-4549-a084-f358b05c05f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2898983-5316-47f8-b756-88b12c871a71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b59aede2-9e4c-404c-baab-e5cca4af4e7b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db2b169a-c6aa-48f4-98fb-6c0326911d54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f16f73ae-9ece-4a41-ab74-b17656ddf189"
       }
     ]
   },
@@ -681,11 +700,39 @@
       },
       {
         "namespace": "mfm",
+        "id": "1bf58ea6-96d7-41a4-bac1-27a289bd00f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "24eb8579-da3e-42b0-93e3-36c84d9a68d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4babda6a-da4a-4697-9814-40d9822ebac0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5d5a339c-4e0d-4888-a361-455d66b4d5a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "62b4ef92-e5f6-4823-8a47-994ccc7564d5"
+      },
+      {
+        "namespace": "mfm",
         "id": "d27db9a5-db39-4a98-a619-bc7f0af40d1f"
       },
       {
         "namespace": "mfm",
+        "id": "d57723bf-4061-4bd1-adc7-e70c8b6f7add"
+      },
+      {
+        "namespace": "mfm",
         "id": "f7b81e29-e04c-4c96-b5de-3f014b17afb4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "faf3f952-2f98-41be-ab67-087899f2737b"
       }
     ]
   },
@@ -947,49 +994,6 @@
     ]
   },
   {
-    "id": "pyre-pistol",
-    "name": "Pyre pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Pyre pistol",
-        "range": 12,
-        "stats": {
-          "A": "D6",
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": null
-        },
-        "keywords": [
-          {
-            "keyword_id": "ignores-cover"
-          },
-          {
-            "keyword_id": "pistol"
-          },
-          {
-            "keyword_id": "torrent"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "bb21-4114-6b0c-634d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "402e16d2-afef-454d-81fa-a67ce4633393"
-      }
-    ]
-  },
-  {
     "id": "astartes-chainsword",
     "name": "Astartes chainsword",
     "type": "melee",
@@ -1116,6 +1120,10 @@
       {
         "namespace": "mfm",
         "id": "f595e04d-f9d2-4226-8c13-53321cc85945"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fc5f1141-2077-4979-a293-1d50afd1349f"
       }
     ]
   },
@@ -1445,141 +1453,10 @@
       {
         "namespace": "mfm",
         "id": "0bf8c41d-aa14-46bb-a28f-163c988dffe5"
-      }
-    ]
-  },
-  {
-    "id": "sternguard-bolt-pistol",
-    "name": "Sternguard bolt pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Bolt Pistol",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "close-quarters"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "4f36-2df5-903a-5541"
       },
       {
         "namespace": "mfm",
-        "id": "2adbdc44-6024-4052-9db4-2999f160feca"
-      }
-    ]
-  },
-  {
-    "id": "sternguard-bolt-rifle",
-    "name": "Sternguard bolt rifle",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Sternguard bolt rifle",
-        "range": 24,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "assault"
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "heavy"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "874a-4375-dbc3-b412"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5ecbc272-0e96-46cd-9958-0c59f5451717"
-      }
-    ]
-  },
-  {
-    "id": "sternguard-heavy-bolter",
-    "name": "Sternguard heavy bolter",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Heavy Bolter",
-        "range": 36,
-        "stats": {
-          "A": 3,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "heavy"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          },
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "a418-befd-3e1b-87be"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3260ec7d-3f12-402e-8c93-baebcc348fa1"
+        "id": "e49d420b-b603-4421-8013-eeb1efba2352"
       }
     ]
   },
@@ -1826,7 +1703,19 @@
       },
       {
         "namespace": "mfm",
+        "id": "04af305e-e6aa-4340-9081-804284d429b0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "680262b7-e9b7-40a6-8f5d-075a0fcfc076"
+      },
+      {
+        "namespace": "mfm",
         "id": "97fadcc6-6a5c-4bd5-bd90-bd881abd5a39"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8ea9db0-f744-4784-9d52-433b7d8da978"
       }
     ]
   },
@@ -2040,6 +1929,10 @@
       {
         "namespace": "mfm",
         "id": "479ed086-441c-4ce5-baa3-3beec95faccb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de29919b-047d-4e92-a081-17eed30474d2"
       }
     ]
   },
@@ -2159,43 +2052,6 @@
     ]
   },
   {
-    "id": "repulsor-executioner-defensive-array",
-    "name": "Repulsor Executioner defensive array",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Defensive Array",
-        "range": 24,
-        "stats": {
-          "A": 18,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "9528-b267-9534-8c58"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "a79b-114a-c736-be0e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d2dafdf-2dad-451a-8296-d974ad462d1b"
-      }
-    ]
-  },
-  {
     "id": "twin-heavy-bolter",
     "name": "Twin heavy bolter",
     "type": "ranged",
@@ -2239,6 +2095,10 @@
       {
         "namespace": "bsdata",
         "id": "f1a6-b394-5bc5-a3cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef57f6a8-975c-468b-8cfa-3841a16ebf55"
       },
       {
         "namespace": "mfm",
@@ -2340,6 +2200,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "b7130aa2-405c-4ad5-9b12-e90da245343a"
+      },
+      {
+        "namespace": "mfm",
         "id": "f4349e2f-23bc-407b-bab9-ae2051541034"
       }
     ]
@@ -2381,7 +2245,15 @@
       },
       {
         "namespace": "mfm",
+        "id": "69ffe07d-1d54-4b25-88fa-a20a9b835419"
+      },
+      {
+        "namespace": "mfm",
         "id": "c21ebfb7-3e9f-47d6-b724-507d4632ed60"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8d4d248-f250-4e80-bf3a-09f8690ace71"
       }
     ]
   },
@@ -2422,39 +2294,10 @@
       {
         "namespace": "mfm",
         "id": "3458f288-19e1-47d0-ba3f-50152a8676b8"
-      }
-    ]
-  },
-  {
-    "id": "repulsor-defensive-array",
-    "name": "Repulsor defensive array",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Defensive Array",
-        "range": 24,
-        "stats": {
-          "A": 18,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "1eaa-6dc9-f8bb-9c4a"
       },
       {
         "namespace": "mfm",
-        "id": "81e53be7-2c53-4e57-83f5-d844f36b3b78"
+        "id": "48c407a7-2ead-4a82-8f9a-cd6b377bca24"
       }
     ]
   },
@@ -2965,6 +2808,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "5a0c5fdb-d2e8-431e-9751-658d9e1d2deb"
+      },
+      {
+        "namespace": "mfm",
         "id": "aa819536-40b2-49cb-87f3-00cb2ca7dad6"
       }
     ]
@@ -3240,63 +3087,10 @@
       {
         "namespace": "mfm",
         "id": "47ad8b26-1547-404c-96c1-aa793a69b983"
-      }
-    ]
-  },
-  {
-    "id": "astartes-grenade-launcher",
-    "name": "Astartes grenade launcher",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Krak",
-        "range": 24,
-        "stats": {
-          "A": 1,
-          "S": 9,
-          "AP": -2,
-          "D": "D3",
-          "BS": 3
-        },
-        "keywords": []
-      },
-      {
-        "name": "Frag",
-        "range": 24,
-        "stats": {
-          "A": "D3",
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "703f-ed39-cb24-5686"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "b757-9e7a-b59f-f51b"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "ca2b-3d9a-e739-cb21"
       },
       {
         "namespace": "mfm",
-        "id": "fb7442e6-a2d8-4df4-b1d1-ccf26c0f01f2"
+        "id": "da602c8c-235a-47e9-b9f4-a66005977375"
       }
     ]
   },
@@ -3330,6 +3124,10 @@
       {
         "namespace": "bsdata",
         "id": "b37d-bd5a-db3e-28e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5fe7615c-a4df-4930-99a7-d66f49d496df"
       },
       {
         "namespace": "mfm",
@@ -3371,76 +3169,6 @@
       {
         "namespace": "mfm",
         "id": "ed1c8040-3507-402c-98df-cad0aaa92377"
-      }
-    ]
-  },
-  {
-    "id": "encarmine-blade",
-    "name": "Encarmine blade",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Encarmine blade",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 6,
-          "AP": -3,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8776-3451-c6e-aa6c"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6ed2e692-b763-4138-ba1f-fe8727a5a19b"
-      }
-    ]
-  },
-  {
-    "id": "encarmine-spear",
-    "name": "Encarmine Spear",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Encarmine Spear",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 6,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "lance"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "e116-2740-11c0-34ed"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e7d1a47f-da35-4a1c-bc72-216f8b0cff43"
       }
     ]
   },
@@ -3670,43 +3398,14 @@
       {
         "namespace": "mfm",
         "id": "295b78c2-7f0b-407b-bd5a-7189f99cf5b2"
-      }
-    ]
-  },
-  {
-    "id": "black-knight-combat-weapon",
-    "name": "Black Knight combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Black Knight combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "S": 5,
-          "AP": -2,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "bbf2-86fe-2cc4-7d97"
       },
       {
         "namespace": "mfm",
-        "id": "d9f73fe8-54a2-42b6-954b-8a17850013a9"
+        "id": "4e86e4a3-dfc3-4a3b-8a92-ceb66b0d37f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f9716fe2-2b13-409a-971b-58451126b076"
       }
     ]
   },
@@ -3977,6 +3676,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "be0c7fb7-f582-46f1-b2d1-b02c524786c3"
+      },
+      {
+        "namespace": "mfm",
         "id": "f817984f-6b1c-4995-a1e0-195bb428c74a"
       }
     ]
@@ -4027,6 +3730,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "28aa2942-b4a8-4740-8ce7-ab03f873b099"
+      },
+      {
+        "namespace": "mfm",
         "id": "ef6923ee-de03-46b2-a719-5637ef0822b6"
       }
     ]
@@ -4065,6 +3772,10 @@
       {
         "namespace": "mfm",
         "id": "787ecc79-0127-42ac-97ba-4b0f29138083"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ed983ce-51b6-42b1-b702-89436fe7c6e2"
       }
     ]
   },
@@ -4163,6 +3874,10 @@
       {
         "namespace": "bsdata",
         "id": "4c0b-95dd-62ef-dc02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb9775de-8bd4-4e0c-b34e-98d09a6fd4db"
       },
       {
         "namespace": "mfm",
@@ -4329,6 +4044,10 @@
       {
         "namespace": "mfm",
         "id": "58fab1f4-2660-400b-ac34-c01d7112ab66"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a5288fe7-77db-4f83-92a4-0bbf5f5a504e"
       }
     ]
   },
@@ -4599,6 +4318,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "4a05d7a8-13c2-4a6d-87d5-c3575cce1d05"
+      },
+      {
+        "namespace": "mfm",
         "id": "52aeca1d-448b-4abf-958f-fc160a5c9343"
       }
     ]
@@ -4636,6 +4359,10 @@
       {
         "namespace": "bsdata",
         "id": "15a1-984e-37a-892a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "587b2741-d30a-46cf-8185-261b8ea37b33"
       },
       {
         "namespace": "mfm",
@@ -4759,6 +4486,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "4c06858c-2fcd-4737-a1e8-4f3275bf8a20"
+      },
+      {
+        "namespace": "mfm",
         "id": "78df6b36-1745-461e-918c-c525562f0095"
       }
     ]
@@ -4852,6 +4583,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "1d024316-b4f5-4840-a240-9caf58edb710"
+      },
+      {
+        "namespace": "mfm",
         "id": "8c6c8a58-aa77-404a-beae-7aea891f08eb"
       }
     ]
@@ -4898,6 +4633,10 @@
       {
         "namespace": "bsdata",
         "id": "46ee-696e-8631-b41e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48fba045-021b-423c-b304-9725d6f562f6"
       },
       {
         "namespace": "mfm",
@@ -5078,6 +4817,10 @@
       {
         "namespace": "bsdata",
         "id": "9592-92a8-cd44-dcc0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "11c84a41-a3c7-4909-b7c6-a85535804ba6"
       },
       {
         "namespace": "mfm",
@@ -5271,43 +5014,6 @@
     ]
   },
   {
-    "id": "deathwatch-thunder-hammer",
-    "name": "Deathwatch thunder hammer",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Deathwatch thunder hammer",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "S": 10,
-          "AP": -2,
-          "D": 3,
-          "WS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "9317-df05-c108-8b92"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8ec4101d-3627-473b-b29f-170bf93e69ac"
-      }
-    ]
-  },
-  {
     "id": "black-shield-blades",
     "name": "Black Shield blades",
     "type": "melee",
@@ -5341,6 +5047,10 @@
       {
         "namespace": "mfm",
         "id": "2649e805-e952-4170-8313-b7944038feac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8beebeda-6a95-441d-98ce-4496fb924236"
       }
     ]
   },
@@ -5382,6 +5092,14 @@
       {
         "namespace": "mfm",
         "id": "0ddafb54-6821-41bd-8edf-24e3ea425e3d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f52fa81-961c-4d93-887f-53e4cb5017c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6221ac1-9a56-46b6-8d7a-e960d42f635f"
       }
     ]
   },
@@ -5421,6 +5139,10 @@
       {
         "namespace": "bsdata",
         "id": "4b89-bd85-ed45-0ce4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00861cd7-0003-4bb8-817b-7223ed18641c"
       },
       {
         "namespace": "mfm",
@@ -5469,6 +5191,14 @@
       {
         "namespace": "bsdata",
         "id": "eaaa-a55e-ee06-4295"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26dc78ee-f76c-4410-bfb6-16c4ef3e2c5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ca9ad1b0-5779-4d63-9552-f428385b424b"
       },
       {
         "namespace": "mfm",
@@ -5559,6 +5289,10 @@
       {
         "namespace": "mfm",
         "id": "62737c30-d4aa-4ce8-8fa3-e4eb3d94e8b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75dad2d9-78f7-41e9-ba95-384e2875b5e3"
       }
     ]
   },
@@ -5710,7 +5444,15 @@
       },
       {
         "namespace": "mfm",
+        "id": "05ba0123-1bb2-4974-90f3-e1e620efd9dc"
+      },
+      {
+        "namespace": "mfm",
         "id": "2f13b7e2-93c9-43a4-89bb-ae337c8c727e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bcd86680-d16c-4dba-accb-bd0a4f90a9b7"
       }
     ]
   },
@@ -5962,6 +5704,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "49f3d852-053d-408d-8553-d85befdc5a7b"
+      },
+      {
+        "namespace": "mfm",
         "id": "80e15a6a-aaa8-4022-8a2e-2098e88b260e"
       }
     ]
@@ -6002,6 +5748,10 @@
       {
         "namespace": "bsdata",
         "id": "ad6a-c679-52ea-6059"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d6b6ed8-7b3a-4828-9cd1-14adcab71951"
       },
       {
         "namespace": "mfm",
@@ -6294,6 +6044,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "2fef1f2c-a532-4c8a-8d8b-b51759de6c95"
+      },
+      {
+        "namespace": "mfm",
         "id": "9f261e71-0f50-4eed-8379-70374141e2e8"
       }
     ]
@@ -6335,6 +6089,10 @@
       {
         "namespace": "mfm",
         "id": "906f2c8a-8790-4d77-ba27-ba9a49a0dc1b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d7b3ec58-3667-4118-aaeb-198eed513af0"
       }
     ]
   },
@@ -6428,6 +6186,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "94efdda0-0f01-4e88-ba35-cb3b59a76a82"
+      },
+      {
+        "namespace": "mfm",
         "id": "96050d52-8c26-419a-8b0b-1cd698aa4800"
       }
     ]
@@ -6507,6 +6269,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "8e008828-b4fc-4595-80c6-7b02189c6d20"
+      },
+      {
+        "namespace": "mfm",
         "id": "92d381cc-379a-4848-9a02-5f8c83f3a207"
       }
     ]
@@ -6545,43 +6311,10 @@
       {
         "namespace": "mfm",
         "id": "70c76d1b-e818-401b-9cae-685b6fc0ada9"
-      }
-    ]
-  },
-  {
-    "id": "relic-fist",
-    "name": "Relic fist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Relic fist",
-        "range": "Melee",
-        "stats": {
-          "A": 1,
-          "S": 8,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "extra-attacks"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "4f19-4c2c-ec70-e4f0"
       },
       {
         "namespace": "mfm",
-        "id": "424d913e-710a-4946-aae1-7121e63d6b57"
+        "id": "d46ce1db-6bbc-4ecc-b645-16ab747926b7"
       }
     ]
   },
@@ -6737,6 +6470,10 @@
       {
         "namespace": "bsdata",
         "id": "c691-f4b-30a0-170b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4edb7dd8-4975-4669-8057-51cac7c1c8eb"
       },
       {
         "namespace": "mfm",
@@ -7041,6 +6778,10 @@
       {
         "namespace": "mfm",
         "id": "82a69ed0-e02b-4230-b805-75adc0a37efc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fbd6ee72-0a55-40fe-b21e-a2bbbfbea0d8"
       }
     ]
   },
@@ -7078,6 +6819,18 @@
       {
         "namespace": "mfm",
         "id": "c52850e6-dffe-46fd-ae33-44e909210cfc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ccb77935-3571-4ac1-a4a8-b293e2d8d3a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5bcbf02-45b0-49d5-bafe-12d075f1b194"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff275c5e-c35f-4049-86e0-6dd6ae146f69"
       }
     ]
   },
@@ -7121,6 +6874,10 @@
       {
         "namespace": "mfm",
         "id": "7a1ce33f-6a2a-4c53-895c-ee9a63121429"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e872fb1-7933-49a3-a784-34c5d6ffc515"
       }
     ]
   },
@@ -7259,6 +7016,10 @@
       {
         "namespace": "mfm",
         "id": "24866036-a316-49ca-8d17-46306841ad31"
+      },
+      {
+        "namespace": "mfm",
+        "id": "74ad7f8e-83f5-4338-82b8-d8dc65c85f9f"
       }
     ]
   },
@@ -7375,7 +7136,15 @@
       },
       {
         "namespace": "mfm",
+        "id": "01f9a328-5e1d-46da-ad4e-ac8dadd79c97"
+      },
+      {
+        "namespace": "mfm",
         "id": "2c3f25c7-fb49-4ce5-a820-d41330078599"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79c448cd-51b6-408f-8cf1-12d4c1f30f53"
       }
     ]
   },
@@ -7413,6 +7182,10 @@
       {
         "namespace": "mfm",
         "id": "2e55c010-55ed-47e4-8973-5f676fac4039"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b57bc0b4-8991-4d88-ba26-d026bd40b00d"
       }
     ]
   },
@@ -7455,6 +7228,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "1a56b1cb-cd0b-4e27-8698-462204143aea"
+      },
+      {
+        "namespace": "mfm",
         "id": "4f5bdb5b-8d1f-4bb2-baed-60c1343e4304"
       }
     ]
@@ -7485,6 +7262,10 @@
       {
         "namespace": "bsdata",
         "id": "17a2-361e-9a8c-18d8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b5c08f6-c0ab-4b37-803f-0ca3131c9be6"
       },
       {
         "namespace": "mfm",
@@ -7525,6 +7306,10 @@
       {
         "namespace": "bsdata",
         "id": "d1a1-1462-dde3-6c02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "148cfd9a-285c-4052-87a6-b8b6c2a8c66b"
       },
       {
         "namespace": "mfm",
@@ -7602,6 +7387,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "63b627a1-2679-4303-a715-4995efd248eb"
+      },
+      {
+        "namespace": "mfm",
         "id": "fbafb439-36f0-4bac-bb48-bab710351371"
       }
     ]
@@ -7636,6 +7425,10 @@
       {
         "namespace": "mfm",
         "id": "4e5420a2-94ca-4678-8727-a0c9447a95e2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "50a2a039-6c46-4dd8-90ef-890be2b6fd83"
       }
     ]
   },
@@ -7672,6 +7465,10 @@
       {
         "namespace": "bsdata",
         "id": "4459-9b5f-1a58-4403"
+      },
+      {
+        "namespace": "mfm",
+        "id": "669edbdb-0f37-44c0-9bc6-74930d8f4934"
       },
       {
         "namespace": "mfm",
@@ -7718,6 +7515,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "779dd9fa-f52b-4850-ba26-0bfc4134ca95"
+      },
+      {
+        "namespace": "mfm",
         "id": "ebfa58cb-595a-454b-bf25-327af92260d0"
       }
     ]
@@ -7755,6 +7556,10 @@
       {
         "namespace": "bsdata",
         "id": "5ba8-94c6-228f-4f7f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36ea45c5-31c9-4ad2-949d-1794dcb831b5"
       },
       {
         "namespace": "mfm",
@@ -7877,6 +7682,10 @@
       {
         "namespace": "bsdata",
         "id": "8bc4-b3ee-2da-7714"
+      },
+      {
+        "namespace": "mfm",
+        "id": "138cd942-cc52-4dbf-aa0a-8a045e197a34"
       },
       {
         "namespace": "mfm",
@@ -8007,6 +7816,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "666d89c2-de25-44bf-85c7-202ad1bf0ba5"
+      },
+      {
+        "namespace": "mfm",
         "id": "681c7b00-2de5-44ed-81ff-ff0ec0e71ca7"
       }
     ]
@@ -8053,6 +7866,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "04ad545c-8d94-48b8-8541-61ab7f0b81c6"
+      },
+      {
+        "namespace": "mfm",
         "id": "6790f01e-9df8-4232-ae37-0378ba4b159f"
       }
     ]
@@ -8083,6 +7900,10 @@
       {
         "namespace": "bsdata",
         "id": "9953-a38d-1b9e-7ab2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10006921-18af-4519-84c3-bcede46ad239"
       },
       {
         "namespace": "mfm",
@@ -8124,130 +7945,10 @@
       {
         "namespace": "mfm",
         "id": "458c4661-f7ea-4039-b266-735179da77ad"
-      }
-    ]
-  },
-  {
-    "id": "astartes-shotgun",
-    "name": "Astartes shotgun",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Shotgun",
-        "range": 18,
-        "stats": {
-          "A": 2,
-          "BS": 3,
-          "S": 4,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "assault"
-          },
-          {
-            "keyword_id": "blast",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2bfb-f524-c9a9-de4"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "de02-10d8-697a-6b2c"
       },
       {
         "namespace": "mfm",
-        "id": "17958ac5-cffc-4251-906a-9a7fba61d68c"
-      }
-    ]
-  },
-  {
-    "id": "scout-sniper-rifle",
-    "name": "Scout sniper rifle",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Sniper Rifle",
-        "range": 36,
-        "stats": {
-          "A": 1,
-          "BS": 3,
-          "S": 5,
-          "AP": -2,
-          "D": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "heavy"
-          },
-          {
-            "keyword_id": "precision"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "58dc-bd5e-fe8-7bd"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3c3b736a-4071-4e9b-8183-3b184b3008fb"
-      }
-    ]
-  },
-  {
-    "id": "brutalis-bolt-rifles",
-    "name": "Brutalis bolt rifles",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Bolt Rifles",
-        "range": 24,
-        "stats": {
-          "A": 4,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b8bc-cc4-1d6a-559e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b0ad20e4-94e0-4591-9c4c-bbd4b87fdaa1"
+        "id": "c917ba81-0873-473a-bb21-6e1137453ae3"
       }
     ]
   },
@@ -8281,6 +7982,10 @@
       {
         "namespace": "bsdata",
         "id": "a45d-5a4-fd3b-fbe"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1efa6bc1-f4f5-4190-9ae7-933660787a1e"
       },
       {
         "namespace": "mfm",
@@ -8406,6 +8111,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "47b12f69-4e67-48f7-9ed4-44566c0bafcb"
+      },
+      {
+        "namespace": "mfm",
         "id": "c8e62e73-bf57-4cff-9c82-a53cf7c98bd9"
       }
     ]
@@ -8436,6 +8145,10 @@
       {
         "namespace": "bsdata",
         "id": "7c56-d514-6af0-22da"
+      },
+      {
+        "namespace": "mfm",
+        "id": "675199a8-6a07-4e47-a2a1-b385ae73426b"
       },
       {
         "namespace": "mfm",
@@ -8479,6 +8192,10 @@
       {
         "namespace": "bsdata",
         "id": "c3bc-26b4-6fa0-bd39"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5dc9f9c0-0d9d-47a0-8abc-aca61e17d018"
       },
       {
         "namespace": "mfm",
@@ -8604,6 +8321,10 @@
       {
         "namespace": "mfm",
         "id": "5805ad46-72a2-4f37-a174-ddadcdb6ab81"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87d8fc23-870f-490b-adc4-14e25a9f4194"
       }
     ]
   },
@@ -8781,6 +8502,10 @@
       {
         "namespace": "bsdata",
         "id": "3451-a59-ad9d-cc65"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fe4a90b-bb54-42c8-bdf0-14ba8daa6cc7"
       },
       {
         "namespace": "mfm",
@@ -9007,6 +8732,10 @@
       {
         "namespace": "mfm",
         "id": "20d6b8c7-f812-4c80-84f8-0a5581be2e72"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3479aa4-87f3-480c-9138-83f20f4ed558"
       }
     ]
   },
@@ -9044,6 +8773,10 @@
       {
         "namespace": "mfm",
         "id": "15ea2fd9-baf0-400d-b665-18868da4ec08"
+      },
+      {
+        "namespace": "mfm",
+        "id": "636eaf30-8e46-4b42-b67d-b527d08ecad8"
       }
     ]
   },
@@ -9152,6 +8885,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "a32f7090-0b59-42d5-a717-3ed2b842b04b"
+      },
+      {
+        "namespace": "mfm",
         "id": "c41fd760-e0e1-4a72-9167-722472877d8f"
       }
     ]
@@ -9232,47 +8969,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "961b1f6b-906a-40be-a62b-3d3abfaee344"
-      }
-    ]
-  },
-  {
-    "id": "twin-fragstorm-grenade-launcher",
-    "name": "Twin fragstorm grenade launcher",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Twin fragstorm grenade launcher",
-        "range": 18,
-        "stats": {
-          "A": "D6",
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "f0ac-c831-aaaa-a840"
+        "id": "50a72abf-9dbc-4be0-810c-d9335b2585f2"
       },
       {
         "namespace": "mfm",
-        "id": "4d32dea0-295e-4149-b59b-f65400865a52"
+        "id": "961b1f6b-906a-40be-a62b-3d3abfaee344"
       }
     ]
   },
@@ -9302,6 +9003,10 @@
       {
         "namespace": "bsdata",
         "id": "9b0e-daf8-e5a-5bce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f534c6c-9c22-4775-b0aa-e2606eb0c79c"
       },
       {
         "namespace": "mfm",
@@ -9350,6 +9055,10 @@
       {
         "namespace": "mfm",
         "id": "8bc80ed3-995d-49bc-a56c-a31e81e295c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e79a3e4a-4ee1-4a84-b065-ae823fcd9676"
       }
     ]
   },
@@ -9418,39 +9127,6 @@
     ]
   },
   {
-    "id": "vanguard-veteran-weapon",
-    "name": "Vanguard Veteran weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Vanguard Veteran weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "d466-dd6c-f7bd-6fea"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f2f60baf-029c-401b-9c51-c5af55a118a2"
-      }
-    ]
-  },
-  {
     "id": "master-crafted-heavy-bolter",
     "name": "Master-crafted heavy bolter",
     "type": "ranged",
@@ -9498,6 +9174,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "93a711b7-ce25-4631-9641-bec57f6cbdd8"
+      },
+      {
+        "namespace": "mfm",
         "id": "d19539d0-c6d8-4f08-b2cf-20d49e045c6b"
       }
     ]
@@ -9538,6 +9218,10 @@
       {
         "namespace": "bsdata",
         "id": "4c78-3296-b3dd-a01a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "57481f4e-6a54-40d5-91d7-6df4eb8dfdfe"
       },
       {
         "namespace": "mfm",
@@ -9725,39 +9409,6 @@
       {
         "namespace": "mfm",
         "id": "ae2e873c-97ae-45ae-9a18-1d728f65e3eb"
-      }
-    ]
-  },
-  {
-    "id": "astraeus-las-ripper",
-    "name": "Astraeus las-ripper",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Astraeus las-ripper",
-        "range": 36,
-        "stats": {
-          "A": 2,
-          "S": 12,
-          "AP": -3,
-          "D": "D6+1",
-          "BS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "5e7d-e4a3-1407-eddf"
-      },
-      {
-        "namespace": "mfm",
-        "id": "05fe101a-87af-49b8-9a9e-9efc0147ded6"
       }
     ]
   },
@@ -9970,6 +9621,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "cb098a08-02a9-4a12-bff0-e3936456bc8b"
+      },
+      {
+        "namespace": "mfm",
         "id": "e51310b9-4d66-4a6c-9338-1d43af136edd"
       }
     ]
@@ -10018,6 +9673,10 @@
       {
         "namespace": "mfm",
         "id": "58231cf0-8193-462e-a4c1-a9cd0b5c46c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa1b0ec7-c4a0-4bd4-aba7-b9010940d61c"
       }
     ]
   },
@@ -10102,6 +9761,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "017e2d64-4a17-4668-9078-655c5b97cf3c"
+      },
+      {
+        "namespace": "mfm",
         "id": "dbc75426-d05a-46e4-8191-971d59d8b4b8"
       }
     ]
@@ -10136,6 +9799,10 @@
       {
         "namespace": "mfm",
         "id": "05d15971-d8a2-40a7-9991-cb47d87ee660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28802ffc-509b-47f2-af94-0619b88ee844"
       }
     ]
   },
@@ -10180,46 +9847,6 @@
     ]
   },
   {
-    "id": "the-ravens-talons",
-    "name": "The Raven’s Talons",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "The Raven’s Talons",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 5,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "precision"
-          },
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "e4fe-9ddc-4e91-c960"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b71a0485-1fbd-4d37-848f-91e458f68d2e"
-      }
-    ]
-  },
-  {
     "id": "bolt-carbine",
     "name": "Bolt carbine",
     "type": "ranged",
@@ -10252,6 +9879,10 @@
       {
         "namespace": "bsdata",
         "id": "a5fb-aa4d-100f-e1bb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "020f0c0a-470d-45cf-8c82-8edb5641d207"
       },
       {
         "namespace": "mfm",
@@ -10336,6 +9967,10 @@
       {
         "namespace": "mfm",
         "id": "393e6402-84b2-462f-952f-d54c8be181d1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e8a7ca9d-6caa-4857-9635-97bc4b5f774d"
       }
     ]
   },
@@ -10369,6 +10004,10 @@
       {
         "namespace": "mfm",
         "id": "3ec06466-aeda-46af-9081-e3f57b12e350"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bcdf47e7-5a35-46ca-a33f-8514a0bc35d1"
       }
     ]
   },
@@ -10609,6 +10248,10 @@
       {
         "namespace": "mfm",
         "id": "6c14fd63-31c2-4fbf-95ac-89732ceda1a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f16f80a4-7112-4b68-93d4-959d57be7298"
       }
     ]
   },
@@ -10642,6 +10285,10 @@
       {
         "namespace": "mfm",
         "id": "4f1588d8-ba3d-495f-afd2-6edcab3d26df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3b0b222-8cf8-4251-8c8c-07903c281450"
       }
     ]
   },
@@ -10671,6 +10318,10 @@
       {
         "namespace": "bsdata",
         "id": "c103-810e-58ff-f0f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2148cf4f-892c-466f-a65b-01feebbb7f0e"
       },
       {
         "namespace": "mfm",
@@ -10704,6 +10355,10 @@
       {
         "namespace": "bsdata",
         "id": "d0b3-238e-1b14-0a1e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "41777d10-00df-449c-9e1b-861ae531a158"
       },
       {
         "namespace": "mfm",
@@ -10797,6 +10452,10 @@
       {
         "namespace": "mfm",
         "id": "31892003-1ee8-473c-b16f-260841af7ba4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c542a046-58a5-4e5d-805b-3e7e376dac0b"
       }
     ]
   },
@@ -11026,6 +10685,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "bd1787d4-60a0-44b3-a080-475d30384772"
+      },
+      {
+        "namespace": "mfm",
         "id": "e485d00a-b4a0-455f-baa8-2d61099ea5b7"
       }
     ]
@@ -11138,6 +10801,10 @@
       {
         "namespace": "bsdata",
         "id": "a2da-8ec0-3f71-a5e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "50742674-645c-43cb-bcc7-da3fa1fe09ea"
       },
       {
         "namespace": "mfm",
@@ -11275,6 +10942,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "87cef685-b8d2-4261-b02d-da3ddff62a14"
+      },
+      {
+        "namespace": "mfm",
         "id": "e1f11543-8b73-430e-be65-3284c9ce9319"
       }
     ]
@@ -11343,43 +11014,6 @@
       {
         "namespace": "mfm",
         "id": "69305a5f-b1dc-4774-b8b7-7f0ef60d5e9a"
-      }
-    ]
-  },
-  {
-    "id": "master-crafted-heavy-bolt-pistol",
-    "name": "Master‑crafted heavy bolt pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Master‑crafted heavy bolt pistol",
-        "range": 18,
-        "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": -1,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "pistol"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2204-956f-ac70-ad68"
-      },
-      {
-        "namespace": "mfm",
-        "id": "1b064fa4-9088-4a97-a17c-a1e7503049f2"
       }
     ]
   },
@@ -11576,6 +11210,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "7725dee4-b0bf-4841-82b0-62704f661b2e"
+      },
+      {
+        "namespace": "mfm",
         "id": "b99e6917-0f37-45e1-95f9-9b332c15bb72"
       }
     ]
@@ -11610,6 +11248,10 @@
       {
         "namespace": "mfm",
         "id": "01c9c15b-0e9d-483f-9ad2-c262902e1354"
+      },
+      {
+        "namespace": "mfm",
+        "id": "adce185b-28fd-41c1-8883-fac68c3f00c2"
       }
     ]
   },
@@ -11676,6 +11318,10 @@
       {
         "namespace": "mfm",
         "id": "0599399d-4323-49b5-802f-be2df72b34a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3ca118c-bc94-46ad-82dd-2529288f90cf"
       }
     ]
   },
@@ -11709,6 +11355,10 @@
       {
         "namespace": "mfm",
         "id": "0599399d-4323-49b5-802f-be2df72b34a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78923cfc-d6b4-404b-9f15-34ac131c9bce"
       }
     ]
   },
@@ -11742,39 +11392,14 @@
       {
         "namespace": "mfm",
         "id": "0599399d-4323-49b5-802f-be2df72b34a3"
-      }
-    ]
-  },
-  {
-    "id": "armoured-hull-stormraven-gunship",
-    "name": "Armoured hull",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Armoured hull",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 8,
-          "AP": 0,
-          "D": 1,
-          "WS": 4
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "3b59-048c-5410-33fe"
       },
       {
         "namespace": "mfm",
-        "id": "0599399d-4323-49b5-802f-be2df72b34a3"
+        "id": "6b4c40b3-9ae2-48a0-b424-9d70f3c2528c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f54be967-a9b4-46a2-8a7b-32b7632f6bad"
       }
     ]
   },
@@ -11808,6 +11433,10 @@
       {
         "namespace": "mfm",
         "id": "0599399d-4323-49b5-802f-be2df72b34a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "abffb197-37c0-49c9-b6a8-e87d1305a798"
       }
     ]
   },
@@ -11837,6 +11466,10 @@
       {
         "namespace": "bsdata",
         "id": "d3da-d5f3-70a9-50ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23d5eec9-95a2-4211-be82-c2a6bc36735c"
       },
       {
         "namespace": "mfm",
@@ -11903,6 +11536,10 @@
       {
         "namespace": "bsdata",
         "id": "d3da-d5f3-70a9-50ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4140ba82-d1f0-4222-aebd-9851dd75f5e2"
       },
       {
         "namespace": "mfm",
@@ -11985,145 +11622,6 @@
     ]
   },
   {
-    "id": "astartes-chainsword-assault-intercessor-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-assault-intercessors-with-jump-packs",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-blood-claws",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-captain-with-jump-pack",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 8,
-          "WS": 2,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ad25-473b-bb10-6863"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4a05e933-0903-4721-a226-7eac774c337b"
-      }
-    ]
-  },
-  {
     "id": "astartes-chainsword-castellan",
     "name": "Astartes chainsword",
     "type": "melee",
@@ -12160,413 +11658,6 @@
       {
         "namespace": "mfm",
         "id": "aeeb2dd1-5cc0-4899-a02e-382ad1527661"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-crusader-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "731a-79db-4259-2dd4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "69216614-66f5-43e4-9b04-4a986b870c16"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-death-company-captain-with-jump-pack",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ad25-473b-bb10-6863"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4a05e933-0903-4721-a226-7eac774c337b"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-death-company-marines",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-death-company-marines-with-jump-packs",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-fortis-kill-team",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-grey-hunters",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-intercessor-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "c1b9-f39d-7390-d4cb"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ee77936c-09d8-407e-81d0-9e9a24946d7c"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-outrider-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-sanguinary-priest",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "36aa-c29e-8f8-c662"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ee77936c-09d8-407e-81d0-9e9a24946d7c"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-scout-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 4,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-sternguard-veteran-squad",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "aa1f-01f9-7060-78a2"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "f241-f2ab-c2bd-cf0e"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d1b87bd1-c1f9-433e-8b2a-efe41e068c4a"
-      }
-    ]
-  },
-  {
-    "id": "astartes-chainsword-talonstrike-kill-team",
-    "name": "Astartes chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Astartes chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "efcd-180-d07-b4d6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ab6273a0-0b67-4b32-8f95-514a1bb4c457"
       }
     ]
   },
@@ -12615,43 +11706,6 @@
     ]
   },
   {
-    "id": "bolt-pistol-captain",
-    "name": "Bolt Pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Bolt Pistol",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "pistol"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b273-b85e-4018-a0cd"
-      },
-      {
-        "namespace": "mfm",
-        "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
-      }
-    ]
-  },
-  {
     "id": "bolt-pistol-captain-in-phobos-armour",
     "name": "Bolt Pistol",
     "type": "ranged",
@@ -12685,6 +11739,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2c0343f-f021-4a98-8d1d-2aba02334049"
       }
     ]
   },
@@ -12722,6 +11780,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f60d1961-b287-42f8-b993-aa3b2185f7b2"
       }
     ]
   },
@@ -12759,6 +11821,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6834aed6-5ca5-47a3-9503-0591fdf85e16"
       }
     ]
   },
@@ -12873,6 +11939,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "63c28752-f8b0-4d2f-8e55-9f39dc9fb5da"
       }
     ]
   },
@@ -12910,6 +11980,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b08b8e0c-7cae-4dc3-9bd7-872120d34735"
       }
     ]
   },
@@ -12968,46 +12042,6 @@
         "keywords": [
           {
             "keyword_id": "close-quarters"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b273-b85e-4018-a0cd"
-      },
-      {
-        "namespace": "mfm",
-        "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
-      }
-    ]
-  },
-  {
-    "id": "bolt-pistol-lieutenant-in-phobos-armour",
-    "name": "Bolt Pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Special-issue Bolt Pistol",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "BS": 2,
-          "S": 5,
-          "AP": -2,
-          "D": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "close-quarters"
-          },
-          {
-            "keyword_id": "precision"
           }
         ]
       }
@@ -13139,146 +12173,6 @@
     ]
   },
   {
-    "id": "chainfist-ancient-in-terminator-armour",
-    "name": "Chainfist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Chainfist",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 8,
-          "AP": -2,
-          "D": 2,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Vehicle",
-              "threshold": 3
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "0e44-bfc8-cd51-8ad0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a5ec70ca-9f32-417e-8567-fdb7d96cf0ca"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-ancient-in-terminator-armour",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Close combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "f3c7-067a-894a-cc3a"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6d3320d1-2a8a-43b4-94a1-b2bff0a30dcb"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-apothecary",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Servo-armature",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "db5b-fe94-e50c-4f4b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c028938-8038-4744-9f5c-a60eca31e9a7"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-apothecary-biologis",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Servo-armature",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "db5b-fe94-e50c-4f4b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c028938-8038-4744-9f5c-a60eca31e9a7"
-      }
-    ]
-  },
-  {
     "id": "close-combat-weapon-chaplain-grimaldus",
     "name": "Close combat weapon",
     "type": "melee",
@@ -13308,142 +12202,6 @@
       {
         "namespace": "mfm",
         "id": "cc306b9d-009b-4ea1-bd8b-79028bbb18d2"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-land-speeder-vengeance",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Close combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b095-d588-7f75-2f48"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c028938-8038-4744-9f5c-a60eca31e9a7"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-lieutenant",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Close combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "f3c7-067a-894a-cc3a"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6d3320d1-2a8a-43b4-94a1-b2bff0a30dcb"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-ravenwing-darkshroud",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Close combat weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "6670-a3c1-dc23-3622"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c028938-8038-4744-9f5c-a60eca31e9a7"
-      }
-    ]
-  },
-  {
-    "id": "close-combat-weapon-wardens-of-ultramar",
-    "name": "Close combat weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Ultramarian Combat Weapons",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 4,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8e0c-d8f7-eeb8-ed2a"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "920f-63fe-ffdf-538c"
-      },
-      {
-        "namespace": "mfm",
-        "id": "301f2fcf-64af-440d-a696-640206a7bc82"
       }
     ]
   },
@@ -13487,6 +12245,10 @@
       {
         "namespace": "mfm",
         "id": "5496e8bb-2adf-431a-9fd9-df34f35fba85"
+      },
+      {
+        "namespace": "mfm",
+        "id": "766523e2-cbcf-4c6c-bae5-324067e50d3c"
       }
     ]
   },
@@ -13523,57 +12285,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "d672ea25-d9de-482e-84bf-a6534f3976e2"
-      }
-    ]
-  },
-  {
-    "id": "combi-weapon-chaplain-with-jump-pack",
-    "name": "Combi-weapon",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Combi-weapon",
-        "range": 24,
-        "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Infantry",
-              "threshold": 4
-            }
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2c13-8cdd-f66b-bcae"
+        "id": "2f07ccc7-aeb5-467e-a095-99019f5e57ee"
       },
       {
         "namespace": "mfm",
-        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+        "id": "d672ea25-d9de-482e-84bf-a6534f3976e2"
       }
     ]
   },
@@ -13624,106 +12340,6 @@
       {
         "namespace": "mfm",
         "id": "e4c6c48f-7b5c-415a-b397-3f2536a7ee1d"
-      }
-    ]
-  },
-  {
-    "id": "combi-weapon-librarian-in-terminator-armour",
-    "name": "Combi-weapon",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Combi-weapon",
-        "range": 24,
-        "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Infantry",
-              "threshold": 4
-            }
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2c13-8cdd-f66b-bcae"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
-      }
-    ]
-  },
-  {
-    "id": "combi-weapon-sternguard-veteran-squad",
-    "name": "Combi-weapon",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Combi-weapon",
-        "range": 24,
-        "stats": {
-          "A": 1,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 4
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Infantry",
-              "threshold": 4
-            }
-          },
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2c13-8cdd-f66b-bcae"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
       }
     ]
   },
@@ -13928,6 +12544,10 @@
       {
         "namespace": "mfm",
         "id": "39fb91ab-fd96-4fe9-b445-a47f0e67845d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a812fa97-f21f-4927-a5e2-8b93d32c21fb"
       }
     ]
   },
@@ -13965,6 +12585,10 @@
       {
         "namespace": "mfm",
         "id": "39fb91ab-fd96-4fe9-b445-a47f0e67845d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d82d7abb-4b26-465a-9cb5-c15577348423"
       }
     ]
   },
@@ -14113,6 +12737,10 @@
       {
         "namespace": "mfm",
         "id": "39fb91ab-fd96-4fe9-b445-a47f0e67845d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4c3c88a3-5928-4d85-8bdc-8587c42ef793"
       }
     ]
   },
@@ -14150,6 +12778,10 @@
       {
         "namespace": "mfm",
         "id": "39fb91ab-fd96-4fe9-b445-a47f0e67845d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bf1af6a5-72f6-4665-9677-1f215a51f65f"
       }
     ]
   },
@@ -14199,6 +12831,10 @@
       {
         "namespace": "bsdata",
         "id": "d9a8-d71f-c7fc-05b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60d2c143-f43f-41dd-a4ff-2416731ff6d4"
       },
       {
         "namespace": "mfm",
@@ -14252,6 +12888,10 @@
       {
         "namespace": "mfm",
         "id": "95c9411b-8b2e-4aa1-93b5-60c9d07c424f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbd15401-5484-4e45-8640-258a656fb97f"
       }
     ]
   },
@@ -14298,6 +12938,10 @@
       {
         "namespace": "mfm",
         "id": "3ae4586d-9d05-461b-86ea-1a0cc1f5de11"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97fba3a3-732d-41dc-a270-d89d41aa784c"
       }
     ]
   },
@@ -14427,6 +13071,10 @@
       {
         "namespace": "mfm",
         "id": "56baafb2-492a-4636-8398-955494a9428d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8831589-224c-401b-b0ac-5c37bb8ebe92"
       }
     ]
   },
@@ -14661,39 +13309,6 @@
     ]
   },
   {
-    "id": "master-crafted-bolt-carbine-wolf-guard-battle-leader",
-    "name": "Master‑crafted bolt carbine",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Master‑crafted bolt carbine",
-        "range": 24,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": 0,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "7a58-0188-2841-79c8"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a13b1149-418f-4491-80c2-6b5287ef547c"
-      }
-    ]
-  },
-  {
     "id": "master-crafted-bolter-captain-titus",
     "name": "Master-crafted bolter",
     "type": "ranged",
@@ -14732,6 +13347,10 @@
       {
         "namespace": "bsdata",
         "id": "607f-73ab-4214-eb23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fd8cc2c-2c8f-468f-bab1-8f586a682d42"
       },
       {
         "namespace": "mfm",
@@ -14781,39 +13400,6 @@
     ]
   },
   {
-    "id": "master-crafted-power-weapon-bladeguard-veteran-squad",
-    "name": "Master-crafted power weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Master-crafted Power Sword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": -2,
-          "D": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "2b6b-56b9-13a8-3320"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f790b705-845e-4cdf-b534-2ce987d3cb90"
-      }
-    ]
-  },
-  {
     "id": "master-crafted-power-weapon-captain",
     "name": "Master-crafted power weapon",
     "type": "melee",
@@ -14839,6 +13425,10 @@
       {
         "namespace": "bsdata",
         "id": "3728-095b-3418-111b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34fda568-f983-490d-88af-2d3f25ec1469"
       },
       {
         "namespace": "mfm",
@@ -14876,6 +13466,10 @@
       {
         "namespace": "mfm",
         "id": "ba0a55c4-d618-4ed0-b59b-02fc4cf2d09b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd0a0ee6-78b7-4523-a82f-04b2d76ba2ad"
       }
     ]
   },
@@ -14950,6 +13544,10 @@
       {
         "namespace": "mfm",
         "id": "059a4bfd-278a-44ab-8041-a63d6654512f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ebf6f5de-19df-4183-b280-40b9086fbc8c"
       }
     ]
   },
@@ -14987,6 +13585,10 @@
       {
         "namespace": "mfm",
         "id": "26b25c04-2987-4f38-8078-a9430fada73c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "500f9140-4b51-4496-b2f1-b9654bdd1b30"
       }
     ]
   },
@@ -15024,6 +13626,10 @@
       {
         "namespace": "mfm",
         "id": "31c09c4f-b097-4879-9a73-e3798802c119"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6b88e9b-1583-4083-9fbd-92d50962defd"
       }
     ]
   },
@@ -15093,6 +13699,10 @@
       {
         "namespace": "bsdata",
         "id": "ebda-08ed-994a-b579"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4cbdddaf-8ad3-49e8-a98e-eda1e7219442"
       },
       {
         "namespace": "mfm",
@@ -15166,6 +13776,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "28d2e6b4-c383-4018-9ef6-f681c11b27f3"
+      },
+      {
+        "namespace": "mfm",
         "id": "31c09c4f-b097-4879-9a73-e3798802c119"
       }
     ]
@@ -15200,6 +13814,10 @@
       {
         "namespace": "mfm",
         "id": "98711673-ce3e-41c2-948c-6d24f7c5cc42"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a2e8b2c4-37f2-45b0-844d-f5d062b8bc05"
       }
     ]
   },
@@ -15229,6 +13847,10 @@
       {
         "namespace": "bsdata",
         "id": "ebda-08ed-994a-b579"
+      },
+      {
+        "namespace": "mfm",
+        "id": "284824da-9974-496d-992c-1287cfe1f487"
       },
       {
         "namespace": "mfm",
@@ -15270,6 +13892,10 @@
       {
         "namespace": "mfm",
         "id": "4ce86bee-ec20-4f13-80dd-ba84fdab049b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5314d270-d402-4d91-add6-f0c308529656"
       }
     ]
   },
@@ -15335,6 +13961,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "c108050e-6aa6-464c-9c4c-325d5d0850a5"
+      },
+      {
+        "namespace": "mfm",
         "id": "f790b705-845e-4cdf-b534-2ce987d3cb90"
       }
     ]
@@ -15377,6 +14007,10 @@
       {
         "namespace": "bsdata",
         "id": "bf02-8951-4f2d-2a64"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4f7baae8-bd9f-4f6e-80a6-1157799f3b86"
       },
       {
         "namespace": "mfm",
@@ -15563,6 +14197,10 @@
       {
         "namespace": "mfm",
         "id": "2753187a-8824-400a-ba87-722cb5f1675f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b26ed322-9f53-48fe-bdbf-28684b1f385d"
       }
     ]
   },
@@ -15603,6 +14241,10 @@
       {
         "namespace": "mfm",
         "id": "2753187a-8824-400a-ba87-722cb5f1675f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6628d2a7-548d-4f42-a4ab-af92757973b0"
       }
     ]
   },
@@ -15686,6 +14328,10 @@
       {
         "namespace": "mfm",
         "id": "821fbe00-e789-485b-af43-9b75e201aa6f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d9309aee-e50f-421e-839e-43298664f5e3"
       }
     ]
   },
@@ -15738,6 +14384,10 @@
       {
         "namespace": "bsdata",
         "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1e0033b4-1192-402b-a89b-26626756f40a"
       },
       {
         "namespace": "mfm",
@@ -15798,6 +14448,10 @@
       {
         "namespace": "mfm",
         "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5667eace-0b7a-4fc6-aeaf-e5c8df43daf4"
       }
     ]
   },
@@ -15853,59 +14507,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
-      }
-    ]
-  },
-  {
-    "id": "plasma-pistol-blood-claws",
-    "name": "Plasma pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Standard",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "S": 7,
-          "AP": -2,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "pistol"
-          }
-        ]
-      },
-      {
-        "name": "Supercharge",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "S": 8,
-          "AP": -3,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "hazardous"
-          },
-          {
-            "keyword_id": "pistol"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "25c2-104f-fa0c-809e"
+        "id": "06e10bbe-9aa8-446c-90eb-8923b427191e"
       },
       {
         "namespace": "mfm",
@@ -15914,7 +14516,7 @@
     ]
   },
   {
-    "id": "plasma-pistol-chaplain-with-jump-pack",
+    "id": "plasma-pistol-blood-claws",
     "name": "Plasma pistol",
     "type": "ranged",
     "profiles": [
@@ -16306,6 +14908,10 @@
       {
         "namespace": "mfm",
         "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9b249f50-08af-47c2-8239-5a629954fc05"
       }
     ]
   },
@@ -16358,6 +14964,10 @@
       {
         "namespace": "bsdata",
         "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15ec03a8-8542-45fc-8ecc-1802f5188b3d"
       },
       {
         "namespace": "mfm",
@@ -16702,39 +15312,6 @@
     ]
   },
   {
-    "id": "power-fist-ancient-in-terminator-armour",
-    "name": "Power fist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Power fist",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 8,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ae9d-92b6-ba7b-3f52"
-      },
-      {
-        "namespace": "mfm",
-        "id": "70636dcd-163d-4d58-be71-5e51f8ce9d9c"
-      }
-    ]
-  },
-  {
     "id": "power-fist-blood-angels-captain",
     "name": "Power fist",
     "type": "melee",
@@ -16760,6 +15337,10 @@
       {
         "namespace": "bsdata",
         "id": "99de-5985-8cb8-f571"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5e1724bc-0d35-4f35-b659-58507a02bf41"
       },
       {
         "namespace": "mfm",
@@ -16796,40 +15377,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "e7e8e749-e1bc-4d7a-a6d2-59285a9352ed"
-      }
-    ]
-  },
-  {
-    "id": "power-fist-captain-in-gravis-armour",
-    "name": "Power fist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Relic Power Fist",
-        "range": "Melee",
-        "stats": {
-          "A": 1,
-          "WS": 2,
-          "S": 8,
-          "AP": -2,
-          "D": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "extra-attacks"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "99de-5985-8cb8-f571"
+        "id": "ba720802-1145-4caa-9fdc-30a50a0f70e2"
       },
       {
         "namespace": "mfm",
@@ -16867,39 +15415,10 @@
       {
         "namespace": "mfm",
         "id": "006df490-474c-47b0-b0ad-ebe6114eae80"
-      }
-    ]
-  },
-  {
-    "id": "power-fist-chaplain-with-jump-pack",
-    "name": "Power fist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Power fist",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 8,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ae9d-92b6-ba7b-3f52"
       },
       {
         "namespace": "mfm",
-        "id": "70636dcd-163d-4d58-be71-5e51f8ce9d9c"
+        "id": "552b55fb-1f03-4370-86c1-7b7d91e16626"
       }
     ]
   },
@@ -16966,6 +15485,10 @@
       {
         "namespace": "mfm",
         "id": "e7e8e749-e1bc-4d7a-a6d2-59285a9352ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6c8c5b1-b45a-48e4-8b3c-3e15dfd1b9ec"
       }
     ]
   },
@@ -16999,6 +15522,10 @@
       {
         "namespace": "mfm",
         "id": "70636dcd-163d-4d58-be71-5e51f8ce9d9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "76a3237c-f470-450e-b647-89fe2f9b28c6"
       }
     ]
   },
@@ -17036,6 +15563,10 @@
       {
         "namespace": "mfm",
         "id": "48e7e97d-bcb9-4d12-a86e-51c1620bb581"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87e50266-18aa-48bb-a245-559344841ef2"
       }
     ]
   },
@@ -17068,36 +15599,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "305971a0-eccf-479a-a48b-4bb649b101d8"
-      }
-    ]
-  },
-  {
-    "id": "power-weapon-ancient-in-terminator-armour",
-    "name": "Power weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Master-crafted Power Weapon",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "WS": 3,
-          "S": 5,
-          "AP": -2,
-          "D": 2
-        },
-        "keywords": []
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "de20-8042-7b1f-dff7"
+        "id": "1ddc2e1e-4101-4be9-a018-e09dfc1c1bb1"
       },
       {
         "namespace": "mfm",
@@ -17131,6 +15633,10 @@
       {
         "namespace": "bsdata",
         "id": "eca6-624b-8c87-5d69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "185156ac-1df2-46cd-90ba-bfa1a90a48e9"
       },
       {
         "namespace": "mfm",
@@ -17168,6 +15674,10 @@
       {
         "namespace": "mfm",
         "id": "696cb535-2448-4fd6-8ff0-73c6f638e9b4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8430d0f1-7df3-4a35-b20f-b8c12e9b0e53"
       }
     ]
   },
@@ -17245,6 +15755,10 @@
       {
         "namespace": "mfm",
         "id": "72c20189-9ff2-4737-9e12-5de63a731165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97101795-d62a-4a67-bec6-4fe26e6e3d97"
       }
     ]
   },
@@ -17274,6 +15788,10 @@
       {
         "namespace": "bsdata",
         "id": "6dc0-a9d5-a111-daf2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "953f0f68-849a-4bff-a5a0-a7d2ba3cf48c"
       },
       {
         "namespace": "mfm",
@@ -17353,6 +15871,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "3d97d860-30c4-429f-bb22-91c262ddf2c1"
+      },
+      {
+        "namespace": "mfm",
         "id": "40286461-ae31-48c2-a208-13cb135fc268"
       }
     ]
@@ -17390,48 +15912,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "cf208151-9d77-4062-aca6-f3acc9739935"
-      }
-    ]
-  },
-  {
-    "id": "skyhammer-missile-launcher-stormhawk-interceptor",
-    "name": "Skyhammer missile launcher",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Skyhammer missile launcher",
-        "range": 48,
-        "stats": {
-          "A": 3,
-          "S": 8,
-          "AP": -1,
-          "D": "D3",
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Fly",
-              "threshold": 2
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "beea-63c9-1c06-76f9"
+        "id": "1cb94288-31f7-4926-9874-e08aa408ea93"
       },
       {
         "namespace": "mfm",
-        "id": "e68a7056-b837-4141-a780-73fcfe53334f"
+        "id": "cf208151-9d77-4062-aca6-f3acc9739935"
       }
     ]
   },
@@ -17472,6 +15957,10 @@
       {
         "namespace": "mfm",
         "id": "1bcf4746-240d-4d4a-821a-d27e14b343fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbdeffc1-4d17-4c60-b198-96708571c087"
       }
     ]
   },
@@ -17556,6 +16045,10 @@
       {
         "namespace": "mfm",
         "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d46e8cb1-62b5-4b6e-9eb1-13a0efe25f4e"
       }
     ]
   },
@@ -17596,6 +16089,10 @@
       {
         "namespace": "mfm",
         "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33f8bdd4-a637-4c7a-9b9e-311c4644cd24"
       }
     ]
   },
@@ -17708,6 +16205,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "12dbd9ce-a3a2-4f54-aa01-4c0b06149247"
+      },
+      {
+        "namespace": "mfm",
         "id": "5dc0a370-563d-4387-b946-334f8c6262e0"
       }
     ]
@@ -17738,6 +16239,10 @@
       {
         "namespace": "bsdata",
         "id": "6feb-0e8b-9746-dd0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14184a35-7649-48d8-a1df-ef42755cc48a"
       },
       {
         "namespace": "mfm",
@@ -17779,43 +16284,10 @@
       {
         "namespace": "mfm",
         "id": "10eeed4e-9699-4bbc-a1c5-2ca0f1721c5d"
-      }
-    ]
-  },
-  {
-    "id": "thunder-hammer-ancient-in-terminator-armour",
-    "name": "Thunder hammer",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Thunder hammer",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 8,
-          "AP": -2,
-          "D": 2,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "b637-5b1c-59f5-d463"
       },
       {
         "namespace": "mfm",
-        "id": "f851d558-ead2-49aa-b91c-d242a946080c"
+        "id": "3a38bf0c-7f4d-495a-a957-1da24d203213"
       }
     ]
   },
@@ -17853,6 +16325,10 @@
       {
         "namespace": "mfm",
         "id": "993e450c-a85b-4924-8d21-37f296b68c80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb6daf4f-97aa-4de7-a46e-dd09a542a380"
       }
     ]
   },
@@ -17890,6 +16366,10 @@
       {
         "namespace": "mfm",
         "id": "0f931617-2dd9-4bfd-a1e0-81946b995edd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "520979dd-d3aa-4812-bd17-eacf094118eb"
       }
     ]
   },
@@ -18042,6 +16522,10 @@
       {
         "namespace": "mfm",
         "id": "993e450c-a85b-4924-8d21-37f296b68c80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe7d3909-9c09-41cb-a469-3a55c4f97c4d"
       }
     ]
   },
@@ -18171,43 +16655,6 @@
     ]
   },
   {
-    "id": "twin-lightning-claws-ancient-in-terminator-armour",
-    "name": "Twin lightning claws",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Twin lightning claws",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 5,
-          "AP": -2,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "fd43-829-68bc-b28f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b38a80e6-def4-40b9-bfe5-c93ddc7ab8e6"
-      }
-    ]
-  },
-  {
     "id": "twin-lightning-claws-deathwatch-terminator-squad",
     "name": "Twin lightning claws",
     "type": "melee",
@@ -18282,6 +16729,10 @@
       {
         "namespace": "mfm",
         "id": "0c5f0247-6518-4e1f-9e2f-0628a19ac913"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c991711e-615b-4de3-badf-b04f134bd87f"
       }
     ]
   },
@@ -18315,49 +16766,10 @@
       {
         "namespace": "mfm",
         "id": "0c5f0247-6518-4e1f-9e2f-0628a19ac913"
-      }
-    ]
-  },
-  {
-    "id": "twin-storm-bolter-redemptor-dreadnought",
-    "name": "Twin storm bolter",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Twin storm bolter",
-        "range": 24,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": 0,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          },
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "1063-59-2a38-61fd"
       },
       {
         "namespace": "mfm",
-        "id": "8ca41df4-91ec-4c56-9372-641a919b5c95"
+        "id": "ae619a17-ea54-4ec5-84eb-e8a0c2759ad1"
       }
     ]
   },
@@ -18469,6 +16881,22 @@
       {
         "namespace": "mfm",
         "id": "20c32cac-b6be-4419-a477-958c9d3aa506"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2be22fe3-b7f7-49d8-8879-ed4a268dcc70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ea87dad-5075-4698-bae6-df062a932a0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac57de76-fbab-4743-83bc-bb81f69a9e5a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee597ac3-4ad2-4d38-8299-c6cef42a2065"
       }
     ]
   },
@@ -18500,7 +16928,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "aed1fd5f-b545-4af2-9ee5-39497b357df1"
+      }
+    ]
   },
   {
     "id": "flamestorm-gauntlets-aggressor-squad",
@@ -18613,7 +17047,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d198df49-368d-48be-82e8-0c2d26fab7d5"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-ancient",
@@ -18640,7 +17080,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6589a6e6-a176-4963-bd10-2af265674c9e"
+      }
+    ]
   },
   {
     "id": "bolt-rifle-ancient",
@@ -18695,7 +17141,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dff78757-b762-4b69-8713-f363803fe526"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-ancient",
@@ -18718,7 +17170,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ae25ad42-1818-45c6-84ff-da59cc37b056"
+      }
+    ]
   },
   {
     "id": "storm-bolter-ancient-in-terminator-armour",
@@ -18748,7 +17206,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e5c2604f-f311-4e9a-aafb-b11fdc433c0a"
+      }
+    ]
   },
   {
     "id": "absolvor-bolt-pistol-apothecary",
@@ -18775,7 +17239,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cc0afcf1-5b55-4ef2-8fa9-0ca9d137ae86"
+      }
+    ]
   },
   {
     "id": "absolvor-bolt-pistol-apothecary-biologis",
@@ -18802,7 +17272,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "92770143-717a-4248-8487-97a422d7d710"
+      }
+    ]
   },
   {
     "id": "hand-flamer-assault-intercessor-squad",
@@ -18831,7 +17307,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "10c5943d-5aef-4b1d-a5f9-fa46fa9f5200"
+      }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-assault-intercessor-squad",
@@ -18858,7 +17340,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "69295819-0f55-4a5b-bf84-fbfd5fcaa270"
+      }
+    ]
   },
   {
     "id": "power-fist-assault-intercessor-squad",
@@ -18881,7 +17369,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "07fd2dd0-63d0-4c71-95ce-5fe1e21afdd2"
+      }
+    ]
   },
   {
     "id": "power-weapon-assault-intercessor-squad",
@@ -18904,7 +17398,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70ba57f7-c91f-47bb-9d77-3e25b4fd29e3"
+      }
+    ]
   },
   {
     "id": "hand-flamer-assault-intercessors-with-jump-packs",
@@ -18933,7 +17433,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "21ce7802-cc64-470e-a47a-96ea0a469bbc"
+      }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-assault-intercessors-with-jump-packs",
@@ -18960,7 +17466,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c233f8f0-ed51-4f9a-b1a6-982e7e95ac4b"
+      }
+    ]
   },
   {
     "id": "power-fist-assault-intercessors-with-jump-packs",
@@ -18983,7 +17495,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0e36da65-c287-46e9-8457-685086481d0d"
+      }
+    ]
   },
   {
     "id": "power-weapon-assault-intercessors-with-jump-packs",
@@ -19006,37 +17524,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "storm-bolters-ballistus-dreadnought",
-    "name": "Storm Bolters",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Storm Bolters",
-        "range": 24,
-        "stats": {
-          "A": 4,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 4
-            }
-          }
-        ]
+        "namespace": "mfm",
+        "id": "8145c94f-8e83-49b4-926f-9416cafd07b4"
       }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-bladeguard-ancient",
@@ -19063,7 +17557,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0a1f6e60-fc64-46b8-af86-2ffc42138560"
+      }
+    ]
   },
   {
     "id": "relics-of-battle-bladeguard-ancient",
@@ -19086,7 +17586,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "233bfc27-001c-4bc9-a4c1-36305350b1ec"
+      }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-bladeguard-veteran-squad",
@@ -19113,7 +17619,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "552eb263-beed-4ea3-852c-ac0aeba7a22d"
+      }
+    ]
   },
   {
     "id": "twin-heavy-bolter-brutalis-dreadnought",
@@ -19152,7 +17664,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c519b3fa-3d90-4837-a112-fc0ae889182e"
+      }
+    ]
   },
   {
     "id": "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought",
@@ -19225,7 +17743,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4fc60f26-9c04-4255-be17-f1a31dc995ba"
+      }
+    ]
   },
   {
     "id": "plasma-pistol-captain",
@@ -19271,7 +17795,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ffdbbada-dc19-470b-8057-2574e1eb5cde"
+      }
+    ]
   },
   {
     "id": "combi-weapon-captain-in-terminator-armour",
@@ -19358,7 +17888,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fcf39577-78f5-48da-9cef-9c9cdf105be3"
+      }
+    ]
   },
   {
     "id": "hand-flamer-captain-with-jump-pack",
@@ -19388,7 +17924,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5c2a4098-30fc-421e-9c4f-2f4c0737e2cd"
+      }
+    ]
   },
   {
     "id": "plasma-pistol-captain-with-jump-pack",
@@ -19434,7 +17976,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "25978559-8572-430b-98ec-1fb788287626"
+      }
+    ]
   },
   {
     "id": "relic-weapon-captain-with-jump-pack",
@@ -19457,7 +18005,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c70e77b4-84dd-44ea-8036-836074a0a617"
+      }
+    ]
   },
   {
     "id": "absolvor-bolt-pistol-chaplain",
@@ -19484,7 +18038,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "26acd923-f762-4b9a-9d30-b0e675829754"
+      }
+    ]
   },
   {
     "id": "crozius-arcanum-chaplain",
@@ -19514,7 +18074,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a0253f30-2c61-46c5-a464-0aea878076f8"
+      }
+    ]
   },
   {
     "id": "crozius-arcanum-chaplain-in-terminator-armour",
@@ -19544,7 +18110,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cfa92552-da1d-452e-8387-e377887db9be"
+      }
+    ]
   },
   {
     "id": "storm-bolter-chaplain-in-terminator-armour",
@@ -19574,7 +18146,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1d44d351-178d-4e4c-b36a-fba5a54a7bc5"
+      }
+    ]
   },
   {
     "id": "absolvor-bolt-pistol-chaplain-on-bike",
@@ -19601,7 +18179,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "21f7515a-958b-484b-bdf2-e4eb0ab31cca"
+      }
+    ]
   },
   {
     "id": "crozius-arcanum-chaplain-on-bike",
@@ -19631,7 +18215,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "52109663-ed0f-40fe-9da4-08f238eda0a8"
+      }
+    ]
   },
   {
     "id": "absolvor-bolt-pistol-chaplain-with-jump-pack",
@@ -19658,7 +18248,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "61ad6b73-4c6b-487f-8ab1-ab3bb206bf8d"
+      }
+    ]
   },
   {
     "id": "crozius-arcanum-chaplain-with-jump-pack",
@@ -19688,7 +18284,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b725014f-9b8a-4b6e-a179-1a8705da5c85"
+      }
+    ]
   },
   {
     "id": "combat-knife-company-heroes",
@@ -19711,34 +18313,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "bolt-pistol-company-heroes",
-    "name": "Master-crafted Bolt Pistol",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Master-crafted Bolt Pistol",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "close-quarters"
-          }
-        ]
+        "namespace": "mfm",
+        "id": "d2fd3bfa-90a6-4aaa-9c5d-a038e596d14b"
       }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "bolt-pistol-desolation-squad",
@@ -19765,7 +18346,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dddb7e76-608f-46b8-b963-ad3e3ae0dedf"
+      }
+    ]
   },
   {
     "id": "castellan-launcher-desolation-squad",
@@ -19792,30 +18379,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "close-combat-weapon-desolation-squad",
-    "name": "Ceramite Fists",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Ceramite Fists",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
+        "namespace": "mfm",
+        "id": "7baacd5d-fd25-465c-90b5-f2ad1e9e3d9e"
       }
-    ],
-    "type": "melee",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "superfrag-rocket-launcher-desolation-squad",
@@ -19875,7 +18445,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "acf09821-6def-4585-b140-a9b6fbfb2672"
+      }
+    ]
   },
   {
     "id": "vengor-launcher-desolation-squad",
@@ -19938,7 +18514,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d4a3a310-2427-45d5-8e16-f430dac1e2ab"
+      }
+    ]
   },
   {
     "id": "bolt-sniper-rifle-eliminator-squad",
@@ -19968,7 +18550,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "25b53f67-53fe-4bee-8d18-cca3941beb3b"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-eliminator-squad",
@@ -19991,7 +18579,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5e25978e-f3f4-4339-a2e7-08c152ff2132"
+      }
+    ]
   },
   {
     "id": "instigator-bolt-carbine-eliminator-squad",
@@ -20060,7 +18654,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e6e4bc1-5b38-4176-9bca-bbc2943de3a6"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-eradicator-squad-with-heavy-bolters",
@@ -20087,7 +18687,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d2b590c1-2b9d-46c5-ae3d-53d8971c3e04"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-eradicator-squad-with-heavy-bolters",
@@ -20110,7 +18716,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e498e6f1-b5d7-4710-aa7a-f0a66b908a80"
+      }
+    ]
   },
   {
     "id": "hovering-bulk-firestrike-servo-turrets",
@@ -20133,7 +18745,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fe300211-d17c-4023-9c57-876ffc44b5f1"
+      }
+    ]
   },
   {
     "id": "armoured-hull-gladiator-lancer",
@@ -20156,7 +18774,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "226449de-fdc0-4ec0-9932-60dede2f8a2c"
+      }
+    ]
   },
   {
     "id": "defensive-array-gladiator-lancer",
@@ -20186,7 +18810,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f966caad-f990-4f36-aaa0-c174af547007"
+      }
+    ]
   },
   {
     "id": "armoured-hull-gladiator-reaper",
@@ -20209,7 +18839,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "65575ce3-9826-4d76-b4f9-e47b42d46e2e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7074f0cd-6d00-450d-a2d1-f9c5afb84d5c"
+      }
+    ]
   },
   {
     "id": "defensive-array-gladiator-reaper",
@@ -20239,7 +18879,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0afadb1c-816f-452a-a671-baac178f5114"
+      }
+    ]
   },
   {
     "id": "armoured-hull-gladiator-valiant",
@@ -20262,7 +18908,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8e5184da-a3b1-4199-bf58-5a276320c7a9"
+      }
+    ]
   },
   {
     "id": "defensive-array-gladiator-valiant",
@@ -20292,7 +18944,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "32203fb8-e4fd-4afd-b127-08f9626db309"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d30917-7b80-4dc5-9a05-8cd8e45a6c69"
+      }
+    ]
   },
   {
     "id": "multi-melta-gladiator-valiant",
@@ -20322,7 +18984,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4a571aef-1823-455c-b03d-b4605d9a5173"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f41fccef-98ec-40bb-a81a-48cbcad7a7f9"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-heavy-intercessor-squad",
@@ -20349,30 +19021,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "close-combat-weapon-heavy-intercessor-squad",
-    "name": "Ceramite Fists",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Ceramite Fists",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
+        "namespace": "mfm",
+        "id": "727c2d60-407c-4938-812a-d214c6fcdbb2"
       }
-    ],
-    "type": "melee",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "bolt-pistol-hellblaster-squad",
@@ -20399,30 +19054,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "close-combat-weapon-hellblaster-squad",
-    "name": "Ceramite Fists",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Ceramite Fists",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
+        "namespace": "mfm",
+        "id": "03eb5a84-4d56-43e1-a1fe-14870209782c"
       }
-    ],
-    "type": "melee",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "plasma-incinerator-hellblaster-squad",
@@ -20480,7 +19118,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "37b14173-dcee-4d8f-90bd-21db00f45cfc"
+      }
+    ]
   },
   {
     "id": "armoured-hull-impulsor",
@@ -20503,7 +19147,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d573559a-f449-4044-92ed-503e31ac52fe"
+      }
+    ]
   },
   {
     "id": "fragstorm-grenade-launcher-impulsor",
@@ -20563,7 +19213,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "09611df1-edb8-43f0-af55-833c8e753f92"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6be050ec-5528-47e2-a82c-8631ede79a37"
+      }
+    ]
   },
   {
     "id": "storm-bolter-impulsor",
@@ -20632,7 +19292,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "40fcf2cc-e96d-4487-a4bd-1eddc27f74ed"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-inceptor-squad",
@@ -20655,7 +19321,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d0b67950-5b7a-446c-a78c-3b0b1aaddce6"
+      }
+    ]
   },
   {
     "id": "plasma-exterminators-inceptor-squad",
@@ -20713,7 +19385,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a741c8a4-9da6-4dc4-a250-ad23a337a8d8"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-incursor-squad",
@@ -20740,7 +19418,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8a00489f-061a-4ce3-8db6-72c5f8a3c613"
+      }
+    ]
   },
   {
     "id": "paired-combat-blades-incursor-squad",
@@ -20770,7 +19454,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "abdc440f-6a47-4662-ab46-62edc06dbdeb"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-infernus-squad",
@@ -20797,30 +19487,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "close-combat-weapon-infernus-squad",
-    "name": "Ceramite Fists",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Ceramite Fists",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
+        "namespace": "mfm",
+        "id": "8439dce9-f3a9-4560-8807-f49bd2fab824"
       }
-    ],
-    "type": "melee",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "bolt-pistol-infiltrator-squad",
@@ -20847,7 +19520,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "43bc0a30-7252-456d-afbf-800d48b58e7f"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-infiltrator-squad",
@@ -20870,7 +19549,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "223695cb-f8b3-419e-9836-f86a85e42d5d"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-intercessor-squad",
@@ -20955,55 +19640,6 @@
     }
   },
   {
-    "id": "astartes-grenade-launcher-intercessor-squad",
-    "name": "Grenade Launcher",
-    "profiles": [
-      {
-        "name": "Frag",
-        "range": 24,
-        "stats": {
-          "A": 4,
-          "BS": 3,
-          "S": 4,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      },
-      {
-        "name": "Krak",
-        "range": 24,
-        "stats": {
-          "A": 1,
-          "BS": 3,
-          "S": 10,
-          "AP": -2,
-          "D": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
     "id": "hand-flamer-intercessor-squad",
     "name": "Hand Flamer",
     "profiles": [
@@ -21030,30 +19666,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "close-combat-weapon-intercessor-squad",
-    "name": "Knives and Fists",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Knives and Fists",
-        "range": "Melee",
-        "stats": {
-          "A": 3,
-          "WS": 3,
-          "S": 5,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": []
+        "namespace": "mfm",
+        "id": "3e9c831c-bcc3-428c-83de-f7dee71b5047"
       }
-    ],
-    "type": "melee",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "power-fist-intercessor-squad",
@@ -21076,7 +19695,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3bbd260c-a234-4605-a42e-859902d19dfa"
+      }
+    ]
   },
   {
     "id": "power-weapon-intercessor-squad",
@@ -21132,36 +19757,6 @@
     }
   },
   {
-    "id": "ironhail-heavy-stubbers-invictor-tactical-warsuit",
-    "name": "Ironhail Heavy Stubbers",
-    "profiles": [
-      {
-        "name": "Ironhail Heavy Stubbers",
-        "range": 36,
-        "stats": {
-          "A": 6,
-          "BS": 3,
-          "S": 4,
-          "AP": 0,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 6
-            }
-          }
-        ]
-      }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
     "id": "absolvor-bolt-pistol-judiciar",
     "name": "Absolvor Bolt Pistol",
     "profiles": [
@@ -21186,7 +19781,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f608304a-66d2-4dbf-8ae0-b66e51a6c55f"
+      }
+    ]
   },
   {
     "id": "anzuq-korsarro-khan",
@@ -21255,7 +19856,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "55692ef4-c2be-49cb-bca7-0de0ac0e2439"
+      }
+    ]
   },
   {
     "id": "multi-melta-land-raider",
@@ -21285,7 +19892,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3a7bb43e-a4a2-4c62-8554-0cf4c79b5051"
+      }
+    ]
   },
   {
     "id": "storm-bolter-land-raider",
@@ -21315,7 +19928,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "12c201fb-34b0-426d-a573-942cee8ae5de"
+      }
+    ]
   },
   {
     "id": "twin-heavy-bolter-land-raider",
@@ -21354,7 +19973,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d553192f-ecf9-42d5-b2c7-a646f1a3bbbf"
+      }
+    ]
   },
   {
     "id": "hunter-killer-missile-land-raider-crusader",
@@ -21381,7 +20006,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c2c7fc73-8ce1-4e6d-a44c-f33704fecef7"
+      }
+    ]
   },
   {
     "id": "hurricane-bolter-land-raider-crusader",
@@ -21414,7 +20045,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "91d9b607-28b0-4f92-8142-ab32771046ba"
+      }
+    ]
   },
   {
     "id": "multi-melta-land-raider-crusader",
@@ -21444,7 +20081,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "94bf38a4-643d-43cf-a9ec-d35829f29af0"
+      }
+    ]
   },
   {
     "id": "storm-bolter-land-raider-crusader",
@@ -21474,7 +20117,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c4524f82-a4a8-4e66-a0da-29a7d37fab2c"
+      }
+    ]
   },
   {
     "id": "twin-assault-cannon-land-raider-crusader",
@@ -21507,7 +20156,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3e32667-9611-4f37-8d67-299f6a19fd87"
+      }
+    ]
   },
   {
     "id": "hunter-killer-missile-land-raider-redeemer",
@@ -21534,7 +20189,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "27814c7c-c866-46a9-acf4-ef05f32ada70"
+      }
+    ]
   },
   {
     "id": "multi-melta-land-raider-redeemer",
@@ -21564,7 +20225,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a8c994f0-847a-4050-a6d9-775781ec9edd"
+      }
+    ]
   },
   {
     "id": "storm-bolter-land-raider-redeemer",
@@ -21594,7 +20261,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c6784cf5-a214-489f-b846-254034571b5e"
+      }
+    ]
   },
   {
     "id": "twin-assault-cannon-land-raider-redeemer",
@@ -21627,7 +20300,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d4ac381e-e7c7-4285-910a-c7bde8db56b5"
+      }
+    ]
   },
   {
     "id": "multi-melta-land-speeder",
@@ -21657,7 +20336,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e80d4c88-ae27-4dac-b740-0b606eabb72f"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-librarian",
@@ -21684,7 +20369,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8c77fed2-eada-425e-a2ad-f10371165348"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-librarian-in-phobos-armour",
@@ -21711,7 +20402,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f22d8298-8726-44d2-ac95-48250ff292c1"
+      }
+    ]
   },
   {
     "id": "storm-bolter-librarian-in-terminator-armour",
@@ -21741,7 +20438,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ec843d57-1cec-4efe-ad70-fb22e131872e"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-lieutenant",
@@ -21764,7 +20467,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1996dcee-0328-4572-be9a-471aaee6ef9a"
+      }
+    ]
   },
   {
     "id": "master-crafted-bolter-lieutenant",
@@ -21787,7 +20496,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4717e9ff-9071-447d-a3c4-31fbbfef8980"
+      }
+    ]
   },
   {
     "id": "plasma-pistol-lieutenant",
@@ -21833,7 +20548,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bfa462d1-10a3-4ead-bd16-55bc8e6656af"
+      }
+    ]
   },
   {
     "id": "monomolecular-combat-blades-lieutenant-in-phobos-armour",
@@ -21866,7 +20587,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "20c2ca3c-9c5b-40de-aa54-3d7bbd08e9fe"
+      }
+    ]
   },
   {
     "id": "combi-weapon-lieutenant-with-combi-weapon",
@@ -21950,7 +20677,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7e33286b-5036-4626-8f02-93edfa08a6b6"
+      }
+    ]
   },
   {
     "id": "plasma-pistol-outrider-squad",
@@ -21996,7 +20729,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "390aa1dc-1bef-44d5-967c-b8967b1ac136"
+      }
+    ]
   },
   {
     "id": "power-weapon-outrider-squad",
@@ -22019,7 +20758,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5c890af3-a4d3-4026-ade5-c1dd2d87c6a3"
+      }
+    ]
   },
   {
     "id": "thunder-hammer-outrider-squad",
@@ -22046,7 +20791,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2d697ae1-2158-4fe7-99ad-aa45b08a81cb"
+      }
+    ]
   },
   {
     "id": "twin-bolt-rifle-outrider-squad",
@@ -22082,37 +20833,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "fragstorm-grenade-launchers-redemptor-dreadnought",
-    "name": "Fragstorm Grenade Launchers",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Fragstorm Grenade Launchers",
-        "range": 18,
-        "stats": {
-          "A": 6,
-          "BS": 3,
-          "S": 4,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast",
-            "parameters": {
-              "value": 2
-            }
-          }
-        ]
+        "namespace": "mfm",
+        "id": "009604c5-af47-43cd-80c7-a62bb4658dd9"
       }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "heavy-flamer-redemptor-dreadnought",
@@ -22142,63 +20869,6 @@
       }
     ],
     "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "storm-bolters-redemptor-dreadnought",
-    "name": "Storm Bolters",
-    "profiles": [
-      {
-        "name": "Storm Bolters",
-        "range": 24,
-        "stats": {
-          "A": 4,
-          "BS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 4
-            }
-          }
-        ]
-      }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "combat-knife-reiver-squad",
-    "name": "Monomolecular Combat Knife",
-    "profiles": [
-      {
-        "name": "Monomolecular Combat Knife",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "WS": 3,
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "keywords": [
-          {
-            "keyword_id": "precision"
-          }
-        ]
-      }
-    ],
-    "type": "melee",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -22268,7 +20938,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "01ec6c7f-9c06-48aa-a928-cb1cc477afde"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5610a7ee-ae59-4cb5-8ab2-dfd6dbd31528"
+      }
+    ]
   },
   {
     "id": "twin-heavy-bolter-repulsor",
@@ -22307,34 +20987,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
-  },
-  {
-    "id": "twin-lascannon-repulsor",
-    "name": "Twin Lascannon",
-    "profiles": [
+    },
+    "external_refs": [
       {
-        "name": "Twin Lascannon",
-        "range": 48,
-        "stats": {
-          "A": 1,
-          "BS": 3,
-          "S": 12,
-          "AP": -3,
-          "D": "D3+3"
-        },
-        "keywords": [
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
+        "namespace": "mfm",
+        "id": "ef9267fb-731a-433f-9aa3-7b2e26c47f68"
       }
-    ],
-    "type": "ranged",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
+    ]
   },
   {
     "id": "twin-heavy-bolter-repulsor-executioner",
@@ -22373,7 +21032,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "13222c1a-b1dd-49bf-bbb3-b8d108bd44d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "21e8a2a9-c9e4-43bf-a141-1e171142949e"
+      }
+    ]
   },
   {
     "id": "hunter-killer-missile-rhino",
@@ -22400,7 +21069,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e6335722-72bc-4d1c-ba0c-d077b830123e"
+      }
+    ]
   },
   {
     "id": "storm-bolter-rhino",
@@ -22430,7 +21105,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cd4949f3-4ef9-4f71-b029-878576ac24e0"
+      }
+    ]
   },
   {
     "id": "bolt-pistol-scout-squad",
@@ -22457,7 +21138,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3f33a910-e47f-4f0f-bdf3-45aad7e59382"
+      }
+    ]
   },
   {
     "id": "boltgun-scout-squad",
@@ -22487,7 +21174,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "410d8224-c77a-4cd9-b611-6a3bcbe79002"
+      }
+    ]
   },
   {
     "id": "artificer-firearm-sternguard-veteran-squad",
@@ -22564,7 +21257,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8b9d0f76-f913-4429-b13f-e8b23600fd10"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-sternguard-veteran-squad",
@@ -22587,7 +21286,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6bc67917-e38f-4a58-a3da-dcdd08f0efed"
+      }
+    ]
   },
   {
     "id": "pyrecannon-sternguard-veteran-squad",
@@ -22685,7 +21390,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "29b9a485-ebed-496a-80ec-e6fadd39f101"
+      }
+    ]
   },
   {
     "id": "onslaught-gatling-cannon-storm-speeder-hailstrike",
@@ -22744,7 +21455,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b106979a-91bf-4732-a418-809598039340"
+      }
+    ]
   },
   {
     "id": "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike",
@@ -22775,7 +21492,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d5eb74d3-7679-4079-9c3e-8175da1069eb"
+      }
+    ]
   },
   {
     "id": "thunder-hammer-terminator-assault-squad",
@@ -22802,7 +21525,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a042d56f-e1c9-4607-88d3-306223af057e"
+      }
+    ]
   },
   {
     "id": "assault-cannon-terminator-squad",
@@ -22832,7 +21561,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e4cb78db-d2e7-4b90-bb0a-cbb51754567a"
+      }
+    ]
   },
   {
     "id": "chainfist-terminator-squad",
@@ -22983,7 +21718,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c06086ae-9eec-4c02-ac57-4c2a0b9557a9"
+      }
+    ]
   },
   {
     "id": "power-weapon-terminator-squad",
@@ -23006,7 +21747,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cbeb162c-8c56-49d3-8691-0b4ff8aeaf1b"
+      }
+    ]
   },
   {
     "id": "storm-bolter-terminator-squad",
@@ -23036,7 +21783,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "74535e51-2b59-4bf7-aeb0-db1a8093094f"
+      }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
@@ -23063,7 +21816,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "558b499e-d3a9-4636-8646-11212d17c423"
+      }
+    ]
   },
   {
     "id": "power-fist-vanguard-veteran-squad-with-jump-packs",
@@ -23086,7 +21845,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "058a2559-92e1-4c01-bcf9-1d1234b4bdbd"
+      }
+    ]
   },
   {
     "id": "relic-blade-vanguard-veteran-squad-with-jump-packs",
@@ -23152,7 +21917,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "eee9a9d3-e5bd-40f5-92f0-e75705ce6cf1"
+      }
+    ]
   },
   {
     "id": "bolt-rifle-wardens-of-ultramar",
@@ -23207,7 +21978,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79d105ba-d3f7-4482-b29d-53760e06c6b5"
+      }
+    ]
   },
   {
     "id": "ceramite-fists-wardens-of-ultramar",
@@ -23230,7 +22007,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "97e05cc3-aee1-4e4c-94a7-e1a31d1fccf5"
+      }
+    ]
   },
   {
     "id": "heavy-bolt-pistol-wardens-of-ultramar",
@@ -23257,11 +22040,29 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dc05f6d1-d4e1-4984-89d1-a99120c0f8ea"
+      }
+    ]
   },
   {
     "id": "knives-and-fists",
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "515cceb5-7bca-45db-b384-c5b27ddb805f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fc56520-bedb-47be-9e4d-cc62677c718e"
+      },
       {
         "namespace": "mfm",
         "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed"
@@ -23292,7 +22093,35 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "1f6598cf-2fc5-4ac1-9c8f-d7081b190b1e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "338608dc-eaa3-47c2-ae38-5fe97e182b75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4077bd37-91ec-46ad-989e-becbd3cbe00b"
+      },
+      {
+        "namespace": "mfm",
         "id": "61c22fcd-fb30-4717-9f44-5c59e9f64a40"
+      },
+      {
+        "namespace": "mfm",
+        "id": "88c56eb9-9574-40ef-ac48-154cef3ecaec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e83fdce-5815-4507-9fba-23d286d3776d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1de0978-8f4c-4edc-aada-b43b5408c6ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ad339caa-2015-430c-9d7b-ef3f3943f2e8"
       }
     ],
     "name": "Ceramite Fists",
@@ -23336,46 +22165,6 @@
           "D": "D3+3",
           "BS": 3
         }
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "anzuq",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f3f4c810-7334-4039-aa5e-13980c4c0a37"
-      }
-    ],
-    "name": "Anzuq",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Anzuq",
-        "range": 18,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": -1,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "anti",
-            "parameters": {
-              "target_keyword": "Infantry",
-              "threshold": 4
-            }
-          },
-          {
-            "keyword_id": "close-quarters"
-          }
-        ]
       }
     ],
     "game_version": {
@@ -23485,6 +22274,10 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "24a94f34-be9c-408b-89fa-b667e1aba470"
+      },
+      {
+        "namespace": "mfm",
         "id": "90024d4b-886e-4398-8603-96865a7903eb"
       }
     ],
@@ -23501,6 +22294,571 @@
           "D": 1,
           "WS": 3
         }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "ravens-talons",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4fdfb447-f311-44bb-90f4-3930e14e5755"
+      }
+    ],
+    "name": "Raven’s Talons",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Raven’s Talons",
+        "range": "Melee",
+        "stats": {
+          "A": 7,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "monomolecular-combat-knife",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4eb07121-43e9-4fe9-be11-dd20e74b0499"
+      }
+    ],
+    "name": "Monomolecular Combat Knife",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Monomolecular Combat Knife",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "shotgun",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4e4dfe19-73c2-451e-9003-384ee06f017b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5a09854f-e17c-4b87-8d6b-f7982be87978"
+      }
+    ],
+    "name": "Shotgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shotgun",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "sniper-rifle",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c3331665-2d8f-46bc-9a11-dc8ef9c6f499"
+      }
+    ],
+    "name": "Sniper Rifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Sniper Rifle",
+        "range": 36,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "master-crafted-power-sword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9e209a94-254e-4a30-aeb7-55d785a32564"
+      }
+    ],
+    "name": "Master-crafted Power Sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Sword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "relic-power-fist",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "22cc6d15-1fbf-4d7a-94df-e874699e10f2"
+      }
+    ],
+    "name": "Relic Power Fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Relic Power Fist",
+        "range": "Melee",
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "master-crafted-bolt-pistol",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f924039f-35fb-4e9d-ba03-68b3de5f6472"
+      }
+    ],
+    "name": "Master-crafted Bolt Pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Master-crafted Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "omnissian-power-axe-and-servo-arm",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "50779c01-dd16-434d-a497-7086e36c56c6"
+      }
+    ],
+    "name": "Omnissian Power Axe and Servo-arm",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Omnissian Power Axe and Servo-arm",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "dreadnought-fist",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "354acf62-e081-4a0f-9869-de1bfb33cc55"
+      }
+    ],
+    "name": "Dreadnought Fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Dreadnought Fist",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 12,
+          "AP": -2,
+          "D": 3,
+          "WS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "dreadnought-inferno-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "41138611-2221-4e61-91a3-a8accc78e796"
+      }
+    ],
+    "name": "Dreadnought Inferno Cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dreadnought Inferno Cannon",
+        "range": 12,
+        "stats": {
+          "A": 7,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "corvus-hammers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "62614d6e-6bb2-4071-a49c-d1b7b20c3488"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e58736a0-d77f-4d1b-a875-c16840e2a38e"
+      }
+    ],
+    "name": "Corvus Hammers",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Corvus Hammers",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "neophyte-chainsword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4450f70e-3028-4a56-b274-1d46ec4f5bc0"
+      }
+    ],
+    "name": "Neophyte Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Neophyte Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "initiate-chainsword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fa045b36-30a0-4f08-99d9-98bc9da5160b"
+      }
+    ],
+    "name": "Initiate Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Initiate Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "encarmine-weapon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1f7ea70e-cc27-43d5-9716-185a833ff09a"
+      }
+    ],
+    "name": "Encarmine Weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Encarmine Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "severance-and-rebuke",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "60ee1c8a-c676-4682-b7d6-4710b5f1ad45"
+      }
+    ],
+    "name": "Severance and Rebuke",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Strike",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 10,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      },
+      {
+        "name": "Sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -3,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "anzuq",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f3f4c810-7334-4039-aa5e-13980c4c0a37"
+      }
+    ],
+    "name": "Anzuq",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Anzuq",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -23704,42 +23062,6 @@
     }
   },
   {
-    "id": "ravens-talons",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4fdfb447-f311-44bb-90f4-3930e14e5755"
-      }
-    ],
-    "name": "Raven’s Talons",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Raven’s Talons",
-        "range": "Melee",
-        "stats": {
-          "A": 7,
-          "S": 5,
-          "AP": -2,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "precision"
-          },
-          {
-            "keyword_id": "twin-linked"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
     "id": "relics-of-battle",
     "external_refs": [
       {
@@ -23768,164 +23090,26 @@
     }
   },
   {
-    "id": "monomolecular-combat-knife",
+    "id": "relic-fist",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "4eb07121-43e9-4fe9-be11-dd20e74b0499"
+        "id": "3d97d860-30c4-429f-bb22-91c262ddf2c1"
       }
     ],
-    "name": "Monomolecular Combat Knife",
+    "name": "Relic Fist",
     "type": "melee",
     "profiles": [
       {
-        "name": "Monomolecular Combat Knife",
+        "name": "Relic Fist",
         "range": "Melee",
         "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "precision"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "shotgun",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4e4dfe19-73c2-451e-9003-384ee06f017b"
-      }
-    ],
-    "name": "Shotgun",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Shotgun",
-        "range": 18,
-        "stats": {
-          "A": 2,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "assault"
-          },
-          {
-            "keyword_id": "blast"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "sniper-rifle",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "c3331665-2d8f-46bc-9a11-dc8ef9c6f499"
-      }
-    ],
-    "name": "Sniper Rifle",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Sniper Rifle",
-        "range": 36,
-        "stats": {
-          "A": 1,
-          "S": 5,
-          "AP": -2,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "heavy"
-          },
-          {
-            "keyword_id": "precision"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "master-crafted-power-sword",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "9e209a94-254e-4a30-aeb7-55d785a32564"
-      }
-    ],
-    "name": "Master-crafted Power Sword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Master-crafted Power Sword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -2,
-          "D": 2,
-          "WS": 3
-        }
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "relic-power-fist",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "22cc6d15-1fbf-4d7a-94df-e874699e10f2"
-      }
-    ],
-    "name": "Relic Power Fist",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Relic Power Fist",
-        "range": "Melee",
-        "stats": {
-          "A": 1,
+          "A": 5,
           "S": 8,
           "AP": -2,
           "D": 2,
           "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "extra-attacks"
-          }
-        ]
+        }
       }
     ],
     "game_version": {
@@ -23997,67 +23181,6 @@
             "keyword_id": "twin-linked"
           }
         ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "master-crafted-bolt-pistol",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f924039f-35fb-4e9d-ba03-68b3de5f6472"
-      }
-    ],
-    "name": "Master-crafted Bolt Pistol",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Master-crafted Bolt Pistol",
-        "range": 12,
-        "stats": {
-          "A": 1,
-          "S": 5,
-          "AP": -1,
-          "D": 2,
-          "BS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "close-quarters"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "omnissian-power-axe-and-servo-arm",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "50779c01-dd16-434d-a497-7086e36c56c6"
-      }
-    ],
-    "name": "Omnissian Power Axe and Servo-arm",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Omnissian Power Axe and Servo-arm",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 6,
-          "AP": -2,
-          "D": 2,
-          "WS": 3
-        }
       }
     ],
     "game_version": {
@@ -24149,25 +23272,25 @@
     }
   },
   {
-    "id": "dreadnought-fist",
+    "id": "encarmine-blade",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "354acf62-e081-4a0f-9869-de1bfb33cc55"
+        "id": "7c481c9e-afd8-4d8a-8fc3-e29770f4d79d"
       }
     ],
-    "name": "Dreadnought Fist",
+    "name": "Encarmine Blade",
     "type": "melee",
     "profiles": [
       {
-        "name": "Dreadnought Fist",
+        "name": "Encarmine Blade",
         "range": "Melee",
         "stats": {
-          "A": 5,
-          "S": 12,
-          "AP": -2,
-          "D": 3,
-          "WS": 3
+          "A": 4,
+          "S": 6,
+          "AP": -3,
+          "D": 2,
+          "WS": 2
         }
       }
     ],
@@ -24177,159 +23300,18 @@
     }
   },
   {
-    "id": "dreadnought-inferno-cannon",
+    "id": "encarmine-spear",
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "41138611-2221-4e61-91a3-a8accc78e796"
+        "id": "61a76cf3-fa69-42a3-8ef0-45d73767ac6b"
       }
     ],
-    "name": "Dreadnought Inferno Cannon",
-    "type": "ranged",
-    "profiles": [
-      {
-        "name": "Dreadnought Inferno Cannon",
-        "range": 12,
-        "stats": {
-          "A": 7,
-          "S": 6,
-          "AP": -1,
-          "D": 1,
-          "BS": null
-        },
-        "keywords": [
-          {
-            "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "torrent"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "corvus-hammers",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "e58736a0-d77f-4d1b-a875-c16840e2a38e"
-      }
-    ],
-    "name": "Corvus Hammers",
+    "name": "Encarmine Spear",
     "type": "melee",
     "profiles": [
       {
-        "name": "Corvus Hammers",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -2,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "neophyte-chainsword",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4450f70e-3028-4a56-b274-1d46ec4f5bc0"
-      }
-    ],
-    "name": "Neophyte Chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Neophyte Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 4,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "initiate-chainsword",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "fa045b36-30a0-4f08-99d9-98bc9da5160b"
-      }
-    ],
-    "name": "Initiate Chainsword",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Initiate Chainsword",
-        "range": "Melee",
-        "stats": {
-          "A": 4,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
-          "WS": 3
-        },
-        "keywords": [
-          {
-            "keyword_id": "sustained-hits",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "encarmine-weapon",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "1f7ea70e-cc27-43d5-9716-185a833ff09a"
-      }
-    ],
-    "name": "Encarmine Weapon",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Encarmine Weapon",
+        "name": "Encarmine Spear",
         "range": "Melee",
         "stats": {
           "A": 4,
@@ -24341,6 +23323,45 @@
         "keywords": [
           {
             "keyword_id": "lance"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "pyre-pistol",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "586eb5b8-24f2-4666-8f26-f9e75b3e3896"
+      }
+    ],
+    "name": "Pyre Pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Pyre Pistol",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "close-quarters"
           }
         ]
       }
@@ -24376,58 +23397,6 @@
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
-            }
-          }
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "id": "severance-and-rebuke",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "60ee1c8a-c676-4682-b7d6-4710b5f1ad45"
-      }
-    ],
-    "name": "Severance and Rebuke",
-    "type": "melee",
-    "profiles": [
-      {
-        "name": "Strike",
-        "range": "Melee",
-        "stats": {
-          "A": 5,
-          "S": 10,
-          "AP": -3,
-          "D": 3,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "precision"
-          }
-        ]
-      },
-      {
-        "name": "Sweep",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 6,
-          "AP": -3,
-          "D": 2,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "cleave",
-            "parameters": {
-              "value": 2
             }
           }
         ]

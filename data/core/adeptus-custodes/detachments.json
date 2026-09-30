@@ -11,9 +11,9 @@
       "admonimortis-lions-of-the-emperor-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "peerless-warrior-lions-of-the-emperor-adeptus-custodes",
       "gilded-champion-lions-of-the-emperor-adeptus-custodes",
       "defiant-to-the-last-lions-of-the-emperor-adeptus-custodes",
+      "peerless-warrior-lions-of-the-emperor-adeptus-custodes",
       "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
       "manoeuvre-and-fire-lions-of-the-emperor-adeptus-custodes",
       "swift-as-the-eagle-lions-of-the-emperor-adeptus-custodes"
@@ -34,6 +34,9 @@
         "namespace": "mfm",
         "id": "16f0256d-a6ba-4d12-963f-2b8874eb17a5"
       }
+    ],
+    "detachment_rule_ids": [
+      "against-all-odds-adeptus-custodes"
     ]
   },
   {
@@ -49,11 +52,11 @@
     ],
     "stratagem_ids": [
       "slayer-of-champions-auric-champions-adeptus-custodes",
+      "superhuman-reserves-auric-champions-adeptus-custodes",
       "the-emperors-auspice-auric-champions-adeptus-custodes",
       "earning-of-a-name-auric-champions-adeptus-custodes",
-      "shoulder-the-mantle-auric-champions-adeptus-custodes",
-      "superhuman-reserves-auric-champions-adeptus-custodes",
-      "vigil-unending-auric-champions-adeptus-custodes"
+      "vigil-unending-auric-champions-adeptus-custodes",
+      "shoulder-the-mantle-auric-champions-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -68,13 +71,16 @@
         "namespace": "mfm",
         "id": "2ed9481a-9f80-4e78-8931-b8070fef82e3"
       }
+    ],
+    "detachment_rule_ids": [
+      "assemblage-of-might-adeptus-custodes"
     ]
   },
   {
     "id": "solar-spearhead",
     "name": "Solar Spearhead",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "auric-armour-adeptus-custodes",
     "enhancement_ids": [
       "adamantine-talisman-solar-spearhead-adeptus-custodes",
       "augury-uplink-solar-spearhead-adeptus-custodes",
@@ -143,6 +149,9 @@
         "namespace": "mfm",
         "id": "71a22085-3750-4339-bd18-7b7511e831ee"
       }
+    ],
+    "detachment_rule_ids": [
+      "martial-mastery-adeptus-custodes"
     ]
   },
   {
@@ -157,11 +166,11 @@
       "oblivion-knight-null-maiden-vigil-adeptus-custodes"
     ],
     "stratagem_ids": [
+      "desperations-price-null-maiden-vigil-adeptus-custodes",
       "witch-hunters-null-maiden-vigil-adeptus-custodes",
       "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
-      "purgation-sweep-null-maiden-vigil-adeptus-custodes",
-      "desperations-price-null-maiden-vigil-adeptus-custodes",
       "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
+      "purgation-sweep-null-maiden-vigil-adeptus-custodes",
       "psychic-abominations-null-maiden-vigil-adeptus-custodes"
     ],
     "game_version": {
@@ -177,6 +186,9 @@
         "namespace": "mfm",
         "id": "b70a6b14-333a-4f04-a3c3-b3341e48c08c"
       }
+    ],
+    "detachment_rule_ids": [
+      "creeping-dread-adeptus-custodes"
     ]
   },
   {
@@ -191,12 +203,12 @@
       "aegis-projector-talons-of-the-emperor-adeptus-custodes"
     ],
     "stratagem_ids": [
+      "hunt-as-one-talons-of-the-emperor-adeptus-custodes",
       "talons-interlocked-talons-of-the-emperor-adeptus-custodes",
       "empyric-severance-talons-of-the-emperor-adeptus-custodes",
-      "taloned-pincer-talons-of-the-emperor-adeptus-custodes",
       "emperors-executioners-talons-of-the-emperor-adeptus-custodes",
-      "shield-of-honour-talons-of-the-emperor-adeptus-custodes",
-      "hunt-as-one-talons-of-the-emperor-adeptus-custodes"
+      "taloned-pincer-talons-of-the-emperor-adeptus-custodes",
+      "shield-of-honour-talons-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -211,6 +223,9 @@
         "namespace": "mfm",
         "id": "f0e490e7-c6e3-4c51-9162-93dca988eee5"
       }
+    ],
+    "detachment_rule_ids": [
+      "revered-companions-adeptus-custodes"
     ]
   },
   {
@@ -243,6 +258,9 @@
         "namespace": "mfm",
         "id": "4edac749-d510-4161-b3c3-1fd31e91cfcf"
       }
+    ],
+    "detachment_rule_ids": [
+      "march-of-the-honoured-dead-adeptus-custodes"
     ]
   },
   {
@@ -255,9 +273,9 @@
       "psyk-out-grenades-upgrade-silent-hunters-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "deathsong-scythes-silent-hunters-adeptus-custodes",
       "umbral-prosecution-silent-hunters-adeptus-custodes",
-      "synchronised-inferno-silent-hunters-adeptus-custodes"
+      "synchronised-inferno-silent-hunters-adeptus-custodes",
+      "deathsong-scythes-silent-hunters-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -272,6 +290,9 @@
         "namespace": "mfm",
         "id": "58dd1c38-27e6-4ccf-a7f5-53068e61b838"
       }
+    ],
+    "detachment_rule_ids": [
+      "skin-crawling-disorientation-adeptus-custodes"
     ]
   },
   {
@@ -284,8 +305,8 @@
       "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "hardened-resolve-tharanatoi-hammerblow-adeptus-custodes",
       "unleash-the-lions-tharanatoi-hammerblow-adeptus-custodes",
+      "hardened-resolve-tharanatoi-hammerblow-adeptus-custodes",
       "electroexorcist-saturation-tharanatoi-hammerblow-adeptus-custodes"
     ],
     "game_version": {
@@ -304,6 +325,9 @@
         "namespace": "mfm",
         "id": "92ae3afb-c5d5-41a9-80da-8db33c91ed41"
       }
+    ],
+    "detachment_rule_ids": [
+      "the-hammer-falls-adeptus-custodes"
     ]
   },
   {
@@ -332,7 +356,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "fearless-and-unrelenting-adeptus-custodes"
+      "fearless-and-unrelenting-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
+      "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
+      "never-outmatched-tristraens-gilded-blades-adeptus-custodes"
     ]
   }
 ]

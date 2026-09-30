@@ -20,7 +20,6 @@ values and absent source relations clear them. Prose is never read or written.
 | chaos-daemons | 29 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-knights | 28 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 64 | 0 | 0 | 0 | 0 | 0 | 0 |
-| crimson-fists | 5 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dark-angels | 12 | 0 | 0 | 0 | 0 | 0 | 0 |
 | death-guard | 32 | 0 | 0 | 0 | 0 | 0 | 0 |
 | deathwatch | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -43,7 +42,7 @@ values and absent source relations clear them. Prose is never read or written.
 | ultramarines | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | white-scars | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 28 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **890** | **0** | **0** | **0** | **0** | **0** | **0** |
+| **TOTAL** | **885** | **0** | **0** | **0** | **0** | **0** | **0** |
 
 ## Enhancement seeds skipped (3)
 

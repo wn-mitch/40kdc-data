@@ -31,6 +31,9 @@
         "namespace": "mfm",
         "id": "5442a079-724c-4f27-a87f-461cdf5b75bf"
       }
+    ],
+    "detachment_rule_ids": [
+      "prescient-redeployment-grey-knights"
     ]
   },
   {
@@ -65,6 +68,9 @@
         "namespace": "mfm",
         "id": "a756d7e9-6264-4d9f-9b2a-dd81e2aba304"
       }
+    ],
+    "detachment_rule_ids": [
+      "channelled-force-grey-knights"
     ]
   },
   {
@@ -80,10 +86,10 @@
     ],
     "stratagem_ids": [
       "sanctified-kill-zone-warpbane-task-force-grey-knights",
-      "fires-of-covenant-warpbane-task-force-grey-knights",
       "flames-of-sanctity-warpbane-task-force-grey-knights",
-      "aegis-eternal-warpbane-task-force-grey-knights",
       "hallowed-beacon-warpbane-task-force-grey-knights",
+      "fires-of-covenant-warpbane-task-force-grey-knights",
+      "aegis-eternal-warpbane-task-force-grey-knights",
       "repelling-sphere-warpbane-task-force-grey-knights"
     ],
     "game_version": {
@@ -99,6 +105,9 @@
         "namespace": "mfm",
         "id": "b2c8df0c-e202-4230-a44b-5e9e23df9737"
       }
+    ],
+    "detachment_rule_ids": [
+      "hallowed-ground-grey-knights"
     ]
   },
   {
@@ -113,11 +122,11 @@
       "tome-of-forbidden-ways-brotherhood-strike-grey-knights"
     ],
     "stratagem_ids": [
-      "purgation-pattern-brotherhood-strike-grey-knights",
-      "shining-veil-brotherhood-strike-grey-knights",
-      "combat-manifestation-brotherhood-strike-grey-knights",
-      "duty-unending-brotherhood-strike-grey-knights",
       "truesilver-channelling-brotherhood-strike-grey-knights",
+      "combat-manifestation-brotherhood-strike-grey-knights",
+      "purgation-pattern-brotherhood-strike-grey-knights",
+      "duty-unending-brotherhood-strike-grey-knights",
+      "shining-veil-brotherhood-strike-grey-knights",
       "expeditious-exit-brotherhood-strike-grey-knights"
     ],
     "game_version": {
@@ -133,6 +142,9 @@
         "namespace": "mfm",
         "id": "b7be5d8d-321e-4043-888f-83a09d1bf1ac"
       }
+    ],
+    "detachment_rule_ids": [
+      "fury-of-titan-grey-knights"
     ]
   },
   {
@@ -141,10 +153,10 @@
     "faction_id": "grey-knights",
     "detachment_rule_id": "duty-before-all-grey-knights",
     "enhancement_ids": [
+      "eye-of-the-augurium-hallowed-conclave-grey-knights",
       "inescapable-judgement-psychic-hallowed-conclave-grey-knights",
       "sanctic-reaper-hallowed-conclave-grey-knights",
-      "nemesis-rounds-hallowed-conclave-grey-knights",
-      "eye-of-the-augurium-hallowed-conclave-grey-knights"
+      "nemesis-rounds-hallowed-conclave-grey-knights"
     ],
     "stratagem_ids": [
       "giants-of-the-battlefield-hallowed-conclave-grey-knights",
@@ -167,6 +179,9 @@
         "namespace": "mfm",
         "id": "c82ee909-80d7-408a-9f67-a83e78b7d1a8"
       }
+    ],
+    "detachment_rule_ids": [
+      "duty-before-all-grey-knights"
     ]
   },
   {
@@ -181,8 +196,8 @@
       "spiritus-machina-sanctic-spearhead-grey-knights"
     ],
     "stratagem_ids": [
-      "abominus-class-targets-sanctic-spearhead-grey-knights",
       "truesilver-will-sanctic-spearhead-grey-knights",
+      "abominus-class-targets-sanctic-spearhead-grey-knights",
       "armoured-aegis-sanctic-spearhead-grey-knights",
       "redoubled-assault-sanctic-spearhead-grey-knights",
       "force-wave-sanctic-spearhead-grey-knights",
@@ -201,6 +216,9 @@
         "namespace": "mfm",
         "id": "f225bc7e-c854-4487-81ed-d18d5b12c2ad"
       }
+    ],
+    "detachment_rule_ids": [
+      "mailed-fist-grey-knights"
     ]
   },
   {
@@ -230,6 +248,9 @@
         "namespace": "mfm",
         "id": "eced4532-3d3c-43ec-9c30-d2bf278514d0"
       }
+    ],
+    "detachment_rule_ids": [
+      "dauntless-champions-grey-knights"
     ]
   },
   {
@@ -242,9 +263,9 @@
       "boons-of-deimos-upgrade-fires-of-purgation-grey-knights"
     ],
     "stratagem_ids": [
+      "spiritsear-fires-of-purgation-grey-knights",
       "soul-locked-fires-of-purgation-grey-knights",
-      "focused-immolation-fires-of-purgation-grey-knights",
-      "spiritsear-fires-of-purgation-grey-knights"
+      "focused-immolation-fires-of-purgation-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -259,6 +280,9 @@
         "namespace": "mfm",
         "id": "6043077b-0e2f-4e4f-a0d7-8ebcec480131"
       }
+    ],
+    "detachment_rule_ids": [
+      "searing-soulflame-grey-knights"
     ]
   },
   {
@@ -271,9 +295,9 @@
       "astral-overlap-upgrade-immaterial-interdiction-grey-knights"
     ],
     "stratagem_ids": [
-      "blades-from-the-beyond-immaterial-interdiction-grey-knights",
       "by-thought-alone-immaterial-interdiction-grey-knights",
-      "responsive-displacement-immaterial-interdiction-grey-knights"
+      "responsive-displacement-immaterial-interdiction-grey-knights",
+      "blades-from-the-beyond-immaterial-interdiction-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -288,6 +312,9 @@
         "namespace": "mfm",
         "id": "ad206ac1-4a33-4d1e-8b4e-2c21118303d9"
       }
+    ],
+    "detachment_rule_ids": [
+      "echojump-grey-knights"
     ]
   },
   {
@@ -316,7 +343,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "strike-from-the-warp-grey-knights"
+      "strike-from-the-warp-grey-knights",
+      "gate-of-infinity-crowes-sanctifiers-grey-knights"
+    ],
+    "stratagem_ids": [
+      "refusal-to-yield-crowes-sanctifiers-grey-knights",
+      "exigent-assignments-crowes-sanctifiers-grey-knights",
+      "psi-reactive-ammunition-crowes-sanctifiers-grey-knights"
     ]
   }
 ]

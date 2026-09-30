@@ -23,7 +23,10 @@
       }
     ],
     "faction_rule_ids": [
-      "waaagh-orks"
+      "waaagh-orks",
+      "da-boss-orks",
+      "unstable-energies-orks",
+      "special-move-types-orks"
     ]
   }
 ]

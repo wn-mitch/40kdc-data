@@ -25,7 +25,8 @@
       }
     ],
     "faction_rule_ids": [
-      "cabal-of-sorcerers-thousand-sons"
+      "cabal-of-sorcerers-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   }
 ]

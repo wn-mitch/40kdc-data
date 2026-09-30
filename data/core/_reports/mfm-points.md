@@ -6,7 +6,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | Dir | Matched | Points changed | Allied added | Ambiguous (kept) | Repo-only (Legends/FW) |
 |---|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 177 | 0 | 0 | 0 | 4 |
+| adeptus-astartes | 177 | 0 | 0 | 0 | 0 |
 | adeptus-custodes | 35 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 38 | 0 | 0 | 0 | 0 |
 | aeldari | 80 | 0 | 0 | 0 | 0 |
@@ -28,7 +28,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | thousand-sons | 32 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 0 | 0 | 0 | 0 |
 | world-eaters | 29 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1077** | **0** | **0** | **8** | **4** |
+| **TOTAL** | **1077** | **0** | **0** | **8** | **0** |
 
 ## agents-of-the-imperium
 

@@ -4428,43 +4428,6 @@
     ]
   },
   {
-    "unit_id": "stormtalon-gunship",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Stormtalon Gunship",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
-        },
-        "default_weapon_ids": [
-          "skyhammer-missile-launcher",
-          "armoured-hull",
-          "twin-assault-cannon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Stormtalon Gunship",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "captain-titus",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -4493,41 +4456,6 @@
         "models": [
           {
             "name": "Captain Titus",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "razorback",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Razorback",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "armoured-tracks-razorback",
-          "twin-heavy-bolter"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Razorback",
             "min": 1,
             "max": 1
           }
@@ -5413,44 +5341,6 @@
     ]
   },
   {
-    "unit_id": "stormhawk-interceptor",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Stormhawk Interceptor",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
-        },
-        "default_weapon_ids": [
-          "armoured-hull",
-          "twin-assault-cannon",
-          "skyhammer-missile-launcher-stormhawk-interceptor",
-          "las-talon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Stormhawk Interceptor",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "captain",
     "faction_id": "adeptus-astartes",
     "models": [
@@ -5516,45 +5406,6 @@
         "models": [
           {
             "name": "Chaplain on Bike",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "stormraven-gunship",
-    "faction_id": "adeptus-astartes",
-    "models": [
-      {
-        "name": "Stormraven Gunship",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
-        },
-        "default_weapon_ids": [
-          "typhoon-missile-launcher",
-          "twin-assault-cannon",
-          "armoured-hull-stormraven-gunship",
-          "stormstrike-missile-launcher",
-          "stormstrike-missile-launcher"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Stormraven Gunship",
             "min": 1,
             "max": 1
           }

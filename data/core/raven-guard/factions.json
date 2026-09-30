@@ -21,7 +21,10 @@
       }
     ],
     "faction_rule_ids": [
-      "combat-doctrines-assault-force-adeptus-astartes"
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes",
+      "librarius-adeptus-astartes",
+      "special-move-types-adeptus-astartes"
     ],
     "army_construction_rules": [
       {

@@ -565,7 +565,13 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "99e837f4-ef82-488b-ad2f-0d27d5ddbead"
+      }
+    ]
   },
   {
     "id": "deffkoptas",
@@ -1148,7 +1154,10 @@
       "dual-supa-shoota"
     ],
     "ability_ids": [
-      "blastajet-force-field-orks",
+      {
+        "id": "blastajet-force-field-orks",
+        "wargear": "blastajet-force-field"
+      },
       {
         "id": "damaged",
         "value": 4
@@ -1844,15 +1853,28 @@
     ],
     "ability_ids": [
       "bomb-squigs-orks",
-      "pulsa-rokkit-orks",
-      "rokkit-barrage-orks"
+      {
+        "id": "pulsa-rokkit-orks",
+        "wargear": "pulsa-rokkit"
+      },
+      "rokkit-barrage-orks",
+      {
+        "id": "pulsa-rokkit-wargear-orks",
+        "wargear": "pulsa-rokkit-once-per-battle-per-unit"
+      }
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cd03e48d-ef51-40a1-97c7-0f2ada778c7c"
+      }
+    ]
   },
   {
     "id": "kommandos",
@@ -2045,7 +2067,13 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "01474b35-18d2-4231-9e9d-c175829eec3d"
+      }
+    ]
   },
   {
     "id": "trukk",
@@ -2968,7 +2996,10 @@
     ],
     "ability_ids": [
       "fix-dat-armour-up-orks",
-      "kustom-force-field-orks",
+      {
+        "id": "kustom-force-field-orks",
+        "wargear": "kustom-force-field"
+      },
       "more-dakka-orks",
       "leader"
     ],
@@ -3071,10 +3102,6 @@
       "thump-gun"
     ],
     "ability_ids": [
-      {
-        "id": "feel-no-pain",
-        "value": 6
-      },
       "mobbed-orks"
     ],
     "game_version": {
@@ -3082,7 +3109,13 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ebb6b151-5a87-487a-81c9-d019440cc01b"
+      }
+    ]
   },
   {
     "id": "deffkilla-wartrike",
@@ -3732,7 +3765,10 @@
     "ability_ids": [
       "ammo-runts-orks",
       "get-out-da-way-orks",
-      "paired-krumpas-orks"
+      {
+        "id": "paired-krumpas-orks",
+        "wargear": "paired-krumpas"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3744,6 +3780,12 @@
       {
         "item_id": "paired-krumpas",
         "cost": 5
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d063a486-12c5-466e-911b-e14e87b97f9e"
       }
     ]
   },
@@ -4668,6 +4710,12 @@
         "models": 1,
         "cost": 165
       }
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5a8b2395-8999-4421-8f66-d9768be02673"
+      }
     ]
   },
   {
@@ -4776,7 +4824,8 @@
     ],
     "ability_ids": [
       "thatll-learn-ya-orks",
-      "waaagh-orks"
+      "waaagh-orks",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -4793,6 +4842,12 @@
       {
         "models": 1,
         "cost": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1cb8e0e2-a7d6-4218-9776-102b86524adc"
       }
     ]
   },

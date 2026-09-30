@@ -459,5 +459,25 @@
       "duration": "until-next-command-phase"
     },
     "community_notes": "Target: one unit within Engagement Range of enemy units"
+  },
+  {
+    "ability_id": "establish-supremacy-ceramite-sentinels-imperial-fists",
+    "name": "Establish Supremacy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "imperial-fists",
+    "detachment_id": "ceramite-sentinels",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

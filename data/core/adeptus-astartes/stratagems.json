@@ -1,5 +1,29 @@
 [
   {
+    "id": "a-worthy-death-gladius-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6c7d5191-deec-4a65-8289-11b1fbc561f1"
+      }
+    ],
+    "name": "A Worthy Death",
+    "category": "detachment",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "a-worthy-death-gladius-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "adamantine-terror-ironclad-champions-adeptus-astartes",
     "external_refs": [
       {
@@ -452,6 +476,82 @@
     }
   },
   {
+    "id": "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e6b56ddb-72ef-4a15-bbb0-37617ac10aa3"
+      }
+    ],
+    "name": "Headhunter Doctrine",
+    "category": "detachment",
+    "detachment_id": "ironstorm-spearhead",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "headhunter-doctrine-ironstorm-spearhead-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hurtling-targets-stormlance-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0e4bdfa4-ab53-47a2-9376-7abbdb472c97"
+      }
+    ],
+    "name": "Hurtling Targets",
+    "category": "detachment",
+    "detachment_id": "stormlance-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "hurtling-targets-stormlance-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4dcd9969-50cd-434d-93f0-803acbd06d88"
+      }
+    ],
+    "name": "Layered Ceramite",
+    "category": "detachment",
+    "detachment_id": "ironstorm-spearhead",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "layered-ceramite-ironstorm-spearhead-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "masterful-tactics-tactical-brethren-adeptus-astartes",
     "external_refs": [
       {
@@ -519,6 +619,54 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "mercy-is-weakness-ironclad-champions-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "might-of-angels-gladius-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c241bb1c-fa73-4511-8e23-08bff4078645"
+      }
+    ],
+    "name": "Might of angels",
+    "category": "detachment",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "might-of-angels-gladius-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0abb15bb-9c7e-4094-9e7d-25075a49ef1c"
+      }
+    ],
+    "name": "Might of the machine Spirit",
+    "category": "detachment",
+    "detachment_id": "ironstorm-spearhead",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "might-of-the-machine-spirit-ironstorm-spearhead-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -671,6 +819,30 @@
     }
   },
   {
+    "id": "responsive-tactics-gladius-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a9e1751a-3ae4-4831-b1b2-52cbcf5dfe74"
+      }
+    ],
+    "name": "Responsive Tactics",
+    "category": "detachment",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "responsive-tactics-gladius-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
     "id": "stand-unyielding-gravis-siege-force-adeptus-astartes",
     "external_refs": [
       {
@@ -713,6 +885,30 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "storm-and-secure-gauntlet-task-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "storm-of-devastation-gladius-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bce16b2b-9e11-4261-b289-bf6b8263d215"
+      }
+    ],
+    "name": "Storm of devastation",
+    "category": "detachment",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "storm-of-devastation-gladius-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -787,6 +983,30 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "sudden-onslaught-stormlance-task-force-adeptus-astartes",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "80865052-9e67-4230-a228-a339a4d99876"
+      }
+    ],
+    "name": "Sudden Onslaught",
+    "category": "detachment",
+    "detachment_id": "stormlance-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "sudden-onslaught-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

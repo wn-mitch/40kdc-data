@@ -24,7 +24,10 @@
       }
     ],
     "faction_rule_ids": [
-      "code-chivalric-imperial-knights"
+      "code-chivalric-imperial-knights",
+      "bondsman-imperial-knights",
+      "super-heavy-walker-imperial-knights",
+      "freeblades-imperial-knights"
     ]
   }
 ]

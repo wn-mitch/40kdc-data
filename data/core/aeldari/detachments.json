@@ -3,7 +3,7 @@
     "id": "ghosts-of-the-webway",
     "name": "Ghosts of the Webway",
     "faction_id": "aeldari",
-    "detachment_rule_id": "acrobatic-onslaught-aeldari",
+    "detachment_rule_id": "acrobatic-onslaught-ghosts-of-the-webway-aeldari",
     "enhancement_ids": [
       "cegorachs-coil-ghosts-of-the-webway-aeldari",
       "mask-of-secrets-ghosts-of-the-webway-aeldari",
@@ -34,6 +34,9 @@
         "namespace": "mfm",
         "id": "06936a21-a084-45d1-b358-5386ce9c3c47"
       }
+    ],
+    "detachment_rule_ids": [
+      "acrobatic-onslaught-ghosts-of-the-webway-aeldari"
     ]
   },
   {
@@ -49,11 +52,11 @@
     ],
     "stratagem_ids": [
       "death-from-on-high-windrider-host-aeldari",
-      "focused-firepower-windrider-host-aeldari",
-      "spiralling-evasion-windrider-host-aeldari",
       "overflight-windrider-host-aeldari",
       "wind-of-blades-windrider-host-aeldari",
-      "daring-riders-windrider-host-aeldari"
+      "daring-riders-windrider-host-aeldari",
+      "focused-firepower-windrider-host-aeldari",
+      "spiralling-evasion-windrider-host-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -68,6 +71,9 @@
         "namespace": "mfm",
         "id": "116e5e49-e39e-4e06-9b10-c7d7d77defdb"
       }
+    ],
+    "detachment_rule_ids": [
+      "ride-the-wind-aeldari"
     ]
   },
   {
@@ -105,6 +111,9 @@
         "namespace": "mfm",
         "id": "2651d2ae-b43a-4576-9e58-6d5275c89350"
       }
+    ],
+    "detachment_rule_ids": [
+      "boons-of-the-brood-aeldari"
     ]
   },
   {
@@ -114,17 +123,17 @@
     "detachment_rule_id": "shepherds-of-the-dead-aeldari",
     "enhancement_ids": [
       "light-of-clarity-spirit-conclave-aeldari",
+      "stave-of-kurnous-spirit-conclave-aeldari",
       "rune-of-mists-spirit-conclave-aeldari",
-      "higher-duty-spirit-conclave-aeldari",
-      "stave-of-kurnous-spirit-conclave-aeldari"
+      "higher-duty-spirit-conclave-aeldari"
     ],
     "stratagem_ids": [
-      "crushing-strides-spirit-conclave-aeldari",
       "seers-eye-spirit-conclave-aeldari",
       "wraithbone-armour-spirit-conclave-aeldari",
       "blades-from-beyond-spirit-conclave-aeldari",
       "soul-bridge-spirit-conclave-aeldari",
-      "spirit-token-spirit-conclave-aeldari"
+      "spirit-token-spirit-conclave-aeldari",
+      "crushing-strides-spirit-conclave-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -139,6 +148,9 @@
         "namespace": "mfm",
         "id": "33492cd0-2688-4ce1-b174-2f5a7b31a54b"
       }
+    ],
+    "detachment_rule_ids": [
+      "shepherds-of-the-dead-aeldari"
     ]
   },
   {
@@ -153,12 +165,12 @@
       "morbid-might-devoted-of-ynnead-aeldari"
     ],
     "stratagem_ids": [
+      "pall-of-dread-devoted-of-ynnead-aeldari",
       "macabre-resilience-devoted-of-ynnead-aeldari",
       "emissaries-of-ynnead-devoted-of-ynnead-aeldari",
+      "parting-the-veil-devoted-of-ynnead-aeldari",
       "soulsight-devoted-of-ynnead-aeldari",
-      "pall-of-dread-devoted-of-ynnead-aeldari",
-      "death-answers-death-devoted-of-ynnead-aeldari",
-      "parting-the-veil-devoted-of-ynnead-aeldari"
+      "death-answers-death-devoted-of-ynnead-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -173,6 +185,9 @@
         "namespace": "mfm",
         "id": "3b0ed811-f339-4f72-ba0b-532a04a18089"
       }
+    ],
+    "detachment_rule_ids": [
+      "strength-from-death-aeldari"
     ]
   },
   {
@@ -190,8 +205,8 @@
       "warding-salvoes-guardian-battlehost-aeldari",
       "shield-nodes-guardian-battlehost-aeldari",
       "vauls-vengeance-guardian-battlehost-aeldari",
-      "blades-of-asuryan-guardian-battlehost-aeldari",
       "time-to-strike-guardian-battlehost-aeldari",
+      "blades-of-asuryan-guardian-battlehost-aeldari",
       "cost-of-victory-guardian-battlehost-aeldari"
     ],
     "game_version": {
@@ -207,6 +222,9 @@
         "namespace": "mfm",
         "id": "43121bed-ff37-44a9-8c6c-44f29cf2c858"
       }
+    ],
+    "detachment_rule_ids": [
+      "defend-at-all-costs-aeldari"
     ]
   },
   {
@@ -215,12 +233,12 @@
     "faction_id": "aeldari",
     "detachment_rule_id": "skilled-crews-aeldari",
     "enhancement_ids": [
-      "guiding-presence-armoured-warhost-aeldari",
-      "spirit-stone-of-raelyth-armoured-warhost-aeldari"
+      "spirit-stone-of-raelyth-armoured-warhost-aeldari",
+      "guiding-presence-armoured-warhost-aeldari"
     ],
     "stratagem_ids": [
-      "soulsight-armoured-warhost-aeldari",
       "layered-wards-armoured-warhost-aeldari",
+      "soulsight-armoured-warhost-aeldari",
       "vectored-engines-armoured-warhost-aeldari"
     ],
     "game_version": {
@@ -236,13 +254,16 @@
         "namespace": "mfm",
         "id": "b58e871b-db2a-47e2-a6cb-38e6db200209"
       }
+    ],
+    "detachment_rule_ids": [
+      "skilled-crews-aeldari"
     ]
   },
   {
     "id": "corsair-coterie",
     "name": "Corsair Coterie",
     "faction_id": "aeldari",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "relentless-raiders-aeldari",
     "enhancement_ids": [
       "infamy-aura-corsair-coterie-aeldari",
       "webway-pathstone-corsair-coterie-aeldari",
@@ -280,7 +301,7 @@
     "id": "eldritch-raiders",
     "name": "Eldritch Raiders",
     "faction_id": "aeldari",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "yriels-own-aeldari",
     "enhancement_ids": [
       "pirate-prince-eldritch-raiders-aeldari",
       "alacritous-assault-eldritch-raiders-aeldari",
@@ -288,12 +309,12 @@
       "adrenal-infusions-eldritch-raiders-aeldari"
     ],
     "stratagem_ids": [
-      "no-prey-too-big-eldritch-raiders-aeldari",
-      "yriels-example-eldritch-raiders-aeldari",
       "raiders-spoils-eldritch-raiders-aeldari",
       "ruthless-killers-eldritch-raiders-aeldari",
-      "withdraw-and-reinforce-eldritch-raiders-aeldari",
-      "impeding-fire-eldritch-raiders-aeldari"
+      "yriels-example-eldritch-raiders-aeldari",
+      "no-prey-too-big-eldritch-raiders-aeldari",
+      "impeding-fire-eldritch-raiders-aeldari",
+      "withdraw-and-reinforce-eldritch-raiders-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -305,7 +326,7 @@
     ],
     "detachment_rule_ids": [
       "yriels-own-aeldari",
-      "veterans-of-the-void-aeldari"
+      "veterans-of-the-void-eldritch-raiders-aeldari"
     ],
     "external_refs": [
       {
@@ -326,11 +347,11 @@
       "torc-of-morai-heg-seer-council-aeldari"
     ],
     "stratagem_ids": [
-      "fate-inescapable-seer-council-aeldari",
-      "ishas-fury-seer-council-aeldari",
       "presentiment-of-dread-seer-council-aeldari",
       "forewarned-seer-council-aeldari",
       "unshrouded-truth-seer-council-aeldari",
+      "fate-inescapable-seer-council-aeldari",
+      "ishas-fury-seer-council-aeldari",
       "psychic-shield-seer-council-aeldari"
     ],
     "game_version": {
@@ -346,6 +367,9 @@
         "namespace": "mfm",
         "id": "b5d7418d-8a4d-42c8-86d8-b8a0c5c788aa"
       }
+    ],
+    "detachment_rule_ids": [
+      "strands-of-fate-aeldari"
     ]
   },
   {
@@ -361,9 +385,9 @@
     ],
     "stratagem_ids": [
       "lightning-fast-reactions-warhost-aeldari",
-      "blitzing-firepower-warhost-aeldari",
       "skyborne-sanctuary-warhost-aeldari",
       "feigned-retreat-warhost-aeldari",
+      "blitzing-firepower-warhost-aeldari",
       "fire-and-fade-warhost-aeldari",
       "webway-tunnel-warhost-aeldari"
     ],
@@ -380,6 +404,9 @@
         "namespace": "mfm",
         "id": "df808d6f-3013-4a9b-8a6f-0b68785891d0"
       }
+    ],
+    "detachment_rule_ids": [
+      "martial-grace-aeldari"
     ]
   },
   {
@@ -395,10 +422,10 @@
     ],
     "stratagem_ids": [
       "warrior-focus-aspect-host-aeldari",
-      "doom-inescapable-aspect-host-aeldari",
-      "preternatural-precision-aspect-host-aeldari",
       "to-their-final-breath-aspect-host-aeldari",
       "skyborne-sanctuary-aspect-host-aeldari",
+      "doom-inescapable-aspect-host-aeldari",
+      "preternatural-precision-aspect-host-aeldari",
       "khaines-vengeance-aspect-host-aeldari"
     ],
     "game_version": {
@@ -414,6 +441,9 @@
         "namespace": "mfm",
         "id": "fc9dead1-222d-4925-bf9c-ba18c4121f50"
       }
+    ],
+    "detachment_rule_ids": [
+      "path-of-the-warrior-aeldari"
     ]
   },
   {
@@ -443,6 +473,9 @@
         "namespace": "mfm",
         "id": "ab0126f1-e344-469a-8125-2838fdcefe8d"
       }
+    ],
+    "detachment_rule_ids": [
+      "far-reaching-doom-aeldari"
     ]
   },
   {
@@ -456,8 +489,8 @@
     ],
     "stratagem_ids": [
       "exit-the-stage-fateful-performance-aeldari",
-      "heroes-fall-fateful-performance-aeldari",
-      "deceptive-feint-fateful-performance-aeldari"
+      "deceptive-feint-fateful-performance-aeldari",
+      "heroes-fall-fateful-performance-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -475,6 +508,9 @@
         "namespace": "mfm",
         "id": "28ea8bf8-1cb6-4ae3-b0c7-2a171e5dc29f"
       }
+    ],
+    "detachment_rule_ids": [
+      "acrobatic-onslaught-aeldari"
     ]
   },
   {
@@ -487,9 +523,9 @@
       "prelude-performer-twilight-flickers-aeldari"
     ],
     "stratagem_ids": [
+      "phantasmal-mirage-twilight-flickers-aeldari",
       "presaged-rehearsal-twilight-flickers-aeldari",
-      "captivating-performance-twilight-flickers-aeldari",
-      "phantasmal-mirage-twilight-flickers-aeldari"
+      "captivating-performance-twilight-flickers-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -507,6 +543,9 @@
         "namespace": "mfm",
         "id": "366e2930-9de3-4494-bcee-e6fed3c3ad1e"
       }
+    ],
+    "detachment_rule_ids": [
+      "dance-of-distortion-aeldari"
     ]
   },
   {
@@ -514,8 +553,8 @@
     "name": "Kygharil's Protectors",
     "faction_id": "aeldari",
     "enhancement_ids": [
-      "guided-jump-kygharils-protectors-aeldari",
-      "seers-hand-kygharils-protectors-aeldari"
+      "seers-hand-kygharils-protectors-aeldari",
+      "guided-jump-kygharils-protectors-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -535,7 +574,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "graceful-warriors-aeldari"
+      "graceful-warriors-aeldari",
+      "battle-focus-kygharils-protectors-aeldari"
+    ],
+    "stratagem_ids": [
+      "fading-fusillade-kygharils-protectors-aeldari",
+      "suppressing-storm-kygharils-protectors-aeldari",
+      "focused-strikes-kygharils-protectors-aeldari"
     ]
   }
 ]

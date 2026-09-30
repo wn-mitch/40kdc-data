@@ -25,7 +25,10 @@
       }
     ],
     "faction_rule_ids": [
-      "combat-doctrines-assault-force-adeptus-astartes"
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels",
+      "the-ravenwing-dark-angels",
+      "the-deathwing-dark-angels"
     ],
     "army_construction_rules": [
       {

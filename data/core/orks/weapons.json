@@ -537,6 +537,10 @@
       {
         "namespace": "bsdata",
         "id": "5bf6-ed4b-e32a-d7c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a746b2c6-27bd-4a7a-8b87-43891f5b0dad"
       }
     ]
   },
@@ -761,6 +765,10 @@
       {
         "namespace": "bsdata",
         "id": "7142-4c07-8072-8474"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33e11b99-dc70-47fd-a118-22d3b9b2a09b"
       }
     ]
   },
@@ -837,6 +845,10 @@
       {
         "namespace": "mfm",
         "id": "5262de47-8a38-43ec-b902-5d0e81e903dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bfc23702-f5d2-4f44-907c-f24ef5da438a"
       }
     ]
   },
@@ -1174,7 +1186,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "532f003f-16e2-48b0-a89d-785c8820b26e"
+      }
+    ]
   },
   {
     "id": "choppa-breaka-boyz",
@@ -1202,6 +1220,10 @@
       {
         "namespace": "bsdata",
         "id": "8fca-90dd-a784-b5c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1103c8be-0a85-4da7-97ec-14ce16f42f20"
       }
     ]
   },
@@ -1231,6 +1253,10 @@
       {
         "namespace": "bsdata",
         "id": "8fca-90dd-a784-b5c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "999a6476-ea38-4a65-884b-31eefea4632b"
       }
     ]
   },
@@ -1437,6 +1463,10 @@
       {
         "namespace": "mfm",
         "id": "04e1aec8-b54a-4a23-a321-b3a02cf54928"
+      },
+      {
+        "namespace": "mfm",
+        "id": "624ae12d-363a-441f-807b-e709e93253bf"
       }
     ]
   },
@@ -1699,6 +1729,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "11a61ccc-7fbc-4fd6-b1fb-115ad51f2abc"
+      },
+      {
+        "namespace": "mfm",
         "id": "270bd7d3-0c88-46e9-ab2e-24801b1bb5f4"
       }
     ]
@@ -1795,6 +1829,10 @@
       {
         "namespace": "mfm",
         "id": "69433362-3d49-4eeb-a158-8c83abafbd12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "92371095-9f67-4652-8372-0dce59496ce1"
       }
     ]
   },
@@ -2039,6 +2077,10 @@
       {
         "namespace": "mfm",
         "id": "35217662-6f03-47c1-9f63-5511cb62851e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9b5a988e-a42d-48f5-b42f-a6a7bfb9b617"
       }
     ]
   },
@@ -2911,6 +2953,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "1f6cf7a2-e03b-4805-80e3-716c72747cea"
+      },
+      {
+        "namespace": "mfm",
         "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
       },
       {
@@ -2924,6 +2970,10 @@
       {
         "namespace": "mfm",
         "id": "b0e508ab-83fc-4eae-a9fa-1cd6c859dfa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b32e2989-b004-404d-af01-926e6aaef076"
       },
       {
         "namespace": "mfm",
@@ -3380,6 +3430,10 @@
       {
         "namespace": "bsdata",
         "id": "ee65-6385-44ba-3758"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0fa67234-1902-432e-8587-40acd6d6ad22"
       }
     ]
   },
@@ -3496,6 +3550,10 @@
       {
         "namespace": "mfm",
         "id": "d83ccf81-b77e-40c8-b10b-2083b39116b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd54c4c2-e9f6-4f7c-bafb-52a8f19d1fa2"
       }
     ]
   },
@@ -3879,6 +3937,14 @@
       },
       {
         "namespace": "mfm",
+        "id": "2de949cd-b924-472b-8a3e-17e5506e4177"
+      },
+      {
+        "namespace": "mfm",
+        "id": "55469346-ccbb-4ba1-8322-1341d4f9d252"
+      },
+      {
+        "namespace": "mfm",
         "id": "efef7b43-09d6-4e2a-8e03-d7d9ed96b92c"
       }
     ]
@@ -3919,6 +3985,10 @@
       {
         "namespace": "bsdata",
         "id": "b52d-d0e9-825d-e3a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1531c712-5d53-4e38-98e7-82a635107b69"
       }
     ]
   },
@@ -3958,6 +4028,10 @@
       {
         "namespace": "bsdata",
         "id": "b52d-d0e9-825d-e3a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e13e6929-387f-4158-a1d9-3a9c43012400"
       }
     ]
   },
@@ -4045,11 +4119,19 @@
       },
       {
         "namespace": "mfm",
+        "id": "3fab525d-dc62-438f-9553-5d60b9723716"
+      },
+      {
+        "namespace": "mfm",
         "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
       },
       {
         "namespace": "mfm",
         "id": "a1571847-dd0a-43f7-b913-2499da8b5c7a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bafc16ed-c4c0-4c90-aad3-551429e2e2a9"
       },
       {
         "namespace": "mfm",
@@ -4090,6 +4172,10 @@
       {
         "namespace": "bsdata",
         "id": "64da-fae7-507d-8b18"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba6d51c2-0146-443f-aa83-e5392588d925"
       }
     ]
   },
@@ -4236,6 +4322,10 @@
       {
         "namespace": "bsdata",
         "id": "752e-cd9b-4721-f0b0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c56c11cc-dab2-4167-b5ed-86b50f7185d1"
       }
     ]
   },
@@ -4977,6 +5067,10 @@
       {
         "namespace": "bsdata",
         "id": "6feb-277f-7f31-504a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "73df340e-f880-4b88-a6e8-97cf28b8a664"
       }
     ]
   },
@@ -6515,6 +6609,10 @@
       {
         "namespace": "mfm",
         "id": "b8f4df3a-1c25-4165-9be8-aac5f34684a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ecfd2bce-17df-421d-ac39-3352a6257ff1"
       }
     ],
     "name": "Burna",
@@ -6642,6 +6740,10 @@
   {
     "id": "scavenged-shivs",
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4d576c65-a430-47f4-94a0-ff2d150ed3fb"
+      },
       {
         "namespace": "mfm",
         "id": "7c9b900a-2fee-4f37-a7b7-bf8590c62923"
@@ -6871,6 +6973,18 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "0561a891-f0c7-49b8-9bdb-3cc264fe60fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12c53383-e43b-4116-bcb6-b24c0271c232"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bad25f0e-0be5-4836-882b-fb25bd4e5a4e"
+      },
+      {
+        "namespace": "mfm",
         "id": "fe30dc0a-f34e-4ead-80e2-b651413d0d7f"
       }
     ],
@@ -6897,6 +7011,10 @@
   {
     "id": "dual-supa-shoota",
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "11783070-fe99-4f5e-8801-271d28d10858"
+      },
       {
         "namespace": "mfm",
         "id": "d8e95dad-dd6e-409e-b84a-62d3cfe5c49f"
@@ -7210,6 +7328,10 @@
     "external_refs": [
       {
         "namespace": "mfm",
+        "id": "1c184aa0-3d9d-4644-9e3f-30d4ed67784e"
+      },
+      {
+        "namespace": "mfm",
         "id": "62c8d1ba-5c55-4ff9-bc47-4393002da20a"
       }
     ],
@@ -7266,6 +7388,14 @@
       {
         "namespace": "mfm",
         "id": "9cc79ab5-7be2-4060-b5da-06c528177ffa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "becd3248-6ec9-4370-bb7c-4548fa52cfec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd6ff115-733f-49ef-b06e-085ec582feb0"
       }
     ],
     "name": "Dual Big Shoota",
@@ -7580,7 +7710,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7eb49a9e-9c91-4b3f-adef-299aa936b4d5"
+      }
+    ]
   },
   {
     "id": "busta-rokkit-launcha",
@@ -7918,7 +8054,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4acc5ff7-b2a5-4360-849e-7653802b18fd"
+      }
+    ]
   },
   {
     "id": "kustom-big-shoota",

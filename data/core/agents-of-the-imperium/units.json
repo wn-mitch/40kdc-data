@@ -1079,7 +1079,10 @@
     ],
     "ability_ids": [
       "death-to-the-alien-agents-of-the-imperium",
-      "storm-shield-agents-of-the-imperium"
+      {
+        "id": "storm-shield-agents-of-the-imperium",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1397,7 +1400,10 @@
     "ability_ids": [
       "kill-team-agents-of-the-imperium",
       "death-to-the-alien-agents-of-the-imperium",
-      "storm-shield-agents-of-the-imperium"
+      {
+        "id": "storm-shield-agents-of-the-imperium",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",

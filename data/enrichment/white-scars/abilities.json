@@ -178,5 +178,45 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "evasive-manoeuvers-spearpoint-task-force-white-scars",
+    "name": "Evasive Manoeuvers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "flawless-riders-spearpoint-task-force-white-scars",
+    "name": "Flawless Riders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

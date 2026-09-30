@@ -29,48 +29,19 @@
     ]
   },
   {
-    "id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
-    "name": "WIND-SWIFT EVASION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "stormlance-task-force",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "8f009121-ad40-5eb6-8339-12099275f3f6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "25378f3a-afc0-4fa6-a087-2095bbebcfe9"
-      }
-    ]
-  },
-  {
-    "id": "unyielding-might-ceramite-sentinels-imperial-fists",
-    "name": "Unyielding Might",
+    "id": "augmented-targeting-ceramite-sentinels-imperial-fists",
+    "name": "Augmented Targeting",
     "category": "detachment",
     "type": "battle-tactic",
     "detachment_id": "ceramite-sentinels",
     "cp_cost": 1,
     "phases": [
-      "command"
+      "shooting"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unyielding-might-ceramite-sentinels-imperial-fists",
+    "ability_id": "augmented-targeting-ceramite-sentinels-imperial-fists",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -78,19 +49,24 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "f24e0ce5-ec23-5a4c-93eb-c818209d8e5d"
+        "id": "8f82ee1b-143b-5226-ac41-bf95c1836f7e"
       },
       {
         "namespace": "mfm",
-        "id": "0933c7f4-df52-4412-a9b5-40564daca344"
+        "id": "39db2117-82ed-4fa3-8c71-4ee54f89d58a"
       }
     ]
   },
   {
-    "id": "stand-to-the-end-ceramite-sentinels-imperial-fists",
-    "name": "Stand to the End",
+    "id": "establish-supremacy-ceramite-sentinels-imperial-fists",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4beba123-b1b0-46fc-b371-dce4b11a3f97"
+      }
+    ],
+    "name": "Establish Supremacy",
     "category": "detachment",
-    "type": "epic-deed",
     "detachment_id": "ceramite-sentinels",
     "cp_cost": 1,
     "phases": [
@@ -99,7 +75,26 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "stand-to-the-end-ceramite-sentinels-imperial-fists",
+    "ability_id": "establish-supremacy-ceramite-sentinels-imperial-fists",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "evasive-repositioning-ceramite-sentinels-imperial-fists",
+    "name": "Evasive Repositioning",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ceramite-sentinels",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "evasive-repositioning-ceramite-sentinels-imperial-fists",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -107,11 +102,11 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "2d480929-5f18-5d51-a515-39436f581538"
+        "id": "ec56919d-3c54-5f62-85a7-7929a5e83089"
       },
       {
         "namespace": "mfm",
-        "id": "32fc0895-94b8-45f9-be9d-51b5b229b7af"
+        "id": "a2d40ec6-20af-4d5a-9c07-8d2d2286cd42"
       }
     ]
   },
@@ -146,19 +141,48 @@
     ]
   },
   {
-    "id": "augmented-targeting-ceramite-sentinels-imperial-fists",
-    "name": "Augmented Targeting",
+    "id": "stand-to-the-end-ceramite-sentinels-imperial-fists",
+    "name": "Stand to the End",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "ceramite-sentinels",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "stand-to-the-end-ceramite-sentinels-imperial-fists",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2d480929-5f18-5d51-a515-39436f581538"
+      },
+      {
+        "namespace": "mfm",
+        "id": "32fc0895-94b8-45f9-be9d-51b5b229b7af"
+      }
+    ]
+  },
+  {
+    "id": "unyielding-might-ceramite-sentinels-imperial-fists",
+    "name": "Unyielding Might",
     "category": "detachment",
     "type": "battle-tactic",
     "detachment_id": "ceramite-sentinels",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "command"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "augmented-targeting-ceramite-sentinels-imperial-fists",
+    "ability_id": "unyielding-might-ceramite-sentinels-imperial-fists",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -166,28 +190,28 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "8f82ee1b-143b-5226-ac41-bf95c1836f7e"
+        "id": "f24e0ce5-ec23-5a4c-93eb-c818209d8e5d"
       },
       {
         "namespace": "mfm",
-        "id": "39db2117-82ed-4fa3-8c71-4ee54f89d58a"
+        "id": "0933c7f4-df52-4412-a9b5-40564daca344"
       }
     ]
   },
   {
-    "id": "evasive-repositioning-ceramite-sentinels-imperial-fists",
-    "name": "Evasive Repositioning",
+    "id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
+    "name": "WIND-SWIFT EVASION",
     "category": "detachment",
     "type": "strategic-ploy",
-    "detachment_id": "ceramite-sentinels",
+    "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "movement"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "evasive-repositioning-ceramite-sentinels-imperial-fists",
+    "ability_id": "wind-swift-evasion-stormlance-task-force-adeptus-astartes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -195,11 +219,11 @@
     "external_refs": [
       {
         "namespace": "game-datacards",
-        "id": "ec56919d-3c54-5f62-85a7-7929a5e83089"
+        "id": "8f009121-ad40-5eb6-8339-12099275f3f6"
       },
       {
         "namespace": "mfm",
-        "id": "a2d40ec6-20af-4d5a-9c07-8d2d2286cd42"
+        "id": "25378f3a-afc0-4fa6-a087-2095bbebcfe9"
       }
     ]
   }

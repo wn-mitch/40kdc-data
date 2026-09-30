@@ -12,11 +12,11 @@
     ],
     "stratagem_ids": [
       "crack-shots-recon-element-astra-militarum",
-      "scouting-outriders-recon-element-astra-militarum",
       "draw-them-out-recon-element-astra-militarum",
-      "courageous-diversion-recon-element-astra-militarum",
       "scramble-field-recon-element-astra-militarum",
-      "tanglefoot-grenades-recon-element-astra-militarum"
+      "courageous-diversion-recon-element-astra-militarum",
+      "tanglefoot-grenades-recon-element-astra-militarum",
+      "scouting-outriders-recon-element-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -34,6 +34,9 @@
         "namespace": "mfm",
         "id": "3062acc0-d72e-471a-bbd1-26598bc30ec4"
       }
+    ],
+    "detachment_rule_ids": [
+      "masters-of-camouflage-astra-militarum"
     ]
   },
   {
@@ -48,11 +51,11 @@
       "veteran-crew-hammer-of-the-emperor-astra-militarum"
     ],
     "stratagem_ids": [
-      "blazing-advance-hammer-of-the-emperor-astra-militarum",
-      "furious-cannonade-hammer-of-the-emperor-astra-militarum",
       "final-hour-hammer-of-the-emperor-astra-militarum",
+      "blazing-advance-hammer-of-the-emperor-astra-militarum",
       "tactical-withdrawal-hammer-of-the-emperor-astra-militarum",
       "crash-through-hammer-of-the-emperor-astra-militarum",
+      "furious-cannonade-hammer-of-the-emperor-astra-militarum",
       "ablative-plating-hammer-of-the-emperor-astra-militarum"
     ],
     "game_version": {
@@ -68,6 +71,9 @@
         "namespace": "mfm",
         "id": "4fa424ac-a7aa-4830-b497-45c89aae7fbb"
       }
+    ],
+    "detachment_rule_ids": [
+      "iron-tread-astra-militarum"
     ]
   },
   {
@@ -83,11 +89,11 @@
     ],
     "stratagem_ids": [
       "coordinated-action-combined-arms-astra-militarum",
-      "fields-of-fire-combined-arms-astra-militarum",
-      "stalwart-protector-combined-arms-astra-militarum",
-      "inspired-command-combined-arms-astra-militarum",
       "reinforcements-combined-arms-astra-militarum",
-      "flexible-command-combined-arms-astra-militarum"
+      "flexible-command-combined-arms-astra-militarum",
+      "fields-of-fire-combined-arms-astra-militarum",
+      "inspired-command-combined-arms-astra-militarum",
+      "stalwart-protector-combined-arms-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -102,6 +108,9 @@
         "namespace": "mfm",
         "id": "6ae8f235-c8b0-4485-8e18-505b6926f1b2"
       }
+    ],
+    "detachment_rule_ids": [
+      "born-soldiers-astra-militarum"
     ]
   },
   {
@@ -116,12 +125,12 @@
       "laud-hailer-grizzled-company-astra-militarum"
     ],
     "stratagem_ids": [
+      "snap-to-it-grizzled-company-astra-militarum",
+      "no-retreat-grizzled-company-astra-militarum",
       "veteran-sharpshooters-grizzled-company-astra-militarum",
       "purging-fire-grizzled-company-astra-militarum",
       "mordian-minute-grizzled-company-astra-militarum",
-      "additional-armour-grizzled-company-astra-militarum",
-      "snap-to-it-grizzled-company-astra-militarum",
-      "no-retreat-grizzled-company-astra-militarum"
+      "additional-armour-grizzled-company-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -139,6 +148,9 @@
         "namespace": "mfm",
         "id": "8f29b4e9-92c8-450f-8d35-5561c49e8803"
       }
+    ],
+    "detachment_rule_ids": [
+      "ruthless-discipline-astra-militarum"
     ]
   },
   {
@@ -168,6 +180,9 @@
         "namespace": "mfm",
         "id": "aae77907-0898-4c11-8a9e-a866a3e67456"
       }
+    ],
+    "detachment_rule_ids": [
+      "fire-zone-purge-astra-militarum"
     ]
   },
   {
@@ -182,12 +197,12 @@
       "vanguard-honours-mechanised-assault-astra-militarum"
     ],
     "stratagem_ids": [
+      "vox-relay-mechanised-assault-astra-militarum",
+      "rapid-dispersal-mechanised-assault-astra-militarum",
       "clear-and-secure-mechanised-assault-astra-militarum",
       "swift-interception-mechanised-assault-astra-militarum",
       "hasty-extraction-mechanised-assault-astra-militarum",
-      "rapid-dispersal-mechanised-assault-astra-militarum",
-      "move-out-mechanised-assault-astra-militarum",
-      "vox-relay-mechanised-assault-astra-militarum"
+      "move-out-mechanised-assault-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -202,6 +217,9 @@
         "namespace": "mfm",
         "id": "c3170734-b810-4e24-8244-0371f715ff9c"
       }
+    ],
+    "detachment_rule_ids": [
+      "armoured-fist-astra-militarum"
     ]
   },
   {
@@ -216,12 +234,12 @@
       "stalwarts-honours-siege-regiment-astra-militarum"
     ],
     "stratagem_ids": [
-      "callous-sacrifice-siege-regiment-astra-militarum",
       "trench-fighters-siege-regiment-astra-militarum",
-      "furious-fusillade-siege-regiment-astra-militarum",
       "over-the-top-siege-regiment-astra-militarum",
-      "minefield-siege-regiment-astra-militarum",
-      "flare-burst-siege-regiment-astra-militarum"
+      "flare-burst-siege-regiment-astra-militarum",
+      "callous-sacrifice-siege-regiment-astra-militarum",
+      "furious-fusillade-siege-regiment-astra-militarum",
+      "minefield-siege-regiment-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -236,6 +254,9 @@
         "namespace": "mfm",
         "id": "f284cddb-5060-44ff-abbb-a2876dedcf18"
       }
+    ],
+    "detachment_rule_ids": [
+      "artillery-support-astra-militarum"
     ]
   },
   {
@@ -244,13 +265,13 @@
     "faction_id": "astra-militarum",
     "detachment_rule_id": "absolutist-principles-astra-militarum",
     "enhancement_ids": [
-      "exemplar-of-duty-upgrade-abhuman-auxiliaries-astra-militarum",
-      "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum"
+      "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum",
+      "exemplar-of-duty-upgrade-abhuman-auxiliaries-astra-militarum"
     ],
     "stratagem_ids": [
       "thick-skulled-obdurance-abhuman-auxiliaries-astra-militarum",
-      "low-profile-abhuman-auxiliaries-astra-militarum",
-      "stirred-to-action-abhuman-auxiliaries-astra-militarum"
+      "stirred-to-action-abhuman-auxiliaries-astra-militarum",
+      "low-profile-abhuman-auxiliaries-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -268,6 +289,9 @@
         "namespace": "mfm",
         "id": "7b0fe28b-5a8e-48cd-bbe7-699babfbd463"
       }
+    ],
+    "detachment_rule_ids": [
+      "absolutist-principles-astra-militarum"
     ]
   },
   {
@@ -280,9 +304,9 @@
       "recon-star-upgrade-designation-force-astra-militarum"
     ],
     "stratagem_ids": [
+      "sump-smog-screen-designation-force-astra-militarum",
       "close-range-detection-designation-force-astra-militarum",
-      "triggered-alerts-designation-force-astra-militarum",
-      "sump-smog-screen-designation-force-astra-militarum"
+      "triggered-alerts-designation-force-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -300,6 +324,9 @@
         "namespace": "mfm",
         "id": "7c12acc3-f2ae-4fa7-b80b-03dae96b72da"
       }
+    ],
+    "detachment_rule_ids": [
+      "designated-targets-astra-militarum"
     ]
   },
   {
@@ -315,10 +342,10 @@
     ],
     "stratagem_ids": [
       "engine-of-wrath-steel-hammer-astra-militarum",
-      "shattering-salvo-steel-hammer-astra-militarum",
       "imposing-arrival-steel-hammer-astra-militarum",
-      "withering-firepower-steel-hammer-astra-militarum",
       "adamantine-behemoth-steel-hammer-astra-militarum",
+      "shattering-salvo-steel-hammer-astra-militarum",
+      "withering-firepower-steel-hammer-astra-militarum",
       "accuracy-under-pressure-steel-hammer-astra-militarum"
     ],
     "game_version": {
@@ -334,6 +361,9 @@
         "namespace": "mfm",
         "id": "660a5970-862e-4ea0-8365-1901adb404be"
       }
+    ],
+    "detachment_rule_ids": [
+      "ceaseless-cannonade-astra-militarum"
     ]
   },
   {
@@ -349,10 +379,10 @@
     ],
     "stratagem_ids": [
       "order-the-advance-armoured-infantry-astra-militarum",
-      "supporting-ordnance-armoured-infantry-astra-militarum",
       "mobile-firebase-armoured-infantry-astra-militarum",
-      "combined-fire-armoured-infantry-astra-militarum",
       "burst-of-speed-armoured-infantry-astra-militarum",
+      "supporting-ordnance-armoured-infantry-astra-militarum",
+      "combined-fire-armoured-infantry-astra-militarum",
       "opening-salvo-armoured-infantry-astra-militarum"
     ],
     "game_version": {
@@ -376,6 +406,10 @@
         "namespace": "mfm",
         "id": "1fe960ed-2abc-4e1d-82f4-b0770b8cd2d8"
       }
+    ],
+    "detachment_rule_ids": [
+      "squadron-command-astra-militarum",
+      "order-astra-militarum"
     ]
   },
   {
@@ -383,8 +417,8 @@
     "name": "Drayden’s Lance",
     "faction_id": "astra-militarum",
     "enhancement_ids": [
-      "call-up-the-reserves-draydens-lance-astra-militarum",
-      "draydens-drill-draydens-lance-astra-militarum"
+      "draydens-drill-draydens-lance-astra-militarum",
+      "call-up-the-reserves-draydens-lance-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -404,7 +438,13 @@
       }
     ],
     "detachment_rule_ids": [
-      "experienced-veterans-astra-militarum"
+      "experienced-veterans-astra-militarum",
+      "voice-of-command-astra-militarum"
+    ],
+    "stratagem_ids": [
+      "focus-attacks-draydens-lance-astra-militarum",
+      "first-wave-draydens-lance-astra-militarum",
+      "veteran-skirmishers-draydens-lance-astra-militarum"
     ]
   }
 ]

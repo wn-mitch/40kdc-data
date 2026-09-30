@@ -12,9 +12,9 @@
     ],
     "stratagem_ids": [
       "hardened-killers-hurons-marauders-chaos-space-marines",
+      "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
       "seize-the-prize-hurons-marauders-chaos-space-marines",
       "reavers-flurry-hurons-marauders-chaos-space-marines",
-      "at-the-tyrants-command-hurons-marauders-chaos-space-marines",
       "to-the-favoured-the-spoils-hurons-marauders-chaos-space-marines",
       "encircling-surge-hurons-marauders-chaos-space-marines"
     ],
@@ -31,6 +31,9 @@
         "namespace": "mfm",
         "id": "12492ec7-0f2c-46fa-822a-80b0c2e8bfd6"
       }
+    ],
+    "detachment_rule_ids": [
+      "tyrannical-motivation-chaos-space-marines"
     ]
   },
   {
@@ -43,8 +46,8 @@
       "conduit-of-chaos-cabal-of-chaos-chaos-space-marines"
     ],
     "stratagem_ids": [
-      "infernal-vigour-cabal-of-chaos-chaos-space-marines",
       "fleshy-curse-cabal-of-chaos-chaos-space-marines",
+      "infernal-vigour-cabal-of-chaos-chaos-space-marines",
       "wreathed-in-warpflame-cabal-of-chaos-chaos-space-marines"
     ],
     "game_version": {
@@ -60,6 +63,9 @@
         "namespace": "mfm",
         "id": "cbb28bd5-40ae-4d3e-8dbd-3b3e1591a89a"
       }
+    ],
+    "detachment_rule_ids": [
+      "empyric-wellspring-chaos-space-marines"
     ]
   },
   {
@@ -76,10 +82,10 @@
     "stratagem_ids": [
       "unfailingly-obdurate-renegade-raiders-chaos-space-marines",
       "scour-and-seize-renegade-raiders-chaos-space-marines",
-      "ruinous-raid-renegade-raiders-chaos-space-marines",
       "opportunistic-raiders-renegade-raiders-chaos-space-marines",
-      "reavers-haste-renegade-raiders-chaos-space-marines",
-      "warpcharged-engines-renegade-raiders-chaos-space-marines"
+      "warpcharged-engines-renegade-raiders-chaos-space-marines",
+      "ruinous-raid-renegade-raiders-chaos-space-marines",
+      "reavers-haste-renegade-raiders-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -94,6 +100,9 @@
         "namespace": "mfm",
         "id": "1a658734-6ba0-4fe7-8f05-ddf084cc694d"
       }
+    ],
+    "detachment_rule_ids": [
+      "raiders-and-reavers-chaos-space-marines"
     ]
   },
   {
@@ -109,9 +118,9 @@
     ],
     "stratagem_ids": [
       "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
+      "brutal-attrition-fellhammer-siege-host-chaos-space-marines",
       "pitiless-cannonade-fellhammer-siege-host-chaos-space-marines",
       "point-blank-destruction-fellhammer-siege-host-chaos-space-marines",
-      "brutal-attrition-fellhammer-siege-host-chaos-space-marines",
       "steadfast-determination-fellhammer-siege-host-chaos-space-marines",
       "siegecraft-fellhammer-siege-host-chaos-space-marines"
     ],
@@ -128,6 +137,9 @@
         "namespace": "mfm",
         "id": "3fe68451-1e4f-41e0-85a9-ecaf0d20e60c"
       }
+    ],
+    "detachment_rule_ids": [
+      "iron-fortitude-chaos-space-marines"
     ]
   },
   {
@@ -142,12 +154,12 @@
       "soul-link-deceptors-chaos-space-marines"
     ],
     "stratagem_ids": [
+      "detonator-deceptors-chaos-space-marines",
       "from-all-sides-deceptors-chaos-space-marines",
       "pick-them-off-deceptors-chaos-space-marines",
       "coils-of-deception-deceptors-chaos-space-marines",
       "relentless-pursuit-deceptors-chaos-space-marines",
-      "scrambled-coordinates-deceptors-chaos-space-marines",
-      "detonator-deceptors-chaos-space-marines"
+      "scrambled-coordinates-deceptors-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -162,6 +174,9 @@
         "namespace": "mfm",
         "id": "41e763bc-5f5c-4e65-be45-9c168c962033"
       }
+    ],
+    "detachment_rule_ids": [
+      "masters-of-misdirection-chaos-space-marines"
     ]
   },
   {
@@ -177,8 +192,8 @@
     ],
     "stratagem_ids": [
       "desperate-pledge-soulforged-warpack-chaos-space-marines",
-      "daemonic-possession-soulforged-warpack-chaos-space-marines",
       "glut-of-souls-soulforged-warpack-chaos-space-marines",
+      "daemonic-possession-soulforged-warpack-chaos-space-marines",
       "unstoppable-rampage-soulforged-warpack-chaos-space-marines",
       "predatory-pursuit-soulforged-warpack-chaos-space-marines",
       "feeding-frenzy-soulforged-warpack-chaos-space-marines"
@@ -196,6 +211,9 @@
         "namespace": "mfm",
         "id": "807aa974-ca16-4d8a-8958-68c1a32f9c86"
       }
+    ],
+    "detachment_rule_ids": [
+      "debt-to-the-soul-forge-chaos-space-marines"
     ]
   },
   {
@@ -210,11 +228,11 @@
       "empyric-symbiote-renegade-warband-chaos-space-marines"
     ],
     "stratagem_ids": [
-      "vengeful-destruction-renegade-warband-chaos-space-marines",
-      "corrupted-munitions-renegade-warband-chaos-space-marines",
       "never-outgunned-renegade-warband-chaos-space-marines",
+      "vengeful-destruction-renegade-warband-chaos-space-marines",
       "undying-hatred-renegade-warband-chaos-space-marines",
       "renegade-claim-renegade-warband-chaos-space-marines",
+      "corrupted-munitions-renegade-warband-chaos-space-marines",
       "reavers-reaction-renegade-warband-chaos-space-marines"
     ],
     "game_version": {
@@ -230,6 +248,9 @@
         "namespace": "mfm",
         "id": "8f4e4263-86bf-426d-b235-6d760ffe8584"
       }
+    ],
+    "detachment_rule_ids": [
+      "slaves-to-none-chaos-space-marines"
     ]
   },
   {
@@ -245,8 +266,8 @@
     ],
     "stratagem_ids": [
       "depthless-cruelty-dread-talons-chaos-space-marines",
-      "pitiless-hunters-dread-talons-chaos-space-marines",
       "bloody-example-dread-talons-chaos-space-marines",
+      "pitiless-hunters-dread-talons-chaos-space-marines",
       "relentless-terror-dread-talons-chaos-space-marines",
       "screaming-descent-dread-talons-chaos-space-marines",
       "merciless-pursuit-dread-talons-chaos-space-marines"
@@ -264,6 +285,9 @@
         "namespace": "mfm",
         "id": "92401979-2a38-4cbd-9781-d3d53d6ad2e0"
       }
+    ],
+    "detachment_rule_ids": [
+      "terror-descends-chaos-space-marines"
     ]
   },
   {
@@ -279,9 +303,9 @@
     ],
     "stratagem_ids": [
       "chosen-for-glory-chaos-cult-chaos-space-marines",
+      "selfless-demise-chaos-cult-chaos-space-marines",
       "infernal-sacrifice-chaos-cult-chaos-space-marines",
       "crazed-focus-chaos-cult-chaos-space-marines",
-      "selfless-demise-chaos-cult-chaos-space-marines",
       "reckless-haste-chaos-cult-chaos-space-marines",
       "mortal-thralls-chaos-cult-chaos-space-marines"
     ],
@@ -298,6 +322,9 @@
         "namespace": "mfm",
         "id": "93ea6b6a-690f-4a73-bb76-638cc4da5641"
       }
+    ],
+    "detachment_rule_ids": [
+      "desperate-devotion-chaos-space-marines"
     ]
   },
   {
@@ -312,11 +339,11 @@
       "mark-of-legend-veterans-of-the-long-war-chaos-space-marines"
     ],
     "stratagem_ids": [
-      "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
-      "let-the-galaxy-burn-veterans-of-the-long-war-chaos-space-marines",
       "endless-ire-veterans-of-the-long-war-chaos-space-marines",
+      "contemptuous-disregard-veterans-of-the-long-war-chaos-space-marines",
       "bringers-of-despair-veterans-of-the-long-war-chaos-space-marines",
       "black-crusade-veterans-of-the-long-war-chaos-space-marines",
+      "let-the-galaxy-burn-veterans-of-the-long-war-chaos-space-marines",
       "millennia-of-experience-veterans-of-the-long-war-chaos-space-marines"
     ],
     "game_version": {
@@ -332,6 +359,9 @@
         "namespace": "mfm",
         "id": "a0d2bc8f-ba0c-4ea6-8ee1-42dccb8fbc4d"
       }
+    ],
+    "detachment_rule_ids": [
+      "focus-of-hatred-chaos-space-marines"
     ]
   },
   {
@@ -369,6 +399,9 @@
         "namespace": "mfm",
         "id": "b7654c2c-0922-444c-a98a-f49438d4f22c"
       }
+    ],
+    "detachment_rule_ids": [
+      "terror-made-manifest-chaos-space-marines"
     ]
   },
   {
@@ -383,10 +416,10 @@
       "intoxicating-elixir-pactbound-zealots-chaos-space-marines"
     ],
     "stratagem_ids": [
-      "profane-zeal-pactbound-zealots-chaos-space-marines",
       "eye-of-the-gods-pactbound-zealots-chaos-space-marines",
-      "skinshift-pactbound-zealots-chaos-space-marines",
       "eternal-hate-pactbound-zealots-chaos-space-marines",
+      "profane-zeal-pactbound-zealots-chaos-space-marines",
+      "skinshift-pactbound-zealots-chaos-space-marines",
       "torpefying-refrain-pactbound-zealots-chaos-space-marines",
       "festering-miasma-pactbound-zealots-chaos-space-marines"
     ],
@@ -403,6 +436,9 @@
         "namespace": "mfm",
         "id": "b7c5bcb7-eecb-4ae5-a18b-b96143c34fa8"
       }
+    ],
+    "detachment_rule_ids": [
+      "marks-of-chaos-chaos-space-marines"
     ]
   },
   {
@@ -419,10 +455,10 @@
     "stratagem_ids": [
       "monstrous-visages-creations-of-bile-chaos-space-marines",
       "masters-are-watching-creations-of-bile-chaos-space-marines",
-      "diabolic-regeneration-creations-of-bile-chaos-space-marines",
-      "autostimulants-creations-of-bile-chaos-space-marines",
       "specimens-for-the-spider-creations-of-bile-chaos-space-marines",
-      "delayed-mutations-creations-of-bile-chaos-space-marines"
+      "delayed-mutations-creations-of-bile-chaos-space-marines",
+      "diabolic-regeneration-creations-of-bile-chaos-space-marines",
+      "autostimulants-creations-of-bile-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -437,6 +473,9 @@
         "namespace": "mfm",
         "id": "d730df46-12ec-4dff-80cf-60aeea5eefcd"
       }
+    ],
+    "detachment_rule_ids": [
+      "experimental-augmentations-chaos-space-marines"
     ]
   },
   {
@@ -467,6 +506,9 @@
         "namespace": "mfm",
         "id": "802cf206-9418-4fa8-9b4a-3ac3d2b9d01d"
       }
+    ],
+    "detachment_rule_ids": [
+      "rain-of-ruin-chaos-space-marines"
     ]
   },
   {
@@ -499,6 +541,9 @@
         "namespace": "mfm",
         "id": "64363c88-2015-4700-9f88-ac03407213db"
       }
+    ],
+    "detachment_rule_ids": [
+      "prey-on-the-weak-chaos-space-marines"
     ]
   },
   {
@@ -514,10 +559,10 @@
     ],
     "stratagem_ids": [
       "empyric-dislocation-warpstrike-champions-chaos-space-marines",
-      "warp-tainted-warpstrike-champions-chaos-space-marines",
-      "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
       "armour-of-corruption-warpstrike-champions-chaos-space-marines",
       "warp-flicker-warpstrike-champions-chaos-space-marines",
+      "warp-tainted-warpstrike-champions-chaos-space-marines",
+      "siegebreaker-strike-warpstrike-champions-chaos-space-marines",
       "portal-of-spite-warpstrike-champions-chaos-space-marines"
     ],
     "game_version": {
@@ -533,6 +578,9 @@
         "namespace": "mfm",
         "id": "b7baa3d5-a100-40d8-9e84-44ec95a8dcfc"
       }
+    ],
+    "detachment_rule_ids": [
+      "warp-portals-chaos-space-marines"
     ]
   },
   {
@@ -549,6 +597,7 @@
     "stratagem_ids": [
       "touch-of-the-arkifane-cult-of-the-arkifane-chaos-space-marines",
       "balefire-boon-cult-of-the-arkifane-chaos-space-marines",
+      "soul-tally-offerings-cult-of-the-arkifane-chaos-space-marines",
       "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines",
       "forge-fire-surge-cult-of-the-arkifane-chaos-space-marines",
       "unholy-fortitude-cult-of-the-arkifane-chaos-space-marines"
@@ -566,6 +615,9 @@
         "namespace": "mfm",
         "id": "c61a7add-d879-4bb6-a61e-dfa1c621e203"
       }
+    ],
+    "detachment_rule_ids": [
+      "soul-forge-boons-chaos-space-marines"
     ]
   },
   {
@@ -594,7 +646,14 @@
       }
     ],
     "detachment_rule_ids": [
-      "abject-fear-chaos-space-marines"
+      "abject-fear-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
+    ],
+    "stratagem_ids": [
+      "vindictive-strategy-zarkans-daemonkin-chaos-space-marines",
+      "daemonic-frenzy-zarkans-daemonkin-chaos-space-marines",
+      "alert-to-danger-zarkans-daemonkin-chaos-space-marines"
     ]
   }
 ]

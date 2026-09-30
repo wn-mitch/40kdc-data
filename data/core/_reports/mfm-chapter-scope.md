@@ -10,13 +10,6 @@ where a chapter is barred from a generic unit with no same-name replacement.
 | Units matched | 177 |
 | faction_keywords collapsed | 0 |
 | excluded_faction_keywords set | 0 |
-| Repo units with no dump datasheet | 4 |
+| Repo units with no dump datasheet | 0 |
 | Dump SM datasheets with no repo unit | 0 |
-
-## Repo units with no SM-family dump datasheet (review)
-
-- stormtalon-gunship
-- razorback
-- stormhawk-interceptor
-- stormraven-gunship
 

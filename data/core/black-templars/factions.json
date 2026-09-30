@@ -25,7 +25,9 @@
       }
     ],
     "faction_rule_ids": [
-      "templar-vows-black-templars"
+      "combat-doctrines-black-templars",
+      "transhuman-strategist-black-templars",
+      "heirs-of-sigismund-black-templars"
     ],
     "army_construction_rules": [
       {

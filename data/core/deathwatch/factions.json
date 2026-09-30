@@ -25,7 +25,9 @@
       }
     ],
     "faction_rule_ids": [
-      "mission-tactics-deathwatch"
+      "combat-doctrines-deathwatch",
+      "transhuman-strategist-deathwatch",
+      "veteran-recruits-deathwatch"
     ],
     "army_construction_rules": [
       {

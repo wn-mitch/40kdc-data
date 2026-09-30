@@ -193,5 +193,45 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "murderous-fusillade-shadowmark-talon-raven-guard",
+    "name": "Murderous Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "suppressed-weapons-shadowmark-talon-raven-guard",
+    "name": "Suppressed Weapons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

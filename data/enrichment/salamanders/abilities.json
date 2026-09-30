@@ -304,5 +304,45 @@
         "INFANTRY"
       ]
     }
+  },
+  {
+    "ability_id": "forged-in-fire-forgefathers-seekers-salamanders",
+    "name": "Forged in Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",
+    "name": "Wrath and Ruin",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

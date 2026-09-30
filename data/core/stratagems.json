@@ -45,7 +45,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "33bd61f7-4741-4c27-a8d8-2e13b20ca121"
+      }
+    ]
   },
   {
     "id": "epic-challenge",

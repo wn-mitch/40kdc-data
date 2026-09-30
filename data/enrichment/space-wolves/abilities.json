@@ -233,6 +233,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
+      "venerable-dreadnought",
       "wulfen-dreadnought"
     ],
     "ability_type": "unit",
@@ -476,7 +477,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [],
+    "unit_ids": ["venerable-dreadnought"],
     "ability_type": "unit",
     "behavior": "passive",
     "faction_id": "space-wolves"
@@ -2680,6 +2681,26 @@
     "faction_id": "space-wolves",
     "detachment_id": null,
     "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unbridled-feroicity-saga-of-the-beastslayer-space-wolves",
+    "name": "Unbridled Feroicity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "space-wolves",
+    "detachment_id": "saga-of-the-beastslayer",
+    "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
     },

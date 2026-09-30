@@ -1186,54 +1186,6 @@
     "faction_id": "orks"
   },
   {
-    "ability_id": "speedboss-orks",
-    "name": "Speedboss",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "source_digest": "f848efe9e045994bcd82b2a220cbe3b446ae97725e685916ae8117c0251df5e9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "unit_ids": [],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "orks"
-  },
-  {
     "ability_id": "fuel-mixa-grot-orks",
     "name": "Fuel-mixa Grot",
     "authored_by": "40kdc-community",
@@ -13098,6 +13050,28 @@
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pulsa-rokkit-wargear-orks",
+    "name": "Pulsa Rokkit (Once per battle, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "tankbustas"
+    ],
+    "faction_id": "orks",
+    "detachment_id": null,
+    "ability_type": "unit",
     "effect": {
       "type": "no-effect"
     },

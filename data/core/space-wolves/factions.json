@@ -25,7 +25,10 @@
       }
     ],
     "faction_rule_ids": [
-      "combat-doctrines-assault-force-adeptus-astartes"
+      "combat-doctrines-space-wolves",
+      "curse-of-the-wulfen-space-wolves",
+      "transhuman-strategist-space-wolves",
+      "sons-of-russ-space-wolves"
     ],
     "army_construction_rules": [
       {

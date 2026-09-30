@@ -20,7 +20,8 @@
       }
     ],
     "faction_rule_ids": [
-      "dark-pacts-chaos-space-marines"
+      "dark-pacts-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines"
     ]
   }
 ]

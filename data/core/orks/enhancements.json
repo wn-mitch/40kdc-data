@@ -18,6 +18,10 @@
       {
         "namespace": "game-datacards",
         "id": "6923d140-58e0-57fe-8895-bcd4803ed1ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd3cd4db-81a6-4567-abe9-fc8b99efe0cd"
       }
     ]
   },
@@ -37,7 +41,13 @@
       "Boyz"
     ],
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e8199306-d04e-451b-b3c4-fda04201f535"
+      }
+    ]
   },
   {
     "id": "blitzboss-brute-bosses-orks",
@@ -55,6 +65,10 @@
       {
         "namespace": "game-datacards",
         "id": "80146bd1-15f6-5c74-9918-42cc8316ca3a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89b800e4-a94c-4307-8217-e0b6ee51cb89"
       }
     ],
     "keyword_restrictions": [
@@ -80,6 +94,10 @@
       {
         "namespace": "game-datacards",
         "id": "94894a90-fc6a-543b-b82e-d11c4a3df379"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1e230c52-458e-46fb-87df-6ab470c0d69d"
       }
     ]
   },
@@ -102,6 +120,10 @@
       {
         "namespace": "game-datacards",
         "id": "350affc1-5169-5c1e-82b0-54af8656d98d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d221c093-20e3-4567-ab3b-7693d4d58de3"
       }
     ]
   },
@@ -124,6 +146,10 @@
       {
         "namespace": "game-datacards",
         "id": "ee67ae2d-2f35-50ec-a5f1-776143408d8d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "543248e3-0f8d-4bb7-99d1-2d3ac25c28e6"
       }
     ]
   },
@@ -143,6 +169,10 @@
       {
         "namespace": "game-datacards",
         "id": "6a9773e3-4d52-5397-8d9b-dcb221d02f44"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd83cfb3-7274-41f4-a532-49a1fb3c2eb1"
       }
     ],
     "keyword_restrictions": [
@@ -169,6 +199,10 @@
       {
         "namespace": "game-datacards",
         "id": "bcfa79fe-d295-515e-ac2f-d18afbe0c46d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5622055e-1188-444d-8912-1e81003bb7cb"
       }
     ]
   },
@@ -192,6 +226,10 @@
       {
         "namespace": "game-datacards",
         "id": "a9d76f2d-9129-576c-8c46-c8fc3fde5c77"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ad49f962-e2f9-4347-96af-a775bd34e6c6"
       }
     ]
   },
@@ -216,6 +254,10 @@
       {
         "namespace": "game-datacards",
         "id": "5673cfa0-7099-58be-b3f6-ed9ece5be056"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab017be1-2023-49f7-841f-eba9b0834573"
       }
     ]
   },
@@ -240,6 +282,10 @@
       {
         "namespace": "game-datacards",
         "id": "f4892714-49c2-5faa-84d4-ed24da62d998"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb08e1ee-da13-4f80-bdd3-c5cb97386d23"
       }
     ]
   },
@@ -265,6 +311,10 @@
       {
         "namespace": "game-datacards",
         "id": "82987ea2-9a77-5246-8b67-40e46e7124a0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3472f66e-cd61-4e21-b2b6-49cf922ec8e7"
       }
     ]
   },
@@ -290,6 +340,10 @@
       {
         "namespace": "game-datacards",
         "id": "af9fbd3e-0a28-5b33-b83f-d1028ec5bc87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c3c9616-ef0a-48d7-951f-7b483083b6e2"
       }
     ]
   },
@@ -312,6 +366,10 @@
       {
         "namespace": "game-datacards",
         "id": "2b3b563d-e1d4-5f44-b1e0-dcab535118fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7cb15917-20d4-4586-a054-d4c3674bff0d"
       }
     ]
   },
@@ -347,6 +405,10 @@
       {
         "namespace": "game-datacards",
         "id": "b36e25a9-bddf-5a15-b80f-6fb01fe59568"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75b36f49-54f5-440e-996f-bd82909ed1a4"
       }
     ]
   },
@@ -369,6 +431,10 @@
       {
         "namespace": "game-datacards",
         "id": "54bc27b8-2da1-59c4-9246-c390378b18ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "99f8a182-847d-4246-85e3-39b971c86dac"
       }
     ]
   },
@@ -393,6 +459,10 @@
       {
         "namespace": "game-datacards",
         "id": "e7526036-f5d5-5d0a-a14f-9c4dbcf00de7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dc12165f-cea0-40e4-b709-e5c8c1a62c82"
       }
     ]
   },
@@ -412,6 +482,10 @@
       {
         "namespace": "game-datacards",
         "id": "19c9ab6a-485b-55de-bfd9-f3a838260656"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f3af4c1-50dc-43f7-bb46-575add51a716"
       }
     ],
     "keyword_restrictions": [
@@ -434,6 +508,10 @@
       {
         "namespace": "game-datacards",
         "id": "f1497cd3-88a4-5d88-ac95-f6b8cab6c831"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8dfa64ea-64c1-483b-8a93-8d756aa0c263"
       }
     ],
     "keyword_restrictions": [
@@ -461,6 +539,10 @@
       {
         "namespace": "game-datacards",
         "id": "e7f7348c-92e4-53ec-be4e-5422013c948a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "94c08bd8-7e2a-4ffc-8377-1243a0d091fc"
       }
     ]
   },
@@ -487,6 +569,10 @@
       {
         "namespace": "game-datacards",
         "id": "92024cbe-1d67-57dc-a5c4-2fb0eabc2337"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0fcb5928-ec67-4ef1-811a-fc9efbb44972"
       }
     ]
   },
@@ -511,6 +597,10 @@
       {
         "namespace": "game-datacards",
         "id": "ef65e131-b18c-5d0f-8288-f073ecead340"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97a9351c-5df1-4e64-b4df-4398311533d7"
       }
     ]
   },
@@ -534,6 +624,10 @@
       {
         "namespace": "game-datacards",
         "id": "46f7d12e-9d3e-5f28-815f-0db2b422d59d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12e70e2e-7747-4c57-8bae-d74c4657555a"
       }
     ]
   },
@@ -564,6 +658,10 @@
       {
         "namespace": "game-datacards",
         "id": "743c1270-2860-5bd6-ae9d-dd3041ac325f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4801d50d-f3c8-4526-b771-98c6326101ab"
       }
     ]
   },
@@ -586,6 +684,10 @@
       {
         "namespace": "game-datacards",
         "id": "336c20c0-7740-5764-83a0-e04cacb56d15"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5ac90fa-836f-457c-a8cc-504b39ec0f4b"
       }
     ]
   },
@@ -610,6 +712,10 @@
       {
         "namespace": "game-datacards",
         "id": "cce81974-c2d4-581b-b47e-2fedb5074062"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a00cea8c-dcbc-4b8e-b890-b72efc0d22c2"
       }
     ]
   },
@@ -639,6 +745,10 @@
       {
         "namespace": "game-datacards",
         "id": "cb0ba06e-38c9-5646-8e5f-6ddf559a0c06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9917fe1b-90a8-4136-8390-ef98111bf3ec"
       }
     ]
   },
@@ -662,6 +772,10 @@
       {
         "namespace": "game-datacards",
         "id": "7757c223-321f-5b10-8909-48fa1cb1f198"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d855099f-ed54-41f6-bcf1-66e82a05a5ac"
       }
     ]
   },
@@ -686,6 +800,10 @@
       {
         "namespace": "game-datacards",
         "id": "788fa53f-2377-51d0-902f-0d58c77e7fa8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49342390-a6c0-481e-bc7b-ae703cfb1132"
       }
     ]
   },

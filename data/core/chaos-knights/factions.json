@@ -24,7 +24,9 @@
       }
     ],
     "faction_rule_ids": [
-      "harbingers-of-dread-chaos-knights"
+      "harbingers-of-dread-chaos-knights",
+      "super-heavy-walker-chaos-knights",
+      "dreadblades-chaos-knights"
     ]
   }
 ]

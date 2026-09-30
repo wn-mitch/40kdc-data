@@ -2794,5 +2794,25 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "in-sacrifice-victory-wrath-of-the-rock-dark-angels",
+    "name": "In Sacrifice, Victory",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "dark-angels",
+    "detachment_id": "wrath-of-the-rock",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

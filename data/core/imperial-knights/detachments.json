@@ -11,9 +11,9 @@
       "bearer-of-the-lancers-sigil-valourstrike-lance-imperial-knights"
     ],
     "stratagem_ids": [
+      "run-them-through-valourstrike-lance-imperial-knights",
       "thunderstomp-valourstrike-lance-imperial-knights",
       "full-tilt-valourstrike-lance-imperial-knights",
-      "run-them-through-valourstrike-lance-imperial-knights",
       "vow-of-retribution-valourstrike-lance-imperial-knights",
       "tactical-foil-valourstrike-lance-imperial-knights",
       "rotate-ion-shields-valourstrike-lance-imperial-knights"
@@ -31,6 +31,9 @@
         "namespace": "mfm",
         "id": "00b6b732-e65e-4176-88d9-35e542ee81dc"
       }
+    ],
+    "detachment_rule_ids": [
+      "bold-gallantry-imperial-knights"
     ]
   },
   {
@@ -39,12 +42,13 @@
     "faction_id": "imperial-knights",
     "detachment_rule_id": "cogbound-alliance-imperial-knights",
     "enhancement_ids": [
-      "knight-of-the-opus-machina-aura-questor-forgepact-imperial-knights",
-      "magos-questoris-questor-forgepact-imperial-knights"
+      "magos-questoris-questor-forgepact-imperial-knights",
+      "knight-of-the-opus-machina-aura-questor-forgepact-imperial-knights"
     ],
     "stratagem_ids": [
-      "omnissiahs-grace-questor-forgepact-imperial-knights",
-      "vengeance-of-the-machine-cult-questor-forgepact-imperial-knights"
+      "in-the-shadow-of-giants-questor-forgepact-imperial-knights",
+      "vengeance-of-the-machine-cult-questor-forgepact-imperial-knights",
+      "omnissiahs-grace-questor-forgepact-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -59,6 +63,9 @@
         "namespace": "mfm",
         "id": "05240064-5412-4911-a60b-229ff34c78c3"
       }
+    ],
+    "detachment_rule_ids": [
+      "cogbound-alliance-imperial-knights"
     ]
   },
   {
@@ -74,11 +81,11 @@
     ],
     "stratagem_ids": [
       "drive-them-out-gate-warden-lance-imperial-knights",
+      "lancebreaker-gate-warden-lance-imperial-knights",
       "steadfast-superiority-gate-warden-lance-imperial-knights",
       "marshal-the-defence-gate-warden-lance-imperial-knights",
       "titanic-bombardment-gate-warden-lance-imperial-knights",
-      "fortress-of-intimidation-gate-warden-lance-imperial-knights",
-      "lancebreaker-gate-warden-lance-imperial-knights"
+      "fortress-of-intimidation-gate-warden-lance-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -93,6 +100,9 @@
         "namespace": "mfm",
         "id": "44cad685-2a76-4309-b842-3e356f75219d"
       }
+    ],
+    "detachment_rule_ids": [
+      "dauntless-defenders-imperial-knights"
     ]
   },
   {
@@ -109,9 +119,9 @@
     "stratagem_ids": [
       "virtue-of-courage-spearhead-at-arms-imperial-knights",
       "exemplars-wisdom-spearhead-at-arms-imperial-knights",
+      "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
       "thin-their-ranks-spearhead-at-arms-imperial-knights",
       "let-duty-be-your-shield-spearhead-at-arms-imperial-knights",
-      "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
       "squires-of-the-hunt-spearhead-at-arms-imperial-knights"
     ],
     "game_version": {
@@ -130,13 +140,16 @@
         "namespace": "mfm",
         "id": "9634aebe-95e3-412b-a881-e33a334ae495"
       }
+    ],
+    "detachment_rule_ids": [
+      "knightly-teachings-imperial-knights"
     ]
   },
   {
     "id": "questoris-companions",
     "name": "Questoris Companions",
     "faction_id": "imperial-knights",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "heroes-of-legend-imperial-knights",
     "enhancement_ids": [
       "herald-of-triumph-questoris-companions-imperial-knights",
       "wyrmslayer-divination-questoris-companions-imperial-knights",
@@ -148,8 +161,8 @@
       "titanic-duel-questoris-companions-imperial-knights",
       "moment-of-glory-questoris-companions-imperial-knights",
       "heros-tread-questoris-companions-imperial-knights",
-      "driven-by-the-past-questoris-companions-imperial-knights",
-      "unstoppable-warrior-questoris-companions-imperial-knights"
+      "unstoppable-warrior-questoris-companions-imperial-knights",
+      "driven-by-the-past-questoris-companions-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -197,6 +210,9 @@
         "namespace": "mfm",
         "id": "bf191d4b-5ac6-4e24-a6f6-d962c1a7b068"
       }
+    ],
+    "detachment_rule_ids": [
+      "rain-of-devastation-imperial-knights"
     ]
   },
   {
@@ -229,6 +245,9 @@
         "namespace": "mfm",
         "id": "a6ada922-2612-4ef6-b7ad-6020954ae038"
       }
+    ],
+    "detachment_rule_ids": [
+      "driven-from-their-lairs-imperial-knights"
     ]
   },
   {
@@ -244,10 +263,10 @@
     ],
     "stratagem_ids": [
       "noble-sacrifice-freeblade-company-imperial-knights",
-      "point-blank-barrage-freeblade-company-imperial-knights",
       "strength-from-exile-freeblade-company-imperial-knights",
-      "survivor-of-strife-freeblade-company-imperial-knights",
       "full-tilt-freeblade-company-imperial-knights",
+      "point-blank-barrage-freeblade-company-imperial-knights",
+      "survivor-of-strife-freeblade-company-imperial-knights",
       "flanking-manoeuvres-freeblade-company-imperial-knights"
     ],
     "game_version": {
@@ -263,6 +282,9 @@
         "namespace": "mfm",
         "id": "c6d159b0-4062-4a44-944c-8e00ee4a7edc"
       }
+    ],
+    "detachment_rule_ids": [
+      "knights-of-legend-imperial-knights"
     ]
   }
 ]

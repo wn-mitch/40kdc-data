@@ -11,10 +11,10 @@
       "revolting-regeneration-virulent-vectorium-death-guard"
     ],
     "stratagem_ids": [
-      "disgustingly-resilient-virulent-vectorium-death-guard",
-      "leechspore-eruption-virulent-vectorium-death-guard",
-      "plaguesurge-virulent-vectorium-death-guard",
       "putrid-detonation-virulent-vectorium-death-guard",
+      "disgustingly-resilient-virulent-vectorium-death-guard",
+      "plaguesurge-virulent-vectorium-death-guard",
+      "leechspore-eruption-virulent-vectorium-death-guard",
       "overwhelming-generosity-virulent-vectorium-death-guard",
       "creeping-blight-virulent-vectorium-death-guard"
     ],
@@ -31,6 +31,9 @@
         "namespace": "mfm",
         "id": "51470653-e741-468c-a4c5-efc6110e46d0"
       }
+    ],
+    "detachment_rule_ids": [
+      "worldblight-death-guard"
     ]
   },
   {
@@ -43,9 +46,9 @@
       "plagueveil-upgrade-flyblown-host-death-guard"
     ],
     "stratagem_ids": [
-      "nauseating-paroxysms-flyblown-host-death-guard",
+      "eye-of-the-swarm-flyblown-host-death-guard",
       "droning-horror-flyblown-host-death-guard",
-      "eye-of-the-swarm-flyblown-host-death-guard"
+      "nauseating-paroxysms-flyblown-host-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -61,6 +64,9 @@
         "namespace": "mfm",
         "id": "9a41d668-c9ee-41c8-81e7-58585d6d8efb"
       }
+    ],
+    "detachment_rule_ids": [
+      "verminous-haze-death-guard"
     ]
   },
   {
@@ -75,8 +81,8 @@
       "tome-of-bounteous-blessings-tallyband-summoners-death-guard"
     ],
     "stratagem_ids": [
-      "clutching-corruption-tallyband-summoners-death-guard",
       "persistent-pests-tallyband-summoners-death-guard",
+      "clutching-corruption-tallyband-summoners-death-guard",
       "all-is-rot-tallyband-summoners-death-guard",
       "fleshy-avalanche-tallyband-summoners-death-guard",
       "avatars-of-decay-tallyband-summoners-death-guard",
@@ -95,6 +101,9 @@
         "namespace": "mfm",
         "id": "73927182-408b-4119-a045-e3b21d35cc36"
       }
+    ],
+    "detachment_rule_ids": [
+      "reverberant-rancidity-death-guard"
     ]
   },
   {
@@ -110,8 +119,8 @@
     ],
     "stratagem_ids": [
       "blessings-of-filth-champions-of-contagion-death-guard",
-      "grotesque-fortitude-champions-of-contagion-death-guard",
       "malignance-magnified-champions-of-contagion-death-guard",
+      "grotesque-fortitude-champions-of-contagion-death-guard",
       "rabid-infusion-champions-of-contagion-death-guard",
       "mobile-vector-champions-of-contagion-death-guard",
       "deaths-heads-champions-of-contagion-death-guard"
@@ -130,6 +139,9 @@
         "namespace": "mfm",
         "id": "ac958d83-3ee2-4279-8115-2b164658da08"
       }
+    ],
+    "detachment_rule_ids": [
+      "manifold-maladies-death-guard"
     ]
   },
   {
@@ -144,12 +156,12 @@
       "tendrilous-emissions-mortarions-hammer-death-guard"
     ],
     "stratagem_ids": [
+      "blighted-land-mortarions-hammer-death-guard",
+      "relentless-grind-mortarions-hammer-death-guard",
       "drawn-to-despair-mortarions-hammer-death-guard",
       "font-of-filth-mortarions-hammer-death-guard",
       "eyestinger-storm-mortarions-hammer-death-guard",
-      "stinking-mire-mortarions-hammer-death-guard",
-      "relentless-grind-mortarions-hammer-death-guard",
-      "blighted-land-mortarions-hammer-death-guard"
+      "stinking-mire-mortarions-hammer-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -165,6 +177,9 @@
         "namespace": "mfm",
         "id": "b3a2a4b5-40a0-4875-8017-bc455d657040"
       }
+    ],
+    "detachment_rule_ids": [
+      "miasmic-bombardment-death-guard"
     ]
   },
   {
@@ -179,9 +194,9 @@
       "talisman-of-burgeoning-shamblerot-vectorium-death-guard"
     ],
     "stratagem_ids": [
-      "gnawing-hunger-shamblerot-vectorium-death-guard",
       "grip-of-the-walking-pox-shamblerot-vectorium-death-guard",
       "smeared-with-filth-shamblerot-vectorium-death-guard",
+      "gnawing-hunger-shamblerot-vectorium-death-guard",
       "hidden-amongst-the-dead-shamblerot-vectorium-death-guard",
       "shock-and-horror-shamblerot-vectorium-death-guard",
       "shambling-wall-shamblerot-vectorium-death-guard"
@@ -199,6 +214,9 @@
         "namespace": "mfm",
         "id": "bd9bf924-b054-47bf-9df6-a301a62b41c5"
       }
+    ],
+    "detachment_rule_ids": [
+      "numberless-horde-death-guard"
     ]
   },
   {
@@ -213,10 +231,10 @@
       "helm-of-the-fly-king-death-lords-chosen-death-guard"
     ],
     "stratagem_ids": [
-      "grim-reapers-death-lords-chosen-death-guard",
       "blooming-pestilence-death-lords-chosen-death-guard",
-      "signal-pox-death-lords-chosen-death-guard",
+      "grim-reapers-death-lords-chosen-death-guard",
       "undying-spite-death-lords-chosen-death-guard",
+      "signal-pox-death-lords-chosen-death-guard",
       "mortarions-teachings-death-lords-chosen-death-guard",
       "sickening-impact-death-lords-chosen-death-guard"
     ],
@@ -233,6 +251,9 @@
         "namespace": "mfm",
         "id": "db1b2621-c7fc-4c1f-91ba-3f75779123b8"
       }
+    ],
+    "detachment_rule_ids": [
+      "deadly-vectors-death-guard"
     ]
   },
   {
@@ -245,9 +266,9 @@
       "lancet-of-the-worldsore-upgrade-contagion-engines-death-guard"
     ],
     "stratagem_ids": [
-      "fresh-vectors-contagion-engines-death-guard",
+      "soulrot-flux-contagion-engines-death-guard",
       "bloodrust-deluge-contagion-engines-death-guard",
-      "soulrot-flux-contagion-engines-death-guard"
+      "fresh-vectors-contagion-engines-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -263,6 +284,9 @@
         "namespace": "mfm",
         "id": "80f1f5cf-8331-4b71-87fa-fe4caaa92633"
       }
+    ],
+    "detachment_rule_ids": [
+      "warped-and-rusted-animus-death-guard"
     ]
   },
   {
@@ -276,8 +300,8 @@
     ],
     "stratagem_ids": [
       "territorial-infection-paragons-of-putrescence-death-guard",
-      "aggravus-spasms-paragons-of-putrescence-death-guard",
-      "simultaneous-contamination-paragons-of-putrescence-death-guard"
+      "simultaneous-contamination-paragons-of-putrescence-death-guard",
+      "aggravus-spasms-paragons-of-putrescence-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -292,6 +316,9 @@
         "namespace": "mfm",
         "id": "39484a39-656d-4552-9eff-acbd524e4f5e"
       }
+    ],
+    "detachment_rule_ids": [
+      "hypervirulent-strains-death-guard"
     ]
   },
   {
@@ -299,8 +326,8 @@
     "name": "Maggot Lords",
     "faction_id": "death-guard",
     "enhancement_ids": [
-      "bountiful-regeneration-maggot-lords-death-guard",
-      "noisome-veil-maggot-lords-death-guard"
+      "noisome-veil-maggot-lords-death-guard",
+      "bountiful-regeneration-maggot-lords-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -320,7 +347,14 @@
       }
     ],
     "detachment_rule_ids": [
-      "creeping-rot-death-guard"
+      "creeping-rot-death-guard",
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
+    ],
+    "stratagem_ids": [
+      "inexorable-executioners-maggot-lords-death-guard",
+      "vomitous-salvoes-maggot-lords-death-guard",
+      "sickening-horror-maggot-lords-death-guard"
     ]
   }
 ]

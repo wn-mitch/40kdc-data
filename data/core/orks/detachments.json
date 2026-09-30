@@ -23,6 +23,11 @@
     ],
     "detachment_rule_ids": [
       "unstoppable-momentum-orks"
+    ],
+    "stratagem_ids": [
+      "readied-brawlers-blitz-brigade-orks",
+      "impending-krunch-blitz-brigade-orks",
+      "keep-it-runnin-blitz-brigade-orks"
     ]
   },
   {
@@ -35,7 +40,14 @@
     ],
     "name": "Brute Bosses",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "surly-as-a-squiggoth-brute-bosses-orks",
+      "brutal-but-kunnin-brute-bosses-orks",
+      "blitzboss-brute-bosses-orks",
+      "proper-killy-brute-bosses-orks",
+      "morgogs-finkin-cap-brute-bosses-orks",
+      "da-gobshot-thunderbuss-brute-bosses-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -58,7 +70,10 @@
     ],
     "name": "Bully Boyz",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "wimp-kickaz-upgrade-bully-boyz-orks",
+      "tellyporta-boss-bully-boyz-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -69,6 +84,11 @@
     ],
     "detachment_rule_ids": [
       "displays-of-savagery-orks"
+    ],
+    "stratagem_ids": [
+      "armed-to-da-teef-bully-boyz-orks",
+      "hulking-brutes-bully-boyz-orks",
+      "too-arrogant-to-die-bully-boyz-orks"
     ]
   },
   {
@@ -82,7 +102,8 @@
     "name": "Da Big Hunt",
     "faction_id": "orks",
     "enhancement_ids": [
-      "glory-hog-da-big-hunt-orks"
+      "glory-hog-da-big-hunt-orks",
+      "it-came-from-da-drops-da-big-hunt-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -94,6 +115,11 @@
     ],
     "detachment_rule_ids": [
       "da-hunt-is-on-orks"
+    ],
+    "stratagem_ids": [
+      "instinctive-hunters-da-big-hunt-orks",
+      "where-dya-fink-youre-going-da-big-hunt-orks",
+      "goaded-into-action-da-big-hunt-orks"
     ]
   },
   {
@@ -107,7 +133,8 @@
     "name": "Dread Mob",
     "faction_id": "orks",
     "enhancement_ids": [
-      "cybork-boosta-dread-mob-orks"
+      "cybork-boosta-dread-mob-orks",
+      "dreadherder-dread-mob-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -119,6 +146,11 @@
     ],
     "detachment_rule_ids": [
       "try-dat-button-orks"
+    ],
+    "stratagem_ids": [
+      "stomping-juggernaut-dread-mob-orks",
+      "dread-power-dread-mob-orks",
+      "crazed-rampage-dread-mob-orks"
     ]
   },
   {
@@ -131,7 +163,10 @@
     ],
     "name": "Flyboyz",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "flyboss-upgrade-flyboyz-orks",
+      "impulsive-recon-upgrade-flyboyz-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -142,6 +177,11 @@
     ],
     "detachment_rule_ids": [
       "skyborne-loons-orks"
+    ],
+    "stratagem_ids": [
+      "long-uncontrolled-bursts-flyboyz-orks",
+      "flyin-headbutt-flyboyz-orks",
+      "whirligig-evasion-flyboyz-orks"
     ]
   },
   {
@@ -155,7 +195,8 @@
     "name": "Green Tide",
     "faction_id": "orks",
     "enhancement_ids": [
-      "ferocious-show-off-green-tide-orks"
+      "ferocious-show-off-green-tide-orks",
+      "ardboyz-upgrade-green-tide-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -167,6 +208,11 @@
     ],
     "detachment_rule_ids": [
       "mob-handed-brutality-orks"
+    ],
+    "stratagem_ids": [
+      "ere-we-go-green-tide-orks",
+      "unbridled-carnage-green-tide-orks",
+      "mob-mentality-green-tide-orks"
     ]
   },
   {
@@ -179,7 +225,10 @@
     ],
     "name": "Kult of Speed",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "smoky-gubbinz-upgrade-kult-of-speed-orks",
+      "competitive-streak-kult-of-speed-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -190,6 +239,11 @@
     ],
     "detachment_rule_ids": [
       "adrenaline-junkies-orks"
+    ],
+    "stratagem_ids": [
+      "delicious-eating-squigs-kult-of-speed-orks",
+      "dakkastorm-kult-of-speed-orks",
+      "speediest-freeks-kult-of-speed-orks"
     ]
   },
   {
@@ -202,7 +256,11 @@
     ],
     "name": "Madcap Meks",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "mekwaaagh-mastermind-madcap-meks-orks",
+      "temperamental-shokka-upgrade-madcap-meks-orks",
+      "enhanced-runt-maw-upgrade-madcap-meks-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -213,6 +271,9 @@
     ],
     "detachment_rule_ids": [
       "unpredictable-genius-orks"
+    ],
+    "stratagem_ids": [
+      "vindictive-artillerists-madcap-meks-orks"
     ]
   },
   {
@@ -225,7 +286,10 @@
     ],
     "name": "Runt Swarm",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "extra-sneaky-upgrade-runt-swarm-orks",
+      "minefield-detail-upgrade-runt-swarm-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -236,6 +300,11 @@
     ],
     "detachment_rule_ids": [
       "sneaky-little-gitz-orks"
+    ],
+    "stratagem_ids": [
+      "scarper-runt-swarm-orks",
+      "infested-war-zone-runt-swarm-orks",
+      "grot-shields-runt-swarm-orks"
     ]
   },
   {
@@ -248,7 +317,10 @@
     ],
     "name": "Shoota Boyz",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "supa-glowy-fing-shoota-boyz-orks",
+      "targetin-squigs-shoota-boyz-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -259,6 +331,11 @@
     ],
     "detachment_rule_ids": [
       "dakka-dakka-dakka-orks"
+    ],
+    "stratagem_ids": [
+      "kustom-dakka-shoota-boyz-orks",
+      "glowin-dakka-shoota-boyz-orks",
+      "never-enough-dakka-shoota-boyz-orks"
     ]
   },
   {
@@ -272,7 +349,8 @@
     "name": "Taktikal Brigade",
     "faction_id": "orks",
     "enhancement_ids": [
-      "kill-kommanda-taktikal-brigade-orks"
+      "kill-kommanda-taktikal-brigade-orks",
+      "throat-slittas-upgrade-taktikal-brigade-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -284,6 +362,11 @@
     ],
     "detachment_rule_ids": [
       "suspiciously-well-organised-orks"
+    ],
+    "stratagem_ids": [
+      "while-their-backs-are-turned-taktikal-brigade-orks",
+      "mind-mostly-on-the-mission-taktikal-brigade-orks",
+      "dubious-restraint-taktikal-brigade-orks"
     ]
   },
   {
@@ -298,6 +381,7 @@
     "faction_id": "orks",
     "enhancement_ids": [
       "headwoppas-killchoppa-war-horde-orks",
+      "da-boss-is-watchin-war-horde-orks",
       "kunnin-but-brutal-war-horde-orks",
       "follow-me-ladz-war-horde-orks"
     ],
@@ -311,6 +395,14 @@
     ],
     "detachment_rule_ids": [
       "get-stuck-in-orks"
+    ],
+    "stratagem_ids": [
+      "breakin-heads-war-horde-orks",
+      "hit-em-harder-war-horde-orks",
+      "fungus-fuel-injection-war-horde-orks",
+      "close-range-dakka-war-horde-orks",
+      "orks-is-never-beaten-war-horde-orks",
+      "mow-em-down-war-horde-orks"
     ]
   },
   {
@@ -323,7 +415,10 @@
     ],
     "name": "Wreckas",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "kaptins-hat-wreckas-orks",
+      "supa-snazz-dakka-upgrade-wreckas-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -334,6 +429,11 @@
     ],
     "detachment_rule_ids": [
       "wreckin-and-lootin-orks"
+    ],
+    "stratagem_ids": [
+      "drive-by-bustin-wreckas-orks",
+      "grab-it-wreckas-orks",
+      "gun-crazy-show-offs-wreckas-orks"
     ]
   },
   {
@@ -346,7 +446,11 @@
     ],
     "name": "Wurrband",
     "faction_id": "orks",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "da-krunch-wurrband-orks",
+      "eadbanger-wurrband-orks",
+      "warphead-wurrband-orks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
