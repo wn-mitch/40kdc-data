@@ -130,6 +130,27 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
       }
     }
   }
+  // A wording that crosses a clause break (". " or "; ") never fits one source chunk, so the chunk
+  // scan cannot find it: scan whole fragments instead, narrowed to sources containing its first
+  // three words, so one surface costs one indexed-free substring filter and a few projections.
+  if (/[.;:!?]/u.test(surface)) {
+    const probe = surface.replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/u).filter(Boolean).slice(0, 3).join(" ");
+    const scope = abilityVersionIds ? `AND id IN (${[...abilityVersionIds].map(Number).filter(Number.isSafeInteger).join(",") || "NULL"})` : "";
+    if (probe) {
+      for (const ability of db.prepare(`
+        SELECT id, faction_id, ability_id, source_text, fragments_json FROM abilities WHERE current = 1 AND instr(lower(source_text), ?) > 0 ${scope}
+      `).all(probe) as Array<{ id: number; faction_id: string; ability_id: string; source_text: string; fragments_json: string }>) {
+        for (const fragment of JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>) {
+          const projection = normalizedProjection(exactSpan(ability.source_text, fragment.start_byte, fragment.end_byte));
+          for (const match of matchesAt(projection, surface)) {
+            const start = fragment.start_byte + match.start_byte;
+            const end = fragment.start_byte + match.end_byte;
+            add({ ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, fragment: fragment.fragment, start_byte: start, end_byte: end, exact_text: exactSpan(ability.source_text, start, end) });
+          }
+        }
+      }
+    }
+  }
   // Pending wording the lexical scan cannot see (for example across a clause break) still counts.
   // Looked up by the indexed `source_spans.normalized_surface` column, not a corpus-wide scan of
   // every pending/unresolved proposal renormalized in JS: `applySurface` calls this once per

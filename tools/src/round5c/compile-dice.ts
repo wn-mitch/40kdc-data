@@ -34,10 +34,10 @@ const body = (items: Planned[]): Node => {
 
 /**
  * Several dice rolled at once, each success doing the same thing ("roll six D6: for each 5+,
- * that unit suffers 1 mortal wound"). The DSL expresses this only for mortal wounds, as a count
+ * that unit suffers 1 mortal wound", or one D6 for each model in this unit). The DSL expresses this only for mortal wounds, as a count
  * per success of a roll of `count` D6; anything else rolled per die has no DSL shape yet.
  */
-function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean): Node[] {
+function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
   for (const item of banded) {
@@ -48,7 +48,7 @@ function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: 
     if (item.leaf.family_id !== "mortal-wounds") throw new CompileError(`Rolling several dice folds only into mortal wounds per success; ${item.leaf.family_id} has no per-die DSL shape.`);
     const modifier = item.node.modifier as Node;
     modifier.per = "success";
-    modifier.roll = { dice: count, threshold: Number(band.from) };
+    modifier.roll = { dice: count, threshold: Number(band.from), ...(perModel ? { per_model: perModel === "target" ? "target" : "this" } : {}) };
     item.gate = item.gate.filter((node) => !isRollMarker(node));
   }
   return planned.map((item) => gated(item.gate, item.node));
@@ -72,7 +72,8 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
   const dice = String(rolls[0]!.parameters.dice);
   const count = rolls[0]!.parameters.count as number | undefined;
-  if (count !== undefined) return perSuccess(planned, banded, dice, count, rolls[0]!.parameters.roll_var !== undefined);
+  const perModel = rolls[0]!.parameters.per_model as string | undefined;
+  if (count !== undefined || perModel !== undefined) return perSuccess(planned, banded, dice, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel);
   const faces = DICE_FACES[dice]!;
   // A roll_var (dice-roll@2) binds the roll as the DSL's `roll` container; a single band then
   // compiles its dice-gated `from` that binding instead of a fresh `dice` field.

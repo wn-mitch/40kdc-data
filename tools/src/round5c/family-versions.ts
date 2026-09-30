@@ -102,6 +102,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "dice-roll", from: 1, to: 2, map: (parameters) => parameters },
   // Version 3 only adds an optional count (several dice); one die leaves it out, so v2 still fits.
   { family: "dice-roll", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 only adds an optional per_model; version 3 parameters still fit.
+  { family: "dice-roll", from: 3, to: 4, map: (parameters) => parameters },
   // Version 2 only adds an optional reward_choice_label; v1's plain {test} still fits.
   { family: "risk-reward-open", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds optional eligibility/binds_event_variable fields; v1's plain shape still fits.

@@ -109,6 +109,11 @@ export function parseHypothesis(value: unknown, ability: CurrentAbility, start: 
  * Parse one ability's `structural_spans`. A span with `parent_span_index` must lie wholly
  * inside one qualifier span of that (non-UNRESOLVED) semantic span; such a span is the only
  * permitted semantic/structural overlap.
+ *
+ * Structural spans are only context for review, so one bad one never costs the response's
+ * labels: a span whose parent is unresolved (often because that span's label was rejected) or
+ * that misses its parent's qualifiers keeps its bytes but loses the parent link; a span that is
+ * malformed, or overlaps one kept before it, is dropped. Only a non-array fails the response.
  */
 export function parseStructuralSpans(
   value: unknown,
@@ -118,8 +123,9 @@ export function parseStructuralSpans(
   label: string,
 ): ParsedStructural[] {
   if (!Array.isArray(value)) throw new TypeError(`${label} must be an array.`);
-  const parsed = value.map((item, index): ParsedStructural => {
+  const parsed = value.flatMap((item, index): ParsedStructural[] => {
     const itemLabel = `${label}[${index}]`;
+    try {
     const structural = asRecord(item, itemLabel);
     assertExactKeys(structural, itemLabel, ["start_byte", "end_byte", "exact_text", "kind", "description"], ["parent_span_index"]);
     const exactText = nonblank(structural.exact_text, `${itemLabel}.exact_text`);
@@ -138,13 +144,11 @@ export function parseStructuralSpans(
     if (structural.parent_span_index !== undefined) {
       const parentIndex = nonnegativeInteger(structural.parent_span_index, `${itemLabel}.parent_span_index`);
       parent = spans.find((span) => span.index === parentIndex) ?? null;
-      if (!parent) throw new RangeError(`${itemLabel}.parent_span_index does not name a span of this ability.`);
-      if (parent.status === "UNRESOLVED") throw new Error(`${itemLabel} cannot be contained by an UNRESOLVED span.`);
-      if (!parent.qualifier_spans.some((qualifier) => startByte >= qualifier.start_byte && endByte <= qualifier.end_byte)) {
-        throw new RangeError(`${itemLabel} must lie wholly inside one qualifier_span of its parent span.`);
+      if (parent && (parent.status === "UNRESOLVED" || !parent.qualifier_spans.some((qualifier) => startByte >= qualifier.start_byte && endByte <= qualifier.end_byte))) {
+        parent = null;
       }
     }
-    return {
+    return [{
       kind: "structural",
       ability,
       fragment: fragmentFor(fragments, startByte, endByte),
@@ -155,13 +159,15 @@ export function parseStructuralSpans(
       description: nonblank(structural.description, `${itemLabel}.description`),
       parent,
       offset_repaired: anchored.repaired,
-    };
-  });
-  const ordered = parsed.slice().sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte);
-  for (let index = 1; index < ordered.length; index += 1) {
-    if (ordered[index]!.start_byte < ordered[index - 1]!.end_byte) {
-      throw new Error(`${label} contains duplicate or overlapping structural spans for ${ability.faction_id}/${ability.ability_id}.`);
+    }];
+    } catch {
+      return [];
     }
+  });
+  const kept: ParsedStructural[] = [];
+  for (const span of parsed.slice().sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte)) {
+    const previous = kept.at(-1);
+    if (!previous || span.start_byte >= previous.end_byte) kept.push(span);
   }
-  return parsed;
+  return parsed.filter((span) => kept.includes(span));
 }

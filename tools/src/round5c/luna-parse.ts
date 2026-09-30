@@ -117,6 +117,8 @@ export type ParsedResponse = {
    * are already accounted for.
    */
   dropped_covered_spans: number;
+  /** Spans dropped because they collided with a span kept before them (see pruneResponseOverlaps). */
+  dropped_overlapping_spans?: number;
 };
 
 export function asRecord(value: unknown, label: string): JsonRecord {

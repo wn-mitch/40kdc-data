@@ -246,7 +246,26 @@ describe("Round 5C OMP Luna transport", () => {
     expect(view.failure).toMatchObject({ reason_code: "TIMEOUT" });
   });
 
-  it("rejects a forged self-report and a malformed body atomically", async () => {
+  it("keeps a response's labels when a structural span collides with a labelled span", async () => {
+    const db = open();
+    const run = prepared(db, "collide");
+    const body = validResponse(run) as { abilities: Array<{ structural_spans: Array<Record<string, unknown>> }> };
+    const source = (run.request as { abilities: Array<{ source_text: string }> }).abilities[0]!.source_text;
+    body.abilities[0]!.structural_spans = [{ ...span(source, "a Hit roll"), kind: "selector", description: "Which roll." }];
+    writeScenario({ body: JSON.stringify(body) });
+    db.close();
+    const view = await runLuna(open, run.run_id, { binary });
+    expect(view.state).toBe("completed");
+    const check = open();
+    try {
+      expect(check.prepare("SELECT count(*) AS n FROM proposals JOIN fingerprints ON fingerprints.id = proposals.fingerprint_id WHERE fingerprints.family_id = 'reroll'").get()).toEqual({ n: 1 });
+      expect(counts(check).atoms).toBe(0);
+    } finally {
+      check.close();
+    }
+  });
+
+  it("rejects a forged self-report atomically, and drops only a malformed structural span", async () => {
     const db = open();
     const forged = prepared(db, "forged");
     writeScenario({ body: JSON.stringify(validResponse(forged, { model: "deepseek-v4-flash" })) });
@@ -259,12 +278,16 @@ describe("Round 5C OMP Luna transport", () => {
     body.abilities[0]!.structural_spans[0]!.exact_text = "that unit";
     writeScenario({ body: JSON.stringify(body) });
     second.close();
+    // A structural span is context, not a label: a malformed one is dropped and the labels stay.
     const view = await runLuna(open, malformed.run_id, { binary });
-    expect(view.failure).toMatchObject({ stage: "import", reason_code: "INVALID_RESPONSE" });
-    expect(view.failure!.message).not.toMatch(/glimmer/u);
+    expect(view.failure).toBeNull();
+    expect(view.state).toBe("completed");
     const check = open();
     try {
-      expect(counts(check)).toEqual({ proposals: 0, atoms: 0, annotations: 0, candidates: 0 });
+      const imported = counts(check);
+      expect(imported.proposals).toBeGreaterThan(0);
+      expect(imported.atoms).toBe(0);
+      expect(imported.annotations).toBe(0);
     } finally {
       check.close();
     }

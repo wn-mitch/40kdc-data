@@ -949,6 +949,43 @@ function responseIntervals(parsed: ParsedResponse, abilityVersionId: number): Ar
   ].sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte);
 }
 
+/**
+ * Keep a response's labels when some of its regions collide. Semantic spans win, in source
+ * order (a later span overlapping an earlier one is dropped); then connectives, then structural
+ * spans, then unresolved regions, each kept only where nothing kept already claims its bytes. A
+ * structural span inside a dropped span's qualifier goes with it. Counted, never silent.
+ */
+function pruneResponseOverlaps(parsed: ParsedResponse, abilities: readonly CurrentAbility[]): void {
+  let dropped = 0;
+  for (const ability of abilities) {
+    const kept: Array<{ start_byte: number; end_byte: number }> = [];
+    const keep = <T extends { ability: CurrentAbility; start_byte: number; end_byte: number }>(items: T[], owned: (item: T) => boolean = () => false): T[] => {
+      const survivors: T[] = [];
+      for (const item of [...items].sort((left, right) => left.start_byte - right.start_byte || left.end_byte - right.end_byte)) {
+        if (item.ability.id !== ability.id) continue;
+        if (!owned(item) && kept.some((other) => intervalOverlaps(other, item))) { dropped += 1; continue; }
+        if (!owned(item)) kept.push(item);
+        survivors.push(item);
+      }
+      return survivors;
+    };
+    const others = <T extends { ability: CurrentAbility }>(items: T[]) => items.filter((item) => item.ability.id !== ability.id);
+    const semantic = keep(parsed.semantic_spans);
+    const connectives = keep(parsed.connectives);
+    const structural = keep(
+      parsed.structural.filter((span) => span.parent === null || semantic.includes(span.parent)),
+      (span) => span.parent !== null,
+    );
+    dropped += parsed.structural.filter((span) => span.ability.id === ability.id && span.parent !== null && !semantic.includes(span.parent)).length;
+    const unresolved = keep(parsed.unresolved);
+    parsed.semantic_spans = [...others(parsed.semantic_spans), ...semantic];
+    parsed.connectives = [...others(parsed.connectives), ...connectives];
+    parsed.structural = [...others(parsed.structural), ...structural];
+    parsed.unresolved = [...others(parsed.unresolved), ...unresolved];
+  }
+  parsed.dropped_overlapping_spans = (parsed.dropped_overlapping_spans ?? 0) + dropped;
+}
+
 function assertNoResponseOverlap(parsed: ParsedResponse, abilities: readonly CurrentAbility[]): void {
   for (const ability of abilities) {
     const intervals = responseIntervals(parsed, ability.id);
@@ -1389,7 +1426,7 @@ export function importLuna(
         if (parsed.model !== requested && parsed.model !== bare) throw new Error("The response's self-reported model conflicts with the observed invocation.");
       }
       const abilities = current.map((item) => item.ability);
-      assertNoResponseOverlap(parsed, abilities);
+      pruneResponseOverlaps(parsed, abilities);
       dropUncoveredRegions(parsed, configured);
       addImplicitUnresolved(parsed, configured, abilities);
       assertNoResponseOverlap(parsed, abilities);

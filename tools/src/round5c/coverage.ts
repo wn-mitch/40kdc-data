@@ -91,7 +91,8 @@ type CoverageIndexes = {
 
 const semanticRoles = LEAF_ROLES;
 const whitespace = /\s/u;
-const punctuation = /\p{P}/u;
+/** Punctuation, and the bullet marks GW lists use (▪ • ●): formatting, never meaning. */
+const punctuation = /[\p{P}\u2022\u25A0\u25A1\u25AA\u25AB\u25CF\u25E6]/u;
 
 function pushInterval<T extends Interval>(index: Map<number, T[]>, abilityId: number, interval: T): void {
   const existing = index.get(abilityId);

@@ -126,6 +126,23 @@ export const DEFAULT_MAX_TOKENS = 100000;
 /** Hard wall-clock budget for one DeepSeek HTTP call; a timeout is a transport failure like any other. */
 const DEFAULT_REQUEST_TIMEOUT_MS = 5 * 60 * 1000;
 
+/**
+ * A request that never reached the API (DNS or connection failure: fetch rejects with a
+ * TypeError before any reply) is retried twice, 2 s then 8 s later. Nothing was sent or billed,
+ * so a retry is safe; a timeout or any HTTP reply is not retried here.
+ */
+async function fetchRetryingNetwork(send: () => Promise<Response>): Promise<Response> {
+  for (const wait of [2_000, 8_000]) {
+    try {
+      return await send();
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, wait));
+    }
+  }
+  return send();
+}
+
 /** DeepSeek's chat completions in JSON mode. */
 export function deepseekModelCall(
   model = DEEPSEEK_MODEL, maxTokens = DEFAULT_MAX_TOKENS, reasoningEffort?: DeepSeekReasoningEffort, timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS,
@@ -135,7 +152,7 @@ export function deepseekModelCall(
     const started = Date.now();
     let response: Response;
     try {
-      response = await fetch(DEEPSEEK_ENDPOINT, {
+      response = await fetchRetryingNetwork(() => fetch(DEEPSEEK_ENDPOINT, {
         method: "POST",
         headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
         body: JSON.stringify({
@@ -144,12 +161,16 @@ export function deepseekModelCall(
           messages: [{ role: "system", content: instructions }, { role: "user", content: request }],
         }),
         signal: AbortSignal.timeout(timeoutMs),
-      });
+      }));
     } catch (error) {
       if (error instanceof Error && error.name === "TimeoutError") {
         throw new DeepSeekCallError(`DeepSeek request timed out after ${Math.round(timeoutMs / 1000)}s.`, {
           usage: null, cost_usd: null, latency_ms: Date.now() - started, cost_unknown: true,
         });
+      }
+      // Never reached the API (DNS or connection failure, retries exhausted): nothing was billed.
+      if (error instanceof TypeError) {
+        throw new DeepSeekCallError(`DeepSeek was unreachable: ${error.message}.`, { usage: null, cost_usd: 0, latency_ms: Date.now() - started, cost_unknown: false });
       }
       throw error;
     }

@@ -78,6 +78,25 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { dice: { enum: DICE }, count: { type: "integer", minimum: 2, maximum: 30 }, roll_var: { type: "string", minLength: 1 } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "dice-roll",
+    version: 4,
+    role: "EVENT",
+    label: "Roll dice",
+    description: "\"Roll one D6\", \"roll six D6\", or \"roll one D6 for each model in this unit\": the result bands that follow (on a 4+, for each 5+) say what happens for each result. count is how many dice are rolled when it is more than one; per_model rolls one die for each model of that unit instead. A named roll_var binds the roll (the DSL's phase-4 `roll` container) so a single result band compiles its dice-gated from that binding instead of rolling again.",
+    starter: { dice: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["dice"],
+      properties: {
+        dice: { enum: DICE }, count: { type: "integer", minimum: 2, maximum: 30 },
+        per_model: { enum: ["this-unit", "target"] },
+        roll_var: { type: "string", minLength: 1 },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "roll-result",
@@ -189,12 +208,16 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
 export function normalizeDiceParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
     case "dice-roll": {
-      const keys = ["dice", ...(version >= 2 && "roll_var" in input ? ["roll_var"] : []), ...(version >= 3 && "count" in input ? ["count"] : [])];
+      const keys = ["dice", ...(version >= 2 && "roll_var" in input ? ["roll_var"] : []), ...(version >= 3 && "count" in input ? ["count"] : []), ...(version >= 4 && "per_model" in input ? ["per_model"] : [])];
       exactKeys(input, keys, family);
       const result: Record<string, unknown> = { dice: enumValue(input.dice, DICE, "dice-roll.dice") };
       if (version >= 3 && "count" in input) {
         if (!Number.isSafeInteger(input.count) || (input.count as number) < 2 || (input.count as number) > 30) throw new TypeError("dice-roll.count must be a whole number of dice from 2 to 30; leave it out for one die.");
         result.count = input.count;
+      }
+      if (version >= 4 && "per_model" in input) {
+        if ("count" in input) throw new TypeError("dice-roll rolls a count of dice or one die per model, not both.");
+        result.per_model = enumValue(input.per_model, ["this-unit", "target"], "dice-roll.per_model");
       }
       if (version >= 2 && "roll_var" in input) {
         if (typeof input.roll_var !== "string" || !input.roll_var) throw new TypeError("dice-roll.roll_var must be a nonblank string.");
