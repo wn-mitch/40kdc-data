@@ -808,7 +808,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "godhammer-assault-force",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
@@ -952,7 +952,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "vindication-task-force",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
@@ -994,7 +994,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1054,7 +1054,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1136,7 +1136,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1176,7 +1176,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1196,7 +1196,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
@@ -1236,7 +1236,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
@@ -1278,7 +1278,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1320,7 +1320,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "vindication-task-force",
+    "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "detachment",
     "effect": {
       "type": "no-effect"
@@ -1362,7 +1362,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "detachment",
     "effect": {
       "type": "no-effect"
@@ -1468,7 +1468,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "vindication-task-force",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1528,7 +1528,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "companions-of-vehemence",
+    "detachment_id": "vow-sworn-crusaders",
     "ability_type": "enhancement",
     "effect": {
       "type": "no-effect"
@@ -1550,7 +1550,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "black-templars",
-    "detachment_id": "bastion-task-force",
+    "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {

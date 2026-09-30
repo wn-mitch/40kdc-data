@@ -193,6 +193,23 @@ describe("mfm:mirror on a reissued codex", () => {
     );
   });
 
+  it("points a kept stratagem record at a detachment that prints it, not the one it came from", async () => {
+    const root = repo({
+      "data/core/adeptus-astartes/detachments.json": [
+        { id: "iron-host", name: "Iron Host", stratagem_ids: ["hold-fast-iron-host"], external_refs: mfm("det-new") },
+      ],
+      "data/core/adeptus-astartes/stratagems.json": [{ id: "hold-fast-iron-host", name: "HOLD FAST", ability_id: "hold-fast-iron-host", detachment_id: "iron-host", external_refs: mfm("st-new") }],
+      "data/core/adeptus-astartes/factions.json": [{ id: "adeptus-astartes", name: "Adeptus Astartes", faction_rule_ids: [] }],
+      "data/enrichment/_core/abilities.json": [],
+      // Folded in from a retired detachment: its own detachment_id still names that one.
+      "data/enrichment/adeptus-astartes/abilities.json": [rec("hold-fast-iron-host", "stratagem", { detachment_id: "retired-host" })],
+    });
+    const { files } = await runMirror(dump(), { root, validate: false, outside: false });
+    for (const f of files) writeFileSync(f.abs, f.after);
+    const [record] = read(root, "data/enrichment/adeptus-astartes/abilities.json") as Array<{ ability_id: string; detachment_id: string }>;
+    expect(record).toMatchObject({ ability_id: "hold-fast-iron-host-adeptus-astartes", detachment_id: "iron-host" });
+  });
+
   it("lists a printed rating its record cannot read unrated, and reports it", async () => {
     const core = (id: string, name: string) => ({ id, abilityType: "core", armyRuleId: null, detachmentRuleId: null, ...loc({ name, rules: "Core text." }) });
     const d = dump({

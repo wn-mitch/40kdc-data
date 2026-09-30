@@ -12,7 +12,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "enhancement",
     "behavior": "reactive",
     "trigger": {
@@ -74,7 +74,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -145,7 +145,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
@@ -199,7 +199,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "enhancement",
     "behavior": "activated",
     "effect": {
@@ -265,7 +265,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
@@ -297,7 +297,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -340,7 +340,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {

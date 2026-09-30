@@ -3413,7 +3413,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "vanguard-spearhead",
+    "detachment_id": "phobos-shadow-force",
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
@@ -3585,7 +3585,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "gladius-task-force",
+    "detachment_id": "devastator-brethren",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -3640,7 +3640,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "vanguard-spearhead",
+    "detachment_id": "phobos-shadow-force",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -3699,7 +3699,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "anvil-siege-force",
+    "detachment_id": "devastator-brethren",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
@@ -3738,7 +3738,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "bastion-task-force",
+    "detachment_id": "gladius-task-force",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -3790,7 +3790,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "ironstorm-spearhead",
+    "detachment_id": "ironclad-champions",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -4023,7 +4023,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "headhunter-task-force",
+    "detachment_id": "ironstorm-spearhead",
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
@@ -4081,7 +4081,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "headhunter-task-force",
+    "detachment_id": "ironstorm-spearhead",
     "ability_type": "enhancement",
     "behavior": "passive",
     "usage": {
@@ -4217,7 +4217,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "vanguard-spearhead",
+    "detachment_id": "phobos-shadow-force",
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
@@ -4433,7 +4433,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "1st-company-task-force",
+    "detachment_id": "assault-brethren",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -4981,7 +4981,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "legacy-of-grace",
+    "detachment_id": "tacticus-attack-force",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -5026,7 +5026,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "liberator-assault-group",
+    "detachment_id": "tacticus-attack-force",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {

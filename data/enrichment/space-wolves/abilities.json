@@ -1854,7 +1854,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
+    "detachment_id": "champions-of-fenris",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -1914,7 +1914,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
+    "detachment_id": "champions-of-fenris",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -2016,7 +2016,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": "legends-of-saga-and-song",
+    "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -2140,7 +2140,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": "saga-of-the-bold",
+    "detachment_id": "champions-of-fenris",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"
@@ -2534,7 +2534,7 @@
     "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
-    "detachment_id": "champions-of-fenris",
+    "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "stratagem",
     "effect": {
       "type": "no-effect"

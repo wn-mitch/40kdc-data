@@ -12,7 +12,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
@@ -68,7 +68,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
@@ -133,7 +133,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -163,7 +163,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "enhancement",
     "behavior": "passive",
     "usage": {
@@ -211,7 +211,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
@@ -282,7 +282,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "salamanders",
-    "detachment_id": "firestorm-assault-force",
+    "detachment_id": "forgefathers-seekers",
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {

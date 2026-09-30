@@ -119,6 +119,15 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
       const want = target === CORE_FACTION ? [] : (plan.unitsOf.get(d.newId) ?? []);
       if (!sameSet(record.unit_ids, want)) changes.unit_ids = want;
     }
+    // A record renamed or folded across a reissue keeps the detachment it came from; it must name
+    // one the identity is printed in, or prose lookups keyed on it find nothing.
+    if (typeof record.detachment_id === "string" && identity.detachment) {
+      const printed = new Set(
+        identity.rows.flatMap((r) => (r.owner.kind === "detachment" ? (repoDetachment.get(r.owner.id) ?? []).map((x) => x.id) : [])),
+      );
+      const want = detachmentIdFor(identity);
+      if (want && !printed.has(record.detachment_id)) changes.detachment_id = want;
+    }
     const refs = [...refRewrites(d.dir, f.rel, d.oldId, record), ...ratingRewrites(identity, d.oldId, record)];
     if (identity.ratings && d.oldId !== identity.id && !refs.some((r) => isRatingValue(r.value))) {
       undecided.push({ kind: "rated-core", where: `${d.dir}/${d.oldId}`, detail: `kept as ${identity.id}, but no literal equal to its rating was found in the DSL; re-author with {rating: true}` });
