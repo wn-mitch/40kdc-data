@@ -12,7 +12,7 @@ import { useDecisionQueue } from "./decision-queue";
 import type { Family } from "./LeafForm";
 import "./workbench.css";
 
-type Role = "EFFECT" | "DURATION" | "EVENT" | "CONDITION";
+type Role = "EFFECT" | "DURATION" | "EVENT" | "CONDITION" | "RESTRICTION" | "COMBINATOR";
 type View = "leaves" | "proposals" | "shapes" | "publish" | "abilities" | "dashboard";
 type Action = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 type Fragment = { fragment: string; start_byte: number; end_byte: number; text: string };
@@ -68,10 +68,11 @@ type Draft = {
   span?: Span; kind: "selection" | "annotation" | "proposal";
 };
 
-const ROLES: Role[] = ["EFFECT", "DURATION", "EVENT", "CONDITION"];
+const ROLES: Role[] = ["EFFECT", "DURATION", "EVENT", "CONDITION", "RESTRICTION", "COMBINATOR"];
 const ROLE_LABELS: Record<Role, string> = {
   EFFECT: "Effect: what changes", DURATION: "Duration: how long",
   EVENT: "Event: when it fires", CONDITION: "Condition: when it applies",
+  RESTRICTION: "Restriction: who, how often, or when it can be used", COMBINATOR: "Combinator: how effects combine (instead)",
 };
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"];
 const REVIEWER = "local-reviewer";

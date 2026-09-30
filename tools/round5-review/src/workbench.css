@@ -2,7 +2,7 @@
 
 .wb-shell {
   --wb-sidebar-width: 15rem;
-  --wb-inspector-width: 22rem;
+  --wb-inspector-width: clamp(24rem, 34vw, 38rem);
   --wb-reader-width: 72ch;
   --wb-control-height: 2.5rem;
   --wb-header-height: 4rem;
@@ -13,6 +13,8 @@
   --wb-role-resource: oklch(0.82 0.12 50);
   --wb-role-connective: var(--muted);
   --wb-role-unresolved: var(--warn);
+  --wb-role-restriction: oklch(0.8 0.08 180);
+  --wb-role-combinator: oklch(0.78 0.06 330);
   --wb-motion: 180ms cubic-bezier(0.22, 1, 0.36, 1);
   display: grid;
   grid-template-columns: var(--wb-sidebar-width) minmax(0, 1fr);
@@ -114,6 +116,8 @@
 .wb-role-event { --wb-paint-color: var(--wb-role-event); }
 .wb-role-effect { --wb-paint-color: var(--wb-role-effect); }
 .wb-role-duration { --wb-paint-color: var(--wb-role-duration); }
+.wb-role-restriction { --wb-paint-color: var(--wb-role-restriction); }
+.wb-role-combinator { --wb-paint-color: var(--wb-role-combinator); }
 .wb-role-resource { --wb-paint-color: var(--wb-role-resource); }
 .wb-role-connective { --wb-paint-color: var(--wb-role-connective); }
 .wb-role-unresolved, .wb-role-novel { --wb-paint-color: var(--wb-role-unresolved); }
