@@ -795,9 +795,12 @@ fn complete_implicit_defaults(
     )?;
     let ref_for_id = |id: &str| {
         explicit_refs.get(id).cloned().unwrap_or_else(|| {
+            // The unit's own faction copy names it (copies of a shared id may spell it
+            // differently); mirror of the TS `hit.weapons` lookup.
             let name = ds
                 .weapons
-                .get_any(id)
+                .get_in_faction(id, unit.faction_id.as_str())
+                .or_else(|| ds.weapons.get_any(id))
                 .map(|weapon| weapon.name.to_string())
                 .or_else(|| ds.wargear.get(id).map(|item| item.name.to_string()))
                 .or_else(|| {
