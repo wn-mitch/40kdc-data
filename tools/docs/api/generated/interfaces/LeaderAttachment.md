@@ -6,7 +6,7 @@
 
 # Interface: LeaderAttachment
 
-Defined in: [generated.ts:425](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L425)
+Defined in: generated.ts:1145
 
 Defines which character units can attach to which bodyguard units.
 
@@ -19,15 +19,39 @@ via the `definition` "leader-attachment".
 
 > **leader\_id**: `string`
 
-Defined in: [generated.ts:426](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L426)
+Defined in: generated.ts:1146
 
 ***
 
 ### eligible\_bodyguard\_ids
 
-> **eligible\_bodyguard\_ids**: \[`string`, `...string[]`\]
+> **eligible\_bodyguard\_ids**: `string`[]
 
-Defined in: [generated.ts:430](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L430)
+Defined in: generated.ts:1147
+
+***
+
+### eligible\_bodyguard\_keywords?
+
+> `optional` **eligible\_bodyguard\_keywords?**: \[`string`, `...string[]`\]
+
+Defined in: generated.ts:1153
+
+Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
+
+#### Min Items
+
+1
+
+***
+
+### conditional\_groups?
+
+> `optional` **conditional\_groups?**: \[\{ `role`: `"leader"` \| `"support"`; `eligible_bodyguard_ids`: \[`string`, `...string[]`\]; `required_roster_unit_ids?`: \[`string`, `...string[]`\]; `excluded_roster_unit_ids?`: \[`string`, `...string[]`\]; \}, ...\{ role: "leader" \| "support"; eligible\_bodyguard\_ids: \[string, ...string\[\]\]; required\_roster\_unit\_ids?: \[string, ...string\[\]\]; excluded\_roster\_unit\_ids?: \[string, ...string\[\]\] \}\[\]\]
+
+Defined in: generated.ts:1159
+
+Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
 
 #### Min Items
 
@@ -39,4 +63,4 @@ Defined in: [generated.ts:430](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:431](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L431)
+Defined in: generated.ts:1191

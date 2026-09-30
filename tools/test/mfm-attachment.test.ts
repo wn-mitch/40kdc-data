@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { DEFAULT_DUMP_PATH } from "../src/mfm/loader.js";
+import { DEFAULT_DUMP_PATH, MfmDump } from "../src/mfm/loader.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
+import { runAttachmentRoles } from "../src/mfm/attachment.js";
 
 /**
  * Attachment keyword-eligibility derivation. `eligible_bodyguard_keywords` is the
@@ -50,5 +51,62 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("attachment keyword eligibili
     const withoutKeywords = agentsRecords().filter((r) => !r.eligible_bodyguard_keywords);
     expect(withoutKeywords.length).toBeGreaterThan(0);
     for (const rec of withoutKeywords) expect("eligible_bodyguard_keywords" in rec).toBe(false);
+  });
+});
+
+describe("attachment roster-condition projection", () => {
+  it("keeps opposite roster requirements and their distinct roles separate", () => {
+    const dump = new MfmDump({
+      data: {
+        faction_keyword: [
+          { id: "f", localisations: { en: { name: "Adeptus Astartes" } } },
+        ],
+        publication: [{ id: "p", factionKeywordId: "f" }],
+        datasheet: [
+          { id: "character", publicationId: "p", isLegends: false, localisations: { en: { name: "Captain" } } },
+          { id: "bodyguard", publicationId: "p", isLegends: false, localisations: { en: { name: "Intercessor Squad" } } },
+          { id: "roster-gate", publicationId: "p", isLegends: false, localisations: { en: { name: "Chaplain" } } },
+        ],
+        datasheet_bodyguard_group: [
+          { id: "without", datasheetId: "character", bodyguardType: "leader" },
+          { id: "with", datasheetId: "character", bodyguardType: "support" },
+        ],
+        datasheet_bodyguard_group_datasheet: [
+          { datasheetBodyguardGroupId: "without", datasheetId: "bodyguard" },
+          { datasheetBodyguardGroupId: "with", datasheetId: "bodyguard" },
+        ],
+        datasheet_bodyguard_group_keyword: [],
+        datasheet_bodyguard_group_excluded_roster_datasheet: [
+          { datasheetBodyguardGroupId: "without", datasheetId: "roster-gate" },
+        ],
+        datasheet_bodyguard_group_required_roster_datasheet: [
+          { datasheetBodyguardGroupId: "with", datasheetId: "roster-gate" },
+        ],
+      },
+    });
+    const report = runAttachmentRoles(dump, "adeptus-astartes");
+    const staged = report.staged.find((file) =>
+      file.path.endsWith("/adeptus-astartes/leader-attachments.json"),
+    );
+    const records = staged?.value as Array<{
+      leader_id: string;
+      eligible_bodyguard_ids: string[];
+      conditional_groups?: unknown[];
+    }>;
+    expect(records.find((record) => record.leader_id === "captain")).toMatchObject({
+      eligible_bodyguard_ids: [],
+      conditional_groups: [
+        {
+          role: "leader",
+          eligible_bodyguard_ids: ["intercessor-squad"],
+          excluded_roster_unit_ids: ["chaplain"],
+        },
+        {
+          role: "support",
+          eligible_bodyguard_ids: ["intercessor-squad"],
+          required_roster_unit_ids: ["chaplain"],
+        },
+      ],
+    });
   });
 });

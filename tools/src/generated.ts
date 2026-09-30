@@ -1144,16 +1144,50 @@ export interface HullShape {
  */
 export interface LeaderAttachment {
   leader_id: EntityId;
-  /**
-   * @minItems 1
-   */
-  eligible_bodyguard_ids: [EntityId, ...EntityId[]];
+  eligible_bodyguard_ids: EntityId[];
   /**
    * Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
    *
    * @minItems 1
    */
   eligible_bodyguard_keywords?: [string, ...string[]];
+  /**
+   * Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+   *
+   * @minItems 1
+   */
+  conditional_groups?: [
+    {
+      role: "leader" | "support";
+      /**
+       * @minItems 1
+       */
+      eligible_bodyguard_ids: [EntityId, ...EntityId[]];
+      /**
+       * @minItems 1
+       */
+      required_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * @minItems 1
+       */
+      excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+    },
+    ...{
+      role: "leader" | "support";
+      /**
+       * @minItems 1
+       */
+      eligible_bodyguard_ids: [EntityId, ...EntityId[]];
+      /**
+       * @minItems 1
+       */
+      required_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * @minItems 1
+       */
+      excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+    }[]
+  ];
   game_version: GameVersionReference;
 }
 /**

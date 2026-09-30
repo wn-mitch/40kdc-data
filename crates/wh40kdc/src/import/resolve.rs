@@ -1129,8 +1129,12 @@ fn apply_leader_attachments(
         .filter_map(|(u, _)| u.ref_.id.clone())
         .collect();
 
-    // Resolve a unit faction-scoped (shared chassis diverge per faction in
-    // `attachment_role`), falling back to first-wins by id.
+    let roster_unit_ids: std::collections::HashSet<String> = units
+        .iter()
+        .filter_map(|unit| unit.ref_.id.clone())
+        .collect();
+
+    // Shared chassis may have different attachment roles in each faction.
     let resolve_unit = |id: &str| -> Option<&crate::Unit> {
         faction_id
             .and_then(|f| {
@@ -1156,22 +1160,16 @@ fn apply_leader_attachments(
             continue;
         }
         // Auto-attach only Support characters (they cannot operate alone).
-        if resolve_unit(leader_id).and_then(|u| u.attachment_role)
-            != Some(UnitAttachmentRole::Support)
+        if ds.effective_attachment_role(
+            leader_id,
+            resolve_unit(leader_id).and_then(|u| u.attachment_role),
+            &roster_unit_ids,
+        ) != Some(UnitAttachmentRole::Support)
         {
             continue;
         }
-        let Some(attachment) = ds
-            .leader_attachments
-            .iter()
-            .find(|la| la.leader_id.as_str() == leader_id)
-        else {
-            continue;
-        };
-        let Some(bodyguard_id) = attachment
-            .eligible_bodyguard_ids
-            .iter()
-            .map(|e| e.as_str())
+        let Some(bodyguard_id) = ds
+            .bodyguard_ids_attachable_from_in_roster(leader_id, &roster_unit_ids)
             .find(|id| bodyguard_ids.contains(*id))
         else {
             continue;

@@ -484,26 +484,25 @@ export class Dataset {
   }
 
   /**
-   * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
-   * eligible body units, sorted by name. The attachment is stored on the
-   * leader pointing down to its bodyguards, so answering "which leaders can
-   * attach to this unit?" means scanning the attachment list. Returns an empty
-   * array for a unit that no leader can attach to (including leader units).
+   * Leaders eligible for `bodyguardUnitId`, sorted by name. Without roster
+   * context this includes every possible conditional group; with a roster set
+   * it includes only groups whose required units are present and excluded
+   * units absent. Unconditional id and keyword eligibility always applies.
    */
-  leadersAttachableTo(bodyguardUnitId: string): UnitView[] {
+  leadersAttachableTo(bodyguardUnitId: string, rosterUnitIds?: ReadonlySet<string>): UnitView[] {
     const bodyguard = this.units.getAny(bodyguardUnitId);
     return (
       this.leaderAttachments
         .filter(
           (la) =>
             la.eligible_bodyguard_ids.includes(bodyguardUnitId) ||
-            // Keyword eligibility (e.g. an Inquisitor leading any Imperium
-            // Battleline Infantry unit): match on the bodyguard's keyword set.
+            (la.conditional_groups ?? []).some((group) =>
+              attachmentGroupApplies(group, rosterUnitIds) &&
+              group.eligible_bodyguard_ids.includes(bodyguardUnitId)) ||
+            // Keyword eligibility also contributes to the unconditional pool.
             (bodyguard !== undefined &&
               matchesBodyguardKeywords(la, bodyguard.raw)),
         )
-        // Attachment data is faction-agnostic (no faction context here); accept
-        // first-wins for a shared leader/bodyguard chassis via getAny.
         .map((la) => this.units.getAny(la.leader_id))
         .filter((u): u is UnitView => u !== undefined)
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -511,16 +510,15 @@ export class Dataset {
   }
 
   /**
-   * The inverse of {@link leadersAttachableTo}: the body units the given
-   * leader can attach to, sorted by name. Scans the same leader-attachment
-   * data from the leader's side (`leader_id` matches; resolve each
-   * `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-   * unit. Together the two queries give the bidirectional attachment graph the
-   * SPA needs to offer a partner dropdown from either end.
+   * Bodyguards eligible for `leaderUnitId`, deduped by id and sorted by name.
+   * Without roster context this includes every possible conditional group;
+   * with a roster set it applies each group's required/excluded unit conditions.
+   * `factionId` scopes the resolved bodyguard views when provided.
    */
   bodyguardsAttachableFrom(
     leaderUnitId: string,
     factionId?: string,
+    rosterUnitIds?: ReadonlySet<string>,
   ): UnitView[] {
     const seen = new Set<string>();
     const out: UnitView[] = [];
@@ -531,18 +529,15 @@ export class Dataset {
     };
     for (const la of this.leaderAttachments) {
       if (la.leader_id !== leaderUnitId) continue;
-      const bodyguards = la.eligible_bodyguard_ids.map((id) =>
-        factionId
-          ? this.units.getInFaction(id, factionId)
-          : this.units.getAny(id),
-      );
-      if (
-        factionId &&
-        bodyguards.every((unit) => unit === undefined) &&
-        !la.eligible_bodyguard_keywords?.length
-      )
-        continue;
-      for (const bodyguard of bodyguards) add(bodyguard);
+      for (const id of la.eligible_bodyguard_ids) {
+        add(factionId ? this.units.getInFaction(id, factionId) : this.units.getAny(id));
+      }
+      for (const group of la.conditional_groups ?? []) {
+        if (!attachmentGroupApplies(group, rosterUnitIds)) continue;
+        for (const id of group.eligible_bodyguard_ids) {
+          add(factionId ? this.units.getInFaction(id, factionId) : this.units.getAny(id));
+        }
+      }
       if (la.eligible_bodyguard_keywords?.length) {
         for (const view of this.units.all) {
           if (
@@ -554,6 +549,20 @@ export class Dataset {
       }
     }
     return out.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /** Conditional roster groups override the flat role; leader wins on overlap. */
+  conditionalAttachmentRole(leaderUnitId: string, rosterUnitIds: ReadonlySet<string>): "leader" | "support" | undefined {
+    let supportApplies = false;
+    for (const attachment of this.leaderAttachments) {
+      if (attachment.leader_id !== leaderUnitId) continue;
+      for (const group of attachment.conditional_groups ?? []) {
+        if (!attachmentGroupApplies(group, rosterUnitIds)) continue;
+        if (group.role === "leader") return "leader";
+        supportApplies = true;
+      }
+    }
+    return supportApplies ? "support" : undefined;
   }
 
   /**
@@ -855,6 +864,15 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
   const existing = map.get(key);
   if (existing) existing.push(value);
   else map.set(key, [value]);
+}
+
+function attachmentGroupApplies(
+  group: NonNullable<LeaderAttachment["conditional_groups"]>[number],
+  rosterUnitIds?: ReadonlySet<string>,
+): boolean {
+  return !rosterUnitIds ||
+    (group.required_roster_unit_ids ?? []).every((id) => rosterUnitIds.has(id)) &&
+    !(group.excluded_roster_unit_ids ?? []).some((id) => rosterUnitIds.has(id));
 }
 
 /** Lowercased union of a unit's `keywords` and `faction_keywords`, for membership tests. */

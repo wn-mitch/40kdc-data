@@ -61,7 +61,9 @@ export interface MfmTableMap {
   datasheet_ability: DatasheetAbilityRow[];
   datasheet_bodyguard_group: DatasheetBodyguardGroupRow[];
   datasheet_bodyguard_group_datasheet: DatasheetBodyguardGroupDatasheetRow[];
+  datasheet_bodyguard_group_excluded_roster_datasheet: DatasheetBodyguardGroupExcludedRosterDatasheetRow[];
   datasheet_bodyguard_group_keyword: DatasheetBodyguardGroupKeywordRow[];
+  datasheet_bodyguard_group_required_roster_datasheet: DatasheetBodyguardGroupRequiredRosterDatasheetRow[];
   datasheet_damage: DatasheetDamageRow[];
   datasheet_datasheet_ability: DatasheetDatasheetAbilityRow[];
   datasheet_faction_keyword: DatasheetFactionKeywordRow[];
@@ -72,7 +74,10 @@ export interface MfmTableMap {
   detachment_detail: DetachmentDetailRow[];
   detachment_detail_bullet_point: DetachmentDetailBulletPointRow[];
   detachment_excluded_datasheet: DetachmentExcludedDatasheetRow[];
-  detachment_faction_detachment_points_cost: DetachmentFactionDetachmentPointsCostRow[];
+  /**
+   * @maxItems 0
+   */
+  detachment_faction_detachment_points_cost: [];
   detachment_faction_keyword: DetachmentFactionKeywordRow[];
   detachment_force_disposition: DetachmentForceDispositionRow[];
   detachment_granted_warlord_miniature: DetachmentGrantedWarlordMiniatureRow[];
@@ -1014,7 +1019,7 @@ export interface DatasheetAbilityRow {
   /**
    * References the detachment-rule record associated with this ability.
    */
-  detachmentRuleId: null | string;
+  detachmentRuleId: null;
   /**
    * Identifies this ability record.
    */
@@ -1122,6 +1127,22 @@ export interface DatasheetBodyguardGroupDatasheetRow {
   datasheetId: string;
 }
 /**
+ * Excludes a bodyguard group when the referenced datasheet is present in the roster.
+ *
+ * This interface was referenced by `MfmDumpPayload`'s JSON-Schema
+ * via the `definition` "DatasheetBodyguardGroupExcludedRosterDatasheetRow".
+ */
+export interface DatasheetBodyguardGroupExcludedRosterDatasheetRow {
+  /**
+   * Identifies the bodyguard group subject to the roster exclusion.
+   */
+  datasheetBodyguardGroupId: string;
+  /**
+   * Identifies a datasheet whose roster presence excludes the group.
+   */
+  datasheetId: string;
+}
+/**
  * Connects a bodyguard eligibility group to a required keyword.
  *
  * This interface was referenced by `MfmDumpPayload`'s JSON-Schema
@@ -1136,6 +1157,22 @@ export interface DatasheetBodyguardGroupKeywordRow {
    * Identifies a keyword required by the eligibility group.
    */
   keywordId: string;
+}
+/**
+ * Requires a referenced datasheet in the roster for a bodyguard group to apply.
+ *
+ * This interface was referenced by `MfmDumpPayload`'s JSON-Schema
+ * via the `definition` "DatasheetBodyguardGroupRequiredRosterDatasheetRow".
+ */
+export interface DatasheetBodyguardGroupRequiredRosterDatasheetRow {
+  /**
+   * Identifies the bodyguard group subject to the roster requirement.
+   */
+  datasheetBodyguardGroupId: string;
+  /**
+   * Identifies a datasheet whose roster presence is required for the group.
+   */
+  datasheetId: string;
 }
 /**
  * Associates damage-state presentation with a datasheet.
@@ -1301,7 +1338,7 @@ export interface DatasheetRuleRow {
   /**
    * Optionally references artwork associated with the rule.
    */
-  image: null | string;
+  image: null;
   /**
    * Maps locale codes to rule presentation payloads.
    */
@@ -1535,26 +1572,6 @@ export interface DetachmentExcludedDatasheetRow {
    * Identifies the detachment imposing this datasheet eligibility exclusion.
    */
   detachmentId: string;
-}
-/**
- * Associates a faction context with an overriding detachment point cost.
- *
- * This interface was referenced by `MfmDumpPayload`'s JSON-Schema
- * via the `definition` "DetachmentFactionDetachmentPointsCostRow".
- */
-export interface DetachmentFactionDetachmentPointsCostRow {
-  /**
-   * Identifies the detachment whose point cost is overridden.
-   */
-  detachmentId: string;
-  /**
-   * Sets the point cost for this detachment and faction association.
-   */
-  detachmentPointsCost: number;
-  /**
-   * Identifies the faction context for this detachment point-cost association.
-   */
-  factionKeywordId: string;
 }
 /**
  * Associates a detachment with a faction keyword to which it applies.
@@ -2249,7 +2266,7 @@ export interface InvulnerableSaveRow {
   /**
    * Optionally identifies the model profile receiving this invulnerable save.
    */
-  miniatureId: null;
+  miniatureId: null | string;
   /**
    * Optionally records the invulnerable save applying at range.
    */
@@ -4580,6 +4597,24 @@ export const MFM_RELATIONS = {
     "nullable": false,
     "meaning": "eligibility"
   },
+  "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId": {
+    "sourceTable": "datasheet_bodyguard_group_excluded_roster_datasheet",
+    "sourceField": "datasheetBodyguardGroupId",
+    "targetTable": "datasheet_bodyguard_group",
+    "targetField": "id",
+    "cardinality": "many-to-many-edge",
+    "nullable": false,
+    "meaning": "eligibility"
+  },
+  "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId": {
+    "sourceTable": "datasheet_bodyguard_group_excluded_roster_datasheet",
+    "sourceField": "datasheetId",
+    "targetTable": "datasheet",
+    "targetField": "id",
+    "cardinality": "many-to-many-edge",
+    "nullable": false,
+    "meaning": "eligibility"
+  },
   "datasheet_bodyguard_group_keyword.datasheetBodyguardGroupId": {
     "sourceTable": "datasheet_bodyguard_group_keyword",
     "sourceField": "datasheetBodyguardGroupId",
@@ -4593,6 +4628,24 @@ export const MFM_RELATIONS = {
     "sourceTable": "datasheet_bodyguard_group_keyword",
     "sourceField": "keywordId",
     "targetTable": "keyword",
+    "targetField": "id",
+    "cardinality": "many-to-many-edge",
+    "nullable": false,
+    "meaning": "eligibility"
+  },
+  "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId": {
+    "sourceTable": "datasheet_bodyguard_group_required_roster_datasheet",
+    "sourceField": "datasheetBodyguardGroupId",
+    "targetTable": "datasheet_bodyguard_group",
+    "targetField": "id",
+    "cardinality": "many-to-many-edge",
+    "nullable": false,
+    "meaning": "eligibility"
+  },
+  "datasheet_bodyguard_group_required_roster_datasheet.datasheetId": {
+    "sourceTable": "datasheet_bodyguard_group_required_roster_datasheet",
+    "sourceField": "datasheetId",
+    "targetTable": "datasheet",
     "targetField": "id",
     "cardinality": "many-to-many-edge",
     "nullable": false,

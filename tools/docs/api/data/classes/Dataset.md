@@ -387,21 +387,24 @@ Rust `Dataset::wargear_options_of`. Empty for a unit with no options.
 
 ### leadersAttachableTo()
 
-> **leadersAttachableTo**(`bodyguardUnitId`): [`UnitView`](UnitView.md)[]
+> **leadersAttachableTo**(`bodyguardUnitId`, `rosterUnitIds?`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:247](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L247)
+Defined in: data/dataset.ts:492
 
-Leaders whose leader-attachment data lists `bodyguardUnitId` among its
-eligible body units, sorted by name. The attachment is stored on the
-leader pointing down to its bodyguards, so answering "which leaders can
-attach to this unit?" means scanning the attachment list. Returns an empty
-array for a unit that no leader can attach to (including leader units).
+Leaders eligible for `bodyguardUnitId`, sorted by name. Without roster
+context this includes every possible conditional group; with a roster set
+it includes only groups whose required units are present and excluded
+units absent. Unconditional id and keyword eligibility always applies.
 
 #### Parameters
 
 ##### bodyguardUnitId
 
 `string`
+
+##### rosterUnitIds?
+
+`ReadonlySet`\<`string`\>
 
 #### Returns
 
@@ -411,16 +414,14 @@ array for a unit that no leader can attach to (including leader units).
 
 ### bodyguardsAttachableFrom()
 
-> **bodyguardsAttachableFrom**(`leaderUnitId`): [`UnitView`](UnitView.md)[]
+> **bodyguardsAttachableFrom**(`leaderUnitId`, `factionId?`, `rosterUnitIds?`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:263](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L263)
+Defined in: data/dataset.ts:518
 
-The inverse of [leadersAttachableTo](#leadersattachableto): the body units the given
-leader can attach to, sorted by name. Scans the same leader-attachment
-data from the leader's side (`leader_id` matches; resolve each
-`eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-unit. Together the two queries give the bidirectional attachment graph the
-SPA needs to offer a partner dropdown from either end.
+Bodyguards eligible for `leaderUnitId`, deduped by id and sorted by name.
+Without roster context this includes every possible conditional group;
+with a roster set it applies each group's required/excluded unit conditions.
+`factionId` scopes the resolved bodyguard views when provided.
 
 #### Parameters
 
@@ -428,10 +429,41 @@ SPA needs to offer a partner dropdown from either end.
 
 `string`
 
+##### factionId?
+
+`string`
+
+##### rosterUnitIds?
+
+`ReadonlySet`\<`string`\>
+
 #### Returns
 
 [`UnitView`](UnitView.md)[]
 
+***
+
+### conditionalAttachmentRole()
+
+> **conditionalAttachmentRole**(`leaderUnitId`, `rosterUnitIds`): `"leader"` \| `"support"` \| `undefined`
+
+Defined in: data/dataset.ts:555
+
+Conditional roster groups override the flat role; leader wins on overlap.
+
+#### Parameters
+
+##### leaderUnitId
+
+`string`
+
+##### rosterUnitIds
+
+`ReadonlySet`\<`string`\>
+
+#### Returns
+
+`"leader"` \| `"support"` \| `undefined`
 ***
 
 ### eligibleAbilities()

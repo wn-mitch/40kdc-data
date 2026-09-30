@@ -371,10 +371,18 @@ class HullShape(TypedDict):
 EligibleBodyguardKeyword: TypeAlias = str
 
 
+class ConditionalGroup(TypedDict):
+    role: Literal["leader", "support"]
+    eligible_bodyguard_ids: list[EntityId]
+    required_roster_unit_ids: NotRequired[list[EntityId]]
+    excluded_roster_unit_ids: NotRequired[list[EntityId]]
+
+
 class LeaderAttachment(TypedDict):
     leader_id: EntityId
     eligible_bodyguard_ids: list[EntityId]
     eligible_bodyguard_keywords: NotRequired[list[EligibleBodyguardKeyword]]
+    conditional_groups: NotRequired[list[ConditionalGroup]]
     game_version: GameVersionRef
 
 

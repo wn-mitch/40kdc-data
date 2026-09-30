@@ -12,16 +12,11 @@
  *
  * Two repo artifacts are derived, per faction dir:
  *   - `units.json` `attachment_role` — set on every leader the dump describes.
- *     **leader-wins** for the 11 mixed datasheets (Lieutenant, Judiciar, …) whose
- *     `support` rows are detachment-scoped (`requiredDetachmentId`): a unit is
- *     `support` only when *all* its groups are `support`; any `leader` group →
- *     `leader`. The repo's flat field can't carry detachment scope, and `support`
- *     ("must attach") is the more-constraining value, so leader-wins never
- *     over-constrains a solo-capable character. This is the bug fix: WE Master of
- *     Executions (a single `leader` group) flips from the scrape's wrong `support`
- *     to `leader`; the CSM MoE (all `support`) stays `support`.
+ *     Mixed detachment-scoped leader/support rows use `leader` as the flat
+ *     fallback, so a character that can operate alone is not forced to attach.
+ *     Roster-scoped groups retain their own role in `leader-attachments.json`.
  *   - `leader-attachments.json` eligibility (`leader_id → eligible_bodyguard_ids`),
- *     rebuilt from the junction.
+ *     including roster-conditional groups from the two roster-datasheet junctions.
  *
  * Non-destructive (additive): a role is only ever *set* for a leader the dump
  * describes — never cleared — so dump-absent units keep their scrape-derived role.
@@ -51,15 +46,20 @@ interface UnitRecord {
   attachment_role?: "leader" | "support" | null;
   [k: string]: unknown;
 }
+interface ConditionalAttachmentGroup {
+  role: "leader" | "support";
+  eligible_bodyguard_ids: string[];
+  required_roster_unit_ids?: string[];
+  excluded_roster_unit_ids?: string[];
+}
 interface LeaderAttachmentRecord {
   leader_id: string;
   eligible_bodyguard_ids: string[];
   eligible_bodyguard_keywords?: string[];
+  conditional_groups?: ConditionalAttachmentGroup[];
   game_version: { edition: string; dataslate: string };
   [k: string]: unknown;
 }
-
-
 
 /** True when a datasheet's publication is a Combat Patrol box (excluded). */
 function isCombatPatrolDatasheet(dump: MfmDump, ds: DatasheetRow): boolean {
@@ -106,6 +106,14 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
   const groupsByDs = dump.groupBy("datasheet_bodyguard_group", "datasheetId");
   const eligByGroup = dump.groupBy("datasheet_bodyguard_group_datasheet", "datasheetBodyguardGroupId");
   const keywordsByGroup = dump.groupBy("datasheet_bodyguard_group_keyword", "datasheetBodyguardGroupId");
+  const excludedRosterByGroup = dump.groupBy(
+    "datasheet_bodyguard_group_excluded_roster_datasheet",
+    "datasheetBodyguardGroupId",
+  );
+  const requiredRosterByGroup = dump.groupBy(
+    "datasheet_bodyguard_group_required_roster_datasheet",
+    "datasheetBodyguardGroupId",
+  );
   const dsById = dump.byId("datasheet");
 
   const results: DirAttachmentResult[] = [];
@@ -168,15 +176,24 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
         unitsChanged = true;
       }
 
-      // ── eligibility: junction bodyguard datasheets → repo unit ids in this dir ──
+      // Each conditional source group retains its own role and roster constraints;
+      // flattening it into the unconditional pool would admit illegal attachments.
       const eligible = new Set<string>();
+      const conditionalGroups: ConditionalAttachmentGroup[] = [];
       const unresolved: string[] = [];
-      // Keyword-based eligibility ("any unit with ALL these keywords qualifies", e.g.
-      // an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit). Dump-edge order
-      // is GW's canonical keyword order, so the insertion-ordered Set preserves it —
-      // no sort, which would spuriously reorder the authored value.
       const keywords = new Set<string>();
+      const rosterIds = (datasheetIds: readonly string[]): string[] =>
+        datasheetIds.map((datasheetId) => {
+          const rosterName = dump.enName(dsById.get(datasheetId));
+          if (!rosterName) throw new Error(`Unresolved roster-condition datasheet ${datasheetId}`);
+          const rosterId = nameToId(rosterName);
+          if (!unitIds.has(rosterId)) {
+            throw new Error(`Roster-condition unit ${rosterId} is absent from ${dir}`);
+          }
+          return rosterId;
+        }).sort();
       for (const g of groups) {
+        const bodyguards = new Set<string>();
         for (const j of eligByGroup.get(g.id) ?? []) {
           const bgName = dump.enName(dsById.get(j.datasheetId));
           if (!bgName) continue;
@@ -186,26 +203,41 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
           } catch {
             continue;
           }
-          if (unitIds.has(bgId)) eligible.add(bgId);
+          if (unitIds.has(bgId)) bodyguards.add(bgId);
           else unresolved.push(bgName);
         }
+        const required = requiredRosterByGroup.get(g.id) ?? [];
+        const excluded = excludedRosterByGroup.get(g.id) ?? [];
+        if (required.length || excluded.length) {
+          if ((keywordsByGroup.get(g.id) ?? []).length) {
+            throw new Error(`Conditional bodyguard group ${g.id} has keyword eligibility that cannot be represented`);
+          }
+          if (!bodyguards.size) {
+            throw new Error(`Conditional bodyguard group ${g.id} has no resolvable bodyguard in ${dir}`);
+          }
+          conditionalGroups.push({
+            role: g.bodyguardType === "support" ? "support" : "leader",
+            eligible_bodyguard_ids: [...bodyguards].sort(),
+            ...(required.length ? { required_roster_unit_ids: rosterIds(required.map((row) => row.datasheetId)) } : {}),
+            ...(excluded.length ? { excluded_roster_unit_ids: rosterIds(excluded.map((row) => row.datasheetId)) } : {}),
+          });
+          continue;
+        }
+        for (const bgId of bodyguards) eligible.add(bgId);
         for (const kw of keywordsByGroup.get(g.id) ?? []) {
           const label = keywordLabel(dump, kw.keywordId);
           if (label) keywords.add(label);
         }
       }
-      if (eligible.size) {
-        // eligible_bodyguard_keywords is additive to the required ids (schema mandates
-        // ≥1 id); a keyword-only leader cannot be represented, so it rides an id record.
+      if (eligible.size || conditionalGroups.length) {
         dumpLa.set(id, {
           leader_id: id,
           eligible_bodyguard_ids: [...eligible].sort(),
           ...(keywords.size ? { eligible_bodyguard_keywords: [...keywords] } : {}),
+          ...(conditionalGroups.length ? { conditional_groups: conditionalGroups } : {}),
           game_version: { ...CONFIRMED },
         });
       } else if (unresolved.length) {
-        // Dump describes this leader but no bodyguard resolved — skip emitting (schema
-        // requires minItems:1); the existing record (if any) is preserved below.
         res.unresolvedLeaders.push({ id, names: [...new Set(unresolved)].sort() });
       }
     }

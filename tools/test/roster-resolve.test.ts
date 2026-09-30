@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
+import { emptyRawData } from "../src/data/types.js";
 import {
   checkRosterLegality,
   primaryDetachment,
@@ -319,5 +320,67 @@ describe("validateRosterCore — unit-excluded-from-faction", () => {
   it("allows a collapsed generic twin (Repulsor) in the chapter that excluded it", () => {
     const { army } = validateRosterCore(norm("black-templars", "repulsor"), ds);
     expect(army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
+  });
+});
+
+describe("roster-conditional leader attachments", () => {
+  const template = ds.units.getInFaction("palatine", "adepta-sororitas")!.raw;
+  const raw = emptyRawData();
+  raw.units = ["example-leader", "example-bodyguard-a", "example-bodyguard-b", "example-gate"].map(
+    (id) => ({ ...template, id, name: id }),
+  );
+  raw.leaderAttachments = [{
+    leader_id: "example-leader",
+    eligible_bodyguard_ids: [],
+    conditional_groups: [
+      { role: "leader", eligible_bodyguard_ids: ["example-bodyguard-a"], excluded_roster_unit_ids: ["example-gate"] },
+      { role: "support", eligible_bodyguard_ids: ["example-bodyguard-b"], required_roster_unit_ids: ["example-gate"] },
+    ],
+    game_version: { edition: "11th", dataslate: "launch" },
+  }];
+  const dataset = new Dataset(raw);
+  const attachmentErrors = (withGate: boolean, target: string | null): string[] => {
+    const unit = (unitId: string, leaderBodyguardId: string | null = null) => ({
+      unitId, modelCount: 1, isWarlord: false, enhancementId: null, leaderBodyguardId, counts: new Map<string, number>(),
+    });
+    const units = [
+      unit("example-leader", target),
+      unit("example-bodyguard-a"),
+      unit("example-bodyguard-b"),
+      ...(withGate ? [unit("example-gate")] : []),
+    ];
+    return validateRosterCore({
+      factionId: template.faction_id, battleSize: null, forceDisposition: null, detachmentIds: [], units,
+    }, dataset).army.filter((v) => v.id === "example-leader").map((v) => v.code);
+  };
+
+  it("selects the permitted bodyguard and role from the current roster", () => {
+    expect(dataset.bodyguardsAttachableFrom("example-leader").map((v) => v.id))
+      .toEqual(["example-bodyguard-a", "example-bodyguard-b"]);
+    expect(dataset.bodyguardsAttachableFrom("example-leader", template.faction_id, new Set(["example-leader"])).map((v) => v.id))
+      .toEqual(["example-bodyguard-a"]);
+    expect(dataset.bodyguardsAttachableFrom("example-leader", template.faction_id, new Set(["example-leader", "example-gate"])).map((v) => v.id))
+      .toEqual(["example-bodyguard-b"]);
+    expect(attachmentErrors(false, "example-bodyguard-a")).not.toContain("leader-attachment-illegal");
+    expect(attachmentErrors(false, "example-bodyguard-b")).toContain("leader-attachment-illegal");
+    expect(attachmentErrors(true, "example-bodyguard-a")).toContain("leader-attachment-illegal");
+    expect(attachmentErrors(true, "example-bodyguard-b")).not.toContain("leader-attachment-illegal");
+    expect(attachmentErrors(false, null)).not.toContain("leader-must-attach");
+    expect(attachmentErrors(true, null)).toContain("leader-must-attach");
+  });
+
+  it("keeps the leader role when conditional groups overlap", () => {
+    const overlapping = new Dataset({
+      ...raw,
+      leaderAttachments: [{
+        ...raw.leaderAttachments[0],
+        conditional_groups: [
+          ...raw.leaderAttachments[0].conditional_groups!,
+          { role: "leader", eligible_bodyguard_ids: ["example-bodyguard-b"], required_roster_unit_ids: ["example-gate"] },
+        ],
+      }],
+    });
+    expect(overlapping.conditionalAttachmentRole("example-leader", new Set(["example-gate"])))
+      .toBe("leader");
   });
 });

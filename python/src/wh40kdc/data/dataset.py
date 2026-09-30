@@ -57,6 +57,28 @@ class ReactiveTrigger(TypedDict):
     trigger: dict[str, Any]
 
 
+def _conditional_group_applies(group: dict[str, Any], roster_unit_ids: set[str]) -> bool:
+    """Whether a conditional attachment group applies to this roster."""
+    return set(group.get("required_roster_unit_ids") or []).issubset(roster_unit_ids) and not (
+        set(group.get("excluded_roster_unit_ids") or []) & roster_unit_ids
+    )
+
+
+def _eligible_bodyguard_ids(
+    attachment: dict[str, Any], roster_unit_ids: set[str] | None
+) -> list[str]:
+    """The attachment's flat ids plus roster-applicable conditional ids.
+
+    With no roster context, every conditional group is possible and contributes
+    to the browseable union.
+    """
+    ids = list(attachment.get("eligible_bodyguard_ids") or [])
+    for group in attachment.get("conditional_groups") or []:
+        if roster_unit_ids is None or _conditional_group_applies(group, roster_unit_ids):
+            ids.extend(group.get("eligible_bodyguard_ids") or [])
+    return ids
+
+
 def _matches_bodyguard_keywords(la: dict[str, Any], unit: dict[str, Any]) -> bool:
     """Whether ``unit`` satisfies an attachment entry's optional keyword eligibility.
 
@@ -413,20 +435,21 @@ class Dataset:
         """
         return self._composition_by_unit.get((unit["id"], unit.get("faction_id")))
 
-    def leaders_attachable_to(self, bodyguard_unit_id: str) -> list[UnitView]:
-        """Leaders whose leader-attachment data lists the unit among its bodyguards.
+    def leaders_attachable_to(
+        self, bodyguard_unit_id: str, roster_unit_ids: set[str] | None = None
+    ) -> list[UnitView]:
+        """Leaders that can attach to a bodyguard, sorted by name.
 
-        The attachment is stored on the leader pointing down to its bodyguards,
-        so answering "which leaders can attach to this unit?" means scanning
-        the attachment list. Sorted by name. Empty for a unit that no leader
-        can attach to (including leader units).
+        Without roster context this returns the union of every possible
+        conditional attachment. With it, only conditional groups whose required
+        ids are present and excluded ids absent contribute.
         """
         bodyguard = self.units.get_any(bodyguard_unit_id)
         out = []
         for la in self.leader_attachments:
             # Keyword eligibility (e.g. an Inquisitor leading any Imperium
             # Battleline Infantry unit) matches on the bodyguard's keyword set.
-            if bodyguard_unit_id not in la.get("eligible_bodyguard_ids", []) and not (
+            if bodyguard_unit_id not in _eligible_bodyguard_ids(la, roster_unit_ids) and not (
                 bodyguard is not None and _matches_bodyguard_keywords(la, bodyguard.raw)
             ):
                 continue
@@ -437,32 +460,82 @@ class Dataset:
                 out.append(unit)
         return sorted(out, key=lambda u: u.name)
 
-    def bodyguards_attachable_from(self, leader_unit_id: str) -> list[UnitView]:
-        """The inverse of :meth:`leaders_attachable_to`, deduped by id, sorted by name.
-
-        Empty for a non-leader unit.
-        """
+    def bodyguard_ids_attachable_from(
+        self, leader_unit_id: str, roster_unit_ids: set[str] | None = None
+    ) -> list[str]:
+        """The declared id-based bodyguard candidates, in data order."""
         seen: set[str] = set()
-        out: list[UnitView] = []
+        ids: list[str] = []
         for la in self.leader_attachments:
             if la.get("leader_id") != leader_unit_id:
                 continue
-            for bodyguard_id in la.get("eligible_bodyguard_ids", []):
-                # Faction-agnostic attachment data — get_any, as above.
-                unit = self.units.get_any(bodyguard_id)
-                if unit is None or unit.id in seen:
-                    continue
-                seen.add(unit.id)
-                out.append(unit)
-            # Keyword eligibility: every unit whose keyword set contains all of
-            # the entry's keywords is also a valid bodyguard (e.g. Imperium
-            # Battleline Infantry for an Inquisitor).
-            if la.get("eligible_bodyguard_keywords"):
-                for unit in self.units.all:
-                    if unit.id not in seen and _matches_bodyguard_keywords(la, unit.raw):
-                        seen.add(unit.id)
-                        out.append(unit)
+            for bodyguard_id in _eligible_bodyguard_ids(la, roster_unit_ids):
+                if bodyguard_id not in seen:
+                    seen.add(bodyguard_id)
+                    ids.append(bodyguard_id)
+        return ids
+
+    def bodyguards_attachable_from(
+        self, leader_unit_id: str, roster_unit_ids: set[str] | None = None
+    ) -> list[UnitView]:
+        """The inverse of :meth:`leaders_attachable_to`, deduped by id, sorted by name.
+
+        Without roster context this returns the union of every possible
+        conditional attachment. Empty for a non-leader unit.
+        """
+        seen: set[str] = set()
+        out: list[UnitView] = []
+        for bodyguard_id in self.bodyguard_ids_attachable_from(leader_unit_id, roster_unit_ids):
+            # Faction-agnostic attachment data — get_any, as above.
+            unit = self.units.get_any(bodyguard_id)
+            if unit is None or unit.id in seen:
+                continue
+            seen.add(unit.id)
+            out.append(unit)
+        for la in self.leader_attachments:
+            if la.get("leader_id") != leader_unit_id or not la.get("eligible_bodyguard_keywords"):
+                continue
+            # Keyword eligibility is unconditional; every matching unit remains
+            # an eligible bodyguard regardless of conditional id groups.
+            for unit in self.units.all:
+                if unit.id not in seen and _matches_bodyguard_keywords(la, unit.raw):
+                    seen.add(unit.id)
+                    out.append(unit)
         return sorted(out, key=lambda u: u.name)
+
+    def effective_attachment_role(
+        self,
+        leader_unit_id: str,
+        roster_unit_ids: set[str] | None = None,
+        faction_id: str | None = None,
+    ) -> str | None:
+        """The leader/support role selected by this roster's conditional groups.
+
+        Applicable conditional groups override the flat role, with leader
+        winning when multiple groups apply. Without a roster context the
+        unit's flat role remains authoritative.
+        """
+        conditional_role = None
+        if roster_unit_ids is not None:
+            for la in self.leader_attachments:
+                if la.get("leader_id") != leader_unit_id:
+                    continue
+                for group in la.get("conditional_groups") or []:
+                    if not _conditional_group_applies(group, roster_unit_ids):
+                        continue
+                    if group.get("role") == "leader":
+                        return "leader"
+                    if group.get("role") == "support":
+                        conditional_role = "support"
+        if conditional_role is not None:
+            return conditional_role
+        unit = (
+            self.units.get_in_faction(leader_unit_id, faction_id)
+            if faction_id is not None
+            else None
+        ) or self.units.get_any(leader_unit_id)
+        return unit.raw.get("attachment_role") if unit is not None else None
+
 
     def eligible_abilities(self, input: dict[str, Any], phase: str) -> list[dict[str, Any]]:
         """Every ability that could apply to the given unit in ``phase``, by source."""
