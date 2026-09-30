@@ -93,7 +93,7 @@ describe("Round 5C restrictions", () => {
     const inTarget = (item: CompileLeaf): CompileLeaf => ({ ...item, fragment: "TARGET" });
     const result = compiled([
       inTarget(leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["INFANTRY", "WARDENS"], match: "all", excluded_keywords: ["TITANIC"] })),
-      inTarget(leaf("CONDITION", "unit-activity", { activity: "selected-to-shoot-this-phase", subject: "this-unit", negated: true })),
+      inTarget(leaf("CONDITION", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true })),
       inTarget(leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true })),
       { ...grant(), fragment: "EFFECT" },
     ]);
@@ -126,7 +126,7 @@ describe("Round 5C restrictions", () => {
   });
 
   it("refuses a TARGET without exactly one target leaf", () => {
-    const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
+    const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
     expect(result.ok ? [] : result.errors).toEqual(["A stratagem TARGET needs exactly one target leaf; found 0."]);
   });
 

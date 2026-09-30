@@ -142,7 +142,7 @@ describe("Round 5C composition rules", () => {
     const result = compiled(text, [
       ["Whenever a model here swings", "EVENT", "attack", attack("makes", "this-unit", "melee")],
       ["re-roll a one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
-      ["If it charged this turn", "CONDITION", "unit-activity", { activity: "charged-this-turn", subject: "this-unit", negated: false }],
+      ["If it charged this turn", "CONDITION", "unit-activity", { activities: ["charged-this-turn"], subject: "this-unit", negated: false }],
       ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
@@ -177,6 +177,58 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
 
+  it("lets a selection pick only a unit those attacks hit", () => {
+    const text = "After this model has shot, pick one enemy unit hit by one or more of those attacks. That unit takes 1 wound.";
+    const pieces: Piece[] = [
+      ["After this model has shot", "EVENT", "event", { kind: "after-shooting" }],
+      ["pick one enemy unit", "EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "CONDITION", "hit-by-attacks", { subject: "selected-unit" }],
+      ["That unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }],
+    ];
+    // The hit is the selection's eligibility, not a gate on the ability: no hit, no unit to select.
+    expect(compiled(text, pieces).mechanics.effect).toEqual({
+      type: "select-units",
+      selector: { owner: "enemy", count: 1, eligibility: {
+        type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "selected-unit", filter: { roll: "hit", result: "success" }, window: "event" },
+      } },
+      effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
+    });
+  });
+
+  describe("weapon-ability keyword leaves under a keyword-less frame", () => {
+    const frame = (phrase: string, weapon_type = "all"): Piece => [phrase, "EFFECT", "weapon-ability-grant", { subject: "this-unit", weapon_type }];
+    const keyword = (name: string): Piece => [`[${name}]`, "EFFECT", "weapon-ability-keyword", { keyword: name }];
+    const grant = (abilities: string[], weapon_type?: string) => ({
+      type: "weapon-ability-grant", target: "this-unit", modifier: { abilities, ...(weapon_type ? { weapon_type } : {}) },
+    });
+
+    it("grants every keyword joined by and", () => {
+      const text = "Ranged guns carried by this unit's models gain [Lethal Hits] and [Sustained Hits 1].";
+      expect(compiled(text, [frame("Ranged guns carried by this unit's models gain", "ranged"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual(grant(["Lethal Hits", "Sustained Hits 1"], "ranged"));
+    });
+
+    it("offers one keyword when they are joined by or, even across sentences", () => {
+      const text = "This unit's attacks gain: [Lethal Hits]. Or: [Sustained Hits 1].";
+      expect(compiled(text, [frame("This unit's attacks gain"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+    });
+
+    it("offers one bulleted keyword, and lets a later frame take the selected one", () => {
+      const bullets = "Guns carried by this unit's models gain one of these:\n■ [Lethal Hits]\n■ [Sustained Hits 1]";
+      expect(compiled(bullets, [frame("Guns carried by this unit's models gain"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+      const selected = "Pick the [Lethal Hits] or [Sustained Hits 1] ability. Guns carried by this unit's models gain the picked ability.";
+      expect(compiled(selected, [keyword("Lethal Hits"), keyword("Sustained Hits 1"), frame("Guns carried by this unit's models gain the picked ability")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+    });
+
+    it("refuses a keyword with no frame, and a frame with no keyword", () => {
+      expect(failures("Gain [Lethal Hits].", [keyword("Lethal Hits")])[0]).toMatch(/no weapon-ability-grant frame/u);
+      expect(failures("Guns carried by this unit's models gain it.", [frame("Guns carried by this unit's models gain it")])[0]).toMatch(/needs weapon-ability-keyword leaves/u);
+    });
+  });
+
   it("gates one band that reaches the top face with dice-gated", () => {
     const result = compiled("Roll one D6: on a 4+, this unit takes 1 wound.", [
       ["Roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
@@ -190,7 +242,7 @@ describe("Round 5C composition rules", () => {
     const text = "Whenever a model here falls, if that model has not fought this phase, roll one D6. On a 2+, leave it; it fights after the attackers finish.";
     const result = compiled(text, [
       ["Whenever a model here falls", "EVENT", "event", { kind: "model-destroyed" }],
-      ["if that model has not fought this phase", "CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }],
+      ["if that model has not fought this phase", "CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }],
       ["roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
       ["On a 2+", "CONDITION", "roll-result", { from: 2, to: 6 }],
       ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { timing: "after-the-attacking-unit-finishes" }],

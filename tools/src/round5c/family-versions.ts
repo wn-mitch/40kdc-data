@@ -73,6 +73,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "unit-state", from: 3, to: 4, map: (parameters) => parameters },
   { family: "unit-keyword", from: 1, to: 2, map: (parameters) => parameters },
   { family: "unit-activity", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 names a list of activities; a version-3 leaf is a list of one.
+  { family: "unit-activity", from: 3, to: 4, map: ({ activity, ...rest }) => ({ activities: [activity], ...rest }) },
   // Version 2 (batch 6) only adds optional to/range on closest-eligible and widens subject.
   { family: "unit-position", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 takes a set of characteristics, improve and worsen, and which weapons carry the change.
@@ -136,6 +138,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "reroll", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
   // Version 4 only adds independent optional filters and flags; existing parameters still fit.
   { family: "weapon-ability-grant", from: 3, to: 4, map: (parameters) => parameters },
+  // Version 5 only makes the keyword optional; a version 4 leaf keeps its keyword.
+  { family: "weapon-ability-grant", from: 4, to: 5, map: (parameters) => parameters },
   // Version 2 widens the aspect/operation enums and adds recipients/options/uses-only fields; a
   // version 1 leaf's aspect and operation are both still in the widened enums, so it fits as is.
   { family: "ability-modifier", from: 1, to: 2, map: (parameters) => parameters },

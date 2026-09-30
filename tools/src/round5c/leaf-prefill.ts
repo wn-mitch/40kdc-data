@@ -317,13 +317,16 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   }
   if (family.id === "unit-activity") {
     const activities: Array<[RegExp, string]> = [
-      [/selected to shoot/iu, "selected-to-shoot-this-phase"], [/selected to move/iu, "selected-to-move-this-phase"], [/selected to fight|fought/iu, "fought-this-phase"],
+      [/selected to shoot/iu, "selected-to-shoot-this-phase"], [/selected to move/iu, "selected-to-move-this-phase"], [/selected to (?:shoot or )?fight|fought/iu, "fought-this-phase"],
       [/charge/iu, "charged-this-turn"], [/advance/iu, "advanced-this-turn"], [/remained stationary/iu, "remained-stationary"],
     ];
-    const activity = activities.find(([pattern]) => pattern.test(exactText))?.[1];
-    if (activity) prefill.activity = activity;
+    const found = activities.flatMap(([pattern, activity]) => (pattern.test(exactText) ? [activity] : []));
+    if (found.length) prefill.activities = found;
     if (/\bnot\b|\bhas not\b|\bhasn't\b/iu.test(exactText)) prefill.negated = true;
     if (/\b(?:this|your|that) (?:unit|model)\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
+  if (family.id === "hit-by-attacks") {
+    if (/\bhit by\b/iu.test(exactText)) prefill.subject = "selected-unit";
   }
   if (family.id === "usage-limit") {
     const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();

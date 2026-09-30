@@ -183,8 +183,8 @@ describe("Round 5C family version upgrade", () => {
         { text: "rest", family_id: null },
         piece("reroll", 2, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);
-      // weapon-ability-grant now continues 3->4 too (version 4 only adds optional filters/flags; identity map).
-      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 4, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
+      // weapon-ability-grant continues 3->4->5 too (4 adds optional filters/flags, 5 makes the keyword optional; identity maps).
+      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 5, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
       // A phase start that never named its phase has no current meaning; it is left, not guessed.
       expect(pieces(retired)).toEqual(retiredBefore);
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_proposal_pieces: 0 });

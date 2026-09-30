@@ -204,7 +204,8 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
 
 /** Require the granted ability name in the exact source-backed effect span. */
 export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
-  if (family === "weapon-ability-grant" && !exactText.toLowerCase().includes(String(parameters.keyword).toLowerCase())) {
+  if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword !== undefined
+    && !exactText.toLowerCase().includes(String(parameters.keyword).toLowerCase())) {
     throw new TypeError("The granted weapon ability must occur in the exact source span.");
   }
 }

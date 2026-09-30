@@ -216,11 +216,19 @@ export function condition(leaf: CompileLeaf): Node {
       return pred("has-keyword", keywords.length === 1 ? { all_of: keywords } : { any_of: keywords }, subject);
     }
     case "unit-activity": {
-      const [event, filter, window] = ACTIVITIES[String(closed(leaf, "activity"))]!;
       // Version 3 (batch 6) widens subject beyond this-unit/target.
       const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;
-      return polarity(leaf, pred("happened", { event, filter: structuredClone(filter), window }, subject));
+      // Version 4 names several activities: any of them, and negated none of them.
+      const activities = leaf.family_version >= 4 ? closed(leaf, "activities") as string[] : [String(closed(leaf, "activity"))];
+      return polarity(leaf, anyOf(activities.map((activity) => {
+        const [event, filter, window] = ACTIVITIES[activity]!;
+        return pred("happened", { event, filter: structuredClone(filter), window }, subject);
+      })));
     }
+    case "hit-by-attacks":
+      // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
+      // attacks of the ability's moment ("after this model has shot"), during that moment.
+      return { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success" }, window: "event" } };
     case "unit-mark":
       return polarity(leaf, pred("designated", { tag: MARK_TAGS[String(closed(leaf, "mark"))] }, who));
     case "unit-position": {

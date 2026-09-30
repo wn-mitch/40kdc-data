@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { mapToLatest } from "../src/round5c/family-versions.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/round5c/leaf-prefill.js";
 import { previewLeaf } from "../src/round5c/leaf-preview.js";
@@ -235,6 +236,20 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
   it("compiles unit-activity@3's new subjects", () => {
     conditionCase("unit-activity", { activity: "charged-this-turn", subject: "selected-unit", negated: false }, 3,
       { type: "happened", parameters: { subject: "selected-unit", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } });
+  });
+
+  it("compiles unit-activity@4's list as any of them, and negated as none of them", () => {
+    const shot = { type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } };
+    const fought = { type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } };
+    conditionCase("unit-activity", { activities: ["fought-this-phase", "selected-to-shoot-this-phase"], subject: "this-unit", negated: true }, 4,
+      { operator: "not", operands: [{ operator: "or", operands: [fought, shot] }] });
+    conditionCase("unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: false }, 4, shot);
+    expect(() => normalizeFingerprintParameters("unit-activity", { activities: [], subject: "this-unit", negated: true }, 4)).toThrow(/at least one/u);
+  });
+
+  it("migrates a unit-activity@3 leaf to a one-item list", () => {
+    expect(mapToLatest("unit-activity", 3, { activity: "fought-this-phase", subject: "this-unit", negated: true }))
+      .toEqual({ family: "unit-activity", version: 4, parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
   });
 
   it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {

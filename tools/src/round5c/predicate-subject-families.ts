@@ -198,6 +198,35 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { activity: { enum: UNIT_ACTIVITIES }, ...wideSubjectAndNegation },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-activity",
+    version: 4,
+    role: "CONDITION",
+    label: "Unit has (or has not) acted",
+    description: "As version 3, but one leaf can name several activities: it holds when the subject did any of them, and negated when it did none (\"has not been selected to shoot or fight this phase\").",
+    starter: { activities: [], subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["activities", "subject", "negated"],
+      properties: { activities: { type: "array", minItems: 1, uniqueItems: true, items: { enum: UNIT_ACTIVITIES } }, ...wideSubjectAndNegation },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "hit-by-attacks",
+    version: 1,
+    role: "CONDITION",
+    label: "Hit by those attacks",
+    description: "The subject was hit by the attacks the ability's moment names (\"select one enemy unit hit by one or more of those attacks\"): after a selection it says which units can be selected, so if nothing was hit nothing can be. Those attacks are the ones the triggering moment's unit or model made (\"after this model has shot\").",
+    starter: { subject: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject"],
+      properties: { subject: { enum: WIDE_SUBJECTS } },
+      additionalProperties: false,
+    },
   },
   {
     id: "unit-mark",
@@ -364,6 +393,10 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
       exactKeys(input, ["keywords", "subject", "negated"], family);
       return { keywords: keywordList(input.keywords), ...(version >= 2 ? wide(family) : legacy(family)) };
     case "unit-activity":
+      if (version >= 4) {
+        exactKeys(input, ["activities", "subject", "negated"], family);
+        return { activities: enumSet(input.activities, UNIT_ACTIVITIES, "unit-activity.activities"), ...wide(family) };
+      }
       exactKeys(input, ["activity", "subject", "negated"], family);
       return { activity: enumValue(input.activity, version >= 2 ? UNIT_ACTIVITIES : UNIT_ACTIVITIES_V1, "unit-activity.activity"), ...(version >= 3 ? wide(family) : legacy(family)) };
     case "unit-mark":
@@ -399,6 +432,9 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
       if ("range" in input) result.range = boundedInteger(input.range, 1, MAX_INCHES, "unit-position.range");
       return result;
     }
+    case "hit-by-attacks":
+      exactKeys(input, ["subject"], family);
+      return { subject: enumValue(input.subject, WIDE_SUBJECTS, "hit-by-attacks.subject") };
     case "target-is-selected":
       exactKeys(input, [], family);
       return {};

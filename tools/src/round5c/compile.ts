@@ -8,6 +8,7 @@ import {
   designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
 } from "./compile-containers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
+import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -143,6 +144,10 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
   if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
   if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
+  if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: the weapon-ability-grant frame it belongs to grants ${String(leaf.parameters.keyword)}.` };
+  if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
+    return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
+  }
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {
     return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
@@ -195,8 +200,14 @@ type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
-  const list = ordered(leaves);
-  const signature = shapeSignature(list, sourceText);
+  const signature = shapeSignature(ordered(leaves), sourceText);
+  let list: CompileLeaf[];
+  try {
+    list = foldWeaponKeywords(ordered(leaves), sourceText);
+  } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature, errors: [error.message] };
+  }
   // named-region-state is a whole ability by itself: the DSL shape it produces has no room for
   // any other leaf beside it (see compile-named-region.ts for why).
   if (list.length === 1 && list[0]!.family_id === "named-region-state") {

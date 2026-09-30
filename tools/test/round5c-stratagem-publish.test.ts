@@ -78,7 +78,7 @@ describe("Round 5C stratagem targets", () => {
     const decide = (exact_text: string, family_id: string, parameters: Record<string, unknown>) => confirmSurface(db, { reviewer: REVIEWER, exact_text, family_id, parameters });
     decide("Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] });
     decide("One STELLAR WARDENS INFANTRY unit from your army", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["STELLAR WARDENS INFANTRY"], match: "all", excluded_keywords: [] });
-    decide("that has not been selected to shoot this phase", "unit-activity", { activity: "selected-to-shoot-this-phase", subject: "this-unit", negated: true });
+    decide("that has not been selected to shoot this phase", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true });
     decide("Until the end of the phase", "duration", { endpoint: "end-of-phase" });
     decide("models in your unit have the Fights First ability", "fights-first", { subject: "this-unit" });
 
@@ -103,7 +103,7 @@ describe("Round 5C stratagem targets", () => {
     confirmSurface(db, { reviewer: REVIEWER, exact_text: "One STELLAR WARDENS INFANTRY unit from your army", family_id: "stratagem-target", parameters: { count: "one", side: "your-army", selects: "unit", keywords: ["STELLAR WARDENS INFANTRY"], match: "all", excluded_keywords: [] } });
     for (const [exact_text, family_id, parameters] of [
       ["Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
-      ["that has not been selected to shoot this phase", "unit-activity", { activity: "selected-to-shoot-this-phase", subject: "this-unit", negated: true }],
+      ["that has not been selected to shoot this phase", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true }],
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["models in your unit have the Fights First ability", "fights-first", { subject: "this-unit" }],
     ] as const) confirmSurface(db, { reviewer: REVIEWER, exact_text, family_id, parameters: parameters as Record<string, unknown> });

@@ -123,10 +123,16 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       const weaponKeyword = leaf.parameters.weapon_keyword;
       const ifPresent = leaf.parameters.if_present;
       const incoming = leaf.parameters.incoming;
+      // A frame folded with its keyword leaves (compile-weapon-keywords.ts) carries `keywords`; a menu grants one of them.
+      const keywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords as string[] : [closed(leaf, "keyword")];
+      if (leaf.parameters.keyword_choice === true) {
+        const { keywords: _keywords, keyword_choice: _choice, ...frame } = leaf.parameters;
+        return { type: "choice", options: keywords.map((keyword) => effect({ ...leaf, parameters: { ...frame, keyword } }, context)) };
+      }
       return {
         type: "weapon-ability-grant", target: target(leaf.parameters.subject),
         modifier: {
-          abilities: [closed(leaf, "keyword")],
+          abilities: keywords,
           ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(weaponName !== undefined ? { weapon_name: weaponName } : {}),
           ...(weaponKeyword !== undefined ? { weapon_keyword: weaponKeyword } : {}),

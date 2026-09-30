@@ -51,6 +51,7 @@ describe("Round 5C leaf describer audit", () => {
       // unit" too — the same collision the omitted default already had with "this-unit".
       "unit-keyword": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "hit-by-attacks": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
       // Version 4's `of`: "of this unit" and "of the recipient" both read "of the unit".
